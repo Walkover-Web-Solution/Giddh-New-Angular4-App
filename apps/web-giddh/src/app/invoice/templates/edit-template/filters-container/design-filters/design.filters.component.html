@@ -9,16 +9,15 @@
     <div class="clearfix">
         <div class="row">
             <div class="col-sm-9">
-                <label
-                    ><input
-                        type="text"
-                        class="form-control"
-                        placeholder="My Template Name"
-                        name="templateName"
-                        maxlength="18"
-                        [(ngModel)]="customTemplate.name"
-                        (ngModelChange)="onValueChange(null, null)"
-                /></label>
+                <text-field
+                    [type]="'text'"
+                    [cssClass]="'form-control'"
+                    [placeholder]="'My Template Name'"
+                    [name]="'templateName'"
+                    [maxlength]="18"
+                    [(ngModel)]="customTemplate.name"
+                    (ngModelChange)="onValueChange(null, null)"
+                ></text-field>
             </div>
         </div>
     </div>
@@ -129,7 +128,7 @@
                                 <img src="" alt="" id="logoImage" [hidden]="!logoAttached" />
                             </label>
                         </span>
-                        <button
+                        <!-- <button
                             *ngIf="showUploadButton"
                             type="button"
                             class="start-upload-btn btn btn-success"
@@ -137,7 +136,17 @@
                             tooltip="Clicking on Upload, will Upload image on server"
                         >
                             Upload
+                        </button> -->
+                        <button
+                            mat-raised-button
+                            *ngIf="showUploadButton"
+                            class="start-upload-btn btn btn-success"
+                            (click)="startUpload()"
+                            tooltip="Clicking on Upload, will Upload image on server"
+                        >
+                            Primary
                         </button>
+
                         <span class="start-upload-btn" *ngIf="isFileUploadInProgress"><b>Uploading...</b></span>
                         <button
                             *ngIf="showDeleteButton"
@@ -252,14 +261,14 @@
                 <i class="ico-txt"></i> <label>Select different fonts</label>
                 <div class="row font-selector mr-t1 form-group">
                     <div class="col-9">
-                        <sh-select
-                            [defaultValue]="selectedFont"
-                            [options]="presetFonts"
-                            (selected)="onFontSelect($event)"
+                        <select-field
+                            [cssClass]="'form-control mat-field-border'"
                             [placeholder]="'Choose font'"
-                            [multiple]="false"
-                            [ItemHeight]="33"
-                        ></sh-select>
+                            [options]="presetFonts"
+                            (selectedOption)="onFontSelect($event)"
+                            [defaultValue]="selectedFont"
+                        >
+                        </select-field>
                     </div>
                 </div>
             </li>
@@ -274,14 +283,14 @@
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
                     <div class="row font-selector mr-t1 form-group">
                         <div class="col-9">
-                            <sh-select
-                                [defaultValue]="selectedFontSize"
-                                [options]="presetFontsSize"
-                                (selected)="onFontSizeSelect($event)"
+                            <select-field
+                                [cssClass]="'form-control mat-field-border'"
                                 [placeholder]="'Choose font size'"
-                                [multiple]="false"
-                                [ItemHeight]="33"
-                            ></sh-select>
+                                [options]="presetFontsSize"
+                                (selectedOption)="onFontSizeSelect($event)"
+                                [defaultValue]="selectedFontSize"
+                            >
+                            </select-field>
                         </div>
                     </div>
                 </li>
@@ -311,56 +320,56 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <input
-                                            type="text"
+                                        <text-field
+                                            [type]="'text'"
                                             decimalDigitsDirective
                                             [DecimalPlaces]="1"
-                                            class="form-control"
+                                            [cssClass]="'form-control'"
                                             [(ngModel)]="customTemplate.topMargin"
                                             (keyup)="
                                                 onValueChange(null, null);
                                                 validatePrintSetting(customTemplate.topMargin, 0, 'topMargin')
                                             "
-                                        />
+                                        ></text-field>
                                     </td>
                                     <td>
-                                        <input
-                                            type="text"
+                                        <text-field
+                                            [type]="'text'"
                                             decimalDigitsDirective
                                             [DecimalPlaces]="1"
-                                            class="form-control"
+                                            [cssClass]="'form-control'"
                                             [(ngModel)]="customTemplate.leftMargin"
                                             (keyup)="
                                                 onValueChange(null, null);
                                                 validatePrintSetting(customTemplate.leftMargin, 1, 'leftMargin')
                                             "
-                                        />
+                                        ></text-field>
                                     </td>
                                     <td>
-                                        <input
-                                            type="text"
+                                        <text-field
+                                            [type]="'text'"
                                             decimalDigitsDirective
                                             [DecimalPlaces]="1"
-                                            class="form-control"
+                                            [cssClass]="'form-control'"
                                             [(ngModel)]="customTemplate.bottomMargin"
                                             (keyup)="
                                                 onValueChange(null, null);
                                                 validatePrintSetting(customTemplate.bottomMargin, 2, 'bottomMargin')
                                             "
-                                        />
+                                        ></text-field>
                                     </td>
                                     <td>
-                                        <input
-                                            type="text"
+                                        <text-field
+                                            [type]="'text'"
                                             decimalDigitsDirective
                                             [DecimalPlaces]="1"
-                                            class="form-control"
+                                            [cssClass]="'form-control'"
                                             [(ngModel)]="customTemplate.rightMargin"
                                             (keyup)="
                                                 onValueChange(null, null);
                                                 validatePrintSetting(customTemplate.rightMargin, 3, 'rightMargin')
                                             "
-                                        />
+                                        ></text-field>
                                     </td>
                                     <td>
                                         <a href="javascript:void(0);" class="pd-r1" (click)="resetPrintSetting()"

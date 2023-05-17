@@ -1,5 +1,6 @@
 <div class="btn-group btn-group-lg" role="group" aria-label="">
     <button
+        mat-button
         type="button"
         class="btn btn-default"
         [ngClass]="{ 'active-tab': ifDesignSelected, 'inactive-tab': ifContentSelected }"
@@ -9,6 +10,7 @@
         Design
     </button>
     <button
+        mat-button
         type="button"
         class="btn btn-default content-tab"
         [ngClass]="{ 'active-tab': ifContentSelected, 'inactive-tab': ifDesignSelected }"

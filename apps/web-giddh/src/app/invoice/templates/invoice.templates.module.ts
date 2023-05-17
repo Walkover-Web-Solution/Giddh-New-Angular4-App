@@ -9,6 +9,8 @@ import { GstTemplateEComponent } from './edit-template/out-tempate/templates/gst
 import { NgxUploaderModule } from 'ngx-uploader';
 import { HasFocusDirectiveModule } from '../../shared/helpers/directives/has-focus/has-focus.module';
 import { ThermalTemplateComponent } from './edit-template/out-tempate/templates/thermal-template/thermal-template.component';
+import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
     imports: [
@@ -17,7 +19,9 @@ import { ThermalTemplateComponent } from './edit-template/out-tempate/templates/
         ReactiveFormsModule,
         CollapseModule,
         NgxUploaderModule,
-        HasFocusDirectiveModule
+        HasFocusDirectiveModule,
+        FormFieldsModule,
+        MatCheckboxModule
     ],
     declarations: [
         OutTemplateComponent,

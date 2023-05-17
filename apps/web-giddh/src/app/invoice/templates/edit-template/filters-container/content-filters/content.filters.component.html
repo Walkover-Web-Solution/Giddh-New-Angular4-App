@@ -18,37 +18,38 @@
                         "
                         class="form-group"
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="companyNameCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['companyName'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
-                        />
-                        Company Name
+                            [checked]="true"
+                        >
+                            Company Name
+                        </mat-checkbox>
                     </div>
                     <div class="form-group" *ngIf="customTemplate?.templateType === 'gst_template_e'">
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="titleCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display"
                             (ngModelChange)="changeInvoiceHeader($event); onChangeFieldVisibility(null, null, null)"
-                            checked
-                        />
-                        Document Title: This is your
+                        >
+                            Document Title: This is your
+                        </mat-checkbox>
                         <div class="ml-3">
-                            <input
-                                type="text"
+                            <text-field
+                                [type]="'text'"
+                                [cssClass]="'form-control'"
                                 hasFocus
                                 #formNameInvoice="hasFocus"
                                 [class.error-box]="contentForm?.controls['title']?.errors?.maxlength"
-                                maxlength="15"
-                                class="form-control"
-                                name="title"
+                                [maxlength]="15"
+                                [name]="'title'"
                                 [(ngModel)]="customTemplate.sections['header'].data['formNameInvoice'].label"
                                 (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="!customTemplate.sections['header'].data['formNameInvoice'].display"
-                            />
+                            ></text-field>
                             <ng-container
                                 *ngIf="formNameInvoice?.isFocused || contentForm?.controls['title']?.errors?.maxlength"
                             >
@@ -59,18 +60,19 @@
                             </ng-container>
                         </div>
                         <div class="ml-3">
-                            <input
-                                type="text"
+                            <text-field
+                                [type]="'text'"
+                                [cssClass]="'form-control'"
                                 hasFocus
                                 #formNameTaxInvoice="hasFocus"
                                 [class.error-box]="contentForm?.controls['taxTitle']?.errors?.maxlength"
-                                maxlength="15"
-                                class="form-control"
-                                name="taxTitle"
+                                [maxlength]="15"
+                                [name]="'taxTitle'"
                                 [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].label"
                                 (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="!customTemplate.sections['header'].data['formNameTaxInvoice'].display"
-                            />
+                            ></text-field>
+
                             <ng-container
                                 *ngIf="
                                     formNameTaxInvoice?.isFocused ||
@@ -93,13 +95,14 @@
                             customTemplate.sections['header'].data['showIrnNumber']
                         "
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="irnCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['showIrnNumber'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                        />
-                        Show IRN number
+                        >
+                            Show IRN number
+                        </mat-checkbox>
                     </div>
                     <div
                         *ngIf="
@@ -110,13 +113,14 @@
                         "
                         class="form-group"
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="showQrCodeCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                        />
-                        Show QR code
+                        >
+                            Show QR code
+                        </mat-checkbox>
                     </div>
                     <div
                         class="form-group"
@@ -128,14 +132,15 @@
                             customTemplate.sections['header'].data['showCompanyAddress']
                         "
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="companyAddressCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['showCompanyAddress'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
-                        />
-                        Company Address
+                            [checked]="true"
+                        >
+                            Company Address
+                        </mat-checkbox>
                     </div>
                     <div
                         class="form-group"
@@ -146,30 +151,32 @@
                             customTemplate.sections['header'].data['warehouseAddress']
                         "
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="warehouseAddressCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['warehouseAddress'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
-                        />
-                        Warehouse Address
+                            [checked]="true"
+                        >
+                            Warehouse Address
+                        </mat-checkbox>
                     </div>
                     <div
                         *ngIf="fieldsAndVisibility.header.gstin && customTemplate?.templateType !== 'gst_template_e'"
                         class="form-group"
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="gstinCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['gstin'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
-                        />
-                        GSTIN
+                            [checked]="true"
+                        >
+                            GSTIN
+                        </mat-checkbox>
                     </div>
                     <div
-                        class="form-group clearfix custom-field"
+                        class="form-group clearfix d-flex align-self-start"
                         *ngIf="
                             showGstComposition === true &&
                             (customTemplate?.templateType === 'gst_template_a' ||
@@ -177,26 +184,28 @@
                             voucherType === 'sales'
                         "
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            class="mt-1 mr-2"
+                            color="primary"
                             name="gstCompositionLabel"
                             [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
-                        />
-                        <span>
-                            <input
-                                class="form-control"
+                            [checked]="true"
+                        >
+                        </mat-checkbox>
+                        <span class="flex-fill">
+                            <text-field
+                                [type]="'text'"
+                                [cssClass]="'form-control'"
                                 [class.error-box]="contentForm?.controls['gstComposition']?.errors?.maxlength"
-                                maxlength="70"
+                                [maxlength]="70"
                                 hasFocus
                                 #gstComposition="hasFocus"
-                                type="text"
-                                name="gstComposition"
-                                placeholder="Registered under Composition Scheme"
+                                [name]="'gstComposition'"
+                                [placeholder]="'Registered under Composition Scheme'"
                                 [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].label"
                                 (ngModelChange)="onFieldChange(null, null, null)"
-                            />
+                            ></text-field>
                             <ng-container
                                 *ngIf="
                                     gstComposition?.isFocused ||
@@ -213,27 +222,28 @@
                     <!-- <div *ngIf="fieldsAndVisibility.header.pan" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[2].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> PAN</div> -->
                     <div *ngIf="voucherType === 'sales' || voucherType === ''">
                         <div *ngIf="fieldsAndVisibility.header.invoiceDate" class="form-group">
-                            <input
-                                type="checkbox"
+                            <mat-checkbox
+                                color="primary"
                                 name="invoiceDateCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['invoiceDate'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                checked
-                            />
-                            Invoice Date
+                                [checked]="true"
+                            >
+                                Invoice Date
+                            </mat-checkbox>
                             <div class="ml-3">
-                                <input
-                                    type="text"
+                                <text-field
+                                    [type]="'text'"
+                                    [cssClass]="'form-control'"
                                     hasFocus
                                     #invoiceDate="hasFocus"
                                     [class.error-box]="contentForm?.controls['invoiceDate']?.errors?.maxlength"
                                     [maxlength]="customTemplate.templateType === 'thermal_template' ? 12 : 15"
-                                    class="form-control"
-                                    name="invoiceDate"
+                                    [name]="'invoiceDate'"
                                     [(ngModel)]="customTemplate.sections['header'].data['invoiceDate'].label"
                                     (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['invoiceDate'].display"
-                                />
+                                ></text-field>
                                 <ng-container
                                     *ngIf="
                                         invoiceDate?.isFocused ||
@@ -250,16 +260,25 @@
                             </div>
                         </div>
                         <div *ngIf="fieldsAndVisibility.header.invoiceNumber" class="form-group">
-                            <input
+                            <!-- <input
                                 type="checkbox"
                                 name="invoiceNumberCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 checked
                             />
-                            Invoice Number
+                            Invoice Number -->
+                            <mat-checkbox
+                                color="primary"
+                                name="invoiceNumberCheckbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                [checked]="true"
+                            >
+                                Invoice Number
+                            </mat-checkbox>
                             <div class="ml-3">
-                                <input
+                                <!-- <input
                                     type="text"
                                     hasFocus
                                     #invoiceNo="hasFocus"
@@ -270,7 +289,19 @@
                                     [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].label"
                                     (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['invoiceNumber'].display"
-                                />
+                                /> -->
+                                <text-field
+                                    [type]="'text'"
+                                    [cssClass]="'form-control'"
+                                    hasFocus
+                                    #invoiceNo="hasFocus"
+                                    [class.error-box]="contentForm?.controls['invoiceNo']?.errors?.maxlength"
+                                    [maxlength]="customTemplate.templateType === 'thermal_template' ? 14 : 15"
+                                    [name]="'invoiceNo'"
+                                    [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].label"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
+                                    [disabled]="!customTemplate.sections['header'].data['invoiceNumber'].display"
+                                ></text-field>
                                 <ng-container
                                     *ngIf="
                                         invoiceNo?.isFocused || contentForm?.controls['invoiceNo']?.errors?.maxlength
@@ -289,14 +320,23 @@
                     <!--   .....this is for other voucher type -->
                     <ng-container *ngIf="voucherType != 'sales'">
                         <div *ngIf="fieldsAndVisibility.header.voucherDate" class="form-group">
-                            <input
+                            <!-- <input
                                 type="checkbox"
                                 name="voucherDateCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['voucherDate'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 checked
                             />
-                            Voucher Date
+                            Voucher Date -->
+                            <mat-checkbox
+                                color="primary"
+                                name="voucherDateCheckbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['voucherDate'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                [checked]="true"
+                            >
+                                Voucher Date
+                            </mat-checkbox>
                             <div class="ml-3">
                                 <input
                                     type="text"
@@ -324,14 +364,23 @@
                             </div>
                         </div>
                         <div *ngIf="fieldsAndVisibility.header.voucherNumber" class="form-group">
-                            <input
+                            <!-- <input
                                 type="checkbox"
                                 name="voucherNumberCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['voucherNumber'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 checked
                             />
-                            Voucher Number
+                            Voucher Number -->
+                            <mat-checkbox
+                                color="primary"
+                                name="voucherNumberCheckbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['voucherNumber'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                [checked]="true"
+                            >
+                                Voucher Number
+                            </mat-checkbox>
                             <div class="ml-3">
                                 <input
                                     type="text"
@@ -364,14 +413,23 @@
                         "
                         class="form-group"
                     >
-                        <input
+                        <!-- <input
                             type="checkbox"
                             name="dueDateCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['dueDate'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             checked
                         />
-                        Due Date
+                        Due Date -->
+                        <mat-checkbox
+                            color="primary"
+                            name="dueDateCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['dueDate'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                            [checked]="true"
+                        >
+                            Due Date
+                        </mat-checkbox>
                         <div class="ml-3">
                             <input
                                 type="text"
@@ -406,14 +464,23 @@
                     <h3>Form</h3>
                     <!-- *ngIf="fieldsAndVisibility.header.formNameTaxInvoice" -->
                     <div class="form-group">
-                        <input
+                        <!-- <input
                             type="checkbox"
                             name="documentTitleCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display"
                             (ngModelChange)="changeInvoiceHeader($event); onChangeFieldVisibility(null, null, null)"
                             checked
                         />
-                        Document Title
+                        Document Title -->
+                        <mat-checkbox
+                            color="primary"
+                            name="documentTitleCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display"
+                            (ngModelChange)="changeInvoiceHeader($event); onChangeFieldVisibility(null, null, null)"
+                            [checked]="true"
+                        >
+                            Document Title
+                        </mat-checkbox>
                         <!-- <div class="ml-3 mr-t1">Invoice
                 <input type="text" maxlength="15" class="form-control" name="tl" [(ngModel)]='customTemplate.sections[0].content[22].label'
                     (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[23].display"
@@ -482,14 +549,23 @@
                         "
                         class="form-group"
                     >
-                        <input
+                        <!-- <input
                             type="checkbox"
                             name="customerNameCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['customerName'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             checked
                         />
-                        Customer Name
+                        Customer Name -->
+                        <mat-checkbox
+                            color="primary"
+                            name="customerNameCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['customerName'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                            [checked]="true"
+                        >
+                            Customer Name
+                        </mat-checkbox>
                     </div>
                     <div
                         *ngIf="
@@ -498,14 +574,23 @@
                         "
                         class="form-group"
                     >
-                        <input
+                        <!-- <input
                             type="checkbox"
                             name="attentionToCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['attentionTo'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             checked
                         />
-                        Attention To
+                        Attention To -->
+                        <mat-checkbox
+                            color="primary"
+                            name="attentionToCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['attentionTo'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                            [checked]="true"
+                        >
+                            Attention To
+                        </mat-checkbox>
                     </div>
 
                     <div
@@ -520,14 +605,23 @@
                         "
                         class="form-group"
                     >
-                        <input
+                        <!-- <input
                             type="checkbox"
                             name="emailIdCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['customerEmail'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             checked
                         />
-                        Email ID
+                        Email ID -->
+                        <mat-checkbox
+                            color="primary"
+                            name="emailIdCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['customerEmail'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                            [checked]="true"
+                        >
+                            Email ID
+                        </mat-checkbox>
                     </div>
                     <div
                         *ngIf="
@@ -539,26 +633,43 @@
                         "
                         class="form-group"
                     >
-                        <input
+                        <!-- <input
                             type="checkbox"
                             name="mobileNumberCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['customerMobileNumber'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             checked
                         />
-                        Mobile Number
+                        Mobile Number -->
+                        <mat-checkbox
+                            color="primary"
+                            name="mobileNumberCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['customerMobileNumber'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                            [checked]="true"
+                        >
+                            Mobile Number
+                        </mat-checkbox>
                     </div>
                 </div>
                 <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_d'">
                     <h3>Billing Details</h3>
                     <div *ngIf="fieldsAndVisibility.header.billingAddress" class="form-group">
-                        <input
+                        <!-- <input
                             type="checkbox"
                             name="billingAddressCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['billingAddress'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableBilling()"
                         />
-                        Billing Address
+                        Billing Address -->
+                        <mat-checkbox
+                            color="primary"
+                            name="billingAddressCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['billingAddress'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableBilling()"
+                        >
+                            Billing Address
+                        </mat-checkbox>
                         <div class="ml-3" *ngIf="customTemplate?.templateType !== 'thermal_template'">
                             <input
                                 type="text"
@@ -583,24 +694,42 @@
                         </div>
                     </div>
                     <div *ngIf="fieldsAndVisibility.header.billingState" class="form-group" [hidden]="true">
-                        <input
+                        <!-- <input
                             type="checkbox"
                             name="billingStateCheckbox"
                             [disabled]="!customTemplate.sections['header'].data['billingAddress'].display"
                             [(ngModel)]="customTemplate.sections['header'].data['billingState'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         />
-                        State
+                        State -->
+                        <mat-checkbox
+                            color="primary"
+                            name="billingStateCheckbox"
+                            [disabled]="!customTemplate.sections['header'].data['billingAddress'].display"
+                            [(ngModel)]="customTemplate.sections['header'].data['billingState'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                        >
+                            State
+                        </mat-checkbox>
                     </div>
                     <div *ngIf="fieldsAndVisibility.header.billingGstin" class="form-group">
-                        <input
+                        <!-- <input
                             type="checkbox"
                             name="billingGstinCheckbox"
                             [disabled]="!customTemplate.sections['header'].data['billingAddress'].display"
                             [(ngModel)]="customTemplate.sections['header'].data['billingGstin'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         />
-                        GSTIN
+                        GSTIN -->
+                        <mat-checkbox
+                            color="primary"
+                            name="billingGstinCheckbox"
+                            [disabled]="!customTemplate.sections['header'].data['billingAddress'].display"
+                            [(ngModel)]="customTemplate.sections['header'].data['billingGstin'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                        >
+                            GSTIN
+                        </mat-checkbox>
                         <div class="ml-3" *ngIf="customTemplate?.templateType !== 'thermal_template'">
                             <input
                                 type="text"
@@ -642,14 +771,23 @@
                 >
                     <h3>Shipping Details</h3>
                     <div *ngIf="fieldsAndVisibility.header.shippingAddress" class="form-group">
-                        <input
+                        <!-- <input
                             type="checkbox"
                             name="shippingAddressCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableShipping()"
                             checked
                         />
-                        Shipping Address
+                        Shipping Address -->
+                        <mat-checkbox
+                            color="primary"
+                            [checked]="true"
+                            name="shippingAddressCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableShipping()"
+                        >
+                            Shipping Address
+                        </mat-checkbox>
                         <div class="ml-3">
                             <input
                                 type="text"
@@ -674,24 +812,42 @@
                         </div>
                     </div>
                     <div *ngIf="fieldsAndVisibility.header.shippingState" class="form-group" [hidden]="true">
-                        <input
+                        <!-- <input
                             type="checkbox"
                             name="shippingStateCheckbox"
                             [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display"
                             [(ngModel)]="customTemplate.sections['header'].data['shippingState'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         />
-                        State
+                        State -->
+                        <mat-checkbox
+                            color="primary"
+                            name="shippingStateCheckbox"
+                            [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display"
+                            [(ngModel)]="customTemplate.sections['header'].data['shippingState'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                        >
+                            State
+                        </mat-checkbox>
                     </div>
                     <div *ngIf="fieldsAndVisibility.header.shippingGstin" class="form-group">
-                        <input
+                        <!-- <input
                             type="checkbox"
                             name="shippingGstinCheckbox"
                             [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display"
                             [(ngModel)]="customTemplate.sections['header'].data['shippingGstin'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         />
-                        GSTIN
+                        GSTIN -->
+                        <mat-checkbox
+                            color="primary"
+                            name="shippingGstinCheckbox"
+                            [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display"
+                            [(ngModel)]="customTemplate.sections['header'].data['shippingGstin'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                        >
+                            GSTIN
+                        </mat-checkbox>
                         <div class="ml-3">
                             <input
                                 type="text"
@@ -741,13 +897,21 @@
                     </h3>
                     <div class="clearfix" [collapse]="!showTransportField">
                         <div class="form-group" *ngIf="fieldsAndVisibility.header.shippingDate">
-                            <input
+                            <!-- <input
                                 type="checkbox"
                                 name="transportDetailsCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['shippingDate'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             />
-                            Ship Date
+                            Ship Date -->
+                            <mat-checkbox
+                                color="primary"
+                                name="transportDetailsCheckbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['shippingDate'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                            >
+                                Ship Date
+                            </mat-checkbox>
                             <div class="ml-3">
                                 <input
                                     type="text"
@@ -775,14 +939,23 @@
                             </div>
                         </div>
                         <div class="form-group" *ngIf="fieldsAndVisibility.header.shippedVia">
-                            <input
+                            <!-- <input
                                 type="checkbox"
                                 name="shipViaCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['shippedVia'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 checked
                             />
-                            Ship Via
+                            Ship Via -->
+                            <mat-checkbox
+                                color="primary"
+                                name="shipViaCheckbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['shippedVia'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                [checked]="true"
+                            >
+                                Ship Via
+                            </mat-checkbox>
                             <div class="ml-3">
                                 <input
                                     type="text"
@@ -815,14 +988,23 @@
                                 customTemplate?.templateType !== 'thermal_template'
                             "
                         >
-                            <input
+                            <!-- <input
                                 type="checkbox"
                                 name="trackingNumberCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['trackingNumber'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 checked
                             />
-                            Tracking No.
+                            Tracking No. -->
+                            <mat-checkbox
+                                color="primary"
+                                name="trackingNumberCheckbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['trackingNumber'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                [checked]="true"
+                            >
+                                Tracking No.
+                            </mat-checkbox>
                             <div class="ml-3">
                                 <input
                                     type="text"
@@ -869,15 +1051,26 @@
                         Custom Field
                     </h3>
                     <div class="clearfix" [collapse]="!showCustomField">
-                        <div *ngIf="fieldsAndVisibility.header.customField1" class="form-group clearfix">
-                            <input
+                        <div
+                            *ngIf="fieldsAndVisibility.header.customField1"
+                            class="form-group clearfix d-flex align-self-start"
+                        >
+                            <!-- <input
                                 type="checkbox"
                                 name="customField1Checkbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['customField1'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 checked
-                            />
-                            <span>
+                            /> -->
+                            <mat-checkbox
+                                color="primary"
+                                name="customField1Checkbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['customField1'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                [checked]="true"
+                            >
+                            </mat-checkbox>
+                            <span class="mt-1 mr-2">
                                 <input
                                     type="text"
                                     hasFocus
@@ -904,13 +1097,21 @@
                             </span>
                         </div>
                         <div *ngIf="fieldsAndVisibility.header.customField2" class="form-group clearfix">
-                            <input
+                            <!-- <input
                                 type="checkbox"
                                 name="customField2Checkbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['customField2'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 checked
-                            />
+                            /> -->
+                            <mat-checkbox
+                                color="primary"
+                                name="customField2Checkbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['customField2'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                [checked]="true"
+                            >
+                            </mat-checkbox>
                             <span>
                                 <input
                                     type="text"
@@ -938,13 +1139,21 @@
                             </span>
                         </div>
                         <div *ngIf="fieldsAndVisibility.header.customField3" class="form-group clearfix">
-                            <input
+                            <!-- <input
                                 type="checkbox"
                                 name="customField3Checkbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['customField3'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 checked
-                            />
+                            /> -->
+                            <mat-checkbox
+                                color="primary"
+                                name="customField3Checkbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['customField3'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                [checked]="true"
+                            >
+                            </mat-checkbox>
                             <span>
                                 <input
                                     type="text"
@@ -997,7 +1206,7 @@
                             "
                         >
                             <td>
-                                <label>
+                                <!-- <label>
                                     <input
                                         type="checkbox"
                                         name="sN"
@@ -1006,7 +1215,16 @@
                                         checked
                                     />
                                     Number</label
+                                > -->
+                                <mat-checkbox
+                                    color="primary"
+                                    name="sN"
+                                    [(ngModel)]="customTemplate.sections['table'].data['sNo'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    [checked]="true"
                                 >
+                                    Number
+                                </mat-checkbox>
                             </td>
                             <td>
                                 <input
@@ -1035,7 +1253,7 @@
                             "
                         >
                             <td>
-                                <label>
+                                <!-- <label>
                                     <input
                                         type="checkbox"
                                         name="dt"
@@ -1043,7 +1261,16 @@
                                         (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                         checked
                                     />Date</label
+                                > -->
+                                <mat-checkbox
+                                    color="primary"
+                                    name="dt"
+                                    [(ngModel)]="customTemplate.sections['table'].data['date'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    [checked]="true"
                                 >
+                                    Date
+                                </mat-checkbox>
                             </td>
                             <td>
                                 <input
@@ -1070,7 +1297,7 @@
                         </tr>
                         <tr *ngIf="fieldsAndVisibility.table.item">
                             <td *ngIf="customTemplate.templateType !== 'thermal_template'">
-                                <label>
+                                <!-- <label>
                                     <input
                                         type="checkbox"
                                         name="it"
@@ -1079,7 +1306,16 @@
                                         checked
                                     />
                                     Item</label
+                                > -->
+                                <mat-checkbox
+                                    color="primary"
+                                    name="it"
+                                    [(ngModel)]="customTemplate.sections['table'].data['item'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    [checked]="true"
                                 >
+                                    Date
+                                </mat-checkbox>
                             </td>
                             <td>
                                 <input
@@ -1114,7 +1350,7 @@
                             "
                         >
                             <td class="pb-3" colspan="2">
-                                <label>
+                                <!-- <label>
                                     <input
                                         type="checkbox"
                                         name="showDescriptionInRows"
@@ -1124,7 +1360,15 @@
                                         (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     />
                                     Show description as a new row
-                                </label>
+                                </label> -->
+                                <mat-checkbox
+                                    color="primary"
+                                    name="showDescriptionInRows"
+                                    [(ngModel)]="customTemplate.sections['table'].data['showDescriptionInRows'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                >
+                                    Show description as a new row
+                                </mat-checkbox>
                             </td>
                         </tr>
                         <tr
@@ -1133,7 +1377,7 @@
                             "
                         >
                             <td>
-                                <label>
+                                <!-- <label>
                                     <input
                                         type="checkbox"
                                         name="hsn"
@@ -1142,7 +1386,16 @@
                                         checked
                                     />
                                     HSN/SAC</label
+                                > -->
+                                <mat-checkbox
+                                    color="primary"
+                                    name="hsn"
+                                    [(ngModel)]="customTemplate.sections['table'].data['hsnSac'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    [checked]="true"
                                 >
+                                    HSN/SAC
+                                </mat-checkbox>
                             </td>
                             <td>
                                 <input
@@ -1169,7 +1422,7 @@
                         </tr>
                         <tr *ngIf="fieldsAndVisibility.table.quantity">
                             <td *ngIf="customTemplate.templateType !== 'thermal_template'">
-                                <label>
+                                <!-- <label>
                                     <input
                                         type="checkbox"
                                         name="qt"
@@ -1180,7 +1433,16 @@
                                         checked
                                     />
                                     Quantity</label
+                                > -->
+                                <mat-checkbox
+                                    color="primary"
+                                    name="qt"
+                                    [(ngModel)]="customTemplate.sections['table'].data['quantity'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableQuantity()"
+                                    [checked]="true"
                                 >
+                                    Quantity
+                                </mat-checkbox>
                             </td>
                             <td>
                                 <input
@@ -1221,7 +1483,7 @@
                         </div> -->
                         <tr [hidden]="true">
                             <td>
-                                <label>
+                                <!-- <label>
                                     <input
                                         type="checkbox"
                                         name="dsc"
@@ -1230,7 +1492,16 @@
                                         checked
                                     />
                                     Description</label
+                                > -->
+                                <mat-checkbox
+                                    color="primary"
+                                    name="dsc"
+                                    [(ngModel)]="customTemplate.sections['table'].data['description'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    [checked]="true"
                                 >
+                                    Description
+                                </mat-checkbox>
                             </td>
                             <td>
                                 <input
@@ -1257,7 +1528,7 @@
                         </tr>
                         <tr *ngIf="fieldsAndVisibility.table.rate">
                             <td *ngIf="customTemplate.templateType !== 'thermal_template'">
-                                <label>
+                                <!-- <label>
                                     <input
                                         type="checkbox"
                                         name="rt"
@@ -1266,7 +1537,16 @@
                                         checked
                                     />
                                     Rate/Item</label
+                                > -->
+                                <mat-checkbox
+                                    color="primary"
+                                    name="rt"
+                                    [(ngModel)]="customTemplate.sections['table'].data['rate'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    [checked]="true"
                                 >
+                                    Rate/Item
+                                </mat-checkbox>
                             </td>
                             <td>
                                 <input
@@ -1299,7 +1579,7 @@
                             "
                         >
                             <td>
-                                <label>
+                                <!-- <label>
                                     <input
                                         type="checkbox"
                                         name="ds"
@@ -1308,7 +1588,16 @@
                                         checked
                                     />
                                     Discount/Item</label
+                                > -->
+                                <mat-checkbox
+                                    color="primary"
+                                    name="ds"
+                                    [(ngModel)]="customTemplate.sections['table'].data['discount'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    [checked]="true"
                                 >
+                                    Discount/Item
+                                </mat-checkbox>
                             </td>
                             <td>
                                 <input
@@ -1340,7 +1629,7 @@
                             "
                         >
                             <td>
-                                <label>
+                                <!-- <label>
                                     <input
                                         type="checkbox"
                                         name="tv"
@@ -1349,7 +1638,16 @@
                                         checked
                                     />
                                     Taxable Value</label
+                                > -->
+                                <mat-checkbox
+                                    color="primary"
+                                    name="tv"
+                                    [(ngModel)]="customTemplate.sections['table'].data['taxableValue'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    [checked]="true"
                                 >
+                                    Taxable Value
+                                </mat-checkbox>
                             </td>
                             <td>
                                 <input
@@ -1376,7 +1674,7 @@
                         </tr>
                         <tr *ngIf="fieldsAndVisibility.table.tax">
                             <td>
-                                <label>
+                                <!-- <label>
                                     <input
                                         type="checkbox"
                                         name="ta"
@@ -1385,7 +1683,16 @@
                                         checked
                                     />
                                     Tax</label
+                                > -->
+                                <mat-checkbox
+                                    color="primary"
+                                    name="ta"
+                                    [(ngModel)]="customTemplate.sections['table'].data['tax'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    [checked]="true"
                                 >
+                                    Tax
+                                </mat-checkbox>
                             </td>
                             <td>
                                 <input
@@ -1410,7 +1717,7 @@
                         </tr>
                         <tr *ngIf="fieldsAndVisibility.table.total">
                             <td *ngIf="customTemplate.templateType !== 'thermal_template'">
-                                <label>
+                                <!-- <label>
                                     <input
                                         type="checkbox"
                                         name="tot"
@@ -1419,7 +1726,16 @@
                                         checked
                                     />
                                     Total</label
+                                > -->
+                                <mat-checkbox
+                                    color="primary"
+                                    name="tot"
+                                    [(ngModel)]="customTemplate.sections['table'].data['total'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    [checked]="true"
                                 >
+                                    Total
+                                </mat-checkbox>
                             </td>
                             <td>
                                 <input
@@ -1454,7 +1770,7 @@
                             "
                         >
                             <td>
-                                <label>
+                                <!-- <label>
                                     <input
                                         type="checkbox"
                                         name="preDue"
@@ -1463,7 +1779,16 @@
                                         checked
                                     />
                                     Previous Due</label
+                                > -->
+                                <mat-checkbox
+                                    color="primary"
+                                    name="preDue"
+                                    [(ngModel)]="customTemplate.sections['table'].data['previousDue'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    [checked]="true"
                                 >
+                                    Previous Due
+                                </mat-checkbox>
                             </td>
                             <td>
                                 <input
@@ -1516,7 +1841,7 @@
                         >
                             <tr *ngIf="isTcsTdsApplicable">
                                 <td>
-                                    <label
+                                    <!-- <label
                                         ><input
                                             type="checkbox"
                                             name="tcsCheckbox"
@@ -1525,7 +1850,16 @@
                                             checked
                                         />
                                         TCS
-                                    </label>
+                                    </label> -->
+                                    <mat-checkbox
+                                        color="primary"
+                                        name="tcsCheckbox"
+                                        [(ngModel)]="customTemplate.sections['table'].data['tcs'].display"
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                        [checked]="true"
+                                    >
+                                        TCS
+                                    </mat-checkbox>
                                 </td>
                                 <td>
                                     <input
@@ -1553,16 +1887,15 @@
                             </tr>
                             <tr *ngIf="isTcsTdsApplicable">
                                 <td>
-                                    <label
-                                        ><input
-                                            type="checkbox"
-                                            name="tdsCheckbox"
-                                            [(ngModel)]="customTemplate.sections['table'].data['tds'].display"
-                                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                            checked
-                                        />
-                                        TDS</label
+                                    <mat-checkbox
+                                        color="primary"
+                                        name="tdsCheckbox"
+                                        [(ngModel)]="customTemplate.sections['table'].data['tds'].display"
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                        [checked]="true"
                                     >
+                                        TDS
+                                    </mat-checkbox>
                                 </td>
                                 <td>
                                     <input
@@ -1590,16 +1923,15 @@
                             </tr>
                             <tr *ngIf="customTemplate?.templateType !== 'thermal_template'">
                                 <td>
-                                    <label
-                                        ><input
-                                            type="checkbox"
-                                            name="totalDueCheckbox"
-                                            [(ngModel)]="customTemplate.sections['table'].data['totalDue'].display"
-                                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                            checked
-                                        />
-                                        Total Due</label
+                                    <mat-checkbox
+                                        color="primary"
+                                        name="totalDueCheckbox"
+                                        [(ngModel)]="customTemplate.sections['table'].data['totalDue'].display"
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                        [checked]="true"
                                     >
+                                        Total Due
+                                    </mat-checkbox>
                                 </td>
                                 <td>
                                     <input
@@ -1639,16 +1971,15 @@
                             "
                         >
                             <td class="pb-3">
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        name="inword"
-                                        [(ngModel)]="customTemplate.sections['footer'].data['totalInWords'].display"
-                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                        checked
-                                    />
-                                    Invoice Total(in words)</label
+                                <mat-checkbox
+                                    color="primary"
+                                    name="inword"
+                                    [(ngModel)]="customTemplate.sections['footer'].data['totalInWords'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    [checked]="true"
                                 >
+                                    Invoice Total(in words)
+                                </mat-checkbox>
                             </td>
                         </tr>
                         <tr
@@ -1660,17 +1991,16 @@
                             "
                         >
                             <td class="pb-3">
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        name="totalQuantity"
-                                        checked
-                                        [(ngModel)]="customTemplate.sections['table'].data['totalQuantity'].display"
-                                        [disabled]="!customTemplate.sections['table'].data['quantity'].display"
-                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                    />
-                                    Total Quantity</label
+                                <mat-checkbox
+                                    color="primary"
+                                    name="totalQuantity"
+                                    [(ngModel)]="customTemplate.sections['table'].data['totalQuantity'].display"
+                                    [disabled]="!customTemplate.sections['table'].data['quantity'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    [checked]="true"
                                 >
+                                    Total Quantity
+                                </mat-checkbox>
                             </td>
                         </tr>
                         <div
@@ -1678,16 +2008,17 @@
                             *ngIf="customTemplate?.templateType === 'gst_template_e' && voucherType === 'sales'"
                         >
                             <div class="form-group font-16">
-                                <input
-                                    type="checkbox"
+                                <mat-checkbox
+                                    color="primary"
                                     name="taxBifurcationCheckbox"
                                     [(ngModel)]="customTemplate.sections['table'].data['taxBifurcation'].display"
                                     (ngModelChange)="
                                         onChangeFieldVisibility(null, null, null);
                                         checkedTaxBifurcation('taxRateBifurcation', 'table')
                                     "
-                                />
-                                Tax Bifurcation
+                                >
+                                    Tax Bifurcation
+                                </mat-checkbox>
                             </div>
                             <div class="ml-3" *ngIf="customTemplate.sections['table'].data['taxBifurcation'].display">
                                 <div class="clearfix mr-b05">
@@ -1738,15 +2069,15 @@
                         "
                     >
                         <div *ngIf="isTcsTdsApplicable" class="form-group">
-                            <input
-                                type="checkbox"
+                            <mat-checkbox
+                                color="primary"
                                 name="tcsCheckbox"
-                                checked
                                 [(ngModel)]="customTemplate.sections['footer'].data['tcs'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                checked="true"
-                            />
-                            TCS
+                                [checked]="true"
+                            >
+                                TCS
+                            </mat-checkbox>
                             <div class="ml-3">
                                 <input
                                     type="text"
@@ -1770,15 +2101,16 @@
                             </div>
                         </div>
                         <div *ngIf="isTcsTdsApplicable" class="form-group">
-                            <input
-                                type="checkbox"
+                            <mat-checkbox
+                                color="primary"
                                 [value]="true"
                                 name="tdsCheckbox"
-                                checked
                                 [(ngModel)]="customTemplate.sections['footer'].data['tds'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            />
-                            TDS
+                                [checked]="true"
+                            >
+                                TDS
+                            </mat-checkbox>
                             <div class="ml-3">
                                 <input
                                     type="text"
@@ -1802,15 +2134,15 @@
                             </div>
                         </div>
                         <div *ngIf="customTemplate.sections['footer'].data['totalDue']" class="form-group">
-                            <input
-                                type="checkbox"
-                                [attr.checked]="true"
+                            <mat-checkbox
+                                color="primary"
                                 name="totalDues"
                                 [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                checked
-                            />
-                            Total Due
+                                [checked]="true"
+                            >
+                                Total Due
+                            </mat-checkbox>
                             <div class="ml-3">
                                 <input
                                     type="text"
@@ -1843,37 +2175,40 @@
                         "
                         class="form-group"
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="footerCompanyNameCheckbox"
-                            checked
                             [(ngModel)]="customTemplate.sections['footer'].data['companyName'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                        />
-                        Company Name
+                            [checked]="true"
+                        >
+                            Company Name
+                        </mat-checkbox>
                     </div>
                     <div *ngIf="customTemplate?.templateType === 'thermal_template'" class="form-group">
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="showQrCodeCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                        />
-                        Show QR code
+                        >
+                            Show QR code
+                        </mat-checkbox>
                     </div>
 
                     <div
                         *ngIf="fieldsAndVisibility.header.gstin && customTemplate?.templateType === 'gst_template_e'"
                         class="form-group"
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="footerGstinCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['gstin'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
-                        />
-                        GSTIN
+                            [checked]="true"
+                        >
+                            GSTIN
+                        </mat-checkbox>
                     </div>
                     <div
                         *ngIf="
@@ -1882,14 +2217,15 @@
                         "
                         class="form-group"
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="cad"
                             [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
-                        />
-                        Company Address
+                            [checked]="true"
+                        >
+                            Company Address
+                        </mat-checkbox>
                         <div class="ml-3">
                             <textarea
                                 class="form-control"
@@ -1925,34 +2261,37 @@
                         "
                         class="form-group"
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="tam"
                             [(ngModel)]="customTemplate.sections['footer'].data['taxableAmount'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                        />
-                        Taxable Amount
+                        >
+                            Taxable Amount
+                        </mat-checkbox>
                     </div>
                     <div *ngIf="fieldsAndVisibility.footer.totalTax" class="form-group" [hidden]="true">
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="ttx"
                             [(ngModel)]="customTemplate.sections['footer'].data['totalTax'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                        />
-                        Total Tax
+                        >
+                            Total Tax
+                        </mat-checkbox>
                     </div>
                     <!--<div class="form-group">
                 <input type="checkbox" name="ded" [(ngModel)]="customTemplate.sections[2].content[2].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Other Deduction/Additions
             </div>-->
                     <div *ngIf="fieldsAndVisibility.footer.total" class="form-group">
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="itot"
                             [(ngModel)]="customTemplate.sections['footer'].data['total'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                        />
-                        Invoice Total
+                        >
+                            Invoice Total
+                        </mat-checkbox>
                     </div>
                     <div
                         *ngIf="
@@ -1963,14 +2302,15 @@
                         class="clearfix mr-t2"
                     >
                         <div class="form-group">
-                            <input
-                                type="checkbox"
+                            <mat-checkbox
+                                color="primary"
                                 name="totalQuantityCheck"
                                 [(ngModel)]="customTemplate.sections['table'].data['totalQuantity'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                checked
-                            />
-                            Total Quantity
+                                [checked]="true"
+                            >
+                                Total Quantity
+                            </mat-checkbox>
                         </div>
                         <div class="form-group">
                             <input
@@ -2000,14 +2340,15 @@
                         </div>
                     </div>
                     <div *ngIf="customTemplate.templateType === 'thermal_template'" class="form-group">
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="totalDueCheckbox"
                             [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
-                        />
-                        Invoice Total
+                            [checked]="true"
+                        >
+                            Invoice Total
+                        </mat-checkbox>
                         <div class="ml-3">
                             <ng-container
                                 *ngIf="totalDue?.isFocused || contentForm?.controls['totalDue']?.errors?.maxlength"
@@ -2025,14 +2366,15 @@
                         "
                         class="form-group"
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="ds"
                             [(ngModel)]="customTemplate.sections['table'].data['discount'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
-                        />
-                        Discount
+                            [checked]="true"
+                        >
+                            Discount
+                        </mat-checkbox>
                         <div class="ml-3">
                             <input
                                 type="text"
@@ -2057,13 +2399,14 @@
                         </div>
                     </div>
                     <div *ngIf="fieldsAndVisibility.footer.taxableAmount" class="form-group">
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="tam"
                             [(ngModel)]="customTemplate.sections['footer'].data['taxableAmount'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                        />
-                        Taxable Amount
+                        >
+                            Taxable Amount
+                        </mat-checkbox>
                         <div class="ml-3">
                             <input
                                 type="text"
@@ -2097,13 +2440,14 @@
                         "
                         class="form-group"
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="itiw"
                             [(ngModel)]="customTemplate.sections['footer'].data['totalInWords'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                        />
-                        Invoice Total(in words)
+                        >
+                            Invoice Total(in words)
+                        </mat-checkbox>
                     </div>
                     <div
                         class="form-group"
@@ -2114,16 +2458,17 @@
                         "
                     >
                         <div class="form-group">
-                            <input
-                                type="checkbox"
+                            <mat-checkbox
+                                color="primary"
                                 name="taxBifurcationCheckbox"
                                 [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display"
                                 (ngModelChange)="
                                     onChangeFieldVisibility(null, null, null);
                                     checkedTaxBifurcation('taxRateBifurcation', 'footer')
                                 "
-                            />
-                            Tax Bifurcation
+                            >
+                                Tax Bifurcation
+                            </mat-checkbox>
                         </div>
                         <div class="ml-3" *ngIf="customTemplate.sections['footer'].data['taxBifurcation'].display">
                             <div class="clearfix mr-b05">
@@ -2166,14 +2511,15 @@
                         "
                     >
                         <div>
-                            <input
-                                type="checkbox"
+                            <mat-checkbox
+                                color="primary"
                                 name="showNotesAtLastPage"
                                 [checked]="customTemplate.sections['footer'].data['showNotesAtLastPage']?.display"
                                 [(ngModel)]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            />
-                            Show notes at the last page
+                            >
+                                Show notes at the last page
+                            </mat-checkbox>
                         </div>
                     </div>
                     <div
@@ -2185,16 +2531,17 @@
                         "
                     >
                         <div class="form-group">
-                            <input
-                                type="checkbox"
+                            <mat-checkbox
+                                color="primary"
                                 name="taxBifurcationCheckbox"
                                 [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display"
                                 (ngModelChange)="
                                     onChangeFieldVisibility(null, null, null);
                                     checkedTaxBifurcation('taxRateBifurcation', 'footer')
                                 "
-                            />
-                            Tax Bifurcation
+                            >
+                                Tax Bifurcation
+                            </mat-checkbox>
                         </div>
                         <div class="ml-3" *ngIf="customTemplate.sections['footer'].data['taxBifurcation'].display">
                             <div class="clearfix mr-b05">
@@ -2216,14 +2563,15 @@
                     </div>
                     <div class="clearfix mr-t1 form-group">
                         <div *ngIf="fieldsAndVisibility.footer.message1">
-                            <input
-                                type="checkbox"
+                            <mat-checkbox
+                                color="primary"
                                 name="msg1"
                                 [(ngModel)]="customTemplate.sections['footer'].data['message1'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                checked
-                            />
-                            Note 1
+                                [checked]="true"
+                            >
+                                Note 1
+                            </mat-checkbox>
                         </div>
                         <div *ngIf="fieldsAndVisibility.footer.message1" class="form-group ml-3 mb-0 clearfix">
                             <div class="row">
@@ -2272,25 +2620,27 @@
                         class="clearfix mr-t1 form-group"
                     >
                         <div>
-                            <input
+                            <mat-checkbox
+                                name="message2"
+                                color="primary"
                                 [checked]="customTemplate.sections.footer.data.showMessage2?.display"
                                 [(ngModel)]="customTemplate.sections['footer'].data['showMessage2'].display"
-                                type="checkbox"
-                                name="message2"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            />
-                            Note 2
+                            >
+                                Note 2
+                            </mat-checkbox>
                         </div>
                     </div>
                     <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mr-t2">
                         <div class="mb-0 form-group thanks-input-group">
-                            <input
-                                type="checkbox"
+                            <mat-checkbox
+                                color="primary"
                                 name="ty"
                                 [(ngModel)]="customTemplate.sections['footer'].data['thanks'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                checked
-                            />
+                                [checked]="true"
+                            >
+                            </mat-checkbox>
                             <input
                                 type="text"
                                 [class.error-box]="contentForm?.controls['thanks']?.errors?.maxlength"
@@ -2322,14 +2672,15 @@
                         "
                         class="form-group"
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="footerCompanyNameCheckbox"
-                            checked
                             [(ngModel)]="customTemplate.sections['footer'].data['companyName'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                        />
-                        Company Name
+                            [checked]="true"
+                        >
+                            Company Name
+                        </mat-checkbox>
                     </div>
                     <div
                         *ngIf="
@@ -2340,14 +2691,15 @@
                         "
                         class="clearfix mr-t1 form-group"
                     >
-                        <input
-                            type="checkbox"
+                        <mat-checkbox
+                            color="primary"
                             name="textUnderSloganCheckbox"
                             [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
-                        />
-                        Text under Image Signature / Slogan
+                            [checked]="true"
+                        >
+                            Text under Image Signature / Slogan
+                        </mat-checkbox>
                         <div class="mb-0 form-group ml-3">
                             <input
                                 type="text"
@@ -2444,6 +2796,7 @@
                                     </label>
                                 </span>
                                 <button
+                                    mat-button
                                     *ngIf="signatureImgAttached"
                                     (click)="removeFile()"
                                     type="button"

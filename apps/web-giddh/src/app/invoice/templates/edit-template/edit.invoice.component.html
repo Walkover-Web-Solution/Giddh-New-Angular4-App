@@ -137,6 +137,7 @@
             <!--<button class="btn btn-default">Preview</button>-->
             <div class="pull-right mr-r4" *ngIf="voucherType === 'sales'">
                 <button
+                    mat-button
                     [attr.disabled]="isFormInValid ? true : null"
                     *ngIf="transactionMode == 'create'"
                     class="btn btn-success"
@@ -145,6 +146,7 @@
                     Save
                 </button>
                 <button
+                    mat-button
                     [attr.disabled]="isFormInValid ? true : null"
                     *ngIf="transactionMode == 'update'"
                     class="btn btn-success"
@@ -152,16 +154,26 @@
                 >
                     Update Template
                 </button>
-                <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
+                <button mat-button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
             </div>
             <div class="pull-right mr-r4" *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
-                <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate('voucher')">
+                <button
+                    mat-button
+                    *ngIf="transactionMode == 'create'"
+                    class="btn btn-success"
+                    (click)="createTemplate('voucher')"
+                >
                     Save
                 </button>
-                <button *ngIf="transactionMode == 'update'" class="btn btn-success" (click)="updateTemplate('voucher')">
+                <button
+                    mat-button
+                    *ngIf="transactionMode == 'update'"
+                    class="btn btn-success"
+                    (click)="updateTemplate('voucher')"
+                >
                     Update Template
                 </button>
-                <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
+                <button mat-button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
             </div>
         </div>
     </div>
