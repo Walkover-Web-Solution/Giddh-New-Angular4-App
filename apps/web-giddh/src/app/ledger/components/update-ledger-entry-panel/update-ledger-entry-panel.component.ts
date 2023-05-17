@@ -2558,7 +2558,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private loadStockVariants(stockUniqueName: string): void {
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(
             map((variants: IVariant[]) => (variants ?? []).map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))), takeUntil(this.destroyed$)).subscribe(res => {
-                this.variantForceClear$ = observableOf({status: true});
+                const isSameStock = res.find(variant => variant.value === this.selectedStockVariantUniqueName);
+                if (!isSameStock) {
+                    this.variantForceClear$ = observableOf({status: true});
+                }
                 this.stockVariants$ = observableOf(res);
                 this.changeDetectorRef.detectChanges();
             });
