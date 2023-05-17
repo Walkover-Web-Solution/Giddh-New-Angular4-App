@@ -11,6 +11,7 @@ import { HasFocusDirectiveModule } from '../../shared/helpers/directives/has-foc
 import { ThermalTemplateComponent } from './edit-template/out-tempate/templates/thermal-template/thermal-template.component';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
     imports: [
@@ -21,7 +22,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         NgxUploaderModule,
         HasFocusDirectiveModule,
         FormFieldsModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatRadioModule
     ],
     declarations: [
         OutTemplateComponent,

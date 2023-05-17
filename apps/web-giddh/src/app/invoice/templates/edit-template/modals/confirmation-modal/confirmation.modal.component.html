@@ -1,7 +1,7 @@
 <div id="" class="">
     <div class="modal-header d-flex justify-content-between">
         <h3>Confirmation</h3>
-        <button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
+        <button mat-button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
     </div>
     <div class="modal-body clearfix" id="export-body">
         <form name="newRole" novalidate class="" autocomplete="off">
@@ -14,8 +14,8 @@
             </ng-container>
 
             <div class="text-right mr-t4">
-                <button type="button" class="btn btn-sm btn-success" (click)="onConfirmation()">Yes</button>
-                <button type="button" class="btn btn-sm btn-primary mr-0" (click)="onCancel()">No</button>
+                <button mat-button type="button" class="btn btn-sm btn-success" (click)="onConfirmation()">Yes</button>
+                <button mat-button type="button" class="btn btn-sm btn-primary mr-0" (click)="onCancel()">No</button>
             </div>
         </form>
     </div>
