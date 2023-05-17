@@ -18,7 +18,7 @@
             <mat-checkbox
                 class="inventory-checkbox"
                 color="primary"
-                [name]="item?.value"
+                [name]="item.value"
                 (ngModelChange)="saveSelectedColumns()"
                 [(ngModel)]="item.checked"
                 [disabled]="item.checked && displayedColumns.length === 2"
