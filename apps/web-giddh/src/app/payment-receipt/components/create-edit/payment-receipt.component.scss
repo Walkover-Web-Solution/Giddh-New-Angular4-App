@@ -11,6 +11,12 @@
 .inner-container {
     max-width: 1120px;
     width: 100%;
+    &.payment-container {
+        max-width: 800px;
+    }
+    .row-gap {
+        row-gap: 10px;
+    }
 }
 .cheque-details {
     position: absolute;
@@ -20,26 +26,6 @@
     margin-left: 35%;
     min-width: 550px;
     max-width: 550px;
-}
-.balance-due-absolute {
-    position: absolute;
-    right: 0;
-    top: 30px;
-
-    .balance-due {
-        display: block;
-        color: #666;
-        line-height: 1.2rem;
-        font-size: 14px;
-        font-weight: 500;
-    }
-
-    .sp-rupees {
-        display: block;
-        font-size: 26px;
-        line-height: 1.2;
-        font-family: opensans-semibold;
-    }
 }
 .action-buttons {
     width: 100%;
@@ -144,8 +130,8 @@
     max-width: 375px;
     left: 15px !important;
     position: absolute;
-    top: 50px !important;
-    z-index: 97;
+    top: 55px !important;
+    z-index: 99;
 }
 section.billing-address-wrap {
     padding-top: 65px;
@@ -168,6 +154,13 @@ section.billing-address-wrap {
     }
     i {
         font-size: 16px;
+    }
+    &.blnc-drop {
+        margin-top: -5px;
+        a {
+            display: flex;
+            justify-content: space-between;
+        }
     }
 }
 
@@ -226,6 +219,156 @@ input.form-control.edit-currency {
     display: inline-block !important;
     width: 80px;
     height: 26px !important;
+}
+
+/*---- custom ----*/
+.receipt-date {
+    justify-content: flex-end;
+    strong {
+        display: flex;
+        justify-content: flex-end;
+    }
+}
+.other-check {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+    height: 100%;
+}
+.payment-date {
+    cursor: pointer;
+    .mat-field-border {
+        border: 0 !important;
+    }
+}
+.description {
+    textarea {
+        height: 60px;
+    }
+}
+
+.advance-toggle {
+    display: flex;
+    column-gap: 20px;
+    padding: 10px 0;
+    .mat-slide-toggle {
+        display: flex;
+    }
+}
+/*---- table ----*/
+
+.table-custom-invoice {
+    > thead {
+        > tr {
+            > th {
+                border: 1px solid var(--color-table-primary-header-bar-border) !important;
+                padding: 10px 8px;
+                white-space: nowrap;
+                text-align: left;
+
+                &:nth-child(2) {
+                    white-space: normal;
+                }
+
+                &:nth-child(3) {
+                    white-space: normal;
+                }
+
+                &:last-child {
+                    vertical-align: middle !important;
+                }
+            }
+        }
+    }
+
+    > tbody {
+        > tr {
+            > td {
+                border: 1px solid var(--color-table-primary-content-bar-border) !important;
+                padding: 10px 8px;
+                white-space: nowrap;
+                position: relative;
+
+                &:nth-child(2) {
+                    white-space: normal;
+                }
+
+                &:nth-child(3) {
+                    white-space: normal;
+                }
+                &.item-total {
+                    position: relative;
+                    .trash-icon-delete {
+                        position: absolute;
+                        right: -35px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        border: 1px solid var(--color-primary-button-border);
+                        border-radius: 50%;
+                        width: 22px;
+                        height: 22px;
+                        text-align: center;
+                    }
+                    .edit-icon {
+                        column-gap: 5px;
+                    }
+                }
+            }
+        }
+    }
+}
+.tax-bottom {
+    justify-content: flex-end;
+}
+.payment-footer {
+    display: flex;
+    justify-content: space-between;
+}
+.file-upload-input {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.file-upload-label {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    padding: 0px 12px;
+    border: 1px solid var(--color-secondary-input-bar-border);
+    border-radius: 5px;
+    display: block;
+    text-align: center;
+}
+.header-dropdown {
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    font-size: 24px;
+    color: var(--color-blue);
+}
+.mat-menu-item {
+    &:hover {
+        color: var(--color-dropdown-list-hover-text) !important;
+    }
+}
+button {
+    &:focus {
+        box-shadow: none !important;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .receipt-date {
+        justify-content: flex-start;
+        strong {
+            justify-content: flex-start;
+        }
+    }
 }
 
 @media (max-width: 990px) {

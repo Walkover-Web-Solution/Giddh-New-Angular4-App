@@ -9,30 +9,54 @@
         <mat-card-content>
             <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
             <div [ngStyle]="{ 'display': !showLoader ? 'block' : 'none' }">
+                <!-- region page change menu -->
+                <div class="d-flex border-bottom mobile-view-padding">
+                    <div class="form-group mr-b05 clearfix pro-invoice-heading">
+                        <div class="clearfix">
+                            <a href="javascript:;" [matMenuTriggerFor]="menu" class="header-dropdown">
+                                Receipt <span _ngcontent-sur-c320="" class="caret ng-tns-c320-2"></span>
+                            </a>
+                            <div class="previous-estimate-wrapper">
+                                <mat-menu #menu="matMenu" class="copy-invoice-menu">
+                                    <button mat-menu-item class="line-height-initial">
+                                        <div class="pd">
+                                            <span class="d-block">Receipt</span>
+                                        </div>
+                                    </button>
+                                    <button mat-menu-item class="line-height-initial">
+                                        <div class="pd">
+                                            <span class="d-block">Receipt 2</span>
+                                        </div>
+                                    </button>
+                                </mat-menu>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <form autocomplete="off" novalidate class="receipt-form" #receiptForm="ngForm">
                     <div class="clearfix">
                         <div
                             class="clearfix pd-t15"
                             [ngClass]="{ 'wrapper-receipt-fields': !voucherFormData.account?.uniqueName }"
                         >
-                            <div class="inner-container">
+                            <div class="inner-container payment-container">
                                 <div
                                     class="clearfix"
                                     [keyboardShortcut]="'alt+c'"
                                     (onShortcutPress)="addAccountFromShortcut()"
                                 >
-                                    <div class="row">
-                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
-                                            <label
-                                                >{{
-                                                    voucherFormData.type === receiptVoucherType
-                                                        ? localeData?.customer_name
-                                                        : localeData?.vendor_name
-                                                }}
-                                                <span class="red-text">*</span></label
-                                            >
-                                        </div>
-                                        <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 select-customer-name">
+                                    <div class="row row-gap">
+                                        <div class="col-sm-12 col-lg-6">
+                                            <strong>
+                                                <label
+                                                    >{{
+                                                        voucherFormData.type === receiptVoucherType
+                                                            ? localeData?.customer_name
+                                                            : localeData?.vendor_name
+                                                    }}
+                                                    <span class="red-text">*</span>
+                                                </label>
+                                            </strong>
                                             <div class="clearfix d-flex flex-column">
                                                 <div class="d-flex">
                                                     <sales-sh-select
@@ -41,7 +65,7 @@
                                                                 !isValidForm &&
                                                                 !voucherFormData.account?.uniqueName?.trim()
                                                         }"
-                                                        class="float-left sales-select width-627"
+                                                        class="float-left sales-select w-100"
                                                         name="customer-uniquename"
                                                         #customerNameDropDown
                                                         [options]="customerAccounts$ | async"
@@ -132,536 +156,22 @@
                                                 />
                                             </ng-container>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div
-                                        class="col-sm-12 col-xl-9 offset-lg-3 col-lg-8 col-md-9 offset-xl-2 offset-md-3"
-                                    >
-                                        <ng-container>
-                                            <section
-                                                [ngClass]="{
-                                                    'billing-address-wrap': !voucherFormData.account?.uniqueName
-                                                }"
-                                            >
-                                                <div class="wrap-billing-address clearfix w-100">
-                                                    <div class="row">
-                                                        <!-- region billing address -->
-                                                        <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
-                                                            <div class="form-group">
-                                                                <div class="d-flex align-items-center">
-                                                                    <span class="pb-0 pd-r15">{{
-                                                                        localeData?.billing_address
-                                                                    }}</span>
-                                                                    <span>
-                                                                        <div
-                                                                            class="
-                                                                                btn-group btn-block
-                                                                                change-address-dropdown
-                                                                            "
-                                                                            *ngIf="accountAddressList?.length > 1"
-                                                                        >
-                                                                            <a
-                                                                                mat-button
-                                                                                [matMenuTriggerFor]="billingAddressMenu"
-                                                                                class="dropdown-toggle"
-                                                                                [style.height.px]="29"
-                                                                            >
-                                                                                {{ localeData?.change }}</a
-                                                                            >
-                                                                            <mat-menu
-                                                                                #billingAddressMenu="matMenu"
-                                                                                class="change-address-mat-menu"
-                                                                            >
-                                                                                <button
-                                                                                    mat-menu-item
-                                                                                    *ngFor="
-                                                                                        let address of accountAddressList
-                                                                                    "
-                                                                                >
-                                                                                    <a
-                                                                                        class="dropdown-item"
-                                                                                        (click)="
-                                                                                            selectAddress(
-                                                                                                voucherFormData.account
-                                                                                                    .billingDetails,
-                                                                                                address,
-                                                                                                true
-                                                                                            )
-                                                                                        "
-                                                                                    >
-                                                                                        {{ address.address }}
-                                                                                        {{ address.state?.name }}
-                                                                                        <span class="d-block">
-                                                                                            {{
-                                                                                                address.gstNumber
-                                                                                                    ? (showGstinNo
-                                                                                                          ? commonLocaleData?.app_gstin +
-                                                                                                            ": "
-                                                                                                          : commonLocaleData?.app_trn +
-                                                                                                            ": ") +
-                                                                                                      address.gstNumber
-                                                                                                    : ""
-                                                                                            }}
-                                                                                        </span>
-                                                                                    </a>
-                                                                                </button>
-                                                                            </mat-menu>
-                                                                        </div>
-                                                                    </span>
-                                                                </div>
-                                                                <div class="billing-address clearfix">
-                                                                    <textarea
-                                                                        matInput
-                                                                        name="billingdetails-address"
-                                                                        class="form-control"
-                                                                        (keyup)="autoFillShippingDetails()"
-                                                                        rows="3"
-                                                                        autocomplete="off"
-                                                                        [(ngModel)]="
-                                                                            voucherFormData.account.billingDetails
-                                                                                .address[0]
-                                                                        "
-                                                                        autofocus="off"
-                                                                        aria-autocomplete="none"
-                                                                        #customerBillingAddress
-                                                                    ></textarea>
-
-                                                                    <div class="row">
-                                                                        <div class="col-sm-12 col-md-6">
-                                                                            <label class="sales-country-label">
-                                                                                {{ customerCountryName }}
-                                                                            </label>
-                                                                        </div>
-
-                                                                        <div class="col-sm-12 col-md-6" #billingState>
-                                                                            <mat-form-field
-                                                                                appearance="fill"
-                                                                                class="
-                                                                                    mat-field-select
-                                                                                    width-100
-                                                                                    only-bottom-border
-                                                                                "
-                                                                            >
-                                                                                <input
-                                                                                    type="text"
-                                                                                    [placeholder]="
-                                                                                        commonLocaleData?.app_state
-                                                                                    "
-                                                                                    name="billingdetails-statecode"
-                                                                                    class="no-border pd-l1"
-                                                                                    matInput
-                                                                                    [formControl]="searchBillingStates"
-                                                                                    [matAutocomplete]="billingStateAuto"
-                                                                                    autocomplete="off"
-                                                                                    (blur)="
-                                                                                        resetValueIfOptionNotSelected(
-                                                                                            'billingState'
-                                                                                        )
-                                                                                    "
-                                                                                />
-                                                                                <mat-autocomplete
-                                                                                    #billingStateAuto="matAutocomplete"
-                                                                                    [displayWith]="displayLabel"
-                                                                                    (optionSelected)="
-                                                                                        fillShippingBillingDetails(
-                                                                                            $event,
-                                                                                            true
-                                                                                        );
-                                                                                        autoFillShippingDetails()
-                                                                                    "
-                                                                                >
-                                                                                    <mat-option
-                                                                                        *ngFor="
-                                                                                            let state of filteredBillingStates
-                                                                                        "
-                                                                                        [value]="state"
-                                                                                        >{{ state?.label }}
-                                                                                    </mat-option>
-                                                                                </mat-autocomplete>
-                                                                            </mat-form-field>
-                                                                        </div>
-
-                                                                        <div
-                                                                            class="col-sm-6 col-md-6"
-                                                                            *ngIf="shouldShowTrnGstField"
-                                                                        >
-                                                                            <text-field
-                                                                                [maxlength]="15"
-                                                                                autocomplete="None"
-                                                                                name="billingdetails-taxnumber"
-                                                                                [cssClass]="'form-control input-custom'"
-                                                                                *ngIf="showGstinNo"
-                                                                                [(ngModel)]="
-                                                                                    voucherFormData.account
-                                                                                        .billingDetails.taxNumber
-                                                                                "
-                                                                                (change)="
-                                                                                    getStateCode(
-                                                                                        'billingDetails',
-                                                                                        statesBilling
-                                                                                    );
-                                                                                    autoFillShippingDetails()
-                                                                                "
-                                                                                [placeholder]="
-                                                                                    commonLocaleData?.app_gstin
-                                                                                "
-                                                                            >
-                                                                            </text-field>
-                                                                            <text-field
-                                                                                [maxlength]="15"
-                                                                                autocomplete="None"
-                                                                                type="text"
-                                                                                name="billingdetails-taxnumber"
-                                                                                [cssClass]="'form-control input-custom'"
-                                                                                *ngIf="showTrnNo"
-                                                                                [(ngModel)]="
-                                                                                    voucherFormData.account
-                                                                                        .billingDetails.taxNumber
-                                                                                "
-                                                                                (change)="
-                                                                                    getStateCode(
-                                                                                        'billingDetails',
-                                                                                        statesBilling
-                                                                                    );
-                                                                                    autoFillShippingDetails()
-                                                                                "
-                                                                                [placeholder]="
-                                                                                    commonLocaleData?.app_trn
-                                                                                "
-                                                                            >
-                                                                            </text-field>
-                                                                        </div>
-                                                                        <!-- static pin code  -->
-                                                                        <div
-                                                                            [ngClass]="{
-                                                                                'col-sm-6 col-md-6':
-                                                                                    showGstinNo || showTrnNo,
-                                                                                'col-sm-12 col-md-12': !(
-                                                                                    showGstinNo || showTrnNo
-                                                                                )
-                                                                            }"
-                                                                        >
-                                                                            <div class="form-group mr-b05">
-                                                                                <text-field
-                                                                                    [type]="'number'"
-                                                                                    [cssClass]="
-                                                                                        'form-control input-custom'
-                                                                                    "
-                                                                                    autocomplete="false"
-                                                                                    name="billing-pincode"
-                                                                                    (blur)="autoFillShippingDetails()"
-                                                                                    [placeholder]="
-                                                                                        commonLocaleData?.app_pin_code
-                                                                                    "
-                                                                                    [(ngModel)]="
-                                                                                        voucherFormData.account
-                                                                                            .billingDetails.pincode
-                                                                                    "
-                                                                                    decimalDigitsDirective
-                                                                                    [preventDecimal]="true"
-                                                                                >
-                                                                                </text-field>
-                                                                            </div>
-                                                                        </div>
-                                                                        <!-- static pin code end-->
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- endregion -->
-
-                                                        <!-- region shipping address -->
-                                                        <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
-                                                            <div class="form-group p-0 width-100">
-                                                                <div class="d-flex align-items-center pb-1">
-                                                                    <span class="pb-0 pd-r15">
-                                                                        <mat-checkbox
-                                                                            color="primary"
-                                                                            (change)="autoFillShippingDetails()"
-                                                                            name="autofill-shipping"
-                                                                            [(ngModel)]="autoFillShipping"
-                                                                        >
-                                                                            {{ localeData?.shipping_billing_same }}
-                                                                        </mat-checkbox>
-                                                                    </span>
-                                                                    <span>
-                                                                        <div
-                                                                            class="
-                                                                                btn-group btn-block
-                                                                                change-address-dropdown
-                                                                            "
-                                                                            *ngIf="
-                                                                                accountAddressList?.length > 1 &&
-                                                                                !autoFillShipping
-                                                                            "
-                                                                        >
-                                                                            <a
-                                                                                mat-button
-                                                                                [matMenuTriggerFor]="
-                                                                                    shippingAddressMenu
-                                                                                "
-                                                                                type="button"
-                                                                                class="dropdown-toggle"
-                                                                                [style.height.px]="24"
-                                                                            >
-                                                                                {{ localeData?.change }}</a
-                                                                            >
-                                                                            <mat-menu
-                                                                                #shippingAddressMenu="matMenu"
-                                                                                class="change-address-mat-menu"
-                                                                            >
-                                                                                <button
-                                                                                    mat-menu-item
-                                                                                    *ngFor="
-                                                                                        let address of accountAddressList
-                                                                                    "
-                                                                                >
-                                                                                    <a
-                                                                                        class="dropdown-item"
-                                                                                        (click)="
-                                                                                            selectAddress(
-                                                                                                voucherFormData.account
-                                                                                                    .shippingDetails,
-                                                                                                address,
-                                                                                                false
-                                                                                            )
-                                                                                        "
-                                                                                    >
-                                                                                        {{ address.address }}
-                                                                                        {{ address.state?.name }}
-
-                                                                                        <span class="d-block"
-                                                                                            >{{
-                                                                                                address.gstNumber
-                                                                                                    ? (showGstinNo
-                                                                                                          ? commonLocaleData?.app_gstin +
-                                                                                                            ": "
-                                                                                                          : commonLocaleData?.app_trn +
-                                                                                                            ": ") +
-                                                                                                      address.gstNumber
-                                                                                                    : ""
-                                                                                            }}
-                                                                                        </span>
-                                                                                    </a>
-                                                                                </button>
-                                                                            </mat-menu>
-                                                                        </div>
-                                                                    </span>
-                                                                </div>
-                                                                <div
-                                                                    class="billing-address"
-                                                                    [ngClass]="{ 'disabled': autoFillShipping }"
-                                                                >
-                                                                    <textarea
-                                                                        matInput
-                                                                        [readonly]="autoFillShipping"
-                                                                        name="shippingdetails-address"
-                                                                        class="form-control"
-                                                                        [(ngModel)]="
-                                                                            voucherFormData.account.shippingDetails
-                                                                                .address[0]
-                                                                        "
-                                                                        rows="3"
-                                                                        autocomplete="off"
-                                                                    ></textarea>
-
-                                                                    <div class="clearfix form-group mb-0">
-                                                                        <div class="row">
-                                                                            <div class="col-sm-12 col-md-6">
-                                                                                <div class="form-group mb-0">
-                                                                                    <label class="sales-country-label">
-                                                                                        {{ customerCountryName }}
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div
-                                                                                class="col-sm-12 col-md-6"
-                                                                                #shippingState
-                                                                            >
-                                                                                <mat-form-field
-                                                                                    appearance="fill"
-                                                                                    class="
-                                                                                        mat-field-select
-                                                                                        width-100
-                                                                                        only-bottom-border
-                                                                                    "
-                                                                                >
-                                                                                    <input
-                                                                                        type="text"
-                                                                                        [placeholder]="
-                                                                                            commonLocaleData?.app_state
-                                                                                        "
-                                                                                        name="shippingdetails-statecode"
-                                                                                        class="no-border pd-l1"
-                                                                                        matInput
-                                                                                        [formControl]="
-                                                                                            searchShippingStates
-                                                                                        "
-                                                                                        [matAutocomplete]="
-                                                                                            shippingStateAuto
-                                                                                        "
-                                                                                        autocomplete="off"
-                                                                                        (blur)="
-                                                                                            resetValueIfOptionNotSelected(
-                                                                                                'shippingState'
-                                                                                            )
-                                                                                        "
-                                                                                    />
-                                                                                    <mat-autocomplete
-                                                                                        #shippingStateAuto="matAutocomplete"
-                                                                                        [displayWith]="displayLabel"
-                                                                                        (optionSelected)="
-                                                                                            fillShippingBillingDetails(
-                                                                                                $event,
-                                                                                                false
-                                                                                            )
-                                                                                        "
-                                                                                    >
-                                                                                        <mat-option
-                                                                                            *ngFor="
-                                                                                                let state of filteredShippingStates
-                                                                                            "
-                                                                                            [value]="state"
-                                                                                            >{{ state?.label }}
-                                                                                        </mat-option>
-                                                                                    </mat-autocomplete>
-                                                                                </mat-form-field>
-                                                                            </div>
-
-                                                                            <div
-                                                                                class="col-sm-6"
-                                                                                *ngIf="shouldShowTrnGstField"
-                                                                            >
-                                                                                <text-field
-                                                                                    [readonly]="autoFillShipping"
-                                                                                    autocomplete="None"
-                                                                                    [maxlength]="15"
-                                                                                    type="text"
-                                                                                    name="shippingdetails-taxnumber"
-                                                                                    *ngIf="showGstinNo"
-                                                                                    [cssClass]="
-                                                                                        'form-control input-custom'
-                                                                                    "
-                                                                                    [(ngModel)]="
-                                                                                        voucherFormData.account
-                                                                                            .shippingDetails.taxNumber
-                                                                                    "
-                                                                                    (change)="
-                                                                                        getStateCode(
-                                                                                            'shippingDetails',
-                                                                                            statesShipping
-                                                                                        )
-                                                                                    "
-                                                                                    [placeholder]="
-                                                                                        commonLocaleData?.app_gstin
-                                                                                    "
-                                                                                ></text-field>
-                                                                                <text-field
-                                                                                    [readonly]="autoFillShipping"
-                                                                                    [maxlength]="15"
-                                                                                    autocomplete="None"
-                                                                                    type="text"
-                                                                                    name="shippingdetails-taxnumber"
-                                                                                    [cssClass]="
-                                                                                        'form-control input-custom'
-                                                                                    "
-                                                                                    *ngIf="showTrnNo"
-                                                                                    [(ngModel)]="
-                                                                                        voucherFormData.account
-                                                                                            .shippingDetails.taxNumber
-                                                                                    "
-                                                                                    (change)="
-                                                                                        getStateCode(
-                                                                                            'shippingDetails',
-                                                                                            statesShipping
-                                                                                        )
-                                                                                    "
-                                                                                    [placeholder]="
-                                                                                        commonLocaleData?.app_trn
-                                                                                    "
-                                                                                ></text-field>
-                                                                            </div>
-                                                                            <!-- static pin code  -->
-                                                                            <div
-                                                                                [ngClass]="{
-                                                                                    'col-sm-6':
-                                                                                        showGstinNo || showTrnNo,
-                                                                                    'col-sm-12': !(
-                                                                                        showGstinNo || showTrnNo
-                                                                                    )
-                                                                                }"
-                                                                            >
-                                                                                <div class="form-group mr-b05">
-                                                                                    <text-field
-                                                                                        [type]="'number'"
-                                                                                        [cssClass]="
-                                                                                            'form-control input-custom'
-                                                                                        "
-                                                                                        autocomplete="false"
-                                                                                        name="shipping-pincode"
-                                                                                        [placeholder]="
-                                                                                            commonLocaleData?.app_pin_code
-                                                                                        "
-                                                                                        [(ngModel)]="
-                                                                                            voucherFormData.account
-                                                                                                .shippingDetails.pincode
-                                                                                        "
-                                                                                        decimalDigitsDirective
-                                                                                        [preventDecimal]="true"
-                                                                                    >
-                                                                                    </text-field>
-                                                                                </div>
-                                                                            </div>
-                                                                            <!-- static pin code end-->
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- endregion -->
-                                                    </div>
-                                                </div>
-                                            </section>
-                                        </ng-container>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clearfix">
-                            <div class="inner-container">
-                                <div class="clearfix">
-                                    <div class="clearfix">
-                                        <div class="row position-relative">
-                                            <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
-                                                <label>{{ localeData?.attention_to }}</label>
-                                            </div>
-                                            <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10">
-                                                <mat-form-field appearance="fill" class="no-border-top">
-                                                    <text-field
-                                                        [cssClass]="'form-control mat-field-border'"
-                                                        name="attention-to"
-                                                        id="attention-to"
-                                                        [placeholder]="localeData?.attention_to"
-                                                        [(ngModel)]="voucherFormData.account.attentionTo"
-                                                    >
-                                                    </text-field>
-                                                </mat-form-field>
-                                            </div>
-                                            <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 cheque-details no-top">
-                                                <div class="form-inline flex-row flex-nowrap">
-                                                    <div class="form-group">
-                                                        <label
+                                        <div class="col-sm-12 col-lg-6 no-top">
+                                            <div class="form-inline flex-row flex-nowrap receipt-date">
+                                                <div class="form-group d-block">
+                                                    <strong>
+                                                        <label class="d-block"
                                                             >{{
                                                                 voucherFormData.type === receiptVoucherType
-                                                                    ? localeData?.receipt_date
-                                                                    : localeData?.payment_date
+                                                                    ? localeData?.date
+                                                                    : localeData?.date
                                                             }}
-                                                            <span class="red-text">*</span></label
-                                                        >
+                                                            <span class="red-text">*</span>
+                                                        </label>
+                                                    </strong>
+                                                    <div class="payment-date">
                                                         <giddh-datepicker
-                                                            class="inline mr-l1"
+                                                            class="inline border-0"
                                                             [showError]="
                                                                 (!isValidForm && !voucherFormData.date) ||
                                                                 isInvalidVoucherDate
@@ -671,7 +181,7 @@
                                                             (ngModelChange)="validateVoucherDate()"
                                                             [placeholder]="commonLocaleData?.app_select_date"
                                                             [cssClass]="
-                                                                'mat-field-border border-left-right-none form-control w-100'
+                                                                ' border-left-right-none form-control w-100 date-border text-lg-right text-md-left'
                                                             "
                                                             [showToggleIcon]="false"
                                                         ></giddh-datepicker>
@@ -680,452 +190,290 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="clearfix" *ngIf="voucherFormData.type === receiptVoucherType">
-                                    <div class="row mr-b05">
-                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
-                                            <label>&nbsp;</label>
+                                    <div class="row row-gap">
+                                        <div class="col-sm-12 col-lg-6">
+                                            <strong>
+                                                <label class="d-block">{{ localeData?.attention_to }}</label>
+                                            </strong>
+                                            <text-field
+                                                [cssClass]="'form-control mat-field-border'"
+                                                name="attention-to"
+                                                id="attention-to"
+                                                [placeholder]="localeData?.attention_to"
+                                                [(ngModel)]="voucherFormData.account.attentionTo"
+                                            >
+                                            </text-field>
                                         </div>
-                                        <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9">
-                                            <div class="width-627">
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="advance-receipt"
-                                                    [(ngModel)]="isAdvanceReceipt"
-                                                >
-                                                    {{ commonLocaleData?.app_voucher_types?.advance_receipt }}
-                                                </mat-checkbox>
-                                            </div>
+                                        <div class="col-sm-12 col-lg-6" #billingState>
+                                            <strong>
+                                                <label class="d-block">Place of Supply</label>
+                                            </strong>
+                                            <select-field
+                                                [cssClass]="'form-control mat-field-border'"
+                                                [name]="'billingdetails-statecode'"
+                                                [placeholder]="commonLocaleData?.app_state"
+                                                [options]="filteredBillingStates"
+                                            >
+                                            </select-field>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="clearfix pull-right receipt-card-table">
-                                    <ng-container>
-                                        <div
-                                            class="switch-currency d-flex align-items-center"
-                                            *ngIf="isMultiCurrencyAccount && !showSwitchCurrency"
-                                        >
-                                            <span class="left-currency mr-r05"
-                                                >{{ commonLocaleData?.app_numbers?.one }}
-                                                {{ companyCurrencyName }}</span
-                                            >
-                                            <img
-                                                class="switch-icon"
-                                                src="{{ imgPath }}switch-icon.svg"
-                                                alt="switch-icon"
-                                                (click)="switchCurrency(true)"
-                                            />
-                                            <span class="right-currency mr-r1 d-flex align-items-center">
-                                                <span class="currency-digits" *ngIf="!showCurrencyValue">{{
-                                                    originalExchangeRate | giddhCurrency
-                                                }}</span>
-                                                <text-field
-                                                    [type]="'number'"
-                                                    name="exchangeRate"
-                                                    [(ngModel)]="exchangeRate"
-                                                    *ngIf="showCurrencyValue"
-                                                    [cssClass]="'form-control edit-currency'"
-                                                >
-                                                </text-field>
-                                                <span class="mr-l4">{{ companyCurrency }}</span>
-                                            </span>
-
-                                            <span class="edit-icon cp">
-                                                <img
-                                                    src="{{ imgPath }}edit-pencilicon.svg"
-                                                    class="edit-pencil"
-                                                    *ngIf="!autoSaveIcon"
-                                                    (click)="
-                                                        showCurrencyValue = !showCurrencyValue;
-                                                        autoSaveIcon = !autoSaveIcon;
-                                                        exchangeRate = originalExchangeRate
-                                                    "
-                                                />
-                                                <img
-                                                    src="{{ imgPath }}autosave.svg"
-                                                    class="edit-pencil"
-                                                    (click)="
-                                                        originalExchangeRate = exchangeRate;
-                                                        previousExchangeRate = exchangeRate;
-                                                        autoSaveIcon = !autoSaveIcon;
-                                                        showCurrencyValue = !showCurrencyValue;
-                                                        calculateTotals()
-                                                    "
-                                                    *ngIf="autoSaveIcon"
-                                                />
-                                            </span>
-                                        </div>
-                                        <div
-                                            class="switch-currency"
-                                            *ngIf="isMultiCurrencyAccount && showSwitchCurrency"
-                                        >
-                                            <span class="left-currency mr-r1"
-                                                >{{ commonLocaleData?.app_numbers?.one }} {{ companyCurrency }}</span
-                                            >
-                                            <img
-                                                class="switch-icon"
-                                                src="{{ imgPath }}switch-icon.svg"
-                                                alt="switch-icon"
-                                                (click)="switchCurrency(false)"
-                                            />
-                                            <span class="right-currency mr-l1">
-                                                <span class="currency-digits" *ngIf="!showCurrencyValue">{{
-                                                    originalReverseExchangeRate | giddhCurrency
-                                                }}</span>
-                                                <text-field
-                                                    [type]="'number'"
-                                                    name="reverseExchangeRate"
-                                                    [(ngModel)]="reverseExchangeRate"
-                                                    *ngIf="showCurrencyValue"
-                                                    [cssClass]="'form-control edit-currency'"
-                                                ></text-field>
-                                                {{ companyCurrencyName }}
-                                            </span>
-                                            <span class="edit-icon cp">
-                                                <img
-                                                    *ngIf="!autoSaveIcon"
-                                                    src="{{ imgPath }}edit-pencilicon.svg"
-                                                    class="edit-pencil"
-                                                    (click)="saveCancelExchangeRate(false)"
-                                                />
-                                                <img
-                                                    src="{{ imgPath }}autosave.svg"
-                                                    class="edit-pencil"
-                                                    (click)="saveCancelExchangeRate(true)"
-                                                    *ngIf="autoSaveIcon"
-                                                />
-                                            </span>
-                                        </div>
-                                    </ng-container>
-                                </div>
-                                <div class="clearfix">
-                                    <table class="table receipt-table" width="100%" cellpadding="0" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>
+                                    <div class="row row-gap">
+                                        <div class="col-lg-4">
+                                            <strong>
+                                                <label>
                                                     {{
                                                         voucherFormData.type === receiptVoucherType
                                                             ? localeData?.receipt_mode
                                                             : localeData?.payment_mode
                                                     }}
                                                     <span class="red-text">*</span>
-                                                </th>
-                                                <th>
-                                                    {{ commonLocaleData?.app_amount }} <span class="red-text">*</span>
-                                                </th>
-                                                <th>{{ localeData?.cheque_no }}</th>
-                                                <th>{{ localeData?.cheque_date }}</th>
-                                                <th *ngIf="isAdvanceReceipt">
-                                                    {{ localeData?.tax_on_advance }} <span class="red-text">*</span>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="clearfix">
-                                                        <mat-form-field
-                                                            appearance="fill"
-                                                            class="mat-field-select width-100"
-                                                            [ngClass]="{
-                                                                'error-box border-radius-5':
-                                                                    !isValidForm &&
-                                                                    !voucherFormData.entries[0].transactions[0].account
-                                                                        ?.uniqueName
-                                                            }"
-                                                        >
-                                                            <input
-                                                                type="text"
-                                                                name="receipt-mode"
-                                                                [placeholder]="commonLocaleData?.app_select"
-                                                                class="no-border pd-l1"
-                                                                matInput
-                                                                [formControl]="searchBankAccount"
-                                                                [matAutocomplete]="bankAccountAuto"
-                                                                autocomplete="off"
-                                                                (blur)="resetValueIfOptionNotSelected('bankAccount')"
-                                                            />
-                                                            <mat-autocomplete
-                                                                #bankAccountAuto="matAutocomplete"
-                                                                [displayWith]="displayLabel"
-                                                                (optionSelected)="selectBank($event)"
-                                                            >
-                                                                <mat-option
-                                                                    *ngFor="let bankAccount of bankAccounts"
-                                                                    [value]="bankAccount"
-                                                                    >{{ bankAccount?.label }}
-                                                                </mat-option>
-                                                            </mat-autocomplete>
-                                                        </mat-form-field>
-                                                    </div>
-                                                    <div class="clearfix mt-2">
-                                                        <mat-form-field appearance="fill" class="width-100">
-                                                            <textarea
-                                                                matInput
-                                                                class="
-                                                                    mat-field-border
-                                                                    form-control
-                                                                    w-100
-                                                                    min-height-100
-                                                                "
-                                                                name="description"
-                                                                [(ngModel)]="
-                                                                    voucherFormData.templateDetails.other.message2
-                                                                "
-                                                                [placeholder]="localeData?.description"
-                                                            ></textarea>
-                                                        </mat-form-field>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <mat-form-field appearance="fill" class="no-border-top width-100">
-                                                        <text-field
-                                                            [cssClass]="'form-control mat-field-border'"
-                                                            [showError]="
-                                                                !isValidForm &&
-                                                                !voucherFormData.entries[0].transactions[0].amount
-                                                                    .amountForAccount
-                                                            "
-                                                            name="receipt-amount"
-                                                            id="receipt-amount"
-                                                            [placeholder]="localeData?.enter_amount"
-                                                            decimalDigitsDirective
-                                                            [mask]="inputMaskFormat"
-                                                            [(ngModel)]="
-                                                                voucherFormData.entries[0].transactions[0].amount
-                                                                    .amountForAccount
-                                                            "
-                                                            (ngModelChange)="calculateTotals()"
-                                                        >
-                                                        </text-field>
-                                                    </mat-form-field>
-                                                </td>
-                                                <td>
-                                                    <mat-form-field appearance="fill" class="no-border-top width-100">
-                                                        <text-field
-                                                            [cssClass]="'form-control mat-field-border'"
-                                                            name="cheque-no"
-                                                            id="cheque-no"
-                                                            [placeholder]="localeData?.cheque_no"
-                                                            [(ngModel)]="voucherFormData.entries[0].chequeNumber"
-                                                        >
-                                                        </text-field>
-                                                    </mat-form-field>
-                                                </td>
-                                                <td>
-                                                    <giddh-datepicker
-                                                        [placeholder]="commonLocaleData?.app_select_date"
-                                                        [cssClass]="
-                                                            'mat-field-border border-left-right-none form-control w-100'
-                                                        "
-                                                        [showError]="isInvalidChequeDate"
-                                                        [showToggleIcon]="false"
-                                                        name="cheque-clearance-date"
-                                                        [(ngModel)]="voucherFormData.entries[0].chequeClearanceDate"
-                                                        (ngModelChange)="validateChequeDate()"
-                                                    >
-                                                    </giddh-datepicker>
-                                                </td>
-                                                <td class="overflow-visible" *ngIf="isAdvanceReceipt">
-                                                    <tax-control
-                                                        [ngClass]="{
-                                                            'error-box': !isValidForm && selectedTaxes?.length === 0
-                                                        }"
-                                                        class="dropdown-container w-100"
-                                                        [taxes]="companyTaxesList"
-                                                        [date]="voucherFormData?.date"
-                                                        [taxRenderData]="voucherFormData.entries[0].taxes"
-                                                        [totalForTax]="
-                                                            voucherFormData.entries[0].transactions[0].amount
-                                                                .amountForAccount
-                                                        "
-                                                        [showHeading]="false"
-                                                        [isMandatory]="true"
-                                                        [exceptTaxTypes]="['tdsrc', 'tdspay', 'tcspay', 'tcsrc']"
-                                                        [maskInput]="inputMaskFormat"
-                                                        [prefixInput]="activeCompany.baseCurrencySymbol"
-                                                        [suffixInput]="''"
-                                                        [applicableTaxes]="[]"
-                                                        [calculateTaxInclusively]="true"
-                                                        [isAdvanceReceipt]="isAdvanceReceipt"
-                                                        [allowedSelectionOfAType]="allowedSelectionOfAType"
-                                                        [commonLocaleData]="commonLocaleData"
-                                                        (taxAmountSumEvent)="calculateTax()"
-                                                    >
-                                                    </tax-control>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="clearfix">
-                                    <div class="row position-relative">
-                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
-                                            <label><i class="icon-file-path"></i> {{ localeData?.attach_file }}</label>
+                                                </label>
+                                            </strong>
+                                            <div class="clearfix">
+                                                <select-field
+                                                    [cssClass]="'form-control mat-field-border'"
+                                                    [name]="'billingdetails-statecode'"
+                                                    [placeholder]="commonLocaleData?.app_bank_name"
+                                                    [options]="bankAccounts"
+                                                >
+                                                </select-field>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-12 col-xl-4 col-lg-6 col-md-5">
-                                            <label
-                                                class="custom-file-label form-control cp position-relative"
-                                                for="file"
+                                        <div class="col-lg-4">
+                                            <strong>
+                                                <label>{{ localeData?.cheque_no }}</label>
+                                            </strong>
+                                            <text-field
+                                                [cssClass]="'form-control mat-field-border'"
+                                                name="cheque-no"
+                                                id="cheque-no"
+                                                [placeholder]="localeData?.cheque_no"
+                                                [(ngModel)]="voucherFormData.entries[0].chequeNumber"
                                             >
-                                                <em *ngIf="!selectedFileName && !isFileUploading">{{
-                                                    localeData?.drag_drop_file
-                                                }}</em>
-                                                <div
-                                                    *ngIf="isFileUploading"
-                                                    class="d-flex justify-content-center align-items-center"
-                                                >
-                                                    <i class="fa fa-spinner rotate"></i>
-                                                </div>
-                                                <em *ngIf="selectedFileName && !isFileUploading" class="text-success">{{
-                                                    selectedFileName
-                                                }}</em>
-                                                <span class="text-success"
-                                                    ><i
-                                                        class="fa fa-check"
-                                                        *ngIf="selectedFileName && !isFileUploading"
-                                                    ></i
-                                                ></span>
-                                                <span
-                                                    class="delete-image"
-                                                    (click)="
-                                                        showAttachmentDeleteConfirmationModal(); $event.preventDefault()
-                                                    "
-                                                    *ngIf="selectedFileName && !isFileUploading"
-                                                >
-                                                    <img src="assets/images/multiply.svg" />
-                                                </span>
-                                                <input
-                                                    type="file"
-                                                    name="file"
-                                                    id="file"
-                                                    class="cp"
-                                                    [options]="fileUploadOptions"
-                                                    ngFileSelect
-                                                    [uploadInput]="uploadInput"
-                                                    (uploadOutput)="onUploadOutput($event)"
-                                                    (change)="onFileChange($event?.target)"
-                                                    droppable="true"
-                                                />
-                                            </label>
+                                            </text-field>
                                         </div>
-                                        <div class="col-sm-12 col-xl-8 col-lg-6 col-md-7 receipt-total">
-                                            <div class="form-inline flex-row flex-nowrap pull-right d-block">
-                                                <div class="clearfix">
-                                                    <div class="table-row">
-                                                        <div class="table-cell">
-                                                            {{ commonLocaleData?.app_subtotal }}
-                                                        </div>
-                                                        <div class="table-cell figure-cell">
-                                                            <span class="d-flex justify-content-end">
-                                                                <amount-field
-                                                                    [amount]="totals.subTotal"
-                                                                    [currencyCode]="
-                                                                        voucherFormData?.account?.currencyCode
-                                                                    "
-                                                                    [currencySymbol]="
-                                                                        voucherFormData?.account?.currencySymbol
-                                                                    "
-                                                                >
-                                                                </amount-field>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="table-row">
-                                                        <div class="table-cell">{{ localeData?.tax_total }}</div>
-                                                        <div class="table-cell figure-cell">
-                                                            <span class="d-flex justify-content-end">
-                                                                <amount-field
-                                                                    [amount]="totals.taxTotal"
-                                                                    [currencyCode]="
-                                                                        voucherFormData?.account?.currencyCode
-                                                                    "
-                                                                    [currencySymbol]="
-                                                                        voucherFormData?.account?.currencySymbol
-                                                                    "
-                                                                >
-                                                                </amount-field>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="table-row">
-                                                        <div class="table-cell">
-                                                            <b
-                                                                >{{ commonLocaleData?.app_total }}
-                                                                <span *ngIf="isMultiCurrencyAccount">{{
-                                                                    voucherFormData?.account?.currencySymbol
-                                                                }}</span></b
-                                                            >
-                                                        </div>
-                                                        <div class="table-cell figure-cell">
-                                                            <span class="d-flex justify-content-end">
-                                                                <amount-field
-                                                                    [amount]="totals.grandTotal"
-                                                                    [currencyCode]="
-                                                                        isMultiCurrencyAccount
-                                                                            ? voucherFormData?.account?.currencyCode
-                                                                            : ''
-                                                                    "
-                                                                    [currencySymbol]="
-                                                                        isMultiCurrencyAccount
-                                                                            ? voucherFormData?.account?.currencySymbol
-                                                                            : ''
-                                                                    "
-                                                                >
-                                                                </amount-field>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="table-row" *ngIf="isMultiCurrencyAccount">
-                                                        <div class="table-cell">
-                                                            <b
-                                                                >{{ commonLocaleData?.app_total }}
-                                                                <span *ngIf="isMultiCurrencyAccount">{{
-                                                                    activeCompany.baseCurrencySymbol
-                                                                }}</span></b
-                                                            >
-                                                        </div>
-                                                        <div class="table-cell figure-cell">
-                                                            <span class="d-flex justify-content-end">
-                                                                <amount-field
-                                                                    [amount]="totals.grandTotalMultiCurrency"
-                                                                    [currencyCode]="companyCurrency"
-                                                                    [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                                                >
-                                                                </amount-field>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        <div class="col-lg-4">
+                                            <strong>
+                                                <label>{{ localeData?.clearance_date }}</label>
+                                            </strong>
+                                            <giddh-datepicker
+                                                [placeholder]="commonLocaleData?.app_select_date"
+                                                [cssClass]="
+                                                    'mat-field-border border-left-right-none form-control w-100'
+                                                "
+                                                [showError]="isInvalidChequeDate"
+                                                [showToggleIcon]="false"
+                                                name="cheque-clearance-date"
+                                                [(ngModel)]="voucherFormData.entries[0].chequeClearanceDate"
+                                                (ngModelChange)="validateChequeDate()"
+                                            >
+                                            </giddh-datepicker>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="clearfix mt-2 description">
+                                                <textarea
+                                                    matInput
+                                                    class="mat-field-border form-control w-100 min-height-80"
+                                                    name="description"
+                                                    [(ngModel)]="voucherFormData.templateDetails.other.message2"
+                                                    [placeholder]="localeData?.description"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="advance-toggle">
+                                                <strong><a href="">Receipt</a></strong>
+                                                <mat-slide-toggle color="primary" id="">
+                                                    <strong>
+                                                        <span class="pull-left">Advance</span>
+                                                    </strong>
+                                                </mat-slide-toggle>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <strong>
+                                                <label
+                                                    >{{ commonLocaleData?.app_amount }}
+                                                    <span class="red-text">*</span></label
+                                                >
+                                            </strong>
+                                            <mat-form-field appearance="fill" class="no-border-top width-100">
+                                                <text-field
+                                                    [cssClass]="'form-control mat-field-border text-right'"
+                                                    [showError]="
+                                                        !isValidForm &&
+                                                        !voucherFormData.entries[0].transactions[0].amount
+                                                            .amountForAccount
+                                                    "
+                                                    name="receipt-amount"
+                                                    id="receipt-amount"
+                                                    [placeholder]="localeData?.enter_amount"
+                                                    decimalDigitsDirective
+                                                    [mask]="inputMaskFormat"
+                                                    [(ngModel)]="
+                                                        voucherFormData.entries[0].transactions[0].amount
+                                                            .amountForAccount
+                                                    "
+                                                    (ngModelChange)="calculateTotals()"
+                                                >
+                                                </text-field>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="other-check">
+                                                <mat-checkbox
+                                                    name="autoFillShipping"
+                                                    color="primary"
+                                                    class="auto-fill-shipping-address mr-t10"
+                                                    (change)="toggleOtherTaxesAsidePane(true, null)"
+                                                >
+                                                </mat-checkbox>
+                                                <strong>
+                                                    <label>Other Tax</label>
+                                                </strong>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3 col-md-3 balance-due-absolute">
-                                <div class="text-right">
-                                    <p class="font-20 pb-r1 justify-content-end">
-                                        <span class="balance-due pd-r05">{{ commonLocaleData?.app_amount }}</span>
-                                        <span class="sp-rupees d-flex justify-content-end">
-                                            <amount-field
-                                                [amount]="totals.grandTotal"
-                                                [currencyCode]="voucherFormData?.account?.currencyCode"
-                                                [currencySymbol]="voucherFormData?.account?.currencySymbol"
-                                            >
-                                            </amount-field>
-                                        </span>
-                                        <span
-                                            class="sp-rupees d-flex justify-content-end"
-                                            *ngIf="isMultiCurrencyAccount"
+                                    <div class="row row-gap inline-adjustment">
+                                        <advance-receipt-adjustment-component
+                                            [adjustedVoucherType]="'receipt'"
+                                            [isUpdateMode]="false"
+                                            [depositAmount]="0"
+                                            [invoiceFormDetails]="voucherFormData"
+                                            [isVoucherModule]="true"
+                                            [advanceReceiptAdjustmentUpdatedData]="null"
+                                            [voucherForAdjustment]="[]"
+                                            [isModal]="false"
                                         >
-                                            <amount-field
-                                                [amount]="totals.grandTotalMultiCurrency"
-                                                [currencyCode]="companyCurrency"
-                                                [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                            >
-                                            </amount-field>
-                                        </span>
-                                    </p>
+                                        </advance-receipt-adjustment-component>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <table class="table table-custom-invoice basic">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Product/Service</th>
+                                                        <th>Amount</th>
+                                                        <th>Tax</th>
+                                                        <th>Other Tax</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <select-field
+                                                                [cssClass]="'form-control mat-field-border mt-4'"
+                                                                [name]="'billingdetails-statecode'"
+                                                                [placeholder]="'Accounting Service'"
+                                                            >
+                                                            </select-field>
+                                                            <div class="d-flex aqua-color tax-bottom">
+                                                                <span class="cp aqua-color">
+                                                                    <a href="javascript:void(0)">HSN: 123456</a>
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <text-field
+                                                                [cssClass]="'form-control mat-field-border text-right'"
+                                                                [showError]="
+                                                                    !isValidForm &&
+                                                                    !voucherFormData.entries[0].transactions[0].amount
+                                                                        .amountForAccount
+                                                                "
+                                                                name="amount"
+                                                                id="amount"
+                                                                [placeholder]="localeData?.enter_amount"
+                                                                decimalDigitsDirective
+                                                                [mask]="inputMaskFormat"
+                                                            >
+                                                            </text-field>
+                                                        </td>
+                                                        <td>
+                                                            <select-field
+                                                                [cssClass]="'form-control mat-field-border text-right'"
+                                                                [name]="'tax'"
+                                                                [placeholder]="'0'"
+                                                            >
+                                                            </select-field>
+                                                        </td>
+                                                        <td class="item-total">
+                                                            <div class="other-check">
+                                                                <mat-checkbox
+                                                                    name="autoFillShipping"
+                                                                    color="primary"
+                                                                    class="auto-fill-shipping-address mr-t10"
+                                                                    (change)="toggleOtherTaxesAsidePane(true, null)"
+                                                                >
+                                                                </mat-checkbox>
+                                                                <strong>
+                                                                    <label>Other Tax</label>
+                                                                </strong>
+                                                            </div>
+                                                            <div class="trash-icon-delete">
+                                                                <span class="cp">
+                                                                    <i class="icon-trash" aria-hidden="true"></i>
+                                                                </span>
+                                                            </div>
+                                                            <!-- hide-edit -->
+                                                            <!-- <span class="edit-icon cp d-flex">
+                                                                <img
+                                                                    src="assets/images/edit-pencilicon.svg"
+                                                                    class="edit-pencil"
+                                                                />
+                                                                <text-field
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    [showError]="
+                                                                        !isValidForm &&
+                                                                        !voucherFormData.entries[0].transactions[0].amount
+                                                                            .amountForAccount
+                                                                    "
+                                                                    name="amount"
+                                                                    id="amount"
+                                                                    [placeholder]="localeData?.enter_amount"
+                                                                >
+                                                                </text-field>
+                                                            </span> -->
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="clearfix mt-2">
+                                                <strong>
+                                                    <label>Note</label>
+                                                </strong>
+                                                <textarea
+                                                    matInput
+                                                    class="mat-field-border form-control w-100 min-height-100"
+                                                    name="note"
+                                                    [placeholder]="'Note'"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 mt-4">
+                                            <div class="file-input">
+                                                <strong>
+                                                    <label
+                                                        >Attachement File
+                                                        <i class="icon-file-path"></i>
+                                                    </label>
+                                                </strong>
+                                                <label for="file-input" class="file-upload-label">
+                                                    Drag/Drop file or Click here
+                                                </label>
+                                                <input
+                                                    type="file"
+                                                    name="file-input"
+                                                    id="file-input"
+                                                    class="file-upload-input"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1221,6 +569,25 @@
         </mat-card-content>
     </mat-card>
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+    <div
+        class="aside-overlay"
+        *ngIf="asideMenuStateForOtherTaxes === 'in'"
+        (click)="closeAsideMenuStateForOtherTaxes()"
+    ></div>
+    <!-- other-tax -->
+    <div id="top0">
+        <app-aside-menu-other-taxes
+            *ngIf="asideMenuStateForOtherTaxes === 'in'"
+            [class]="asideMenuStateForOtherTaxes"
+            [taxes]="companyTaxesList"
+            [otherTaxesModal]="otherTaxModal"
+            [commonLocaleData]="commonLocaleData"
+            [@slideInOut]="asideMenuStateForOtherTaxes"
+            (closeModal)="closeAsideMenuStateForOtherTaxes()"
+            (applyTaxes)="toggleOtherTaxesAsidePane(true, null)"
+        >
+        </app-aside-menu-other-taxes>
+    </div>
     <generic-aside-menu-account
         [class]="accountAsideMenuState"
         [@slideInOut]="accountAsideMenuState"
