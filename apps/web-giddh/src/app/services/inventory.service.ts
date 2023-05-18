@@ -206,7 +206,7 @@ export class InventoryService {
    */
     public getStockMappedUnit(): Observable<BaseResponse<StockMappedUnitResponse[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVENTORY_API.GET_STOCK_MAPPED_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + INVENTORY_API.GET_STOCK_MAPPED_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), []).pipe(map((res) => {
             let data: BaseResponse<StockMappedUnitResponse[], string> = res;
             data.request = '';
             data.queryString = {};
