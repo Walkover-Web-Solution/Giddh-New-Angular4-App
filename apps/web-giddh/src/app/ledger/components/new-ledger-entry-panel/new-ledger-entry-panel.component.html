@@ -1184,7 +1184,7 @@
 </ng-template>
 <ng-template #variantAndWarehouseDropdown>
     <div class="d-flex justify-content-between mb-2">
-        <ng-container *ngIf="currentTxn?.isStock && stockVariants$ | async as stockVariants">
+        <ng-container *ngIf="currentTxn?.isStock && stockVariants | async as stockVariants">
             <div *ngIf="stockVariants?.length > 1" class="col-md-3 mb-2 p-0 pr-2">
                 <div>
                     <label>{{ localeData?.select_variant }}</label>

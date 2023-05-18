@@ -21,7 +21,7 @@ import * as dayjs from 'dayjs';
 import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
-import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
+import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, BehaviorSubject } from 'rxjs';
 import { debounceTime, map, take, takeUntil, filter as observableFilter } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { ConfirmationModalConfiguration } from '../../../theme/confirmation-modal/confirmation-modal.interface';
@@ -281,7 +281,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** True if einvoice is generated for the voucher */
     public isEinvoiceGenerated: boolean = false;
     /** Stores the stock variants */
-    public stockVariants$: Observable<Array<IOption>> = observableOf([]);
+    public stockVariants: BehaviorSubject<Array<IOption>> = new BehaviorSubject([]);
     /** Stores the selected stock variant */
     public selectedStockVariant: IVariant;
     /** Stores the selected stock variant */
@@ -2562,7 +2562,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 if (!isSameStock) {
                     this.variantForceClear$ = observableOf({status: true});
                 }
-                this.stockVariants$ = observableOf(res);
+                this.stockVariants.next(res);
                 this.changeDetectorRef.detectChanges();
             });
     }
@@ -2574,7 +2574,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private assignStockVariantDetails(): void {
-        this.stockVariants$.pipe(observableFilter(val => val?.length === 1), take(1)).subscribe(res => {
+        this.stockVariants.pipe(observableFilter(val => val?.length === 1), take(1)).subscribe(res => {
             this.selectedStockVariant = {name: res[0].label, uniqueName: res[0].value};
             this.selectedStockVariantUniqueName = this.selectedStockVariant.uniqueName;
         });
