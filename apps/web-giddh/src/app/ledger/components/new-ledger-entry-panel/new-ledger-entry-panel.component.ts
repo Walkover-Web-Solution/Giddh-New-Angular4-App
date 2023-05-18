@@ -270,7 +270,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** True if unit dropdown  is open */
     public isUnitOpen: boolean = false;
     /** Stores the stock variants */
-    public stockVariants$: Observable<Array<IOption>> = observableOf([]);
+    public stockVariants: BehaviorSubject<Array<IOption>> = new BehaviorSubject([]);
     /** True, if stock category is 'expenses' and inclusive tax is applied */
     public purchaseTaxInclusive: boolean;
     /** True, if stock category is 'income' and inclusive tax is applied */
@@ -421,6 +421,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         this.blankLedger.generateInvoice = cloneDeep(this.manualGenerateVoucherChecked);
+        this.stockVariants.pipe(filter(val => val?.length === 1), takeUntil(this.destroyed$)).subscribe(res => {
+            this.stockVariantSelected.emit(res[0].value);
+        });
     }
 
     @HostListener('click', ['$event'])
@@ -444,7 +447,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (changes?.selectedAccountDetails?.currentValue !== changes?.selectedAccountDetails?.previousValue && this.currentTxn.isStock) {
             this.loadStockVariants(this.currentTxn.stockUniqueName);
-            this.stockVariants$.pipe(filter(val => val?.length === 1), take(1)).subscribe(res => this.stockVariantSelected.emit(res[0].value))
         }
         if (this.voucherApiVersion === 2 && changes?.invoiceList?.currentValue) {
             this.invoiceList$ = observableOf(this.invoiceList);
@@ -1888,7 +1890,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private loadStockVariants(stockUniqueName: string): void {
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(
             map((variants: IVariant[]) => (variants ?? []).map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))), takeUntil(this.destroyed$)).subscribe(res => {
-                this.stockVariants$ = observableOf(res);
+                this.stockVariants.next(res);
                 this.variantForceClear$ = observableOf({status: true});
                 this.cdRef.detectChanges();
             });

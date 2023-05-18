@@ -810,7 +810,7 @@
                 <!--        tourist scheme template end-->
                 <div class="row mr-b1">
                     <div class="d-flex justify-content-between w-100">
-                        <ng-container *ngIf="isStockPresent && stockVariants$ | async as stockVariants">
+                        <ng-container *ngIf="isStockPresent && stockVariants | async as stockVariants">
                             <div class="col-sm-3 pd-r1" *ngIf="stockVariants.length > 1">
                                 <label class="font-12">{{ localeData?.select_variant }}</label>
                                 <sh-select
