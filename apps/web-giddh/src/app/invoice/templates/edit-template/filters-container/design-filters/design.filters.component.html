@@ -144,7 +144,7 @@
                             (click)="startUpload()"
                             tooltip="Clicking on Upload, will Upload image on server"
                         >
-                            Primary
+                            Upload
                         </button>
 
                         <span class="start-upload-btn" *ngIf="isFileUploadInProgress"><b>Uploading...</b></span>
@@ -323,8 +323,8 @@
                                     <td>
                                         <text-field
                                             [type]="'text'"
-                                            decimalDigitsDirective
-                                            [DecimalPlaces]="1"
+                                            [allowDecimalDigitsOnly]="true"
+                                            [customDecimalPlaces]="1"
                                             [cssClass]="'form-control'"
                                             [(ngModel)]="customTemplate.topMargin"
                                             (keyup)="
@@ -336,8 +336,8 @@
                                     <td>
                                         <text-field
                                             [type]="'text'"
-                                            decimalDigitsDirective
-                                            [DecimalPlaces]="1"
+                                            [allowDecimalDigitsOnly]="true"
+                                            [customDecimalPlaces]="1"
                                             [cssClass]="'form-control'"
                                             [(ngModel)]="customTemplate.leftMargin"
                                             (keyup)="
@@ -349,8 +349,8 @@
                                     <td>
                                         <text-field
                                             [type]="'text'"
-                                            decimalDigitsDirective
-                                            [DecimalPlaces]="1"
+                                            [allowDecimalDigitsOnly]="true"
+                                            [customDecimalPlaces]="1"
                                             [cssClass]="'form-control'"
                                             [(ngModel)]="customTemplate.bottomMargin"
                                             (keyup)="
@@ -362,8 +362,8 @@
                                     <td>
                                         <text-field
                                             [type]="'text'"
-                                            decimalDigitsDirective
-                                            [DecimalPlaces]="1"
+                                            [allowDecimalDigitsOnly]="true"
+                                            [customDecimalPlaces]="1"
                                             [cssClass]="'form-control'"
                                             [(ngModel)]="customTemplate.rightMargin"
                                             (keyup)="
