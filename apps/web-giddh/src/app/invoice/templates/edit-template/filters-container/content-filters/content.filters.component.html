@@ -2256,23 +2256,26 @@
                         <div class="mb-0 form-group thanks-input-group">
                             <mat-checkbox
                                 color="primary"
+                                class="mt-1 mr-2"
                                 name="ty"
                                 [(ngModel)]="customTemplate.sections['footer'].data['thanks'].display"
                                 (change)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                             </mat-checkbox>
-                            <text-field
-                                [type]="'text'"
-                                [cssClass]="'form-control thanks-input-inline'"
-                                [class.error-box]="contentForm?.controls['thanks']?.errors?.maxlength"
-                                [disabled]="!fieldsAndVisibility.footer.thanks?.display"
-                                (keyup)="onFieldChange(null, null, null)"
-                                [(ngModel)]="customTemplate.sections['footer'].data['thanks'].label"
-                                [placeholder]="'Thank You for your business'"
-                                [maxlength]="30"
-                                [name]="'thanks'"
-                            ></text-field>
+                            <span class="flex-fill">
+                                <text-field
+                                    [type]="'text'"
+                                    [cssClass]="'form-control thanks-input-inline'"
+                                    [class.error-box]="contentForm?.controls['thanks']?.errors?.maxlength"
+                                    [disabled]="!fieldsAndVisibility.footer.thanks?.display"
+                                    (keyup)="onFieldChange(null, null, null)"
+                                    [(ngModel)]="customTemplate.sections['footer'].data['thanks'].label"
+                                    [placeholder]="'Thank You for your business'"
+                                    [maxlength]="30"
+                                    [name]="'thanks'"
+                                ></text-field>
+                            </span>
                         </div>
                         <div
                             class="form-group ml-3 clearfix"
