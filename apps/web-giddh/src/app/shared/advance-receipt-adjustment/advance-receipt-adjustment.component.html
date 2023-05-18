@@ -123,14 +123,18 @@
                     <div class="row voucher-form">
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label for="name"
-                                    >{{ localeData?.adjustment_voucher }}<span class="text-danger">*</span></label
-                                >
+                                <strong>
+                                    <label for="name"
+                                        >{{ localeData?.adjustment_voucher }}<span class="text-danger">*</span></label
+                                    >
+                                </strong>
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label>{{ commonLocaleData?.app_amount }}<span class="text-danger">* </span></label>
+                                <strong>
+                                    <label>{{ commonLocaleData?.app_amount }}<span class="text-danger">* </span></label>
+                                </strong>
                             </div>
                         </div>
                         <div class="col-sm-2" *ngIf="voucherApiVersion !== 2">
@@ -405,10 +409,7 @@
                             <div>
                                 <div>
                                     <div class="form-group row clearfix">
-                                        .
-                                        <strong>
-                                            <label class="col-md-2">{{ commonLocaleData?.app_tds }}</label>
-                                        </strong>
+                                        <label class="col-md-2">{{ commonLocaleData?.app_tds }}</label>
                                         <div class="col-md-3">
                                             <div #tdsTypeBox>
                                                 <select-field
@@ -427,12 +428,10 @@
                                     </div>
 
                                     <div class="form-group row clearfix">
-                                        <strong>
-                                            <label class="col-md-2"
-                                                >{{ commonLocaleData?.app_amount }}
-                                                <span class="text-danger">* </span></label
-                                            >
-                                        </strong>
+                                        <label class="col-md-2"
+                                            >{{ commonLocaleData?.app_amount }}
+                                            <span class="text-danger">* </span></label
+                                        >
                                         <div class="col-md-3">
                                             <text-field
                                                 #tdsAmountBox
@@ -495,7 +494,7 @@
 
                             <i class="icon-info pointer" [tooltip]="localeData?.adjustment_amount_error"></i>
                         </span>
-                        <div class="note-message mt-3" *ngIf="isVoucherModule || isModal">
+                        <div class="note-message mt-3" *ngIf="isVoucherModule && isModal">
                             <p>{{ commonLocaleData?.app_note }}:</p>
                             <p>{{ localeData?.adjustment_note }}</p>
                         </div>

@@ -190,7 +190,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row row-gap">
+                                    <div class="row row-gap mt-2">
                                         <div class="col-sm-12 col-lg-6">
                                             <strong>
                                                 <label class="d-block">{{ localeData?.attention_to }}</label>
@@ -217,7 +217,7 @@
                                             </select-field>
                                         </div>
                                     </div>
-                                    <div class="row row-gap">
+                                    <div class="row row-gap mt-2">
                                         <div class="col-lg-4">
                                             <strong>
                                                 <label>
@@ -297,29 +297,25 @@
                                                     <span class="red-text">*</span></label
                                                 >
                                             </strong>
-                                            <mat-form-field appearance="fill" class="no-border-top width-100">
-                                                <text-field
-                                                    [cssClass]="'form-control mat-field-border text-right'"
-                                                    [showError]="
-                                                        !isValidForm &&
-                                                        !voucherFormData.entries[0].transactions[0].amount
-                                                            .amountForAccount
-                                                    "
-                                                    name="receipt-amount"
-                                                    id="receipt-amount"
-                                                    [placeholder]="localeData?.enter_amount"
-                                                    decimalDigitsDirective
-                                                    [mask]="inputMaskFormat"
-                                                    [(ngModel)]="
-                                                        voucherFormData.entries[0].transactions[0].amount
-                                                            .amountForAccount
-                                                    "
-                                                    (ngModelChange)="calculateTotals()"
-                                                >
-                                                </text-field>
-                                            </mat-form-field>
+                                            <text-field
+                                                [cssClass]="'form-control mat-field-border text-right'"
+                                                [showError]="
+                                                    !isValidForm &&
+                                                    !voucherFormData.entries[0].transactions[0].amount.amountForAccount
+                                                "
+                                                name="receipt-amount"
+                                                id="receipt-amount"
+                                                [placeholder]="localeData?.enter_amount"
+                                                decimalDigitsDirective
+                                                [mask]="inputMaskFormat"
+                                                [(ngModel)]="
+                                                    voucherFormData.entries[0].transactions[0].amount.amountForAccount
+                                                "
+                                                (ngModelChange)="calculateTotals()"
+                                            >
+                                            </text-field>
                                         </div>
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-4 mt-4">
                                             <div class="other-check">
                                                 <mat-checkbox
                                                     name="autoFillShipping"
