@@ -2620,9 +2620,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     isFixed: data.body.isFixed,
                     mergedAccounts: data.body.mergedAccounts,
                     mobileNo: data.body.mobileNo,
-                    nameStr: event.additional && event.additional.parentGroups ? event.additional.parentGroups.map(parent => parent?.name).join(', ') : '',
+                    nameStr: event.additional.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.name).join(', '),
                     stock: data.body.stock,
-                    uNameStr: event.additional && event.additional.parentGroups ? event.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
+                    uNameStr: event.additional.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName).join(', '),
                     accountApplicableDiscounts: data.body.applicableDiscounts,
                     parentGroups: event.additional.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups
                     // added due to parentGroups is getting null in search API
