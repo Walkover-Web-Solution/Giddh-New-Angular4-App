@@ -100,6 +100,10 @@
 
 button.mat-menu-item {
     color: var(--color-dropdown-list);
+    height: 38px;
+    line-height: 38px;
+    padding-left: 10px;
+    min-width: 160px;
 }
 
 .account-detail-custom-title {
