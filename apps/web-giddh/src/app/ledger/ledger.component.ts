@@ -1195,6 +1195,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.isMoreDetailsOpened = false;
         this.lc.showNewLedgerPanel = false;
+        this.needToReCalculate.next(false);
     }
 
     public showUpdateLedgerModal(txn: ITransactionItem, type: string) {
@@ -2678,8 +2679,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     txn.amount = rate;
                 }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
-                this.needToReCalculate.next(true);
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+                this.needToReCalculate.next(true);
                 txn.showOtherTax = this.showOtherTax(txn);
                 if (this.newLedgerComponent) {
                     this.newLedgerComponent.preparePreAppliedDiscounts();

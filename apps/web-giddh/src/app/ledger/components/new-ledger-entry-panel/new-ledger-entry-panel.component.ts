@@ -512,9 +512,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.needToReCalculate.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.setTaxCalculationMethodForStock();
-                this.amountChanged();
-                // this.calculateTotal();
-                this.calculateTax();
+                if (this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive) {
+                    this.currentTxn.total = giddhRoundOff((this.currentTxn.inventory.quantity * this.currentTxn.inventory.unit.rate), this.giddhBalanceDecimalPlaces);
+                    setTimeout(() => {
+                        this.calculateAmount();
+                    }, 100);
+                } else {
+                    this.amountChanged();
+                    // this.calculateTotal();
+                    this.calculateTax();
+                }
             }
         });
         this.cdRef.markForCheck();
@@ -602,12 +609,18 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.currentTxn.total = giddhRoundOff((this.currentTxn.taxInclusiveAmount + (!isExportValid ? this.currentTxn.tax : 0)), this.giddhBalanceDecimalPlaces);
                     this.totalForTax = this.currentTxn.total;
                     this.currentTxn.convertedTotal = giddhRoundOff((this.currentTxn.convertedAmount - (!isExportValid ? this.currentTxn.convertedTax : 0)), this.giddhBalanceDecimalPlaces);
-                } else if (this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive) {
-                    this.currentTxn.total = giddhRoundOff((this.currentTxn.inventory.quantity * this.currentTxn.inventory.unit.rate), this.giddhBalanceDecimalPlaces);
-                    this.currentTxn.taxInclusiveAmount = this.calculateInclusiveAmount(this.currentTxn.total);
+                }
+                else if (this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive) {
                     this.totalForTax = this.currentTxn.total;
-                    this.currentTxn.convertedTotal = giddhRoundOff((this.currentTxn.convertedAmount - (!isExportValid ? this.currentTxn.convertedTax : 0)), this.giddhBalanceDecimalPlaces);
-                } else {
+                    if (this.currentTxn.selectedAccount) {
+                        if (this.currentTxn.selectedAccount.stock) {
+                            this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
+                            this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
+                            this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
+                        }
+                    }
+                }
+                else {
                     let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
                     const convertedTotal = (this.currentTxn.convertedAmount - this.currentTxn.convertedDiscount) || 0;
                     this.totalForTax = total;
