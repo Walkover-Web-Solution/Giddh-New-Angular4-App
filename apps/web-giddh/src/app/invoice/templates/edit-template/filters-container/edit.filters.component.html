@@ -1,8 +1,9 @@
 <div class="btn-group btn-group-lg" role="group" aria-label="">
     <button
-        mat-button
+        mat-raised-button
+        color="primary"
         type="button"
-        class="btn btn-default"
+        class="btn edit-filter-navigation-btn"
         [ngClass]="{ 'active-tab': ifDesignSelected, 'inactive-tab': ifContentSelected }"
         (click)="openTab('design')"
         id="defaultOpen"
@@ -10,9 +11,9 @@
         Design
     </button>
     <button
-        mat-button
+        mat-raised-button
         type="button"
-        class="btn btn-default content-tab"
+        class="btn edit-filter-navigation-btn content-tab"
         [ngClass]="{ 'active-tab': ifContentSelected, 'inactive-tab': ifDesignSelected }"
         (click)="openTab('content')"
     >

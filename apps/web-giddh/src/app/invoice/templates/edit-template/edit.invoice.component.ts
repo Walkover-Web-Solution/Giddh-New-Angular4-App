@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
@@ -14,6 +14,7 @@ import { InvoiceTemplateModalComponent } from './modals/template-modal/template-
 import { VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { InvoiceService } from '../../../services/invoice.service';
 import { cloneDeep } from '../../../lodash-optimized';
+import {  MatDialog } from '@angular/material/dialog';
 
 /**
  * Created by kunalsaxena on 6/29/17.
@@ -27,9 +28,9 @@ import { cloneDeep } from '../../../lodash-optimized';
 
 export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
-    @ViewChild('templateModal', { static: true }) public templateModal: ModalDirective;
-    @ViewChild('customTemplateConfirmationModal', { static: true }) public customTemplateConfirmationModal: ModalDirective;
-    @ViewChild('invoiceTemplatePreviewModal', { static: true }) public invoiceTemplatePreviewModal: ModalDirective;
+    @ViewChild('templateModal', { static: true }) public templateModal: TemplateRef<any>;;
+    @ViewChild('customTemplateConfirmationModal', { static: true }) public customTemplateConfirmationModal: TemplateRef<any>;
+    @ViewChild('invoiceTemplatePreviewModal', { static: true }) public invoiceTemplatePreviewModal: TemplateRef<any>;
     public voucherType: string;
     @ViewChild(InvoiceTemplateModalComponent, { static: true }) public invoiceTemplateModalComponent: InvoiceTemplateModalComponent;
 
@@ -631,11 +632,13 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         name: 'Template I',
         type: 'invoice'
     };
-    public showinvoiceTemplatePreviewModal: boolean = false;
-    public showtemplateModal: boolean = false;
+    // public showinvoiceTemplatePreviewModal: boolean = false;
+    // public showtemplateModal: boolean = false;
     public templateType: any;
     /** True if user has invoice template permissions */
     public hasInvoiceTemplatePermissions: boolean = true;
+     /** Reference of dialog */
+     private dialogRef: any;
 
     constructor(
         private _toasty: ToasterService,
@@ -644,7 +647,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         private _invoiceTemplatesService: InvoiceTemplatesService,
         private _activatedRoute: ActivatedRoute,
         private invoiceService: InvoiceService,
-        private _invoiceUiDataService: InvoiceUiDataService
+        private _invoiceUiDataService: InvoiceUiDataService,
+        public dialog: MatDialog
     ) {
 
     }
@@ -750,8 +754,14 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         }
         this._invoiceUiDataService.setLogoPath('');
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
-        this.showtemplateModal = true;
-        this.templateModal?.show();
+        // this.showtemplateModal = true;
+        // this.templateModal?.show();
+        this.dialogRef = this.dialog.open(this.templateModal,{
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            height: '100%',
+            width: '100%',
+        })
     }
 
     /**
@@ -761,7 +771,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this.confirmationFlag = 'closeConfirmation';
         this.selectedTemplateUniqueName = null;
         this.deleteTemplateConfirmationMessage = `Are you sure want to close this popup? Your unsaved changes will be discarded`;
-        this.customTemplateConfirmationModal?.show();
+        // this.customTemplateConfirmationModal?.show();
+        this.dialogRef = this.dialog.open(this.customTemplateConfirmationModal);
     }
 
     /**
@@ -812,8 +823,9 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res?.status === 'success') {
                     this._toasty.successToast('Template Saved Successfully.');
-                    this.templateModal.hide();
-                    this.showtemplateModal = false;
+                    // this.templateModal.hide();
+                    this.dialogRef.close(this.templateModal);
+                    // this.showtemplateModal = false;
                     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
                 } else {
                     this._toasty.errorToast(res?.message, res?.code);
@@ -863,8 +875,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                     this.confirmationFlag = null;
                     this.selectedTemplateUniqueName = null;
                     this.deleteTemplateConfirmationMessage = null;
-                    this.customTemplateConfirmationModal?.hide();
-                    this.templateModal.hide();
+                    // this.customTemplateConfirmationModal?.hide();
+                    this.dialogRef.close(this.customTemplateConfirmationModal);
+                    this.dialogRef.close(this.templateModal);
+                    // this.templateModal.hide();
                     this._invoiceUiDataService.resetCustomTemplate();
                     this._invoiceUiDataService.setLogoPath('');
                     this._invoiceUiDataService.unusedImageSignature = '';
@@ -872,7 +886,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                         this.invoiceTemplateModalComponent.editFiltersComponent.openTab('design');
                     }
 
-                    this.showtemplateModal = false;
+                    // this.showtemplateModal = false;
                     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
                 } else {
                     this._toasty.errorToast(res?.message, res?.code);
@@ -906,15 +920,17 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
         this._invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'preview', customCreatedTemplates, defaultTemplate);
         // let data = cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
-        this.showinvoiceTemplatePreviewModal = true;
-        this.invoiceTemplatePreviewModal?.show();
+        this.dialogRef =  this.dialog.open(this.invoiceTemplatePreviewModal,{
+            minWidth: '1000px',
+            minHeight: '100vh'
+        })
     }
 
     /**
      * onUpdateTemplate
      */
     public onUpdateTemplate(template) {
-        this.showtemplateModal = true;
+        // this.showtemplateModal = true;
         let customCreatedTemplates = null;
         let defaultTemplate = null;
 
@@ -926,7 +942,13 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this.transactionMode = 'update';
         this._invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'update', customCreatedTemplates, defaultTemplate);
         this.selectedTemplateUniqueName = template.copyFrom;
-        this.templateModal?.show();
+        // this.templateModal?.show();
+        this.dialogRef = this.dialog.open(this.templateModal,{
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            height: '100%',
+            width: '100%',
+        })
     }
 
     /**
@@ -948,7 +970,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             let selectedTemplate = cloneDeep(template);
             this.deleteTemplateConfirmationMessage = `Are you sure you want to delete "<b>${selectedTemplate.name}</b>" template?`;
             this.selectedTemplateUniqueName = selectedTemplate?.uniqueName;
-            this.customTemplateConfirmationModal?.show();
+            this.dialogRef = this.dialog.open(this.customTemplateConfirmationModal);
         }
     }
 
@@ -967,21 +989,15 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             }
             this._invoiceUiDataService.resetCustomTemplate();
             this._invoiceUiDataService.setLogoPath('');
-            this.templateModal.hide();
-            this.showtemplateModal = false;
+            // this.templateModal.hide();
+            this.dialogRef.close(this.templateModal);
+            // this.showtemplateModal = false;
             this._invoiceUiDataService.unusedImageSignature = '';
         }
-        this.customTemplateConfirmationModal?.hide();
+        this.dialogRef.close();
     }
 
-    /**
-     * onClosePreviewModal
-     */
-    public onClosePreviewModal() {
-        this.invoiceTemplatePreviewModal?.hide();
-        this.showinvoiceTemplatePreviewModal = false;
-    }
-
+    
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

@@ -80,6 +80,10 @@ import { VoucherModule } from '../voucher/voucher.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     // Change this to your Google API key
@@ -176,7 +180,11 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
         DatepickerWrapperModule,
         FormFieldsModule,
         DeleteTemplateConfirmationModalModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatMenuModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatTooltipModule
     ],
     exports: [
         InvoiceRoutingModule,

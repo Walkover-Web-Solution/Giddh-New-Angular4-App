@@ -16,7 +16,7 @@
                     [name]="'templateName'"
                     [maxlength]="18"
                     [(ngModel)]="customTemplate.name"
-                    (ngModelChange)="onValueChange(null, null)"
+                    (change)="onValueChange(null, null)"
                 ></text-field>
             </div>
         </div>
@@ -142,7 +142,7 @@
                             *ngIf="showUploadButton"
                             class="start-upload-btn btn btn-success"
                             (click)="startUpload()"
-                            tooltip="Clicking on Upload, will Upload image on server"
+                            matTooltip="Clicking on Upload, will Upload image on server"
                         >
                             Upload
                         </button>
@@ -154,7 +154,7 @@
                             type="button"
                             class="start-upload-btn btn btn-danger"
                             (click)="deleteLogo()"
-                            tooltip="Clicking on this, will delete image from server"
+                            matTooltip="Clicking on this, will delete image from server"
                         >
                             Delete
                         </button>

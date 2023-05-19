@@ -103,3 +103,19 @@
         max-width: 100%;
     }
 }
+
+.btn.focus,
+button:focus,
+button.cdk-keyboard-focused,
+.mat-button:focus,
+.mat-flat-button:focus,
+.mat-raised-button:focus {
+    box-shadow: unset !important;
+}
+
+.template-action-btn {
+    min-width: unset;
+    line-height: unset;
+    padding: 7px 10px;
+    margin-right: 15px;
+}

@@ -12,6 +12,9 @@ import { ThermalTemplateComponent } from './edit-template/out-tempate/templates/
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     imports: [
@@ -23,7 +26,10 @@ import { MatRadioModule } from '@angular/material/radio';
         HasFocusDirectiveModule,
         FormFieldsModule,
         MatCheckboxModule,
-        MatRadioModule
+        MatRadioModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatTooltipModule
     ],
     declarations: [
         OutTemplateComponent,

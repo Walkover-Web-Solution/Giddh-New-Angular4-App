@@ -1,7 +1,7 @@
 <div>
     <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
         <h3 class="modal-title bg" id="modal-title">Invoice template preview</h3>
-        <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i>
+        <i class="icon-cross text-right close-modal" aria-hidden="true" mat-dialog-close></i>
     </div>
     <div class="modal-body pd-t3 pd-b5 pd-l2 pd-r2 clearfix" id="export-body">
         <invoice-template class="invoice-preview scroll-auto" [isPreviewMode]="true"></invoice-template>

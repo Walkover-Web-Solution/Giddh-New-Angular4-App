@@ -3,32 +3,18 @@
         <div class="clearfix" id="template-grid-wrapper">
             <label class="mr-b05">Select Design for</label>
 
-            <div class="select-design">
-                <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown">
-                    <button
-                        dropdownToggle
-                        type="button"
-                        class="btn more-btn-dropdown dropdown-toggle"
-                        aria-controls="dropdown-basic"
-                    >
-                        {{
-                            voucherType === "debit note" || voucherType === "credit note"
-                                ? "Credit/Debit Note"
-                                : (voucherType | titlecase)
-                        }}
-                        <span class="caret"></span>
-                    </button>
-                    <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                        <li role="menuitem" (click)="voucherTypeChanged('sales')">
-                            <a class="dropdown-item cp" href="javascript:void(0)">Sales</a>
-                        </li>
-
-                        <li role="menuitem" (click)="voucherTypeChanged('debit note')">
-                            <a class="dropdown-item cp" href="javascript:void(0)">Credit/Debit Note</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <button class="btn more-btn-dropdown dropdown-toggle" mat-button [matMenuTriggerFor]="selectDesign">
+                {{
+                    voucherType === "debit note" || voucherType === "credit note"
+                        ? "Credit/Debit Note"
+                        : (voucherType | titlecase)
+                }}
+                <span class="caret"></span>
+            </button>
+            <mat-menu #selectDesign="matMenu">
+                <button mat-menu-item (click)="voucherTypeChanged('sales')">Sales</button>
+                <button mat-menu-item (click)="voucherTypeChanged('debit note')">Credit/Debit Note</button>
+            </mat-menu>
 
             <div class="template-grid">
                 <h3 class="text-left">Design Template</h3>
@@ -36,7 +22,14 @@
                     Click to add a template from our gallery. You can customize the template title, columns,and headers
                     in line item table.
                 </small>
-                <button class="btn pull-left isActive mt-5 add-new-btn" (click)="onOpenTemplateModal()">Add New</button>
+                <button
+                    mat-raised-button
+                    color="primary"
+                    class="btn pull-left isActive mt-5 add-new-btn"
+                    (click)="onOpenTemplateModal()"
+                >
+                    Add New
+                </button>
             </div>
 
             <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
@@ -57,19 +50,20 @@
 
                     <div class="template-action">
                         <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
-                        <button class="btn btn-default" (click)="onPreview(template)">
-                            <i class="icon-eye" tooltip="Preview" aria-hidden="true"></i>
+                        <button mat-stroked-button class="template-action-btn" (click)="onPreview(template)">
+                            <i class="icon-eye" matTooltip="Preview" aria-hidden="true"></i>
                         </button>
                         <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
-                        <button class="btn btn-default" (click)="onUpdateTemplate(template)">
-                            <i class="icon-edit-pencil" tooltip="Edit template" aria-hidden="true"></i>
+                        <button mat-stroked-button class="template-action-btn" (click)="onUpdateTemplate(template)">
+                            <i class="icon-edit-pencil" matTooltip="Edit template" aria-hidden="true"></i>
                         </button>
                         <button
+                            mat-stroked-button
                             [disabled]="template.isDefault"
-                            class="btn btn-default"
+                            class="template-action-btn"
                             (click)="onDeleteTemplate(template)"
                         >
-                            <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>
+                            <i class="icon-trash" matTooltip="Delete" aria-hidden="true"></i>
                         </button>
 
                         <div class="template-meta">
@@ -96,19 +90,20 @@
 
                         <div class="template-action">
                             <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
-                            <button class="btn btn-default" (click)="onPreview(template)">
-                                <i class="icon-eye" tooltip="Preview" aria-hidden="true"></i>
+                            <button mat-stroked-button class="template-action-btn" (click)="onPreview(template)">
+                                <i class="icon-eye" matTooltip="Preview" aria-hidden="true"></i>
                             </button>
                             <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
-                            <button class="btn btn-default" (click)="onUpdateTemplate(template)">
-                                <i class="icon-edit-pencil" tooltip="Edit template" aria-hidden="true"></i>
+                            <button mat-stroked-button class="template-action-btn" (click)="onUpdateTemplate(template)">
+                                <i class="icon-edit-pencil" matTooltip="Edit template" aria-hidden="true"></i>
                             </button>
                             <button
+                                mat-stroked-button
+                                class="template-action-btn"
                                 [disabled]="template.isDefaultForVoucher"
-                                class="btn btn-default"
                                 (click)="onDeleteTemplate(template)"
                             >
-                                <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>
+                                <i class="icon-trash" matTooltip="Delete" aria-hidden="true"></i>
                             </button>
 
                             <div class="template-meta">
@@ -121,7 +116,8 @@
         </div>
     </div>
     <!-- Template modal -->
-    <div bsModal #templateModal="bs-modal" class="modal fade" role="dialog" [config]="{ keyboard: true }" tabindex="-1">
+    <!-- <div bsModal #templateModal="bs-modal" class="modal fade" role="dialog" [config]="{ keyboard: true }" tabindex="-1"> -->
+    <ng-template #templateModal tabindex="-1">
         <div class="modal-dialog full-modal">
             <!-- modal-liq-90 class is removed for now-->
             <div class="modal-content border-radius-none">
@@ -137,19 +133,19 @@
             <!--<button class="btn btn-default">Preview</button>-->
             <div class="pull-right mr-r4" *ngIf="voucherType === 'sales'">
                 <button
-                    mat-button
+                    mat-raised-button
+                    color="primary"
                     [attr.disabled]="isFormInValid ? true : null"
                     *ngIf="transactionMode == 'create'"
-                    class="btn btn-success"
                     (click)="createTemplate('invoice')"
                 >
                     Save
                 </button>
                 <button
-                    mat-button
+                    mat-raised-button
+                    color="primary"
                     [attr.disabled]="isFormInValid ? true : null"
                     *ngIf="transactionMode == 'update'"
-                    class="btn btn-success"
                     (click)="updateTemplate('invoice')"
                 >
                     Update Template
@@ -158,17 +154,17 @@
             </div>
             <div class="pull-right mr-r4" *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
                 <button
-                    mat-button
+                    mat-raised-button
+                    color="primary"
                     *ngIf="transactionMode == 'create'"
-                    class="btn btn-success"
                     (click)="createTemplate('voucher')"
                 >
                     Save
                 </button>
                 <button
-                    mat-button
+                    mat-raised-button
+                    color="primary"
                     *ngIf="transactionMode == 'update'"
-                    class="btn btn-success"
                     (click)="updateTemplate('voucher')"
                 >
                     Update Template
@@ -176,17 +172,11 @@
                 <button mat-button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
             </div>
         </div>
-    </div>
+    </ng-template>
+    <!-- </div> -->
 
     <!--delete custom template confirmation modal -->
-    <div
-        bsModal
-        #customTemplateConfirmationModal="bs-modal"
-        class="modal fade"
-        role="dialog"
-        [config]="{ keyboard: true }"
-        tabindex="-1"
-    >
+    <ng-template #customTemplateConfirmationModal tabindex="-1">
         <div class="modal-dialog modal-md">
             <!-- modal-liq-90 class is removed for now-->
             <div class="modal-content">
@@ -197,17 +187,11 @@
                 ></delete-template-confirmation-modal>
             </div>
         </div>
-    </div>
+    </ng-template>
 
     <!--invoice-template-preview-modal -->
-    <div
-        bsModal
-        #invoiceTemplatePreviewModal="bs-modal"
-        class="modal fade"
-        role="dialog"
-        [config]="{ keyboard: true }"
-        tabindex="-1"
-    >
+
+    <ng-template #invoiceTemplatePreviewModal tabindex="-1">
         <div class="modal-dialog modal-xl">
             <!-- modal-liq-90 class is removed for now-->
             <div class="modal-content">
@@ -216,5 +200,5 @@
                 ></invoice-template-preview-modal>
             </div>
         </div>
-    </div>
+    </ng-template>
 </div>
