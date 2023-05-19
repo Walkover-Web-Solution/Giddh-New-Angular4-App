@@ -10524,6 +10524,13 @@ body.update-scroll-hidden {
             }
         }
     }
+
+    button.mat-menu-item {
+        height: 38px;
+        line-height: 38px;
+        padding-left: 10px;
+        min-width: 160px;
+    }
 }
 
 .cdk-overlay-pane {
