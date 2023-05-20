@@ -287,7 +287,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             }
             this.selectedType = interval?.charAt(0)?.toUpperCase() + interval?.slice(1);
 
-            if (!this.currentBranch?.uniqueName && this.currentOrganizationType === OrganizationType.Branch) {
+            if (this.currentOrganizationType === OrganizationType.Branch) {
                 if (!this.currentBranch) {
                     this.currentBranch = {};
                 }
