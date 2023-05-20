@@ -321,6 +321,11 @@ export class ContactComponent implements OnInit, OnDestroy {
                             "checked": true
                         },
                         {
+                            "value": "parent_group",
+                            "label": "Parent Group",
+                            "checked": true
+                        },
+                        {
                             "value": "sales",
                             "label": "Sales",
                             "checked": true
@@ -339,6 +344,11 @@ export class ContactComponent implements OnInit, OnDestroy {
                         {
                             "value": "vendor_name",
                             "label": "Vendor Name",
+                            "checked": true
+                        },
+                        {
+                            "value": "parent_group",
+                            "label": "Parent Group",
                             "checked": true
                         },
                         {

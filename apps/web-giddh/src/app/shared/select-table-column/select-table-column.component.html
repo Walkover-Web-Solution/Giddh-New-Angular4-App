@@ -11,8 +11,10 @@
     <ng-container *ngFor="let item of customiseColumns">
         <button
             class="menu-buttons"
+            [ngClass]="{ 'disabled-button': item.checked && displayedColumns.length === 2 }"
             mat-menu-item
             (click)="$event?.stopPropagation()"
+            [disabled]="item.checked && displayedColumns.length === 2"
             (keydown.enter)="$event?.stopPropagation(); item.checked = !item.checked; saveSelectedColumns()"
         >
             <mat-checkbox
