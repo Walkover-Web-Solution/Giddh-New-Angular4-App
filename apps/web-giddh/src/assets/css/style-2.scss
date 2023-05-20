@@ -5006,6 +5006,10 @@ label {
     margin-bottom: 0;
 }
 
+#customInvoice .template-editor .table > tbody > tr > td input {
+    text-align: left !important;
+}
+
 #customInvoice .template-editor .custom-field span:not(.max-character-label) {
     display: inline-block;
     float: right;

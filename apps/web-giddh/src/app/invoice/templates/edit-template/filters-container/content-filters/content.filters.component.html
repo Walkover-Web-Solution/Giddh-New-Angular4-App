@@ -2468,6 +2468,8 @@
                                                 class="form-control"
                                                 [class.error-box]="contentForm?.controls['slogan']?.errors?.maxlength"
                                                 maxlength="30"
+                                                hasFocus
+                                                #slogan="hasFocus"
                                                 [disabled]="customTemplate.sections.footer.data.imageSignature.display"
                                                 name="slogan"
                                                 [(ngModel)]="customTemplate.sections['footer'].data['slogan'].label"

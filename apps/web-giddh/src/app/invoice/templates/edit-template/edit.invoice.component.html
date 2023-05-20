@@ -2,15 +2,23 @@
     <div class="template-grid-container">
         <div class="clearfix" id="template-grid-wrapper">
             <label class="mr-b05">Select Design for</label>
-
-            <button class="btn more-btn-dropdown dropdown-toggle" mat-button [matMenuTriggerFor]="selectDesign">
-                {{
-                    voucherType === "debit note" || voucherType === "credit note"
-                        ? "Credit/Debit Note"
-                        : (voucherType | titlecase)
-                }}
-                <span class="caret"></span>
-            </button>
+            <div class="select-design">
+                <button
+                    class="btn more-btn-dropdown dropdown-toggle"
+                    [matMenuTriggerFor]="selectDesign"
+                    #menuTrigger="matMenuTrigger"
+                    (mouseover)="openMenu(menuTrigger)"
+                >
+                    <span>
+                        {{
+                            voucherType === "debit note" || voucherType === "credit note"
+                                ? "Credit/Debit Note"
+                                : (voucherType | titlecase)
+                        }}
+                    </span>
+                    <span class="caret"></span>
+                </button>
+            </div>
             <mat-menu #selectDesign="matMenu">
                 <button mat-menu-item (click)="voucherTypeChanged('sales')">Sales</button>
                 <button mat-menu-item (click)="voucherTypeChanged('debit note')">Credit/Debit Note</button>
@@ -25,7 +33,7 @@
                 <button
                     mat-raised-button
                     color="primary"
-                    class="btn pull-left isActive mt-5 add-new-btn"
+                    class="pull-left isActive mt-5 p-0 add-new-btn"
                     (click)="onOpenTemplateModal()"
                 >
                     Add New

@@ -115,7 +115,14 @@ button.cdk-keyboard-focused,
 
 .template-action-btn {
     min-width: unset;
-    line-height: unset;
     padding: 7px 10px;
     margin-right: 15px;
+    height: 36px;
+    width: 37px;
+    line-height: 18px;
+}
+.mat-menu-item {
+    line-height: 36px;
+    height: 36px;
+    padding: 0 11px;
 }

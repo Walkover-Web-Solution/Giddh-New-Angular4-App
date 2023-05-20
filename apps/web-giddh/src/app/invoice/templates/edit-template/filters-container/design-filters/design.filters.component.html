@@ -9,15 +9,17 @@
     <div class="clearfix">
         <div class="row">
             <div class="col-sm-9">
-                <text-field
-                    [type]="'text'"
-                    [cssClass]="'form-control'"
-                    [placeholder]="'My Template Name'"
-                    [name]="'templateName'"
-                    [maxlength]="18"
-                    [(ngModel)]="customTemplate.name"
-                    (change)="onValueChange(null, null)"
-                ></text-field>
+                <label>
+                    <text-field
+                        [type]="'text'"
+                        [cssClass]="'form-control'"
+                        [placeholder]="'My Template Name'"
+                        [name]="'templateName'"
+                        [maxlength]="18"
+                        [(ngModel)]="customTemplate.name"
+                        (change)="onValueChange(null, null)"
+                    ></text-field>
+                </label>
             </div>
         </div>
     </div>

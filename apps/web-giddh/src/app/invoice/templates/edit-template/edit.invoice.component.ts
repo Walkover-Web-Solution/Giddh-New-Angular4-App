@@ -15,6 +15,7 @@ import { VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { InvoiceService } from '../../../services/invoice.service';
 import { cloneDeep } from '../../../lodash-optimized';
 import {  MatDialog } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 /**
  * Created by kunalsaxena on 6/29/17.
@@ -772,7 +773,9 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedTemplateUniqueName = null;
         this.deleteTemplateConfirmationMessage = `Are you sure want to close this popup? Your unsaved changes will be discarded`;
         // this.customTemplateConfirmationModal?.show();
-        this.dialogRef = this.dialog.open(this.customTemplateConfirmationModal);
+        this.dialogRef = this.dialog.open(this.customTemplateConfirmationModal,{
+            position: {top: '56px'} 
+        });
     }
 
     /**
@@ -920,7 +923,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
         this._invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'preview', customCreatedTemplates, defaultTemplate);
         // let data = cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
-        this.dialogRef =  this.dialog.open(this.invoiceTemplatePreviewModal,{
+        this.dialog.open(this.invoiceTemplatePreviewModal, {
             minWidth: '1000px',
             minHeight: '100vh'
         })
@@ -970,7 +973,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             let selectedTemplate = cloneDeep(template);
             this.deleteTemplateConfirmationMessage = `Are you sure you want to delete "<b>${selectedTemplate.name}</b>" template?`;
             this.selectedTemplateUniqueName = selectedTemplate?.uniqueName;
-            this.dialogRef = this.dialog.open(this.customTemplateConfirmationModal);
+            this.dialogRef = this.dialog.open(this.customTemplateConfirmationModal,{
+                minWidth: '650px',
+                position: {top: '56px'} 
+            });
         }
     }
 
@@ -996,6 +1002,13 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.dialogRef.close();
     }
+
+     /**
+     *  Open MatMenu on mouseover
+     */
+    openMenu(menuTrigger: MatMenuTrigger):void {
+        menuTrigger.openMenu();
+   } 
 
     
     public ngOnDestroy() {
