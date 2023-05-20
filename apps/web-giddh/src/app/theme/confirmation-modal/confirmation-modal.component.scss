@@ -4,7 +4,7 @@
     position: relative;
     width: 100%;
     box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
-    font-family: "Open Sans", sans-serif;
+    font-family: var(--font-regular);
     background-color: var(--color-common-primary-background-for-all-components);
     .modal-header {
         padding: 10px 15px;

@@ -56,7 +56,7 @@
 }
 .no-btn.clear-filter {
     text-decoration: underline;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     color: var(--color-abbey);
     padding: 6px 0;
     outline: none !important;
@@ -85,7 +85,7 @@
     }
 }
 .regular-font {
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
 }
 .material-head {
     min-width: 20% !important;
@@ -117,7 +117,7 @@
     }
 }
 .regular-font {
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
 }
 .row-gray-background th {
     background-color: var(--color-primary-mf-report-row-gray-th-background);
