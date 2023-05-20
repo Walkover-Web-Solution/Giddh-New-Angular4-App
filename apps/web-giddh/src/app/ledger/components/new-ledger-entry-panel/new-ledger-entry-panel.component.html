@@ -115,12 +115,7 @@
                                 matInput
                                 [disabled]="isReadOnly"
                                 id="new-ledger-enter-amount"
-                                *ngIf="
-                                    !isAdvanceReceipt &&
-                                    !salesTaxInclusive &&
-                                    !purchaseTaxInclusive &&
-                                    !fixedAssetTaxInclusive
-                                "
+                                *ngIf="!isAdvanceReceipt"
                                 type="text"
                                 name="amount"
                                 class="form-control text-right mat-field-border"
@@ -136,12 +131,7 @@
                                 matInput
                                 [disabled]="isReadOnly"
                                 id="new-ledger-enter-amount-advance-receipt"
-                                *ngIf="
-                                    isAdvanceReceipt ||
-                                    salesTaxInclusive ||
-                                    purchaseTaxInclusive ||
-                                    fixedAssetTaxInclusive
-                                "
+                                *ngIf="isAdvanceReceipt"
                                 type="text"
                                 name="advanceAmount"
                                 class="form-control text-right mat-field-border"
@@ -194,11 +184,7 @@
                                 [maskInput]="inputMaskFormat"
                                 [prefixInput]="selectedPrefixForCurrency"
                                 [suffixInput]="selectedSuffixForCurrency"
-                                [ledgerAmount]="
-                                    salesTaxInclusive || purchaseTaxInclusive || fixedAssetTaxInclusive
-                                        ? currentTxn.taxInclusiveAmount
-                                        : currentTxn.amount
-                                "
+                                [ledgerAmount]="currentTxn.amount"
                                 [discountsList]="discountsList"
                                 [commonLocaleData]="commonLocaleData"
                                 [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
@@ -289,12 +275,7 @@
                                 (taxAmountSumEvent)="calculateTax()"
                                 (hideOtherPopups)="hideDiscount()"
                                 (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event"
-                                [calculateTaxInclusively]="
-                                    isAdvanceReceiptWithTds ||
-                                    purchaseTaxInclusive ||
-                                    salesTaxInclusive ||
-                                    fixedAssetTaxInclusive
-                                "
+                                [calculateTaxInclusively]="isAdvanceReceiptWithTds || isInclusiveEntry"
                                 [isAdvanceReceipt]="isAdvanceReceipt"
                                 [allowedSelectionOfAType]="allowedSelectionOfAType"
                                 [commonLocaleData]="commonLocaleData"
