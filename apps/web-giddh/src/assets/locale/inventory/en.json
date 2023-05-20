@@ -92,9 +92,5 @@
         "opening_bal":"Opening Bal",
         "variant":"Variant",
         "variants":"Variants"
-    },
-    "button":{
-        "export_btn": "Export",
-        "back_btn": "Back"
     }
 }

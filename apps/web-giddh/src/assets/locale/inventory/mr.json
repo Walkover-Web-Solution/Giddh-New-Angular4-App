@@ -12,7 +12,7 @@
         "branch_transfer":"शाखा हस्तांतरण",
         "manufacturing":"उत्पादन",
         "warehouse_balance":"गोदाम उघडण्याची शिल्लक",
-        "custom_units":"Custom Units"
+        "custom_units":"सानुकूल युनिट"
     },
     "reports":{
         "transaction_count":"व्यवहाराची संख्या",
