@@ -808,16 +808,25 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public closeConfirmationPopup() {
+    public closeConfirmationPopup(): void {
         this.invoiceConfirmationModel?.hide();
     }
 
-    public closePerformActionPopup(data) {
-        this.performActionOnInvoiceModel?.hide();
+    public performActionPopup(data: any): void {
         if (data) {
             data.action = 'paid';
             this.store.dispatch(this.invoiceActions.ActionOnInvoice(data.uniqueName, data));
         }
+    }
+    
+    /**
+     * Closes payment popup
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public closePerformActionPopup(): void {
+        this.store.dispatch(this.invoiceActions.resetActionOnInvoice());
+        this.performActionOnInvoiceModel?.hide();
     }
 
     public goToInvoice(voucherType: string) {
