@@ -65,7 +65,7 @@
 
 /*---- aribaugrotesk ----*/
 
-@font-face {
+/* @font-face {
     font-family: "aribaugrotesk-regular";
     font-display: swap;
     src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Rg.woff")
@@ -91,11 +91,39 @@
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
+} */
+
+@font-face {
+    font-family: "gtamerica-regular";
+    font-display: swap;
+    src: url("../fonts/gt-america/GT-America-Regular.ttf")
+            format("ttf");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "gtamerica-semibold";
+    font-display: swap;
+    src: url("../fonts/gt-america/GT-America-Light.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "gtamerica-bold";
+    font-display: swap;
+    src: url("../fonts/gt-america/GT-America-Bold.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
 }
 
 html,
 body{
-    --font-regular: "aribaugrotesk-regular";
-    --font-semibold: "aribaugrotesk-semibold";
-    --font-bold: "aribaugrotesk-bold";
+    --font-regular: "gtamerica-regular";
+    --font-semibold: "gtamerica-semibold";
+    --font-bold: "gtamerica-bold";
 }
