@@ -4,11 +4,6 @@ export enum ContactsTab {
 }
 export const CONTACTS_COMMON_COLUMNS = [
     {
-        "value": "parent_group",
-        "label": "Parent Group",
-        "checked": true
-    },
-    {
         "value": "opening",
         "label": "Opening",
         "checked": true
