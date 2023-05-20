@@ -440,7 +440,7 @@ textarea:focus {
     display: block;
     font-size: 26px;
     line-height: 1.2;
-    font-family: "AribauGrotesk-Regular";
+    font-family: var(--font-regular);
 }
 
 .sp-rupees span.icon-rupees {
@@ -1617,7 +1617,7 @@ label.sales-country-label {
 
 b,
 strong {
-    font-family: "AribauGrotesk-Regular";
+    font-family: var(--font-regular);
     font-weight: 500;
 }
 
