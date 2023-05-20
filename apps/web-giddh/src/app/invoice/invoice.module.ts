@@ -84,6 +84,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatRadioModule } from '@angular/material/radio';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     // Change this to your Google API key
@@ -184,7 +185,8 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
         MatMenuModule,
         MatDialogModule,
         MatButtonModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatRadioModule
     ],
     exports: [
         InvoiceRoutingModule,

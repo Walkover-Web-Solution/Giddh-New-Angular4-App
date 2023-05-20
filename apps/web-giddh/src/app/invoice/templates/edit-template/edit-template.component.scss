@@ -12,6 +12,8 @@
     background: var(--color-common-primary-background-for-all-components);
     .add-new-btn {
         width: 83px;
+        background-color: var(--color-quaternary-button-background);
+        color: var(--color-white);
     }
 }
 
@@ -117,9 +119,19 @@ button.cdk-keyboard-focused,
     min-width: unset;
     padding: 7px 10px;
     margin-right: 15px;
-    height: 36px;
+    height: 37px;
     width: 37px;
     line-height: 18px;
+    transition: 400ms;
+    &:hover:not([disabled]) {
+        background-color: var(--color-quaternary-button-background);
+        color: var(--color-white);
+    }
+    &:disabled {
+        background-color: var(--color-quaternary-button-background);
+        filter: opacity(0.5);
+        color: var(--color-white);
+    }
 }
 .mat-menu-item {
     line-height: 36px;

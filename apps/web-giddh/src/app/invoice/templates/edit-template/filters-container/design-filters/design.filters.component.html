@@ -163,7 +163,41 @@
                         <div class="pull-left mr-l1 mr-t1 choose-size">
                             <div class="d-block" [class.cursor-disable]="isFileUploaded">
                                 <p>Size</p>
-                                <input
+                                <mat-radio-group
+                                    [(ngModel)]="defaultImageSize"
+                                    name="chooseSize"
+                                    [disabled]="isFileUploaded"
+                                >
+                                    <mat-radio-button
+                                        color="primary"
+                                        [value]="'S'"
+                                        id="fontS"
+                                        class="selected-radio"
+                                        [checked]="true"
+                                        (click)="onValueChange('logoSize', '60')"
+                                    >
+                                        S
+                                    </mat-radio-button>
+                                    <mat-radio-button
+                                        color="primary"
+                                        id="fontM"
+                                        [value]="'M'"
+                                        id="fontM"
+                                        (click)="onValueChange('logoSize', '80')"
+                                    >
+                                        M
+                                    </mat-radio-button>
+                                    <mat-radio-button
+                                        color="primary"
+                                        id="fontM"
+                                        [value]="'L'"
+                                        id="fontL"
+                                        (click)="onValueChange('logoSize', '100')"
+                                    >
+                                        L
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                                <!-- <input
                                     [(ngModel)]="defaultImageSize"
                                     name="chooseSize"
                                     type="radio"
@@ -193,7 +227,7 @@
                                     [disabled]="isFileUploaded"
                                     (click)="onValueChange('logoSize', '100')"
                                 />
-                                <label for="fontL">L</label>
+                                <label for="fontL">L</label> -->
                             </div>
                             <div class="d-block">
                                 <a

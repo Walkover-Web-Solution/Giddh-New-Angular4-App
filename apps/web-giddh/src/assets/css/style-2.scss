@@ -1881,31 +1881,39 @@ ul.sub-list {
     color: var(--color-septenary-button-text);
     background: var(--color-secondary-button-background-hover);
 }
+.choose-size {
+    .mat-radio-label-content {
+        font-weight: bold;
+        display: inline-block;
+        border: 1px solid var(--color-iron);
+        border-radius: 50%;
+        width: 30px !important;
+        text-align: center;
+        height: 30px !important;
+        line-height: 30px !important;
+        margin-right: 5px;
+        color: var(--color-abbey);
+        padding-left: unset !important;
+    }
+    // input[type=radio]:checked+.mat-radio-label-content  {
+    //     background: var(--color-dark-fog);
+    //     clear: both;
+    // }
+    .selected-radio {
+        .mat-radio-label-content {
+            background: var(--color-dark-fog);
+            clear: both;
+        }
+    }
 
-.choose-size label {
-    font-weight: bold;
-    display: inline-block;
-    border: 1px solid var(--color-iron);
-    border-radius: 50%;
-    width: 30px !important;
-    text-align: center;
-    height: 30px !important;
-    line-height: 30px !important;
-    margin-right: 5px;
-    color: var(--color-abbey);
-}
+    input:disabled + .mat-radio-label-content {
+        cursor: not-allowed !important;
+    }
 
-.choose-size input:checked + label {
-    background: var(--color-dark-fog);
-    clear: both;
-}
-
-.choose-size input:disabled + label {
-    cursor: not-allowed !important;
-}
-
-.choose-size input {
-    display: none;
+    .mat-radio-input,
+    .mat-radio-container {
+        display: none !important;
+    }
 }
 
 .cursor-disable {
