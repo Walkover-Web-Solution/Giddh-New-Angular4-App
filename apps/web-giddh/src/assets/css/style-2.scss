@@ -1026,12 +1026,6 @@ $custom-typography: mat-typography-config(
     }
 }
 
-@media (max-width: 320px) {
-    .on-mobile-view tbody td {
-        padding: 5px 10px 5px 53% !important;
-    }
-}
-
 .table-cell {
     display: table-cell;
 }
@@ -12207,6 +12201,13 @@ body.update-scroll-hidden {
     .page-has-tabs .custom-tabs .top-bar.aging-top-bar {
         margin-top: -10px;
     }
+    aside-create-unit,
+    aside-create-group {
+        max-width: 370px;
+        .aside-pane {
+            max-width: 370px;
+        }
+    }
 }
 
 @media (max-width: 500px) {
@@ -12267,6 +12268,13 @@ body.update-scroll-hidden {
     .pagination {
         justify-content: flex-start;
         flex-wrap: wrap;
+    }
+    aside-create-unit,
+    aside-create-group {
+        max-width: 310px;
+        .aside-pane {
+            max-width: 310px;
+        }
     }
 }
 
@@ -13707,25 +13715,10 @@ aside-create-group {
     }
 }
 
-@media (max-width: 575px) {
-    aside-create-unit,
-    aside-create-group {
-        max-width: 370px;
-        .aside-pane {
-            max-width: 370px;
-        }
-    }
-}
-@media (max-width: 375px) {
-    aside-create-unit,
-    aside-create-group {
-        max-width: 310px;
-        .aside-pane {
-            max-width: 310px;
-        }
-    }
-}
 @media (max-width: 320px) {
+    .on-mobile-view tbody td {
+        padding: 5px 10px 5px 53% !important;
+    }
     aside-create-unit,
     aside-create-group {
         max-width: 280px;
