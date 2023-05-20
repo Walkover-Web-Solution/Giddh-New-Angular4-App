@@ -945,85 +945,6 @@ $custom-typography: mat-typography-config(
             max-width: 600px;
         }
     }
-
-    .move-select {
-        .menu {
-            width: 36% !important;
-        }
-    }
-
-    .move-wrapper {
-        float: left;
-        max-width: 100% !important;
-        flex: 100% !important;
-    }
-
-    .ipad-responsive-modal {
-        .pull-right {
-            .mat-raised-button {
-                width: 100%;
-                padding-left: 0.7rem !important;
-                box-shadow: none !important;
-                margin-right: 0 !important;
-                margin-left: 11px !important;
-            }
-        }
-    }
-
-    .select-subscription {
-        float: left;
-        width: 100% !important;
-
-        .mat-form-field-wrapper {
-            height: 100% !important;
-            padding-bottom: 0 !important;
-        }
-
-        .mat-form-field-flex {
-            float: left !important;
-            width: 100% !important;
-        }
-
-        .mat-form-field-infix {
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            margin-top: 0 !important;
-            border: none !important;
-        }
-
-        .mat-select {
-            margin-top: 0 !important;
-            z-index: 9991 !important;
-        }
-    }
-
-    .subscription-form-select {
-        float: left !important;
-        width: 100% !important;
-        height: 29px !important;
-
-        .mat-form-field-wrapper {
-            height: 100% !important;
-            padding-bottom: 0 !important;
-        }
-
-        .mat-form-field-flex {
-            float: left !important;
-            width: 100% !important;
-        }
-
-        .mat-form-field-infix {
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            margin-top: 0 !important;
-            border: none !important;
-        }
-
-        .mat-select {
-            margin-top: 0 !important;
-            z-index: 9991 !important;
-        }
-    }
 }
 
 .table-cell {
@@ -12208,6 +12129,13 @@ body.update-scroll-hidden {
             max-width: 370px;
         }
     }
+    aside-create-unit,
+    aside-create-group {
+        max-width: 370px;
+        .aside-pane {
+            max-width: 370px;
+        }
+    }
 }
 
 @media (max-width: 500px) {
@@ -14013,45 +13941,6 @@ aside-create-group {
         max-width: 280px;
         .aside-pane {
             max-width: 280px;
-        }
-    }
-}
-
-/*--- custom-unit ---*/
-.mat-grid-wrapper {
-    .mat-list-wrap {
-        width: 100%;
-    }
-    .mat-grid-tile-content {
-        align-items: flex-start;
-        .mat-list-base .mat-list-item {
-            &.map-item {
-                .mat-list-item-content {
-                    justify-content: flex-end;
-                }
-            }
-            .mat-list-item-content {
-                padding: 0;
-            }
-        }
-    }
-}
-
-@media (max-width: 575px) {
-    aside-create-unit,
-    aside-create-group {
-        max-width: 370px;
-        .aside-pane {
-            max-width: 370px;
-        }
-    }
-}
-@media (max-width: 375px) {
-    aside-create-unit,
-    aside-create-group {
-        max-width: 310px;
-        .aside-pane {
-            max-width: 310px;
         }
     }
 }
