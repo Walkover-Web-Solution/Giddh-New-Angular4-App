@@ -83,9 +83,5 @@
         "greater_than":"Greater than",
         "less_than":"Less than",
         "excluded":"Excluded"
-    },
-    "button":{
-        "export_btn": "Export",
-        "back_btn": "Back"
     }
 }
