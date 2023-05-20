@@ -49,6 +49,7 @@ import { ReceiptService } from '../../../../services/receipt.service';
 import { ToasterService } from '../../../../services/toaster.service';
 import { AppState } from '../../../../store';
 import { ProformaListComponent } from '../../../proforma/proforma-list.component';
+import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 
 @Component({
     selector: 'invoice-preview-details-component',
@@ -183,7 +184,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private modalService: BsModalService,
         private domSanitizer: DomSanitizer,
         private commonService: CommonService,
-        private thermalService: ThermalService) {
+        private thermalService: ThermalService,
+        private invoiceAction: InvoiceActions) {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -1066,5 +1068,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         setTimeout(() => {
             this.perfectScrollbar?.directiveRef?.scrollToElement(".single-invoice-detail.activeItem");
         }, 200);
+    }
+
+    /**
+     * Closes payment popup
+     *
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public closePerformActionPopup(): void {
+        this.store.dispatch(this.invoiceAction.resetActionOnInvoice());
     }
 }
