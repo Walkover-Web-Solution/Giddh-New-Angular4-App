@@ -671,6 +671,18 @@ $custom-typography: mat-typography-config(
 .purchase-customise-column-button {
     float: right !important;
 }
+
+/*---- custom -----*/
+.inline-adjustment {
+    .adjustments-list {
+        height: auto !important;
+        overflow-y: unset !important;
+    }
+    advance-receipt-adjustment-component {
+        min-width: 750px;
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -7832,9 +7844,16 @@ span.red-text {
     border: 1px solid var(--color-secondary-input-bar-border);
 }
 
-.table-custom-invoice ul.dropdown-menu {
-    min-width: 160px !important;
-    height: auto !important;
+.table-custom-invoice {
+    ul.dropdown-menu {
+        min-width: 160px !important;
+        height: auto !important;
+    }
+    .mat-input-element {
+        &.product-top {
+            margin-top: 20px !important;
+        }
+    }
 }
 
 .sales-invoice-table {
@@ -9872,9 +9891,22 @@ giddh-datepicker {
 }
 
 giddh-datepicker {
-    .mat-form-field-appearance-fill .mat-form-field-flex {
-        border: 1px solid var(--color-secondary-input-bar-border) !important;
-        border-radius: 5px !important;
+    &:not(.date-border) {
+        .mat-form-field-appearance-fill .mat-form-field-flex {
+            border: 1px solid var(--color-secondary-input-bar-border) !important;
+            border-radius: 5px !important;
+        }
+    }
+}
+
+.payment-date {
+    giddh-datepicker .mat-form-field-appearance-fill .mat-form-field-flex {
+        border: 0px !important;
+    }
+    ngx-daterangepicker-material input.mat-input-element,
+    giddh-datepicker input.mat-input-element {
+        cursor: pointer;
+        font-weight: 600;
     }
 }
 

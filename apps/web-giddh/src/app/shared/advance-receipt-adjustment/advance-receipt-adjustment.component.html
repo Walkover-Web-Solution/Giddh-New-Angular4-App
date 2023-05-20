@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete()"
 >
     <!-- Adjust Payment modal start -->
-    <div class="modal-header">
+    <div class="modal-header" *ngIf="isModal">
         <h4 class="modal-title bg pull-left">{{ localeData?.page_heading }}</h4>
         <button mat-button class="close pull-right" aria-label="Close" (click)="onCancel()">
             <span aria-hidden="true">&times;</span>
@@ -18,7 +18,7 @@
                 <span class="text-light" *ngIf="isUpdateMode && isVoucherModule">
                     {{ localeData?.adjusted_amount_error }}
                 </span>
-                <div class="row mb-2">
+                <div class="row mb-2" *ngIf="isModal">
                     <div class="col-md-8 mr-t05">
                         <div class="form-group">
                             <label>{{ localeData?.customer_name }} </label>
@@ -123,14 +123,18 @@
                     <div class="row voucher-form">
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label for="name"
-                                    >{{ localeData?.adjustment_voucher }}<span class="text-danger">*</span></label
-                                >
+                                <strong>
+                                    <label for="name"
+                                        >{{ localeData?.adjustment_voucher }}<span class="text-danger">*</span></label
+                                    >
+                                </strong>
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label>{{ commonLocaleData?.app_amount }}<span class="text-danger">* </span></label>
+                                <strong>
+                                    <label>{{ commonLocaleData?.app_amount }}<span class="text-danger">* </span></label>
+                                </strong>
                             </div>
                         </div>
                         <div class="col-sm-2" *ngIf="voucherApiVersion !== 2">
@@ -259,7 +263,7 @@
                                         "
                                         [placeholder]="localeData?.enter_amount"
                                         [type]="'text'"
-                                        [cssClass]="'form-control mat-field-border'"
+                                        [cssClass]="'form-control mat-field-border text-right'"
                                         [name]="'amount' + entry?.uniqueName"
                                         [prefix]="currencySymbol"
                                         [mask]="inputMaskFormat"
@@ -490,11 +494,11 @@
 
                             <i class="icon-info pointer" [tooltip]="localeData?.adjustment_amount_error"></i>
                         </span>
-                        <div class="note-message mt-3" *ngIf="isVoucherModule">
+                        <div class="note-message mt-3" *ngIf="isVoucherModule && isModal">
                             <p>{{ commonLocaleData?.app_note }}:</p>
                             <p>{{ localeData?.adjustment_note }}</p>
                         </div>
-                        <div class="mt-2">
+                        <div class="mt-2" *ngIf="isModal">
                             <button
                                 mat-button
                                 *ngIf="!isUpdateMode"
