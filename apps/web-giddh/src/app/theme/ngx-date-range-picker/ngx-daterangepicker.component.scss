@@ -54,7 +54,7 @@
 */
 
 .md-drppicker {
-    font-family: Roboto, sans-serif;
+    font-family: var(--fo);
     color: var(--color-datepicker-month-name);
     background-color: var(--color-white);
     border-radius: 4px;
@@ -178,8 +178,7 @@
         th,
         .th-div {
             font-size: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell,
-                "Helvetica Neue", sans-serif;
+            font-family: var(--font-regular) !important;
             font: 400 14px system-ui;
             margin-bottom: 0 !important;
         }

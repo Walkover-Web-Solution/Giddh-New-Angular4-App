@@ -219,7 +219,7 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: " opensans-semibold ";
+    font-family: var(--font-semibold);
     text-transform: capitalize;
 }
 .ledger-footer-1 {
