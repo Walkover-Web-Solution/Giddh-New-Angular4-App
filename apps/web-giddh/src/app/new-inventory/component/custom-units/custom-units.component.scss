@@ -11,6 +11,9 @@
                 color: var(--color-table-secondary-heading);
                 font-size: 14px;
                 display: inline-block;
+                &.list-font {
+                    font-size: 16px;
+                }
             }
             .items {
                 font-size: 14px;

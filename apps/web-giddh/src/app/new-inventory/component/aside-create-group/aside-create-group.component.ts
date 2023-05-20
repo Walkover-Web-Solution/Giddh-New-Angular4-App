@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChildren, EventEmitter, Output, Input } from '@angular/core';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 
 @Component({
     selector: 'aside-create-group',
@@ -15,12 +14,6 @@ export class AsideCreatGroupComponent implements OnInit {
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     public closeAsidePane(event?) {
         this.closeAsideEvent.emit();
-    }
-
-    @ViewChildren('unitNameType') public unitNameType: ShSelectComponent;
-    public isDivide: boolean = false;
-    public changeType(ev) {
-        this.isDivide = ev;
     }
     public ngOnInit() {
 
