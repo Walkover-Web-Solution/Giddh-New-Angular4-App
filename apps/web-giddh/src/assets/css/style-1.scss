@@ -2219,6 +2219,7 @@ form#groupDetailForm {
 .right-col-new {
     width: 50% !important;
 }
+
 /* responsive */
 @media (min-width: 768px) {
     .form-inline.financial-select-year .form-group {
@@ -2435,17 +2436,6 @@ form#groupDetailForm {
     background: var(--color-primary-tooltip-background) !important;
 }
 /** aside pane styles */
-.aside-pane {
-    position: relative;
-    z-index: 5;
-    height: 100vh;
-    color: var(--color-right-sidebar-settings);
-    background-color: var(--color-primary-right-side-popup-body-background) !important;
-}
-.aside-pane {
-    max-width: 760px;
-    width: 100%;
-}
 .aside-overlay {
     position: fixed;
     top: 0;

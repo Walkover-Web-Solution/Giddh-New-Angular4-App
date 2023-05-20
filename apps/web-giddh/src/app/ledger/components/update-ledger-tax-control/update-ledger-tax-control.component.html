@@ -23,7 +23,8 @@
                 name="formattedTotal"
                 class="form-control cursor-pointer text-right mat-field-border"
                 [(ngModel)]="formattedTotal"
-                (focus)="handleInputFocus()"
+                [ngClass]="{ 'field-disabled': readonly }"
+                (focus)="!readonly ? handleInputFocus() : ''"
             />
             <span class="caret"></span>
         </div>

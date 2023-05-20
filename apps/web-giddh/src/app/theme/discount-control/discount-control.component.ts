@@ -4,7 +4,6 @@ import { ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil } from 'rxjs/operators';
-import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'discount-control-component',
@@ -17,7 +16,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     public get defaultDiscount(): LedgerDiscountClass {
         return this.discountAccountsDetails[0];
     }
-
+    /** True if field is read only */
+    @Input() public readonly: boolean = false;
     @Input() public discountAccountsDetails: LedgerDiscountClass[];
     @Input() public ledgerAmount: number = 0;
     @Input() public totalAmount: number = 0;
@@ -45,8 +45,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public discountsList: any[] = [];
 
     constructor(
-        private store: Store<AppState>,
-        private generalService: GeneralService,
+        private store: Store<AppState>
     ) {
 
     }
@@ -185,5 +184,15 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Shows discount menu
+     *
+     * @memberof DiscountControlComponent
+     */
+    public showDiscountMenu(): void {
+        this.discountMenu = true;
+        this.hideOtherPopups.emit(true);
     }
 }

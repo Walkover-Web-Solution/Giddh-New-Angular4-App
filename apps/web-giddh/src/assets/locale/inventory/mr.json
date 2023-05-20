@@ -11,7 +11,8 @@
         "fixed_assets":"स्थिर मालमत्ता",
         "branch_transfer":"शाखा हस्तांतरण",
         "manufacturing":"उत्पादन",
-        "warehouse_balance":"गोदाम उघडण्याची शिल्लक"
+        "warehouse_balance":"गोदाम उघडण्याची शिल्लक",
+        "custom_units":"Custom Units"
     },
     "reports":{
         "transaction_count":"व्यवहाराची संख्या",

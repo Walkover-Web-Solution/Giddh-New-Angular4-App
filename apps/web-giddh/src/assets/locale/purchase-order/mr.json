@@ -70,5 +70,8 @@
     "currency_conversion": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />(रूपांतरण दर: [CONVERSION_RATE])",
     "delayed_by_days": "[DAYS] दिवसांनी विलंब",
     "delivery_in_day": "[DAYS] दिवसांत वितरण",
-    "delivery_in_days": "[DAYS] दिवसांत वितरण"
+    "delivery_in_days": "[DAYS] दिवसांत वितरण",
+    "convert_bill_popup_heading": "Convert to Bill",
+    "purchase_bill_number": "Purchase Bill Number",
+    "po_selection_vendor_error": "Please select purchase orders of only 1 vendor."
 }

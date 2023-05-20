@@ -14,7 +14,6 @@
         overflow-y: auto;
         z-index: unset;
         padding-bottom: 60px;
-        box-shadow: 3px 3px 6px var(--color-primary-common-box-shadow);
 
         .back-to-main-slider {
             display: block;
@@ -98,12 +97,13 @@
                         }
                         &.sub-option[aria-level="1"] {
                             position: relative;
-                            left: 20px;
+                            // left: 20px;
+                            padding-left: 20px !important;
                             height: 27px;
-                            width: 210px;
+                            width: 100%;
                             line-height: 15px;
                             &:last-child {
-                                align-items: flex-start;
+                                align-items: center;
                                 position: relative;
                                 top: 8px;
                             }
