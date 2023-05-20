@@ -234,6 +234,12 @@ input.form-control.edit-currency {
     align-items: center;
     column-gap: 5px;
     height: 100%;
+    strong {
+        margin-top: 4px;
+    }
+    &.other-check-table {
+        margin-top: -5px;
+    }
 }
 .payment-date {
     cursor: pointer;
@@ -253,6 +259,11 @@ input.form-control.edit-currency {
     padding: 10px 0;
     .mat-slide-toggle {
         display: flex;
+    }
+    strong {
+        a {
+            color: var(--color-blue);
+        }
     }
 }
 /*---- table ----*/

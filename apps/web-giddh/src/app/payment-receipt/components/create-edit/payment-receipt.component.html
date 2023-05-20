@@ -315,6 +315,21 @@
                                             >
                                             </text-field>
                                         </div>
+                                        <!-- show tax field onclick advance toggle -->
+                                        <!-- <div class="col-lg-4">
+                                            <strong>
+                                                <label
+                                                    >Tax
+                                                    <span class="red-text">*</span></label
+                                                >
+                                            </strong>
+                                            <select-field
+                                                [cssClass]="'form-control mat-field-border text-right'"
+                                                [name]="'tax'"
+                                                [placeholder]="'0'"
+                                            >
+                                            </select-field>
+                                        </div> -->
                                         <div class="col-lg-4 mt-4">
                                             <div class="other-check">
                                                 <mat-checkbox
@@ -358,7 +373,7 @@
                                                     <tr>
                                                         <td>
                                                             <select-field
-                                                                [cssClass]="'form-control mat-field-border mt-4'"
+                                                                [cssClass]="'form-control mat-field-border product-top'"
                                                                 [name]="'billingdetails-statecode'"
                                                                 [placeholder]="'Accounting Service'"
                                                             >
@@ -394,7 +409,7 @@
                                                             </select-field>
                                                         </td>
                                                         <td class="item-total">
-                                                            <div class="other-check">
+                                                            <div class="other-check other-check-table">
                                                                 <mat-checkbox
                                                                     name="autoFillShipping"
                                                                     color="primary"
@@ -442,7 +457,7 @@
                                                 </strong>
                                                 <textarea
                                                     matInput
-                                                    class="mat-field-border form-control w-100 min-height-100"
+                                                    class="mat-field-border form-control w-100 min-height-100 mt-1"
                                                     name="note"
                                                     [placeholder]="'Note'"
                                                 ></textarea>
@@ -458,7 +473,7 @@
                                                         <i class="icon-file-path"></i>
                                                     </label>
                                                 </strong>
-                                                <label for="file-input" class="file-upload-label">
+                                                <label for="file-input" class="file-upload-label mt-1">
                                                     Drag/Drop file or Click here
                                                 </label>
                                                 <input
