@@ -762,7 +762,7 @@ ul.sub-list {
             font-size: 16px;
             display: flex;
             padding: 15px;
-            font-family: "opensans-bold";
+            font-family: var(--font-bold);
             color: var(--color-nero);
             border-bottom: 1px solid var(--color-iron);
             width: 100%;

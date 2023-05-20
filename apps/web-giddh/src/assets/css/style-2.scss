@@ -7788,7 +7788,7 @@ span.red-text {
 }
 
 .total-sales-tabs .nav-tabs > li.active a {
-    font-family: "LatoWebBold";
+    font-family: var(--font-bold);
 }
 
 .total-sales-tabs .nav-tabs > li.active > a,

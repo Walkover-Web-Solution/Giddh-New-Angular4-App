@@ -1993,7 +1993,7 @@ ul.pills li {
 }
 
 strong {
-    font-family: var(--font-regular);
+    font-family: var(--font-semibold);
     color: var(--color-popup-footer-text);
 }
 .hamburger-menu a:hover {
@@ -2173,7 +2173,7 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
 }
 .basic thead tr th {
     border: 0;
-    font-family: var(--font-regular);
+    font-family: var(--font-semibold);
 
     text-transform: capitalize;
 }
@@ -2733,7 +2733,7 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 }
 .mat-header-cell {
     color: var(--color-giddh-blue) !important;
-    font-family: var(--font-regular);
+    font-family: var(--font-semibold);
     font-size: 14px !important;
 }
 .mat-header-cell.text-right {
