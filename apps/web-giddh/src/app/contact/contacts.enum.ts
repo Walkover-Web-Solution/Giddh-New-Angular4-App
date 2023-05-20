@@ -4,11 +4,6 @@ export enum ContactsTab {
 }
 export const CONTACTS_COMMON_COLUMNS = [
     {
-        "value": "opening",
-        "label": "Opening",
-        "checked": true
-    },
-    {
         "value": "closing",
         "label": "Closing",
         "checked": true

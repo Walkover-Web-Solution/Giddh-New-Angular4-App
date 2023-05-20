@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { ReplaySubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { CommonService } from "../../services/common.service";
-import { InventoryService } from "../../services/inventory.service";
 import { ToasterService } from "../../services/toaster.service";
 
 @Component({
@@ -94,7 +93,6 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
             });
         });
     }
-
 
     /**
      * This will be used for filtering the display columns
