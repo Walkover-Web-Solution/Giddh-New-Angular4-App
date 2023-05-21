@@ -1400,6 +1400,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.stockForm.variants?.forEach(variant => {
                 if (variant.purchaseAccountDetails) {
                     variant.purchaseAccountDetails.accountUniqueName = null;
+                    variant.purchaseInformation = [];
                 }
             });
             this.stockForm.purchaseAccountDetails = {
@@ -1414,6 +1415,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 ]
             };
             this.changeDetection.detectChanges();
+        } else {
+            this.stockForm.variants?.forEach(variant => {
+                if (!variant?.purchaseInformation?.length) {
+                    this.addNewVariantPurchaseUnitPrice(variant);
+                }
+            });
         }
     }
 
@@ -1428,6 +1435,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.stockForm.variants?.forEach(variant => {
                 if (variant.fixedAssetAccountDetails) {
                     variant.fixedAssetAccountDetails.accountUniqueName = null;
+                    variant.fixedAssetsInformation = [];
                 }
             });
             this.stockForm.fixedAssetAccountDetails = {
@@ -1442,6 +1450,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 ]
             };
             this.changeDetection.detectChanges();
+        } else {
+            this.stockForm.variants?.forEach(variant => {
+                if (!variant?.fixedAssetsInformation?.length) {
+                    this.addNewVariantFixedAssetsUnitPrice(variant);
+                }
+            });
         }
     }
 
@@ -1456,6 +1470,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.stockForm.variants?.forEach(variant => {
                 if (variant.salesAccountDetails) {
                     variant.salesAccountDetails.accountUniqueName = null;
+                    variant.salesInformation = [];
                 }
             });
             this.stockForm.salesAccountDetails = {
@@ -1470,6 +1485,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 ]
             };
             this.changeDetection.detectChanges();
+        } else {
+            this.stockForm.variants?.forEach(variant => {
+                if (!variant?.salesInformation?.length) {
+                    this.addNewVariantSalesUnitPrice(variant);
+                }
+            });
         }
     }
 
