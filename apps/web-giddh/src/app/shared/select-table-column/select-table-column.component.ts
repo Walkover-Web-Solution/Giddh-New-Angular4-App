@@ -95,6 +95,20 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     }
 
     /**
+     * This will use for on key down enter
+     *
+     * @param {*} item
+     * @return {*}  {void}
+     * @memberof SelectTableColumnComponent
+     */
+    public onKeydownEnter(item: any): void {
+        if (!(item?.checked && this.displayedColumns.length <= 2)) {
+            item.checked = !item.checked;
+            this.saveSelectedColumns();
+        }
+    }
+
+    /**
      * This will be used for filtering the display columns
      *
      * @memberof SelectTableColumnComponent
