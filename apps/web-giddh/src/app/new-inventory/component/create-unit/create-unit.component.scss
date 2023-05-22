@@ -85,6 +85,21 @@
     }
 }
 
+@media screen and (max-width: 1600px) {
+    .unit-quantity {
+        .unit-rspnsiv {
+            padding-left: 0px;
+        }
+        .row {
+            .unit-equal {
+                .equal-sign {
+                    right: 4px;
+                }
+            }
+        }
+    }
+}
+
 @media screen and (max-width: 991px) {
     .unit-quantity {
         .inc-dec {
