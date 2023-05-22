@@ -145,7 +145,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                     if (typeof this._selectedValues[0] === "string") {
                         let selectedValues = this._selectedValues.map(value => {
                             let filteredValue = this.rows?.filter(row => row?.value === String(value));
-                            let rowNotFound: any = { label: value, value: value };
+                            let rowNotFound: any = { label: this.defaultValue ? this.defaultValue : value, value: value };
                             return (filteredValue && filteredValue[0]?.value) ? filteredValue[0] : rowNotFound;
                         });
                         this._selectedValues = selectedValues;
@@ -155,7 +155,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                 } else {
                     const value = typeof val[0] === 'string' ? val[0] : val[0].value;
                     let filteredValue = this.rows?.filter(row => row?.value === String(value));
-                    let rowNotFound: any = { label: value, value: value };
+                    let rowNotFound: any = { label: this.defaultValue ? this.defaultValue : value, value: value };
                     this.selectSingle((filteredValue && filteredValue[0]?.value) ? filteredValue[0] : rowNotFound);
                 }
             } else {
