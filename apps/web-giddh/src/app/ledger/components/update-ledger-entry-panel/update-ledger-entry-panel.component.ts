@@ -2507,6 +2507,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
     }
 
+    /**
+     * Assigns the stock details
+     *
+     * @private
+     * @param {IOption} event Stock select event
+     * @param {ILedgerTransactionItem} txn Current transaction
+     * @param {*} [requestObject] Additional request object to be provided to the API
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
     private assignStockDetails(event: IOption, txn: ILedgerTransactionItem, requestObject?: any): void {
         const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount?.uniqueName) : '';
         // If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
