@@ -1677,17 +1677,17 @@ span.eligible-ITC {
 .payment-mode {
     display: flex;
     justify-content: space-between;
+    width: 100%;
     .payment-label {
-        text-align: right;
-        width: 40%;
-        margin-right: 10px;
+        text-align: left;
+        width: 50%;
+        display: flex;
+        justify-content: flex-start;
     }
     select-field {
-        width: 60%;
         text-align: left;
     }
     text-field {
-        width: 72%;
         input {
             width: 100%;
         }
