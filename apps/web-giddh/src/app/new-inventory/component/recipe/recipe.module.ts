@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RecipeComponent } from './recipe.component';
 import { MainComponent } from './main.component';
 import { CreateRecipeComponent } from './create-recipe/create-recipe.component';
 import { ListRecipeComponent } from './list-recipe/list-recipe.component';
@@ -20,10 +19,9 @@ import { RecipeRoutingModule } from './recipe.routing.module';
         RecipeRoutingModule
     ],
     exports: [
-        RecipeComponent,
         CreateRecipeComponent,
         ListRecipeComponent
     ],
-    declarations: [RecipeComponent, MainComponent, CreateRecipeComponent, ListRecipeComponent]
+    declarations: [MainComponent, CreateRecipeComponent, ListRecipeComponent]
 })
 export class RecipeModule { }
