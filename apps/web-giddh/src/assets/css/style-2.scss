@@ -10549,6 +10549,17 @@ body.update-scroll-hidden {
             }
         }
     }
+
+    button.mat-menu-item {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 0 6px !important;
+    }
+    .mat-menu-content {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+    }
 }
 
 .cdk-overlay-pane {
