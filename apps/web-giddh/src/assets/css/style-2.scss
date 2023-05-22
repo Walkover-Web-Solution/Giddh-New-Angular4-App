@@ -10660,10 +10660,14 @@ body.update-scroll-hidden {
     }
 
     button.mat-menu-item {
-        height: 38px;
-        line-height: 38px;
-        padding-left: 10px;
-        min-width: 160px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 0 6px !important;
+    }
+    .mat-menu-content {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
     }
 }
 .ledger-attachments-popup {
