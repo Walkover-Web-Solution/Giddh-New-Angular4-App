@@ -45,9 +45,9 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     /** Holds stock group name */
     public stockGroupName: string = "";
     /** Hide/Show for unique name list */
-    public showUniqueName: boolean = true;
+    public showUniqueName: boolean = false;
     /** Hide/Show for group name list */
-    public showGroupName: boolean = true;
+    public showGroupName: boolean = false;
     /** Hold group stock report request */
     public GroupStockReportRequest: GroupStockReportRequest;
     /** Hold stocks report */
@@ -62,14 +62,24 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     public allSelectedWarehouse: any[] = [];
     /** True if api call in progress */
     public isLoading: boolean = false;
-    /** This will hold common JSON data */
-    public commonLocaleData: any = {};
     /** True if click on particular unit dropdown */
     public isOpen: boolean = false;
     /** This will use for instance of lwarehouses Dropdown */
     public warehousesDropdown: FormControl = new FormControl();
     /** Hold all warehouses */
     public allWarehouses: any[] = [];
+    /** Hold module type */
+    public moduleType = 'INVENTORY_WAREHOUSE_OPENING_BALANCE';
+    /** This will use for stock balance column check values */
+    public customiseColumns = [];
+    /** This will use for stock balance displayed columns */
+    public displayedColumns: any[] = [];
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
 
     constructor(
 
@@ -140,6 +150,18 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             this.GroupStockReportRequest.stockName = s;
             this.getStocks();
         });
+        this.customiseColumns = [
+            {
+                "value": "unique_name",
+                "label": "Unique Name",
+                "checked": true
+            },
+            {
+                "value": "stock_group",
+                "label": "Stock Group",
+                "checked": true
+            }
+        ];
     }
 
     /**
@@ -400,6 +422,46 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             }
             this.cdr.detectChanges();
         }, 20);
+    }
+
+    /**
+     * This will use for show hide main table headers from customise columns
+     *
+     * @param {*} event
+     * @memberof StockBalanceComponent
+     */
+    public showSelectedTableColumns(event: any): void {
+        if (event) {
+            this.displayedColumns = event;
+            if (this.displayedColumns?.includes('unique_name')) {
+                this.showUniqueName = true;
+            } else {
+                this.showUniqueName = false;
+            }
+            if (this.displayedColumns?.includes("stock_group")) {
+                this.showGroupName = true;
+            } else {
+                this.showGroupName = false;
+            }
+        }
+        this.cdr.detectChanges();
+    }
+
+    /**
+    * This will use for translation complete
+    *
+    * @param {*} event
+    * @memberof StockBalanceComponent
+    */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
+            this.customiseColumns = this.customiseColumns?.map(column => {
+                column.label = this.localeData?.warehouse_opening_balance[column.value];
+                return column;
+            });
+            this.cdr.detectChanges();
+        }
     }
 
     /**

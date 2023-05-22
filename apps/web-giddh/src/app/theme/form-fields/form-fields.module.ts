@@ -20,6 +20,9 @@ import { CdkScrollComponent } from "./cdk-scroll/cdk-scroll.component";
 import { CdkScrollModule } from "./cdk-scroll/cdk-scroll.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { SelectMultipleFieldsComponent } from "./select-multiple-fields/select-multiple-fields.component";
+import { MatIconModule } from "@angular/material/icon";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
     declarations: [
@@ -46,7 +49,10 @@ import { SelectMultipleFieldsComponent } from "./select-multiple-fields/select-m
         ClickOutsideModule,
         MatChipsModule,
         CdkScrollModule,
-        ScrollingModule
+        ScrollingModule,
+        MatIconModule,
+        MatMenuModule,
+        MatButtonModule
     ],
     exports: [
         TextFieldComponent,

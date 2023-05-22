@@ -358,6 +358,11 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             }
             return state;
         }
+        case INVOICE_ACTIONS.RESET_ACTION_ON_INVOICE: {
+            let newState = _.cloneDeep(state);
+            newState.invoiceActionUpdated = false;
+            return Object.assign({}, state, newState);
+        }
         case INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA_RESPONSE: {
             const s = { ...state, recurringInvoiceData: { ...state.recurringInvoiceData, recurringInvoices: action.payload }, hasRecurringVoucherListPermissions: true };
             return s;
@@ -469,6 +474,11 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             newState.isInvoiceGenerated = true;
             return Object.assign({}, state, newState);
         }
+        case INVOICE_ACTIONS.RESET_PENDING_DATA:
+            return {
+                ...state,
+                ledgers: null
+            };
         case INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE:
             return {
                 ...state,

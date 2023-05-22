@@ -57,6 +57,7 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AttachmentsModule } from '../theme/attachments/attachments.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 @NgModule({
     declarations: [
@@ -127,7 +128,8 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
         NewConfirmationModalModule,
         MatGridListModule,
         MatExpansionModule,
-        AttachmentsModule
+        AttachmentsModule,
+        FormFieldsModule
     ]
 })
 export class LedgerModule {

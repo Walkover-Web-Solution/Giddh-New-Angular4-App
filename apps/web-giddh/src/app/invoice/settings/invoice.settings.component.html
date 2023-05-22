@@ -31,7 +31,7 @@
                                                     color="primary"
                                                 >
                                                 </mat-slide-toggle>
-                                                <label>{{ localeData?.narration_on_mobile }}</label>
+                                                <label class="left-gap">{{ localeData?.narration_on_mobile }}</label>
                                             </div>
 
                                             <div class="col-sm-6 col-md-9 col-lg-8 form-group mr-t05">
@@ -77,7 +77,7 @@
                                         <div class="row">
                                             <div class="col-md-5 col-sm-12 col-xs-12">
                                                 <div class="mb-0 form-group">
-                                                    <div class="" [ngClass]="{ 'input-group': true }">
+                                                    <div class="" [ngClass]="{ 'input-group': true }" class="obj-gap">
                                                         <input
                                                             type="email"
                                                             class="form-control"
@@ -159,7 +159,7 @@
                                             color="primary"
                                         >
                                         </mat-slide-toggle>
-                                        <label>{{ localeData?.send_email_gmail }}</label>
+                                        <label class="left-gap">{{ localeData?.send_email_gmail }}</label>
                                     </div>
 
                                     <div class="col-lg-9 col-md-12 col-sm-12 form-group d-flex align-items-center">
@@ -195,7 +195,6 @@
                     <div class="estimate-tab single-tab-block">
                         <div class="box clearfix mb-2">
                             <h4 class="clearfix bd-rb">{{ localeData?.estimate_quotation }} <span></span></h4>
-
                             <div class="clearfix">
                                 <div class="row heading-name">
                                     <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
@@ -220,7 +219,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
                                         <label>{{ localeData?.default_expiry_days }}</label>
@@ -247,7 +245,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="row next-step-estimate">
                                     <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
                                         <label
@@ -289,7 +286,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
@@ -300,9 +296,8 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label>{{ localeData?.auto_change_status_expiry }}</label>
+                                            <label class="left-gap">{{ localeData?.auto_change_status_expiry }}</label>
                                         </div>
-
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
                                             <mat-slide-toggle
                                                 [(ngModel)]="estimateSetting.autoChangeStatusOnExp"
@@ -325,7 +320,7 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label>{{ localeData?.auto_email_generate }}</label>
+                                            <label class="left-gap">{{ localeData?.auto_email_generate }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
                                             <mat-slide-toggle
@@ -342,21 +337,28 @@
                                 <!-- <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-md-12 col-lg-3">
-                                            <input type="checkbox" [(ngModel)]="estimateSetting.sendSms" class="pull-left"
+                                            <input
+                                                type="checkbox"
+                                                [(ngModel)]="estimateSetting.sendSms"
+                                                class="pull-left"
                                                 name="invoiceCreatePaymentEntry"
-                                                class="show-on-mobile" /><label>{{localeData?.enable_sms_estimate}}</label>
+                                                class="show-on-mobile"
+                                            /><label>{{ localeData?.enable_sms_estimate }}</label
+                                            >
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9">
                                             <div class="form-group clearfix">
-                                                <input type="checkbox" [(ngModel)]="estimateSetting.sendSms"
-                                                    class="pull-left" name="invoiceCreatePaymentEntry"
-                                                    class="hide-on-mobile" />
-
+                                                <input
+                                                    type="checkbox"
+                                                    [(ngModel)]="estimateSetting.sendSms"
+                                                    class="pull-left"
+                                                    name="invoiceCreatePaymentEntry"
+                                                    class="hide-on-mobile"
+                                                />
                                             </div>
                                         </div>
                                     </div>
                                 </div> -->
-
                                 <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                             </div>
                         </div>
@@ -404,7 +406,7 @@
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-9">
                                         <div class="default-expiry">
-                                            <div>
+                                            <div class="">
                                                 <div class="form-group">
                                                     <div [ngClass]="{ 'input-group': true }">
                                                         <input
@@ -434,7 +436,7 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label>{{ localeData?.auto_change_status_expiry }}</label>
+                                            <label class="left-gap">{{ localeData?.auto_change_status_expiry }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
                                             <mat-slide-toggle
@@ -458,7 +460,7 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label>{{ localeData?.auto_mail_generate_update }}</label>
+                                            <label class="left-gap">{{ localeData?.auto_mail_generate_update }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
                                             <mat-slide-toggle
@@ -561,7 +563,7 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label>{{ localeData?.show_seal }}</label>
+                                            <label class="left-gap">{{ localeData?.show_seal }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group">
                                             <mat-slide-toggle
@@ -585,7 +587,7 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label>{{ localeData?.auto_mail_update }}</label>
+                                            <label class="left-gap">{{ localeData?.auto_mail_update }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group">
                                             <mat-slide-toggle
@@ -612,22 +614,18 @@
                                         </div>
 
                                         <div class="col-sm-12 col-md-9">
-
                                             <div class="form-group clearfix">
-
                                                 <input type="checkbox" [(ngModel)]="invoiceSetting.sendInvLinkOnSms"
                                                     (ngModelChange)="onChangeSendInvoiceViaSms(invoiceSetting.sendInvLinkOnSms)"
                                                     name="invoiceSetting.sendInvLinkOnSms"
                                                     class="pull-left hide-on-mobile" />
 
                                                 <div class="pull-left sms-textarea" *ngIf="invoiceSetting.sendInvLinkOnSms">
-
                                                     <textarea [(ngModel)]="invoiceSetting.smsContent"
                                                         class="pull-left form-control"
                                                         name="invoiceSetting.sendInvLinkOnSms" rows="3"></textarea>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div> -->
@@ -641,7 +639,7 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label>{{ localeData?.custom_invoice_no }}</label>
+                                            <label class="left-gap">{{ localeData?.custom_invoice_no }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9">
                                             <div class="form-group clearfix d-flex">
@@ -688,7 +686,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
@@ -699,7 +696,7 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label>{{ localeData?.auto_delete_entries }}</label>
+                                            <label class="left-gap">{{ localeData?.auto_delete_entries }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group">
                                             <mat-slide-toggle
@@ -722,7 +719,7 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label>{{ localeData?.apply_sales_round_off }}</label>
+                                            <label class="left-gap">{{ localeData?.apply_sales_round_off }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group">
                                             <mat-slide-toggle
@@ -745,7 +742,9 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label>{{ localeData?.apply_credit_note_round_off }}</label>
+                                            <label class="left-gap">{{
+                                                localeData?.apply_credit_note_round_off
+                                            }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group">
                                             <mat-slide-toggle
@@ -771,7 +770,9 @@
                                                 (change)="handleEInvoiceChange($event)"
                                             >
                                             </mat-slide-toggle>
-                                            <label>{{ localeData?.e_invoice_authentication_label }}</label>
+                                            <label class="left-gap">{{
+                                                localeData?.e_invoice_authentication_label
+                                            }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group user-authenticate d-flex">
                                             <mat-slide-toggle
@@ -783,7 +784,7 @@
                                             </mat-slide-toggle>
                                             <div *ngIf="invoiceSetting.gstEInvoiceEnable" class="d-inline-flex">
                                                 <div class="d-inline-flex position-relative mr-l15">
-                                                    <label>Username</label>
+                                                    <label>{{ localeData?.e_invoice_username_label }}</label>
                                                     <input
                                                         [(ngModel)]="invoiceSetting.gstEInvoiceUserName"
                                                         type="text"
@@ -792,7 +793,7 @@
                                                     />
                                                 </div>
                                                 <div class="d-inline-flex position-relative mr-l15">
-                                                    <label>Password</label>
+                                                    <label>{{ localeData?.e_invoice_password_label }}</label>
                                                     <input
                                                         [(ngModel)]="invoiceSetting.gstEInvoiceUserPassword"
                                                         type="password"
@@ -801,7 +802,7 @@
                                                     />
                                                 </div>
                                                 <div class="d-inline-flex position-relative mr-l15">
-                                                    <label>GSTIN</label>
+                                                    <label>{{ localeData?.e_invoice_gstin_label }}</label>
                                                     <input
                                                         [(ngModel)]="invoiceSetting.gstEInvoiceGstin"
                                                         type="text"
@@ -813,7 +814,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <!-- static code end -->
                                 <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                             </div>
                         </div>
@@ -824,7 +825,7 @@
         </section>
 
         <ng-template #buttonsSection>
-            <div class="btn-group mr-t2" role="group" aria-label="Basic example">
+            <div class="btn-group mr-t2" role="group">
                 <button type="button" class="btn btn-success mr-r1" (click)="UpdateForm()">
                     {{ commonLocaleData?.app_save }}
                 </button>

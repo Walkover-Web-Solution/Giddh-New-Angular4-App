@@ -134,7 +134,6 @@ export class CompletedComponent implements OnInit, OnDestroy {
         // set financial years based on company financial year
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
-                this.activeCompany = activeCompany;
                 this.filterForm.get('filterCompany')?.patchValue(activeCompany.uniqueName);
             }
         });

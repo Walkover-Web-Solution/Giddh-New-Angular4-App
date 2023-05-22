@@ -68,7 +68,7 @@ tr.fsstock td {
     color: var(--color-nero);
     font-weight: normal !important;
     font-size: 14px;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
 }
 .input-label-stock {
     display: none;

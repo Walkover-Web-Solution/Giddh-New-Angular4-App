@@ -952,6 +952,18 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Resets invoice action
+     *
+     * @returns {CustomActions}
+     * @memberof InvoiceActions
+     */
+    public resetActionOnInvoice(): CustomActions {
+        return {
+            type: INVOICE_ACTIONS.RESET_ACTION_ON_INVOICE
+        };
+    }
+
     public ModifiedInvoiceStateData(model: string[]): CustomActions {
         return {
             type: INVOICE_ACTIONS.MODIFIED_INVOICE_STATE_DATA,
@@ -1362,6 +1374,18 @@ export class InvoiceActions {
     public resetTransporterListResponse(): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.RESET_ALL_TRANSPORTER_RESPONSE
+        };
+    }
+
+    /**
+     * Resets the pending data of pending invoices section
+     *
+     * @returns {CustomActions}
+     * @memberof InvoiceActions
+     */
+    public resetPendingData(): CustomActions {
+        return {
+            type: INVOICE_ACTIONS.RESET_PENDING_DATA
         };
     }
 

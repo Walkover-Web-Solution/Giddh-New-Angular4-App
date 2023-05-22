@@ -3,7 +3,6 @@
         font-size: 32px;
     }
 }
-
 .upload-excel {
     display: flex;
     height: 320px;
@@ -120,7 +119,7 @@
             margin-left: 6px;
             flex: 1;
             .item {
-                font-family: "opensans-semibold";
+                font-family: var(--font-semibold);
             }
         }
         .default-entity {

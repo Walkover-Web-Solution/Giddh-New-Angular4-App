@@ -231,15 +231,16 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/pages/inventory']);
                 }
             }
-            if (this.stockForm.type === 'PRODUCT' || this.stockForm.type === 'SERVICE') {
-                this.getPurchaseAccounts();
-                this.getSalesAccounts();
-            }
-
-            if (this.stockForm.type === 'FIXED_ASSETS') {
-                this.getFixedAssetsAccounts();
-            }
         });
+
+        if (this.stockForm.type === 'PRODUCT' || this.stockForm.type === 'SERVICE') {
+            this.getPurchaseAccounts();
+            this.getSalesAccounts();
+        }
+
+        if (this.stockForm.type === 'FIXED_ASSETS') {
+            this.getFixedAssetsAccounts();
+        }
     }
 
 
@@ -906,8 +907,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         name: this.stockUnitName,
                         code: this.stockForm.stockUnitUniqueName
                     },
-                    openingQuantity: variant.warehouseBalance[0].openingQuantity,
-                    openingAmount: variant.warehouseBalance[0].openingAmount
+                    openingQuantity: 0,
+                    openingAmount: 0
                 }
             ]
 
@@ -986,28 +987,30 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 if (response.body.fixedAssetAccountDetails) {
                     this.stockForm.fixedAssetAccountDetails = response.body.fixedAssetAccountDetails;
                 }
-                const unitRateObj = {
-                    rate: null,
-                    stockUnitCode: null,
-                    stockUnitUniqueName: null,
-                    accountUniqueName: null
-                }
                 this.stockForm.variants = this.stockForm.variants?.map(variant => {
-                    ['purchaseAccountDetails', 'salesAccountDetails', 'fixedAssetAccountDetails'].forEach(accountDetailsKey => {
-                        if (!variant?.[accountDetailsKey]) {
-                            variant[accountDetailsKey] = {
-                                accountUniqueName: null,
-                                unitRates: [Object.assign({}, unitRateObj)]
-                            }
-                        } else if (!variant[accountDetailsKey]?.unitRates?.length) {
-                            variant[accountDetailsKey]['unitRates'] = [Object.assign({}, unitRateObj)];
-                        } else {
-                            variant[accountDetailsKey].unitRates = variant[accountDetailsKey].unitRates.map(unitRate => {
-                                unitRate['accountUniqueName'] = variant[accountDetailsKey].accountUniqueName;
-                                return unitRate;
-                            });
-                        }
-                    });
+                    if (!variant.purchaseAccountDetails?.unitRates?.length) {
+                        variant.purchaseAccountDetails?.unitRates.push({
+                            rate: null,
+                            stockUnitCode: null,
+                            stockUnitUniqueName: null
+                        });
+                    }
+
+                    if (!variant?.salesAccountDetails?.unitRates?.length) {
+                        variant.salesAccountDetails?.unitRates.push({
+                            rate: null,
+                            stockUnitCode: null,
+                            stockUnitUniqueName: null
+                        });
+                    }
+                    if (!variant?.fixedAssetAccountDetails?.unitRates?.length) {
+                        variant.fixedAssetAccountDetails?.unitRates.push({
+                            rate: null,
+                            stockUnitCode: null,
+                            stockUnitUniqueName: null
+                        });
+                    }
+
                     variant['salesInformation'] = variant?.salesAccountDetails?.unitRates;
                     variant['purchaseInformation'] = variant?.purchaseAccountDetails?.unitRates;
                     variant['fixedAssetsInformation'] = variant?.fixedAssetAccountDetails?.unitRates;

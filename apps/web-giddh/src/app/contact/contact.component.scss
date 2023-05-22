@@ -103,7 +103,7 @@ button.mat-menu-item {
 }
 
 .account-detail-custom-title {
-    font-family: "opensans-semibold" !important;
+    font-family: var(--font-semibold) !important;
     font-size: 16px !important;
     word-break: break-word !important;
     margin-top: 5%;
@@ -121,7 +121,7 @@ button.mat-menu-item {
     color: var(--color-abbey);
     margin-top: 7px;
     font-size: 14px !important;
-    font-family: opensans-regular !important;
+    font-family: var(--font-regular) !important;
 }
 
 ul.list-unstyled li a {
@@ -794,7 +794,6 @@ button.btn.btn-filter span.icon-cross {
         padding-top: 0;
         float: none !important;
     }
-
     .position-relative.word-wrap .icon-dots-three-vertical {
         display: block;
     }
@@ -975,4 +974,8 @@ button.btn.btn-filter span.icon-cross {
     color: var(--color-denary-button-text);
     background-color: var(--color-denary-button-background);
     border: 1px solid var(--color-primary-button-border);
+}
+th.mat-header-cell,
+td.mat-cell {
+    white-space: nowrap !important;
 }

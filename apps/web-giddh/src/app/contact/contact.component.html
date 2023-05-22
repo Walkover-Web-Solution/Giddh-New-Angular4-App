@@ -188,60 +188,16 @@
                                             </button>
                                         </div>
                                         <div class="mr-0" *ngIf="activeTab !== 'aging'">
-                                            <button
-                                                mat-icon-button
-                                                [matMenuTriggerFor]="menu"
-                                                matTooltipPosition="left"
-                                                matTooltip="{{ localeData?.filter_toggle }}"
+                                            <select-table-column
+                                                [moduleType]="moduleType"
+                                                [customiseColumns]="customiseColumns"
+                                                (selectedColumns)="showSelectedHeaderColumns($event)"
+                                                [localeData]="localeData"
+                                                [commonLocaleData]="commonLocaleData"
+                                                [iconClass]="'icon-options select-multiple-icon-options'"
+                                                (isLoading)="isLoading = $event"
                                             >
-                                                <i class="icon-options"></i>
-                                            </button>
-                                            <mat-menu #menu="matMenu">
-                                                <button
-                                                    mat-menu-item
-                                                    (click)="$event.stopPropagation()"
-                                                    (keydown.enter)="
-                                                        $event.stopPropagation();
-                                                        selectAllCheckbox.checked = !selectAllCheckbox?.checked;
-                                                        selectAllColumns(selectAllCheckbox?.checked)
-                                                    "
-                                                >
-                                                    <mat-checkbox
-                                                        #selectAllCheckbox
-                                                        color="primary"
-                                                        name="selectAll"
-                                                        [(ngModel)]="selectAll"
-                                                        (change)="selectAllColumns($event?.checked)"
-                                                        >{{ commonLocaleData?.app_select_all }}
-                                                    </mat-checkbox>
-                                                </button>
-                                                <ng-container *ngFor="let item of availableColumnsCount">
-                                                    <button
-                                                        *ngIf="showFieldFilter[item?.value]"
-                                                        mat-menu-item
-                                                        (click)="$event.stopPropagation()"
-                                                        (keydown.enter)="
-                                                            $event.stopPropagation();
-                                                            optionsCheckbox.checked = !optionsCheckbox?.checked;
-                                                            columnFilter(
-                                                                !showFieldFilter[item?.value].visibility,
-                                                                item?.value
-                                                            )
-                                                        "
-                                                    >
-                                                        <mat-checkbox
-                                                            #optionsCheckbox
-                                                            class="text-capitalize"
-                                                            color="primary"
-                                                            name="{{ item?.value }}"
-                                                            (ngModelChange)="columnFilter($event, item?.value)"
-                                                            [(ngModel)]="showFieldFilter[item?.value].visibility"
-                                                        >
-                                                            {{ showFieldFilter[item?.value].displayName }}</mat-checkbox
-                                                        >
-                                                    </button>
-                                                </ng-container>
-                                            </mat-menu>
+                                            </select-table-column>
                                         </div>
                                     </div>
                                     <div class="btn-group pull-right on-mobile-view mr-t1">
@@ -337,10 +293,7 @@
                                     </mat-menu>
                                 </div>
                             </div>
-                            <div
-                                class="total-details-box mr-r05 border-none opening-box min-width-230"
-                                *ngIf="showFieldFilter?.openingBalance?.visibility"
-                            >
+                            <div class="total-details-box mr-r05 border-none opening-box min-width-230">
                                 <h5>
                                     {{ localeData?.opening }}
                                     <div>
@@ -614,14 +567,14 @@
         <div class="mobile-card-wrapper table-responsive vendor-page all-table">
             <ng-container *ngIf="activeTab === 'customer'">
                 <table
-                    *ngIf="(searchStr || sundryDebtorsAccounts?.length) && customFieldsLoaded"
+                    *ngIf="searchStr || sundryDebtorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryDebtorsAccounts"
                     class="w-100"
                     (mouseenter)="showSelectAll = true"
                     (mouseleave)="showSelectAll = false"
                 >
-                    <ng-container matColumnDef="customerName">
+                    <ng-container matColumnDef="customer_name">
                         <th
                             class="mat-customer-name"
                             mat-header-cell
@@ -738,7 +691,7 @@
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="parentGroup">
+                    <ng-container matColumnDef="parent_group">
                         <th mat-header-cell *matHeaderCellDef>
                             <div class="d-flex align-items-center">
                                 {{ commonLocaleData?.app_parent_group }}
@@ -751,7 +704,7 @@
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="openingBalance">
+                    <ng-container matColumnDef="opening">
                         <th mat-header-cell *matHeaderCellDef>
                             <div class="d-flex justify-content-end align-items-center">
                                 {{ localeData?.opening }}
@@ -873,7 +826,7 @@
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="contact">
+                    <ng-container matColumnDef="contacts">
                         <th class="contact-header" mat-header-cell *matHeaderCellDef>
                             <div class="d-flex">
                                 <div class="flex-fill">
@@ -946,31 +899,21 @@
                             </ng-container>
                         </td>
                     </ng-container>
-
-                    <ng-container *ngFor="let column of companyCustomFields$ | async">
-                        <ng-container [matColumnDef]="column?.uniqueName">
-                            <th mat-header-cell *matHeaderCellDef>{{ column?.key }}</th>
-                            <td mat-cell *matCellDef="let account" [attr.data-title]="column?.key">
-                                {{ account.customFields[column?.uniqueName]?.value }}
-                            </td>
-                        </ng-container>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayColumns$ | async; sticky: true"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayColumns$ | async; let idx = index"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns; let idx = index"></tr>
                 </table>
             </ng-container>
 
             <ng-container *ngIf="activeTab === 'vendor'" class="sticky-table">
                 <table
-                    *ngIf="(searchStr || sundryCreditorsAccounts?.length) && customFieldsLoaded"
+                    *ngIf="searchStr || sundryCreditorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryCreditorsAccounts"
                     class="w-100"
                     (mouseenter)="showSelectAll = true"
                     (mouseleave)="showSelectAll = false"
                 >
-                    <ng-container matColumnDef="vendorName">
+                    <ng-container matColumnDef="vendor_name">
                         <th
                             class="mat-vendor-name"
                             mat-header-cell
@@ -1176,7 +1119,7 @@
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="parentGroup">
+                    <ng-container matColumnDef="parent_group">
                         <th mat-header-cell *matHeaderCellDef>
                             <div class="d-flex align-items-center">
                                 {{ commonLocaleData?.app_parent_group }}
@@ -1189,7 +1132,7 @@
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="openingBalance">
+                    <ng-container matColumnDef="opening">
                         <th mat-header-cell *matHeaderCellDef>
                             <div class="d-flex justify-content-end align-items-center">
                                 {{ localeData?.opening }}
@@ -1310,7 +1253,7 @@
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="contact">
+                    <ng-container matColumnDef="contacts">
                         <th class="contact-header" mat-header-cell *matHeaderCellDef>
                             <div class="d-flex">
                                 <div class="flex-fill">
@@ -1384,15 +1327,6 @@
                         </td>
                     </ng-container>
 
-                    <ng-container *ngFor="let column of companyCustomFields$ | async">
-                        <ng-container [matColumnDef]="column?.uniqueName">
-                            <th mat-header-cell *matHeaderCellDef>{{ column?.key }}</th>
-                            <td mat-cell *matCellDef="let account" [attr.data-title]="column?.key">
-                                {{ account.customFields[column?.uniqueName]?.value }}
-                            </td>
-                        </ng-container>
-                    </ng-container>
-
                     <ng-container matColumnDef="action">
                         <th mat-header-cell *matHeaderCellDef width="200px">
                             {{ commonLocaleData?.app_action }}
@@ -1453,8 +1387,8 @@
                         </td>
                     </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayColumns$ | async; sticky: true"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayColumns$ | async; let idx = index"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
             </ng-container>
         </div>

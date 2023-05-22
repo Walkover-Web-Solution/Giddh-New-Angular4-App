@@ -19,7 +19,8 @@ import { cloneDeep, find, isEqual, orderBy, uniqBy } from "../../../lodash-optim
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from "../../../models/api-models/Account";
 import { OnboardingFormRequest } from "../../../models/api-models/Common";
 import { TaxResponse } from "../../../models/api-models/Company";
-import { AccountDetailsClass, IForceClear, PaymentReceipt, PaymentReceiptTransaction, StateCode, VoucherTypeEnum } from "../../../models/api-models/Sales";
+import { IContentCommon } from "../../../models/api-models/Invoice";
+import { AccountDetailsClass, IForceClear, PaymentReceipt, PaymentReceiptTransaction, SalesOtherTaxesModal, StateCode, VoucherTypeEnum } from "../../../models/api-models/Sales";
 import { LEDGER_API } from "../../../services/apiurls/ledger.api";
 import { GeneralService } from "../../../services/general.service";
 import { LedgerService } from "../../../services/ledger.service";
@@ -128,6 +129,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Holds state of account aside menu */
     public accountAsideMenuState: string = 'out';
+    /**This will use for thead array read only */
+    public theadArrReadOnly: IContentCommon[] = [];
+    /** Hold aside menu state for other tax  */
+    public asideMenuStateForOtherTaxes: string = 'out';
     /** Selected customer details */
     public selectedCustomerForDetails: string = null;
     /** Holds session key observable */
@@ -230,6 +235,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public isInvalidVoucherDate: boolean = false;
     /** True if cheque date is invalid */
     public isInvalidChequeDate: boolean = false;
+
+    public otherTaxModal: SalesOtherTaxesModal= new SalesOtherTaxesModal();
 
     /** @ignore */
     constructor(
@@ -375,6 +382,9 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
 
         if (this.voucherFormData.type === this.receiptVoucherType) {
             this.store.dispatch(this.companyActions.getTax());
+        }
+        if (this.asideMenuStateForOtherTaxes === 'in') {
+            this.toggleOtherTaxesAsidePane(true);
         }
 
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -956,12 +966,30 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public toggleBodyClass(): void {
+        if (this.asideMenuStateForOtherTaxes === 'in') {
+        /* add fixed class only in crete mode not in update mode
+            - because fixed class is already added in update mode due to double scrolling issue
+         */
+        if (!this.isUpdateMode) {
+            document.querySelector('body').classList.add('fixed');
+        }
+    }
         if (this.accountAsideMenuState === 'in') {
             document.querySelector('.invoice-modal-content')?.classList?.add('aside-account-create');
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('.invoice-modal-content')?.classList?.remove('aside-account-create');
             document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null) {
+        this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+    public closeAsideMenuStateForOtherTaxes(): void {
+        if (this.asideMenuStateForOtherTaxes === 'in') {
+            this.toggleOtherTaxesAsidePane(true, null);
         }
     }
 
@@ -1315,12 +1343,21 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      */
     public sendEmail(event: any): void {
         if (event) {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.paymentReceiptResponse?.account?.uniqueName, {
-                emailId: event.email?.split(','),
-                voucherNumber: [this.paymentReceiptResponse?.number],
-                voucherType: this.paymentReceiptResponse?.type,
-                typeOfInvoice: event.downloadCopy ? event.downloadCopy : []
-            }));
+            if (this.generalService.voucherApiVersion === 2) {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.paymentReceiptResponse.account.uniqueName, {
+                    email: { to: event.email.split(',') },
+                    uniqueName: this.paymentReceiptResponse?.uniqueName,
+                    voucherType: this.paymentReceiptResponse?.type,
+                    copyTypes: event.downloadCopy ? event.downloadCopy : []
+                }));
+            } else {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.paymentReceiptResponse?.account?.uniqueName, {
+                    emailId: event.email?.split(','),
+                    voucherNumber: [this.paymentReceiptResponse?.number],
+                    voucherType: this.paymentReceiptResponse?.type,
+                    typeOfInvoice: event.downloadCopy ? event.downloadCopy : []
+                }));
+            }
         }
     }
 
