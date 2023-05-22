@@ -119,6 +119,8 @@
                                                         stockGroupName = $event.label
                                                     "
                                                     [defaultValue]="stockGroupName"
+                                                    [allowValueReset]="true"
+                                                    (onClear)="stockGroupName = ''; stockGroupUniqueName = ''"
                                                 ></select-field>
                                                 <button
                                                     *ngIf="queryParams?.stockUniqueName"
@@ -181,7 +183,12 @@
                             </div>
                         </div>
                         <div class="other-group mt-2">
-                            <mat-tab-group mat-align-tabs="start" class="mat-tab-them account-inventory-other-tab">
+                            <mat-tab-group
+                                [selectedIndex]="activeTabIndex"
+                                (selectedTabChange)="onTabChange($event)"
+                                mat-align-tabs="start"
+                                class="mat-tab-them account-inventory-other-tab"
+                            >
                                 <mat-tab [label]="localeData?.account">
                                     <div class="tab-container-new">
                                         <!-- <form>
