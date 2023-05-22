@@ -1,1 +1,119 @@
-<p class="font-20">create-recipe works! Hello</p>
+<div class="create-recipe px-3 mt-2">
+    <div class="create-recipe-wrapper">
+        <div class="row">
+            <div class="mb-3">
+                <div>
+                    <label>Stock</label>
+                    <select-field
+                        class="width-280"
+                        [cssClass]="'form-control'"
+                        [name]="''"
+                        [placeholder]="'Select Stock'"
+                        [options]="stock"
+                        [defaultValue]=""
+                    >
+                    </select-field>
+                </div>
+            </div>
+        </div>
+        <hr class="my-2" />
+        <div class="row flex-column mt-3">
+            <div class="d-flex flex-wrap mb-3">
+                <div class="mr-3">
+                    <label>Variant</label>
+                    <select-field
+                        class="width-280"
+                        [cssClass]="'form-control'"
+                        [name]="''"
+                        [placeholder]="'Select Variant'"
+                        [options]="stock"
+                        [defaultValue]=""
+                    >
+                    </select-field>
+                </div>
+
+                <div class="mr-3">
+                    <label>Output Qty</label>
+                    <text-field
+                        class="width-280"
+                        type="text"
+                        name="''"
+                        [placeholder]="'Enter Output Qty'"
+                        [cssClass]="'form-control'"
+                    ></text-field>
+                </div>
+
+                <div class="mr-3">
+                    <label>Stock Unit</label>
+                    <select-field
+                        class="width-280"
+                        [cssClass]="'form-control'"
+                        [name]="''"
+                        [placeholder]="'Select Stock Unit'"
+                        [options]="stock"
+                        [defaultValue]=""
+                    >
+                    </select-field>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap mb-3">
+                <div class="mr-3">
+                    <label>Stock</label>
+                    <select-field
+                        class="width-280"
+                        [cssClass]="'form-control'"
+                        [name]="''"
+                        [placeholder]="'Select Stock'"
+                        [options]="stock"
+                        [defaultValue]=""
+                    >
+                    </select-field>
+                </div>
+                <div class="mr-3">
+                    <label>Variant</label>
+                    <select-field
+                        class="width-280"
+                        [cssClass]="'form-control'"
+                        [name]="''"
+                        [placeholder]="'Select Variant'"
+                        [options]="stock"
+                        [defaultValue]=""
+                    >
+                    </select-field>
+                </div>
+
+                <div class="mr-3">
+                    <label>Quantity</label>
+                    <text-field
+                        class="width-280"
+                        type="text"
+                        name="''"
+                        [placeholder]="'Enter Qty'"
+                        [cssClass]="'form-control'"
+                    ></text-field>
+                </div>
+
+                <div class="mr-3">
+                    <label>Unit</label>
+                    <select-field
+                        class="width-280"
+                        [cssClass]="'form-control'"
+                        [name]="''"
+                        [placeholder]="'Select Unit'"
+                        [options]="stock"
+                        [defaultValue]=""
+                    >
+                    </select-field>
+                </div>
+                <div class="d-flex justify-content-center align-items-end mr-3">
+                    <button mat-icon-button class="edit-btn mb-1">
+                        <i class="icon-add"></i>
+                    </button>
+                    <button mat-icon-button class="edit-btn mb-1">
+                        <i class="icon-cross"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

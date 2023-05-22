@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create-recipe.component.scss']
 })
 export class CreateRecipeComponent implements OnInit {
+   /** Create Recipe  Stock  list */
+   public stock:any = [];
 
   constructor() { }
 
