@@ -68,7 +68,7 @@
             }
         }
         h3 {
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
             color: var(--color-primary-sidebar-company-branch-block-h3);
             .company-alice {
                 width: 30px;
@@ -106,7 +106,7 @@
                     width: 140px;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    font-family: "opensans-regular";
+                    font-family: var(--font-regular);
                     font-size: 13px;
                     margin-left: 18px;
                     margin-top: 7px;
@@ -215,7 +215,7 @@
         }
         p {
             color: var(--color-sidebar-list-head);
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
         }
         ul {
             li {
@@ -245,7 +245,7 @@
     }
     .menu-block {
         .menu-item {
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
             p {
                 display: flex;
                 justify-content: space-between;
@@ -283,7 +283,7 @@
                     }
                     a {
                         color: var(--color-sidebar-secondary-anchor-text);
-                        font-family: "opensans-semibold";
+                        font-family: var(--font-semibold);
                         width: 100%;
                         display: flex;
                         justify-content: space-between;
@@ -334,7 +334,7 @@
                             color: var(--color-primary-sidebar-menu-item-wrapper-list-anchor);
                             align-items: center;
                             display: flex;
-                            font-family: "opensans-regular";
+                            font-family: var(--font-regular);
                         }
                     }
                     .sub-menu {
@@ -357,7 +357,7 @@
                                 color: var(--color-sidebar-primary-anchor-text);
                                 align-items: center;
                                 display: flex;
-                                font-family: "opensans-regular";
+                                font-family: var(--font-regular);
                                 background-color: transparent;
                                 justify-content: flex-start;
                                 padding: 10px 0 10px 50px;
@@ -429,6 +429,11 @@
                     padding: 14px 10px !important;
                 }
             }
+            &.padding-14 {
+                .branch-connection {
+                    padding: 14px 10px !important;
+                }
+            }
             h3 {
                 justify-content: center;
                 align-items: center;
@@ -462,7 +467,7 @@
                         align-items: center;
                         padding: 0;
                         margin-top: 15px;
-                        font-family: "opensans-semibold";
+                        font-family: var(--font-semibold);
                         letter-spacing: 0;
                         font-size: 16px;
                         height: 36px;
@@ -479,7 +484,7 @@
                     align-items: center;
                     padding: 0;
                     margin-top: 15px;
-                    font-family: "opensans-semibold";
+                    font-family: var(--font-semibold);
                     letter-spacing: 0;
                     font-size: 16px;
                     height: 36px;

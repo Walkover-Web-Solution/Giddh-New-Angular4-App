@@ -361,7 +361,7 @@
                                                         <!-- region billing address -->
                                                         <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
                                                             <div class="form-group">
-                                                                <div class="d-flex align-items-center pb-1">
+                                                                <div class="d-flex align-items-center pb-2">
                                                                     <span class="pb-0 pd-r15">{{
                                                                         localeData?.billing_address
                                                                     }}</span>
@@ -452,7 +452,7 @@
                                                                         #customerBillingAddress
                                                                         [disabled]="isEinvoiceGenerated"
                                                                     ></textarea>
-                                                                    <div class="row">
+                                                                    <div class="row row-gap">
                                                                         <div class="col-sm-12 col-md-6">
                                                                             <label class="sales-country-label">
                                                                                 {{ customerCountryName }}
@@ -469,7 +469,7 @@
                                                                                     commonLocaleData?.app_state
                                                                                 "
                                                                                 [cssClass]="
-                                                                                    'select-bdr-bottom form-control  '
+                                                                                    'select-bdr-bottom form-control  input-bill'
                                                                                 "
                                                                                 (selectedOption)="
                                                                                     fillShippingBillingDetails(
@@ -507,7 +507,7 @@
                                                                                 [type]="'text'"
                                                                                 [name]="'billingDetails.gstNumber'"
                                                                                 [cssClass]="
-                                                                                    'form-control input-custom billing'
+                                                                                    'form-control input-custom billing input-bill'
                                                                                 "
                                                                                 *ngIf="showGSTINNo"
                                                                                 [(ngModel)]="
@@ -532,7 +532,9 @@
                                                                                 autocomplete="none"
                                                                                 [type]="'text'"
                                                                                 [name]="'billingDetails.gstNumber'"
-                                                                                [cssClass]="'form-control input-custom'"
+                                                                                [cssClass]="
+                                                                                    'form-control input-custom input-bill'
+                                                                                "
                                                                                 *ngIf="showTRNNo"
                                                                                 [(ngModel)]="
                                                                                     invFormData.accountDetails
@@ -566,7 +568,7 @@
                                                                                 <text-field
                                                                                     [type]="'number'"
                                                                                     [cssClass]="
-                                                                                        'form-control input-custom'
+                                                                                        'form-control input-custom input-bill'
                                                                                     "
                                                                                     autocomplete="false"
                                                                                     [name]="'billingPinCode'"
@@ -698,7 +700,7 @@
                                                                         [disabled]="isEinvoiceGenerated"
                                                                     ></textarea>
                                                                     <div class="clearfix form-group mb-0">
-                                                                        <div class="row">
+                                                                        <div class="row row-gap">
                                                                             <div class="col-sm-12 col-md-6">
                                                                                 <div class="form-group mb-0">
                                                                                     <label class="sales-country-label">
@@ -719,7 +721,7 @@
                                                                                         commonLocaleData?.app_state
                                                                                     "
                                                                                     [cssClass]="
-                                                                                        'select-bdr-bottom form-control'
+                                                                                        'select-bdr-bottom form-control input-bill'
                                                                                     "
                                                                                     #statesShipping
                                                                                     (selectedOption)="
@@ -761,7 +763,7 @@
                                                                                     [name]="'shippingDetails.gstNumber'"
                                                                                     *ngIf="showGSTINNo"
                                                                                     [cssClass]="
-                                                                                        'form-control input-custom'
+                                                                                        'form-control input-custom input-bill'
                                                                                     "
                                                                                     [(ngModel)]="
                                                                                         invFormData.accountDetails
@@ -787,7 +789,7 @@
                                                                                     [type]="'text'"
                                                                                     [name]="'shippingDetails.gstNumber'"
                                                                                     [cssClass]="
-                                                                                        'form-control input-custom'
+                                                                                        'form-control input-custom input-bill'
                                                                                     "
                                                                                     *ngIf="showTRNNo"
                                                                                     [(ngModel)]="
@@ -819,7 +821,7 @@
                                                                                     <text-field
                                                                                         [type]="'number'"
                                                                                         [cssClass]="
-                                                                                            'form-control input-custom'
+                                                                                            'form-control input-custom input-bill'
                                                                                         "
                                                                                         autocomplete="false"
                                                                                         [name]="'shippingPinCode'"
@@ -968,7 +970,7 @@
                         </div>
                         <!-- endregion -->
                         <!-- region attention to, email, mobile, voucher section -->
-                        <div class="customer-invoice-table bg-white pd-b2 pd-t2">
+                        <div class="customer-invoice-table bg-white pd-b2 pd-t1">
                             <div class="inner-container">
                                 <!-- region attention to -->
                                 <div class="row">
@@ -989,7 +991,7 @@
                                 </div>
                                 <!-- endregion-->
                                 <!-- region email -->
-                                <div class="row mt-1">
+                                <div class="row mt-2">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ commonLocaleData?.app_email_id }}</label>
                                     </div>
@@ -1007,7 +1009,7 @@
                                 </div>
                                 <!-- endregion-->
                                 <!-- region mobile no -->
-                                <div class="row mt-1 mobile-number-wrapper">
+                                <div class="row mt-2 mobile-number-wrapper">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                     </div>
@@ -1029,7 +1031,7 @@
                                 <!-- endregion-->
                                 <!-- warehouse selection -->
                                 <div
-                                    class="row mt-1 warehouse-wrapper"
+                                    class="row mt-2 warehouse-wrapper"
                                     *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1"
                                 >
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
@@ -1064,7 +1066,7 @@
                                                     <!-- region billing address -->
                                                     <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
                                                         <div class="form-group">
-                                                            <div class="d-flex align-items-center pb-1">
+                                                            <div class="d-flex align-items-center pb-2">
                                                                 <span class="pd-r15">{{
                                                                     localeData?.billing_address
                                                                 }}</span>
@@ -1158,7 +1160,7 @@
                                                                             #companyBillingState
                                                                             [placeholder]="commonLocaleData?.app_state"
                                                                             [cssClass]="
-                                                                                ' select-bdr-bottom form-control '
+                                                                                ' select-bdr-bottom form-control input-bill'
                                                                             "
                                                                             (selectedOption)="
                                                                                 fillShippingBillingCompanyDetails(
@@ -1209,7 +1211,7 @@
                                                                                     .gstNumber
                                                                             "
                                                                             [cssClass]="
-                                                                                'form-control input-custom billing'
+                                                                                'form-control input-custom billing input-bill'
                                                                             "
                                                                             (change)="
                                                                                 getStateCodeCompany('billingDetails');
@@ -1235,7 +1237,9 @@
                                                                         <div class="form-group mr-b05">
                                                                             <text-field
                                                                                 [type]="'number'"
-                                                                                [cssClass]="'form-control input-custom'"
+                                                                                [cssClass]="
+                                                                                    'form-control input-custom input-bill'
+                                                                                "
                                                                                 autocomplete="false"
                                                                                 [name]="'purchaseBillBillingPinCode'"
                                                                                 [placeholder]="
@@ -1378,7 +1382,7 @@
                                                                                     commonLocaleData?.app_state
                                                                                 "
                                                                                 [cssClass]="
-                                                                                    'select-bdr-bottom form-control '
+                                                                                    'select-bdr-bottom form-control input-bill'
                                                                                 "
                                                                                 [ngClass]="{
                                                                                     'disabled': autoFillCompanyShipping
@@ -1433,7 +1437,9 @@
                                                                                     purchaseBillCompany.shippingDetails
                                                                                         .gstNumber
                                                                                 "
-                                                                                [cssClass]="'form-control input-custom'"
+                                                                                [cssClass]="
+                                                                                    'form-control input-custom input-bill'
+                                                                                "
                                                                                 (change)="
                                                                                     getStateCodeCompany(
                                                                                         'shippingDetails'
@@ -1460,7 +1466,7 @@
                                                                                 <text-field
                                                                                     [type]="'number'"
                                                                                     [cssClass]="
-                                                                                        'form-control input-custom'
+                                                                                        'form-control input-custom input-bill'
                                                                                     "
                                                                                     autocomplete="false"
                                                                                     [name]="
@@ -1491,7 +1497,7 @@
                                     </div>
                                 </div>
                                 <div
-                                    class="row mt-1"
+                                    class="row mt-3"
                                     *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))"
                                 >
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
@@ -1548,7 +1554,7 @@
                                 </div>
                                 <!-- end Link purchase order -->
                                 <!-- region invoice no, invoice date, Expiry date -->
-                                <div class="row mt-1">
+                                <div class="row mt-2">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label> {{ invoiceNoLabel }} </label>
                                     </div>
@@ -2511,6 +2517,7 @@
                                         <div class="product-name">
                                             <div class="ng-select-wrap">
                                                 <select-field
+                                                    [autofocus]="true"
                                                     #selectAccount
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('item')"
@@ -3067,7 +3074,7 @@
                             <!-- endregion -->
                         </table>
                         <div class="row mr-0 ml-0 other-details-section">
-                            <div class="col-md-6">
+                            <div class="col-md-6 pl-0">
                                 <!-- region other details-->
                                 <div *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.otherDetails">
                                     <div class="collapse-pane clearfix">
@@ -3256,7 +3263,7 @@
                                 <!-- endregion -->
                             </div>
                             <!-- region total section -->
-                            <div class="col-md-6">
+                            <div class="col-md-6 pr-0">
                                 <section class="table-sec form-group">
                                     <div class="table-row">
                                         <div class="table-cell">{{ commonLocaleData?.app_total_amount }}</div>
@@ -3519,7 +3526,7 @@
                                                     id="deposit-dropdown"
                                                     class="form-group pd-1"
                                                 >
-                                                    <p>{{ localeData?.deposit }}</p>
+                                                    <strong>{{ localeData?.deposit }}</strong>
                                                     <ul>
                                                         <ng-container
                                                             *ngIf="
@@ -3534,7 +3541,10 @@
                                                         >
                                                             <li role="menuitem" class="mr-t1">
                                                                 <div class="clearfix payment-mode deposit-payment-mode">
-                                                                    <div class="pull-right balance-due-text">
+                                                                    <div class="balance-due-text">
+                                                                        <label class="blnc-label">{{
+                                                                            localeData?.adjust_amount
+                                                                        }}</label>
                                                                         <div
                                                                             class="clearfix mr-b1 text-left"
                                                                             *ngIf="voucherApiVersion !== 2"
@@ -3564,7 +3574,7 @@
                                                                                 </mat-radio-button>
                                                                             </mat-radio-group>
                                                                         </div>
-                                                                        <div class="clearfix mr-t05">
+                                                                        <div class="clearfix mr-t05 adjust-amount">
                                                                             <span class="pull-left">
                                                                                 <p class="text-light">
                                                                                     <amount-field
@@ -3598,9 +3608,6 @@
                                                                             ></a>
                                                                         </div>
                                                                     </div>
-                                                                    <label class="pull-right">{{
-                                                                        localeData?.adjust_amount
-                                                                    }}</label>
                                                                 </div>
                                                             </li>
                                                         </ng-container>
@@ -3612,7 +3619,12 @@
                                                             "
                                                         >
                                                             <li role="menuitem" class="mr-t1">
-                                                                <div class="clearfix payment-mode">
+                                                                <div class="payment-mode">
+                                                                    <label class="payment-label">{{
+                                                                        !isCashInvoice
+                                                                            ? commonLocaleData?.app_payment_mode
+                                                                            : localeData?.account
+                                                                    }}</label>
                                                                     <select-field
                                                                         #depositDropdown
                                                                         [cssClass]="
@@ -3632,11 +3644,6 @@
                                                                         "
                                                                     >
                                                                     </select-field>
-                                                                    <label class="pull-right">{{
-                                                                        !isCashInvoice
-                                                                            ? commonLocaleData?.app_payment_mode
-                                                                            : localeData?.account
-                                                                    }}</label>
                                                                 </div>
                                                             </li>
                                                             <li
@@ -3653,14 +3660,18 @@
                                                                     !isCashInvoice
                                                                 "
                                                             >
-                                                                <text-field
-                                                                    (change)="
-                                                                        calculateBalanceDue();
-                                                                        updateDepositAmount($event?.target?.value)
-                                                                    "
-                                                                    [placeholder]="commonLocaleData?.app_amount"
-                                                                    [cssClass]="
-                                                                        'form-control
+                                                                <div class="payment-mode">
+                                                                    <label class="payment-label">{{
+                                                                        commonLocaleData?.app_amount
+                                                                    }}</label>
+                                                                    <text-field
+                                                                        (change)="
+                                                                            calculateBalanceDue();
+                                                                            updateDepositAmount($event?.target?.value)
+                                                                        "
+                                                                        [placeholder]="commonLocaleData?.app_amount"
+                                                                        [cssClass]="
+                                                                            'form-control
                                                                         amount-field
                                                                         due-amount-field
                                                                         text-right
@@ -3668,24 +3679,24 @@
                                                                         max-width-100
                                                                         mat-field-border
                                                                         multicurrency-grandtotal'
-                                                                    "
-                                                                    [name]="'dueAmount'"
-                                                                    [prefix]="depositCurrSymbol"
-                                                                    [suffix]="selectedSuffixForCurrency"
-                                                                    [mask]="inputMaskFormat"
-                                                                    [useMask]="true"
-                                                                    [(ngModel)]="depositAmount"
-                                                                    [required]="depositAccountUniqueName ? true : false"
-                                                                    [type]="'text'"
-                                                                    [readonly]="isEinvoiceGenerated"
-                                                                ></text-field>
-                                                                <label class="pull-right">{{
-                                                                    commonLocaleData?.app_amount
-                                                                }}</label>
+                                                                        "
+                                                                        [name]="'dueAmount'"
+                                                                        [prefix]="depositCurrSymbol"
+                                                                        [suffix]="selectedSuffixForCurrency"
+                                                                        [mask]="inputMaskFormat"
+                                                                        [useMask]="true"
+                                                                        [(ngModel)]="depositAmount"
+                                                                        [required]="
+                                                                            depositAccountUniqueName ? true : false
+                                                                        "
+                                                                        [type]="'text'"
+                                                                        [readonly]="isEinvoiceGenerated"
+                                                                    ></text-field>
+                                                                </div>
                                                             </li>
 
                                                             <li
-                                                                class="clearfix mr-t1 bigger-dollar"
+                                                                class="clearfix mr-t1 bigger-dollar blnc-due"
                                                                 *ngIf="
                                                                     isSalesInvoice ||
                                                                     (voucherApiVersion === 2 &&
@@ -3695,7 +3706,8 @@
                                                                             isPendingVoucherType))
                                                                 "
                                                             >
-                                                                <strong class="pull-right balance-due-text">
+                                                                <strong>{{ localeData?.balance_due }}</strong>
+                                                                <strong class="blnc-due-num ml-3">
                                                                     <span *ngIf="isMulticurrencyAccount">{{
                                                                         invFormData.accountDetails.currencySymbol
                                                                     }}</span>
@@ -3715,9 +3727,6 @@
                                                                         }}
                                                                     </ng-container>
                                                                 </strong>
-                                                                <strong class="pull-right">{{
-                                                                    localeData?.balance_due
-                                                                }}</strong>
                                                             </li>
                                                         </ng-container>
                                                     </ul>
@@ -5060,7 +5069,7 @@
                                                 id="deposit-dropdown"
                                                 class="form-group pd-1"
                                             >
-                                                <p>{{ localeData?.deposit }}</p>
+                                                <strong>{{ localeData?.deposit }}</strong>
                                                 <ul>
                                                     <li role="menuitem" class="mr-t1">
                                                         <div class="clearfix payment-mode deposit-payment-mode">
@@ -5554,7 +5563,7 @@
             </div>
         </div>
     </ng-template>
-    <!-- region  delete attachment confirmation popup -->
+    <!-- region delete attachment confirmation popup -->
     <ng-template #attachmentDeleteConfirmationModel>
         <div class="modal-dialog modal-md">
             <div class="modal-content">

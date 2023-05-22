@@ -489,7 +489,7 @@
                                         [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
-                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0"
+                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0 && lc.showEledger"
                                     >
                                         <i class="icon-trash lh-0"></i>
                                     </a>
@@ -891,6 +891,10 @@
                                                                     [localeData]="localeData"
                                                                     [commonLocaleData]="commonLocaleData"
                                                                     [entrySide]="'dr'"
+                                                                    (stockVariantSelected)="
+                                                                        loadDetails(selectedAccountDetails, txn, $event)
+                                                                    "
+                                                                    [selectedAccountDetails]="selectedAccountDetails"
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1178,6 +1182,10 @@
                                                                     [localeData]="localeData"
                                                                     [commonLocaleData]="commonLocaleData"
                                                                     [entrySide]="'cr'"
+                                                                    (stockVariantSelected)="
+                                                                        loadDetails(selectedAccountDetails, txn, $event)
+                                                                    "
+                                                                    [selectedAccountDetails]="selectedAccountDetails"
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1875,6 +1883,10 @@
                                                 [localeData]="localeData"
                                                 [commonLocaleData]="commonLocaleData"
                                                 [entrySide]="'dr'"
+                                                (stockVariantSelected)="
+                                                    loadDetails(selectedAccountDetails, txn, $event)
+                                                "
+                                                [selectedAccountDetails]="selectedAccountDetails"
                                             >
                                             </new-ledger-entry-panel>
                                         </div>
@@ -2300,6 +2312,10 @@
                                                 [localeData]="localeData"
                                                 [commonLocaleData]="commonLocaleData"
                                                 [entrySide]="'cr'"
+                                                (stockVariantSelected)="
+                                                    loadDetails(selectedAccountDetails, txn, $event)
+                                                "
+                                                [selectedAccountDetails]="selectedAccountDetails"
                                             >
                                             </new-ledger-entry-panel>
                                         </div>

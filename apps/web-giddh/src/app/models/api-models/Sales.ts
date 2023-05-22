@@ -744,6 +744,7 @@ export class PaymentReceiptEntry {
 
 export class PaymentReceipt {
     account: AccountDetailsClass;
+    accountDetails: any;
     updateAccountDetails: boolean;
     entries: PaymentReceiptEntry[];
     date: any;
@@ -756,6 +757,7 @@ export class PaymentReceipt {
 
     constructor() {
         this.account = new AccountDetailsClass();
+        this.accountDetails = new AccountDetailsClass();
         this.entries = [new PaymentReceiptEntry()];
         this.templateDetails = new TemplateDetailsClass();
         this.date = "";

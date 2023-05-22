@@ -188,7 +188,7 @@ span.viasocket a {
     color: var(--color-teal);
     padding: 6px 10px;
     margin-right: 10px;
-    margin-left: 10px;
+    margin-left: 0;
 }
 .delete-verified-icon {
     padding: 6px 10px;
@@ -211,6 +211,11 @@ span.viasocket a {
 }
 
 @media (max-width: 991px) {
+    /*--- custom ---*/
+    .left-gap {
+        margin-left: 25px;
+    }
+
     #invoice-setting .show-on-mobile {
         display: inline-block;
         float: left;

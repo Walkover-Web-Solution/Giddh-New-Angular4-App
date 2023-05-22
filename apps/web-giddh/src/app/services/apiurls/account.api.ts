@@ -1,5 +1,5 @@
 const COMMON_URL_FOR_ACCOUNT = 'company/:companyUniqueName/accounts/:accountUniqueName';
-const COMMON_URL_FOR_ACCOUNT_V2 = 'v2/company/:companyUniqueName/accounts/:accountUniqueName';
+const COMMON_URL_FOR_ACCOUNT_V2 = 'v2/company/:companyUniqueName/accounts/:accountUniqueName?source=:source';
 
 export const ACCOUNTS_API_V2 = {
     GET: COMMON_URL_FOR_ACCOUNT_V2,

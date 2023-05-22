@@ -490,13 +490,15 @@ export class ReportsComponent implements OnInit {
                     queryParams = {
                         from: balanceReportRequest.from ?? '',
                         to: balanceReportRequest.to ?? '',
-                        stockGroupUniqueName: this.reportUniqueName ? this.reportUniqueName : ''
+                        stockGroupUniqueName: this.reportUniqueName ? this.reportUniqueName : '',
+                        entity: 'group-wise'
                     };
                 } else {
                     queryParams = {
                         from: balanceReportRequest.from ?? '',
                         to: balanceReportRequest.to ?? '',
-                        stockGroupUniqueName: ''
+                        stockGroupUniqueName: '',
+                        entity: ''
                     };
                 }
                 balanceReportRequest.from = undefined;

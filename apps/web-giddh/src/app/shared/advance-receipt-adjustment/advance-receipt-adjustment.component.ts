@@ -76,6 +76,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     };
     public advanceReceiptAdjustmentPreUpdatedData: VoucherAdjustments;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    @Input() public isModal: boolean = true;
     @Input() public invoiceFormDetails;
     @Input() public isUpdateMode;
     @Input() public depositAmount = 0;
@@ -723,7 +724,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             }
         }
         // To restrict user to enter amount less or equal selected voucher amount
-        if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.adjustmentAmount && this.adjustVoucherForm.adjustments[index].adjustmentAmount.amountForAccount > excessAmount) {
+        if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.adjustmentAmount && this.adjustVoucherForm.adjustments[index]?.adjustmentAmount?.amountForAccount > excessAmount) {
             this.adjustVoucherForm.adjustments[index].adjustmentAmount.amountForAccount = cloneDeep(excessAmount);
             entry.adjustmentAmount.amountForAccount = excessAmount;
             this.adjustVoucherForm.adjustments = cloneDeep(this.adjustVoucherForm.adjustments);
@@ -731,7 +732,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         if (entry && entry.taxRate && entry.adjustmentAmount?.amountForAccount) {
             let taxAmount = this.calculateInclusiveTaxAmount(entry.adjustmentAmount.amountForAccount, entry.taxRate);
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = Number(taxAmount);
-        } else {
+        } else if(this.adjustVoucherForm.adjustments[index]) {
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = 0.0;
         }
         this.calculateBalanceDue();
@@ -747,7 +748,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         let totalAmount: number = 0;
         let convertedTotalAmount: number = 0;
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
-            this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
+            this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails?.balanceDue;
             this.adjustVoucherForm.adjustments.forEach(item => {
                 if (item && item.adjustmentAmount && item.adjustmentAmount.amountForAccount) {
                     if (

@@ -6,7 +6,7 @@
 @import "./json-diff.scss";
 @import "./intl.scss";
 $custom-typography: mat-typography-config(
-    $font-family: "opensans-regular",
+    $font-family: var(--font-regular),
 );
 @include angular-material-typography($custom-typography);
 @import "../css/ngx-bs-datepicker.scss";
@@ -15,6 +15,13 @@ $custom-typography: mat-typography-config(
 */
 :focus {
     outline: none !important;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-family: var(--font-regular);
 }
 
 .basic > tbody > tr > td,
@@ -46,7 +53,7 @@ $custom-typography: mat-typography-config(
     padding: 15px 11px !important;
     font-weight: 400;
     border-bottom: 1px solid var(--color-table-primary-content-bar-border);
-    font-family: opensans-semibold;
+    font-family: var(--font-semibold);
     font-size: 14px;
 }
 
@@ -69,13 +76,6 @@ $custom-typography: mat-typography-config(
         width: 18.2% !important;
     }
 }
-
-.billing-details {
-    .mat-form-field-infix {
-        border-top: 0 !important;
-    }
-}
-
 .all-table {
     .mat-column-contact {
         text-transform: lowercase;
@@ -93,7 +93,11 @@ $custom-typography: mat-typography-config(
         min-width: 170px !important;
     }
 }
-
+.billing-details {
+    .mat-form-field-infix {
+        border-top: 0 !important;
+    }
+}
 .branch-profile-wrapper {
     float: left !important;
     width: auto !important;
@@ -234,7 +238,7 @@ $custom-typography: mat-typography-config(
     }
 
     .multicurrency-grandtotal {
-        width: 77%;
+        width: 100%;
         float: right;
     }
 
@@ -333,6 +337,7 @@ $custom-typography: mat-typography-config(
     .select-field-input {
         border-bottom: 1px solid var(--color-secondary-input-bar-border);
         margin-bottom: 1px !important;
+        background-color: transparent !important;
     }
 }
 .multicurrency-edit {
@@ -648,6 +653,47 @@ $custom-typography: mat-typography-config(
         color: var(--color-black) !important;
     }
 }
+.select-multiple-icon-options {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--color-secondary-input-bar-border);
+    background-color: var(--color-white);
+    color: var(--color-primary-input-bar-text);
+    font-size: 16px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    position: absolute;
+    right: 3px;
+    bottom: 2px;
+
+    &:hover {
+        background: var(--color-filter-background-hover);
+        color: var(--color-filter-text-hover);
+        border-color: var(--color-filter-background-hover);
+    }
+}
+.purchase-customise-column-button {
+    float: right !important;
+}
+
+/*--- custom ---*/
+.obj-gap {
+    column-gap: 5px;
+}
+/*---- custom -----*/
+.inline-adjustment {
+    .adjustments-list {
+        height: auto !important;
+        overflow-y: unset !important;
+    }
+    advance-receipt-adjustment-component {
+        min-width: 750px;
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -707,6 +753,15 @@ $custom-typography: mat-typography-config(
 
 .mat-calendar-body-cell-content {
     color: var(--color-datepicker-ternary-date);
+}
+
+.mat-calendar-body-cell {
+    &.mat-calendar-body-active {
+        .mat-calendar-body-selected {
+            color: var(--color-white) !important;
+            background-color: var(--color-primary-header-background);
+        }
+    }
 }
 
 .product-option {
@@ -999,13 +1054,12 @@ aside-create-group {
 }
 
 body {
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     font-display: block;
     -webkit-font-smoothing: auto;
     padding: 0 !important;
     margin: 0 !important;
 }
-
 /* table css need to removed at last (finish)*/
 .modal-header .close {
     cursor: pointer;
@@ -1349,7 +1403,6 @@ input {
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: var(--color-white);
 }
-
 .navbar {
     min-height: auto;
     margin-bottom: 10px;
@@ -1493,11 +1546,11 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 
 .font-bold {
-    font-family: "opensans-bold";
+    font-family: var(--font-bold);
 }
 
 .modal-open {
@@ -1524,7 +1577,7 @@ ul.sub-list {
 
 .top-heading > h4 {
     font-size: 18px;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     line-height: 28px;
     text-transform: capitalize;
 }
@@ -1713,7 +1766,7 @@ ul.sub-list {
 }
 
 .aging-table-top .top-aging-table-top span .date-range-picker {
-    font-family: opensans-semibold;
+    font-family: var(--font-semibold);
     text-align: left !important;
 }
 
@@ -1774,7 +1827,7 @@ ul.sub-list {
 
 .unbold {
     font-weight: normal !important;
-    font-family: "opensans-regular" !important;
+    font-family: var(--font-regular) !important;
 }
 
 .top-aging-table-top .date-range-picker {
@@ -2022,7 +2075,7 @@ modal-container.modal {
 }
 
 .table-modal thead tr th {
-    font-family: "opensans-regular" !important;
+    font-family: var(--font-regular) !important;
     font-family: cursive;
     border-right: 1px solid var(--color-iron);
 }
@@ -2336,6 +2389,7 @@ modal-container.modal {
 }
 
 /* my css end */
+
 /*input*/
 .form-control {
     background: var(--color-secondary-input-bar-background) !important;
@@ -3790,10 +3844,10 @@ a.btn.btn-xs.btn-link.pull-right {
     position: relative;
     background: var(--color-primary-header-background) !important;
     color: var(--color-white);
+    border-color: var(--color-primary-popup-list-header-bottom-border);
     height: 65px;
     display: flex;
     align-items: center;
-    border-color: var(--color-primary-popup-list-header-bottom-border);
 }
 
 .modal-body {
@@ -5097,6 +5151,7 @@ label {
     line-height: 50px;
     margin-bottom: 0 !important;
     padding: 0 10px;
+    font-size: 14px;
 }
 
 .design-tool li [class^="ico-"],
@@ -5256,7 +5311,7 @@ input[type="checkbox"][disabled] {
 
 .section-head {
     padding-bottom: 10px;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     font-size: 110%;
     color: var(--color-common-quaternary-text);
 }
@@ -5457,13 +5512,13 @@ input[type="checkbox"][disabled]:after {
 }
 
 .table-container section div .group {
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     text-transform: uppercase;
 }
 
 .welcome-header h2 {
     font-size: 26px;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     color: var(--color-common-primary-text);
 }
 
@@ -5746,7 +5801,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .welcome-header h1 {
     font-size: 30px;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     color: var(--color-giddh-blue);
 }
 
@@ -5778,7 +5833,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .welcome-header h2 {
     font-size: 26px;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     color: var(--color-common-primary-text);
     position: relative;
 }
@@ -6083,7 +6138,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .form-header h3 {
     font-size: 18px;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 
 .form-body {
@@ -6523,7 +6578,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: var(--color-giddh-blue);
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     vertical-align: middle;
 }
 
@@ -7397,6 +7452,41 @@ footer#footer.absolute-footer {
                 }
             }
         }
+        .scroll-container {
+            .wrap-account-sidebar {
+                .grp-wrapper {
+                    .col-wrapper {
+                        border-color: var(--color-common-secondary-border);
+                        &:nth-child(1) {
+                            background-color: var(--color-common-primary-background-for-all-components);
+                        }
+                    }
+                }
+            }
+        }
+
+        .manage-group-acc {
+            account-operations {
+                #middleBody {
+                    .top-bar {
+                        border-color: var(--color-common-secondary-border) !important;
+                    }
+                }
+            }
+        }
+    }
+    login {
+        .modal.fade {
+            .modal-body.clearfix {
+                #authModal {
+                    button[type="login"].ladda-button {
+                        .ladda-label {
+                            color: var(--color-secondary-button-text);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -7442,7 +7532,7 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
 }
 
 .border-radius-0 {
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
 }
 
 .border-radius-0 small.mr-t05.mr-b05.grey {
@@ -7746,7 +7836,7 @@ span.red-text {
 }
 
 .total-sales-tabs .nav-tabs > li.active a {
-    font-family: "LatoWebBold";
+    font-family: var(--font-bold);
 }
 
 .total-sales-tabs .nav-tabs > li.active > a,
@@ -7812,9 +7902,16 @@ span.red-text {
     border: 1px solid var(--color-secondary-input-bar-border);
 }
 
-.table-custom-invoice ul.dropdown-menu {
-    min-width: 160px !important;
-    height: auto !important;
+.table-custom-invoice {
+    ul.dropdown-menu {
+        min-width: 160px !important;
+        height: auto !important;
+    }
+    .mat-input-element {
+        &.product-top {
+            margin-top: 20px !important;
+        }
+    }
 }
 
 .sales-invoice-table {
@@ -7866,7 +7963,7 @@ ul.dropdown-menu p.lead.pd {
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid var(--color-tab-primary-selected-tab-bottom-border) !important;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     background-color: inherit;
 }
 
@@ -7907,7 +8004,7 @@ ul.dropdown-menu p.lead.pd {
 
 #invoice-setting ul.nav.nav-tabs a {
     border-bottom: 1px solid !important;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     color: var(--color-rectangular-tab-inactive-primary-icon) !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
@@ -8024,7 +8121,7 @@ ul.dropdown-menu p.lead.pd {
 
 #tab-integration .nav-tabs > li a.active {
     border: 1px solid var(--color-rectangular-tab-active-primary-border) !important;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     color: var(--color-rectangular-tab-active-primary-text) !important;
     border-color: var(--color-rectangular-tab-active-primary-border) !important;
     background-color: var(--color-rectangular-tab-primary-background);
@@ -8253,10 +8350,6 @@ highcharts-chart {
 
 .panel {
     border-radius: 2px;
-}
-
-.invoice-modal-content .app-aside-menu-other-taxes:host {
-    top: 60px !important;
 }
 
 .mat-chip-list {
@@ -8500,6 +8593,11 @@ highcharts-chart {
             padding-left: 5px;
             font-size: 14px;
         }
+    }
+
+    .input-bill {
+        border-radius: 0px !important;
+        background-color: transparent !important;
     }
 }
 
@@ -9357,7 +9455,7 @@ span#HW_badge_cont:nth-child(3) {
             margin-bottom: 0;
             font-size: 14px;
             border-bottom: none;
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
             background-color: var(--color-popup-background);
         }
 
@@ -9386,7 +9484,7 @@ span#HW_badge_cont:nth-child(3) {
             flex: 1;
 
             .item {
-                font-family: "opensans-semibold";
+                font-family: var(--font-semibold);
             }
         }
 
@@ -9699,7 +9797,7 @@ giddh-datepicker {
     }
 
     overflow-y: auto !important;
-
+    height: auto;
     .advance-search {
         #export-body {
             sh-select {
@@ -9851,9 +9949,22 @@ giddh-datepicker {
 }
 
 giddh-datepicker {
-    .mat-form-field-appearance-fill .mat-form-field-flex {
-        border: 1px solid var(--color-secondary-input-bar-border) !important;
-        border-radius: 5px !important;
+    &:not(.date-border) {
+        .mat-form-field-appearance-fill .mat-form-field-flex {
+            border: 1px solid var(--color-secondary-input-bar-border) !important;
+            border-radius: 5px !important;
+        }
+    }
+}
+
+.payment-date {
+    giddh-datepicker .mat-form-field-appearance-fill .mat-form-field-flex {
+        border: 0px !important;
+    }
+    ngx-daterangepicker-material input.mat-input-element,
+    giddh-datepicker input.mat-input-element {
+        cursor: pointer;
+        font-weight: 600;
     }
 }
 
@@ -10096,7 +10207,8 @@ giddh-datepicker {
                                 #purchase-info-check,
                                 #sales-info-check {
                                     .mat-checkbox-label {
-                                        font: normal normal 600 14px/17px Open Sans;
+                                        font: normal normal 600 14px/17px;
+                                        font-family: var(--font-regular);
                                         letter-spacing: 0px;
                                         position: relative;
                                         bottom: 1px;
@@ -10435,7 +10547,7 @@ body.update-scroll-hidden {
 
                     a {
                         min-width: 110px;
-                        font-family: "opensans-regular";
+                        font-family: var(--font-regular);
                         color: var(--color-nav-tabs-anchor) !important;
                         padding-top: 5px !important;
                         padding-left: 20px !important;
@@ -10568,6 +10680,25 @@ body.update-scroll-hidden {
                     }
                 }
             }
+            .modal-body {
+                sh-select-menu {
+                    .menu {
+                        virtual-scroll {
+                            .total-padding {
+                                height: auto;
+                            }
+                        }
+                        .mat-dialog-container {
+                            .modal-body {
+                                input,
+                                textarea {
+                                    border: 1px solid var(--color-secondary-input-bar-border);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         .cdk-overlay-connected-position-bounding-box {
@@ -10581,8 +10712,43 @@ body.update-scroll-hidden {
             }
         }
     }
-}
 
+    button.mat-menu-item {
+        height: 38px;
+        line-height: 38px;
+        padding-left: 10px;
+        min-width: 160px;
+    }
+}
+.ledger-attachments-popup {
+    .cdk-overlay-container {
+        .mat-dialog-container {
+            background-color: var(--color-popup-background);
+        }
+
+        .cdk-overlay-connected-position-bounding-box {
+            .mat-menu-panel {
+                .mat-menu-content {
+                    button:focus {
+                        box-shadow: none !important;
+                        background-color: var(--color-dropdown-list-hover-background);
+                    }
+                }
+            }
+        }
+    }
+
+    button.mat-menu-item {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px !important;
+    }
+    .mat-menu-content {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+    }
+}
 .cdk-overlay-pane {
     height: auto !important;
 }
@@ -10699,8 +10865,14 @@ body.update-scroll-hidden {
     }
 
     .main-table {
-        tbody > tr > td:first-child {
-            min-width: 242px !important;
+        tbody {
+            tr {
+                td {
+                    &:first-child {
+                        min-width: 242px !important;
+                    }
+                }
+            }
         }
     }
 
@@ -10782,13 +10954,11 @@ body.update-scroll-hidden {
     .right-bar {
         width: 100% !important;
     }
-
     .activity-log-page {
         .cdk-overlay-container {
             z-index: 99999;
         }
     }
-
     .unit-mapping-page {
         .unit-mapping-grid-list {
             .grid-box-content {
@@ -12176,13 +12346,6 @@ body.update-scroll-hidden {
             max-width: 370px;
         }
     }
-    aside-create-unit,
-    aside-create-group {
-        max-width: 370px;
-        .aside-pane {
-            max-width: 370px;
-        }
-    }
 }
 
 @media (max-width: 500px) {
@@ -12781,6 +12944,38 @@ body.prevent-body-scroll {
     .hidden-md {
         display: none !important;
     }
+    ngx-daterangepicker-material,
+    giddh-datepicker {
+        .recurring-form {
+            .mat-form-field {
+                min-width: 95px !important;
+            }
+        }
+    }
+    .invoice-date-label {
+        giddh-datepicker {
+            .mat-form-field {
+                min-width: 95px !important;
+            }
+        }
+    }
+    .mat-form-field-wrapper {
+        .mat-form-field-infix {
+            .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+                padding-left: 32px !important;
+            }
+        }
+    }
+    .invoice-date-due-date {
+        .mat-datepicker-toggle {
+            .mat-button-wrapper {
+                .mat-datepicker-toggle-default-icon {
+                    width: 15px;
+                    right: 18px !important;
+                }
+            }
+        }
+    }
 }
 
 /*media query for height resolution*/
@@ -12857,6 +13052,7 @@ body.prevent-body-scroll {
 
 .mat-calendar-arrow {
     border-top-color: var(--color-white) !important;
+    fill: var(--color-white);
 }
 
 .mat-datepicker-toggle,
@@ -13481,6 +13677,10 @@ hamburger-menu {
     .cdk-overlay-container-z-index {
         z-index: 1000 !important;
     }
+
+    .cdk-overlay-container {
+        z-index: 9999 !important;
+    }
 }
 
 //inventory control styling
@@ -13932,6 +14132,53 @@ body.hide-scroll-body.master-page {
     }
 }
 
+/********************* Custom-Units-Css  ********************/
+
+aside-create-unit,
+aside-create-group {
+    position: fixed;
+    left: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 760px;
+    z-index: 99999;
+    .container-fluid {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .aside-pane {
+        position: relative;
+        z-index: 5;
+        height: 100vh;
+        color: var(--color-right-sidebar-settings);
+        background-color: var(--color-primary-right-side-popup-body-background) !important;
+        max-width: 760px;
+        width: 100%;
+    }
+}
+
+/*--- custom-unit ---*/
+.mat-grid-wrapper {
+    .mat-list-wrap {
+        width: 100%;
+    }
+    .mat-grid-tile-content {
+        align-items: flex-start;
+        .mat-list-base .mat-list-item {
+            &.map-item {
+                .mat-list-item-content {
+                    justify-content: flex-end;
+                }
+            }
+            .mat-list-item-content {
+                padding: 0;
+            }
+        }
+    }
+}
+
 @media (max-width: 320px) {
     .on-mobile-view tbody td {
         padding: 5px 10px 5px 53% !important;
@@ -13941,6 +14188,45 @@ body.hide-scroll-body.master-page {
         max-width: 280px;
         .aside-pane {
             max-width: 280px;
+        }
+    }
+}
+
+/*--- custom-unit ---*/
+.mat-grid-wrapper {
+    .mat-list-wrap {
+        width: 100%;
+    }
+    .mat-grid-tile-content {
+        align-items: flex-start;
+        .mat-list-base .mat-list-item {
+            &.map-item {
+                .mat-list-item-content {
+                    justify-content: flex-end;
+                }
+            }
+            .mat-list-item-content {
+                padding: 0;
+            }
+        }
+    }
+}
+
+@media (max-width: 575px) {
+    aside-create-unit,
+    aside-create-group {
+        max-width: 370px;
+        .aside-pane {
+            max-width: 370px;
+        }
+    }
+}
+@media (max-width: 375px) {
+    aside-create-unit,
+    aside-create-group {
+        max-width: 310px;
+        .aside-pane {
+            max-width: 310px;
         }
     }
 }

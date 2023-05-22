@@ -536,12 +536,12 @@
     </ng-template>
     <ng-template #purchaseAdvanceSearch>
         <purchase-advance-search
+            *ngIf="translationLoaded"
             [purchaseOrderPostRequest]="purchaseOrderPostRequest"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
             (closeModelEvent)="advanceSearchCallback($event)"
-        >
-        </purchase-advance-search>
+        ></purchase-advance-search>
     </ng-template>
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
@@ -614,7 +614,7 @@
         </div>
     </div>
     <purchase-order-preview
-        *ngIf="purchaseOrderUniqueName"
+        *ngIf="purchaseOrderUniqueName && translationLoaded"
         [purchaseOrders]="purchaseOrders"
         [companyUniqueName]="purchaseOrderGetRequest.companyUniqueName"
         [purchaseOrderUniqueName]="purchaseOrderUniqueName"

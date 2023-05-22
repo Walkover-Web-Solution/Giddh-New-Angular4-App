@@ -46,6 +46,7 @@
     "enter_sku_number": "Enter SKU number",
     "unit_cm_mm":"eg. cm, kg, m, box",
     "avail_on_variant":"Available on variant",
+    "variant_name":"Variant Name",
     "variant_name_linked":"Variant Name (linked)",
     "final_product_1":"Final Product 1 ",
     "final_product_2":"Final Product 2 ",
