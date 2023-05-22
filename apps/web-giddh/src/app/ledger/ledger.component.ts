@@ -2683,7 +2683,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
-                this.needToReCalculate.next(true);
                 txn.showOtherTax = this.showOtherTax(txn);
                 // if (this.newLedgerComponent) {
                 //     this.newLedgerComponent.preparePreAppliedDiscounts();

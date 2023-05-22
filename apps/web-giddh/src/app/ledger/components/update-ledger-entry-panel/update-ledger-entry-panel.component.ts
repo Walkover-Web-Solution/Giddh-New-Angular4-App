@@ -22,7 +22,7 @@ import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, BehaviorSubject } from 'rxjs';
-import { debounceTime, map, take, takeUntil, filter as observableFilter } from 'rxjs/operators';
+import { debounceTime, map, take, takeUntil } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { ConfirmationModalConfiguration } from '../../../theme/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
@@ -776,6 +776,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
 
+        if (this.vm.stockTrxEntry?.inventory && !this.selectedStockVariantUniqueName) {
+            return;
+        }
         // due to date picker of Tx chequeClearance date format need to change
         if (this.vm.selectedLedger.chequeClearanceDate) {
             let chequeClearanceDate = (typeof this.vm.selectedLedger.chequeClearanceDate === "object") ? dayjs(this.vm.selectedLedger.chequeClearanceDate) : dayjs(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT);
@@ -2243,6 +2246,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 // Load stock's variants
                 this.loadStockVariants(t.inventory.stock?.uniqueName);
                 this.selectedStockVariantUniqueName = t.inventory.variant?.uniqueName;
+                this.selectedStockVariant = {name: t.inventory.variant?.name, uniqueName: t.inventory.variant?.uniqueName};
                 this.assignStockVariantDetails();
 
                 const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
@@ -2495,9 +2499,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private assignStockVariantDetails(): void {
-        this.stockVariants.pipe(observableFilter(val => val?.length === 1), take(1)).subscribe(res => {
-            this.selectedStockVariant = {name: res[0].label, uniqueName: res[0].value};
-            this.selectedStockVariantUniqueName = this.selectedStockVariant.uniqueName;
+        this.stockVariants.pipe(take(1)).subscribe(res => {
+            if (res?.length) {
+                this.selectedStockVariant = {name: res[0].label, uniqueName: res[0].value};
+                this.selectedStockVariantUniqueName = this.selectedStockVariant.uniqueName;
+            }
         });
     }
 
@@ -2568,7 +2574,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             stockUnitCode: unitCode,
                             code: unitCode,
                             rate: rate,
-                            stockUnitUniqueName: stockUnitUniqueName
+                            stockUnitUniqueName: stockUnitUniqueName,
+                            uniqueName: txn.inventory.unit.uniqueName,
                         },
                         amount: 0,
                         rate

@@ -26,7 +26,7 @@ import {
 import { AccountResponse, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { filter, map, take, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import {
     ConfirmationModalConfiguration,
@@ -271,6 +271,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isUnitOpen: boolean = false;
     /** Stores the stock variants */
     public stockVariants: BehaviorSubject<Array<IOption>> = new BehaviorSubject([]);
+    /** Stores the selected stock variant */
+    public selectedStockVariantUniqueName: string;
     /** True, if stock category is 'expenses' and inclusive tax is applied */
     public purchaseTaxInclusive: boolean;
     /** True, if stock category is 'income' and inclusive tax is applied */
@@ -421,8 +423,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         this.blankLedger.generateInvoice = cloneDeep(this.manualGenerateVoucherChecked);
-        this.stockVariants.pipe(filter(val => val?.length === 1), takeUntil(this.destroyed$)).subscribe(res => {
-            this.stockVariantSelected.emit(res[0].value);
+        this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res?.length) {
+                this.selectedStockVariantUniqueName = res[0].value;
+                this.stockVariantSelected.emit(res[0].value);
+            }
         });
     }
 
@@ -788,6 +793,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.taxControll.taxInputElement?.nativeElement.classList.add('error-box');
                 return;
             }
+        }
+        if (this.currentTxn?.isStock && !this.selectedStockVariantUniqueName) {
+            return;
         }
         // Taxes checkbox will be false in case of receipt and payment voucher
         if (this.voucherApiVersion === 2 && (this.blankLedger.voucherType === 'rcpt' || this.blankLedger.voucherType === 'pay') && !this.isAdvanceReceipt) {
