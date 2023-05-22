@@ -14142,53 +14142,6 @@ body.hide-scroll-body.master-page {
     }
 }
 
-/********************* Custom-Units-Css  ********************/
-
-aside-create-unit,
-aside-create-group {
-    position: fixed;
-    left: auto;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    max-width: 760px;
-    z-index: 99999;
-    .container-fluid {
-        padding-left: 0;
-        padding-right: 0;
-    }
-    .aside-pane {
-        position: relative;
-        z-index: 5;
-        height: 100vh;
-        color: var(--color-right-sidebar-settings);
-        background-color: var(--color-primary-right-side-popup-body-background) !important;
-        max-width: 760px;
-        width: 100%;
-    }
-}
-
-/*--- custom-unit ---*/
-.mat-grid-wrapper {
-    .mat-list-wrap {
-        width: 100%;
-    }
-    .mat-grid-tile-content {
-        align-items: flex-start;
-        .mat-list-base .mat-list-item {
-            &.map-item {
-                .mat-list-item-content {
-                    justify-content: flex-end;
-                }
-            }
-            .mat-list-item-content {
-                padding: 0;
-            }
-        }
-    }
-}
-
 @media (max-width: 320px) {
     .on-mobile-view tbody td {
         padding: 5px 10px 5px 53% !important;
