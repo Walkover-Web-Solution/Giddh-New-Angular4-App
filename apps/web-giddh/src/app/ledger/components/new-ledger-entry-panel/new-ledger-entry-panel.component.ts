@@ -817,6 +817,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 });
             }
             if (this.generalService.voucherApiVersion === 1) {
+                /** From API, for v1 companies, isStock key is creating issue in entry creation */
                 delete transaction.isStock;
             }
         });
