@@ -59,7 +59,10 @@
 
 /*--- custom ---*/
 .unit-quantity {
+    display: flex;
+    justify-content: space-between;
     .row {
+        width: 92%;
         .unit-equal {
             .equal-sign {
                 position: absolute;
@@ -68,29 +71,12 @@
             }
         }
     }
-    .inc-dec {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        .plus-minus {
-            display: flex;
-            position: absolute;
-            bottom: 2px;
-            right: -5px;
-            button {
-                min-width: 14px;
-                padding: 0 5px;
-            }
-        }
-    }
 }
 
-@media screen and (max-width: 991px) {
+@media (max-width: 768px) {
     .unit-quantity {
-        .inc-dec {
-            .plus-minus {
-                bottom: -10px;
-            }
+        .row {
+            width: 94%;
         }
     }
 }

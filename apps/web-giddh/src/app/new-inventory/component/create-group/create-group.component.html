@@ -1,0 +1,32 @@
+<form>
+    <div class="row mt-3">
+        <div class="col-sm-6">
+            <label>Name <span class="red-text">*</span></label>
+            <text-field
+                [cssClass]="'form-control'"
+                [name]="'hsnNumber'"
+                [type]="'text'"
+                [placeholder]="'Name'"
+                [id]="'item-unit-code'"
+            >
+            </text-field>
+        </div>
+        <div class="col-sm-6">
+            <label>Unique Name <span class="red-text">*</span></label>
+            <text-field
+                [cssClass]="'form-control'"
+                [name]="'hsnNumber'"
+                [type]="'text'"
+                [placeholder]="'Unique Name'"
+                [id]="'item-unit-code'"
+            >
+            </text-field>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-sm-12">
+            <button mat-raised-button type="submit" class="btn-success">Save</button>
+            <button mat-raised-button type="submit" class="btn-sm btn-danger">Clear</button>
+        </div>
+    </div>
+</form>

@@ -1,84 +1,70 @@
-<div class="aside-pane">
-    <div class="header-create-unit">
-        <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
-        <div class="form-header">
-            <div class="back-button mr-r15"><i class="icon-back-arrow"></i></div>
-            <!-- funcation of back to main aside (click)="backToMainAside()" -->
-            <h3>Create Unit</h3>
+<form>
+    <div class="row">
+        <div class="col-sm-6">
+            <label>Unit Group <span class="red-text">*</span></label>
+            <select-field [cssClass]="'form-control mat-field-border'" [placeholder]="'Select unit'"> </select-field>
         </div>
     </div>
-    <div class="aside-body create-group-aside-body">
-        <div class="aside-pane-form">
-            <form>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <label>Unit Name <span class="red-text">*</span></label>
-                        <sh-select id="item-unit-name" placeholder="Select Unit"></sh-select>
-                    </div>
-                    <div class="col-sm-6">
-                        <label>Unit Code <span class="red-text">*</span></label>
-                        <input class="form-control" id="item-unit-code" placeholder="Unique Name" />
+    <div class="row mt-3">
+        <div class="col-sm-6">
+            <label>Unit Name <span class="red-text">*</span></label>
+            <select-field [cssClass]="'form-control mat-field-border'" [placeholder]="'Select unit'"> </select-field>
+        </div>
+        <div class="col-sm-6">
+            <label>Unit Code <span class="red-text">*</span></label>
+            <text-field
+                [cssClass]="'form-control'"
+                [name]="'hsnNumber'"
+                [type]="'text'"
+                [placeholder]="'Unique Name'"
+                [id]="'item-unit-code'"
+            >
+            </text-field>
+        </div>
+    </div>
+    <!-- section-repeat -->
+    <div class="unit-quantity mt-3">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 unit-equal">
+                <label>Unit Name <span class="red-text">*</span></label>
+                <select-field
+                    [cssClass]="'form-control mat-field-border'"
+                    [id]="'item-parent-unit'"
+                    [placeholder]="'Choose a Parent Unit'"
+                >
+                </select-field>
+                <span class="equal-sign">=</span>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-2 pr-0">
+                <label>Qty. per Unit <span class="red-text">*</span></label>
+                <text-field
+                    [cssClass]="'form-control text-right'"
+                    [name]="'hsnNumber'"
+                    [type]="'number'"
+                    [placeholder]="'Quanitity'"
+                    [id]="'quantity-per-unit'"
+                >
+                </text-field>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 pl-2">
+                <label>Mapped Unit <span class="red-text">*</span></label>
+                <select-field [cssClass]="'form-control mat-field-border'" [placeholder]="'Choose unit'">
+                </select-field>
+            </div>
+            <div class="col-lg-1 col-md-2 col-sm-1 pl-0">
+                <div class="inc-dec">
+                    <div class="plus-minus">
+                        <button mat-raised-button class="btn mr-0"><i class="icon-plus add-row"></i></button>
+                        <button mat-raised-button class="btn mr-0"><i class="icon-cross delete"></i></button>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <label>Parent Unit</label>
-                        <sh-select id="item-parent-unit" placeholder="Choose a Parent Unit"></sh-select>
-                    </div>
-                    <div class="col-sm-3">
-                        <label>Unit Code <span class="red-text">*</span></label>
-                        <div class="checkbox square-switch">
-                            <input type="checkbox" id="isDivide" [checked]="isDivide" (change)="isDivide = !isDivide" />
-                            <label for="isDivide">
-                                <span class="pull-left width-100 text-left" *ngIf="isDivide"
-                                    ><img src="./assets/images/divide-ico.svg" /> Divide</span
-                                >
-                                <span class="pull-right width-100 text-right" *ngIf="!isDivide"
-                                    ><img src="./assets/images/multiply.svg" [style.width.px]="11" /> Multiply</span
-                                >
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <label>Qty. per Unit <span class="red-text">*</span></label>
-                        <input type="text" class="form-control" id="quantity-per-unit" placeholder="Quanitity" />
-                    </div>
-                </div>
-                <div class="row button-group mt-5">
-                    <div class="col-sm-12">
-                        <button id="clear-btn" class="btn btn-primary">Clear</button>
-                        <button id="create-btn" class="btn btn-success">Create</button>
-                    </div>
-                </div>
-            </form>
-            <div class="mr-t2 clearfix">
-                <table class="table basic giddh-table mb-0">
-                    <thead>
-                        <tr>
-                            <th>Unit Name</th>
-                            <th>Parent Unit</th>
-                            <th class="text-right">Qty per Unit</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- table code is dynamic but not working developer can correct , commenting for now -->
-                        <!-- <tr *ngFor="let item of stockUnit$ | async">
-                            <td>{{item.name}} ({{item.code}})</td>
-                            <td>{{item.parentStockUnit?.name}} <span *ngIf="!item.parentStockUnit?.name">-</span>
-                            </td>
-                            <td class="text-right">{{item.displayQuantityPerUnit | giddhRoundOff : giddhDecimalPlaces}}</td>
-                            <td class="action ico-btn">
-                                <button class="btn-default btn-xs" [disabled]="editMode" (click)="editUnit(item)"><i
-                                        class="icon-edit-pencil"></i></button>
-                                <button class="btn-default btn-xs" [disabled]="editMode"
-                                    [ladda]="(deleteCustomStockInProcessCode$ | async)?.indexOf(item.code) > -1"
-                                    (click)="deleteUnit(item.code)"><i class="fa fa-trash"></i></button>
-                            </td>
-                        </tr> -->
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>
-</div>
+    <div class="row mt-5">
+        <div class="col-sm-12">
+            <button mat-raised-button type="submit" class="btn-success">Save</button>
+            <button mat-raised-button type="submit" class="btn-sm btn-danger">Clear</button>
+        </div>
+    </div>
+</form>

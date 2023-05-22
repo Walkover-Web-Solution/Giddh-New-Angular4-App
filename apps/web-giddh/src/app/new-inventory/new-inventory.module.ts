@@ -68,6 +68,13 @@ import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
 import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
+import { CustomUnitsComponent } from "./component/custom-units/custom-units.component";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatListModule } from "@angular/material/list";
+import { MatDivider } from "@angular/material/divider";
+import { AsideCreateNewUnitComponent } from "./component/aside-create-unit/aside-create-unit.component";
+import { CreateGroupComponent } from "./component/create-group/create-group.component";
+import { AsideCreatGroupComponent } from "./component/aside-create-group/aside-create-group.component";
 
 @NgModule({
     declarations: [
@@ -108,7 +115,11 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         ItemWiseComponent,
         VariantWiseComponent,
         ReportFiltersComponent,
-        ReportsComponent
+        ReportsComponent,
+        AsideCreateNewUnitComponent,
+        CreateGroupComponent,
+        AsideCreatGroupComponent,
+        CustomUnitsComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -141,7 +152,9 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         MatDialogModule,
         MatAutocompleteModule,
         MatTooltipModule,
-        SelectTableColumnModule
+        SelectTableColumnModule,
+        MatGridListModule,
+        MatListModule,
     ],
     exports: [
         NewInventoryComponent,
@@ -175,7 +188,8 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         DashboardPurchaseReport,
         DashboardSalesReport,
         DashboardSellingReport,
-        ReportFiltersComponent
+        ReportFiltersComponent,
+        MatDivider
     ]
 })
 export class NewInventoryModule { }
