@@ -288,6 +288,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public selectedStockVariantUniqueName: string;
     /** To force clear the variant dropdown */
     public variantForceClear$: Observable<IForceClear> = observableOf({status: false});
+    /** Stores the stock uniquename */
+    private selectedStockUniquenName: string;
 
     constructor(
         private accountService: AccountService,
@@ -584,7 +586,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
-    public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent, clearAccount?: boolean) {
+    public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp?: ShSelectComponent, clearAccount?: boolean) {
         if (!e.value || clearAccount) {
             // if there's no selected account set selectedAccount to null
             txn.selectedAccount = null;
@@ -628,7 +630,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (e.additional.stock) {
                 // check if we aleready have stock entry
                 if (this.vm.isThereStockEntry(e?.value)) {
-                    selectCmp.clear();
+                    selectCmp?.clear();
                     txn.particular.uniqueName = null;
                     txn.particular.name = null;
                     txn.selectedAccount = null;
@@ -639,102 +641,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     let requestObject;
                     if (e.additional.stock) {
                         requestObject = {
-                            stockUniqueName: e.additional.stock?.uniqueName
+                            stockUniqueName: e.additional.stock?.uniqueName,
+                            variantUniqueName: this.selectedStockVariant?.uniqueName
                         };
                     }
-                    const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount?.uniqueName) : '';
-                    // If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
-                    const accountUniqueName = e.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-                        this.activeAccount ? this.activeAccount?.uniqueName : '' :
-                        e.additional?.uniqueName;
-                    this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                        // directly assign additional property
-                        if (data && data.body) {
-                            // Take taxes of parent group and stock's own taxes
-                            const taxes = this.generalService.fetchTaxesOnPriority(
-                                data.body.stock?.taxes ?? [],
-                                data.body.stock?.groupTaxes ?? [],
-                                data.body.taxes ?? [],
-                                data.body.groupTaxes ?? []);
-                            txn.selectedAccount = {
-                                ...e.additional,
-                                label: e.label,
-                                value: e?.value,
-                                isHilighted: true,
-                                applicableTaxes: taxes,
-                                currency: data.body.currency,
-                                currencySymbol: data.body.currencySymbol,
-                                email: data.body.emails,
-                                isFixed: data.body.isFixed,
-                                mergedAccounts: data.body.mergedAccounts,
-                                mobileNo: data.body.mobileNo,
-                                nameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent?.name).join(', ') : '',
-                                stock: data.body.stock,
-                                uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
-                            };
-                            if (txn.selectedAccount && txn.selectedAccount.stock) {
-                                txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
-                            }
-                            let rate = 0;
-                            let unitCode = '';
-                            let stockName = '';
-                            let stockUniqueName = '';
-                            let stockUnitUniqueName = '';
-                            if (txn.selectedAccount && txn.selectedAccount.stock) {
-                                let defaultUnit = {
-                                    stockUnitCode: txn.selectedAccount.stock.stockUnitCode,
-                                    code: txn.selectedAccount.stock.stockUnitCode,
-                                    rate: txn.selectedAccount.stock.rate,
-                                    name: txn.selectedAccount.stock.name
-                                };
-                                // For V1 company, the unitRates is obtained in 'stock' and for v2 company, unitRates is obtained in 'stock.variant'
-                                const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : txn.selectedAccount.stock?.variant?.unitRates
-                                txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
-                                stockName = defaultUnit.name;
-                                rate = defaultUnit.rate;
-                                stockUniqueName = txn.selectedAccount.stock?.uniqueName;
-                                unitCode = defaultUnit.code;
-                                stockUnitUniqueName = txn.selectedAccount.stock.stockUnitUniqueName;
-                            }
-
-                            if (stockName && stockUniqueName) {
-                                txn.inventory = {
-                                    stock: {
-                                        name: stockName,
-                                        uniqueName: stockUniqueName,
-                                    },
-                                    quantity: 1,
-                                    unit: {
-                                        stockUnitCode: unitCode,
-                                        code: unitCode,
-                                        rate: rate,
-                                        stockUnitUniqueName: stockUnitUniqueName
-                                    },
-                                    amount: 0,
-                                    rate
-                                };
-                                // Stock item, show the warehouse & variant drop down
-                                if (!this.isStockPresent) {
-                                    this.isStockPresent = true;
-                                }
-                                this.loadStockVariants(stockUniqueName);
-                                this.assignStockVariantDetails();
-                            }
-                            if (rate > 0) {
-                                txn.amount = rate;
-                            }
-                            // check if need to showEntryPanel
-                            // first check with opened lager
-                            if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
-                                this.vm.showNewEntryPanel = true;
-                            } else {
-                                // now check if we transactions array have any income/expense/fixed assets entry
-                                let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
-                                this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
-                            }
-                            this.vm.onTxnAmountChange(txn);
-                        }
-                    });
+                    this.assignStockDetails(e, txn, requestObject);
                 }
             } else {
                 this.searchService.loadDetails(e?.value).pipe(takeUntil(this.destroyed$)).subscribe(data => {
@@ -2328,6 +2239,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }
             if (t.inventory) {
+                this.selectedStockUniquenName = t.inventory.stock?.uniqueName;
                 // Load stock's variants
                 this.loadStockVariants(t.inventory.stock?.uniqueName);
                 this.selectedStockVariantUniqueName = t.inventory.variant?.uniqueName;
@@ -2544,6 +2456,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public variantChanged(event: IOption): void {
         this.selectedStockVariant = {name: event.label, uniqueName: event.value};
+        const stockEntry = this.vm.selectedLedger.transactions.find(transaction => transaction.inventory);
+        const stockLinkedAcccount = stockEntry?.particular?.uniqueName?.split('#')?.shift();
+        const eventDetails = {
+            label: stockEntry?.particular?.name,
+            value: stockEntry?.particular?.uniqueName,
+            additional: {
+                stock: stockEntry?.inventory?.stock,
+                uniqueName: stockLinkedAcccount
+            }
+        };
+        this.selectAccount(eventDetails, stockEntry, null);
     }
 
     /**
@@ -2575,6 +2498,106 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.stockVariants.pipe(observableFilter(val => val?.length === 1), take(1)).subscribe(res => {
             this.selectedStockVariant = {name: res[0].label, uniqueName: res[0].value};
             this.selectedStockVariantUniqueName = this.selectedStockVariant.uniqueName;
+        });
+    }
+
+    private assignStockDetails(event: IOption, txn: ILedgerTransactionItem, requestObject?: any): void {
+        const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount?.uniqueName) : '';
+        // If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
+        const accountUniqueName = event.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+            this.activeAccount ? this.activeAccount?.uniqueName : '' :
+            event.additional?.uniqueName;
+        this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            // directly assign additional property
+            if (data && data.body) {
+                // Take taxes of parent group and stock's own taxes
+                const taxes = this.generalService.fetchTaxesOnPriority(
+                    data.body.stock?.taxes ?? [],
+                    data.body.stock?.groupTaxes ?? [],
+                    data.body.taxes ?? [],
+                    data.body.groupTaxes ?? []);
+                txn.selectedAccount = {
+                    ...(event ? event.additional : {}),
+                    label: event?.label ?? txn.selectedAccount?.label ?? '',
+                    value: event?.value ?? txn.selectedAccount?.label ?? '',
+                    isHilighted: true,
+                    applicableTaxes: taxes,
+                    currency: data.body.currency,
+                    currencySymbol: data.body.currencySymbol,
+                    email: data.body.emails,
+                    isFixed: data.body.isFixed,
+                    mergedAccounts: data.body.mergedAccounts,
+                    mobileNo: data.body.mobileNo,
+                    nameStr: data.body.parentGroups.join(', '),
+                    stock: data.body.stock,
+                    uNameStr: data.body.parentGroups.join(', '),
+                };
+                if (txn.selectedAccount && txn.selectedAccount.stock) {
+                    txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                }
+                let rate = 0;
+                let unitCode = '';
+                let stockName = '';
+                let stockUniqueName = '';
+                let stockUnitUniqueName = '';
+                if (txn.selectedAccount && txn.selectedAccount.stock) {
+                    let defaultUnit = {
+                        stockUnitCode: txn.selectedAccount.stock.stockUnitCode,
+                        code: txn.selectedAccount.stock.stockUnitCode,
+                        rate: txn.selectedAccount.stock.rate,
+                        name: txn.selectedAccount.stock.name
+                    };
+                    // For V1 company, the unitRates is obtained in 'stock' and for v2 company, unitRates is obtained in 'stock.variant'
+                    const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : txn.selectedAccount.stock?.variant?.unitRates
+                    txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
+                    stockName = defaultUnit.name;
+                    rate = defaultUnit.rate;
+                    stockUniqueName = txn.selectedAccount.stock?.uniqueName;
+                    unitCode = defaultUnit.code;
+                    stockUnitUniqueName = txn.selectedAccount.stock.stockUnitUniqueName;
+                }
+
+                if (stockName && stockUniqueName) {
+                    txn.inventory = {
+                        stock: {
+                            name: stockName,
+                            uniqueName: stockUniqueName,
+                        },
+                        quantity: 1,
+                        unit: {
+                            stockUnitCode: unitCode,
+                            code: unitCode,
+                            rate: rate,
+                            stockUnitUniqueName: stockUnitUniqueName
+                        },
+                        amount: 0,
+                        rate
+                    };
+                    // Stock item, show the warehouse & variant drop down
+                    if (!this.isStockPresent) {
+                        this.isStockPresent = true;
+                    }
+                    if (this.selectedStockUniquenName !== stockUniqueName) {
+                        // Load variants only when stock changes
+                        this.selectedStockUniquenName = stockUniqueName;
+                        this.loadStockVariants(stockUniqueName);
+                        this.assignStockVariantDetails();
+                    }
+                }
+                if (rate > 0) {
+                    txn.amount = rate;
+                }
+                // check if need to showEntryPanel
+                // first check with opened lager
+                if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
+                    this.vm.showNewEntryPanel = true;
+                } else {
+                    // now check if we transactions array have any income/expense/fixed assets entry
+                    let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
+                    this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
+                }
+                this.vm.onTxnAmountChange(txn);
+            }
         });
     }
 }

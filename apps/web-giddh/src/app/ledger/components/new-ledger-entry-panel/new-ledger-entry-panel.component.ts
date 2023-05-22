@@ -512,16 +512,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.needToReCalculate.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.setTaxCalculationMethodForStock();
-                if (this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive) {
-                    this.currentTxn.total = giddhRoundOff((this.currentTxn.inventory.quantity * this.currentTxn.inventory.unit.rate), this.giddhBalanceDecimalPlaces);
-                    setTimeout(() => {
+                this.preparePreAppliedDiscounts();
+                this.calculatePreAppliedTax();
+                this.detectChanges();
+                setTimeout(() => {
+                    if (this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive) {
+                        this.currentTxn.total = giddhRoundOff((this.currentTxn.inventory.quantity * this.currentTxn.inventory.unit.rate), this.giddhBalanceDecimalPlaces);
                         this.calculateAmount();
-                    }, 100);
-                } else {
-                    this.amountChanged();
-                    // this.calculateTotal();
-                    this.calculateTax();
-                }
+                    } else {
+                        this.amountChanged();
+                        // this.calculateTotal();
+                        this.calculateTax();
+                    }
+                }, 100);
             }
         });
         this.cdRef.markForCheck();
@@ -567,21 +570,20 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             });
         }
         this.currentTxn.convertedDiscount = this.calculateConversionRate(this.currentTxn.discount);
-        this.calculateTax();
+        if (this.isInclusiveEntry) {
+            this.calculateFieldValuesInclusively();
+        } else {
+            this.calculateTax();
+        }
     }
 
     public calculateTax() {
-        let totalPercentage: number;
-        totalPercentage = this.currentTxn?.taxesVm?.reduce((pv, cv) => {
-            return cv.isChecked ? pv + cv.amount : pv;
-        }, 0);
-        if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds && !this.salesTaxInclusive && !this.purchaseTaxInclusive && !this.fixedAssetTaxInclusive) {
-            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(false, this.currentTxn.taxInclusiveAmount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+        this.calculateTaxValue();
+        if (this.isInclusiveEntry) {
+            this.calculateFieldValuesInclusively();
         } else {
-            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt || this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive, this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+            this.calculateTotal();
         }
-        this.currentTxn.convertedTax = this.calculateConversionRate(this.currentTxn.tax);
-        this.calculateTotal();
     }
 
     /**
@@ -609,18 +611,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.currentTxn.total = giddhRoundOff((this.currentTxn.taxInclusiveAmount + (!isExportValid ? this.currentTxn.tax : 0)), this.giddhBalanceDecimalPlaces);
                     this.totalForTax = this.currentTxn.total;
                     this.currentTxn.convertedTotal = giddhRoundOff((this.currentTxn.convertedAmount - (!isExportValid ? this.currentTxn.convertedTax : 0)), this.giddhBalanceDecimalPlaces);
-                }
-                else if (this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive) {
-                    this.totalForTax = this.currentTxn.total;
-                    if (this.currentTxn.selectedAccount) {
-                        if (this.currentTxn.selectedAccount.stock) {
-                            this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
-                            this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
-                            this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
-                        }
-                    }
-                }
-                else {
+                } else if (this.isInclusiveEntry && (this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive)) {
+                    this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
+                } else {
                     let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
                     const convertedTotal = (this.currentTxn.convertedAmount - this.currentTxn.convertedDiscount) || 0;
                     this.totalForTax = total;
@@ -1890,7 +1883,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public variantChanged(event: IOption): void {
-        this.stockVariantSelected.emit(event.value);
+        if (event.value) {
+            // Must not call the variant API when stock is changed
+            this.stockVariantSelected.emit(event.value);
+        }
     }
 
     /**
@@ -1944,6 +1940,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.purchaseTaxInclusive = false;
             this.fixedAssetTaxInclusive = false;
         }
+        if (this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive) {
+            this.isInclusiveEntry = true;
+        } else {
+            this.isInclusiveEntry = false;
+        }
     }
 
     /**
@@ -1980,5 +1981,57 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         return giddhRoundOff(((Number(total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
         (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
+    }
+
+    /**
+     * Calculates the value of discount, tax inclusively and stock price
+     *
+     * @private
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private calculateFieldValuesInclusively(): void {
+        this.currentTxn.amount = this.calculateInclusiveAmount(this.currentTxn.total);
+        if (this.currentTxn.inventory) {
+            this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+        } else {
+            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+        }
+        if (this.discountControl) {
+            this.discountControl.ledgerAmount = this.currentTxn.amount;
+            this.discountControl.change(null, null, true);
+            this.calculateTaxValue();
+        }
+        if (this.taxControll) {
+            this.taxControll.totalForTax = this.currentTxn.total;
+            this.taxControll.change(true);
+            this.calculateTotal();
+        }
+        if (this.currentTxn.selectedAccount) {
+            if (this.currentTxn.selectedAccount.stock) {
+                this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
+                this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
+                this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
+            }
+        }
+        this.calculateCompoundTotal();
+    }
+
+    /**
+     * Calculates the tax value and converted tax value
+     *
+     * @private
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private calculateTaxValue(): void {
+        let totalPercentage: number;
+        totalPercentage = this.currentTxn?.taxesVm?.reduce((pv, cv) => {
+            return cv.isChecked ? pv + cv.amount : pv;
+        }, 0);
+        if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds && !this.salesTaxInclusive && !this.purchaseTaxInclusive && !this.fixedAssetTaxInclusive) {
+            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(false, this.currentTxn.taxInclusiveAmount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+        } else {
+            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt || this.isInclusiveEntry, this.isInclusiveEntry ? this.currentTxn.total : this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+        }
+        this.currentTxn.convertedTax = this.calculateConversionRate(this.currentTxn.tax);
     }
 }

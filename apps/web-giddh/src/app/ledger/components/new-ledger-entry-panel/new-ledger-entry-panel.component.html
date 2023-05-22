@@ -275,12 +275,7 @@
                                 (taxAmountSumEvent)="calculateTax()"
                                 (hideOtherPopups)="hideDiscount()"
                                 (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event"
-                                [calculateTaxInclusively]="
-                                    isAdvanceReceiptWithTds ||
-                                    purchaseTaxInclusive ||
-                                    salesTaxInclusive ||
-                                    fixedAssetTaxInclusive
-                                "
+                                [calculateTaxInclusively]="isAdvanceReceiptWithTds || isInclusiveEntry"
                                 [isAdvanceReceipt]="isAdvanceReceipt"
                                 [allowedSelectionOfAType]="allowedSelectionOfAType"
                                 [commonLocaleData]="commonLocaleData"
