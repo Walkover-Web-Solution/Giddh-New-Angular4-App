@@ -711,6 +711,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.toaster.showSnackBar("success", this.localeData?.entry_created, this.commonLocaleData?.app_success);
                 this.lc.showNewLedgerPanel = false;
                 this.lc.showBankLedgerPanel = false;
+                this.needToReCalculate.next(false);
                 this.getTransactionData();
                 this.resetBlankTransaction();
                 this.resetPreviousSearchResults();
@@ -939,6 +940,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.selectedTrxWhileHovering = '';
         this.lc.showBankLedgerPanel = false;
+        this.needToReCalculate.next(false);
         this.lc.currentBlankTxn = null;
         this.lc.selectedBankTxnUniqueName = null;
     }
@@ -1142,6 +1144,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.getCurrencyRate('blankLedger');
         }
         this.resetPreviousSearchResults();
+        this.needToReCalculate.next(false);
     }
 
     public showNewLedgerEntryPopup(trx: TransactionVM) {
@@ -1194,6 +1197,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.isMoreDetailsOpened = false;
         this.lc.showNewLedgerPanel = false;
+        this.needToReCalculate.next(false);
     }
 
     public showUpdateLedgerModal(txn: ITransactionItem, type: string) {
@@ -2677,21 +2681,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     txn.amount = rate;
                 }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
-                this.needToReCalculate.next(true);
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
                 txn.showOtherTax = this.showOtherTax(txn);
-                if (this.newLedgerComponent) {
-                    this.newLedgerComponent.preparePreAppliedDiscounts();
-                }
+                // if (this.newLedgerComponent) {
+                //     this.newLedgerComponent.preparePreAppliedDiscounts();
+                // }
                 this.handleRcmVisibility(txn);
                 this.handleTaxableAmountVisibility(txn);
-                if (this.newLedgerComponent) {
-                    this.newLedgerComponent.calculatePreAppliedTax();
-                    this.newLedgerComponent.calculateTax();
-                    this.newLedgerComponent.calculateTotal();
-                }
+                // if (this.newLedgerComponent) {
+                    //     this.newLedgerComponent.calculatePreAppliedTax();
+                    //     this.newLedgerComponent.calculateTax();
+                    //     this.newLedgerComponent.calculateTotal();
+                    // }
                 this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
-                this.cdRf.detectChanges();
+                this.needToReCalculate.next(true);
+                // this.cdRf.detectChanges();
             }
         });
     }

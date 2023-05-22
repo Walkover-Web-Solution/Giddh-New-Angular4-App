@@ -230,8 +230,11 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
     /**
      * select/deselect tax checkbox
+     *
+     * @param {boolean} [preventEmit] Prevent the total amount update event to avoid recursive calculation
+     * @memberof TaxControlComponent
      */
-    public change(event?: any) {
+    public change(preventEmit?: boolean) {
         this.selectedTaxes = [];
         this.taxSum = this.calculateSum();
         this.calculateInclusiveOrExclusiveTaxes();
@@ -290,7 +293,12 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
             }
         }, 100);
-        this.taxAmountSumEvent.emit(this.taxSum);
+        if (!preventEmit) {
+            /** Should emit only conditionally, done to avoid
+             * recursive call to change method in case of inclusive tax calculation for stock
+            */
+            this.taxAmountSumEvent.emit(this.taxSum);
+        }
         if (this.taxRenderData?.length > 0) {
             this.selectedTaxEvent.emit(this.selectedTaxes);
         }
