@@ -425,12 +425,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will use for show hide main table headers from customise columns
+     * This will use for show hide main table columns from customise columns
      *
      * @param {*} event
      * @memberof PurchaseRegisterExpandComponent
      */
-    public getCustomiseHeaderColumns(event: any): void {
+    public getSelectedTableColumns(event: any): void {
         this.displayedColumns = event;
         const displayColumnsSet = new Set(this.displayedColumns);
         Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = displayColumnsSet.has(key));
