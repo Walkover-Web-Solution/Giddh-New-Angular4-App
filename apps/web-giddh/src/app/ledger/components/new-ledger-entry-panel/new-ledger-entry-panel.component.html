@@ -342,7 +342,7 @@
             </table>
         </div>
         <div class="row warehouse-field">
-            <div class="col-md-12" [ngClass]="{ 'offset-md-4': !currentTxn?.selectedAccount?.stock }">
+            <div class="col-md-12">
                 <div class="text-right mr-b1" *ngIf="currentTxn?.selectedAccount && showOtherTax">
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <mat-checkbox

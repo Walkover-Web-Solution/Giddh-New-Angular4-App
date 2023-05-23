@@ -1925,11 +1925,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {TransactionVM} transaction Current transaction
      * @memberof LedgerComponent
      */
-    public handleAmountInput(transaction: TransactionVM): void {
-        if (transaction?.amount !== undefined) {
-            transaction.amount = Number(transaction.amount);
-            this.needToReCalculate.next(true);
+    public handleAmountInput(transaction: TransactionVM, isStockInclusiveEntry?: boolean): void {
+        if (isStockInclusiveEntry) {
+            if (transaction?.total !== undefined) {
+                transaction.total = Number(transaction.total);
+            }
+        } else {
+            if (transaction?.amount !== undefined) {
+                transaction.amount = Number(transaction.amount);
+            }
         }
+        this.needToReCalculate.next(true);
     }
 
     /**

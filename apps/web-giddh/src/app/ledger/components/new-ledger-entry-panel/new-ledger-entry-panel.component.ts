@@ -522,17 +522,18 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.detectChanges();
                 setTimeout(() => {
                     if (this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive) {
-                        this.currentTxn.total = giddhRoundOff((this.currentTxn.inventory.quantity * this.currentTxn.inventory.unit.rate), this.giddhBalanceDecimalPlaces);
+                        this.currentTxn.total = !this.currentTxn.total ? giddhRoundOff((this.currentTxn.inventory.quantity * this.currentTxn.inventory.unit.rate), this.giddhBalanceDecimalPlaces) : this.currentTxn.total;
                         this.calculateAmount();
                     } else {
                         this.amountChanged();
                         // this.calculateTotal();
                         this.calculateTax();
                     }
+                    this.cdRef.markForCheck();
                 }, 100);
             }
         });
-        this.cdRef.markForCheck();
+        // this.cdRef.markForCheck();
     }
 
     public addToDrOrCr(type: string, e: Event) {
@@ -676,12 +677,18 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
     }
 
-    public changePrice(val: string) {
+    /**
+     * Price field change handler
+     *
+     * @param {string} val Changed value
+     * @param {boolean} [isUnitChanged] True, if this handler is triggerred through change of unit field
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public changePrice(val: string, isUnitChanged?: boolean) {
         if (!this.isExchangeRateSwapped && !this.isInclusiveEntry) {
             this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.ratePrecision);
             this.currentTxn.inventory.unit.highPrecisionRate = this.currentTxn.inventory.unit.rate;
             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
-
             this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
             if (this.currentTxn.inventory) {
                 this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
@@ -696,10 +703,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
 
             this.calculateTotal();
+        } else if (this.isInclusiveEntry && isUnitChanged) {
+            // In case of inclusive entry, calculate the total and other fields only when unit has changed
+            this.currentTxn.total = giddhRoundOff((this.currentTxn.inventory.quantity * this.currentTxn.inventory.unit.rate), this.giddhBalanceDecimalPlaces);
+            this.calculateAmount();
         }
     }
 
     public changeQuantity(val: string) {
+        this.isInclusiveEntry = false;
         this.currentTxn.inventory.quantity = Number(val);
         this.currentTxn.amount = Number((this.currentTxn.inventory.unit.highPrecisionRate * this.currentTxn.inventory.quantity).toFixed(this.giddhBalanceDecimalPlaces));
         if (this.currentTxn.inventory) {
@@ -892,7 +904,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let unit = unitRates.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
         this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
         if (this.currentTxn.inventory.unit) {
-            this.changePrice(this.currentTxn.inventory.unit.rate?.toString());
+            this.changePrice(this.currentTxn.inventory.unit.rate?.toString(), true);
         }
     }
 
@@ -1912,7 +1924,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(
             map((variants: IVariant[]) => (variants ?? []).map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))), takeUntil(this.destroyed$)).subscribe(res => {
                 this.stockVariants.next(res);
-                this.variantForceClear$ = observableOf({status: true});
+                if (this.selectedAccountDetails.additional?.stock?.uniqueName !== stockUniqueName) {
+                    this.variantForceClear$ = observableOf({status: true});
+                    this.selectedStockVariantUniqueName = res[0].value;
+                }
                 this.cdRef.detectChanges();
             });
     }
