@@ -2,7 +2,6 @@
     border: 0;
     box-sizing: content-box;
     color: var(--color-nero);
-    font-family: inherit;
     font-style: inherit;
     font-weight: inherit;
     list-style: none;
@@ -71,7 +70,6 @@ p {
     box-sizing: border-box;
     font-size: 12px;
     margin: 0 auto;
-    overflow: hidden;
     padding: 0.1in;
     letter-spacing: 0;
     width: 100%;
@@ -204,7 +202,6 @@ header img {
 .word-break {
     word-break: break-word;
 }
-
 /* table items */
 
 #default table.item {

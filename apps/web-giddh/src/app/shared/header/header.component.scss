@@ -140,7 +140,7 @@ a[vr-item]:focus {
 .left-fixed-header > li {
     text-transform: capitalize;
     position: relative;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 
 .button-back-head {
@@ -197,7 +197,7 @@ a[vr-item]:focus {
     color: var(--color-nero);
     letter-spacing: 0.6px;
     font-weight: normal;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     padding: 0;
 }
 
@@ -252,7 +252,7 @@ a[vr-item]:focus {
     font-size: 16px;
     padding-left: 15px;
     padding-right: 15px;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     img {
         width: 18px;
     }
@@ -519,7 +519,7 @@ span.icon-support.dropdown-toggle {
 .show-more-opt {
     font-size: 14px;
     padding: 0 15px;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     color: var(--color-blue);
 }
 
@@ -616,7 +616,7 @@ ul.sub-list {
 
 .company-name .text-ellipsis {
     font-size: 13px;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
 }
 
 .overlay-cal {
@@ -670,7 +670,7 @@ ul.sub-list {
 .show-more-module a {
     font-size: 14px;
     color: var(--color-blue) !important;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 /*notification css*/
 .white-row {
@@ -682,7 +682,7 @@ ul.sub-list {
     margin-top: 10px;
     color: var(--color-primary-header-notification-text);
     p {
-        font-family: "opensans-semibold";
+        font-family: var(--font-semibold);
         font-size: 14px;
     }
     .click-here {
@@ -710,6 +710,11 @@ ul.sub-list {
 .desktop-header .hamburger-menu {
     display: flex;
 }
+.desktop-header {
+    .navbar {
+        display: none;
+    }
+}
 .unique-name-financial-year {
     display: flex;
     align-items: center;
@@ -718,11 +723,6 @@ ul.sub-list {
         margin-right: 5px;
         white-space: normal;
         word-break: break-word;
-    }
-}
-.desktop-header {
-    .navbar {
-        display: none;
     }
 }
 .name-year {
@@ -762,7 +762,7 @@ ul.sub-list {
             font-size: 16px;
             display: flex;
             padding: 15px;
-            font-family: "opensans-bold";
+            font-family: var(--font-bold);
             color: var(--color-nero);
             border-bottom: 1px solid var(--color-iron);
             width: 100%;
@@ -819,14 +819,6 @@ ul.sub-list {
                     &:hover {
                         color: var(--color-blue) !important;
                     }
-                }
-                span {
-                    a {
-                        padding: 0;
-                    }
-                }
-                .branch-alias-name {
-                    width: 90%;
                 }
                 span {
                     a {
@@ -1057,13 +1049,6 @@ aside-setting {
         position: absolute;
         top: 0;
     }
-    .gst-menu-icon,
-    .setting-menu-icon {
-        padding: 4px 8px;
-        display: none;
-        width: 32px;
-        text-align: center;
-    }
     .fixed-padding {
         padding-top: 87px;
         #primary-new-header.primary-main-header {
@@ -1292,6 +1277,13 @@ aside-setting {
         .white-row {
             margin: 0 15px;
         }
+    }
+    .setting-menu-icon,
+    .gst-menu-icon {
+        padding: 4px 8px 4px 8px;
+        display: none;
+        width: 32px;
+        text-align: center;
     }
     .mobile-back-btn {
         display: none;

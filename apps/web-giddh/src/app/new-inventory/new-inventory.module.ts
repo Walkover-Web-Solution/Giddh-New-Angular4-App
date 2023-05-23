@@ -67,6 +67,7 @@ import { ReportFiltersComponent } from "./component/report-filters/report-filter
 import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
 import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
+import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatListModule } from "@angular/material/list";
@@ -152,6 +153,7 @@ import { RecipeModule } from "./component/recipe/recipe.module";
         MatDialogModule,
         MatAutocompleteModule,
         MatTooltipModule,
+        SelectTableColumnModule,
         MatGridListModule,
         MatListModule,
         RecipeModule

@@ -82,8 +82,7 @@ export const INVENTORY_API = {
     DELETE_STOCK_V2: 'v2/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName', // DELETE call
     UPDATE_STOCK_V2: 'v2/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName',
     TRANSACTION_STOCK_REPORT_V2: 'company/:companyUniqueName/inventory/transaction-report?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&transaction_type=:transactionType', // post for filter rest all get
-    TRANSACTION_STOCK_REPORT_BALANCE_V2: 'company/:companyUniqueName/inventory/balance?stockGroupUniqueName=:stockGroupUniqueName&from=:from&to=:to',
-    TRANSACTION_STOCK_REPORT_COLUMNS: 'company/:companyUniqueName/report-filters?module=:module',
+    TRANSACTION_STOCK_REPORT_BALANCE_V2: 'company/:companyUniqueName/inventory/balance?stockGroupUniqueName=:stockGroupUniqueName&entity=:entity&from=:from&to=:to',
     SEARCH_STOCK_TRANSACTION_FILTERS: 'company/:companyUniqueName/inventory-search',
     INVENTORY_GROUP_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/group-wise?stockGroupUniqueName=:stockGroupUniqueName&from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy',
     INVENTORY_ITEM_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/item-wise?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy',

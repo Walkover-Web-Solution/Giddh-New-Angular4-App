@@ -72,7 +72,10 @@
                     <div class="col-sm-4">
                         <div class="cr-dr-account">
                             <label>{{ localeData?.opening_balance }}</label>
-                            <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }">
+                            <div
+                                [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"
+                                class="obj-gap"
+                            >
                                 <input
                                     type="text"
                                     min="0"
@@ -122,7 +125,10 @@
                 <div class="row" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">
                     <div class="form-group col-xs-12 col-sm-4">
                         <label for="">{{ localeData?.foreign_opening_balance }}</label>
-                        <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }">
+                        <div
+                            [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
+                            class="obj-gap"
+                        >
                             <input
                                 type="text"
                                 min="0"
@@ -179,7 +185,7 @@
                                             value="hsn"
                                         />
                                         <label for="hsnCodeType" class="radio-custom-label">{{
-                                            commonLocaleData?.app_hsn_code
+                                            commonLocaleData?.app_hsn
                                         }}</label>
                                     </span>
                                     <span>
@@ -192,7 +198,7 @@
                                             value="sac"
                                         />
                                         <label for="sacCodeType" class="ml-1 radio-custom-label">{{
-                                            commonLocaleData?.app_sac_code
+                                            commonLocaleData?.app_sac
                                         }}</label>
                                     </span>
                                 </div>
@@ -414,7 +420,7 @@
                                 </div>
                                 <div *ngIf="l">
                                     <a
-                                        class="text-right btn btn-primary add-address-btn"
+                                        class="text-right btn btn-primary add-address-btn add-new-btn"
                                         href="javascript:void(0);"
                                         (click)="addGstDetailsForm(gst.get('gstNumber')?.value)"
                                     >

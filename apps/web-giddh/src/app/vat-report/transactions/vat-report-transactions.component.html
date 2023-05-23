@@ -26,6 +26,7 @@
                     vatReportTransactions.results[0].description
                 }}</span>
             </div>
+
             <div class="invoice-preview table-responsive">
                 <table class="table basic table-bordered mt-2 invoice-table desktop-table">
                     <thead>
@@ -94,13 +95,13 @@
                 ></pagination>
             </div>
         </div>
+    </div>
 
-        <!-- Download or Send Invoice on mail -->
-        <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div element-view-container-ref #downloadOrSendMailComponent="elementviewcontainerref"></div>
-                </div>
+    <!-- Download or Send Invoice on mail -->
+    <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div element-view-container-ref #downloadOrSendMailComponent="elementviewcontainerref"></div>
             </div>
         </div>
     </div>

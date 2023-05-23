@@ -60,7 +60,7 @@
 .badge {
     background: var(--color-dark-fog) !important;
     color: var(--color-nero) !important;
-    font-family: opensans-regular;
+    font-family: var(--font-regular);
     border: none !important;
     font-weight: 400 !important;
     padding: 10px;
@@ -101,5 +101,11 @@
     .template-grid {
         background: var(--color-wild-sand);
         max-width: 100%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .template-preview-container {
+        z-index: 99999;
     }
 }

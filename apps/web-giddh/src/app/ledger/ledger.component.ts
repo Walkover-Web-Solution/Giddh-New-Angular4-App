@@ -262,6 +262,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public entrySide: string = "";
     /** This will show/hide for v2 for autopaid if ledger account is sundrydebtor and sundrycreditor*/
     public enableAutopaid: boolean = false;
+    /** Selected account details to load the details after variant is selected */
+    public selectedAccountDetails: IOption;
     /* Observable to check if account prediction api call has completed */
     private accountPredictionSubject: Subject<boolean> = new Subject();
     /** Holds if we need bank ledger popup to be hidden */
@@ -290,7 +292,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private invoiceAction: InvoiceActions,
         private commonAction: CommonActions
     ) {
-
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.trxRequest = new TransactionsRequest();
@@ -364,6 +365,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public selectAccount(e: IOption, txn: TransactionVM, clearAccount?: boolean, isBankTransaction?: boolean) {
         this.keydownClassAdded = false;
         this.selectedTxnAccUniqueName = '';
+        this.selectedAccountDetails = e;
         if (!e?.value || clearAccount) {
             // if there's no selected account set selectedAccount to null
             txn.selectedAccount = null;
@@ -382,122 +384,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
             txn.particular = undefined;
             return;
         }
-        let requestObject;
-        if (e.additional.stock) {
-            requestObject = {
-                stockUniqueName: e.additional.stock?.uniqueName,
-                oppositeAccountUniqueName: e.additional?.uniqueName
-            };
+        txn.isStock = Boolean(e.additional?.stock);
+        txn.stockUniqueName = e.additional.stock?.uniqueName;
+        txn.oppositeAccountUniqueName = e.additional?.uniqueName;
+        if (!txn.isStock) {
+            this.loadDetails(e, txn);
         }
-        const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount?.uniqueName) : '';
-        /** If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
-            to fetch the correct stock details as the first preference is always the current ledger account and then particular account
-            This logic is only required in ledger.
-        */
-        const accountUniqueName = e.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-            this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '' :
-            e.additional?.uniqueName;
-        this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data && data.body) {
-                txn.showTaxationDiscountBox = false;
-                // Take taxes of parent group and stock's own taxes
-                const taxes = this.generalService.fetchTaxesOnPriority(
-                    data.body.stock?.taxes ?? [],
-                    data.body.stock?.groupTaxes ?? [],
-                    data.body.taxes ?? [],
-                    data.body.groupTaxes ?? []);
-                if (txn?.taxesVm) {
-                    txn?.taxesVm.forEach(tax => {
-                        tax.isChecked = false;
-                        tax.isDisabled = false;
-                    });
-                }
-                txn.selectedAccount = {
-                    ...e.additional,
-                    label: e.label,
-                    name: e.label,
-                    category: data.body.category,
-                    value: e?.value,
-                    isHilighted: true,
-                    applicableTaxes: taxes,
-                    currency: data.body.currency,
-                    currencySymbol: data.body.currencySymbol,
-                    email: data.body.emails,
-                    isFixed: data.body.isFixed,
-                    mergedAccounts: data.body.mergedAccounts,
-                    mobileNo: data.body.mobileNo,
-                    nameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent?.name).join(', ') : '',
-                    stock: data.body.stock,
-                    uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
-                    accountApplicableDiscounts: data.body.applicableDiscounts,
-                    parentGroups: e.additional.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups
-                    // added due to parentGroups is getting null in search API
-                };
-                if (txn.selectedAccount && txn.selectedAccount.stock) {
-                    txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
-                }
-                if (!this.isHideBankLedgerPopup) {
-                    this.lc.currentBlankTxn = txn;
-                }
-                let rate = 0;
-                let unitCode = '';
-                let stockName = '';
-                let stockUniqueName = '';
-                let stockUnitUniqueName = '';
-
-                //#region unit rates logic
-                if (txn.selectedAccount && txn.selectedAccount.stock) {
-                    let defaultUnit = {
-                        stockUnitCode: txn.selectedAccount.stock.stockUnitCode,
-                        code: txn.selectedAccount.stock.stockUnitCode,
-                        rate: txn.selectedAccount.stock.rate,
-                        name: txn.selectedAccount.stock.name
-                    };
-                    txn.unitRate = txn.selectedAccount.stock.unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
-                    stockName = defaultUnit.name;
-                    rate = defaultUnit.rate;
-                    stockUniqueName = txn.selectedAccount.stock?.uniqueName;
-                    unitCode = defaultUnit.code;
-                    stockUnitUniqueName = txn.selectedAccount.stock.stockUnitUniqueName;
-                }
-                if (stockName && stockUniqueName) {
-                    txn.inventory = {
-                        stock: {
-                            name: stockName,
-                            uniqueName: stockUniqueName
-                        },
-                        quantity: 1,
-                        unit: {
-                            stockUnitCode: unitCode,
-                            code: unitCode,
-                            rate: rate,
-                            stockUnitUniqueName: stockUnitUniqueName
-                        }
-                    };
-                } else {
-                    delete txn.inventory;
-                }
-                if (rate > 0) {
-                    txn.amount = rate;
-                }
-                // check if selected account category allows to show taxationDiscountBox in newEntry popup
-                this.needToReCalculate.next(true);
-                txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
-                txn.showOtherTax = this.showOtherTax(txn);
-                if (this.newLedgerComponent) {
-                    this.newLedgerComponent.preparePreAppliedDiscounts();
-                }
-                this.handleRcmVisibility(txn);
-                this.handleTaxableAmountVisibility(txn);
-                if (this.newLedgerComponent) {
-                    this.newLedgerComponent.calculatePreAppliedTax();
-                    this.newLedgerComponent.calculateTax();
-                    this.newLedgerComponent.calculateTotal();
-                }
-                this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
-                this.cdRf.detectChanges();
-            }
-        });
+        this.cdRf.markForCheck();
     }
 
     public hideEledgerWrap() {
@@ -818,6 +711,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.toaster.showSnackBar("success", this.localeData?.entry_created, this.commonLocaleData?.app_success);
                 this.lc.showNewLedgerPanel = false;
                 this.lc.showBankLedgerPanel = false;
+                this.needToReCalculate.next(false);
                 this.getTransactionData();
                 this.resetBlankTransaction();
                 this.resetPreviousSearchResults();
@@ -1046,6 +940,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.selectedTrxWhileHovering = '';
         this.lc.showBankLedgerPanel = false;
+        this.needToReCalculate.next(false);
         this.lc.currentBlankTxn = null;
         this.lc.selectedBankTxnUniqueName = null;
     }
@@ -1249,6 +1144,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.getCurrencyRate('blankLedger');
         }
         this.resetPreviousSearchResults();
+        this.needToReCalculate.next(false);
     }
 
     public showNewLedgerEntryPopup(trx: TransactionVM) {
@@ -1301,6 +1197,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.isMoreDetailsOpened = false;
         this.lc.showNewLedgerPanel = false;
+        this.needToReCalculate.next(false);
     }
 
     public showUpdateLedgerModal(txn: ITransactionItem, type: string) {
@@ -1568,7 +1465,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount?.uniqueName) : '';
             // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
             const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-                this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '' :
+                this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
                 '';
             const requestObject = {
                 q: encodeURIComponent(query),
@@ -2668,6 +2565,137 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.toaster.showSnackBar("error", response?.message);
                     }
                 });
+            }
+        });
+    }
+
+    /**
+     * Load details of the selected account
+     *
+     * @private
+     * @param {IOption} event Selection event
+     * @param {TransactionVM} txn Transaction detauks
+     * @param {string} [variantUniqueName] Uniquename of the variant
+     * @memberof LedgerComponent
+     */
+    private loadDetails(event: IOption, txn: TransactionVM, variantUniqueName?: string): void {
+        let requestObject;
+        if (event.additional.stock) {
+            requestObject = {
+                stockUniqueName: event.additional.stock?.uniqueName,
+                oppositeAccountUniqueName: event.additional?.uniqueName,
+                variantUniqueName
+            };
+        }
+        const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount?.uniqueName) : '';
+        /** If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
+            to fetch the correct stock details as the first preference is always the current ledger account and then particular account
+            This logic is only required in ledger.
+        */
+        const accountUniqueName = event.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+            this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '' :
+            event.additional?.uniqueName;
+        this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data && data.body) {
+                txn.showTaxationDiscountBox = false;
+                // Take taxes of parent group and stock's own taxes
+                const taxes = this.generalService.fetchTaxesOnPriority(
+                    data.body.stock?.taxes ?? [],
+                    data.body.stock?.groupTaxes ?? [],
+                    data.body.taxes ?? [],
+                    data.body.groupTaxes ?? []);
+                if (txn?.taxesVm) {
+                    txn?.taxesVm.forEach(tax => {
+                        tax.isChecked = false;
+                        tax.isDisabled = false;
+                    });
+                }
+                txn.selectedAccount = {
+                    ...event.additional,
+                    label: event.label,
+                    name: event.label,
+                    category: data.body.category,
+                    value: event?.value,
+                    isHilighted: true,
+                    applicableTaxes: taxes,
+                    currency: data.body.currency,
+                    currencySymbol: data.body.currencySymbol,
+                    email: data.body.emails,
+                    isFixed: data.body.isFixed,
+                    mergedAccounts: data.body.mergedAccounts,
+                    mobileNo: data.body.mobileNo,
+                    nameStr: event.additional.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.name).join(', '),
+                    stock: data.body.stock,
+                    uNameStr: event.additional.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName).join(', '),
+                    accountApplicableDiscounts: data.body.applicableDiscounts,
+                    parentGroups: event.additional.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups
+                    // added due to parentGroups is getting null in search API
+                };
+                if (txn.selectedAccount && txn.selectedAccount.stock) {
+                    txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                }
+                if (!this.isHideBankLedgerPopup) {
+                    this.lc.currentBlankTxn = txn;
+                }
+                let rate = 0;
+                let unitCode = '';
+                let stockName = '';
+                let stockUniqueName = '';
+                let stockUnitUniqueName = '';
+
+                //#region unit rates logic
+                if (txn.selectedAccount && txn.selectedAccount.stock) {
+                    let defaultUnit = {
+                        stockUnitCode: txn.selectedAccount.stock.stockUnitCode,
+                        code: txn.selectedAccount.stock.stockUnitCode,
+                        rate: txn.selectedAccount.stock.rate,
+                        name: txn.selectedAccount.stock.name
+                    };
+                    const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : txn.selectedAccount.stock?.variant?.unitRates
+                    txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
+                    stockName = defaultUnit.name;
+                    rate = defaultUnit.rate;
+                    stockUniqueName = txn.selectedAccount.stock?.uniqueName;
+                    unitCode = defaultUnit.code;
+                    stockUnitUniqueName = txn.selectedAccount.stock.stockUnitUniqueName;
+                }
+                if (stockName && stockUniqueName) {
+                    txn.inventory = {
+                        stock: {
+                            name: stockName,
+                            uniqueName: stockUniqueName,
+                        },
+                        variant: {uniqueName: txn.selectedAccount.stock.variant?.uniqueName},
+                        quantity: 1,
+                        unit: {
+                            stockUnitCode: unitCode,
+                            code: unitCode,
+                            rate: rate,
+                            stockUnitUniqueName: stockUnitUniqueName
+                        }
+                    };
+                } else {
+                    delete txn.inventory;
+                }
+                if (rate > 0) {
+                    txn.amount = rate;
+                }
+                // check if selected account category allows to show taxationDiscountBox in newEntry popup
+                txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+                txn.showOtherTax = this.showOtherTax(txn);
+                // if (this.newLedgerComponent) {
+                //     this.newLedgerComponent.preparePreAppliedDiscounts();
+                // }
+                this.handleRcmVisibility(txn);
+                this.handleTaxableAmountVisibility(txn);
+                // if (this.newLedgerComponent) {
+                    //     this.newLedgerComponent.calculatePreAppliedTax();
+                    //     this.newLedgerComponent.calculateTax();
+                    //     this.newLedgerComponent.calculateTotal();
+                    // }
+                this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
+                this.needToReCalculate.next(true);
+                // this.cdRf.detectChanges();
             }
         });
     }

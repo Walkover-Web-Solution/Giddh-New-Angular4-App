@@ -8390,10 +8390,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
-     * This will use for delete attachment confirmation
-     *
-     * @memberof VoucherComponent
-     */
+    * This will use for delete attachment confirmation
+    *
+    * @memberof VoucherComponent
+    */
     public deleteAttachementConfirmation(): void {
         this.attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
         let dialogRef = this.dialog.open(this.attachmentDeleteConfirmationModel, {

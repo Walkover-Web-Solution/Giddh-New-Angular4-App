@@ -229,7 +229,7 @@
                                                     *ngIf="voucherType === 'sales'"
                                                     class="cp"
                                                     role="menuitem"
-                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"
+                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
                                                 >
                                                     <a class="dropdown-item">{{
                                                         commonLocaleData?.app_payment_status?.paid
@@ -497,7 +497,7 @@
                                         <p class="payment-content">{{ localeData?.record_payment }}</p>
                                         <a
                                             href="javascript:;"
-                                            (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"
+                                            (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
                                             >{{ localeData?.receipt_payment }}</a
                                         >
                                     </div>
@@ -877,7 +877,8 @@
                 [selectedInvoiceForPayment]="selectedItem"
                 [localeData]="localeData"
                 [commonLocaleData]="commonLocaleData"
-                (closeModelEvent)="processPaymentEvent.emit($event); receivePaymentPopup.toggle()"
+                (performActionPopup)="processPaymentEvent.emit($event)"
+                (closeModelEvent)="closePerformActionPopup(); receivePaymentPopup.hide()"
             >
             </invoice-payment-model>
         </div>

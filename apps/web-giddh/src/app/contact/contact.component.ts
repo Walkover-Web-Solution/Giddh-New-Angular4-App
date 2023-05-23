@@ -20,9 +20,9 @@ import { saveAs } from "file-saver";
 import * as dayjs from "dayjs";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
-import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
-import { cloneDeep, find, isEqual, map as lodashMap, uniq } from "../../app/lodash-optimized";
+import { cloneDeep, find, map as lodashMap, uniq } from "../../app/lodash-optimized";
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
@@ -57,6 +57,7 @@ import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { CustomFieldsService } from "../services/custom-fields.service";
+import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
 
 @Component({
     selector: "contact-detail",
@@ -114,12 +115,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** sorting */
     public key: string = "name"; // set default
     public order: string = "asc";
-    public showFieldFilter: {
-        [columnname: string]: {
-            displayName: string;
-            visibility: boolean
-        }
-    } = {};
     public updateCommentIdx: number = null;
     public searchStr$ = new Subject<string>();
     public searchStr: string = "";
@@ -187,10 +182,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isGetAccountsInProcess: boolean = false;
     /** This will hold the current page number */
     public currentPage: number = 1;
-    /** company custom fields list */
-    public companyCustomFields$: Observable<any[]>;
-    /** Column span length */
-    public colspanLength: number = 11;
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -205,12 +196,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openingBalance: any;
     /** This will hold closing balance amount */
     public closingBalance: number = 0;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     /** This will store screen size */
@@ -233,33 +224,24 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("mailModal") public mailModalComponent: TemplateRef<any>;
     /** Instance of bulk payment modal */
     @ViewChild("template") public bulkPaymentModalRef: TemplateRef<any>;
-    public displayColumns: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
-    public displayColumns$: Observable<string[]> = this.displayColumns.asObservable().pipe(takeUntil(this.destroyed$), distinctUntilChanged(isEqual));
-    public customerColumns: string[] = ["customerName", "sales", "receipt", "closing"];
-    public vendorColumns: string[] = ["vendorName", "purchase", "payment", "closing"];
-    /** True/false if select all is checked */
-    public selectAll: boolean = false;
-    /** Holds count of available columns on the page */
-    public availableColumnsCount: any[] = [];
+
     /** True if we should select all checkbox */
     public showSelectAll: boolean = false;
-    /** True if custom fields finished loading */
-    public customFieldsLoaded: boolean = true;
-    /** Custom fields request */
-    public customFieldsRequest: any = {
-        page: 0,
-        count: 0,
-        moduleUniqueName: 'account'
-    };
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
     /** True if it's default load */
     public defaultLoad: boolean = true;
+    /** This will use for displayed table columns */
+    public displayedColumns: any[] = [];
+    /** This will use for customise column check values */
+    public customiseColumns = [];
+    /** Holds inventory type module  */
+    public moduleType: string = '';
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private customFieldsService: CustomFieldsService) {
+        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -286,21 +268,10 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.renderer.addClass(document.body, 'contact-body');
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
-        // localStorage supported
-        if (window.localStorage) {
-            let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"]));
-            if (showColumnObj) {
-                if (showColumnObj.closingBalance !== undefined) {
-                    delete showColumnObj.closingBalance;
-                }
-                this.showFieldFilter = showColumnObj;
-                this.setTableColspan();
-            }
-        }
 
         this.breakPointObservar.observe([
             "(max-width: 1023px)",
@@ -313,6 +284,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         combineLatest([this.route.params, this.route.queryParams]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
+            let lastTabType = this.moduleType;
+            this.moduleType = (params.type)?.toUpperCase();
 
             if (params) {
                 if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
@@ -321,7 +294,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                         this.setActiveTab("customer");
                     }
                     if (activeTab === "vendor" && this.localeData?.page_heading) {
-                        this.availableColumnsCount = [];
                         this.showNameSearch = false;
                         this.searchedName?.reset();
                         this.translationComplete(true);
@@ -332,7 +304,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                         this.setActiveTab("vendor");
                     }
                     if (activeTab === "customer" && this.localeData?.page_heading) {
-                        this.availableColumnsCount = [];
                         this.showNameSearch = false;
                         this.searchedName?.reset();
                         this.translationComplete(true);
@@ -340,9 +311,83 @@ export class ContactComponent implements OnInit, OnDestroy {
                 } else {
                     this.setActiveTab("aging-report");
                 }
-                this.setDisplayColumns();
+                this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
+
+                if (this.activeTab === ContactsTab.customer.toLowerCase()) {
+                    this.customiseColumns.splice(0, 0,
+                        {
+                            "value": "customer_name",
+                            "label": "Customer Name",
+                            "checked": true
+                        },
+                        {
+                            "value": "parent_group",
+                            "label": "Parent Group",
+                            "checked": true
+                        },
+                        {
+                            "value": "opening",
+                            "label": "Opening",
+                            "checked": true
+                        },
+                        {
+                            "value": "sales",
+                            "label": "Sales",
+                            "checked": true
+                        },
+                        {
+                            "value": "receipt",
+                            "label": "Receipt",
+                            "checked": true
+                        }
+                    );
+                    this.moduleType = ContactsTab.customer;
+                    this.displayedColumns = [];
+                }
+                if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+                    this.customiseColumns.splice(0, 0,
+                        {
+                            "value": "vendor_name",
+                            "label": "Vendor Name",
+                            "checked": true
+                        },
+                        {
+                            "value": "parent_group",
+                            "label": "Parent Group",
+                            "checked": true
+                        },
+                        {
+                            "value": "opening",
+                            "label": "Opening",
+                            "checked": true
+                        },
+                        {
+                            "value": "purchase",
+                            "label": "Purchase",
+                            "checked": true
+                        },
+                        {
+                            "value": "payment",
+                            "label": "Payment",
+                            "checked": true
+                        }
+                    );
+                    this.customiseColumns.push(
+                        {
+                            value: "action",
+                            label: "Action",
+                            checked: true
+                        })
+                    this.moduleType = ContactsTab.vendor;
+                    this.displayedColumns = [];
+                }
+                if (lastTabType) {
+                    this.translationComplete(true);
+                }
             }
+
         });
+
 
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
@@ -592,14 +637,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     public setActiveTab(tabName: "customer" | "aging-report" | "vendor") {
         this.searchStr = "";
         this.tabSelected(tabName);
-        this.showFieldFilter = {};
         let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"]));
         if (showColumnObj) {
             if (showColumnObj.closingBalance !== undefined) {
                 delete showColumnObj.closingBalance;
             }
-            this.showFieldFilter = showColumnObj;
-            this.setTableColspan();
         }
 
         if (tabName === "vendor") {
@@ -1249,20 +1291,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
     }
 
-    public columnFilter(event: boolean, column: string) {
-        if (this.showFieldFilter[column]) {
-            this.showFieldFilter[column].visibility = event;
-        }
-        this.setTableColspan();
-
-        this.selectAll = Object.keys(this.showFieldFilter).every(filterName => this.showFieldFilter[filterName].visibility);
-
-        if (window.localStorage) {
-            localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"], JSON.stringify(this.showFieldFilter));
-        }
-        this.setDisplayColumns();
-    }
-
     /**
      * Fetches the details for country and sets the visibility of tax filter
      * if country taxation is supported in Giddh
@@ -1294,12 +1322,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
             }
         });
-    }
-
-    private setTableColspan() {
-        let balancesColsArr = ['openingBalance'];
-        let length = Object.keys(this.showFieldFilter)?.filter(f => this.showFieldFilter[f])?.filter(f => balancesColsArr.includes(f))?.length;
-        this.tableColsPan = length > 0 ? 4 : 3;
     }
 
     /**
@@ -1335,20 +1357,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * This will toggle all columns
-     *
-     * @param {boolean} event
-     * @memberof ContactComponent
-     */
-    public selectAllColumns(event: boolean): void {
-        Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key].visibility = event);
-        this.setTableColspan();
-        if (window.localStorage) {
-            localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"], JSON.stringify(this.showFieldFilter));
-        }
-        this.setDisplayColumns();
-    }
 
     /**
      * This will show datepicker
@@ -1429,82 +1437,18 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * API call to get custom field data
+     * This will use for show hide main table headers from customise columns
      *
-     * @memberof ContactComponent
+     * @param {*} event
+     * @memberof PurchaseRegisterExpandComponent
      */
-    public getCompanyCustomField(): void {
-        this.customFieldsService.list(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.status === "success") {
-                if (response.body?.results?.length) {
-                    let customFields = response.body.results?.map(field => {
-                        return {
-                            key: field.fieldName,
-                            uniqueName: field?.uniqueName
-                        }
-                    });
-
-                    this.colspanLength = 11 + customFields?.length;
-                    this.addNewFieldFilters(customFields);
-                    this.companyCustomFields$ = observableOf(customFields);
-                }
-            } else {
-                this.toaster.showSnackBar("error", response.message);
-            }
-            this.customFieldsLoaded = true;
-            this.cdRef.detectChanges();
-        });
+    public showSelectedHeaderColumns(columns: string[]): void {
+        if (columns) {
+            this.displayedColumns = columns;
+        }
+        this.cdRef.detectChanges();
     }
 
-    /**
-     * To add new properties in showFieldFilter object
-     *
-     * @param {*} field
-     * @memberof ContactComponent
-     */
-    public addNewFieldFilters(field: any): void {
-        for (let key of field) {
-            if (key?.uniqueName) {
-                let index = Object.keys(this.showFieldFilter).length;
-                if (!this.showFieldFilter[key?.uniqueName]) {
-                    this.showFieldFilter[key?.uniqueName] = {
-                        visibility: false,
-                        displayName: key.key,
-                    };
-                }
-
-                let isColumnAvailable = this.availableColumnsCount?.filter(column => column?.value === key?.uniqueName);
-                if (!isColumnAvailable?.length) {
-                    this.availableColumnsCount.push({ key: index, value: key?.uniqueName });
-                }
-            }
-        }
-        this.setDisplayColumns();
-
-        this.selectAll = Object.keys(this.showFieldFilter).every(filterName => this.showFieldFilter[filterName].visibility);
-    }
-
-    /**
-     * To add new properties in showFieldFilter object
-     *
-     * @memberof ContactComponent
-     */
-    public setDisplayColumns(): void {
-        const defaultColumms: string[] = this.activeTab === "customer" ? this.customerColumns : this.vendorColumns;
-        let computedColumns: string[] = [...defaultColumms, ...Object.keys(this.showFieldFilter)?.filter(key => this.showFieldFilter[key].visibility)];
-        if (this.activeTab === "vendor" && computedColumns?.length) {
-            computedColumns?.push("action");
-        }
-        if (computedColumns?.findIndex(s => s === "openingBalance") > -1) {
-            computedColumns = computedColumns?.filter(s => s !== "openingBalance");
-            computedColumns.splice(1, 0, "openingBalance");
-        }
-        if (computedColumns?.findIndex(s => s === "parentGroup") > -1) {
-            computedColumns = computedColumns?.filter(s => s !== "parentGroup");
-            computedColumns.splice(1, 0, "parentGroup");
-        }
-        this.displayColumns.next(computedColumns);
-    }
 
     /**
      * Branch change handler
@@ -1579,38 +1523,10 @@ export class ContactComponent implements OnInit, OnDestroy {
                     value: "%s_AN",
                 },
             ];
-
-            const availableColumns = [
-                {
-                    key: this.commonLocaleData?.app_parent_group,
-                    uniqueName: 'parentGroup'
-                },
-                {
-                    key: this.localeData?.opening,
-                    uniqueName: 'openingBalance'
-                },
-                {
-                    key: this.localeData?.contacts,
-                    uniqueName: 'contact'
-                },
-                {
-                    key: this.commonLocaleData?.app_state,
-                    uniqueName: 'state'
-                },
-                {
-                    key: this.commonLocaleData?.app_tax_number,
-                    uniqueName: 'gstin'
-                },
-                {
-                    key: this.localeData?.comment,
-                    uniqueName: 'comment'
-                }
-            ];
-
-            this.addNewFieldFilters(availableColumns);
-            this.setTableColspan();
-
-            //this.getCompanyCustomField();
+            this.customiseColumns = this.customiseColumns?.map(column => {
+                column.label = this.localeData[column.value];
+                return column;
+            });
         }
     }
 
@@ -1763,8 +1679,6 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     private resetColumns(): void {
-        this.availableColumnsCount = [];
-        this.showFieldFilter = {};
         this.translationComplete(true);
     }
 }

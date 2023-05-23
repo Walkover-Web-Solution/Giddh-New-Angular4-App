@@ -93,7 +93,7 @@
         .select-puchase-info {
             background-color: var(--color-lavender);
             padding: 6px 10px;
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
         }
         .icon-plus {
             color: var(--color-blue);
@@ -106,7 +106,7 @@
         color: var(--color-blue);
     }
     p.product-made-by {
-        font-family: "opensans-semibold";
+        font-family: var(--font-semibold);
         position: relative;
         margin-bottom: 15px;
         padding-top: 5px;
