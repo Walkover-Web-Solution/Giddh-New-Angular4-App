@@ -48,13 +48,17 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public imgPath: string;
     public expand: boolean = false;
     public showFieldFilter = {
-        voucherType: true,
-        voucherNo: true,
-        productService: false,
-        qtyRate: false,
+        date: false,
+        account: false,
+        voucher_type: false,
+        voucher_no: false,
+        purchase: false,
+        return: false,
+        qty_rate: false,
         value: false,
         discount: false,
-        tax: false
+        tax: false,
+        net_purchase: false
     };
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -66,6 +70,16 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public showClearFilter: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /* This will hold module type */
+    public moduleType = 'PURCHASE_REGISTER';
+    /** This will use for purchase register column check values */
+    public customiseColumns = [];
+    /** This will use for purchase register displayed columns */
+    public displayedColumns: any[] = [];
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private ledgerService: LedgerService, private toaster: ToasterService) {
         this.purchaseRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.PurchaseRegisteDetailedResponse), takeUntil(this.destroyed$));
@@ -129,6 +143,58 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.showSearchInvoiceNo = false;
             }
         });
+        this.customiseColumns = [
+            {
+                "value": "date",
+                "label": "Date",
+                "checked": true
+            },
+            {
+                "value": "account",
+                "label": "Account",
+                "checked": true
+            },
+            {
+                "value": "voucher_type",
+                "label": "Voucher Type",
+                "checked": true
+            },
+            {
+                "value": "voucher_no",
+                "label": "Voucher No.",
+                "checked": true
+            },
+            {
+                "value": "purchase",
+                "label": "Purchase",
+                "checked": true
+            },
+            {
+                "value": "return",
+                "label": "Return",
+                "checked": true
+            },
+            {
+                "value": "qty_rate",
+                "label": "Qty-Rate",
+                "checked": true
+            },
+            {
+                "value": "discount",
+                "label": "Discount",
+                "checked": true
+            },
+            {
+                "value": "tax",
+                "label": "Tax",
+                "checked": true
+            },
+            {
+                "value": "net_purchase",
+                "label": "Net Purchase",
+                "checked": true
+            }
+        ];
     }
 
     public getDetailedPurchaseReport(PurchaseDetailedfilter) {
@@ -282,8 +348,11 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: boolean): void {
         if (event) {
+            this.customiseColumns = this.customiseColumns?.map(column => {
+                column.label = this.localeData[column.value];
+                return column;
+            });
             this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
-
             this.getCurrentMonthYear();
         }
     }
@@ -330,23 +399,21 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         exportBodyRequest.q = this.voucherNumberInput?.value;
         exportBodyRequest.branchUniqueName = this.getDetailedPurchaseRequestFilter?.branchUniqueName;
         exportBodyRequest.columnsToExport = [];
-
-        if(this.showFieldFilter.voucherType) {
+        if (this.showFieldFilter.voucher_type) {
             exportBodyRequest.columnsToExport.push("Voucher Type");
         }
-        if(this.showFieldFilter.voucherNo) {
+        if (this.showFieldFilter.voucher_no) {
             exportBodyRequest.columnsToExport.push("Voucher No");
         }
-        if(this.showFieldFilter.qtyRate) {
+        if (this.showFieldFilter.qty_rate) {
             exportBodyRequest.columnsToExport.push("Qty/Unit");
         }
-        if(this.showFieldFilter.discount) {
+        if (this.showFieldFilter.discount) {
             exportBodyRequest.columnsToExport.push("Discount");
         }
-        if(this.showFieldFilter.tax) {
+        if (this.showFieldFilter.tax) {
             exportBodyRequest.columnsToExport.push("Tax");
         }
-
         this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this.toaster.showSnackBar("success", response?.body);
@@ -356,4 +423,17 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    /**
+     * This will use for show hide main table headers from customise columns
+     *
+     * @param {*} event
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public getCustomiseHeaderColumns(event: any): void {
+        this.displayedColumns = event;
+        const displayColumnsSet = new Set(this.displayedColumns);
+        Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = displayColumnsSet.has(key));
+    }
+
 }
