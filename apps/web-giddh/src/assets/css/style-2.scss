@@ -754,6 +754,32 @@ aside-create-group {
 .mat-grid-wrapper {
     .mat-list-wrap {
         width: 100%;
+        .mat-grid-tile {
+            height: 100%;
+            min-height: 670px;
+        }
+    }
+    .inventory-master {
+        .item-list {
+            padding-right: 15px;
+            height: 100%;
+            /* width: 225px !important; */
+        }
+        .mat-list-base .mat-list-item {
+            width: 225px;
+            .mat-list-item-content {
+                a {
+                    color: var(--color-black);
+                    display: block;
+                    width: 100%;
+                }
+            }
+        }
+        .mat-grid-tile-content {
+            height: 100%;
+            overflow: auto;
+            justify-content: flex-start;
+        }
     }
     .mat-grid-tile-content {
         align-items: flex-start;
@@ -766,6 +792,12 @@ aside-create-group {
             .mat-list-item-content {
                 padding: 0;
             }
+        }
+    }
+    .unitgroup-grid-tile {
+        .mat-grid-tile-content {
+            display: block;
+            padding: 0 20px;
         }
     }
 }
@@ -10586,6 +10618,8 @@ body.update-scroll-hidden {
 .cdk-overlay-pane {
     height: auto !important;
 }
+
+/*---- inventory-master ----*/
 
 /* responsive  starts here*/
 @media (max-width: 1440px) {
