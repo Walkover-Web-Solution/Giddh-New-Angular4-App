@@ -409,7 +409,8 @@
                                                                                 stockForm.fixedAssetAccountDetails.accountUniqueName =
                                                                                     $event?.value;
                                                                                 stockForm.variants[0].fixedAssetsInformation.accountUniqueName =
-                                                                                    $event?.value
+                                                                                    $event?.value;
+                                                                                fixedAssetsAccountName = $event?.label
                                                                             "
                                                                             [readonly]="
                                                                                 !isFixedAssetsInformationEnabled
@@ -617,7 +618,8 @@
                                                                                     stockForm?.purchaseAccountDetails.accountUniqueName =
                                                                                         $event?.value;
                                                                                     stockForm?.variants[0]?.purchaseInformation.accountUniqueName =
-                                                                                        $event?.value
+                                                                                        $event?.value;
+                                                                                    purchaseAccountName = $event?.label
                                                                                 "
                                                                                 [readonly]="
                                                                                     !isPurchaseInformationEnabled
@@ -820,7 +822,8 @@
                                                                                     stockForm?.salesAccountDetails.accountUniqueName =
                                                                                         $event?.value;
                                                                                     stockForm?.variants[0]?.salesInformation.accountUniqueName =
-                                                                                        $event?.value
+                                                                                        $event?.value;
+                                                                                    salesAccountName = $event?.label
                                                                                 "
                                                                                 [readonly]="!isSalesInformationEnabled"
                                                                                 [defaultValue]="salesAccountName"
