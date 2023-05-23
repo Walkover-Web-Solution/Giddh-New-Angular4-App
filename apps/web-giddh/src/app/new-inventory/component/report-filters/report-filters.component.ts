@@ -136,8 +136,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public autoSelectSearchOption: boolean = false;
     /** Observable to subscribe for refresh columns on select chiplist */
     public refreshColumns = new Subject<void>();
-    /** This will hold if any chiplist selected on search bar */
-    public holdSearchChiplistValue: any;
 
     constructor(
         public dialog: MatDialog,
@@ -565,7 +563,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public selectChiplistValue(option: any): void {
-        this.holdSearchChiplistValue = option;
         this.stockReportRequest.page = 1;
         const selectOptionValue = option?.option?.value;
         if (option?.option?.value?.type === 'STOCK GROUP') {
@@ -759,8 +756,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public editInventory(): void {
-        let type = this.holdSearchChiplistValue?.option?.value?.type;
-        let uniqueName = this.holdSearchChiplistValue?.option?.value?.uniqueName;
+        let type = this.filtersChipList[0]?.type;
+        let uniqueName = this.filtersChipList[0]?.uniqueName;
         if (type === 'STOCK GROUP') {
             this.router.navigate(['/pages/inventory/v2/group', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
         }

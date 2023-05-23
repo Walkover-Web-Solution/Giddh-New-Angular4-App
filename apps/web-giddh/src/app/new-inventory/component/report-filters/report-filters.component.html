@@ -73,8 +73,14 @@
             searchPage === 'TRANSACTION'
         "
     >
-        <button mat-raised-button class="edit-btn-inventory ml-3 mr-0" color="primary" (click)="editInventory()">
-            Edit
+        <button
+            mat-raised-button
+            class="edit-btn-inventory ml-3 mr-0"
+            color="primary"
+            (click)="editInventory()"
+            *ngIf="filtersChipList?.length === 1"
+        >
+            {{ commonLocaleData?.app_edit }}
         </button>
     </div>
     <div class="clear-filter d-flex" *ngIf="showClearFilter">
