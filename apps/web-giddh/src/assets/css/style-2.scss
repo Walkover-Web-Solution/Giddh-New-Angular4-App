@@ -648,6 +648,7 @@ $custom-typography: mat-typography-config(
         color: var(--color-black) !important;
     }
 }
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -13627,6 +13628,18 @@ hamburger-menu {
 
     .mat-tab-label {
         min-width: 100px !important;
+    }
+}
+
+.other-group {
+    .mat-tab-them {
+        .mat-tab-label {
+            min-width: 94px !important;
+            padding: 0 20px !important;
+        }
+        .mat-tab-labels {
+            margin-left: 0 !important;
+        }
     }
 }
 

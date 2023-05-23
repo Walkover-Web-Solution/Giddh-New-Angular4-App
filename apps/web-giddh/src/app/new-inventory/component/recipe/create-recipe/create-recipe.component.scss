@@ -1,6 +1,6 @@
 .create-recipe {
     &-wrapper {
-        padding: 0 15px;
+        padding: 0 18px;
 
         .width-280 {
             display: block;
@@ -11,7 +11,7 @@
             width: 30px !important;
             height: 30px !important;
             line-height: 0px !important;
-            font-size: 22px;
+            font-size: 20px;
 
             .icon-add {
                 color: var(--color-common-senary-text);
@@ -23,6 +23,9 @@
 
         hr {
             margin-left: -15px;
+        }
+        .repeatable-container {
+            background-color: var(--color-common-septenary-background-for-all-components);
         }
     }
 }
