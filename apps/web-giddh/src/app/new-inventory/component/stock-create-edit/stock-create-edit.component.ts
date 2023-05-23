@@ -791,28 +791,33 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         }
         if (!this.stockGroupUniqueName) {
-            if (!this.stockGroups?.length) {
-                let stockRequest = {
-                    name: 'Main Group',
-                    uniqueName: 'maingroup',
-                    hsnNumber: '',
-                    sacNumber: '',
-                    type: this.stockForm.type
-                };
-                this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response?.status === "success") {
-                        this.stockGroupUniqueName = "maingroup";
-                        this.saveStock();
-                    } else {
-                        this.toaster.showSnackBar("error", response?.message);
-                    }
-                });
-            } else {
+            let mainGroupExists = this.stockGroups?.filter(group => {
+                return group?.value === "maingroup"
+            });
+            if (mainGroupExists?.length > 0) {
                 this.stockGroupUniqueName = "maingroup";
+                this.saveStock();
+            } else {
+                    let stockRequest = {
+                        name: 'Main Group',
+                        uniqueName: 'maingroup',
+                        hsnNumber: '',
+                        sacNumber: '',
+                        type: this.stockForm.type
+                    };
+                    this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        if (response?.status === "success") {
+                            this.stockGroupUniqueName = "maingroup";
+                            this.saveStock();
+                        } else {
+                            this.toaster.showSnackBar("error", response?.message);
+                        }
+                    });
+                }
+            } else {
                 this.saveStock();
             }
         }
-    }
 
     /**
      * Save stock
@@ -989,7 +994,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 }
                 this.stockForm.variants = this.stockForm.variants?.map(variant => {
                     ['purchaseAccountDetails', 'salesAccountDetails', 'fixedAssetAccountDetails'].forEach(accountDetailsKey => {
-                        if (!variant?.[accountDetailsKey]) {
+                        if (!variant[accountDetailsKey]) {
                             variant[accountDetailsKey] = {
                                 accountUniqueName: null,
                                 unitRates: [Object.assign({}, unitRateObj)]
