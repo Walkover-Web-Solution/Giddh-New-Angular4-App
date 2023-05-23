@@ -805,9 +805,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         sacNumber: '',
                         type: this.stockForm.type
                     };
-                    this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         if (response?.status === "success") {
-                            this.stockGroupUniqueName = "maingroup";
+                            this.stockGroupUniqueName = response?.body?.uniqueName;
                             this.saveStock();
                         } else {
                             this.toaster.showSnackBar("error", response?.message);
