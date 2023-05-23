@@ -428,7 +428,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This will use for show hide main table headers from customise columns
+    * This will use for show hide main table columns from customise columns
     *
     * @param {*} event
     * @memberof SalesRegisterExpandComponent
