@@ -183,6 +183,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** Holds active tab index */
+    private activeTabIndex: number;
 
     constructor(
         private inventoryService: InventoryService,
@@ -241,7 +243,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
     }
-
 
     /**
      * Adds new option value
@@ -789,7 +790,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 return;
             }
         }
-
         if (!this.stockGroupUniqueName) {
             let mainGroupExists = this.stockGroups?.filter(group => {
                 return group?.value === "maingroup"
@@ -798,26 +798,26 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockGroupUniqueName = "maingroup";
                 this.saveStock();
             } else {
-                let stockRequest = {
-                    name: 'Main Group',
-                    uniqueName: 'maingroup',
-                    hsnNumber: '',
-                    sacNumber: '',
-                    type: this.stockForm.type
-                };
+                    let stockRequest = {
+                        name: 'Main Group',
+                        uniqueName: 'maingroup',
+                        hsnNumber: '',
+                        sacNumber: '',
+                        type: this.stockForm.type
+                    };
                 this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response?.status === "success") {
-                        this.stockGroupUniqueName = "maingroup";
-                        this.saveStock();
-                    } else {
-                        this.toaster.showSnackBar("error", response?.message);
-                    }
-                });
+                        if (response?.status === "success") {
+                            this.stockGroupUniqueName = response?.body?.uniqueName;
+                            this.saveStock();
+                        } else {
+                            this.toaster.showSnackBar("error", response?.message);
+                        }
+                    });
+                }
+            } else {
+                this.saveStock();
             }
-        } else {
-            this.saveStock();
         }
-    }
 
     /**
      * Save stock
@@ -994,7 +994,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 }
                 this.stockForm.variants = this.stockForm.variants?.map(variant => {
                     ['purchaseAccountDetails', 'salesAccountDetails', 'fixedAssetAccountDetails'].forEach(accountDetailsKey => {
-                        if (!variant?.[accountDetailsKey]) {
+                        if (!variant[accountDetailsKey]) {
                             variant[accountDetailsKey] = {
                                 accountUniqueName: null,
                                 unitRates: [Object.assign({}, unitRateObj)]
@@ -1681,6 +1681,16 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (event) {
             this.translationLoaded = true;
         }
+    }
+
+    /**
+     * This will use for on tab changes
+     *
+     * @param {*} event
+     * @memberof StockCreateEditComponent
+     */
+    public onTabChange(event: any): void {
+        this.activeTabIndex = event?.index;
     }
 
     /**

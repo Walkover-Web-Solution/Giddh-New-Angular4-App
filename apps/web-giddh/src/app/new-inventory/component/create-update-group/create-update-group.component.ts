@@ -72,7 +72,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.initGroupForm();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.stockType = params?.type?.toUpperCase();
-
+            if (this.stockType === 'FIXEDASSETS') {
+                this.stockType = 'FIXED_ASSETS';
+            }
             if (params.groupUniqueName) {
                 this.groupUniqueName = params.groupUniqueName;
                 this.getGroupDetails();
@@ -279,9 +281,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     * @memberof CreateUpdateGroupComponent
     */
     public getStockGroups(): void {
-        if (this.stockType === 'FIXEDASSETS') {
-            this.stockType = 'FIXED_ASSETS';
-        }
         this.inventoryService.GetGroupsWithStocksFlatten(this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 let stockGroups: IOption[] = [];
