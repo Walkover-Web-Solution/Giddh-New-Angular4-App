@@ -61,7 +61,7 @@
                                                             ? localeData?.fixed_assets
                                                             : (stockForm.type | titlecase)
                                                     }}
-                                                    {{ localeData?.name }}
+                                                    {{ commonLocaleData?.app_name }}
                                                     <span class="red-text product-name-star">*</span></label
                                                 >
                                             </div>
@@ -1242,7 +1242,7 @@
                                                                 {{ localeData?.is_rate_inclusive }}
                                                             </th>
                                                             <th class="text-center archive table-heading-color">
-                                                                {{ localeData?.archive }}
+                                                                {{ commonLocaleData?.app_archive }}
                                                             </th>
                                                         </tr>
                                                         <tr
