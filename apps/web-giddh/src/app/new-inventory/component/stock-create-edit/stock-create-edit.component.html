@@ -61,7 +61,7 @@
                                                             ? localeData?.fixed_assets
                                                             : (stockForm.type | titlecase)
                                                     }}
-                                                    {{ localeData?.name }}
+                                                    {{ commonLocaleData?.app_name }}
                                                     <span class="red-text product-name-star">*</span></label
                                                 >
                                             </div>
@@ -119,6 +119,8 @@
                                                         stockGroupName = $event.label
                                                     "
                                                     [defaultValue]="stockGroupName"
+                                                    [allowValueReset]="true"
+                                                    (onClear)="stockGroupName = ''; stockGroupUniqueName = ''"
                                                 ></select-field>
                                                 <button
                                                     *ngIf="queryParams?.stockUniqueName"
@@ -181,7 +183,12 @@
                             </div>
                         </div>
                         <div class="other-group mt-2">
-                            <mat-tab-group mat-align-tabs="start" class="mat-tab-them account-inventory-other-tab">
+                            <mat-tab-group
+                                [selectedIndex]="activeTabIndex"
+                                (selectedTabChange)="onTabChange($event)"
+                                mat-align-tabs="start"
+                                class="mat-tab-them account-inventory-other-tab"
+                            >
                                 <mat-tab [label]="localeData?.account">
                                     <div class="tab-container-new">
                                         <!-- <form>
@@ -1235,7 +1242,7 @@
                                                                 {{ localeData?.is_rate_inclusive }}
                                                             </th>
                                                             <th class="text-center archive table-heading-color">
-                                                                {{ localeData?.archive }}
+                                                                {{ commonLocaleData?.app_archive }}
                                                             </th>
                                                         </tr>
                                                         <tr

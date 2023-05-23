@@ -183,6 +183,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** Holds active tab index */
+    private activeTabIndex: number;
 
     constructor(
         private inventoryService: InventoryService,
@@ -241,7 +243,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
     }
-
 
     /**
      * Adds new option value
@@ -789,15 +790,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 return;
             }
         }
-
         if (!this.stockGroupUniqueName) {
-            let mainGroupExists = this.stockGroups?.filter(group => {
-                return group?.value === "maingroup"
-            });
-            if (mainGroupExists?.length > 0) {
-                this.stockGroupUniqueName = "maingroup";
-                this.saveStock();
-            } else {
+            if (!this.stockGroups?.length) {
                 let stockRequest = {
                     name: 'Main Group',
                     uniqueName: 'maingroup',
@@ -813,9 +807,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         this.toaster.showSnackBar("error", response?.message);
                     }
                 });
+            } else {
+                this.stockGroupUniqueName = "maingroup";
+                this.saveStock();
             }
-        } else {
-            this.saveStock();
         }
     }
 
@@ -1681,6 +1676,16 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (event) {
             this.translationLoaded = true;
         }
+    }
+
+    /**
+     * This will use for on tab changes
+     *
+     * @param {*} event
+     * @memberof StockCreateEditComponent
+     */
+    public onTabChange(event: any): void {
+        this.activeTabIndex = event?.index;
     }
 
     /**
