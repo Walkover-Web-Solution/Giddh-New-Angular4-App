@@ -22,6 +22,7 @@ import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-p
 import { InventorySidebarModule } from "../inventory-sidebar/inventory-sidebar.module";
 import { TranslateDirectiveModule } from "../../../theme/translate/translate.directive.module";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { RecipeModule } from "../recipe/recipe.module";
 
 @NgModule({
     declarations: [
@@ -50,7 +51,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         GiddhPageLoaderModule,
         InventorySidebarModule,
         TranslateDirectiveModule,
-        MatTooltipModule
+        MatTooltipModule,
+        RecipeModule
     ],
     exports: [
         StockCreateEditComponent

@@ -75,6 +75,7 @@ import { MatDivider } from "@angular/material/divider";
 import { AsideCreateNewUnitComponent } from "./component/aside-create-unit/aside-create-unit.component";
 import { CreateGroupComponent } from "./component/create-group/create-group.component";
 import { AsideCreatGroupComponent } from "./component/aside-create-group/aside-create-group.component";
+import { RecipeModule } from "./component/recipe/recipe.module";
 
 @NgModule({
     declarations: [
@@ -155,6 +156,7 @@ import { AsideCreatGroupComponent } from "./component/aside-create-group/aside-c
         SelectTableColumnModule,
         MatGridListModule,
         MatListModule,
+        RecipeModule
     ],
     exports: [
         NewInventoryComponent,
