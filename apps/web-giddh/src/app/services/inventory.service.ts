@@ -1119,6 +1119,7 @@ export class InventoryService {
         return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTION_STOCK_REPORT_BALANCE_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>queryParams.stockGroupUniqueName))
             ?.replace(':stockUniqueName', encodeURIComponent(<any>queryParams.stockUniqueNames))
+            ?.replace(':entity', encodeURIComponent(<any>queryParams.entity))
             ?.replace(':from', encodeURIComponent(queryParams.from))
             ?.replace(':to', encodeURIComponent(queryParams.to))
             , stockReportRequest).pipe(
