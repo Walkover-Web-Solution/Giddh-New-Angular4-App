@@ -1436,19 +1436,17 @@ table.table.table-custom-invoice.basic,
 
 .balance-due-text {
     display: flex;
-    justify-content: space-between;
     width: 100%;
-    margin: 0 15px;
-    column-gap: 30px;
     align-items: center;
     .blnc-label {
-        width: 50%;
+        width: 45%;
+        text-align: left;
     }
     .adjust-amount {
         display: flex;
         align-items: center;
         column-gap: 30px;
-        justify-content: flex-end;
+        justify-content: flex-start;
         width: 50%;
     }
 }
