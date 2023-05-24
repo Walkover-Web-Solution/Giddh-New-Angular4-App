@@ -976,3 +976,7 @@ button.btn.btn-filter span.icon-cross {
     background-color: var(--color-denary-button-background);
     border: 1px solid var(--color-primary-button-border);
 }
+th.mat-header-cell,
+td.mat-cell {
+    white-space: nowrap !important;
+}

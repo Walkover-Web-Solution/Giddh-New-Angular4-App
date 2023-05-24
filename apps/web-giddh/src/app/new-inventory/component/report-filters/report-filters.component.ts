@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Even
 import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { Observable, ReplaySubject, of as observableOf } from "rxjs";
+import { Observable, ReplaySubject, of as observableOf, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../../app.constant";
 import { BalanceStockTransactionReportRequest, SearchStockTransactionReportRequest, StockTransactionReportRequest } from "../../../models/api-models/Inventory";
@@ -134,6 +134,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public displayedColumns: string[] = [];
     /** This will auto select the option which is coming from url */
     public autoSelectSearchOption: boolean = false;
+    /** Observable to subscribe for refresh columns on select chiplist */
+    public refreshColumns = new Subject<void>();
 
     constructor(
         public dialog: MatDialog,
@@ -159,7 +161,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.autoSelectSearchOption = true;
             this.searchRequest.q = this.reportUniqueName;
         }
-
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
@@ -232,7 +233,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.searchInventory();
-        this.getReportColumns();
     }
 
     /**
@@ -255,7 +255,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         if (this.moduleName !== InventoryModuleName.transaction && changes?.moduleName?.currentValue !== this.moduleName) {
             if (changes?.searchPage?.currentValue || changes?.moduleType?.currentValue) {
                 this.searchInventory();
-                this.getReportColumns();
             }
         }
         if (changes?.stockReportRequest?.currentValue) {
@@ -294,67 +293,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * This will get customised columns
-     *
-     * @memberof ReportFiltersComponent
-     */
-    public getReportColumns(): void {
-        this.inventoryService.getStockTransactionReportColumns(this.moduleName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.body && response.status === 'success') {
-                if (response.body?.columns) {
-                    this.customiseColumns?.forEach(column => {
-                        if (!response.body.columns?.includes(column?.value)) {
-                            column.checked = false;
-                        }
-                    });
-                }
-            }
-            this.filteredDisplayColumns();
-        });
-    }
-
-    /**
-     * This will use to save customised columns
-     *
-     * @memberof ReportFiltersComponent
-     */
-    public saveColumns(): void {
-        setTimeout(() => {
-            this.filteredDisplayColumns();
-            let saveColumnReq = {
-                module: this.moduleName,
-                columns: this.displayedColumns
-            }
-            this.inventoryService.saveStockTransactionReportColumns(saveColumnReq).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                this.isLoading.emit(false);
-            });
-        });
-    }
-
-    /**
-     * This will use to select all customised columns
-     *
-     * @param {*} event
-     * @memberof ReportFiltersComponent
-     */
-    public selectAllColumns(event: any): void {
-        this.customiseColumns?.forEach(column => {
-            if (column) {
-                column.checked = event;
-            }
-        });
-        this.filteredDisplayColumns();
-        this.saveColumns();
-        this.changeDetection.detectChanges();
-    }
-
-    /**
      * This will be used for filtering the display columns
      *
      * @memberof ReportFiltersComponent
      */
-    public filteredDisplayColumns(): void {
-        this.displayedColumns = this.customiseColumns?.filter(value => value?.checked).map(column => column?.value);
+    public setDisplayColumns(columns: string[]): void {
+        this.displayedColumns = columns;
         this.selectedColumns.emit(this.displayedColumns);
         this.changeDetection.detectChanges();
     }
@@ -628,10 +572,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             const findStockColumnCheck = this.customiseColumns?.find(value => value?.value === "stock_name");
             if (this.stockReportRequest.stockUniqueNames?.length === 0 && findStockColumnCheck?.checked) {
                 findStockColumnCheck.checked = false;
-                this.displayedColumns = this.displayedColumns?.filter(value => value !== "stock_name");
+                this.refreshColumns.next();
             } else if (this.stockReportRequest.stockUniqueNames?.length > 0 && !findStockColumnCheck?.checked) {
                 findStockColumnCheck.checked = true;
-                this.filteredDisplayColumns();
+                this.refreshColumns.next();
             }
             if (this.stockReportRequest.stockUniqueNames?.length) {
                 this.stockReportRequest.stockUniqueNames.push(option?.option?.value?.uniqueName);
@@ -647,10 +591,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             const findVariantColumnCheck = this.customiseColumns?.find(value => value?.value === "variant_name");
             if (this.stockReportRequest.variantUniqueNames?.length === 0 && findVariantColumnCheck?.checked) {
                 findVariantColumnCheck.checked = false;
-                this.displayedColumns = this.displayedColumns.filter(value => value !== "variant_name");
+                this.refreshColumns.next();
             } else if (this.stockReportRequest.variantUniqueNames?.length > 0 && !findVariantColumnCheck?.checked) {
                 findVariantColumnCheck.checked = true;
-                this.filteredDisplayColumns();
+                this.refreshColumns.next();
             }
             if (this.stockReportRequest.variantUniqueNames?.length) {
                 this.stockReportRequest.variantUniqueNames.push(option?.option?.value?.uniqueName);
@@ -693,7 +637,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.stockReportRequest.stocks = this.stockReportRequest.stocks?.filter(value => value?.uniqueName != selectOptionValue.uniqueName);
                 if (this.stockReportRequest.stockUniqueNames.length <= 1) {
                     this.customiseColumns.find(value => value?.value === "stock_name").checked = (this.stockReportRequest.stockUniqueNames?.length === 1 ? false : true);
-                    this.filteredDisplayColumns();
+                    this.refreshColumns.next();
                 }
             }
             if (selectOptionValue.type === "VARIANT") {
@@ -701,7 +645,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.stockReportRequest.variants = this.stockReportRequest.variants?.filter(value => value?.uniqueName != selectOptionValue.uniqueName);
                 if (this.stockReportRequest.variantUniqueNames?.length <= 1) {
                     this.customiseColumns.find(value => value?.value === "variant_name").checked = (this.stockReportRequest.variantUniqueNames.length === 1 ? false : true);
-                    this.filteredDisplayColumns();
+                    this.refreshColumns.next();
                 }
             }
             this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;

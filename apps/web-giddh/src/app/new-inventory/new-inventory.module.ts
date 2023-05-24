@@ -75,6 +75,7 @@ import { AsideCreateNewUnitComponent } from "./component/aside-create-unit/aside
 import { CreateGroupComponent } from "./component/create-group/create-group.component";
 import { AsideCreatGroupComponent } from "./component/aside-create-group/aside-create-group.component";
 import { RecipeModule } from "./component/recipe/recipe.module";
+import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 
 @NgModule({
     declarations: [
@@ -154,7 +155,8 @@ import { RecipeModule } from "./component/recipe/recipe.module";
         MatTooltipModule,
         MatGridListModule,
         MatListModule,
-        RecipeModule
+        RecipeModule,
+        SelectTableColumnModule
     ],
     exports: [
         NewInventoryComponent,
