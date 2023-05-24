@@ -75,6 +75,7 @@ import { AsideCreateNewUnitComponent } from "./component/aside-create-unit/aside
 import { CreateGroupComponent } from "./component/create-group/create-group.component";
 import { AsideCreatGroupComponent } from "./component/aside-create-group/aside-create-group.component";
 import { RecipeModule } from "./component/recipe/recipe.module";
+import { ManufacturingModule } from "../manufacturing/manufacturing.module";
 
 @NgModule({
     declarations: [
@@ -154,7 +155,8 @@ import { RecipeModule } from "./component/recipe/recipe.module";
         MatTooltipModule,
         MatGridListModule,
         MatListModule,
-        RecipeModule
+        RecipeModule,
+        ManufacturingModule
     ],
     exports: [
         NewInventoryComponent,
