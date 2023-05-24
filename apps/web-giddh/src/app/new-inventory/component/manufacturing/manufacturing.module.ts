@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CreateManufacturingComponent } from './create-manufacturing/create-manufacturing.component';
 import { ManufacturingRoutingModule } from './manufacturing.routing.module';
 import { ListManufacturingComponent } from './list-manufacturing/list-manufacturing.component';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
     imports: [
@@ -16,7 +17,9 @@ import { ListManufacturingComponent } from './list-manufacturing/list-manufactur
         HamburgerMenuModule,
         FormFieldsModule,
         MatButtonModule,
-        ManufacturingRoutingModule
+        ManufacturingRoutingModule,
+        MatButtonModule,
+        MatTableModule
     ],
     exports: [
         CreateManufacturingComponent,

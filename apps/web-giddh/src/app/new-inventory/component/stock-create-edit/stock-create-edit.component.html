@@ -1595,6 +1595,9 @@
                                         </div>
                                     </div>
                                 </mat-tab>
+                                <mat-tab label="Manufacturing">
+                                    <create-recipe></create-recipe>
+                                </mat-tab>
                                 <mat-tab [label]="localeData?.other">
                                     <div class="tab-container-new">
                                         <div class="row">
@@ -1852,9 +1855,6 @@
                                             </ng-container>
                                         </div>
                                     </div>
-                                </mat-tab>
-                                <mat-tab label="Manufacturing">
-                                    <create-recipe></create-recipe>
                                 </mat-tab>
                                 <mat-tab *ngIf="false" [label]="localeData?.variant">
                                     <div class="tab-container-new">
