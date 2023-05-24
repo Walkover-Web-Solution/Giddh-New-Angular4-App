@@ -979,3 +979,7 @@ button.btn.btn-filter span.icon-cross {
 th.mat-header-cell {
     white-space: nowrap !important;
 }
+td.mat-cell {
+    white-space: normal !important;
+    word-break: keep-all !important;
+}
