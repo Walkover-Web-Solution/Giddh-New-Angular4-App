@@ -168,6 +168,12 @@
                                                         (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
                                                         >{{ tax.name }}</mat-option
                                                     >
+                                                    <mat-option
+                                                        class="create-update-no-data"
+                                                        [disabled]="true"
+                                                        *ngIf="!taxes?.length"
+                                                        >{{ commonLocaleData?.app_no_result_found }}</mat-option
+                                                    >
                                                 </mat-select>
                                             </div>
                                         </div>
@@ -1241,7 +1247,14 @@
                                                             >
                                                                 {{ localeData?.fixed_assets_unit }}
                                                             </th>
-                                                            <th class="text-center unit-name table-heading-color">
+                                                            <th
+                                                                class="text-center unit-name table-heading-color"
+                                                                *ngIf="
+                                                                    isFixedAssetsInformationEnabled ||
+                                                                    isPurchaseInformationEnabled ||
+                                                                    isSalesInformationEnabled
+                                                                "
+                                                            >
                                                                 {{ localeData?.is_rate_inclusive }}
                                                             </th>
                                                             <th class="text-center archive table-heading-color">
@@ -1553,6 +1566,7 @@
                                                                     "
                                                                 >
                                                                     <mat-checkbox
+                                                                        *ngIf="isSalesInformationEnabled"
                                                                         color="primary"
                                                                         name="variantSalesTaxInclusive{{ i }}"
                                                                         [(ngModel)]="variant.salesTaxInclusive"
@@ -1560,6 +1574,7 @@
                                                                         matTooltipPosition="above"
                                                                     ></mat-checkbox>
                                                                     <mat-checkbox
+                                                                        *ngIf="isPurchaseInformationEnabled"
                                                                         class="mr-l2"
                                                                         color="primary"
                                                                         name="variantPurchaseTaxInclusive{{ i }}"
@@ -1568,7 +1583,12 @@
                                                                         matTooltipPosition="above"
                                                                     ></mat-checkbox>
                                                                 </ng-container>
-                                                                <ng-container *ngIf="stockForm.type === 'FIXED_ASSETS'">
+                                                                <ng-container
+                                                                    *ngIf="
+                                                                        stockForm.type === 'FIXED_ASSETS' &&
+                                                                        isFixedAssetsInformationEnabled
+                                                                    "
+                                                                >
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         name="variantFixedAssetsTaxInclusive{{ i }}"
