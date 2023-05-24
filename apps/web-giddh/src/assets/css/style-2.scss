@@ -663,6 +663,18 @@ textarea {
         color: var(--color-black) !important;
     }
 }
+
+/*---- custom -----*/
+.inline-adjustment {
+    .adjustments-list {
+        height: auto !important;
+        overflow-y: unset !important;
+    }
+    advance-receipt-adjustment-component {
+        min-width: 750px;
+    }
+}
+
 .select-multiple-icon-options {
     width: 36px;
     height: 36px;

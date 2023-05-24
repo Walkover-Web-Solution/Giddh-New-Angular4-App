@@ -5,388 +5,437 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu></hamburger-menu>
-    <mat-card class="receipt-card">
-        <mat-card-content>
-            <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-            <div [ngStyle]="{ 'display': !showLoader ? 'block' : 'none' }">
-                <!-- region page change menu -->
-                <div class="d-flex border-bottom mobile-view-padding">
-                    <div class="form-group mr-b05 clearfix pro-invoice-heading">
-                        <div class="clearfix">
-                            <a href="javascript:;" [matMenuTriggerFor]="menu" class="header-dropdown">
-                                Receipt <span _ngcontent-sur-c320="" class="caret ng-tns-c320-2"></span>
-                            </a>
-                            <div class="previous-estimate-wrapper">
-                                <mat-menu #menu="matMenu" class="copy-invoice-menu">
-                                    <button mat-menu-item class="line-height-initial">
-                                        <div class="pd">
-                                            <span class="d-block">Receipt</span>
-                                        </div>
-                                    </button>
-                                    <button mat-menu-item class="line-height-initial">
-                                        <div class="pd">
-                                            <span class="d-block">Receipt 2</span>
-                                        </div>
-                                    </button>
-                                </mat-menu>
-                            </div>
+    <div class="receipt-card">
+        <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
+        <div [ngStyle]="{ 'display': !showLoader ? 'block' : 'none' }">
+            <!-- region page change menu -->
+            <div class="d-flex border-bottom mobile-view-padding receipt-dropdown">
+                <div class="form-group mr-b05 clearfix pro-invoice-heading">
+                    <div class="clearfix">
+                        <a href="javascript:;" [matMenuTriggerFor]="menu" class="header-dropdown">
+                            Receipt <span _ngcontent-sur-c320="" class="caret ng-tns-c320-2"></span>
+                        </a>
+                        <div class="previous-estimate-wrapper">
+                            <mat-menu #menu="matMenu" class="columns-wrapper">
+                                <button mat-menu-item class="line-height-initial">
+                                    <div class="pd">
+                                        <span class="d-block">Receipt</span>
+                                    </div>
+                                </button>
+                                <button mat-menu-item class="line-height-initial">
+                                    <div class="pd">
+                                        <span class="d-block">Payment</span>
+                                    </div>
+                                </button>
+                            </mat-menu>
                         </div>
                     </div>
                 </div>
-                <form autocomplete="off" novalidate class="receipt-form" #receiptForm="ngForm">
-                    <div class="clearfix">
-                        <div
-                            class="clearfix pd-t15"
-                            [ngClass]="{ 'wrapper-receipt-fields': !voucherFormData.account?.uniqueName }"
-                        >
-                            <div class="inner-container payment-container">
-                                <div
-                                    class="clearfix"
-                                    [keyboardShortcut]="'alt+c'"
-                                    (onShortcutPress)="addAccountFromShortcut()"
-                                >
-                                    <div class="row row-gap">
-                                        <div class="col-sm-12 col-lg-6">
-                                            <strong>
-                                                <label
-                                                    >{{
+            </div>
+            <form autocomplete="off" novalidate class="receipt-form" #receiptForm="ngForm">
+                <div class="clearfix">
+                    <div
+                        class="clearfix pd-t15"
+                        [ngClass]="{ 'wrapper-receipt-fields': !voucherFormData.account?.uniqueName }"
+                    >
+                        <div class="inner-container payment-container">
+                            <div
+                                class="clearfix"
+                                [keyboardShortcut]="'alt+c'"
+                                (onShortcutPress)="addAccountFromShortcut()"
+                            >
+                                <div class="row row-gap">
+                                    <div class="col-sm-12 col-lg-6">
+                                        <strong>
+                                            <label
+                                                >{{
+                                                    voucherFormData.type === receiptVoucherType
+                                                        ? localeData?.customer_name
+                                                        : localeData?.vendor_name
+                                                }}
+                                                <span class="red-text">*</span>
+                                            </label>
+                                        </strong>
+                                        <div class="clearfix d-flex flex-column">
+                                            <div class="d-flex">
+                                                <sales-sh-select
+                                                    [ngClass]="{
+                                                        'error-box':
+                                                            !isValidForm && !voucherFormData.account?.uniqueName?.trim()
+                                                    }"
+                                                    class="float-left sales-select w-100"
+                                                    name="customer-uniquename"
+                                                    #customerNameDropDown
+                                                    [options]="customerAccounts$ | async"
+                                                    [(ngModel)]="voucherFormData.account.uniqueName"
+                                                    [customFilter]="customMoveGroupFilter"
+                                                    [isPaginationEnabled]="true"
+                                                    (scrollEnd)="handleScrollEnd('customer')"
+                                                    (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'customer')"
+                                                    [notFoundMsg]="noResultsFoundLabel"
+                                                    [enableDynamicSearch]="true"
+                                                    (onHide)="resetPreviousSearchResults(true, 'customer')"
+                                                    (selected)="onSelectCustomer($event)"
+                                                    [placeholder]="commonLocaleData?.app_select"
+                                                    [notFoundLink]="true"
+                                                    [doNotReset]="true"
+                                                    [forceClearReactive]="forceClear$ | async"
+                                                    [isFilterEnabled]="true"
+                                                    (noResultsClicked)="addNewAccount()"
+                                                    [multiple]="false"
+                                                    [ItemHeight]="67"
+                                                    [notFoundLinkText]="
                                                         voucherFormData.type === receiptVoucherType
-                                                            ? localeData?.customer_name
-                                                            : localeData?.vendor_name
-                                                    }}
-                                                    <span class="red-text">*</span>
-                                                </label>
-                                            </strong>
-                                            <div class="clearfix d-flex flex-column">
-                                                <div class="d-flex">
-                                                    <sales-sh-select
-                                                        [ngClass]="{
-                                                            'error-box':
-                                                                !isValidForm &&
-                                                                !voucherFormData.account?.uniqueName?.trim()
-                                                        }"
-                                                        class="float-left sales-select w-100"
-                                                        name="customer-uniquename"
-                                                        #customerNameDropDown
-                                                        [options]="customerAccounts$ | async"
-                                                        [(ngModel)]="voucherFormData.account.uniqueName"
-                                                        [customFilter]="customMoveGroupFilter"
-                                                        [isPaginationEnabled]="true"
-                                                        (scrollEnd)="handleScrollEnd('customer')"
-                                                        (dynamicSearchedQuery)="
-                                                            onSearchQueryChanged($event, 1, 'customer')
-                                                        "
-                                                        [notFoundMsg]="noResultsFoundLabel"
-                                                        [enableDynamicSearch]="true"
-                                                        (onHide)="resetPreviousSearchResults(true, 'customer')"
-                                                        (selected)="onSelectCustomer($event)"
-                                                        [placeholder]="commonLocaleData?.app_select"
-                                                        [notFoundLink]="true"
-                                                        [doNotReset]="true"
-                                                        [forceClearReactive]="forceClear$ | async"
-                                                        [isFilterEnabled]="true"
-                                                        (noResultsClicked)="addNewAccount()"
-                                                        [multiple]="false"
-                                                        [ItemHeight]="67"
-                                                        [notFoundLinkText]="
-                                                            voucherFormData.type === receiptVoucherType
-                                                                ? localeData?.add_customer
-                                                                : localeData?.add_vendor
-                                                        "
-                                                        (keyup)="resetCustomerName($event)"
-                                                        (onClear)="resetCustomerName(null)"
-                                                        [isOpen]="allowFocus"
-                                                    >
-                                                        <ng-template #optionTemplate let-option="option">
-                                                            <a href="javascript:void(0)" class="list-item flex-column">
-                                                                <div class="item">{{ option?.label }}</div>
-                                                                <div class="item-unique">{{ option?.value }}</div>
-                                                            </a>
-                                                        </ng-template>
-                                                        <ng-template #notFoundLinkTemplate>
-                                                            <a
-                                                                href="javascript:void(0)"
-                                                                class="
-                                                                    list-item
-                                                                    pd-l05 pd-r05
-                                                                    border-none
-                                                                    d-flex
-                                                                    justify-content-between
-                                                                    w-100
-                                                                "
-                                                                [keyboardShortcut]="'alt+c'"
-                                                            >
-                                                                <div class="item">
-                                                                    {{
-                                                                        voucherFormData.type === receiptVoucherType
-                                                                            ? localeData?.add_customer
-                                                                            : localeData?.add_vendor
-                                                                    }}
-                                                                </div>
-                                                                <div class="item">
-                                                                    {{ commonLocaleData?.app_alt_c }}
-                                                                </div>
-                                                            </a>
-                                                        </ng-template>
-                                                    </sales-sh-select>
-                                                </div>
-                                                <div
-                                                    class="d-flex aqua-color"
-                                                    *ngIf="voucherFormData?.account?.uniqueName"
+                                                            ? localeData?.add_customer
+                                                            : localeData?.add_vendor
+                                                    "
+                                                    (keyup)="resetCustomerName($event)"
+                                                    (onClear)="resetCustomerName(null)"
+                                                    [isOpen]="allowFocus"
                                                 >
-                                                    <span class="cp aqua-color">
-                                                        <a href="javascript:void(0)" (click)="getCustomerDetails()">{{
-                                                            voucherFormData.type === receiptVoucherType
-                                                                ? localeData?.customer_details
-                                                                : localeData?.vendor_details
-                                                        }}</a>
-                                                    </span>
-                                                </div>
+                                                    <ng-template #optionTemplate let-option="option">
+                                                        <a href="javascript:void(0)" class="list-item flex-column">
+                                                            <div class="item">{{ option?.label }}</div>
+                                                            <div class="item-unique">{{ option?.value }}</div>
+                                                        </a>
+                                                    </ng-template>
+                                                    <ng-template #notFoundLinkTemplate>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            class="
+                                                                list-item
+                                                                pd-l05 pd-r05
+                                                                border-none
+                                                                d-flex
+                                                                justify-content-between
+                                                                w-100
+                                                            "
+                                                            [keyboardShortcut]="'alt+c'"
+                                                        >
+                                                            <div class="item">
+                                                                {{
+                                                                    voucherFormData.type === receiptVoucherType
+                                                                        ? localeData?.add_customer
+                                                                        : localeData?.add_vendor
+                                                                }}
+                                                            </div>
+                                                            <div class="item">
+                                                                {{ commonLocaleData?.app_alt_c }}
+                                                            </div>
+                                                        </a>
+                                                    </ng-template>
+                                                </sales-sh-select>
                                             </div>
-                                            <ng-container *ngIf="!voucherFormData.account?.uniqueName">
-                                                <img
-                                                    src="{{ imgPath }}new/search_customer.svg"
-                                                    *ngIf="voucherFormData.type === receiptVoucherType"
-                                                    class="img-responsive search-arrow-image"
-                                                />
-                                                <img
-                                                    src="{{ imgPath }}new/search-vendor.svg"
-                                                    *ngIf="voucherFormData.type !== receiptVoucherType"
-                                                    class="img-responsive search-arrow-image"
-                                                />
-                                            </ng-container>
+                                            <div class="d-flex aqua-color" *ngIf="voucherFormData?.account?.uniqueName">
+                                                <span class="cp aqua-color">
+                                                    <a href="javascript:void(0)" (click)="getCustomerDetails()">{{
+                                                        voucherFormData.type === receiptVoucherType
+                                                            ? localeData?.customer_details
+                                                            : localeData?.vendor_details
+                                                    }}</a>
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-12 col-lg-6 no-top">
-                                            <div class="form-inline flex-row flex-nowrap receipt-date">
-                                                <div class="form-group d-block">
-                                                    <strong>
-                                                        <label class="d-block"
-                                                            >{{
-                                                                voucherFormData.type === receiptVoucherType
-                                                                    ? localeData?.date
-                                                                    : localeData?.date
-                                                            }}
-                                                            <span class="red-text">*</span>
-                                                        </label>
-                                                    </strong>
-                                                    <div class="payment-date">
-                                                        <giddh-datepicker
-                                                            class="inline border-0"
-                                                            [showError]="
-                                                                (!isValidForm && !voucherFormData.date) ||
-                                                                isInvalidVoucherDate
-                                                            "
-                                                            name="receipt-date"
-                                                            [(ngModel)]="voucherFormData.date"
-                                                            (ngModelChange)="validateVoucherDate()"
-                                                            [placeholder]="commonLocaleData?.app_select_date"
-                                                            [cssClass]="
-                                                                ' border-left-right-none form-control w-100 date-border text-lg-right text-md-left'
-                                                            "
-                                                            [showToggleIcon]="false"
-                                                        ></giddh-datepicker>
-                                                    </div>
+                                        <ng-container *ngIf="!voucherFormData.account?.uniqueName">
+                                            <img
+                                                src="{{ imgPath }}new/search_customer.svg"
+                                                *ngIf="voucherFormData.type === receiptVoucherType"
+                                                class="img-responsive search-arrow-image"
+                                            />
+                                            <img
+                                                src="{{ imgPath }}new/search-vendor.svg"
+                                                *ngIf="voucherFormData.type !== receiptVoucherType"
+                                                class="img-responsive search-arrow-image"
+                                            />
+                                        </ng-container>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-6 no-top">
+                                        <div class="form-inline flex-row flex-nowrap receipt-date">
+                                            <div class="form-group d-block">
+                                                <strong>
+                                                    <label class="d-block"
+                                                        >{{
+                                                            voucherFormData.type === receiptVoucherType
+                                                                ? localeData?.date
+                                                                : localeData?.date
+                                                        }}
+                                                        <span class="red-text">*</span>
+                                                    </label>
+                                                </strong>
+                                                <div class="payment-date">
+                                                    <giddh-datepicker
+                                                        class="inline border-0"
+                                                        [showError]="
+                                                            (!isValidForm && !voucherFormData.date) ||
+                                                            isInvalidVoucherDate
+                                                        "
+                                                        name="receipt-date"
+                                                        [(ngModel)]="voucherFormData.date"
+                                                        (ngModelChange)="validateVoucherDate()"
+                                                        [placeholder]="commonLocaleData?.app_select_date"
+                                                        [cssClass]="
+                                                            ' border-left-right-none form-control w-100 date-border text-lg-right text-md-left'
+                                                        "
+                                                        [showToggleIcon]="false"
+                                                    ></giddh-datepicker>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row row-gap mt-2">
-                                        <div class="col-sm-12 col-lg-6">
-                                            <strong>
-                                                <label class="d-block">{{ localeData?.attention_to }}</label>
-                                            </strong>
-                                            <text-field
-                                                [cssClass]="'form-control mat-field-border'"
-                                                name="attention-to"
-                                                id="attention-to"
-                                                [placeholder]="localeData?.attention_to"
-                                                [(ngModel)]="voucherFormData.account.attentionTo"
+                                </div>
+                                <div class="row row-gap mt-2">
+                                    <div class="col-lg-12">
+                                        <ng-container>
+                                            <section
+                                                [ngClass]="{
+                                                    'billing-address-wrap': !voucherFormData.account?.uniqueName
+                                                }"
                                             >
-                                            </text-field>
-                                        </div>
-                                        <div class="col-sm-12 col-lg-6" #billingState>
-                                            <strong>
-                                                <label class="d-block">Place of Supply</label>
-                                            </strong>
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-lg-6">
+                                                        <strong>
+                                                            <label class="d-block">{{
+                                                                localeData?.attention_to
+                                                            }}</label>
+                                                        </strong>
+                                                        <text-field
+                                                            [cssClass]="'form-control mat-field-border'"
+                                                            name="attention-to"
+                                                            id="attention-to"
+                                                            [placeholder]="localeData?.attention_to"
+                                                            [(ngModel)]="voucherFormData.account.attentionTo"
+                                                        >
+                                                        </text-field>
+                                                    </div>
+                                                    <div class="col-sm-12 col-lg-6" #billingState>
+                                                        <strong>
+                                                            <label class="d-block">Place of Supply</label>
+                                                        </strong>
+                                                        <select-field
+                                                            [cssClass]="'form-control mat-field-border'"
+                                                            [name]="'billingdetails-statecode'"
+                                                            [placeholder]="commonLocaleData?.app_state"
+                                                            [options]="filteredBillingStates"
+                                                        >
+                                                        </select-field>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                                <div class="row row-gap mt-2">
+                                    <div class="col-lg-4">
+                                        <strong>
+                                            <label>
+                                                {{
+                                                    voucherFormData.type === receiptVoucherType
+                                                        ? localeData?.receipt_mode
+                                                        : localeData?.payment_mode
+                                                }}
+                                                <span class="red-text">*</span>
+                                            </label>
+                                        </strong>
+                                        <div class="clearfix">
                                             <select-field
                                                 [cssClass]="'form-control mat-field-border'"
                                                 [name]="'billingdetails-statecode'"
-                                                [placeholder]="commonLocaleData?.app_state"
-                                                [options]="filteredBillingStates"
+                                                [placeholder]="commonLocaleData?.app_bank_name"
+                                                [options]="bankAccounts"
                                             >
                                             </select-field>
                                         </div>
                                     </div>
-                                    <div class="row row-gap mt-2">
-                                        <div class="col-lg-4">
-                                            <strong>
-                                                <label>
-                                                    {{
-                                                        voucherFormData.type === receiptVoucherType
-                                                            ? localeData?.receipt_mode
-                                                            : localeData?.payment_mode
-                                                    }}
-                                                    <span class="red-text">*</span>
-                                                </label>
-                                            </strong>
-                                            <div class="clearfix">
-                                                <select-field
-                                                    [cssClass]="'form-control mat-field-border'"
-                                                    [name]="'billingdetails-statecode'"
-                                                    [placeholder]="commonLocaleData?.app_bank_name"
-                                                    [options]="bankAccounts"
-                                                >
-                                                </select-field>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <strong>
-                                                <label>{{ localeData?.cheque_no }}</label>
-                                            </strong>
-                                            <text-field
-                                                [cssClass]="'form-control mat-field-border'"
-                                                name="cheque-no"
-                                                id="cheque-no"
-                                                [placeholder]="localeData?.cheque_no"
-                                                [(ngModel)]="voucherFormData.entries[0].chequeNumber"
-                                            >
-                                            </text-field>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <strong>
-                                                <label>{{ localeData?.clearance_date }}</label>
-                                            </strong>
-                                            <giddh-datepicker
-                                                [placeholder]="commonLocaleData?.app_select_date"
-                                                [cssClass]="
-                                                    'mat-field-border border-left-right-none form-control w-100'
-                                                "
-                                                [showError]="isInvalidChequeDate"
-                                                [showToggleIcon]="false"
-                                                name="cheque-clearance-date"
-                                                [(ngModel)]="voucherFormData.entries[0].chequeClearanceDate"
-                                                (ngModelChange)="validateChequeDate()"
-                                            >
-                                            </giddh-datepicker>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="clearfix mt-2 description">
-                                                <textarea
-                                                    matInput
-                                                    class="mat-field-border form-control w-100 min-height-80"
-                                                    name="description"
-                                                    [(ngModel)]="voucherFormData.templateDetails.other.message2"
-                                                    [placeholder]="localeData?.description"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="advance-toggle">
-                                                <strong><a href="">Receipt</a></strong>
-                                                <mat-slide-toggle color="primary" id="">
-                                                    <strong>
-                                                        <span class="pull-left">Advance</span>
-                                                    </strong>
-                                                </mat-slide-toggle>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <strong>
-                                                <label
-                                                    >{{ commonLocaleData?.app_amount }}
-                                                    <span class="red-text">*</span></label
-                                                >
-                                            </strong>
-                                            <text-field
-                                                [cssClass]="'form-control mat-field-border text-right'"
-                                                [showError]="
-                                                    !isValidForm &&
-                                                    !voucherFormData.entries[0].transactions[0].amount.amountForAccount
-                                                "
-                                                name="receipt-amount"
-                                                id="receipt-amount"
-                                                [placeholder]="localeData?.enter_amount"
-                                                decimalDigitsDirective
-                                                [mask]="inputMaskFormat"
-                                                [(ngModel)]="
-                                                    voucherFormData.entries[0].transactions[0].amount.amountForAccount
-                                                "
-                                                (ngModelChange)="calculateTotals()"
-                                            >
-                                            </text-field>
-                                        </div>
-                                        <!-- show tax field onclick advance toggle -->
-                                        <!-- <div class="col-lg-4">
-                                            <strong>
-                                                <label
-                                                    >Tax
-                                                    <span class="red-text">*</span></label
-                                                >
-                                            </strong>
-                                            <select-field
-                                                [cssClass]="'form-control mat-field-border text-right'"
-                                                [name]="'tax'"
-                                                [placeholder]="'0'"
-                                            >
-                                            </select-field>
-                                        </div> -->
-                                        <div class="col-lg-4 mt-4">
-                                            <div class="other-check">
-                                                <mat-checkbox
-                                                    name="autoFillShipping"
-                                                    color="primary"
-                                                    class="auto-fill-shipping-address mr-t10"
-                                                    (change)="toggleOtherTaxesAsidePane(true, null)"
-                                                >
-                                                </mat-checkbox>
-                                                <strong>
-                                                    <label>Other Tax</label>
-                                                </strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row row-gap inline-adjustment">
-                                        <advance-receipt-adjustment-component
-                                            [adjustedVoucherType]="'receipt'"
-                                            [isUpdateMode]="false"
-                                            [depositAmount]="0"
-                                            [invoiceFormDetails]="voucherFormData"
-                                            [isVoucherModule]="true"
-                                            [advanceReceiptAdjustmentUpdatedData]="null"
-                                            [voucherForAdjustment]="[]"
-                                            [isModal]="false"
+                                    <div class="col-lg-4">
+                                        <strong>
+                                            <label>{{ localeData?.cheque_no }}</label>
+                                        </strong>
+                                        <text-field
+                                            [cssClass]="'form-control mat-field-border'"
+                                            name="cheque-no"
+                                            id="cheque-no"
+                                            [placeholder]="localeData?.cheque_no"
+                                            [(ngModel)]="voucherFormData.entries[0].chequeNumber"
                                         >
-                                        </advance-receipt-adjustment-component>
+                                        </text-field>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <table class="table table-custom-invoice basic">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Product/Service</th>
-                                                        <th>Amount</th>
-                                                        <th>Tax</th>
-                                                        <th>Other Tax</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <select-field
-                                                                [cssClass]="'form-control mat-field-border product-top'"
-                                                                [name]="'billingdetails-statecode'"
-                                                                [placeholder]="'Accounting Service'"
+                                    <div class="col-lg-4">
+                                        <strong>
+                                            <label>{{ localeData?.clearance_date }}</label>
+                                        </strong>
+                                        <giddh-datepicker
+                                            [placeholder]="commonLocaleData?.app_select_date"
+                                            [cssClass]="'mat-field-border border-left-right-none form-control w-100'"
+                                            [showError]="isInvalidChequeDate"
+                                            [showToggleIcon]="false"
+                                            name="cheque-clearance-date"
+                                            [(ngModel)]="voucherFormData.entries[0].chequeClearanceDate"
+                                            (ngModelChange)="validateChequeDate()"
+                                        >
+                                        </giddh-datepicker>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="clearfix mt-2 description">
+                                            <textarea
+                                                matInput
+                                                class="mat-field-border form-control w-100 min-height-80"
+                                                name="description"
+                                                [(ngModel)]="voucherFormData.templateDetails.other.message2"
+                                                [placeholder]="localeData?.description"
+                                            ></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="advance-toggle">
+                                            <strong><a href="">Receipt</a></strong>
+                                            <mat-slide-toggle color="primary" id="">
+                                                <strong>
+                                                    <span class="pull-left">Advance</span>
+                                                </strong>
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <strong>
+                                            <label
+                                                >{{ commonLocaleData?.app_amount }}
+                                                <span class="red-text">*</span></label
+                                            >
+                                        </strong>
+                                        <text-field
+                                            [cssClass]="'form-control mat-field-border text-right'"
+                                            [showError]="
+                                                !isValidForm &&
+                                                !voucherFormData.entries[0].transactions[0].amount.amountForAccount
+                                            "
+                                            name="receipt-amount"
+                                            id="receipt-amount"
+                                            [placeholder]="localeData?.enter_amount"
+                                            decimalDigitsDirective
+                                            [mask]="inputMaskFormat"
+                                            [(ngModel)]="
+                                                voucherFormData.entries[0].transactions[0].amount.amountForAccount
+                                            "
+                                            (ngModelChange)="calculateTotals()"
+                                        >
+                                        </text-field>
+                                    </div>
+                                    <!-- show tax field onclick advance toggle -->
+                                    <div class="col-lg-4">
+                                        <strong>
+                                            <label>Tax <span class="red-text">*</span></label>
+                                        </strong>
+                                        <select-field
+                                            [cssClass]="'form-control mat-field-border text-right'"
+                                            [name]="'tax'"
+                                            [placeholder]="'0'"
+                                        >
+                                        </select-field>
+                                    </div>
+                                    <div class="col-lg-4 mt-4">
+                                        <div class="other-check">
+                                            <mat-checkbox
+                                                name="autoFillShipping"
+                                                color="primary"
+                                                class="auto-fill-shipping-address mr-t10"
+                                                (change)="toggleOtherTaxesAsidePane(true, null)"
+                                            >
+                                            </mat-checkbox>
+                                            <strong>
+                                                <label>Other Tax</label>
+                                            </strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-gap inline-adjustment">
+                                    <advance-receipt-adjustment-component
+                                        [adjustedVoucherType]="'receipt'"
+                                        [isUpdateMode]="false"
+                                        [depositAmount]="0"
+                                        [invoiceFormDetails]="voucherFormData"
+                                        [isVoucherModule]="true"
+                                        [advanceReceiptAdjustmentUpdatedData]="null"
+                                        [voucherForAdjustment]="[]"
+                                        [isModal]="false"
+                                    >
+                                    </advance-receipt-adjustment-component>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <table class="table table-custom-invoice basic">
+                                            <thead>
+                                                <tr>
+                                                    <th>Product/Service</th>
+                                                    <th>Amount</th>
+                                                    <th>Tax</th>
+                                                    <th>Other Tax</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <select-field
+                                                            [cssClass]="'form-control mat-field-border product-top'"
+                                                            [name]="'billingdetails-statecode'"
+                                                            [placeholder]="'Accounting Service'"
+                                                        >
+                                                        </select-field>
+                                                        <div class="d-flex aqua-color tax-bottom">
+                                                            <span class="cp aqua-color">
+                                                                <a href="javascript:void(0)">HSN: 123456</a>
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <text-field
+                                                            [cssClass]="'form-control mat-field-border text-right'"
+                                                            [showError]="
+                                                                !isValidForm &&
+                                                                !voucherFormData.entries[0].transactions[0].amount
+                                                                    .amountForAccount
+                                                            "
+                                                            name="amount"
+                                                            id="amount"
+                                                            [placeholder]="localeData?.enter_amount"
+                                                            decimalDigitsDirective
+                                                            [mask]="inputMaskFormat"
+                                                        >
+                                                        </text-field>
+                                                    </td>
+                                                    <td>
+                                                        <select-field
+                                                            [cssClass]="'form-control mat-field-border text-right'"
+                                                            [name]="'tax'"
+                                                            [placeholder]="'0'"
+                                                        >
+                                                        </select-field>
+                                                    </td>
+                                                    <td class="item-total">
+                                                        <div class="other-check other-check-table">
+                                                            <mat-checkbox
+                                                                name="autoFillShipping"
+                                                                color="primary"
+                                                                class="auto-fill-shipping-address mr-t10"
+                                                                (change)="toggleOtherTaxesAsidePane(true, null)"
                                                             >
-                                                            </select-field>
-                                                            <div class="d-flex aqua-color tax-bottom">
-                                                                <span class="cp aqua-color">
-                                                                    <a href="javascript:void(0)">HSN: 123456</a>
-                                                                </span>
-                                                            </div>
-                                                        </td>
-                                                        <td>
+                                                            </mat-checkbox>
+                                                            <strong>
+                                                                <label>Other Tax</label>
+                                                            </strong>
+                                                        </div>
+                                                        <div class="trash-icon-delete">
+                                                            <span class="cp">
+                                                                <i class="icon-trash" aria-hidden="true"></i>
+                                                            </span>
+                                                        </div>
+                                                        <!-- hide-edit -->
+                                                        <!-- <span class="edit-icon cp d-flex">
+                                                            <img
+                                                                src="assets/images/edit-pencilicon.svg"
+                                                                class="edit-pencil"
+                                                            />
                                                             <text-field
-                                                                [cssClass]="'form-control mat-field-border text-right'"
+                                                                [cssClass]="'form-control mat-field-border'"
                                                                 [showError]="
                                                                     !isValidForm &&
                                                                     !voucherFormData.entries[0].transactions[0].amount
@@ -395,190 +444,139 @@
                                                                 name="amount"
                                                                 id="amount"
                                                                 [placeholder]="localeData?.enter_amount"
-                                                                decimalDigitsDirective
-                                                                [mask]="inputMaskFormat"
                                                             >
                                                             </text-field>
-                                                        </td>
-                                                        <td>
-                                                            <select-field
-                                                                [cssClass]="'form-control mat-field-border text-right'"
-                                                                [name]="'tax'"
-                                                                [placeholder]="'0'"
-                                                            >
-                                                            </select-field>
-                                                        </td>
-                                                        <td class="item-total">
-                                                            <div class="other-check other-check-table">
-                                                                <mat-checkbox
-                                                                    name="autoFillShipping"
-                                                                    color="primary"
-                                                                    class="auto-fill-shipping-address mr-t10"
-                                                                    (change)="toggleOtherTaxesAsidePane(true, null)"
-                                                                >
-                                                                </mat-checkbox>
-                                                                <strong>
-                                                                    <label>Other Tax</label>
-                                                                </strong>
-                                                            </div>
-                                                            <div class="trash-icon-delete">
-                                                                <span class="cp">
-                                                                    <i class="icon-trash" aria-hidden="true"></i>
-                                                                </span>
-                                                            </div>
-                                                            <!-- hide-edit -->
-                                                            <!-- <span class="edit-icon cp d-flex">
-                                                                <img
-                                                                    src="assets/images/edit-pencilicon.svg"
-                                                                    class="edit-pencil"
-                                                                />
-                                                                <text-field
-                                                                    [cssClass]="'form-control mat-field-border'"
-                                                                    [showError]="
-                                                                        !isValidForm &&
-                                                                        !voucherFormData.entries[0].transactions[0].amount
-                                                                            .amountForAccount
-                                                                    "
-                                                                    name="amount"
-                                                                    id="amount"
-                                                                    [placeholder]="localeData?.enter_amount"
-                                                                >
-                                                                </text-field>
-                                                            </span> -->
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="clearfix mt-2">
-                                                <strong>
-                                                    <label>Note</label>
-                                                </strong>
-                                                <textarea
-                                                    matInput
-                                                    class="mat-field-border form-control w-100 min-height-100 mt-1"
-                                                    name="note"
-                                                    [placeholder]="'Note'"
-                                                ></textarea>
-                                            </div>
+                                                        </span> -->
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="add-line-bulk-item font-14">
+                                            <a href="javascript:void(0)">+ Add New Line</a>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-lg-6 mt-4">
-                                            <div class="file-input">
-                                                <strong>
-                                                    <label
-                                                        >Attachement File
-                                                        <i class="icon-file-path"></i>
-                                                    </label>
-                                                </strong>
-                                                <label for="file-input" class="file-upload-label mt-1">
-                                                    Drag/Drop file or Click here
+                                    <div class="col-lg-6">
+                                        <div class="clearfix mt-2">
+                                            <strong>
+                                                <label>Note</label>
+                                            </strong>
+                                            <textarea
+                                                matInput
+                                                class="mat-field-border form-control w-100 min-height-100 mt-1"
+                                                name="note"
+                                                [placeholder]="'Note'"
+                                            ></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 mt-4">
+                                        <div class="file-input">
+                                            <strong>
+                                                <label
+                                                    >Attachement File
+                                                    <i class="icon-file-path"></i>
                                                 </label>
-                                                <input
-                                                    type="file"
-                                                    name="file-input"
-                                                    id="file-input"
-                                                    class="file-upload-input"
-                                                />
-                                            </div>
+                                            </strong>
+                                            <label for="file-input" class="file-upload-label mt-1">
+                                                Drag/Drop file or Click here
+                                            </label>
+                                            <input
+                                                type="file"
+                                                name="file-input"
+                                                id="file-input"
+                                                class="file-upload-input"
+                                            />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <section class="clearfix mr-t100">
-                        <section class="text-center mr-b2 giddh-overlap-block action-buttons">
-                            <div class="col-12">
-                                <div class="pull-right pr update-mode">
-                                    <button
-                                        type="button"
-                                        mat-raised-button
-                                        *ngIf="!isUpdateMode"
-                                        [disabled]="isLoading || isFileUploading"
-                                        (click)="resetForm(receiptForm)"
-                                    >
-                                        {{ commonLocaleData?.app_clear }}
-                                    </button>
-                                    <button
-                                        color="primary"
-                                        type="button"
-                                        mat-raised-button
-                                        *ngIf="!isUpdateMode"
-                                        [disabled]="isLoading || isFileUploading"
-                                        (click)="createVoucher(receiptForm)"
-                                    >
-                                        {{
-                                            voucherFormData.type === receiptVoucherType
-                                                ? localeData?.create_receipt
-                                                : localeData?.create_payment
-                                        }}
-                                    </button>
-                                    <button
-                                        type="button"
-                                        mat-raised-button
-                                        *ngIf="isUpdateMode"
-                                        [routerLink]="
-                                            '/pages/voucher/' +
-                                            voucherFormData.type +
-                                            '/preview/' +
-                                            queryParams?.uniqueName +
-                                            '/' +
-                                            queryParams?.accountUniqueName
-                                        "
-                                    >
-                                        {{ commonLocaleData?.app_cancel }}
-                                    </button>
-                                    <button
-                                        color="primary"
-                                        type="button"
-                                        mat-raised-button
-                                        *ngIf="isUpdateMode"
-                                        [disabled]="isLoading || isFileUploading"
-                                        (click)="updateVoucher()"
-                                    >
-                                        {{
-                                            voucherFormData.type === receiptVoucherType
-                                                ? localeData?.update_receipt
-                                                : localeData?.update_payment
-                                        }}
-                                    </button>
-                                    <span class="d-inline-block v-align-middle" *ngIf="!isUpdateMode">
-                                        <div class="btn-group dropup">
-                                            <button
-                                                class="caret-button"
-                                                mat-raised-button
-                                                [matMenuTriggerFor]="menu"
-                                                [disabled]="isLoading || isFileUploading"
-                                            >
-                                                <span class="caret"></span>
+                </div>
+                <section class="clearfix mr-t100">
+                    <section class="text-center mr-b2 giddh-overlap-block action-buttons">
+                        <div class="col-12">
+                            <div class="pull-right pr update-mode">
+                                <button
+                                    type="button"
+                                    mat-raised-button
+                                    *ngIf="!isUpdateMode"
+                                    [disabled]="isLoading || isFileUploading"
+                                    (click)="resetForm(receiptForm)"
+                                >
+                                    {{ commonLocaleData?.app_clear }}
+                                </button>
+                                <button
+                                    color="primary"
+                                    type="button"
+                                    mat-raised-button
+                                    *ngIf="!isUpdateMode"
+                                    [disabled]="isLoading || isFileUploading"
+                                    (click)="createVoucher(receiptForm)"
+                                >
+                                    {{
+                                        voucherFormData.type === receiptVoucherType
+                                            ? localeData?.create_receipt
+                                            : localeData?.create_payment
+                                    }}
+                                </button>
+                                <button
+                                    type="button"
+                                    mat-raised-button
+                                    *ngIf="isUpdateMode"
+                                    [routerLink]="
+                                        '/pages/voucher/' +
+                                        voucherFormData.type +
+                                        '/preview/' +
+                                        queryParams?.uniqueName +
+                                        '/' +
+                                        queryParams?.accountUniqueName
+                                    "
+                                >
+                                    {{ commonLocaleData?.app_cancel }}
+                                </button>
+                                <button
+                                    color="primary"
+                                    type="button"
+                                    mat-raised-button
+                                    *ngIf="isUpdateMode"
+                                    [disabled]="isLoading || isFileUploading"
+                                    (click)="updateVoucher()"
+                                >
+                                    {{
+                                        voucherFormData.type === receiptVoucherType
+                                            ? localeData?.update_receipt
+                                            : localeData?.update_payment
+                                    }}
+                                </button>
+                                <span class="d-inline-block v-align-middle" *ngIf="!isUpdateMode">
+                                    <div class="btn-group dropup">
+                                        <button
+                                            class="caret-button"
+                                            mat-raised-button
+                                            [matMenuTriggerFor]="menu"
+                                            [disabled]="isLoading || isFileUploading"
+                                        >
+                                            <span class="caret"></span>
+                                        </button>
+                                        <mat-menu #menu="matMenu" yPosition="above">
+                                            <button mat-menu-item (click)="createVoucher(receiptForm, sendEmailModal)">
+                                                <span>{{ localeData?.create_send }}</span>
                                             </button>
-                                            <mat-menu #menu="matMenu" yPosition="above">
-                                                <button
-                                                    mat-menu-item
-                                                    (click)="createVoucher(receiptForm, sendEmailModal)"
-                                                >
-                                                    <span>{{ localeData?.create_send }}</span>
-                                                </button>
-                                                <button
-                                                    mat-menu-item
-                                                    (click)="createVoucher(receiptForm, sendPrintModal)"
-                                                >
-                                                    <span>{{ localeData?.create_print }}</span>
-                                                </button>
-                                            </mat-menu>
-                                        </div>
-                                    </span>
-                                </div>
+                                            <button mat-menu-item (click)="createVoucher(receiptForm, sendPrintModal)">
+                                                <span>{{ localeData?.create_print }}</span>
+                                            </button>
+                                        </mat-menu>
+                                    </div>
+                                </span>
                             </div>
-                        </section>
+                        </div>
                     </section>
-                </form>
-            </div>
-        </mat-card-content>
-    </mat-card>
+                </section>
+            </form>
+        </div>
+    </div>
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
     <div
         class="aside-overlay"
