@@ -137,7 +137,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /** Observable to subscribe for refresh columns on select chiplist */
     public refreshColumns = new Subject<void>();
     /** This will hold if variant is selected on chip list */
-    public isVariantAvailabe : boolean = false;
+    public isVariantSelected : boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -683,10 +683,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         if (this.searchRequest.page === 1 || this.searchRequest.page <= this.searchRequest.totalPages) {
             delete this.searchRequest.totalItems;
             delete this.searchRequest.totalPages;
-            if (!this.searchRequest.variantUniqueNames?.length) {
-                this.isVariantAvailabe = true;
+            if (this.searchRequest.variantUniqueNames?.length) {
+                this.isVariantSelected = true;
             } else {
-                this.isVariantAvailabe = false;
+                this.isVariantSelected = false;
             }
             let searchRequest = cloneDeep(this.searchRequest);
 

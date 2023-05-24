@@ -78,7 +78,7 @@
             class="edit-btn-inventory ml-3 mr-0"
             color="primary"
             (click)="editInventory()"
-            *ngIf="filtersChipList?.length === 1 && isVariantAvailabe"
+            *ngIf="filtersChipList?.length === 1 && !isVariantSelected"
         >
             {{ commonLocaleData?.app_edit }}
         </button>
