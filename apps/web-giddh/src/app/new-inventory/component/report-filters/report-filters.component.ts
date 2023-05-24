@@ -761,7 +761,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         if (type === 'STOCK GROUP') {
             this.router.navigate(['/pages/inventory/v2/group', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
         }
-        if (type === 'STOCK') {
+        if (type === 'STOCK' || type === 'VARIANT') {
             this.router.navigate(['/pages/inventory/v2/stock', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
         }
     }
