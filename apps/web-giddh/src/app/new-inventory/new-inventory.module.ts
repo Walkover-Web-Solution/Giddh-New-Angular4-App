@@ -68,14 +68,6 @@ import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
 import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
-import { CustomUnitsComponent } from "./component/custom-units/custom-units.component";
-import { MatGridListModule } from "@angular/material/grid-list";
-import { MatListModule } from "@angular/material/list";
-import { MatDivider } from "@angular/material/divider";
-import { AsideCreateNewUnitComponent } from "./component/aside-create-unit/aside-create-unit.component";
-import { CreateGroupComponent } from "./component/create-group/create-group.component";
-import { AsideCreatGroupComponent } from "./component/aside-create-group/aside-create-group.component";
-import { RecipeModule } from "./component/recipe/recipe.module";
 
 @NgModule({
     declarations: [
@@ -116,11 +108,7 @@ import { RecipeModule } from "./component/recipe/recipe.module";
         ItemWiseComponent,
         VariantWiseComponent,
         ReportFiltersComponent,
-        ReportsComponent,
-        AsideCreateNewUnitComponent,
-        CreateGroupComponent,
-        AsideCreatGroupComponent,
-        CustomUnitsComponent
+        ReportsComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -153,10 +141,7 @@ import { RecipeModule } from "./component/recipe/recipe.module";
         MatDialogModule,
         MatAutocompleteModule,
         MatTooltipModule,
-        SelectTableColumnModule,
-        MatGridListModule,
-        MatListModule,
-        RecipeModule
+        SelectTableColumnModule
     ],
     exports: [
         NewInventoryComponent,
@@ -190,8 +175,7 @@ import { RecipeModule } from "./component/recipe/recipe.module";
         DashboardPurchaseReport,
         DashboardSalesReport,
         DashboardSellingReport,
-        ReportFiltersComponent,
-        MatDivider
+        ReportFiltersComponent
     ]
 })
 export class NewInventoryModule { }
