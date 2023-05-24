@@ -408,6 +408,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                     uniqueName: branchUniqueName
                 }
             };
+            this.generalService.currentBranchUniqueName = branchUniqueName;
             this.setOrganizationDetails(OrganizationType.Branch, details);
             this.store.dispatch(this.invoiceAction.getInvoiceSetting());
             this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(take(1)).subscribe(response => {
