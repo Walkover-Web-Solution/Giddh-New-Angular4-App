@@ -68,7 +68,6 @@ import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
 import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
-<<<<<<< HEAD
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatListModule } from "@angular/material/list";
@@ -77,8 +76,6 @@ import { AsideCreateNewUnitComponent } from "./component/aside-create-unit/aside
 import { CreateGroupComponent } from "./component/create-group/create-group.component";
 import { AsideCreatGroupComponent } from "./component/aside-create-group/aside-create-group.component";
 import { RecipeModule } from "./component/recipe/recipe.module";
-=======
->>>>>>> c0ada8a163b3294602a466797a1d7815db30091c
 
 @NgModule({
     declarations: [
