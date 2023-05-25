@@ -9,6 +9,10 @@ import { CreateManufacturingComponent } from './create-manufacturing/create-manu
 import { ManufacturingRoutingModule } from './manufacturing.routing.module';
 import { ListManufacturingComponent } from './list-manufacturing/list-manufacturing.component';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { DatepickerWrapperModule } from '../../../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @NgModule({
     imports: [
@@ -19,7 +23,11 @@ import { MatTableModule } from '@angular/material/table';
         MatButtonModule,
         ManufacturingRoutingModule,
         MatButtonModule,
-        MatTableModule
+        MatTableModule,
+        MatDialogModule,
+        MatTooltipModule,
+        DatepickerWrapperModule,
+        PaginationModule.forRoot()
     ],
     exports: [
         CreateManufacturingComponent,

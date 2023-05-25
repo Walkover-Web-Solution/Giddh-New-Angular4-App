@@ -1,13 +1,25 @@
 #list-manufacture {
     .form-fileds {
-        .width-280 {
+        .max-width-230 {
             display: block;
-            width: 280px;
+            width: auto;
+            max-width: 230px;
+        }
+        .gap-between {
+            gap: 1rem;
         }
     }
     .table-wrapper {
-        .mat-header-row {
-            background-color: var(--color-common-senary-background-for-all-components) !important;
+        border-top: 1px solid lightgray;
+    }
+}
+
+@media (max-width: 1440px) {
+    #list-manufacture {
+        .form-fileds {
+            .max-width-230 {
+                width: 200px !important;
+            }
         }
     }
 }
