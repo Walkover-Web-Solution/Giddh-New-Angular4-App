@@ -75,6 +75,7 @@ import { AsideCreateNewUnitComponent } from "./component/aside-create-unit/aside
 import { CreateGroupComponent } from "./component/create-group/create-group.component";
 import { AsideCreatGroupComponent } from "./component/aside-create-group/aside-create-group.component";
 import { RecipeModule } from "./component/recipe/recipe.module";
+import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 
 @NgModule({
@@ -120,7 +121,8 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         AsideCreateNewUnitComponent,
         CreateGroupComponent,
         AsideCreatGroupComponent,
-        CustomUnitsComponent
+        CustomUnitsComponent,
+        InventoryMasterComponent
     ],
     imports: [
         NewInventoryRoutingModule,

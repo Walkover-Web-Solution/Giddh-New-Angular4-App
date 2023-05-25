@@ -12,7 +12,8 @@
         "branch_transfer":"शाखा स्थानांतरण",
         "manufacturing":"उत्पादन",
         "warehouse_balance":"वेयरहाउस ओपनिंग बैलेंस",
-        "custom_units":"कस्टम इकाई"
+        "custom_units":"कस्टम इकाई",
+        "master":"मास्टर"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",
