@@ -46,7 +46,7 @@ const routes: Routes = [
                 component: InventoryTransactionListComponent,
             },
             {
-                path: "reports/:type/master",
+                path: ":type/master",
                 component: InventoryMasterComponent,
             },
             {

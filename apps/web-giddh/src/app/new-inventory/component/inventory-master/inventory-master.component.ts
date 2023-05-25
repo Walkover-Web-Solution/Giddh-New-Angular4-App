@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core";
+import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
 
 @Component({
   selector: "inventory-master",
@@ -6,12 +7,13 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/
   styleUrls: ["./inventory-master.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InventoryMasterComponent implements OnInit, OnDestroy {
+export class InventoryMasterComponent  {
   public createUpdateStock: string = 'out';
   public createUpdateGroup: string = 'out';
 
+  public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
   /* Create unit aside pane open function */
-  public createUnitToggleAsidePane(): void {
+  public createStockToggleAsidePane(): void {
     this.createUpdateStock = this.createUpdateStock === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
   }
@@ -27,11 +29,5 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
     } else {
       document.querySelector('body').classList.remove('fixed');
     }
-  }
-  public ngOnInit(): void {
-    document.querySelector('body').classList.add('custom-units');
-  }
-  public ngOnDestroy(): void{
-    document.querySelector('body').classList.remove('custom-units');
   }
 }

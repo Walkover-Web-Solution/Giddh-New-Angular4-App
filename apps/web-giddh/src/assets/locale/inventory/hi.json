@@ -13,7 +13,7 @@
         "manufacturing":"उत्पादन",
         "warehouse_balance":"वेयरहाउस ओपनिंग बैलेंस",
         "custom_units":"कस्टम इकाई",
-        "master":"मालिक"
+        "master":"मास्टर"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",

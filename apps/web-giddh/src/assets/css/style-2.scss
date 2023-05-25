@@ -763,7 +763,8 @@ aside-create-group {
         .item-list {
             padding-right: 15px;
             height: 100%;
-            /* width: 225px !important; */
+            width: 225px !important;
+            float: left;
         }
         .mat-list-base .mat-list-item {
             width: 225px;
