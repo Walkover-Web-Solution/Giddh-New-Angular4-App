@@ -821,13 +821,13 @@
                                     "
                                     (selected)="variantChanged($event)"
                                     [placeholder]="localeData?.select_variant"
-                                    [(ngModel)]="selectedStockVariantUniqueName"
+                                    [(ngModel)]="selectedStockVariant.uniqueName"
                                     [options]="stockVariants"
                                     [defaultValue]="selectedStockVariant?.name"
                                     [isRequired]="true"
                                     [doNotResetSelectedValues]="true"
                                     [forceClearReactive]="variantForceClear$ | async"
-                                    [cssClass]="!selectedStockVariantUniqueName ? 'error-box' : ''"
+                                    [cssClass]="!selectedStockVariant.uniqueName ? 'error-box' : ''"
                                 ></sh-select>
                             </div>
                         </ng-container>

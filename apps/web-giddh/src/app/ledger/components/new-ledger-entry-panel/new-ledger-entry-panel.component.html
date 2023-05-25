@@ -1165,8 +1165,8 @@
 </ng-template>
 <ng-template #variantAndWarehouseDropdown>
     <div class="d-flex justify-content-between mb-2">
-        <ng-container *ngIf="currentTxn?.isStock && stockVariants | async as stockVariants">
-            <div *ngIf="stockVariants?.length > 1" class="col-md-3 mb-2 p-0 pr-2">
+        <ng-container *ngIf="currentTxn?.isStock && stockVariants | async as variants">
+            <div *ngIf="variants?.length > 1" class="col-md-3 mb-2 p-0 pr-2">
                 <div>
                     <label>{{ localeData?.select_variant }}</label>
                     <!-- <select-field
@@ -1174,7 +1174,7 @@
                         [cssClass]="'form-control mat-field-border'"
                         [placeholder]="localeData?.select_variant"
                         (selectedOption)="variantChanged($event)"
-                        [options]="stockVariants"
+                        [options]="variants"
                         [required]="true"
                     >
                     </select-field> -->
@@ -1184,11 +1184,12 @@
                         [forceClearReactive]="variantForceClear$ | async"
                         [class.disabled-ledger]="isReadOnly"
                         [placeholder]="localeData?.select_variant"
-                        [options]="stockVariants"
+                        [options]="variants"
                         (selected)="variantChanged($event)"
-                        [(ngModel)]="selectedStockVariantUniqueName"
+                        [(ngModel)]="selectedStockVariant.value"
                         [isRequired]="true"
-                        [cssClass]="!selectedStockVariantUniqueName ? 'error-box' : ''"
+                        [cssClass]="!selectedStockVariant.value ? 'error-box' : ''"
+                        [defaultValue]="selectedStockVariant.label"
                     ></sh-select>
                 </div>
             </div>
