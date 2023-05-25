@@ -13,6 +13,9 @@
         "manufacturing":"Manufacturing",
         "warehouse_balance":"Warehouse Opening Balance",
         "custom_units":"Custom Units",
+        "recipe":"Recipe",
+        "create_manufacturing":"Create Manufacturing",
+        "report":"Report",
         "master":"Master"
     },
     "reports":{

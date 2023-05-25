@@ -13,6 +13,9 @@
         "manufacturing":"उत्पादन",
         "warehouse_balance":"गोदाम उघडण्याची शिल्लक",
         "custom_units":"सानुकूल युनिट",
+        "recipe":"कृती",
+        "create_manufacturing":"मॅन्युफॅक्चरिंग तयार करा",
+        "report":"अहवाल द्या",
         "master":"मास्टर"
     },
     "reports":{
