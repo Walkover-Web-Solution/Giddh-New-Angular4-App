@@ -3,6 +3,7 @@
 /**
 # margin mixin pass direction and number
 */
+
 @mixin marg($d, $num) {
     @if $d== "B" {
         margin-bottom: $num;
@@ -441,7 +442,7 @@ textarea:focus {
     display: block;
     font-size: 26px;
     line-height: 1.2;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 
 .sp-rupees span.icon-rupees {
@@ -1142,7 +1143,7 @@ section.new-table {
     font-size: 14px !important;
     font-weight: 500;
     display: block;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 
 .single-card-row {
@@ -1604,7 +1605,7 @@ label.sales-country-label {
 
 b,
 strong {
-    font-family: "opensans-bold";
+    font-family: var(--font-bold);
     font-weight: 500;
 }
 
