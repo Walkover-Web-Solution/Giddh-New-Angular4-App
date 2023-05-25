@@ -24,7 +24,7 @@
         "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",
         "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile",
         "icon": "icon.png",
-        "hardenedRuntime" : true,
+        "hardenedRuntime": true,
         "gatekeeperAssess": false
     },
     "dmg": {
@@ -50,7 +50,12 @@
             "nsis-web",
             "zip"
         ],
-        "icon": "icon.ico"
+        "icon": "icon.ico",
+        "signingHashAlgorithms": [
+            "sha256"
+        ],
+        "publisherName": "Walkover Technologies Pvt Ltd",
+        "legalTrademarks": "Walkover Technologies Pvt Ltd"
     },
     "nsis": {
         "oneClick": true,
