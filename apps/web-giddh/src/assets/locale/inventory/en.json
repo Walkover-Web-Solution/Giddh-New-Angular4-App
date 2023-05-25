@@ -86,5 +86,14 @@
         "greater_than":"Greater than",
         "less_than":"Less than",
         "excluded":"Excluded"
+    },
+    "warehouse_opening_balance":{
+        "unique_name":"Unique Name",
+        "stock_group":"Stock Group",
+        "new_stock":"+ New Stock",
+        "select_warehouse":"Select Warehouse",
+        "opening_bal":"Opening Bal",
+        "variant":"Variant",
+        "variants":"Variants"
     }
 }

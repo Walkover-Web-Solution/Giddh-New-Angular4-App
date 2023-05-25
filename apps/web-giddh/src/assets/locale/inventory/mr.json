@@ -85,5 +85,14 @@
         "greater_than":"या पेक्षा मोठे",
         "less_than":"च्या पेक्षा कमी",
         "excluded":"वगळलेले"
+    },
+     "warehouse_opening_balance":{
+        "unique_name":"अद्वितीय नाव",
+        "stock_group":"स्टॉक ग्रुप",
+        "new_stock":"+ नवीन स्टॉक",
+        "select_warehouse":"वेअरहाऊस निवडा",
+        "opening_bal":"सलामी बल",
+        "variant":"प्रकार",
+        "variants":"रूपे"
     }
 }

@@ -259,7 +259,8 @@ export class InventoryTransactionListComponent implements OnInit {
                 let queryParams = {
                     from: balanceReportRequest.from ?? '',
                     to: balanceReportRequest.to ?? '',
-                    stockGroupUniqueName: ''
+                    stockGroupUniqueName: '',
+                    entity: ''
                 };
                 balanceReportRequest.from = undefined;
                 balanceReportRequest.to = undefined;

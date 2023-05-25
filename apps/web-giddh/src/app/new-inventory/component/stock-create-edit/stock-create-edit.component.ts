@@ -792,10 +792,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         }
         if (!this.stockGroupUniqueName) {
             let mainGroupExists = this.stockGroups?.filter(group => {
-                return group?.value === "maingroup"
+                return group?.additional?.name === "Main Group"
             });
             if (mainGroupExists?.length > 0) {
-                this.stockGroupUniqueName = "maingroup";
+                this.stockGroupUniqueName = mainGroupExists[0]?.value;
                 this.saveStock();
             } else {
                     let stockRequest = {
@@ -814,7 +814,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         }
                     });
                 }
-            } else {
+        } else {
                 this.saveStock();
             }
         }
@@ -906,8 +906,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         name: this.stockUnitName,
                         code: this.stockForm.stockUnitUniqueName
                     },
-                    openingQuantity: variant.warehouseBalance[0].openingQuantity,
-                    openingAmount: variant.warehouseBalance[0].openingAmount
+                    openingQuantity: this.isVariantAvailable ? variant.warehouseBalance[0].openingQuantity : this.stockForm.openingQuantity,
+                    openingAmount: this.isVariantAvailable ? variant.warehouseBalance[0].openingAmount : this.stockForm.openingAmount
                 }
             ]
 
@@ -1554,7 +1554,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
    * @memberof StockCreateEditComponent
    */
     public selectVariantSalesPurchaseUnit(variantSalesUnitRate: any, event: any): void {
-        variantSalesUnitRate.stockUnitCode = event?.additional?.code;
+        variantSalesUnitRate.stockUnitCode = event.additional?.additional?.code ? event.additional?.additional?.code : event.additional?.code;
         variantSalesUnitRate.stockUnitName = event?.label;
         variantSalesUnitRate.stockUnitUniqueName = event?.value;
     }
@@ -1567,7 +1567,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     * @memberof StockCreateEditComponent
     */
     public selectVariantFixedAssetsUnit(variantFixedAssetsUnitRate: any, event: any): void {
-        variantFixedAssetsUnitRate.stockUnitCode = event?.additional?.code;
+        variantFixedAssetsUnitRate.stockUnitCode = event.additional?.additional?.code ? event.additional?.additional?.code : event.additional?.code;
         variantFixedAssetsUnitRate.stockUnitName = event?.label;
         variantFixedAssetsUnitRate.stockUnitUniqueName = event?.value;
     }

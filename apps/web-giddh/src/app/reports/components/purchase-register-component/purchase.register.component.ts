@@ -286,6 +286,14 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 this.selectedMonth = null;
             }
             this.selectedType = interval?.charAt(0)?.toUpperCase() + interval?.slice(1);
+
+            if (this.currentOrganizationType === OrganizationType.Branch) {
+                if (!this.currentBranch) {
+                    this.currentBranch = {};
+                }
+                this.currentBranch.uniqueName = this.generalService.currentBranchUniqueName;
+            }
+            
             let request: ReportsRequestModel = {
                 to: endDate,
                 from: startDate,
