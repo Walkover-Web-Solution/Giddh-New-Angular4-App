@@ -136,7 +136,7 @@ html,
 body {
     height: 100%;
     background: #f7f8fa;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
 
     color: #333333;
     -webkit-font-smoothing: antialiased;
