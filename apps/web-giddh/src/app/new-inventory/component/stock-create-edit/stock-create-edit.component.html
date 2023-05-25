@@ -51,143 +51,136 @@
                     >
                         <div class="row flex-column-reverse flex-md-row upper-common-form-container">
                             <div class="col-xl-8 col-lg-12">
-                                <div class="row flex-column-reverse flex-md-row">
-                                    <div class="col-md-8 col-lg-8 col-xl-6 col-12 upper-common-form-label-field">
-                                        <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-4">
-                                                <label class="product-name-label">
-                                                    {{
-                                                        stockForm.type === "FIXED_ASSETS"
-                                                            ? localeData?.fixed_assets
-                                                            : (stockForm.type | titlecase)
-                                                    }}
-                                                    {{ commonLocaleData?.app_name }}
-                                                    <span class="red-text product-name-star">*</span></label
-                                                >
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6 ml-lg-2">
-                                                <text-field
-                                                    [cssClass]="'form-control'"
-                                                    [name]="'productName'"
-                                                    [placeholder]="localeData?.enter_product"
-                                                    [type]="'text'"
-                                                    [(ngModel)]="stockForm.name"
-                                                    [required]="true"
-                                                >
-                                                </text-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-4">
-                                                <label
-                                                    >{{
-                                                        stockForm.type === "FIXED_ASSETS"
-                                                            ? localeData?.fixed_assets
-                                                            : (stockForm.type | titlecase)
-                                                    }}
-                                                    {{ commonLocaleData?.app_unit }}
-                                                    <span class="red-text">*</span></label
-                                                >
-                                            </div>
-
-                                            <div class="col-sm-6 col-lg-6 ml-lg-2">
-                                                <select-field
-                                                    [cssClass]="'form-control'"
-                                                    [name]="'stockUnitCode'"
-                                                    [placeholder]="localeData?.select_unit"
-                                                    [options]="stockUnits"
-                                                    (selectedOption)="
-                                                        stockForm.stockUnitUniqueName = $event?.value;
-                                                        stockUnitName = $event.label
-                                                    "
-                                                    [defaultValue]="stockUnitName"
-                                                ></select-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-4">
-                                                <label> {{ localeData?.under_group }}</label>
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6 ml-lg-2 under-group-field-button-wrapper">
-                                                <select-field
-                                                    [cssClass]="'form-control'"
-                                                    [name]="'stockGroup'"
-                                                    [placeholder]="commonLocaleData?.app_select_group"
-                                                    [options]="stockGroups"
-                                                    (selectedOption)="
-                                                        stockGroupUniqueName = $event?.value;
-                                                        stockGroupName = $event.label
-                                                    "
-                                                    [defaultValue]="
-                                                        stockGroups.length ? stockGroups[0] : stockGroupName
-                                                    "
-                                                    [allowValueReset]="true"
-                                                    (onClear)="stockGroupName = ''; stockGroupUniqueName = ''"
-                                                ></select-field>
-                                                <button
-                                                    *ngIf="queryParams?.stockUniqueName"
-                                                    mat-raised-button
-                                                    class="btn-success min-width-100 move-stock"
-                                                    (click)="moveStock()"
-                                                    [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
-                                                >
-                                                    {{ localeData?.move }}
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-4">
-                                                <label>{{ commonLocaleData?.app_unique_name }} </label>
-                                                <!-- <i class="icon-info text-gray"></i> -->
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6 ml-lg-2">
-                                                <text-field
-                                                    [cssClass]="'form-control'"
-                                                    [name]="'uniqueName'"
-                                                    [placeholder]="commonLocaleData?.app_unique_name"
-                                                    [type]="'text'"
-                                                    [(ngModel)]="stockForm.uniqueName"
-                                                ></text-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-4">
-                                                <label>{{ localeData?.applicable_tax }} </label>
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6 ml-lg-2">
-                                                <mat-select
-                                                    name="taxes"
-                                                    class="form-control"
-                                                    [placeholder]="commonLocaleData?.app_select_tax"
-                                                    multiple
-                                                    [(value)]="stockForm.taxes"
-                                                >
-                                                    <mat-option
-                                                        *ngFor="let tax of taxes"
-                                                        [value]="tax?.uniqueName"
-                                                        [disabled]="tax.isDisabled"
-                                                        [selected]="tax.isChecked"
-                                                        (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
-                                                        >{{ tax.name }}</mat-option
-                                                    >
-                                                    <mat-option
-                                                        class="create-update-no-data"
-                                                        [disabled]="true"
-                                                        *ngIf="!taxes?.length"
-                                                        >{{ commonLocaleData?.app_no_result_found }}</mat-option
-                                                    >
-                                                </mat-select>
-                                            </div>
-                                        </div>
+                                <div class="row mr-b1">
+                                    <div class="col-sm-6 col-lg-4">
+                                        <label class="product-name-label">
+                                            {{
+                                                stockForm.type === "FIXED_ASSETS"
+                                                    ? localeData?.fixed_assets
+                                                    : (stockForm.type | titlecase)
+                                            }}
+                                            {{ commonLocaleData?.app_name }}
+                                            <span class="red-text product-name-star">*</span></label
+                                        >
                                     </div>
-                                    <!-- <div class="col-md-4 col-lg-4 col-xl-6 col-12">
-                                        <div class="add-image-button">
-                                            <button mat-button role="button" type="button">
-                                                <img src="{{ imgPath }}add-image.svg" />
-                                            </button>
-                                        </div>
-                                    </div> -->
+                                    <div class="col-sm-6 col-lg-6 ml-lg-2">
+                                        <text-field
+                                            [cssClass]="'form-control'"
+                                            [name]="'productName'"
+                                            [placeholder]="localeData?.enter_product"
+                                            [type]="'text'"
+                                            [(ngModel)]="stockForm.name"
+                                            [required]="true"
+                                        >
+                                        </text-field>
+                                    </div>
                                 </div>
+                                <div class="row mr-b1">
+                                    <div class="col-sm-6 col-lg-4">
+                                        <label
+                                            >{{
+                                                stockForm.type === "FIXED_ASSETS"
+                                                    ? localeData?.fixed_assets
+                                                    : (stockForm.type | titlecase)
+                                            }}
+                                            {{ commonLocaleData?.app_unit }}
+                                            <span class="red-text">*</span></label
+                                        >
+                                    </div>
+
+                                    <div class="col-sm-6 col-lg-6 ml-lg-2">
+                                        <select-field
+                                            [cssClass]="'form-control'"
+                                            [name]="'stockUnitCode'"
+                                            [placeholder]="localeData?.select_unit"
+                                            [options]="stockUnits"
+                                            (selectedOption)="
+                                                stockForm.stockUnitUniqueName = $event?.value;
+                                                stockUnitName = $event.label
+                                            "
+                                            [defaultValue]="stockUnitName"
+                                        ></select-field>
+                                    </div>
+                                </div>
+                                <div class="row mr-b1">
+                                    <div class="col-sm-6 col-lg-4">
+                                        <label> {{ localeData?.under_group }}</label>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 ml-lg-2 under-group-field-button-wrapper">
+                                        <select-field
+                                            [cssClass]="'form-control'"
+                                            [name]="'stockGroup'"
+                                            [placeholder]="commonLocaleData?.app_select_group"
+                                            [options]="stockGroups"
+                                            (selectedOption)="
+                                                stockGroupUniqueName = $event?.value; stockGroupName = $event.label
+                                            "
+                                            [defaultValue]="stockGroups.length ? stockGroups[0] : stockGroupName"
+                                            [allowValueReset]="true"
+                                            (onClear)="stockGroupName = ''; stockGroupUniqueName = ''"
+                                        ></select-field>
+                                        <button
+                                            *ngIf="queryParams?.stockUniqueName"
+                                            mat-raised-button
+                                            class="btn-success min-width-100 move-stock"
+                                            (click)="moveStock()"
+                                            [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
+                                        >
+                                            {{ localeData?.move }}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row mr-b1">
+                                    <div class="col-sm-6 col-lg-4">
+                                        <label>{{ commonLocaleData?.app_unique_name }} </label>
+                                        <!-- <i class="icon-info text-gray"></i> -->
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 ml-lg-2">
+                                        <text-field
+                                            [cssClass]="'form-control'"
+                                            [name]="'uniqueName'"
+                                            [placeholder]="commonLocaleData?.app_unique_name"
+                                            [type]="'text'"
+                                            [(ngModel)]="stockForm.uniqueName"
+                                        ></text-field>
+                                    </div>
+                                </div>
+                                <div class="row mr-b1">
+                                    <div class="col-sm-6 col-lg-4">
+                                        <label>{{ localeData?.applicable_tax }} </label>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 ml-lg-2">
+                                        <mat-select
+                                            name="taxes"
+                                            class="form-control"
+                                            [placeholder]="commonLocaleData?.app_select_tax"
+                                            multiple
+                                            [(value)]="stockForm.taxes"
+                                        >
+                                            <mat-option
+                                                *ngFor="let tax of taxes"
+                                                [value]="tax?.uniqueName"
+                                                [disabled]="tax.isDisabled"
+                                                [selected]="tax.isChecked"
+                                                (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
+                                                >{{ tax.name }}</mat-option
+                                            >
+                                            <mat-option
+                                                class="create-update-no-data"
+                                                [disabled]="true"
+                                                *ngIf="!taxes?.length"
+                                                >{{ commonLocaleData?.app_no_result_found }}</mat-option
+                                            >
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-4 col-lg-4 col-xl-6 col-12">
+                                    <div class="add-image-button">
+                                        <button mat-button role="button" type="button">
+                                            <img src="{{ imgPath }}add-image.svg" />
+                                        </button>
+                                    </div>
+                                </div> -->
                             </div>
                         </div>
                         <div class="other-group mt-2">

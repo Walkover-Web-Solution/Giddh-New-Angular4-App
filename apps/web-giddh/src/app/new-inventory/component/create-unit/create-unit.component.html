@@ -1,19 +1,19 @@
 <form>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-xl-5 col-lg-5 col-sm-5">
             <label>Unit Group <span class="red-text">*</span></label>
             <select-field [cssClass]="'form-control mat-field-border'" [placeholder]="'Select unit'"> </select-field>
         </div>
     </div>
     <div class="row mt-3">
-        <div class="col-sm-6">
+        <div class="col-xl-5 col-lg-5 col-sm-5">
             <label>Unit Name <span class="red-text">*</span></label>
             <select-field [cssClass]="'form-control mat-field-border'" [placeholder]="'Select unit'"> </select-field>
         </div>
-        <div class="col-sm-6">
+        <div class="col-xl-7 col-lg-7 col-sm-7">
             <label>Unit Code <span class="red-text">*</span></label>
             <text-field
-                [cssClass]="'form-control'"
+                [cssClass]="'form-control mat-field-border'"
                 [name]="'hsnNumber'"
                 [type]="'text'"
                 [placeholder]="'Unique Name'"
@@ -25,7 +25,7 @@
     <!-- section-repeat -->
     <div class="unit-quantity mt-3">
         <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6 unit-equal">
+            <div class="col-xl-5 col-lg-5 col-md-5 col-sm-6 unit-equal">
                 <label>Unit Name <span class="red-text">*</span></label>
                 <select-field
                     [cssClass]="'form-control mat-field-border'"
@@ -35,10 +35,10 @@
                 </select-field>
                 <span class="equal-sign">=</span>
             </div>
-            <div class="col-lg-2 col-md-3 col-sm-2 pr-0 unit-responsive">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-2 pr-0 unit-responsive">
                 <label>Qty. per Unit <span class="red-text">*</span></label>
                 <text-field
-                    [cssClass]="'form-control text-right'"
+                    [cssClass]="'form-control text-right mat-field-border'"
                     [name]="'hsnNumber'"
                     [type]="'number'"
                     [placeholder]="'Quanitity'"
@@ -46,12 +46,12 @@
                 >
                 </text-field>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 pl-2">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 pl-2">
                 <label>Mapped Unit <span class="red-text">*</span></label>
                 <select-field [cssClass]="'form-control mat-field-border'" [placeholder]="'Choose unit'">
                 </select-field>
             </div>
-            <div class="col-lg-1 col-md-2 col-sm-1 pl-0">
+            <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0">
                 <div class="inc-dec">
                     <div class="plus-minus">
                         <button mat-raised-button class="btn mr-0"><i class="icon-plus add-row"></i></button>
@@ -61,7 +61,7 @@
             </div>
         </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-4">
         <div class="col-sm-12">
             <button mat-raised-button type="submit" class="btn-success">Save</button>
             <button mat-raised-button type="submit" class="btn-sm btn-danger">Clear</button>
