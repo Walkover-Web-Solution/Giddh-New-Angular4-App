@@ -12,7 +12,11 @@
         "branch_transfer":"Branch Transfer",
         "manufacturing":"Manufacturing",
         "warehouse_balance":"Warehouse Opening Balance",
-        "custom_units":"Custom Units"
+        "custom_units":"Custom Units",
+        "recipe":"Recipe",
+        "create_manufacturing":"Create Manufacturing",
+        "report":"Report",
+        "master":"Master"
     },
     "reports":{
         "transaction_count":"Transaction Count",

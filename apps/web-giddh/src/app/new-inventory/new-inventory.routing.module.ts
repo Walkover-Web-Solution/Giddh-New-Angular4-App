@@ -20,7 +20,8 @@ import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.c
 import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
 import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
-import { CustomUnitsComponent } from "./component/custom-units/custom-units.component";
+import { CustomUnitsComponent } from "./component/custom-units/custom-units.component"
+import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 
 const routes: Routes = [
     {
@@ -43,6 +44,10 @@ const routes: Routes = [
             {
                 path: "reports/:type/transaction",
                 component: InventoryTransactionListComponent,
+            },
+            {
+                path: ":type/master",
+                component: InventoryMasterComponent,
             },
             {
                 path: "reports/:type/transaction/:uniqueName",
@@ -119,6 +124,10 @@ const routes: Routes = [
     {
         path: "recipe",
         loadChildren: () => import('./component/recipe/recipe.module').then(module => module.RecipeModule)
+    },
+    {
+        path: "manufacturing",
+        loadChildren: () => import('./component/manufacturing/manufacturing.module').then(module => module.ManufacturingModule)
     },
     {
         path: "inventory-dashboard",
