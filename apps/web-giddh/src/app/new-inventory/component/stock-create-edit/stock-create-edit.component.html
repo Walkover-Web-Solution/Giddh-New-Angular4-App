@@ -115,7 +115,7 @@
                                             (selectedOption)="
                                                 stockGroupUniqueName = $event?.value; stockGroupName = $event.label
                                             "
-                                            [defaultValue]="stockGroupName"
+                                            [defaultValue]="stockGroups.length ? stockGroups[0] : stockGroupName"
                                             [allowValueReset]="true"
                                             (onClear)="stockGroupName = ''; stockGroupUniqueName = ''"
                                         ></select-field>
