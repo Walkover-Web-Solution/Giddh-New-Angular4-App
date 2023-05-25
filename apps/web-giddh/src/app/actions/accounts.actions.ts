@@ -125,7 +125,7 @@ export class AccountsAction {
     public GetAccountDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(AccountsAction.GET_ACCOUNT_DETAILS),
-            switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload)),
+            switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload.uniqueName, action.payload.source)),
             map(response => {
                 return this.getAccountDetailsResponse(response);
             })));
@@ -619,10 +619,10 @@ export class AccountsAction {
         };
     }
 
-    public getAccountDetails(value: string): CustomActions {
+    public getAccountDetails(value: string, source?: string): CustomActions {
         return {
             type: AccountsAction.GET_ACCOUNT_DETAILS,
-            payload: value
+            payload: { uniqueName: value, source: source }
         };
     }
 

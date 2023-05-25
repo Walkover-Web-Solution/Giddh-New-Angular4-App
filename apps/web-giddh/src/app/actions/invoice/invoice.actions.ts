@@ -952,6 +952,18 @@ export class InvoiceActions {
         };
     }
 
+    /**
+     * Resets invoice action
+     *
+     * @returns {CustomActions}
+     * @memberof InvoiceActions
+     */
+    public resetActionOnInvoice(): CustomActions {
+        return {
+            type: INVOICE_ACTIONS.RESET_ACTION_ON_INVOICE
+        };
+    }
+
     public ModifiedInvoiceStateData(model: string[]): CustomActions {
         return {
             type: INVOICE_ACTIONS.MODIFIED_INVOICE_STATE_DATA,

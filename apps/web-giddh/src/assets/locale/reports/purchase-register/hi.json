@@ -8,5 +8,15 @@
     "net_tax": "शुद्ध कर",
     "net_discount": "शुद्ध छूट",
     "net_tds": "नेट टीडीएस",
-    "net_tcs": "नेट टीसीएस"
+    "net_tcs": "नेट टीसीएस",
+    "purchase": "खरीदना",
+    "net_purchase": "शुद्ध खरीद",
+    "voucher_type": "वाउचर प्रकार",
+    "voucher_no": "वाउचर संख्या।",
+    "qty_rate": "मात्रा-दर",
+    "discount": "छूट",
+    "tax": "कर",
+    "date": "तारीख",
+    "account": "खाता",
+    "return": "वापस करना"
 }

@@ -392,21 +392,11 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BillingDetailComponent
      */
     public ngAfterViewInit(): void {
-        /* RAZORPAY */
-        if (window['Razorpay'] === undefined) {
-            let scriptTag = document.createElement('script');
-            scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            document.body.appendChild(scriptTag);
-        }
-        /* RAZORPAY */
-
         let that = this;
 
         setTimeout(() => {
             let activeCompany = null;
-            this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => activeCompany = activeCompany );
+            this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => activeCompany = activeCompany);
 
             this.options = {
                 key: RAZORPAY_KEY,
@@ -424,7 +414,14 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 description: 'Walkover Technologies Private Limited.'
             };
 
-            this.razorpay = new window['Razorpay'](this.options);
+            let interval = setInterval(() => {
+                try {
+                    if (!this.razorpay) {
+                        this.razorpay = new window['Razorpay'](this.options);
+                        clearInterval(interval);
+                    }
+                } catch (exception) {}
+            }, 50);
         }, 1000);
     }
 

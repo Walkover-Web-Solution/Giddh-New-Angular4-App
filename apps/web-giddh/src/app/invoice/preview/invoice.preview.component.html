@@ -1771,7 +1771,8 @@
                                 [selectedInvoiceForPayment]="selectedInvoice"
                                 [localeData]="localeData"
                                 [commonLocaleData]="commonLocaleData"
-                                (closeModelEvent)="closePerformActionPopup($event)"
+                                (performActionPopup)="performActionPopup($event)"
+                                (closeModelEvent)="closePerformActionPopup()"
                             >
                             </invoice-payment-model>
                         </div>
@@ -1878,7 +1879,7 @@
                         (closeEvent)="invoicePreviewClosed()"
                         (onOpenAdvanceReceiptModal)="openAdvanceReceiptModal($event)"
                         [isCompany]="isCompany"
-                        (processPaymentEvent)="closePerformActionPopup($event)"
+                        (processPaymentEvent)="performActionPopup($event)"
                         [voucherType]="selectedVoucher"
                         (updateVoucherAction)="onPerformAction(null, $event)"
                         [appSideMenubarIsOpen]="appSideMenubarIsOpen"
