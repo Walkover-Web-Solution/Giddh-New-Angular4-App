@@ -98,7 +98,7 @@
                   The actual rendered columns are set as a property on the row definition" -->
 
             <!-- Position Column -->
-            <ng-container matColumnDef="date" sticky]="isSticky(stickyColumns, 'date')">
+            <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef>Date</th>
                 <td mat-cell *matCellDef="let element">{{ element.date }}</td>
             </ng-container>
@@ -180,15 +180,89 @@
 
 <!--Mat Dialog for Advance Filter-->
 
-<ng-template #advance_filter_dailog>
-    <div>
+<ng-template #advance_filter_dialog>
+    <div class="advance-search-dialog">
         <div class="modal-header theme-bg pd-l2 pd-r2">
             <h3 class="modal-title bg" id="modal-title">Advanced Filter</h3>
-            <button mat-icon-button mat-dialog-close>x</button>
+            <i mat-dialog-close class="icon-cross color-white"></i>
         </div>
 
-        <div class="modal-body pd-l2 pd-r2 clearfix">
-            <h1 class="mr-b1 mr-t15">Filter Content Here ...</h1>
+        <div class="modal-body clearfix">
+            <div class="form-fileds clearfix">
+                <form class="col-md-12 pl-0 pr-0 mr-b05">
+                    <div class="row mt-2">
+                        <div class="col-md-4 col-sm-12">
+                            <label>Search By</label>
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <select-field
+                                [cssClass]="'form-control'"
+                                [name]="''"
+                                [placeholder]="'Select Search By'"
+                                [options]="product"
+                                [defaultValue]=""
+                            >
+                            </select-field>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-4 col-sm-12">
+                            <label>Operation</label>
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <select-field
+                                [cssClass]="'form-control'"
+                                [name]="''"
+                                [placeholder]="'Select Operation'"
+                                [options]="product"
+                                [defaultValue]=""
+                            >
+                            </select-field>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-4 col-sm-12">
+                            <label>Value</label>
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <text-field
+                                [type]="'text'"
+                                [name]="''"
+                                [placeholder]="'Enter Value'"
+                                [cssClass]="'form-control'"
+                                [(ngModel)]="searchStr"
+                                (ngModelChange)="searchStr$.next($event)"
+                            ></text-field>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-4 col-sm-12">
+                            <label>Inventory Type</label>
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <select-field
+                                [cssClass]="'form-control'"
+                                [name]="''"
+                                [placeholder]="'Select Operation'"
+                                [options]="product"
+                                [defaultValue]=""
+                            >
+                            </select-field>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-4">
+                        <div class="mr-2">
+                            <button type="button" class="mr-0" mat-raised-button color="primary">Search</button>
+                        </div>
+                        <div class="ml-2">
+                            <button type="button" mat-dialog-close class="mr-0" mat-stroked-button color="primary">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </ng-template>

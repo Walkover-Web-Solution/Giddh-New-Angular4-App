@@ -118,7 +118,9 @@
                                                         stockGroupUniqueName = $event?.value;
                                                         stockGroupName = $event.label
                                                     "
-                                                    [defaultValue]="stockGroupName"
+                                                    [defaultValue]="
+                                                        stockGroups.length ? stockGroups[0] : stockGroupName
+                                                    "
                                                     [allowValueReset]="true"
                                                     (onClear)="stockGroupName = ''; stockGroupUniqueName = ''"
                                                 ></select-field>
@@ -1113,7 +1115,6 @@
                                                 <mat-checkbox
                                                     color="primary"
                                                     [checked]="true"
-                                                    [disabled]="queryParams?.stockUniqueName"
                                                     id="variant"
                                                     name="isVariantAvailable"
                                                     [(ngModel)]="isVariantAvailable"
@@ -1558,11 +1559,35 @@
                                                                     </div>
                                                                 </ng-container>
                                                             </td>
-                                                            <td class="text-center unit-name">
+                                                            <td
+                                                                class="text-center unit-name"
+                                                                *ngIf="
+                                                                    isSalesInformationEnabled ||
+                                                                    isPurchaseInformationEnabled ||
+                                                                    isFixedAssetsInformationEnabled
+                                                                "
+                                                            >
+                                                                <mat-checkbox
+                                                                    *ngIf="isSalesInformationEnabled"
+                                                                    color="primary"
+                                                                    name="variantSalesTaxInclusive{{ i }}"
+                                                                    [(ngModel)]="variant.salesTaxInclusive"
+                                                                    [matTooltip]="localeData?.is_sales_inclusive"
+                                                                    matTooltipPosition="above"
+                                                                ></mat-checkbox>
+                                                                <mat-checkbox
+                                                                    *ngIf="isPurchaseInformationEnabled"
+                                                                    class="mr-l2"
+                                                                    color="primary"
+                                                                    name="variantPurchaseTaxInclusive{{ i }}"
+                                                                    [(ngModel)]="variant.purchaseTaxInclusive"
+                                                                    [matTooltip]="localeData?.is_purchase_inclusive"
+                                                                    matTooltipPosition="above"
+                                                                ></mat-checkbox>
                                                                 <ng-container
                                                                     *ngIf="
-                                                                        stockForm.type === 'PRODUCT' ||
-                                                                        stockForm.type === 'SERVICE'
+                                                                        stockForm.type === 'FIXED_ASSETS' &&
+                                                                        isFixedAssetsInformationEnabled
                                                                     "
                                                                 >
                                                                     <mat-checkbox
