@@ -185,6 +185,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public translationLoaded: boolean = false;
     /** Holds active tab index */
     private activeTabIndex: number;
+    /** True if name has spacing */
+    public hasSpacingError = false;
 
     constructor(
         private inventoryService: InventoryService,
@@ -226,6 +228,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.changeDetection.detectChanges();
             }
             if (params?.stockUniqueName) {
+                console.log("called");
+
                 this.queryParams = params;
                 this.getStockDetails();
             } else {
@@ -314,8 +318,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 let stockGroups: IOption[] = [];
                 this.arrangeStockGroups(response.body?.results, stockGroups);
                 this.stockGroups = stockGroups;
+                this.stockGroupUniqueName = this.stockGroups?.length ? this.stockGroups[0]?.value : '';
             }
         });
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -339,6 +345,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 }
             }
         });
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -413,9 +420,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public addVariantOption(): void {
+        console.log(this.stockForm);
         if (this.isVariantAvailable) {
-            const optionIndex = this.stockForm.options?.length + 1;
-            this.stockForm.options.push({ name: "", values: [], order: optionIndex });
+                const optionIndex = this.stockForm.options?.length + 1;
+                this.stockForm.options.push({ name: "", values: [], order: optionIndex });
         } else {
             this.stockForm.options = [];
             this.generateVariants();
@@ -748,7 +756,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         });
     }
 
-
     /**
      * Create stock
      *
@@ -798,26 +805,26 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockGroupUniqueName = mainGroupExists[0]?.value;
                 this.saveStock();
             } else {
-                    let stockRequest = {
-                        name: 'Main Group',
-                        uniqueName: 'maingroup',
-                        hsnNumber: '',
-                        sacNumber: '',
-                        type: this.stockForm.type
-                    };
+                let stockRequest = {
+                    name: 'Main Group',
+                    uniqueName: 'maingroup',
+                    hsnNumber: '',
+                    sacNumber: '',
+                    type: this.stockForm.type
+                };
                 this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        if (response?.status === "success") {
-                            this.stockGroupUniqueName = response?.body?.uniqueName;
-                            this.saveStock();
-                        } else {
-                            this.toaster.showSnackBar("error", response?.message);
-                        }
-                    });
-                }
-        } else {
-                this.saveStock();
+                    if (response?.status === "success") {
+                        this.stockGroupUniqueName = response?.body?.uniqueName;
+                        this.saveStock();
+                    } else {
+                        this.toaster.showSnackBar("error", response?.message);
+                    }
+                });
             }
+        } else {
+            this.saveStock();
         }
+    }
 
     /**
      * Save stock
@@ -1362,7 +1369,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             customFields: []
         };
 
-        this.stockGroupUniqueName = "";
+        this.stockGroupUniqueName = this.stockGroups[0]?.value;
         this.isPurchaseInformationEnabled = false;
         this.isSalesInformationEnabled = false;
         this.isFixedAssetsInformationEnabled = false;
@@ -1376,7 +1383,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.inlineEditCustomField = 0;
         this.selectedTaxes = [];
         this.taxTempArray = [];
-
         this.changeDetection.detectChanges();
     }
 
@@ -1691,6 +1697,16 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public onTabChange(event: any): void {
         this.activeTabIndex = event?.index;
+    }
+
+    /**
+     * This will use for validation in name space
+     *
+     * @param {string} value
+     * @memberof StockCreateEditComponent
+     */
+    public checkSpacingValidation(value: string): void {
+        this.hasSpacingError = value?.trim() !== value;
     }
 
     /**
