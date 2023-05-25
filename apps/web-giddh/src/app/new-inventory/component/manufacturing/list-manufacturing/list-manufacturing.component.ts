@@ -1,10 +1,7 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
-import { InvoiceFilterClassForInvoicePreview } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 export interface PeriodicElement {
@@ -44,7 +41,7 @@ export class ListManufacturingComponent implements OnInit {
    displayedColumns: string[] = ['date', 'voucher_no', 'finished_variant', 'stock', 'qty_outwards', 'qty_outwards_unit', 'material_used', 'qty_inwards', 'qty_inwards_unit', 'warehouse'];
    dataSource = ELEMENT_DATA;
    /** Instance of Mat Dialog for Advance Filter */
-  @ViewChild("advance_filter_dailog") public advanceFilterComponent: TemplateRef<any>;
+  @ViewChild("advance_filter_dialog") public advanceFilterComponent: TemplateRef<any>;
   /** directive to get reference of element */
   @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     public selectedDateRange: any;
@@ -74,8 +71,7 @@ export class ListManufacturingComponent implements OnInit {
  */
   openAdvanceFilterDialog(){
       this.dialog.open(this.advanceFilterComponent,{
-        height: '400px',
-        width: '600px',
+        width: '630px',
       })
   }
 
