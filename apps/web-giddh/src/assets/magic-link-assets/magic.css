@@ -60,6 +60,66 @@
     text-rendering: optimizeLegibility;
 }
 
+/*---- aribaugrotesk ----*/
+
+@font-face {
+    font-family: "aribaugrotesk-regular";
+    font-display: swap;
+    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Rg.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "aribaugrotesk-semibold";
+    font-display: swap;
+    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Md.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "aribaugrotesk-bold";
+    font-display: swap;
+    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Bd.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+
+/*---- gtamerica ----*/
+
+@font-face {
+    font-family: "gtamerica-regular";
+    font-display: swap;
+    src: url("../fonts/gt-america/GT-America-Regular.ttf")
+            format("truetype");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "gtamerica-semibold";
+    font-display: swap;
+    src: url("../fonts/gt-america/GT-America-Light.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "gtamerica-bold";
+    font-display: swap;
+    src: url("../fonts/gt-america/GT-America-Bold.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+
 html,
 body,
 div,
@@ -142,7 +202,7 @@ html,
 body {
     height: 100%;
     background: #f7f8fa;
-    font-family: "opensans-regular";
+    font-family: "aribaugrotesk-regular";
 
     color: #333333;
     -webkit-font-smoothing: antialiased;

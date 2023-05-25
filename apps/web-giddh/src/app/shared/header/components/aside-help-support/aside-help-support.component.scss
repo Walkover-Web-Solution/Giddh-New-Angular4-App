@@ -55,7 +55,7 @@
         top: 0;
         background-color: inherit;
         h2 {
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
             font-size: 18px;
             color: var(--color-giddh-blue);
         }
@@ -70,7 +70,7 @@
 
                 p {
                     font-size: 14px;
-                    font-family: "opensans-semibold";
+                    font-family: var(--font-semibold);
                 }
                 small {
                     font-size: 12px;
@@ -84,7 +84,7 @@
                 list-style: none;
                 li {
                     font-size: 14px;
-                    font-family: "opensans-semibold";
+                    font-family: var(--font-semibold);
                     margin-bottom: 10px;
                     a {
                         color: var(--color-nero);
@@ -100,7 +100,7 @@
             h4 {
                 padding-bottom: 15px;
                 font-size: 14px;
-                font-family: "opensans-semibold";
+                font-family: var(--font-semibold);
             }
             ul {
                 list-style: none;

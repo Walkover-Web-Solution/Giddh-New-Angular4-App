@@ -6,7 +6,7 @@
 @import "./json-diff.scss";
 @import "./intl.scss";
 $custom-typography: mat-typography-config(
-    $font-family: "opensans-regular",
+    $font-family: var(--font-regular),
 );
 @include angular-material-typography($custom-typography);
 @import "../css/ngx-bs-datepicker.scss";
@@ -15,6 +15,13 @@ $custom-typography: mat-typography-config(
 */
 :focus {
     outline: none !important;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-family: var(--font-regular);
 }
 
 .basic > tbody > tr > td,
@@ -46,7 +53,7 @@ $custom-typography: mat-typography-config(
     padding: 15px 11px !important;
     font-weight: 400;
     border-bottom: 1px solid var(--color-table-primary-content-bar-border);
-    font-family: opensans-semibold;
+    font-family: var(--font-semibold);
     font-size: 14px;
 }
 
@@ -234,7 +241,7 @@ $custom-typography: mat-typography-config(
     }
 
     .multicurrency-grandtotal {
-        width: 77%;
+        width: 100%;
         float: right;
     }
 
@@ -333,6 +340,7 @@ $custom-typography: mat-typography-config(
     .select-field-input {
         border-bottom: 1px solid var(--color-secondary-input-bar-border);
         margin-bottom: 1px !important;
+        background-color: transparent !important;
     }
 }
 .multicurrency-edit {
@@ -658,6 +666,10 @@ $custom-typography: mat-typography-config(
         min-width: 750px;
     }
 }
+/*--- custom ---*/
+.obj-gap {
+    column-gap: 5px;
+}
 
 .select-multiple-icon-options {
     width: 36px;
@@ -743,6 +755,15 @@ $custom-typography: mat-typography-config(
 
 .mat-calendar-body-cell-content {
     color: var(--color-datepicker-ternary-date);
+}
+
+.mat-calendar-body-cell {
+    &.mat-calendar-body-active {
+        .mat-calendar-body-selected {
+            color: var(--color-white) !important;
+            background-color: #3f51b5;
+        }
+    }
 }
 
 .product-option {
@@ -987,13 +1008,12 @@ $custom-typography: mat-typography-config(
 }
 
 body {
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     font-display: block;
     -webkit-font-smoothing: auto;
     padding: 0 !important;
     margin: 0 !important;
 }
-
 /* table css need to removed at last (finish)*/
 .modal-header .close {
     cursor: pointer;
@@ -1481,11 +1501,11 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 
 .font-bold {
-    font-family: "opensans-bold";
+    font-family: var(--font-bold);
 }
 
 .modal-open {
@@ -1512,7 +1532,7 @@ ul.sub-list {
 
 .top-heading > h4 {
     font-size: 18px;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     line-height: 28px;
     text-transform: capitalize;
 }
@@ -1701,7 +1721,7 @@ ul.sub-list {
 }
 
 .aging-table-top .top-aging-table-top span .date-range-picker {
-    font-family: opensans-semibold;
+    font-family: var(--font-semibold);
     text-align: left !important;
 }
 
@@ -1762,7 +1782,7 @@ ul.sub-list {
 
 .unbold {
     font-weight: normal !important;
-    font-family: "opensans-regular" !important;
+    font-family: var(--font-regular) !important;
 }
 
 .top-aging-table-top .date-range-picker {
@@ -2010,7 +2030,7 @@ modal-container.modal {
 }
 
 .table-modal thead tr th {
-    font-family: "opensans-regular" !important;
+    font-family: var(--font-regular) !important;
     font-family: cursive;
     border-right: 1px solid var(--color-iron);
 }
@@ -5244,7 +5264,7 @@ input[type="checkbox"][disabled] {
 
 .section-head {
     padding-bottom: 10px;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     font-size: 110%;
     color: var(--color-common-quaternary-text);
 }
@@ -5445,13 +5465,13 @@ input[type="checkbox"][disabled]:after {
 }
 
 .table-container section div .group {
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     text-transform: uppercase;
 }
 
 .welcome-header h2 {
     font-size: 26px;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     color: var(--color-common-primary-text);
 }
 
@@ -5734,7 +5754,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .welcome-header h1 {
     font-size: 30px;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     color: var(--color-giddh-blue);
 }
 
@@ -5766,7 +5786,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .welcome-header h2 {
     font-size: 26px;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     color: var(--color-common-primary-text);
     position: relative;
 }
@@ -6071,7 +6091,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .form-header h3 {
     font-size: 18px;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 
 .form-body {
@@ -6511,7 +6531,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: var(--color-giddh-blue);
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     vertical-align: middle;
 }
 
@@ -7430,7 +7450,7 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
 }
 
 .border-radius-0 {
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
 }
 
 .border-radius-0 small.mr-t05.mr-b05.grey {
@@ -7734,7 +7754,7 @@ span.red-text {
 }
 
 .total-sales-tabs .nav-tabs > li.active a {
-    font-family: "LatoWebBold";
+    font-family: var(--font-bold);
 }
 
 .total-sales-tabs .nav-tabs > li.active > a,
@@ -7861,7 +7881,7 @@ ul.dropdown-menu p.lead.pd {
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid var(--color-tab-primary-selected-tab-bottom-border) !important;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     background-color: inherit;
 }
 
@@ -7902,7 +7922,7 @@ ul.dropdown-menu p.lead.pd {
 
 #invoice-setting ul.nav.nav-tabs a {
     border-bottom: 1px solid !important;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     color: var(--color-rectangular-tab-inactive-primary-icon) !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
@@ -8019,7 +8039,7 @@ ul.dropdown-menu p.lead.pd {
 
 #tab-integration .nav-tabs > li a.active {
     border: 1px solid var(--color-rectangular-tab-active-primary-border) !important;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     color: var(--color-rectangular-tab-active-primary-text) !important;
     border-color: var(--color-rectangular-tab-active-primary-border) !important;
     background-color: var(--color-rectangular-tab-primary-background);
@@ -8495,6 +8515,11 @@ highcharts-chart {
             padding-left: 5px;
             font-size: 14px;
         }
+    }
+
+    .input-bill {
+        border-radius: 0px !important;
+        background-color: transparent !important;
     }
 }
 
@@ -9352,7 +9377,7 @@ span#HW_badge_cont:nth-child(3) {
             margin-bottom: 0;
             font-size: 14px;
             border-bottom: none;
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
             background-color: var(--color-popup-background);
         }
 
@@ -9381,7 +9406,7 @@ span#HW_badge_cont:nth-child(3) {
             flex: 1;
 
             .item {
-                font-family: "opensans-semibold";
+                font-family: var(--font-semibold);
             }
         }
 
@@ -10104,7 +10129,8 @@ giddh-datepicker {
                                 #purchase-info-check,
                                 #sales-info-check {
                                     .mat-checkbox-label {
-                                        font: normal normal 600 14px/17px Open Sans;
+                                        font: normal normal 600 14px/17px;
+                                        font-family: var(--font-regular);
                                         letter-spacing: 0px;
                                         position: relative;
                                         bottom: 1px;
@@ -10445,7 +10471,7 @@ body.update-scroll-hidden {
 
                     a {
                         min-width: 110px;
-                        font-family: "opensans-regular";
+                        font-family: var(--font-regular);
                         color: var(--color-nav-tabs-anchor) !important;
                         padding-top: 5px !important;
                         padding-left: 20px !important;
@@ -12770,6 +12796,26 @@ body.prevent-body-scroll {
     .hidden-md {
         display: none !important;
     }
+    ngx-daterangepicker-material,
+    giddh-datepicker {
+        .recurring-form .mat-form-field {
+            min-width: 95px !important;
+        }
+    }
+    .invoice-date-label giddh-datepicker .mat-form-field {
+        min-width: 95px !important;
+    }
+    .mat-form-field-wrapper
+        .mat-form-field-infix
+        .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+        padding-left: 32px !important;
+    }
+    .invoice-date-due-date {
+        .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
+            width: 15px;
+            right: 18px !important;
+        }
+    }
 }
 
 /*media query for height resolution*/
@@ -12846,6 +12892,7 @@ body.prevent-body-scroll {
 
 .mat-calendar-arrow {
     border-top-color: var(--color-white) !important;
+    fill: var(--color-white);
 }
 
 .mat-datepicker-toggle,
