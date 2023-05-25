@@ -121,6 +121,10 @@ const routes: Routes = [
         loadChildren: () => import('./component/recipe/recipe.module').then(module => module.RecipeModule)
     },
     {
+        path: "manufacturing",
+        loadChildren: () => import('./component/manufacturing/manufacturing.module').then(module => module.ManufacturingModule)
+    },
+    {
         path: "inventory-dashboard",
         component: InventoryDashboardComponent,
     },
