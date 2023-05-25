@@ -40,7 +40,7 @@ jobs:
             - name: Install Node.js & NPM
               uses: actions/setup-node@v3
               with:
-                  node-version: "16"
+                  node-version: "14.19.3"
             - uses: bahmutov/npm-install@v1
               env:
                   CYPRESS_INSTALL_BINARY: 0
@@ -72,6 +72,8 @@ jobs:
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  CSC_LINK: ${{ secrets.CSC_LINK_WIN }}
+                  CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_WIN_PASS }}
                   GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
                   GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
                   RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
