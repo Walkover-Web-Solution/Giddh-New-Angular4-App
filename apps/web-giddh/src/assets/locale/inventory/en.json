@@ -13,7 +13,10 @@
         "manufacturing":"Manufacturing",
         "warehouse_balance":"Warehouse Opening Balance",
         "custom_units":"Custom Units",
-        "master":"Master"
+        "master":"Master",
+        "recipe":"Recipe",
+        "create_manufacturing":"Create Manufacturing",
+        "report":"Report"
     },
     "reports":{
         "transaction_count":"Transaction Count",
