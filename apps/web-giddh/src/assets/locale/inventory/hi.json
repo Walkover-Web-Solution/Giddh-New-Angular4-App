@@ -15,7 +15,8 @@
         "custom_units":"कस्टम इकाई",
         "recipe":"व्यंजन विधि",
         "create_manufacturing":"मैन्युफैक्चरिंग बनाएं",
-        "report":"प्रतिवेदन"
+        "report":"प्रतिवेदन",
+        "master":"मास्टर"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",

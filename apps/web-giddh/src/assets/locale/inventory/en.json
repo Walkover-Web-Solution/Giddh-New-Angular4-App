@@ -15,7 +15,8 @@
         "custom_units":"Custom Units",
         "recipe":"Recipe",
         "create_manufacturing":"Create Manufacturing",
-        "report":"Report"
+        "report":"Report",
+        "master":"Master"
     },
     "reports":{
         "transaction_count":"Transaction Count",

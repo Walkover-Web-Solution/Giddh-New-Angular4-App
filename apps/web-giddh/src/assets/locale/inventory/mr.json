@@ -15,7 +15,8 @@
         "custom_units":"सानुकूल युनिट",
         "recipe":"कृती",
         "create_manufacturing":"मॅन्युफॅक्चरिंग तयार करा",
-        "report":"अहवाल द्या"
+        "report":"अहवाल द्या",
+        "master":"मास्टर"
     },
     "reports":{
         "transaction_count":"व्यवहाराची संख्या",
