@@ -115,7 +115,7 @@
                                             (selectedOption)="
                                                 stockGroupUniqueName = $event?.value; stockGroupName = $event.label
                                             "
-                                            [defaultValue]="stockGroupName"
+                                            [defaultValue]="stockGroups.length ? stockGroups[0] : stockGroupName"
                                             [allowValueReset]="true"
                                             (onClear)="stockGroupName = ''; stockGroupUniqueName = ''"
                                         ></select-field>
@@ -164,6 +164,12 @@
                                                 [selected]="tax.isChecked"
                                                 (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
                                                 >{{ tax.name }}</mat-option
+                                            >
+                                            <mat-option
+                                                class="create-update-no-data"
+                                                [disabled]="true"
+                                                *ngIf="!taxes?.length"
+                                                >{{ commonLocaleData?.app_no_result_found }}</mat-option
                                             >
                                         </mat-select>
                                     </div>
@@ -404,7 +410,8 @@
                                                                                 stockForm.fixedAssetAccountDetails.accountUniqueName =
                                                                                     $event?.value;
                                                                                 stockForm.variants[0].fixedAssetsInformation.accountUniqueName =
-                                                                                    $event?.value
+                                                                                    $event?.value;
+                                                                                fixedAssetsAccountName = $event?.label
                                                                             "
                                                                             [readonly]="
                                                                                 !isFixedAssetsInformationEnabled
@@ -612,7 +619,8 @@
                                                                                     stockForm?.purchaseAccountDetails.accountUniqueName =
                                                                                         $event?.value;
                                                                                     stockForm?.variants[0]?.purchaseInformation.accountUniqueName =
-                                                                                        $event?.value
+                                                                                        $event?.value;
+                                                                                    purchaseAccountName = $event?.label
                                                                                 "
                                                                                 [readonly]="
                                                                                     !isPurchaseInformationEnabled
@@ -815,7 +823,8 @@
                                                                                     stockForm?.salesAccountDetails.accountUniqueName =
                                                                                         $event?.value;
                                                                                     stockForm?.variants[0]?.salesInformation.accountUniqueName =
-                                                                                        $event?.value
+                                                                                        $event?.value;
+                                                                                    salesAccountName = $event?.label
                                                                                 "
                                                                                 [readonly]="!isSalesInformationEnabled"
                                                                                 [defaultValue]="salesAccountName"
@@ -1099,7 +1108,6 @@
                                                 <mat-checkbox
                                                     color="primary"
                                                     [checked]="true"
-                                                    [disabled]="queryParams?.stockUniqueName"
                                                     id="variant"
                                                     name="isVariantAvailable"
                                                     [(ngModel)]="isVariantAvailable"
@@ -1233,7 +1241,14 @@
                                                             >
                                                                 {{ localeData?.fixed_assets_unit }}
                                                             </th>
-                                                            <th class="text-center unit-name table-heading-color">
+                                                            <th
+                                                                class="text-center unit-name table-heading-color"
+                                                                *ngIf="
+                                                                    isFixedAssetsInformationEnabled ||
+                                                                    isPurchaseInformationEnabled ||
+                                                                    isSalesInformationEnabled
+                                                                "
+                                                            >
                                                                 {{ localeData?.is_rate_inclusive }}
                                                             </th>
                                                             <th class="text-center archive table-heading-color">
@@ -1537,30 +1552,37 @@
                                                                     </div>
                                                                 </ng-container>
                                                             </td>
-                                                            <td class="text-center unit-name">
+                                                            <td
+                                                                class="text-center unit-name"
+                                                                *ngIf="
+                                                                    isSalesInformationEnabled ||
+                                                                    isPurchaseInformationEnabled ||
+                                                                    isFixedAssetsInformationEnabled
+                                                                "
+                                                            >
+                                                                <mat-checkbox
+                                                                    *ngIf="isSalesInformationEnabled"
+                                                                    color="primary"
+                                                                    name="variantSalesTaxInclusive{{ i }}"
+                                                                    [(ngModel)]="variant.salesTaxInclusive"
+                                                                    [matTooltip]="localeData?.is_sales_inclusive"
+                                                                    matTooltipPosition="above"
+                                                                ></mat-checkbox>
+                                                                <mat-checkbox
+                                                                    *ngIf="isPurchaseInformationEnabled"
+                                                                    class="mr-l2"
+                                                                    color="primary"
+                                                                    name="variantPurchaseTaxInclusive{{ i }}"
+                                                                    [(ngModel)]="variant.purchaseTaxInclusive"
+                                                                    [matTooltip]="localeData?.is_purchase_inclusive"
+                                                                    matTooltipPosition="above"
+                                                                ></mat-checkbox>
                                                                 <ng-container
                                                                     *ngIf="
-                                                                        stockForm.type === 'PRODUCT' ||
-                                                                        stockForm.type === 'SERVICE'
+                                                                        stockForm.type === 'FIXED_ASSETS' &&
+                                                                        isFixedAssetsInformationEnabled
                                                                     "
                                                                 >
-                                                                    <mat-checkbox
-                                                                        color="primary"
-                                                                        name="variantSalesTaxInclusive{{ i }}"
-                                                                        [(ngModel)]="variant.salesTaxInclusive"
-                                                                        [matTooltip]="localeData?.is_sales_inclusive"
-                                                                        matTooltipPosition="above"
-                                                                    ></mat-checkbox>
-                                                                    <mat-checkbox
-                                                                        class="mr-l2"
-                                                                        color="primary"
-                                                                        name="variantPurchaseTaxInclusive{{ i }}"
-                                                                        [(ngModel)]="variant.purchaseTaxInclusive"
-                                                                        [matTooltip]="localeData?.is_purchase_inclusive"
-                                                                        matTooltipPosition="above"
-                                                                    ></mat-checkbox>
-                                                                </ng-container>
-                                                                <ng-container *ngIf="stockForm.type === 'FIXED_ASSETS'">
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         name="variantFixedAssetsTaxInclusive{{ i }}"
@@ -1846,8 +1868,7 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab label="Manufacturing">
-                                    Hello
-                                    <app-create-recipe></app-create-recipe>
+                                    <create-recipe></create-recipe>
                                 </mat-tab>
                                 <mat-tab *ngIf="false" [label]="localeData?.variant">
                                     <div class="tab-container-new">

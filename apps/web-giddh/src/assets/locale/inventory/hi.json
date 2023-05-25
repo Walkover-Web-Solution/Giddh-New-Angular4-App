@@ -83,5 +83,14 @@
         "greater_than":"से अधिक",
         "less_than":"से कम",
         "excluded":"छोड़ा गया"
+    },
+     "warehouse_opening_balance":{
+        "unique_name":"अनूठा नाम",
+        "stock_group":"स्टॉक समूह",
+        "new_stock":"+ नया स्टॉक",
+        "select_warehouse":"गोदाम का चयन करें",
+        "opening_bal":"ओपनिंग बाल",
+        "variant":"प्रकार",
+        "variants":"वेरिएंट"
     }
 }

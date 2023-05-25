@@ -122,6 +122,10 @@ const routes: Routes = [
         loadChildren: () => import('./component/create-update-group/create-update-group.module').then(module => module.GroupCreateEditModule)
     },
     {
+        path: "recipe",
+        loadChildren: () => import('./component/recipe/recipe.module').then(module => module.RecipeModule)
+    },
+    {
         path: "inventory-dashboard",
         component: InventoryDashboardComponent,
     },

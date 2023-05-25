@@ -791,28 +791,33 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         }
         if (!this.stockGroupUniqueName) {
-            if (!this.stockGroups?.length) {
-                let stockRequest = {
-                    name: 'Main Group',
-                    uniqueName: 'maingroup',
-                    hsnNumber: '',
-                    sacNumber: '',
-                    type: this.stockForm.type
-                };
-                this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response?.status === "success") {
-                        this.stockGroupUniqueName = "maingroup";
-                        this.saveStock();
-                    } else {
-                        this.toaster.showSnackBar("error", response?.message);
-                    }
-                });
+            let mainGroupExists = this.stockGroups?.filter(group => {
+                return group?.additional?.name === "Main Group"
+            });
+            if (mainGroupExists?.length > 0) {
+                this.stockGroupUniqueName = mainGroupExists[0]?.value;
+                this.saveStock();
             } else {
-                this.stockGroupUniqueName = "maingroup";
+                    let stockRequest = {
+                        name: 'Main Group',
+                        uniqueName: 'maingroup',
+                        hsnNumber: '',
+                        sacNumber: '',
+                        type: this.stockForm.type
+                    };
+                this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        if (response?.status === "success") {
+                            this.stockGroupUniqueName = response?.body?.uniqueName;
+                            this.saveStock();
+                        } else {
+                            this.toaster.showSnackBar("error", response?.message);
+                        }
+                    });
+                }
+        } else {
                 this.saveStock();
             }
         }
-    }
 
     /**
      * Save stock
@@ -901,8 +906,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         name: this.stockUnitName,
                         code: this.stockForm.stockUnitUniqueName
                     },
-                    openingQuantity: variant.warehouseBalance[0].openingQuantity,
-                    openingAmount: variant.warehouseBalance[0].openingAmount
+                    openingQuantity: this.isVariantAvailable ? variant.warehouseBalance[0].openingQuantity : this.stockForm.openingQuantity,
+                    openingAmount: this.isVariantAvailable ? variant.warehouseBalance[0].openingAmount : this.stockForm.openingAmount
                 }
             ]
 
@@ -989,7 +994,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 }
                 this.stockForm.variants = this.stockForm.variants?.map(variant => {
                     ['purchaseAccountDetails', 'salesAccountDetails', 'fixedAssetAccountDetails'].forEach(accountDetailsKey => {
-                        if (!variant?.[accountDetailsKey]) {
+                        if (!variant[accountDetailsKey]) {
                             variant[accountDetailsKey] = {
                                 accountUniqueName: null,
                                 unitRates: [Object.assign({}, unitRateObj)]
@@ -1549,7 +1554,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
    * @memberof StockCreateEditComponent
    */
     public selectVariantSalesPurchaseUnit(variantSalesUnitRate: any, event: any): void {
-        variantSalesUnitRate.stockUnitCode = event?.additional?.code;
+        variantSalesUnitRate.stockUnitCode = event.additional?.additional?.code ? event.additional?.additional?.code : event.additional?.code;
         variantSalesUnitRate.stockUnitName = event?.label;
         variantSalesUnitRate.stockUnitUniqueName = event?.value;
     }
@@ -1562,7 +1567,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     * @memberof StockCreateEditComponent
     */
     public selectVariantFixedAssetsUnit(variantFixedAssetsUnitRate: any, event: any): void {
-        variantFixedAssetsUnitRate.stockUnitCode = event?.additional?.code;
+        variantFixedAssetsUnitRate.stockUnitCode = event.additional?.additional?.code ? event.additional?.additional?.code : event.additional?.code;
         variantFixedAssetsUnitRate.stockUnitName = event?.label;
         variantFixedAssetsUnitRate.stockUnitUniqueName = event?.value;
     }

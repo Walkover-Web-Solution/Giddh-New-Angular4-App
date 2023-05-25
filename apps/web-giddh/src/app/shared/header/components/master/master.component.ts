@@ -351,7 +351,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
 
         this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
         this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
-        this.store.dispatch(this.accountsAction.getAccountDetails(item?.uniqueName));
+        this.store.dispatch(this.accountsAction.getAccountDetails(item?.uniqueName, 'MASTER'));
     }
 
     /**
