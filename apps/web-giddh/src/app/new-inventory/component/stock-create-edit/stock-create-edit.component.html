@@ -169,18 +169,18 @@
                                                 class="create-update-no-data"
                                                 [disabled]="true"
                                                 *ngIf="!taxes?.length"
-                                                >{{ commonLocaleData?.app_no_result_found }}</mat-option
-                                            >
+                                                >{{ commonLocaleData?.app_no_result_found }}
+                                            </mat-option>
                                         </mat-select>
                                     </div>
                                 </div>
                                 <!-- <div class="col-md-4 col-lg-4 col-xl-6 col-12">
-                                    <div class="add-image-button">
-                                        <button mat-button role="button" type="button">
-                                            <img src="{{ imgPath }}add-image.svg" />
-                                        </button>
-                                    </div>
-                                </div> -->
+                                        <div class="add-image-button">
+                                            <button mat-button role="button" type="button">
+                                                <img src="{{ imgPath }}add-image.svg" />
+                                            </button>
+                                        </div>
+                                    </div> -->
                             </div>
                         </div>
                         <div class="other-group mt-2">
@@ -393,7 +393,8 @@
                                                                         name="isFixedAssetsInformationEnabled"
                                                                         [(ngModel)]="isFixedAssetsInformationEnabled"
                                                                         (ngModelChange)="toggleFixedAssetsInformation()"
-                                                                        >{{ localeData?.fixed_assets_information }}
+                                                                    >
+                                                                        {{ localeData?.fixed_assets_information }}
                                                                     </mat-checkbox>
                                                                 </div>
                                                                 <div class="row">
@@ -417,7 +418,8 @@
                                                                                 !isFixedAssetsInformationEnabled
                                                                             "
                                                                             [defaultValue]="fixedAssetsAccountName"
-                                                                        ></select-field>
+                                                                        >
+                                                                        </select-field>
                                                                     </div>
                                                                     <div
                                                                         class="col-sm-6 col-lg-5"
@@ -626,7 +628,8 @@
                                                                                     !isPurchaseInformationEnabled
                                                                                 "
                                                                                 [defaultValue]="purchaseAccountName"
-                                                                            ></select-field>
+                                                                            >
+                                                                            </select-field>
                                                                         </div>
                                                                         <div
                                                                             class="col-sm-6 col-lg-5"
@@ -801,7 +804,8 @@
                                                                             name="isSalesInformationEnabled"
                                                                             [(ngModel)]="isSalesInformationEnabled"
                                                                             (ngModelChange)="toggleSalesInformation()"
-                                                                            >{{ localeData?.sales_information }}
+                                                                        >
+                                                                            {{ localeData?.sales_information }}
                                                                         </mat-checkbox>
                                                                     </div>
                                                                     <!-- input field will disabled if sales info unchecked -->
@@ -828,7 +832,8 @@
                                                                                 "
                                                                                 [readonly]="!isSalesInformationEnabled"
                                                                                 [defaultValue]="salesAccountName"
-                                                                            ></select-field>
+                                                                            >
+                                                                            </select-field>
                                                                         </div>
                                                                         <div
                                                                             class="col-sm-6 col-lg-5"
@@ -1303,7 +1308,8 @@
                                                                     [name]="'variantSkuCode' + i"
                                                                     [(ngModel)]="variant.skuCode"
                                                                     [type]="'text'"
-                                                                ></text-field>
+                                                                >
+                                                                </text-field>
                                                             </td>
                                                             <td
                                                                 class="
@@ -1753,7 +1759,8 @@
                                                             [(ngModel)]="stockForm.customField1Heading"
                                                             [autoFocus]="true"
                                                             class="common-custom-field-width"
-                                                        ></text-field>
+                                                        >
+                                                        </text-field>
                                                         <span
                                                             class="pull-right right-fix-save-icon"
                                                             *ngIf="inlineEditCustomField === 1"
@@ -1801,7 +1808,8 @@
                                                             [(ngModel)]="stockForm.customField2Heading"
                                                             [autoFocus]="true"
                                                             class="common-custom-field-width"
-                                                        ></text-field>
+                                                        >
+                                                        </text-field>
                                                         <span
                                                             class="pull-right right-fix-save-icon"
                                                             *ngIf="inlineEditCustomField === 2"
@@ -1941,7 +1949,8 @@
                                                                 type="text"
                                                                 id="variant-qty"
                                                                 [placeholder]="localeData?.enter_qty"
-                                                            ></text-field>
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_rate }} </label>
@@ -1980,7 +1989,8 @@
                                                                 type="text"
                                                                 id="addon-item"
                                                                 [placeholder]="localeData?.add_item"
-                                                            ></text-field>
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ localeData?.quantity }} </label>
@@ -1989,7 +1999,8 @@
                                                                 type="text"
                                                                 id="addon-qty"
                                                                 [placeholder]="localeData?.enter_qty"
-                                                            ></text-field>
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_sku }} </label>
@@ -1998,7 +2009,8 @@
                                                                 type="text"
                                                                 id="addon-sku"
                                                                 [placeholder]="localeData?.enter_sku_number"
-                                                            ></text-field>
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_unit }} </label>
@@ -2007,7 +2019,8 @@
                                                                 type="text"
                                                                 id="addon-unit"
                                                                 [placeholder]="commonLocaleData?.app_unit_cm_mm"
-                                                            ></text-field>
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_rate }} </label>
@@ -2016,7 +2029,8 @@
                                                                 type="text"
                                                                 id="addon-rate"
                                                                 [placeholder]="localeData?.enter_rate"
-                                                            ></text-field>
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ localeData?.avail_on_variant }} </label>
@@ -2061,10 +2075,8 @@
                                                                 <div class="variant-name-field mr-b15">
                                                                     <label> {{ localeData?.variant_name }}</label>
                                                                     <!-- All variant list will show in dropdown -->
-                                                                    <sh-select
-                                                                        placeholder=""
-                                                                        id="variant-name"
-                                                                    ></sh-select>
+                                                                    <sh-select placeholder="" id="variant-name">
+                                                                    </sh-select>
                                                                 </div>
                                                                 <div>
                                                                     <label class="d-block hide-label-on-mobile">
@@ -2267,7 +2279,8 @@
                                                                 id="expense-amount"
                                                                 type="text"
                                                                 [placeholder]="commonLocaleData?.app_amount"
-                                                            ></text-field>
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                         <div
                                                             class="
@@ -2364,7 +2377,8 @@
                                                     id="combo-unique-name"
                                                     type="text"
                                                     [placeholder]="commonLocaleData?.app_unique_name_placeholder"
-                                                ></text-field>
+                                                >
+                                                </text-field>
                                             </div>
                                         </div>
                                         <div class="row mr-b15">
@@ -2569,7 +2583,8 @@
                                                                         type="text"
                                                                         id="select-unit"
                                                                         [placeholder]="localeData?.select_unit"
-                                                                    ></text-field>
+                                                                    >
+                                                                    </text-field>
                                                                 </div>
                                                                 <div class="col-sm-6 col-6">
                                                                     <text-field
@@ -2577,7 +2592,8 @@
                                                                         type="text"
                                                                         id="rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
-                                                                    ></text-field>
+                                                                    >
+                                                                    </text-field>
                                                                 </div>
                                                                 <button
                                                                     mat-icon-button
@@ -2595,7 +2611,8 @@
                                                                         type="text"
                                                                         id="select-unit"
                                                                         [placeholder]="localeData?.select_unit"
-                                                                    ></text-field>
+                                                                    >
+                                                                    </text-field>
                                                                 </div>
                                                                 <div class="col-sm-6 col-6">
                                                                     <text-field
@@ -2603,7 +2620,8 @@
                                                                         type="text"
                                                                         id="rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
-                                                                    ></text-field>
+                                                                    >
+                                                                    </text-field>
                                                                 </div>
                                                                 <button
                                                                     mat-icon-button
@@ -2837,7 +2855,8 @@
                                                                             id="amount"
                                                                             type="text"
                                                                             value="200"
-                                                                        ></text-field>
+                                                                        >
+                                                                        </text-field>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -2868,7 +2887,8 @@
                                                                             id="stock-output-qty"
                                                                             type="text"
                                                                             [placeholder]="localeData?.enter_qty"
-                                                                        ></text-field>
+                                                                        >
+                                                                        </text-field>
                                                                     </div>
                                                                 </div>
                                                                 <div class="row mr-b15">
@@ -2898,7 +2918,8 @@
                                                                     [cssClass]="'form-control'"
                                                                     type="text"
                                                                     [placeholder]="commonLocaleData?.app_stock_name"
-                                                                ></text-field>
+                                                                >
+                                                                </text-field>
                                                             </div>
                                                             <div class="col-lg-6 col-sm-6 col-xl-4 show-on-mobile">
                                                                 <label>&nbsp;</label>
@@ -2968,7 +2989,8 @@
                                                                                 color="primary"
                                                                                 id="purchase-price-tax"
                                                                                 type="checkbox"
-                                                                                >Price Inclusive of Tax ?
+                                                                            >
+                                                                                Price Inclusive of Tax ?
                                                                             </mat-checkbox>
                                                                         </p>
                                                                     </div>
@@ -3094,7 +3116,8 @@
                                                                                 color="primary"
                                                                                 id="sales-price-tax"
                                                                                 type="checkbox"
-                                                                                >Price Inclusive of Tax ?
+                                                                            >
+                                                                                Price Inclusive of Tax ?
                                                                             </mat-checkbox>
                                                                         </p>
                                                                     </div>
@@ -3227,7 +3250,8 @@
                                                                 type="text"
                                                                 id="select-stock-nme"
                                                                 placeholder="Select Stock"
-                                                            ></text-field>
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -3326,7 +3350,8 @@
                                                                     [cssClass]="'form-control'"
                                                                     type="text"
                                                                     placeholder="Separate options with a comma"
-                                                                ></text-field>
+                                                                >
+                                                                </text-field>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -3496,7 +3521,8 @@
                                                                 type="text"
                                                                 id="combo-variant-qty"
                                                                 placeholder="Enter Qty"
-                                                            ></text-field>
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_rate }} </label>
@@ -3535,7 +3561,8 @@
                                                                 type="text"
                                                                 id="combo-addon-item"
                                                                 placeholder="Add item"
-                                                            ></text-field>
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> Quantity </label>
@@ -3544,7 +3571,8 @@
                                                                 type="text"
                                                                 id="combo-addon-qty"
                                                                 placeholder="Enter Quantity"
-                                                            ></text-field>
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> SKU </label>
@@ -3553,7 +3581,8 @@
                                                                 type="text"
                                                                 id="combo-sku"
                                                                 placeholder="Enter SKU Number"
-                                                            ></text-field>
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> Unit </label>
@@ -3562,7 +3591,8 @@
                                                                 type="text"
                                                                 id="addon-unit"
                                                                 placeholder="eg. cm, kg, m, box"
-                                                            ></text-field>
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_rate }} </label>
@@ -3578,10 +3608,8 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> Available on variant </label>
                                                             <!-- All available variant list show with checkbox -->
-                                                            <sh-select
-                                                                placeholder=""
-                                                                id="combo-addon-available"
-                                                            ></sh-select>
+                                                            <sh-select placeholder="" id="combo-addon-available">
+                                                            </sh-select>
                                                         </div>
                                                     </div>
                                                     <div>
@@ -4804,8 +4832,8 @@
                                         </button>
                                         <button mat-menu-item>
                                             <mat-checkbox color="primary" id="check-sales-info"
-                                                >Sales Information</mat-checkbox
-                                            >
+                                                >Sales Information
+                                            </mat-checkbox>
                                         </button>
                                         <button mat-menu-item>
                                             <mat-checkbox color="primary" id="check-hsn-sac-code">

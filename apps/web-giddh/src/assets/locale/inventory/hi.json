@@ -13,10 +13,10 @@
         "manufacturing":"उत्पादन",
         "warehouse_balance":"वेयरहाउस ओपनिंग बैलेंस",
         "custom_units":"कस्टम इकाई",
+        "master":"मास्टर",
         "recipe":"व्यंजन विधि",
         "create_manufacturing":"मैन्युफैक्चरिंग बनाएं",
-        "report":"प्रतिवेदन",
-        "master":"मास्टर"
+        "report":"प्रतिवेदन"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",
