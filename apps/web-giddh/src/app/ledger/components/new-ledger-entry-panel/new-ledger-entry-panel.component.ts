@@ -122,6 +122,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedSuffixForCurrency: string;
     @Input() public inputMaskFormat: string = '';
     @Input() public giddhBalanceDecimalPlaces: number = 2;
+    /** Stores true, if the total value is modified by the user */
+    @Input() public isTotalChanged: boolean;
     @ViewChild('webFileInput', { static: true }) public webFileInput: ElementRef;
     /** True, if RCM taxable amount needs to be displayed in create new ledger component as per criteria */
     @Input() public shouldShowRcmTaxableAmount: boolean = false;
@@ -151,6 +153,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public saveOtherTax: EventEmitter<any> = new EventEmitter();
     /** Emits the variant uniquename when stock variant is selected */
     @Output() public stockVariantSelected: EventEmitter<string> = new EventEmitter();
+    /** Emitter to update the parent when any field other than total is changed */
+    @Output() public isTotalChangedChange: EventEmitter<boolean> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
     @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
@@ -522,8 +526,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.detectChanges();
                 setTimeout(() => {
                     if (this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive) {
-                        this.currentTxn.total = !this.currentTxn.total ? giddhRoundOff((this.currentTxn.inventory.quantity * this.currentTxn.inventory.unit.rate), this.giddhBalanceDecimalPlaces) : this.currentTxn.total;
+                        this.currentTxn.total = !this.isTotalChanged ? giddhRoundOff((this.currentTxn.inventory.quantity * this.currentTxn.inventory.unit.rate), this.giddhBalanceDecimalPlaces) : this.currentTxn.total;
                         this.calculateAmount();
+                        this.isTotalChangedChange.emit(false);
                     } else {
                         this.amountChanged();
                         // this.calculateTotal();
@@ -686,7 +691,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public changePrice(val?: string, isUnitChanged?: boolean) {
         if (!this.isExchangeRateSwapped && !this.isInclusiveEntry) {
-            this.currentTxn.inventory.unit.rate = giddhRoundOff(val ? Number(val) : this.currentTxn.inventory.unit.rate / this.blankLedger?.exchangeRate, this.ratePrecision);
+            this.currentTxn.inventory.unit.rate = giddhRoundOff((val ? Number(val) : this.currentTxn.inventory.unit.rate) / this.blankLedger?.exchangeRate, this.ratePrecision);
             this.currentTxn.inventory.unit.highPrecisionRate = this.currentTxn.inventory.unit.rate;
             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
             this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);

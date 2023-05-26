@@ -895,6 +895,7 @@
                                                                         loadDetails(selectedAccountDetails, txn, $event)
                                                                     "
                                                                     [selectedAccountDetails]="selectedAccountDetails"
+                                                                    [(isTotalChanged)]="isTotalChanged"
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1186,6 +1187,7 @@
                                                                         loadDetails(selectedAccountDetails, txn, $event)
                                                                     "
                                                                     [selectedAccountDetails]="selectedAccountDetails"
+                                                                    [(isTotalChanged)]="isTotalChanged"
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1910,6 +1912,7 @@
                                                     loadDetails(selectedAccountDetails, txn, $event)
                                                 "
                                                 [selectedAccountDetails]="selectedAccountDetails"
+                                                [(isTotalChanged)]="isTotalChanged"
                                             >
                                             </new-ledger-entry-panel>
                                         </div>
@@ -2290,7 +2293,7 @@
                                                             txn.selectedAccount?.stock?.variant?.purchaseTaxInclusive ||
                                                             txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                                         "
-                                                        (input)="handleAmountInput(txn, true)"
+                                                        (input)="isTotalChanged = true; handleAmountInput(txn, true)"
                                                         (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
                                                     />
                                                     <input
@@ -2362,6 +2365,7 @@
                                                     loadDetails(selectedAccountDetails, txn, $event)
                                                 "
                                                 [selectedAccountDetails]="selectedAccountDetails"
+                                                [(isTotalChanged)]="isTotalChanged"
                                             >
                                             </new-ledger-entry-panel>
                                         </div>
