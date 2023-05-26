@@ -1,120 +1,56 @@
-@import url("https://fonts.googleapis.com/css?family=Arvo:400,700|Inconsolata");
+/*--- pro-font ---*/
 @font-face {
-    font-family: "opensans-regular";
-    src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot");
-    src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot?#iefix")
-            format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.svg")
-            format("svg"),
-        url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.woff")
-            format("woff"),
-        url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.ttf")
-            format("truetype");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-
-@font-face {
-    font-family: "opensans-semibold";
-    src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot");
-    src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot?#iefix")
-            format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.svg")
-            format("svg"),
-        url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.woff")
-            format("woff"),
-        url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.ttf")
-            format("truetype");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-@font-face {
-    font-family: "opensans-bold";
-    src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot");
-    src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot?#iefix")
-            format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.svg") format("svg"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.woff")
-            format("woff"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.ttf")
-            format("truetype");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-@font-face {
-    font-family: "opensans-extra-bold";
-    src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot");
-    src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot?#iefix")
-            format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.svg")
-            format("svg"),
-        url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.woff")
-            format("woff"),
-        url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.ttf")
-            format("truetype");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-
-/*---- aribaugrotesk ----*/
-
-@font-face {
-    font-family: "aribaugrotesk-regular";
+    font-family: "sfpro-regular";
     font-display: swap;
-    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Rg.woff")
+    src: url("../fonts/sf-pro/SF-Pro-Display-Regular.woff")
             format("woff");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "aribaugrotesk-semibold";
+    font-family: "sfpro-semibold";
     font-display: swap;
-    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Md.woff")
+    src: url("../fonts/sf-pro/SF-Pro-Display-Semibold.woff")
             format("woff");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "aribaugrotesk-bold";
+    font-family: "sfpro-bold";
     font-display: swap;
-    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Bd.woff")
+    src: url("../fonts/sf-pro/SF-Pro-Display-Bold.woff")
             format("woff");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
 
-/*---- gtamerica ----*/
-
+/*--- inter-font ---*/
 @font-face {
-    font-family: "gtamerica-regular";
+    font-family: "inter-regular";
     font-display: swap;
-    src: url("../fonts/gt-america/GT-America-Regular.ttf")
+    src: url("../fonts/interfont/Inter-Regular.ttf")
             format("truetype");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "gtamerica-semibold";
+    font-family: "inter-semibold";
     font-display: swap;
-    src: url("../fonts/gt-america/GT-America-Light.woff")
-            format("woff");
+    src: url("../fonts/interfont/Inter-SemiBold.ttf")
+            format("truetype");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "gtamerica-bold";
+    font-family: "inter-bold";
     font-display: swap;
-    src: url("../fonts/gt-america/GT-America-Bold.woff")
-            format("woff");
+    src: url("../fonts/interfont/Inter-Bold.ttf")
+            format("truetype");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
@@ -202,7 +138,7 @@ html,
 body {
     height: 100%;
     background: #f7f8fa;
-    font-family: "aribaugrotesk-regular";
+    font-family: "sfpro-regular", "inter-regular";
 
     color: #333333;
     -webkit-font-smoothing: antialiased;
