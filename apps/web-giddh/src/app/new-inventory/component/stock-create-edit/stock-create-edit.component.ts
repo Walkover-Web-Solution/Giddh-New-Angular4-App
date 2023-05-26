@@ -185,8 +185,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public translationLoaded: boolean = false;
     /** Holds active tab index */
     private activeTabIndex: number;
-    /** True if name has spacing */
-    public hasSpacingError = false;
+    /** True if variant option check validation*/
+    public checkOptionValidation = false;
 
     constructor(
         private inventoryService: InventoryService,
@@ -420,14 +420,35 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public addVariantOption(): void {
-        console.log(this.stockForm);
         if (this.isVariantAvailable) {
+            if (this.checkOptionValidity()) {
+                this.checkOptionValidation = false;
                 const optionIndex = this.stockForm.options?.length + 1;
                 this.stockForm.options.push({ name: "", values: [], order: optionIndex });
+            } else {
+                this.checkOptionValidation = true;
+            }
         } else {
             this.stockForm.options = [];
-            this.generateVariants();
+            this.stockForm.variants = this.stockForm.variants.slice(0, 1);
         }
+    }
+
+    /**
+     * This will use for check option validation in variant
+     *
+     * @return {*}  {boolean}
+     * @memberof StockCreateEditComponent
+     */
+    public checkOptionValidity(): boolean {
+        let isValid = true;
+        this.stockForm.options.forEach(option => {
+            if (!option.name || !option.values.length) {
+                isValid = false;
+                return;
+            }
+        });
+        return isValid;
     }
 
     /**
@@ -453,6 +474,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public generateVariants(): void {
+        console.log("call");
+
         let attributes = [];
 
         this.stockForm.options?.forEach((option, index) => {
@@ -1706,7 +1729,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public checkSpacingValidation(value: string): void {
-        this.hasSpacingError = value?.trim() !== value;
+        if (value.trim() !== value) {
+            this.stockCreateEditForm.form.controls.productName.setErrors({ hasSpacingError: true });
+        }
     }
 
     /**

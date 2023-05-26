@@ -1158,13 +1158,23 @@
                                                                     [name]="'option-' + i"
                                                                     [(ngModel)]="option.name"
                                                                     [type]="'text'"
-                                                                ></text-field>
+                                                                    [required]="true"
+                                                                    [showError]="stockCreateEditForm.form.controls?.['option-'+i]?.invalid && checkOptionValidation"
+                                                                >
+                                                                </text-field>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-8">
                                                                 <label class="category-label">{{
                                                                     localeData?.category
                                                                 }}</label>
-                                                                <div class="multi-select-input">
+                                                                <div
+                                                                    class="multi-select-input"
+                                                                    [ngClass]="{
+                                                                        'error-box':
+                                                                            !stockForm.options[i]?.values.length &&
+                                                                            checkOptionValidation
+                                                                    }"
+                                                                >
                                                                     <mat-chip-list #chipList>
                                                                         <mat-chip
                                                                             class="s-chip"
@@ -1226,7 +1236,15 @@
                                                         <i class="icon-options mr-2"></i>Customise
                                                     </button>
                                                 </div> -->
-                                                <div class="table-responsive" *ngIf="stockForm.variants?.length > 0">
+                                                <div
+                                                    class="table-responsive"
+                                                    *ngIf="
+                                                        stockForm.variants?.length > 0 &&
+                                                        (stockForm.options?.length > 1 ||
+                                                            (stockForm.options[0].name &&
+                                                                stockForm.options[0].values.length))
+                                                    "
+                                                >
                                                     <table class="stock-table font-14" style="margin-left: 2px">
                                                         <tr>
                                                             <th class="variant-name-column table-heading-color">
@@ -5021,9 +5039,7 @@
                             mat-flat-button
                             class="create-inventory-btn"
                             (click)="createStock(stockCreateEditForm)"
-                            [disabled]="
-                                stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError
-                            "
+                            [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName"
                         >
                             {{ localeData?.create_inventory }}
                         </button>
@@ -5048,9 +5064,7 @@
                             mat-raised-button
                             class="btn-success min-width-100"
                             (click)="updateStock(stockCreateEditForm)"
-                            [disabled]="
-                                stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError
-                            "
+                            [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName"
                         >
                             {{ commonLocaleData?.app_update }}
                         </button>
