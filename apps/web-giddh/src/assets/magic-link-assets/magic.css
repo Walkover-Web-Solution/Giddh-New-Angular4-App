@@ -1,60 +1,54 @@
-@import url("https://fonts.googleapis.com/css?family=Arvo:400,700|Inconsolata");
 @font-face {
-    font-family: "opensans-regular";
-    src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot");
-    src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot?#iefix")
-            format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.svg")
-            format("svg"),
-        url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.woff")
-            format("woff"),
-        url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.ttf")
-            format("truetype");
+    font-family: "aribaugrotesk-regular";
+    font-display: swap;
+    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Rg.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "aribaugrotesk-semibold";
+    font-display: swap;
+    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Md.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "aribaugrotesk-bold";
+    font-display: swap;
+    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Bd.woff")
+            format("woff");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
 
 @font-face {
-    font-family: "opensans-semibold";
-    src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot");
-    src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot?#iefix")
-            format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.svg")
-            format("svg"),
-        url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.woff")
-            format("woff"),
-        url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.ttf")
+    font-family: "gtamerica-regular";
+    font-display: swap;
+    src: url("../fonts/gt-america/GT-America-Regular.ttf")
             format("truetype");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "opensans-bold";
-    src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot");
-    src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot?#iefix")
-            format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.svg") format("svg"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.woff")
-            format("woff"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.ttf")
-            format("truetype");
+    font-family: "gtamerica-semibold";
+    font-display: swap;
+    src: url("../fonts/gt-america/GT-America-Light.woff")
+            format("woff");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "opensans-extra-bold";
-    src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot");
-    src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot?#iefix")
-            format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.svg")
-            format("svg"),
-        url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.woff")
-            format("woff"),
-        url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.ttf")
-            format("truetype");
+    font-family: "gtamerica-bold";
+    font-display: swap;
+    src: url("../fonts/gt-america/GT-America-Bold.woff")
+            format("woff");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
@@ -230,11 +224,11 @@ body {
     padding-right: 25px;
 }
 
-.pdL-5 {
+.pd-l-5 {
     padding-left: 5px;
 }
 
-.pdR-5 {
+.pd-r-5 {
     padding-right: 5px;
 }
 
@@ -495,7 +489,7 @@ body {
 }
 
 .border-none {
-    border: none;
+    border: none !important;
 }
 
 .bd-rt {
@@ -640,6 +634,14 @@ body {
 
 .pad0 {
     padding: 0 !important;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+.position-relative {
+    position: relative !important;
 }
 
 /*structure style*/
@@ -893,7 +895,6 @@ table th[class*="col-"] {
 #contact {
     background-color: #f26122;
     padding: 60px 0;
-    /* font-family: 'Inconsolata', serif; */
     font-weight: 400;
     color: #fff;
     /* letter-spacing: 1px; */
@@ -1007,10 +1008,6 @@ h4 {
 
 .green {
     color: #00796b;
-}
-
-.inconsolata {
-    /* font-family: 'Inconsolata', monospace; */
 }
 
 .font-black {

@@ -1124,11 +1124,11 @@ export class InventoryService {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             data.queryString = {
-                type: model.type,
+                type: model.type
             }
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {
-            type: model.type,
+            type: model.type
         })));
     }
 
@@ -1239,7 +1239,7 @@ export class InventoryService {
                         to: queryParams.to,
                         count: queryParams.count,
                         page: queryParams.page,
-                        type: queryParams.type,
+                        type: queryParams.type
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportResponse, InventoryReportRequest>(e, stockReportRequest, {
@@ -1247,7 +1247,7 @@ export class InventoryService {
                     to: queryParams.to,
                     count: queryParams.count,
                     page: queryParams.page,
-                    type: queryParams.type,
+                    type: queryParams.type
                 })));
     }
 
@@ -1277,7 +1277,7 @@ export class InventoryService {
                         to: queryParams.to,
                         count: queryParams.count,
                         page: queryParams.page,
-                        type: queryParams.type,
+                        type: queryParams.type
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportResponse, InventoryReportRequest>(e, stockReportRequest, {
@@ -1285,7 +1285,7 @@ export class InventoryService {
                     to: queryParams.to,
                     count: queryParams.count,
                     page: queryParams.page,
-                    type: queryParams.type,
+                    type: queryParams.type
                 })));
     }
 
@@ -1308,13 +1308,12 @@ export class InventoryService {
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
-                    data.request = queryParams;
                     data.queryString = {
                         from: queryParams.from,
                         to: queryParams.to,
                         count: queryParams.count,
                         page: queryParams.page,
-                        type: queryParams.type,
+                        type: queryParams.type
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportResponse, InventoryReportRequest>(e, stockReportRequest, {
@@ -1322,7 +1321,7 @@ export class InventoryService {
                     to: queryParams.to,
                     count: queryParams.count,
                     page: queryParams.page,
-                    type: queryParams.type,
+                    type: queryParams.type
                 })));
     }
 }

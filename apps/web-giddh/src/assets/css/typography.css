@@ -122,8 +122,8 @@
 }
 
 html,
-body{
-    --font-regular: "aribaugrotesk-regular";
-    --font-semibold: "aribaugrotesk-semibold";
-    --font-bold: "aribaugrotesk-bold";
+body {
+    --font-regular: "sfpro-regular", "inter-regular";
+    --font-semibold: "sfpro-semibold", "inter-semibold";
+    --font-bold: "sfpro-bold", "inter-bold";
 }

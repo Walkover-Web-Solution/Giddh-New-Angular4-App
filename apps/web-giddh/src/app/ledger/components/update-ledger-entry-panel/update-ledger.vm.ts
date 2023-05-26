@@ -61,6 +61,8 @@ export class UpdateLedgerVm {
     public isAdvanceReceipt: boolean = false;
     /** True, if RCM is present */
     public isRcmEntry: boolean = false;
+    /** True, when amount needs to be calculated inclusive of tax */
+    public isInclusiveTax: boolean = false;
 
     // multi-currency variables
     public isMultiCurrencyAvailable: boolean = false;
@@ -542,7 +544,9 @@ export class UpdateLedgerVm {
         }
 
         let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
-        if (this.isAdvanceReceipt || this.isRcmEntry) {
+        const particularAccount = this.getParticularAccount();
+        const ledgerAccount = this.getLedgerAccount(particularAccount);
+        if (this.isAdvanceReceipt || this.isRcmEntry || this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger?.voucher?.shortCode)) {
             this.totalAmount = this.grandTotal;
             this.generateGrandTotal();
         } else {
@@ -580,14 +584,6 @@ export class UpdateLedgerVm {
                 this.discountComponent.ledgerAmount = this.totalAmount;
                 this.discountComponent.change();
             }
-        }
-
-        let particularAccount = this.getParticularAccount();
-        let ledgerAccount = this.getLedgerAccount(particularAccount);
-
-        if (this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger?.voucher?.shortCode)) {
-            this.totalAmount = this.grandTotal;
-            this.generateGrandTotal();
         }
 
         this.getEntryTotal();
