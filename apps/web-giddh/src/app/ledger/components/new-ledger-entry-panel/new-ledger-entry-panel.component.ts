@@ -686,7 +686,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public changePrice(val: string, isUnitChanged?: boolean) {
         if (!this.isExchangeRateSwapped && !this.isInclusiveEntry) {
-            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.ratePrecision);
+            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val) / this.blankLedger?.exchangeRate, this.ratePrecision);
             this.currentTxn.inventory.unit.highPrecisionRate = this.currentTxn.inventory.unit.rate;
             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
             this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
