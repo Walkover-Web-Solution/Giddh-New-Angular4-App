@@ -684,9 +684,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @param {boolean} [isUnitChanged] True, if this handler is triggerred through change of unit field
      * @memberof NewLedgerEntryPanelComponent
      */
-    public changePrice(val: string, isUnitChanged?: boolean) {
+    public changePrice(val?: string, isUnitChanged?: boolean) {
         if (!this.isExchangeRateSwapped && !this.isInclusiveEntry) {
-            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val) / this.blankLedger?.exchangeRate, this.ratePrecision);
+            this.currentTxn.inventory.unit.rate = giddhRoundOff(val ? Number(val) : this.currentTxn.inventory.unit.rate / this.blankLedger?.exchangeRate, this.ratePrecision);
             this.currentTxn.inventory.unit.highPrecisionRate = this.currentTxn.inventory.unit.rate;
             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
             this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
