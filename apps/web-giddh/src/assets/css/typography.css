@@ -63,66 +63,68 @@
     text-rendering: optimizeLegibility;
 }
 
-/*---- aribaugrotesk ----*/
+/*--- pro-font ---*/
+@font-face {
+    font-family: "sfpro-regular";
+    font-display: swap;
+    src: local('sfpro-regular'),
+        url("../fonts/sf-pro/SF-Pro-Display-Regular.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "sfpro-semibold";
+    font-display: swap;
+    src: local('sfpro-semibold')
+        url("../fonts/sf-pro/SF-Pro-Display-Semibold.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "sfpro-bold";
+    font-display: swap;
+    src: url("../fonts/sf-pro/SF-Pro-Display-Bold.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
 
+/*--- inter-font ---*/
 @font-face {
-    font-family: "aribaugrotesk-regular";
+    font-family: "inter-regular";
     font-display: swap;
-    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Rg.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-@font-face {
-    font-family: "aribaugrotesk-semibold";
-    font-display: swap;
-    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Md.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-@font-face {
-    font-family: "aribaugrotesk-bold";
-    font-display: swap;
-    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Bd.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-
-@font-face {
-    font-family: "gtamerica-regular";
-    font-display: swap;
-    src: url("../fonts/gt-america/GT-America-Regular.ttf")
+    src: url("../fonts/interfont/Inter-Regular.ttf")
             format("truetype");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "gtamerica-semibold";
+    font-family: "inter-semibold";
     font-display: swap;
-    src: url("../fonts/gt-america/GT-America-Light.woff")
-            format("woff");
+    src: url("../fonts/interfont/Inter-SemiBold.ttf")
+            format("truetype");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "gtamerica-bold";
+    font-family: "inter-bold";
     font-display: swap;
-    src: url("../fonts/gt-america/GT-America-Bold.woff")
-            format("woff");
+    src: url("../fonts/interfont/Inter-Bold.ttf")
+            format("truetype");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
 
 html,
-body {
+body{
     --font-regular: "sfpro-regular", "inter-regular";
     --font-semibold: "sfpro-semibold", "inter-semibold";
     --font-bold: "sfpro-bold", "inter-bold";
