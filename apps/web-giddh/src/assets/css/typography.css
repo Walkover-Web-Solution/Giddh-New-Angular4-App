@@ -63,145 +63,31 @@
     text-rendering: optimizeLegibility;
 }
 
-/*---- aribaugrotesk ----*/
-
-@font-face {
-    font-family: "aribaugrotesk-regular";
-    font-display: swap;
-    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Rg.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-@font-face {
-    font-family: "aribaugrotesk-semibold";
-    font-display: swap;
-    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Md.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-@font-face {
-    font-family: "aribaugrotesk-bold";
-    font-display: swap;
-    src: url("../fonts/aribau-grotesk/AribauGroteskTRIAL-Bd.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-
-@font-face {
-    font-family: "gtamerica-regular";
-    font-display: swap;
-    src: url("../fonts/gt-america/GT-America-Regular.ttf")
-            format("truetype");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-@font-face {
-    font-family: "gtamerica-semibold";
-    font-display: swap;
-    src: url("../fonts/gt-america/GT-America-Light.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-@font-face {
-    font-family: "gtamerica-bold";
-    font-display: swap;
-    src: url("../fonts/gt-america/GT-America-Bold.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-
 /*--- pro-font ---*/
 @font-face {
-    font-family: "spro-regular";
+    font-family: "sfpro-regular";
     font-display: swap;
-    src: url("../fonts/sf-pro/SF-Pro-Display-Regular.woff")
+    src: local('sfpro-regular'),
+        url("../fonts/sf-pro/SF-Pro-Display-Regular.woff")
             format("woff");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "spro-semibold";
+    font-family: "sfpro-semibold";
     font-display: swap;
-    src: url("../fonts/sf-pro/SF-Pro-Display-Semibold.woff")
+    src: local('sfpro-semibold')
+        url("../fonts/sf-pro/SF-Pro-Display-Semibold.woff")
             format("woff");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "spro-bold";
+    font-family: "sfpro-bold";
     font-display: swap;
     src: url("../fonts/sf-pro/SF-Pro-Display-Bold.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-
-/*--- text-font ---*/
-@font-face {
-    font-family: "stext-regular";
-    font-display: swap;
-    src: url("../fonts/sf-text/SF-Pro-Text-Regular.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-@font-face {
-    font-family: "stext-semibold";
-    font-display: swap;
-    src: url("../fonts/sf-text/SF-Pro-Text-Semibold.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-@font-face {
-    font-family: "stext-bold";
-    font-display: swap;
-    src: url("../fonts/sf-text/SF-Pro-Text-Bold.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-
-/*--- rounded-font ---*/
-@font-face {
-    font-family: "srounded-regular";
-    font-display: swap;
-    src: url("../fonts/sf-rounded/SF-Pro-Rounded-Regular.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-@font-face {
-    font-family: "srounded-semibold";
-    font-display: swap;
-    src: url("../fonts/sf-rounded/SF-Pro-Rounded-Bold.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-@font-face {
-    font-family: "srounded-bold";
-    font-display: swap;
-    src: url("../fonts/sf-rounded/SF-Pro-Rounded-Bold.woff")
             format("woff");
     font-style: normal;
     font-weight: normal;
@@ -239,7 +125,7 @@
 
 html,
 body{
-    --font-regular: "inter-regular";
-    --font-semibold: "inter-semibold";
-    --font-bold: "inter-bold";
+    --font-regular: "sfpro-regular", "inter-regular";
+    --font-semibold: "sfpro-semibold", "inter-semibold";
+    --font-bold: "sfpro-bold", "inter-bold";
 }
