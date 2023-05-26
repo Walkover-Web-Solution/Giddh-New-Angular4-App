@@ -2686,6 +2686,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (rate > 0) {
                     txn.amount = rate;
                 }
+                txn.total = 0;
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
                 txn.showOtherTax = this.showOtherTax(txn);

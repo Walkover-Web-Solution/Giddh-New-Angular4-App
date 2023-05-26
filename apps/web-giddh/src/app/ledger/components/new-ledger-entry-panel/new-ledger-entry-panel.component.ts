@@ -271,8 +271,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isUnitOpen: boolean = false;
     /** Stores the stock variants */
     public stockVariants: BehaviorSubject<Array<IOption>> = new BehaviorSubject([]);
-    /** Stores the selected stock variant */
-    public selectedStockVariantUniqueName: string;
     /** True, if stock category is 'expenses' and inclusive tax is applied */
     public purchaseTaxInclusive: boolean;
     /** True, if stock category is 'income' and inclusive tax is applied */
@@ -281,6 +279,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public fixedAssetTaxInclusive: boolean;
     /** To force clear the variant dropdown */
     public variantForceClear$: Observable<IForceClear> = observableOf({status: false});
+    /** Stores the value of selected stock variant */
+    public selectedStockVariant: IOption = {label: '', value: ''};
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -425,7 +425,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.generateInvoice = cloneDeep(this.manualGenerateVoucherChecked);
         this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.length) {
-                this.selectedStockVariantUniqueName = res[0].value;
+                this.selectedStockVariant = Object.assign({}, res[0]);
                 this.stockVariantSelected.emit(res[0].value);
             }
         });
@@ -530,7 +530,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         this.calculateTax();
                     }
                     this.cdRef.markForCheck();
-                }, 100);
+                }, 10);
             }
         });
         // this.cdRef.markForCheck();
@@ -686,7 +686,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public changePrice(val: string, isUnitChanged?: boolean) {
         if (!this.isExchangeRateSwapped && !this.isInclusiveEntry) {
-            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.ratePrecision);
+            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val) / this.blankLedger?.exchangeRate, this.ratePrecision);
             this.currentTxn.inventory.unit.highPrecisionRate = this.currentTxn.inventory.unit.rate;
             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
             this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
@@ -806,7 +806,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 return;
             }
         }
-        if (this.currentTxn?.isStock && !this.selectedStockVariantUniqueName) {
+        if (this.currentTxn?.isStock && !this.selectedStockVariant.value) {
             return;
         }
         // Taxes checkbox will be false in case of receipt and payment voucher
@@ -827,6 +827,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         delete adjustment.balanceDue;
                     }
                 });
+            }
+            if (transaction.inventory && transaction.selectedAccount?.stock?.variant) {
+                transaction.inventory.taxInclusive = transaction.selectedAccount.stock.variant.salesTaxInclusive ||
+                transaction.selectedAccount.stock.variant.purchaseTaxInclusive ||
+                transaction.selectedAccount.stock.variant.fixedAssetTaxInclusive;
             }
             if (this.generalService.voucherApiVersion === 1) {
                 /** From API, for v1 companies, isStock key is creating issue in entry creation */
@@ -1923,11 +1928,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(
             map((variants: IVariant[]) => (variants ?? []).map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))), takeUntil(this.destroyed$)).subscribe(res => {
                 this.stockVariants.next(res);
-                if (this.selectedAccountDetails.additional?.stock?.uniqueName !== stockUniqueName) {
-                    this.variantForceClear$ = observableOf({status: true});
-                    this.selectedStockVariantUniqueName = res[0].value;
-                }
-                this.cdRef.detectChanges();
+                this.variantForceClear$ = observableOf({status: true});
+                setTimeout(() => {
+                    this.selectedStockVariant = Object.assign({}, res[0]);
+                    this.cdRef.detectChanges();
+                });
             });
     }
 

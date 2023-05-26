@@ -283,13 +283,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Stores the stock variants */
     public stockVariants: BehaviorSubject<Array<IOption>> = new BehaviorSubject([]);
     /** Stores the selected stock variant */
-    public selectedStockVariant: IVariant;
-    /** Stores the selected stock variant */
-    public selectedStockVariantUniqueName: string;
+    public selectedStockVariant: IVariant = {name: '', uniqueName: ''};
     /** To force clear the variant dropdown */
     public variantForceClear$: Observable<IForceClear> = observableOf({status: false});
     /** Stores the stock uniquename */
     private selectedStockUniquenName: string;
+    /** True if entry value is calculated inclusively */
+    private isInclusiveEntry: boolean = false;
 
     constructor(
         private accountService: AccountService,
@@ -776,7 +776,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
 
-        if (this.vm.stockTrxEntry?.inventory && !this.selectedStockVariantUniqueName) {
+        if (this.vm.stockTrxEntry?.inventory && !this.selectedStockVariant.uniqueName) {
             return;
         }
         // due to date picker of Tx chequeClearance date format need to change
@@ -2243,12 +2243,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }
             if (t.inventory) {
-                this.selectedStockUniquenName = t.inventory.stock?.uniqueName;
-                // Load stock's variants
-                this.loadStockVariants(t.inventory.stock?.uniqueName);
-                this.selectedStockVariantUniqueName = t.inventory.variant?.uniqueName;
                 this.selectedStockVariant = {name: t.inventory.variant?.name, uniqueName: t.inventory.variant?.uniqueName};
-                this.assignStockVariantDetails();
+                if (this.selectedStockUniquenName !== t.inventory.stock?.uniqueName) {
+                    /** Load stock variant only when stock has changed (stock will not be changed if the
+                     user only updates the entry) */
+                    this.selectedStockUniquenName = t.inventory.stock?.uniqueName;
+                    // Load stock's variants
+                    this.loadStockVariants(t.inventory.stock?.uniqueName);
+                    this.assignStockVariantDetails();
+                }
+                this.isInclusiveEntry = t.inventory.taxInclusive;
 
                 const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
                 if (unitRates && unitRates.length) {
@@ -2485,7 +2489,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private loadStockVariants(stockUniqueName: string): void {
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(
             map((variants: IVariant[]) => (variants ?? []).map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))), takeUntil(this.destroyed$)).subscribe(res => {
-                const isSameStock = res.find(variant => variant.value === this.selectedStockVariantUniqueName);
+                const isSameStock = res.find(variant => variant.value === this.selectedStockVariant.uniqueName);
                 if (!isSameStock) {
                     this.variantForceClear$ = observableOf({status: true});
                 }
@@ -2504,7 +2508,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.stockVariants.pipe(take(1)).subscribe(res => {
             if (res?.length) {
                 this.selectedStockVariant = {name: res[0].label, uniqueName: res[0].value};
-                this.selectedStockVariantUniqueName = this.selectedStockVariant.uniqueName;
             }
         });
     }

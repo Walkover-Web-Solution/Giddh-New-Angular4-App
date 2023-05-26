@@ -36,6 +36,7 @@ export interface IInventory {
     unit: IInventoryUnit;
     warehouse?: WarehouseDetails;
     variant?: IVariant;
+    taxInclusive?: boolean;
 }
 
 export interface IUnit {

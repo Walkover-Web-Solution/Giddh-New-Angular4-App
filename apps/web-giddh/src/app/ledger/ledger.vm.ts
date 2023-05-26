@@ -476,6 +476,7 @@ export interface IInventory {
     stock: INameUniqueName;
     warehouse: WarehouseDetails;
     variant: IVariant;
+    taxInclusive?: boolean;
 }
 
 export interface IInventoryUnit {
