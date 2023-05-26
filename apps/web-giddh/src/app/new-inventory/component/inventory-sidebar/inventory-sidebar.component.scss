@@ -102,11 +102,6 @@
                             height: 27px;
                             width: 100%;
                             line-height: 15px;
-                            &:last-child {
-                                align-items: center;
-                                position: relative;
-                                top: 8px;
-                            }
                             &:hover {
                                 color: var(--color-sidebar-anchor-text-hover);
                                 background-color: var(--color-white);

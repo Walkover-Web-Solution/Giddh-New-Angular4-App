@@ -338,8 +338,8 @@ table.stock-table {
             border: 1px solid var(--color-secondary-input-bar-border);
 
             &.archive {
-                max-width: 70px;
-                min-width: 70px;
+                max-width: 80px;
+                min-width: 80px;
             }
 
             &.sales-purchase-info {
@@ -371,8 +371,8 @@ table.stock-table {
             }
 
             &.opening-qty {
-                max-width: 140px;
-                min-width: 140px;
+                max-width: 150px;
+                min-width: 150px;
             }
 
             &.opening-amount {
@@ -383,6 +383,11 @@ table.stock-table {
             &.sku-code {
                 max-width: 130px;
                 min-width: 130px;
+            }
+
+            &.is-rate-inclusive {
+                max-width: 165px;
+                min-width: 165px;
             }
         }
     }
@@ -831,6 +836,10 @@ table.stock-table {
             display: none !important;
         }
     }
+    .btn-position-left {
+        right: 16px !important;
+        top: 6px !important;
+    }
 }
 
 .tab-container-new {
@@ -847,4 +856,11 @@ table.stock-table {
         top: -28px;
         left: 21px;
     }
+}
+
+.btn-position-left {
+    position: absolute;
+    right: 15px;
+    z-index: 1;
+    top: 18px;
 }
