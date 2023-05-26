@@ -235,7 +235,7 @@ span.date-wise-sale {
     cursor: pointer;
 }
 .total-sales-tabs a.active-graph {
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 input:read-only {
     border-color: var(--color-secondary-input-bar-border) !important;

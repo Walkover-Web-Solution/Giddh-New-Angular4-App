@@ -47,12 +47,6 @@ form {
                     font-size: 14px;
                     font-weight: 500;
                 }
-                .total-amount-order {
-                    display: block;
-                    font-size: 26px;
-                    line-height: 1.2;
-                    font-family: "opensans-semibold";
-                }
             }
             .select-customer-name {
                 sh-select,
@@ -809,7 +803,7 @@ table.table.table-custom-invoice.basic {
 
 b,
 strong {
-    font-family: "opensans-bold";
+    font-family: var(--font-bold);
     font-weight: 500;
 }
 .card-invoice-table .differ-currency {
@@ -926,7 +920,7 @@ span.eligible-ITC {
     font-size: 14px !important;
     font-weight: 500;
     display: block;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     padding-bottom: 5px;
 }
 
