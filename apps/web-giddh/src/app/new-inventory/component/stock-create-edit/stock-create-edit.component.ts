@@ -445,7 +445,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.stockForm.options.forEach(option => {
             if (!option.name || !option.values.length) {
                 isValid = false;
-                return;
+                return isValid;
             }
         });
         return isValid;
@@ -1727,7 +1727,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public checkSpacingValidation(value: string): void {
-        this.hasSpacingError = value?.trim() !== value;
+        this.hasSpacingError = (value?.trim()) ? false : true;
     }
 
     /**
