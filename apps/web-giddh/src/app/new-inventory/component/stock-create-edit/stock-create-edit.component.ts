@@ -185,6 +185,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public translationLoaded: boolean = false;
     /** Holds active tab index */
     private activeTabIndex: number;
+    /** True if name has spacing */
+    public hasSpacingError = false;
     /** True if variant option check validation*/
     public checkOptionValidation = false;
 
@@ -1729,9 +1731,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public checkSpacingValidation(value: string): void {
-        if (value.trim() !== value) {
-            this.stockCreateEditForm.form.controls.productName.setErrors({ hasSpacingError: true });
-        }
+        this.hasSpacingError = value?.trim() !== value;
     }
 
     /**

@@ -5039,7 +5039,9 @@
                             mat-flat-button
                             class="create-inventory-btn"
                             (click)="createStock(stockCreateEditForm)"
-                            [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName"
+                            [disabled]="
+                                stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError
+                            "
                         >
                             {{ localeData?.create_inventory }}
                         </button>
@@ -5064,7 +5066,9 @@
                             mat-raised-button
                             class="btn-success min-width-100"
                             (click)="updateStock(stockCreateEditForm)"
-                            [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName"
+                            [disabled]="
+                                stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError
+                            "
                         >
                             {{ commonLocaleData?.app_update }}
                         </button>
