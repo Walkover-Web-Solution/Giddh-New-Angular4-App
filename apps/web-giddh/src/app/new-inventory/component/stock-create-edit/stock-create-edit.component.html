@@ -166,7 +166,7 @@
                                                     class="form-control"
                                                     [placeholder]="commonLocaleData?.app_select_tax"
                                                     multiple
-                                                    [(value)]="stockForm.taxes"
+                                                    [value]="stockForm.taxes"
                                                 >
                                                     <mat-option
                                                         *ngFor="let tax of taxes"

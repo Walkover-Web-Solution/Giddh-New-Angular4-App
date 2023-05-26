@@ -429,8 +429,22 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.checkOptionValidation = true;
             }
         } else {
-            this.stockForm.options = [];
-            this.stockForm.variants = this.stockForm.variants.slice(0, 1);
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '40%',
+            data: {
+                title: 'Confirmation',
+                body: "Doing the section will remove all the variants, Are your sure you want to unselect it?",
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.stockForm.options = [];
+                this.stockForm.variants = this.stockForm.variants.slice(0, 1);
+            }
+        });
         }
     }
 
@@ -1159,7 +1173,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             return;
         }
         let isSelected = this.selectedTaxes?.filter(selectedTax => selectedTax === taxSelected.uniqueName);
-
         if (taxSelected.taxType !== 'gstcess') {
             let index = findIndex(this.taxTempArray, (taxTemp) => taxTemp.taxType === taxSelected.taxType);
             if (index > -1 && !isSelected?.length) {
