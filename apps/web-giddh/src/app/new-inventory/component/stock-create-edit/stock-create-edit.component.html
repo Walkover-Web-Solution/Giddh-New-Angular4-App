@@ -691,9 +691,9 @@
                                                                                 "
                                                                             >
                                                                                 <div
-                                                                                    class="col-6 pr-0"
+                                                                                    class="col-6"
                                                                                     [ngClass]="{
-                                                                                        'col-sm-5 col-xs-5':
+                                                                                        'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.purchaseInformation
                                                                                                 ?.length > 1
@@ -911,9 +911,9 @@
                                                                                 "
                                                                             >
                                                                                 <div
-                                                                                    class="col-6 pr-0"
+                                                                                    class="col-6"
                                                                                     [ngClass]="{
-                                                                                        'col-sm-5 col-xs-5':
+                                                                                        'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.salesInformation
                                                                                                 ?.length > 1
@@ -946,9 +946,9 @@
                                                                                     ></select-field>
                                                                                 </div>
                                                                                 <div
-                                                                                    class="col-6 pr-0"
+                                                                                    class="col-6"
                                                                                     [ngClass]="{
-                                                                                        'col-sm-5 col-xs-5':
+                                                                                        'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.salesInformation
                                                                                                 ?.length > 1
@@ -1627,7 +1627,7 @@
                                                                 </ng-container>
                                                             </td>
                                                             <td
-                                                                class="text-center unit-name"
+                                                                class="text-center is-rate-inclusive"
                                                                 *ngIf="
                                                                     isSalesInformationEnabled ||
                                                                     isPurchaseInformationEnabled ||
@@ -1716,7 +1716,14 @@
                                             >
                                                 <div class="row mr-b1">
                                                     <div class="col-sm-6 col-lg-4">
-                                                        <label>{{ commonLocaleData?.app_hsn_code }}</label>
+                                                        <mat-radio-group color="primary" [name]="''">
+                                                            <mat-radio-button value="HSN" [checked]="true">
+                                                                {{ commonLocaleData?.app_hsn }}
+                                                            </mat-radio-button>
+                                                            <mat-radio-button value="SAC">
+                                                                {{ commonLocaleData?.app_sac }}
+                                                            </mat-radio-button>
+                                                        </mat-radio-group>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
                                                         <text-field
