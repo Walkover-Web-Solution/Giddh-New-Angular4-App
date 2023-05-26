@@ -1692,7 +1692,14 @@
                                             >
                                                 <div class="row mr-b1">
                                                     <div class="col-sm-6 col-lg-4">
-                                                        <label>{{ commonLocaleData?.app_hsn_code }}</label>
+                                                        <mat-radio-group color="primary" [name]="''">
+                                                            <mat-radio-button value="HSN" [checked]="true">
+                                                                {{ commonLocaleData?.app_hsn }}
+                                                            </mat-radio-button>
+                                                            <mat-radio-button value="SAC">
+                                                                {{ commonLocaleData?.app_sac }}
+                                                            </mat-radio-button>
+                                                        </mat-radio-group>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
                                                         <text-field
