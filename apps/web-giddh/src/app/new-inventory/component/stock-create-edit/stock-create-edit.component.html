@@ -610,7 +610,7 @@
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <label
-                                                                                >{{ localeData?.is_purchase_inclusive }}
+                                                                                >{{ localeData?.is_rate_inclusive }}
                                                                             </label>
                                                                         </div>
                                                                         <div
@@ -691,9 +691,9 @@
                                                                                 "
                                                                             >
                                                                                 <div
-                                                                                    class="col-6 pr-0"
+                                                                                    class="col-6"
                                                                                     [ngClass]="{
-                                                                                        'col-sm-5 col-xs-5':
+                                                                                        'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.purchaseInformation
                                                                                                 ?.length > 1
@@ -728,9 +728,9 @@
                                                                                     ></select-field>
                                                                                 </div>
                                                                                 <div
-                                                                                    class="col-6 pr-0"
+                                                                                    class="col-6"
                                                                                     [ngClass]="{
-                                                                                        'col-sm-5 col-xs-5':
+                                                                                        'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.purchaseInformation
                                                                                                 ?.length > 1
@@ -784,8 +784,13 @@
                                                                                 </button>
                                                                                 <div class="col-sm-10 col-10">
                                                                                     <button
-                                                                                        mat-icon-button
-                                                                                        class="icon-button-add"
+                                                                                        mat-flat-button
+                                                                                        class="
+                                                                                            bg-transparent
+                                                                                            icon-button-add
+                                                                                            px-0
+                                                                                            pt-2
+                                                                                        "
                                                                                         role="button"
                                                                                         type="button"
                                                                                         disableRipple
@@ -811,6 +816,7 @@
                                                                                             "
                                                                                             class="
                                                                                                 add-new-text-container
+                                                                                                text-primary
                                                                                             "
                                                                                         >
                                                                                             {{ localeData?.add_new }}
@@ -843,7 +849,7 @@
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <label>{{
-                                                                                localeData?.is_sales_inclusive
+                                                                                localeData?.is_rate_inclusive
                                                                             }}</label>
                                                                         </div>
                                                                         <div
@@ -911,9 +917,9 @@
                                                                                 "
                                                                             >
                                                                                 <div
-                                                                                    class="col-6 pr-0"
+                                                                                    class="col-6"
                                                                                     [ngClass]="{
-                                                                                        'col-sm-5 col-xs-5':
+                                                                                        'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.salesInformation
                                                                                                 ?.length > 1
@@ -946,9 +952,9 @@
                                                                                     ></select-field>
                                                                                 </div>
                                                                                 <div
-                                                                                    class="col-6 pr-0"
+                                                                                    class="col-6"
                                                                                     [ngClass]="{
-                                                                                        'col-sm-5 col-xs-5':
+                                                                                        'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.salesInformation
                                                                                                 ?.length > 1
@@ -1002,8 +1008,13 @@
                                                                                 </button>
                                                                                 <div class="col-sm-10 col-10">
                                                                                     <button
-                                                                                        mat-icon-button
-                                                                                        class="icon-button-add"
+                                                                                        mat-flat-button
+                                                                                        class="
+                                                                                            bg-transparent
+                                                                                            icon-button-add
+                                                                                            px-0
+                                                                                            pt-2
+                                                                                        "
                                                                                         role="button"
                                                                                         type="button"
                                                                                         disableRipple
@@ -1029,6 +1040,7 @@
                                                                                             "
                                                                                             class="
                                                                                                 add-new-text-container
+                                                                                                text-primary
                                                                                             "
                                                                                         >
                                                                                             {{ localeData?.add_new }}
@@ -1627,7 +1639,7 @@
                                                                 </ng-container>
                                                             </td>
                                                             <td
-                                                                class="text-center unit-name"
+                                                                class="text-center is-rate-inclusive"
                                                                 *ngIf="
                                                                     isSalesInformationEnabled ||
                                                                     isPurchaseInformationEnabled ||
