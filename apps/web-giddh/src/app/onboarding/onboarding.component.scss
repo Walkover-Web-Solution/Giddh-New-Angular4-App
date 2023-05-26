@@ -18,7 +18,7 @@
 
 .border-btm {
     font-size: 16px;
-    font-family: "" opensans-semibold "";
+    font-family: var(--font-semibold);
     border-bottom: 1px solid var(--color-common-secondary-border);
     padding: 7px 0;
     margin-bottom: 10px;
@@ -76,7 +76,7 @@
     background: var(--color-primary-onboarding-btn-sync-background);
     box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
     font-size: 16px;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
 }
 
 p {
@@ -182,7 +182,7 @@ a.text-dark {
 }
 
 .custom-dialog .modal-header h3 {
-    font-family: "CambriaBold";
+    font-family: var(--font-bold);
     font-size: 20px;
     color: var(--color-nero) !important;
     margin-bottom: 15px;
@@ -240,7 +240,7 @@ a.text-dark {
 
 #talk_sales > li > a {
     color: var(--color-nero);
-    font-family: "CambriaBold";
+    font-family: var(--font-bold);
     padding-left: 28px !important;
     line-height: 35px;
     font-size: 16px;
@@ -289,7 +289,7 @@ a.text-dark {
 }
 
 .talktosale-superform input {
-    font-family: "AvenirLTStdMedium" !important;
+    font-family: var(--font-semibold) !important;
 }
 
 .talktosale-superform .sf-header {
@@ -304,7 +304,7 @@ a.text-dark {
 }
 
 #sFform-V6Lc input {
-    font-family: "AvenirLTStdMedium" !important;
+    font-family: var(--font-regular) !important;
 }
 
 @media (max-width: 767px) {
@@ -323,7 +323,7 @@ a.text-dark {
 }
 
 #sFSection-V6Lc {
-    font-family: Roboto;
+    font-family: var(--font-regular);
     background: var(--color-dark-fog);
 }
 
@@ -369,7 +369,7 @@ a.text-dark {
 
 .talktosale-superform .sFSection {
     padding: 0 !important;
-    font-family: "CambriaRegular" !important;
+    font-family: var(--font-regular) !important;
 }
 
 .talktosale-superform .sFSection .sFform textarea {

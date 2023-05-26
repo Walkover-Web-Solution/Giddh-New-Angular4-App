@@ -15,7 +15,7 @@
             }
         }
         button {
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
             font-size: 24px !important;
         }
     }
@@ -23,7 +23,7 @@
         .total-sales-tabs {
             .active-graph {
                 color: var(--color-nero);
-                font-family: "opensans-semibold";
+                font-family: var(--font-semibold);
             }
         }
     }

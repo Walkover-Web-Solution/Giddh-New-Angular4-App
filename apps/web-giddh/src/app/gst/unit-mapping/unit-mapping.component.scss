@@ -18,7 +18,7 @@
         }
         .unit-box,
         .map-unit-box {
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
             color: var(--color-table-secondary-heading);
         }
     }

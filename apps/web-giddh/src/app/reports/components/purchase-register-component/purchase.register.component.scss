@@ -100,7 +100,7 @@ ul#dropdown-nested li .caret {
     border-bottom: 1px solid var(--color-iron);
     .nav-report {
         li {
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
             font-size: 20px;
             a {
                 color: var(--color-giddh-blue);

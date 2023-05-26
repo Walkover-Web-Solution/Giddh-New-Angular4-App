@@ -66,7 +66,7 @@
     "proforma_no": "Proforma #",
     "estimate_no": "Estimate #",
     "purchase_bill_no": "Purchase Bill #",
-    "invoice_due_date": "Invoice Due Date",
+    "invoice_due_date": "Due Date",
     "proforma_date": "Proforma Date",
     "estimate_date": "Estimate Date",
     "expiry_date": "Expiry Date",
