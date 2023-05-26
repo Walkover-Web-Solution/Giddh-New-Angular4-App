@@ -230,8 +230,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.changeDetection.detectChanges();
             }
             if (params?.stockUniqueName) {
-                console.log("called");
-
                 this.queryParams = params;
                 this.getStockDetails();
             } else {
@@ -476,8 +474,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public generateVariants(): void {
-        console.log("call");
-
         let attributes = [];
 
         this.stockForm.options?.forEach((option, index) => {
