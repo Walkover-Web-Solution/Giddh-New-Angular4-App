@@ -83,7 +83,7 @@
                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                 [mask]="inputMaskFormat"
                                 [customDecimalPlaces]="ratePrecision"
-                                (change)="changePrice($event)"
+                                (change)="changePrice()"
                                 name="unitPrice"
                                 (keyup)="isInclusiveEntry = false"
                                 class="form-control text-right mat-field-border"
