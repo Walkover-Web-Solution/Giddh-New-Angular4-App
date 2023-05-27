@@ -1,5 +1,5 @@
 import { PermissionDataService } from './../permissions/permission-data.service';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { GeneralService } from '../services/general.service';
 import { OrganizationType } from '../models/user-login-state';
@@ -57,7 +57,7 @@ export const SCOPE_TO_ROUTE_MAPPING = [
 ];
 
 @Injectable()
-export class NeedsAuthorization implements CanActivate {
+export class NeedsAuthorization  {
 
     constructor(public router: Router, private permissionDataService: PermissionDataService, private generalService: GeneralService) {
     }
