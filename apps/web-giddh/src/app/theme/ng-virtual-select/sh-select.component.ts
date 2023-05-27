@@ -98,7 +98,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     public defaultValueUpdated: boolean = false;
     /** Holds string for select all records */
     public selectAllRecords: string = SELECT_ALL_RECORDS;
-    /** Keys. **/
+    /** Stores the model value set through ngModel */
+    private modelValue: string;
 
     private KEYS: any = {
         BACKSPACE: 8,
@@ -121,7 +122,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         this._options = val;
         this.updateRows(val);
         if (!this.doNotResetSelectedValues) {
-            this.selectedValues = [this.filter];
+            this.selectedValues = [this.modelValue ?? this.filter];
         }
     }
 
@@ -531,6 +532,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     //////// ControlValueAccessor imp //////////
 
     public writeValue(value: any) {
+        this.modelValue = value;
         this.selectedValues = value;
         if (!this.cdRef['destroyed']) {
             this.cdRef.detectChanges();
