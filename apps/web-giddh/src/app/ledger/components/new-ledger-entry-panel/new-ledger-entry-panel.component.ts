@@ -281,8 +281,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public salesTaxInclusive: boolean;
     /** True, if stock category is 'assets' and inclusive tax is applied */
     public fixedAssetTaxInclusive: boolean;
-    /** To force clear the variant dropdown */
-    public variantForceClear$: Observable<IForceClear> = observableOf({status: false});
     /** Stores the value of selected stock variant */
     public selectedStockVariant: IOption = {label: '', value: ''};
 
@@ -430,6 +428,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.length) {
                 this.selectedStockVariant = Object.assign({}, res[0]);
+                this.cdRef.detectChanges();
                 this.stockVariantSelected.emit(res[0].value);
             }
         });
@@ -529,6 +528,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         this.currentTxn.total = !this.isTotalChanged ? giddhRoundOff((this.currentTxn.inventory.quantity * this.currentTxn.inventory.unit.rate), this.giddhBalanceDecimalPlaces) : this.currentTxn.total;
                         this.calculateAmount();
                         this.isTotalChangedChange.emit(false);
+                        this.isInclusiveEntry = false;
                     } else {
                         this.amountChanged();
                         // this.calculateTotal();
@@ -581,20 +581,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             });
         }
         this.currentTxn.convertedDiscount = this.calculateConversionRate(this.currentTxn.discount);
-        if (this.isInclusiveEntry) {
-            this.calculateFieldValuesInclusively();
-        } else {
-            this.calculateTax();
-        }
+        this.calculateTax();
     }
 
     public calculateTax() {
         this.calculateTaxValue();
-        if (this.isInclusiveEntry) {
-            this.calculateFieldValuesInclusively();
-        } else {
-            this.calculateTotal();
-        }
+        this.calculateTotal();
     }
 
     /**
@@ -1934,11 +1926,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(
             map((variants: IVariant[]) => (variants ?? []).map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))), takeUntil(this.destroyed$)).subscribe(res => {
                 this.stockVariants.next(res);
-                this.variantForceClear$ = observableOf({status: true});
-                setTimeout(() => {
-                    this.selectedStockVariant = Object.assign({}, res[0]);
-                    this.cdRef.detectChanges();
-                });
             });
     }
 
@@ -2022,6 +2009,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     /**
      * Calculates the value of discount, tax inclusively and stock price
+     * This method will be used for inclusive MRP calculation in future
      *
      * @private
      * @memberof NewLedgerEntryPanelComponent

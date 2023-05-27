@@ -1181,7 +1181,6 @@
                     <sh-select
                         name="variantDropdown"
                         [disabled]="isReadOnly"
-                        [forceClearReactive]="variantForceClear$ | async"
                         [class.disabled-ledger]="isReadOnly"
                         [placeholder]="localeData?.select_variant"
                         [options]="variants"
@@ -1189,7 +1188,6 @@
                         [(ngModel)]="selectedStockVariant.value"
                         [isRequired]="true"
                         [cssClass]="!selectedStockVariant.value ? 'error-box' : ''"
-                        [defaultValue]="selectedStockVariant.label"
                     ></sh-select>
                 </div>
             </div>

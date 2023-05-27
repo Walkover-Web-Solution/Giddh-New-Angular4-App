@@ -284,12 +284,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public stockVariants: BehaviorSubject<Array<IOption>> = new BehaviorSubject([]);
     /** Stores the selected stock variant */
     public selectedStockVariant: IVariant = {name: '', uniqueName: ''};
-    /** To force clear the variant dropdown */
-    public variantForceClear$: Observable<IForceClear> = observableOf({status: false});
     /** Stores the stock uniquename */
     private selectedStockUniquenName: string;
-    /** True if entry value is calculated inclusively */
-    private isInclusiveEntry: boolean = false;
 
     constructor(
         private accountService: AccountService,
@@ -458,6 +454,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector('body')?.classList?.add('update-ledger-entry-panel-popup');
+        this.assignStockVariantDetails();
     }
 
     public toggleShow(): void {
@@ -586,7 +583,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
-    public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp?: ShSelectComponent, clearAccount?: boolean) {
+    public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp?: ShSelectComponent, clearAccount?: boolean, isVariantChanged?: boolean) {
         if (!e.value || clearAccount) {
             // if there's no selected account set selectedAccount to null
             txn.selectedAccount = null;
@@ -642,7 +639,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     if (e.additional.stock) {
                         requestObject = {
                             stockUniqueName: e.additional.stock?.uniqueName,
-                            variantUniqueName: this.selectedStockVariant?.uniqueName
+                            ...(isVariantChanged ? { variantUniqueName: this.selectedStockVariant?.uniqueName } : {})
                         };
                     }
                     this.assignStockDetails(e, txn, requestObject);
@@ -827,7 +824,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         requestObj.transactions.map((transaction: any) => {
             if (transaction?.inventory && this.isStockPresent) {
                 transaction.inventory.variant = this.selectedStockVariant ?? transaction.inventory.variant;
-
+                transaction.inventory.taxInclusive = this.vm.isInclusiveTax;
                 // Update the warehouse details in update ledger flow
                 if (transaction?.inventory.warehouse) {
                     transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
@@ -2249,9 +2246,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.selectedStockUniquenName = t.inventory.stock?.uniqueName;
                     // Load stock's variants
                     this.loadStockVariants(t.inventory.stock?.uniqueName);
-                    this.assignStockVariantDetails();
                 }
-                this.isInclusiveEntry = t.inventory.taxInclusive;
+                this.vm.isInclusiveEntry = t.inventory.taxInclusive;
 
                 const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
                 if (unitRates && unitRates.length) {
@@ -2474,7 +2470,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 uniqueName: stockLinkedAcccount
             }
         };
-        this.selectAccount(eventDetails, stockEntry, null);
+        this.selectAccount(eventDetails, stockEntry, null, false, true);
     }
 
     /**
@@ -2487,10 +2483,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private loadStockVariants(stockUniqueName: string): void {
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(
             map((variants: IVariant[]) => (variants ?? []).map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))), takeUntil(this.destroyed$)).subscribe(res => {
-                const isSameStock = res.find(variant => variant.value === this.selectedStockVariant.uniqueName);
-                if (!isSameStock) {
-                    this.variantForceClear$ = observableOf({status: true});
-                }
                 this.stockVariants.next(res);
                 this.changeDetectorRef.detectChanges();
             });
@@ -2503,7 +2495,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private assignStockVariantDetails(): void {
-        this.stockVariants.pipe(take(1)).subscribe(res => {
+        this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.length) {
                 this.selectedStockVariant = {name: res[0].label, uniqueName: res[0].value};
             }
@@ -2558,15 +2550,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 let stockName = '';
                 let stockUniqueName = '';
                 let stockUnitUniqueName = '';
-                if (txn.selectedAccount && txn.selectedAccount.stock) {
+                const stockDetails = txn.selectedAccount.stock;
+                if (txn.selectedAccount && stockDetails) {
                     let defaultUnit = {
-                        stockUnitCode: txn.selectedAccount.stock.stockUnitCode,
-                        code: txn.selectedAccount.stock.stockUnitCode,
-                        rate: txn.selectedAccount.stock.rate,
-                        name: txn.selectedAccount.stock.name
+                        stockUnitCode: stockDetails.stockUnitCode,
+                        code: stockDetails.stockUnitCode,
+                        rate: stockDetails.rate,
+                        name: stockDetails.name
                     };
                     // For V1 company, the unitRates is obtained in 'stock' and for v2 company, unitRates is obtained in 'stock.variant'
-                    const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : txn.selectedAccount.stock?.variant?.unitRates
+                    const unitRates = this.generalService.voucherApiVersion === 1 ? stockDetails?.unitRates : stockDetails?.variant?.unitRates
                     txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                     if (requestObject.variantUniqueName) {
                         // Variant got changed, search the selected variant's unit and assign its rate
@@ -2578,8 +2571,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         unitCode = defaultUnit.code;
                     }
                     stockName = defaultUnit.name;
-                    stockUniqueName = txn.selectedAccount.stock?.uniqueName;
-                    stockUnitUniqueName = txn.selectedAccount.stock.stockUnitUniqueName;
+                    stockUniqueName = stockDetails?.uniqueName;
+                    stockUnitUniqueName = stockDetails.stockUnitUniqueName;
                 }
 
                 if (stockName && stockUniqueName) {
@@ -2607,7 +2600,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         // Load variants only when stock changes
                         this.selectedStockUniquenName = stockUniqueName;
                         this.loadStockVariants(stockUniqueName);
-                        this.assignStockVariantDetails();
                     }
                 }
                 if (rate > 0) {
@@ -2622,7 +2614,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
                     this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
                 }
-                this.vm.onTxnAmountChange(txn);
+                if (stockDetails && (stockDetails.variant?.salesTaxInclusive || stockDetails.variant?.purchaseTaxInclusive || stockDetails.variant?.fixedAssetTaxInclusive)) {
+                    // Calculate inclusively
+                    this.vm.isInclusiveTax = true;
+                    this.vm.inventoryTotalChanged();
+                } else {
+                    this.vm.isInclusiveTax = false;
+                    this.vm.onTxnAmountChange(txn);
+                }
+                this.changeDetectorRef.detectChanges();
             }
         });
     }

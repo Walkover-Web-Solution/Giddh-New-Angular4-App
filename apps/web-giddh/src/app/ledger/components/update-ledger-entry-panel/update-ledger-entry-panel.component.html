@@ -823,10 +823,7 @@
                                     [placeholder]="localeData?.select_variant"
                                     [(ngModel)]="selectedStockVariant.uniqueName"
                                     [options]="stockVariants"
-                                    [defaultValue]="selectedStockVariant?.name"
                                     [isRequired]="true"
-                                    [doNotResetSelectedValues]="true"
-                                    [forceClearReactive]="variantForceClear$ | async"
                                     [cssClass]="!selectedStockVariant.uniqueName ? 'error-box' : ''"
                                 ></sh-select>
                             </div>
