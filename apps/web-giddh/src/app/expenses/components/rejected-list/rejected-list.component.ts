@@ -9,7 +9,7 @@ import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import { ExpenseService } from '../../../services/expences.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Lightbox } from 'ngx-lightbox';
 
 @Component({

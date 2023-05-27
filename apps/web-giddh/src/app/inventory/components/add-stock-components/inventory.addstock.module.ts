@@ -7,7 +7,7 @@ import { ShSelectModule } from '../../../theme/ng-virtual-select/sh-select.modul
 import { InventoryAddStockComponent } from './inventory.addstock.component';
 import { DecimalDigitsModule } from '../../../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { LaddaModule } from 'angular2-ladda';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatLegacySlideToggleModule as MatSlideToggleModule } from '@angular/material/legacy-slide-toggle';
 
 @NgModule({
     declarations: [InventoryAddStockComponent],

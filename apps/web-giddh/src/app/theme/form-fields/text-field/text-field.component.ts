@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional, Self, SimpleChanges, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NgControl } from "@angular/forms";
-import { MatFormFieldControl } from "@angular/material/form-field";
+import { MatLegacyFormFieldControl as MatFormFieldControl } from "@angular/material/legacy-form-field";
 import { Subject } from "rxjs";
 
 const noop = () => {

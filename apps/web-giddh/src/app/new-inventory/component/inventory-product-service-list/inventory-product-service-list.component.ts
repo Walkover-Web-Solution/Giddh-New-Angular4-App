@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChildren } from "@angular/core";
 import { ShSelectComponent } from "../../../theme/ng-virtual-select/sh-select.component";
 import { Router } from "@angular/router";
-import { MatTableDataSource } from "@angular/material/table";
+import { MatLegacyTableDataSource as MatTableDataSource } from "@angular/material/legacy-table";
 import { SelectionModel } from "@angular/cdk/collections";
 
 export interface PeriodicElement {

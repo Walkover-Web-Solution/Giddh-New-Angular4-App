@@ -13,7 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { ToasterService } from '../../../services/toaster.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { AllFeaturesComponent } from '../all-features/all-features.component';
 import { SubscriptionsUser } from '../../../models/api-models/Subscriptions';
 import { uniqBy } from '../../../lodash-optimized';

@@ -6,8 +6,8 @@ import localeMr from '@angular/common/locales/mr';
 import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS, NativeDateAdapter } from "@angular/material/core";
 import { CommonModule, formatDate, registerLocaleData } from "@angular/common";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
+import { MatLegacyFormFieldModule as MatFormFieldModule } from "@angular/material/legacy-form-field";
+import { MatLegacyInputModule as MatInputModule } from "@angular/material/legacy-input";
 
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);

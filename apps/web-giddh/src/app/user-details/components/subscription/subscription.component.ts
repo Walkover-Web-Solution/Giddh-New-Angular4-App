@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, OnChanges } from "@angular/core";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { MatAccordion } from "@angular/material/expansion";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { SubscriptionsActions } from '../../../actions/user-subscriptions/subscriptions.action';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';

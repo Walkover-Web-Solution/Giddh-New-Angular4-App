@@ -7,8 +7,8 @@ import { SelectModule } from '../../theme/ng-select/ng-select';
 import { LaddaModule } from 'angular2-ladda';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { GiddhDatepickerModule } from '../../theme/giddh-datepicker/giddh-datepicker.module';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 
 

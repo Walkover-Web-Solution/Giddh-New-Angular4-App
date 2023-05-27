@@ -22,7 +22,7 @@ import { UpdateLedgerEntryPanelComponent } from '../ledger/components/update-led
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { DaybookService } from '../services/daybook.service';
 import { ToasterService } from '../services/toaster.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { LedgerService } from '../services/ledger.service';
 import { Router } from '@angular/router';

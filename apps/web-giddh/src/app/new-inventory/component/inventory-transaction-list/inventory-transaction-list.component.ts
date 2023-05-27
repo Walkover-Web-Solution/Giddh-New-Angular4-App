@@ -7,7 +7,7 @@ import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { FormControl } from "@angular/forms";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { MatSort } from "@angular/material/sort";
 import { cloneDeep } from "../../../lodash-optimized";
 import { BalanceStockTransactionReportRequest, InventoryReportBalanceResponse, StockTransactionReportRequest } from "../../../models/api-models/Inventory";

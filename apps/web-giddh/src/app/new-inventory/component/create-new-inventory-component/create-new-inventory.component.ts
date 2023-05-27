@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import { takeUntil } from "rxjs/operators";
 import { ReplaySubject } from "rxjs";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { MatChipInputEvent } from "@angular/material/chips";
+import { MatLegacyChipInputEvent as MatChipInputEvent } from "@angular/material/legacy-chips";
 
 export interface Category {
     name: string;

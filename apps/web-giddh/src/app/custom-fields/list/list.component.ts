@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
 import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";

@@ -41,7 +41,7 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { UnitMappingComponent } from './unit-mapping/unit-mapping.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { PushToPortalComponent } from './modals/push-to-portal/push-to-portal.component';
 
 @NgModule({

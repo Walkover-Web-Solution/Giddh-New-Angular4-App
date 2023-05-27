@@ -26,7 +26,7 @@ import { SalesService } from '../../services/sales.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 import { TabDirective } from 'ngx-bootstrap/tabs';
-import { MatTabGroup } from '@angular/material/tabs';
+import { MatLegacyTabGroup as MatTabGroup } from '@angular/material/legacy-tabs';
 
 @Component({
     selector: 'setting-integration',

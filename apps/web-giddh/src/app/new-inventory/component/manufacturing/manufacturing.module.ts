@@ -4,13 +4,13 @@ import { MainComponent } from './main.component';
 import { InventorySidebarModule } from '../inventory-sidebar/inventory-sidebar.module';
 import { HamburgerMenuModule } from '../../../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { CreateManufacturingComponent } from './create-manufacturing/create-manufacturing.component';
 import { ManufacturingRoutingModule } from './manufacturing.routing.module';
 import { ListManufacturingComponent } from './list-manufacturing/list-manufacturing.component';
-import { MatTableModule } from '@angular/material/table';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
+import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import { DatepickerWrapperModule } from '../../../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 

@@ -52,10 +52,10 @@ import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currency
 import { FormControl } from "@angular/forms";
 import { Lightbox } from "ngx-lightbox";
 import { MatCheckboxChange } from "@angular/material/checkbox/checkbox";
-import { MatTableModule } from "@angular/material/table";
-import { MatTabChangeEvent } from "@angular/material/tabs";
-import { MatDialog } from "@angular/material/dialog";
-import { MatMenuTrigger } from "@angular/material/menu";
+import { MatLegacyTableModule as MatTableModule } from "@angular/material/legacy-table";
+import { MatLegacyTabChangeEvent as MatTabChangeEvent } from "@angular/material/legacy-tabs";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatLegacyMenuTrigger as MatMenuTrigger } from "@angular/material/legacy-menu";
 import { CustomFieldsService } from "../services/custom-fields.service";
 import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
 

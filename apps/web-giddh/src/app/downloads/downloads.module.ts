@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
-import { MatButtonModule } from "@angular/material/button";
-import { MatDialogModule } from "@angular/material/dialog";
-import { MatTableModule } from "@angular/material/table";
+import { MatLegacyButtonModule as MatButtonModule } from "@angular/material/legacy-button";
+import { MatLegacyDialogModule as MatDialogModule } from "@angular/material/legacy-dialog";
+import { MatLegacyTableModule as MatTableModule } from "@angular/material/legacy-table";
 import { PaginationModule } from "ngx-bootstrap/pagination";
 import { DownloadsRoutingModule } from "./downloads.routing.module";
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
@@ -14,8 +14,8 @@ import { ImportsComponent } from "./components/imports/imports.component";
 import { ExportsComponent } from "./components/exports/exports.component";
 import { ExportsJsonComponent } from "./components/exports-json/exports-json.component";
 import { DownloadsComponent } from "./downloads.component";
-import { MatTabsModule } from "@angular/material/tabs";
-import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatLegacyTabsModule as MatTabsModule } from "@angular/material/legacy-tabs";
+import { MatLegacyTooltipModule as MatTooltipModule } from "@angular/material/legacy-tooltip";
 
 @NgModule({
     declarations: [

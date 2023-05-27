@@ -14,7 +14,7 @@ import { GeneralService } from "../../services/general.service";
 import { ToasterService } from "../../services/toaster.service";
 import { AppState } from "../../store";
 import { saveAs } from 'file-saver';
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { LedgerService } from "../../services/ledger.service";
 import { ConfirmModalComponent } from "../new-confirm-modal/confirm-modal.component";
 import { InvoiceSetting } from "../../models/interfaces/invoice.setting.interface";

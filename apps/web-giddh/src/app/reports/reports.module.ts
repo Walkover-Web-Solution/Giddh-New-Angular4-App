@@ -33,16 +33,16 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
 import { PaymentReportComponent } from './components/payment-report/payment-report.component';
 import { PaymentAdvanceSearchComponent } from './components/payment-advance-search/payment-advance-search.component';
 import { PreviewComponent } from '../payment-receipt/components/preview/preview.component';
-import { MatCardModule } from '@angular/material/card';
+import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import { NewConfirmModalModule } from '../theme/new-confirm-modal';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { SendEmailModule } from '../shared/send-email/send-email.module';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatLegacySlideToggleModule as MatSlideToggleModule } from '@angular/material/legacy-slide-toggle';
 import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
 
 @NgModule({

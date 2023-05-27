@@ -30,9 +30,9 @@ import { WindowRef } from './shared/helpers/window.object';
 import { reducers } from './store';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar';
 import { SnackBarModule } from './theme/snackbar/snackbar.module';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { LoaderModule } from './loader/loader.module';
 import { PageModule } from './page/page.module';
 

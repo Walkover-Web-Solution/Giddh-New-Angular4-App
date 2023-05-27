@@ -12,7 +12,7 @@ import { Store, select } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
 import { download } from '@giddh-workspaces/utils';
 import { GeneralService } from '../../../services/general.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';

@@ -46,7 +46,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
 import { VoucherModule } from '../voucher/voucher.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatLegacySlideToggleModule as MatSlideToggleModule } from '@angular/material/legacy-slide-toggle';
 
 @NgModule({
     declarations: [

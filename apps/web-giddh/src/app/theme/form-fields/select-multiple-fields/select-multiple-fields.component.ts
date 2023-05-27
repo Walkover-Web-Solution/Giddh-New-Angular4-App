@@ -1,8 +1,8 @@
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
-import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
-import { MatChipInputEvent } from "@angular/material/chips";
+import { MatLegacyAutocompleteTrigger as MatAutocompleteTrigger } from "@angular/material/legacy-autocomplete";
+import { MatLegacyChipInputEvent as MatChipInputEvent } from "@angular/material/legacy-chips";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN } from "../../../app.constant";
