@@ -51,7 +51,7 @@ import { OrganizationType } from "../models/user-login-state";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
 import { FormControl } from "@angular/forms";
 import { Lightbox } from "ngx-lightbox";
-import { MatCheckboxChange } from "@angular/material/checkbox/checkbox";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatLegacyTableModule as MatTableModule } from "@angular/material/legacy-table";
 import { MatLegacyTabChangeEvent as MatTabChangeEvent } from "@angular/material/legacy-tabs";
 import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
