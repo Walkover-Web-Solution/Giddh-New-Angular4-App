@@ -189,6 +189,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public hasSpacingError = false;
     /** True if variant option check validation*/
     public checkOptionValidation = false;
+    /** Holds if hsn/sac selected */
+    public hsnSac: string = 'HSN';
 
     constructor(
         private inventoryService: InventoryService,
@@ -965,6 +967,13 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         } else {
             delete stockForm.fixedAssetsAccountUniqueNames;
         }
+
+        if (this.hsnSac === "HSN") {
+            stockForm.sacNumber = "";
+        } else {
+            stockForm.hsnNumber = "";
+        }
+
         return stockForm;
     }
 
