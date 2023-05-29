@@ -594,7 +594,8 @@ export class UpdateLedgerVm {
 
     public unitChanged(stockUnitUniqueName: string) {
         let unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
-        this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
+        const unitRate = giddhRoundOff(unit.rate / (this.selectedLedger?.exchangeRate ?? 1), this.ratePrecision);
+        this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unitRate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
         this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
         this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
     }
