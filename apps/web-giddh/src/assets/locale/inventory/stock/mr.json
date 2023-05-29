@@ -70,6 +70,7 @@
     "create_inventory":"इन्व्हेंटरी तयार करा",
     "variant_1":"प्रकार 1",
     "other":"इतर",
-    "variant":"प्रकार"
+    "variant":"प्रकार",
+    "enter_sac_code": "SAC कोड प्रविष्ट करा"
 }
 

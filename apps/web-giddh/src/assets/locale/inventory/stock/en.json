@@ -70,6 +70,7 @@
     "create_inventory":"Create Inventory",
     "variant_1":"variant 1",
     "other":"Other",
-    "variant":"Variant"
+    "variant":"Variant",
+    "enter_sac_code": "Enter SAC Code"
 }
 
