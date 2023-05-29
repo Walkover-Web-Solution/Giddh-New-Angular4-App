@@ -5,36 +5,16 @@
             <h3>Create New</h3>
         </div>
     </div>
-    <div class="aside-body">
-        <div class="create-product-wrapper mr-t2">
-            <div class="create-one-item pd-b15 pd-t15 d-flex">
-                <div class="wrapper-create-item">
-                    <div class="circle-icon">
-                        <i class="icon-inventory"></i>
-                    </div>
-                    <div class="create-item" (click)="createNewByAsidePanel('stock')">
-                        <h4>Create Stock</h4>
-                        <p>
-                            (Product you sell or purchase and keep track of its quantities Service you provide to
-                            customer like Designing, Tax preparation etc.. )
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="create-one-item pd-b15 pd-t15 d-flex">
-                <div class="wrapper-create-item">
-                    <div class="circle-icon">
-                        <i class="icon-inventory"></i>
-                    </div>
-                    <div class="create-item" (click)="createNewByAsidePanel('group')">
-                        <h4>Create Group</h4>
-                        <p>
-                            (Product you sell or purchase and keep track of its quantities Service you provide to
-                            customer like Designing, Tax preparation etc.. )
-                        </p>
-                    </div>
-                </div>
-            </div>
+    <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" vr-item>
+        <div class="pb-3">
+            <button class="btn btn-lg btn-primary" mat-raised-button (click)="createNewByAsidePanel('stock')">
+                Create Stock
+            </button>
+        </div>
+        <div>
+            <button class="btn btn-lg btn-primary" mat-raised-button (click)="createNewByAsidePanel('group')">
+                Create Group
+            </button>
         </div>
     </div>
 </div>
