@@ -691,9 +691,9 @@
                                                                                 "
                                                                             >
                                                                                 <div
-                                                                                    class="col-6 pr-0"
+                                                                                    class="col-6"
                                                                                     [ngClass]="{
-                                                                                        'col-sm-5 col-xs-5':
+                                                                                        'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.purchaseInformation
                                                                                                 ?.length > 1
@@ -728,9 +728,9 @@
                                                                                     ></select-field>
                                                                                 </div>
                                                                                 <div
-                                                                                    class="col-6 pr-0"
+                                                                                    class="col-6"
                                                                                     [ngClass]="{
-                                                                                        'col-sm-5 col-xs-5':
+                                                                                        'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.purchaseInformation
                                                                                                 ?.length > 1
@@ -911,9 +911,9 @@
                                                                                 "
                                                                             >
                                                                                 <div
-                                                                                    class="col-6 pr-0"
+                                                                                    class="col-6"
                                                                                     [ngClass]="{
-                                                                                        'col-sm-5 col-xs-5':
+                                                                                        'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.salesInformation
                                                                                                 ?.length > 1
@@ -946,9 +946,9 @@
                                                                                     ></select-field>
                                                                                 </div>
                                                                                 <div
-                                                                                    class="col-6 pr-0"
+                                                                                    class="col-6"
                                                                                     [ngClass]="{
-                                                                                        'col-sm-5 col-xs-5':
+                                                                                        'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.salesInformation
                                                                                                 ?.length > 1
@@ -1627,7 +1627,7 @@
                                                                 </ng-container>
                                                             </td>
                                                             <td
-                                                                class="text-center unit-name"
+                                                                class="text-center is-rate-inclusive"
                                                                 *ngIf="
                                                                     isSalesInformationEnabled ||
                                                                     isPurchaseInformationEnabled ||
@@ -1710,35 +1710,33 @@
                                 <mat-tab [label]="localeData?.other">
                                     <div class="tab-container-new">
                                         <div class="row">
-                                            <div
-                                                class="col-xl-6 col-md-12 col-lg-8 col-sm-12"
-                                                *ngIf="stockForm.type === 'PRODUCT'"
-                                            >
+                                            <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
                                                 <div class="row mr-b1">
                                                     <div class="col-sm-6 col-lg-4">
-                                                        <label>{{ commonLocaleData?.app_hsn_code }}</label>
+                                                        <mat-radio-group
+                                                            color="primary"
+                                                            name="hsn_sac"
+                                                            [(ngModel)]="hsnSac"
+                                                        >
+                                                            <mat-radio-button value="HSN">
+                                                                {{ commonLocaleData?.app_hsn }}
+                                                            </mat-radio-button>
+                                                            <mat-radio-button value="SAC">
+                                                                {{ commonLocaleData?.app_sac }}
+                                                            </mat-radio-button>
+                                                        </mat-radio-group>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
                                                         <text-field
+                                                            *ngIf="hsnSac === 'HSN'"
                                                             [cssClass]="'form-control'"
                                                             [name]="'hsnNumber'"
                                                             [type]="'text'"
                                                             [placeholder]="localeData?.enter_code"
                                                             [(ngModel)]="stockForm.hsnNumber"
                                                         ></text-field>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div
-                                                class="col-xl-6 col-md-12 col-lg-8 col-sm-12"
-                                                *ngIf="stockForm.type === 'SERVICE'"
-                                            >
-                                                <div class="row mr-b1">
-                                                    <div class="col-sm-6 col-lg-4">
-                                                        <label>{{ commonLocaleData?.app_sac_code }}</label>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-6">
                                                         <text-field
+                                                            *ngIf="hsnSac === 'SAC'"
                                                             [cssClass]="'form-control'"
                                                             [name]="'sacNumber'"
                                                             [type]="'text'"
