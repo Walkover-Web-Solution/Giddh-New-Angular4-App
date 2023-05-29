@@ -1841,7 +1841,7 @@
                                                             txn.selectedAccount?.stock?.variant?.purchaseTaxInclusive ||
                                                             txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                                         "
-                                                        (input)="handleAmountInput(txn, true)"
+                                                        (input)="isTotalChanged = true; handleAmountInput(txn, true)"
                                                         (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
                                                     />
                                                     <input
