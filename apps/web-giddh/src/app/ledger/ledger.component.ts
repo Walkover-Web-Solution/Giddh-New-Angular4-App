@@ -264,6 +264,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public enableAutopaid: boolean = false;
     /** Selected account details to load the details after variant is selected */
     public selectedAccountDetails: IOption;
+    /** True, if the total was changed explicitly by the user in case of inclusive tax */
+    public isTotalChanged: boolean;
     /* Observable to check if account prediction api call has completed */
     private accountPredictionSubject: Subject<boolean> = new Subject();
     /** Holds if we need bank ledger popup to be hidden */
@@ -2686,7 +2688,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (rate > 0) {
                     txn.amount = rate;
                 }
-                txn.total = 0;
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
                 txn.showOtherTax = this.showOtherTax(txn);

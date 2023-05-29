@@ -93,6 +93,8 @@ export class UpdateLedgerVm {
     public voucherApiVersion: 1 | 2;
     /* Amount should have precision up to 16 digits for better calculation */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
+    /** True if entry value is calculated inclusively */
+    public isInclusiveEntry: boolean = false;
 
     constructor(
         private generalService: GeneralService,
