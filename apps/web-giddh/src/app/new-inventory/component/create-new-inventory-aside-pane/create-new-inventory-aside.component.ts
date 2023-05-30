@@ -26,6 +26,12 @@ export class CreateNewInventoryAsideComponent implements OnInit {
     @Input() public moduleType;
     /* Aside pane state*/
     public asideMenuState: string = 'out';
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
 
     constructor(private router: Router) { }
 
@@ -72,6 +78,18 @@ export class CreateNewInventoryAsideComponent implements OnInit {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    /**
+     * This will use for translation complete
+     *
+     * @param {*} event
+     * @memberof CreateNewInventoryAsideComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
         }
     }
 }
