@@ -74,14 +74,13 @@
 
                             <div>
                                 <label>Quantity</label>
-                                <select-field
+                                <text-field
                                     [cssClass]="'form-control mat-field-border'"
+                                    [type]="'number'"
                                     [name]="''"
                                     [placeholder]="'Select Quantity'"
-                                    [options]="product"
-                                    [defaultValue]=""
                                 >
-                                </select-field>
+                                </text-field>
                                 <small class="float-right pt-1">Multiple of <span>200</span> </small>
                             </div>
                         </div>
