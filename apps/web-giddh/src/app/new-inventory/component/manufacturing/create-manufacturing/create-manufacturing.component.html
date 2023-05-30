@@ -1,0 +1,185 @@
+<section id="create-manufacturing" class="clearfix">
+    <hamburger-menu [pageHeading]="'Create Manufacture'"></hamburger-menu>
+    <div class="manufacturing-wrapper">
+        <div class="row">
+            <div class="form-fileds w-100">
+                <div class="d-inline-flex flex-wrap align-items-end">
+                    <div class="col">
+                        <label>Date</label>
+                        <giddh-datepicker
+                            name="from"
+                            [cssClass]="'mat-field-border bdr form-control w-100'"
+                            [showToggleIcon]="false"
+                        >
+                        </giddh-datepicker>
+                    </div>
+
+                    <div class="col">
+                        <label>Warehouse</label>
+                        <select-field
+                            [cssClass]="'form-control mat-field-border'"
+                            [name]="''"
+                            [placeholder]="'Select Warehouse'"
+                            [options]="product"
+                            [defaultValue]=""
+                        >
+                        </select-field>
+                    </div>
+
+                    <div class="col">
+                        <div class="custom-card bg-green">
+                            <p class="card-head-text">Total Cost</p>
+                            <p class="card-text">0</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="custom-card bg-vivid-gamboge">
+                            <p class="card-head-text">Cost per Item</p>
+                            <p class="card-text">3.0</p>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-3 max-width-1300" />
+            </div>
+        </div>
+        <div class="row max-width-1300">
+            <div class="col-3">
+                <div class="row">
+                    <div class="form-fileds w-100">
+                        <div class="d-flex flex-column flex-wrap gap-between w-100">
+                            <h1 class="section-head">Finished Stock</h1>
+                            <div>
+                                <label>Product</label>
+                                <select-field
+                                    [cssClass]="'form-control mat-field-border'"
+                                    [name]="''"
+                                    [placeholder]="'Select Product'"
+                                    [options]="product"
+                                    [defaultValue]=""
+                                >
+                                </select-field>
+                            </div>
+
+                            <div>
+                                <label>Variant</label>
+                                <select-field
+                                    [cssClass]="'form-control mat-field-border'"
+                                    [name]="''"
+                                    [placeholder]="'Select Variant'"
+                                    [options]="product"
+                                    [defaultValue]=""
+                                >
+                                </select-field>
+                            </div>
+
+                            <div>
+                                <label>Quantity</label>
+                                <text-field
+                                    [cssClass]="'form-control mat-field-border'"
+                                    [type]="'number'"
+                                    [name]="''"
+                                    [placeholder]="'Select Quantity'"
+                                >
+                                </text-field>
+                                <small class="float-right pt-1">Multiple of <span>200</span> </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1 d-flex justify-content-center align-items-center">
+                <span class="less-than-text"> <i class="icon-left"></i></span>
+            </div>
+            <div class="col-8 pr-0">
+                <div class="row">
+                    <div class="consumption-details-wrapper w-100">
+                        <h1 class="section-head">Raw Stock</h1>
+                        <div class="mt-2">
+                            <table id="table-raw-stock">
+                                <thead>
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Quantity</th>
+                                        <th>Unit</th>
+                                        <th>Rate</th>
+                                        <th>Amount</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="position-relative before-line">FG</td>
+                                        <td>20</td>
+                                        <td>kg</td>
+                                        <td>12</td>
+                                        <td>200</td>
+                                        <td><i class="icon-cross" aria-hidden="true"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <select-field
+                                                    [cssClass]="'form-control mat-field-border'"
+                                                    [name]="''"
+                                                    [placeholder]="'Select Product'"
+                                                    [options]="product"
+                                                    [defaultValue]=""
+                                                >
+                                                </select-field>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <text-field
+                                                    [cssClass]="'form-control mat-field-border'"
+                                                    [type]="'number'"
+                                                >
+                                                </text-field>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <text-field
+                                                    [cssClass]="'form-control mat-field-border'"
+                                                    [type]="'text'"
+                                                    [readonly]="true"
+                                                >
+                                                </text-field>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div>
+                                                    <text-field
+                                                        [cssClass]="'form-control mat-field-border'"
+                                                        [type]="'number'"
+                                                        [readonly]="true"
+                                                    >
+                                                    </text-field>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>0</td>
+                                        <td><i class="icon-add" aria-hidden="true"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6">
+                                            <button mat-stroked-button color="primary" class="mb-2">+ Add Stock</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td colspan="3">20</td>
+                                        <td>200</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
