@@ -67,13 +67,25 @@
                                     border: 2px solid
                                         var(--color-manufacture-source-tbody-tr-td-nth-child1-before-background);
                                     border-right: 0px;
+                                    border-top: 0px;
                                     border-radius: 3px 0 0 3px;
                                 }
                             }
+
                             .mat-stroked-button {
                                 padding: 4px 6px !important;
                                 line-height: unset !important;
                                 font-size: 12px !important;
+                            }
+                        }
+                        &:first-child {
+                            td {
+                                &.before-line {
+                                    &::before {
+                                        border-top: 2px solid
+                                            var(--color-manufacture-source-tbody-tr-td-nth-child1-before-background) !important;
+                                    }
+                                }
                             }
                         }
                     }
