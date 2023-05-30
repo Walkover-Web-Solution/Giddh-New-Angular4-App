@@ -1,31 +1,151 @@
-.create-recipe {
-    &-wrapper {
-        padding: 0 18px;
+#create-manufacturing {
+    .manufacturing-wrapper {
+        padding: 15px;
 
-        .width-280 {
-            display: block;
-            width: 280px;
+        .row {
+            margin-left: unset;
+            margin-right: unset;
+        }
+        .max-width-1300 {
+            max-width: 1300px;
+        }
+        .less-than-text {
+            font-size: 32px;
+            color: var(--color-abbey);
         }
 
-        .edit-btn {
-            width: 30px !important;
-            height: 30px !important;
-            line-height: 0px !important;
-            font-size: 20px;
+        .form-fileds {
+            .max-width-230 {
+                display: block;
+                width: auto;
+            }
+            .gap-between {
+                gap: 1rem;
+            }
+            small {
+                font-size: 11.8px;
+            }
+            label {
+                font-size: 14px;
+                font-weight: 400;
+            }
+        }
 
-            .icon-add {
-                color: var(--color-common-senary-text);
+        .consumption-details-wrapper {
+            #table-raw-stock {
+                width: 100%;
+                th,
+                td {
+                    padding: 10px 15px;
+                    font-size: 14px;
+                    text-align: right;
+                    &:first-child {
+                        text-align: left;
+                    }
+                }
+
+                thead {
+                    border-bottom: 1px solid var(--color-iron);
+                    tr {
+                        th {
+                            color: var(--color-primary-button-text);
+                            font-weight: 500;
+                        }
+                    }
+                }
+                tbody {
+                    tr {
+                        td {
+                            &.before-line {
+                                &::before {
+                                    content: "";
+                                    position: absolute;
+                                    left: -1px;
+                                    top: 20px;
+                                    width: 14px;
+                                    height: 50px;
+                                    border: 2px solid
+                                        var(--color-manufacture-source-tbody-tr-td-nth-child1-before-background);
+                                    border-right: 0px;
+                                    border-radius: 3px 0 0 3px;
+                                }
+                            }
+                            .mat-stroked-button {
+                                padding: 4px 6px !important;
+                                line-height: unset !important;
+                                font-size: 12px !important;
+                            }
+                        }
+                    }
+                }
+                tfoot {
+                    border-top: 1px solid var(--color-iron);
+                    border-bottom: 1px solid var(--color-iron);
+                    tr {
+                        td {
+                            color: var(--color-nero);
+                            font-weight: 100;
+                        }
+                    }
+                }
+            }
+            .section-head {
+                padding-left: 15px;
             }
             .icon-cross {
-                color: var(--color-gst-primary-doc-actions);
+                color: var(--color-red);
             }
         }
+        .total-cost-card {
+            padding: 15px 0;
 
-        hr {
-            margin-left: -15px;
+            &-head {
+                padding: 12px 19px;
+                background-color: var(--color-abbey);
+                color: var(--color-white);
+            }
+
+            &-body {
+                font-weight: 600;
+                padding: 10px 0;
+
+                .col-5 {
+                    flex: unset !important;
+                    & ~ .col-5 {
+                        text-align: right;
+                    }
+                }
+            }
         }
-        .repeatable-container {
-            background-color: var(--color-common-septenary-background-for-all-components);
+        .arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            font-size: 44px;
+        }
+
+        .custom-card {
+            padding: 12px 15px;
+            border-radius: 5px;
+            min-width: 280px;
+
+            &.bg-green {
+                background-color: var(--color-opening-box-background);
+                color: var(--color-success-enable);
+            }
+            &.bg-vivid-gamboge {
+                background-color: var(--color-total-details-secondary-background);
+                color: var(--color-total-details-secondary-content);
+            }
+            .card-head-text {
+                font-size: 12px;
+                color: var(--color-total-details-heading);
+            }
+            .card-text {
+                font-size: 16px;
+                font-weight: 500;
+            }
         }
     }
 }
