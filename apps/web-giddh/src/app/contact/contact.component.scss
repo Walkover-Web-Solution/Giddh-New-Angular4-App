@@ -103,7 +103,7 @@ button.mat-menu-item {
 }
 
 .account-detail-custom-title {
-    font-family: "opensans-semibold" !important;
+    font-family: var(--font-semibold) !important;
     font-size: 16px !important;
     word-break: break-word !important;
     margin-top: 5%;
@@ -121,7 +121,7 @@ button.mat-menu-item {
     color: var(--color-abbey);
     margin-top: 7px;
     font-size: 14px !important;
-    font-family: opensans-regular !important;
+    font-family: var(--font-regular) !important;
 }
 
 ul.list-unstyled li a {
@@ -976,7 +976,10 @@ button.btn.btn-filter span.icon-cross {
     background-color: var(--color-denary-button-background);
     border: 1px solid var(--color-primary-button-border);
 }
-th.mat-header-cell,
-td.mat-cell {
+th.mat-header-cell {
     white-space: nowrap !important;
+}
+td.mat-cell {
+    white-space: normal !important;
+    word-break: keep-all !important;
 }

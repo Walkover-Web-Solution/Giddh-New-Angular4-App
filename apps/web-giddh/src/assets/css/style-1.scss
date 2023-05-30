@@ -18,7 +18,7 @@ VERSION:  1
 html,
 body {
     height: 100%;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     color: var(--color-nero);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -1526,7 +1526,7 @@ ul.pills li {
     -webkit-box-shadow: 0px 3px 28px 0 var(--color-primary-common-box-shadow);
     -moz-box-shadow: 0px 3px 28px 0 var(--color-primary-common-box-shadow);
     box-shadow: 0px 3px 28px 0 var(--color-primary-common-box-shadow);
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     font-size: 100%;
     font-size: 14px;
     border: 1px solid var(--color-common-primary-border);
@@ -2001,7 +2001,7 @@ ul.pills li {
 }
 
 strong {
-    font-family: "" opensans-semibold "";
+    font-family: var(--font-semibold);
     color: var(--color-popup-footer-text);
 }
 .hamburger-menu a:hover {
@@ -2018,7 +2018,7 @@ strong {
 
 b,
 strong {
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     font-weight: 500;
 }
 .select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow b {
@@ -2181,7 +2181,8 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
 }
 .basic thead tr th {
     border: 0;
-    font-family: "" opensans-semibold "";
+    font-family: var(--font-semibold);
+
     text-transform: capitalize;
 }
 .basic tbody tr:hover td {
@@ -2740,7 +2741,7 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 }
 .mat-header-cell {
     color: var(--color-giddh-blue) !important;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     font-size: 14px !important;
 }
 .mat-header-cell.text-right {
@@ -2810,6 +2811,7 @@ tr.mat-footer-row {
 table.mat-table {
     border-spacing: 2px !important;
     background-color: var(--common-secondary-background-color-for-all-component);
+    font-family: var(--font-regular);
 }
 
 th.mat-header-cell:first-of-type,
@@ -3160,14 +3162,16 @@ td.mat-footer-cell {
         .mat-tab-label {
             .mat-tab-label-content {
                 letter-spacing: 0px;
-                font: normal normal normal 16px/22px Open Sans;
+                font: normal normal normal 16px/22px;
+                font-family: var(--font-regular);
                 color: var(--color-tab-primary-inactive) !important;
             }
             &:focus,
             :active {
                 .mat-tab-label-content {
                     letter-spacing: 0px;
-                    font: normal normal 600 16px/22px Open Sans;
+                    font: normal normal 600 16px/22px;
+                    font-family: var(--font-regular);
                     color: var(--color-tab-primary-active) !important;
                 }
             }

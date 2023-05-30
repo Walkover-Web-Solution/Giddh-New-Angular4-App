@@ -62,7 +62,70 @@
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
+
+/*--- pro-font ---*/
+@font-face {
+    font-family: "sfpro-regular";
+    font-display: swap;
+    src: local('sfpro-regular'),
+        url("../fonts/sf-pro/SF-Pro-Display-Regular.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "sfpro-semibold";
+    font-display: swap;
+    src: local('sfpro-semibold')
+        url("../fonts/sf-pro/SF-Pro-Display-Semibold.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "sfpro-bold";
+    font-display: swap;
+    src: url("../fonts/sf-pro/SF-Pro-Display-Bold.woff")
+            format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+
+/*--- inter-font ---*/
+@font-face {
+    font-family: "inter-regular";
+    font-display: swap;
+    src: url("../fonts/interfont/Inter-Regular.ttf")
+            format("truetype");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "inter-semibold";
+    font-display: swap;
+    src: url("../fonts/interfont/Inter-SemiBold.ttf")
+            format("truetype");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "inter-bold";
+    font-display: swap;
+    src: url("../fonts/interfont/Inter-Bold.ttf")
+            format("truetype");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+
 html,
-body {
-    font-family: "opensans-regular";
+body{
+    --font-regular: "sfpro-regular", "inter-regular";
+    --font-semibold: "sfpro-semibold", "inter-semibold";
+    --font-bold: "sfpro-bold", "inter-bold";
 }

@@ -52,7 +52,7 @@
                 a {
                     padding: 10px 15px;
                     color: var(--color-nero);
-                    font-family: "opensans-semibold";
+                    font-family: var(--font-semibold);
                     display: flex;
                     font-size: 14px;
                     &:hover {

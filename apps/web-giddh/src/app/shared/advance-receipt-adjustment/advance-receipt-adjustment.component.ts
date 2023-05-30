@@ -76,6 +76,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     };
     public advanceReceiptAdjustmentPreUpdatedData: VoucherAdjustments;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    @Input() public isModal: boolean = true;
     @Input() public invoiceFormDetails;
     @Input() public isUpdateMode;
     @Input() public depositAmount = 0;
@@ -747,7 +748,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         let totalAmount: number = 0;
         let convertedTotalAmount: number = 0;
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
-            this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
+            this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails?.balanceDue;
             this.adjustVoucherForm.adjustments.forEach(item => {
                 if (item && item.adjustmentAmount && item.adjustmentAmount.amountForAccount) {
                     if (
