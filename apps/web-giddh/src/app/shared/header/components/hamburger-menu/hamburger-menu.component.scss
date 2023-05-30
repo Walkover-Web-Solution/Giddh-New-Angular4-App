@@ -24,7 +24,7 @@
     &.page-has-heading {
         width: 100%;
         h4 {
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
             font-size: 20px;
         }
     }

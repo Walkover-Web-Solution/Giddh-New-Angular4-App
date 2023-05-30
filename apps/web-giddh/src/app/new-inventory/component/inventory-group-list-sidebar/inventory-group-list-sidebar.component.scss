@@ -11,7 +11,7 @@
     height: 400px;
     h4.product-name {
         font-size: 16px;
-        font-family: "opensans-semibold";
+        font-family: var(--font-semibold);
         padding: 10px 15px;
         background-color: var(--color-sidebar-list-background-hover);
     }

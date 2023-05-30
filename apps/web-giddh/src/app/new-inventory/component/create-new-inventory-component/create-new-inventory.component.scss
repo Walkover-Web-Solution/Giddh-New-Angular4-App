@@ -34,7 +34,7 @@
         .select-puchase-info {
             background-color: var(--color-lavender);
             padding: 6px 10px;
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
         }
 
         .add-new-field {
@@ -74,7 +74,7 @@
     .stock-made-with {
         margin-bottom: 15px;
         position: relative;
-        font-family: "opensans-semibold";
+        font-family: var(--font-semibold);
 
         &:after {
             position: absolute;
