@@ -13311,10 +13311,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
     }
 }
-.stock-group-search input {
-    padding-left: 30px !important;
-    padding-top: 20px !important;
-}
 
 .stock-balance-wrapper {
     .search-warehouse-bar {
@@ -13341,9 +13337,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
             color: var(--color-search-bar-primary-border);
         }
     }
-    .stock-balance-main-list-table {
-    }
-
     .stock-list-body {
         .stock-list-expanded-content {
             .mat-form-field-infix {
@@ -13431,90 +13424,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
                             }
                         }
                     }
-                }
-            }
-        }
-    }
-}
-
-#mat-select-0-panel {
-    min-width: calc(100% + 24px) !important;
-    position: absolute;
-    top: 44px;
-    left: 28px;
-
-    button {
-        span.mat-button-wrapper {
-            color: var(--color-blue);
-        }
-    }
-
-    .mat-pseudo-checkbox {
-        color: var(--color-primary-checkbox-and-expansion-panel-arrow);
-    }
-}
-
-.myPanelClass {
-    margin-top: 30px !important;
-    margin-left: 16px !important;
-
-    button {
-        color: var(--color-blue);
-    }
-}
-
-.myPanelClass.position-fix {
-    min-width: calc(100% + 15px) !important;
-    position: absolute;
-    top: 1px;
-    left: -7px;
-}
-
-.create-custom-field-page {
-    .custom-field-wrapper {
-        text-field {
-            .text-field-container {
-                input {
-                    width: 100%;
-                    height: auto;
-                    border: 1px solid var(--color-secondary-input-bar-border);
-                    background-color: var(--color-secondary-input-bar-background);
-
-                    &::placeholder {
-                        color: var(--color-common-primary-input-placeholder);
-                    }
-                }
-            }
-        }
-
-        .mat-select {
-            .mat-select-placeholder {
-                font-size: 14px;
-                color: var(--color-common-primary-input-placeholder);
-            }
-        }
-
-        .minMaxField-wrapper {
-            .minMaxField {
-                .text-field-container {
-                    width: 42%;
-                    display: inline-block;
-
-                    &:first-child {
-                        margin-right: 10px;
-                    }
-                }
-            }
-        }
-    }
-}
-
-.select-physical-product {
-    .product-option {
-        .product-option-wrapper {
-            .multi-select-input {
-                input {
-                    background: var(--color-secondary-input-bar-background);
                 }
             }
         }
@@ -13826,9 +13735,11 @@ hamburger-menu {
     }
 }
 
-.stock-group-search input {
-    padding-left: 30px !important;
-    padding-top: 20px !important;
+.stock-group-search {
+    input {
+        padding-left: 30px !important;
+        padding-top: 20px !important;
+    }
 }
 
 .stock-balance-wrapper {
