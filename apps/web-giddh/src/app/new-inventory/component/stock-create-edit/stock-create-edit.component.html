@@ -59,7 +59,11 @@
                                                     {{
                                                         stockForm.type === "FIXED_ASSETS"
                                                             ? localeData?.fixed_assets
-                                                            : (stockForm.type | titlecase)
+                                                            : stockForm.type === "SERVICE"
+                                                            ? commonLocaleData?.app_service
+                                                            : stockForm.type === "PRODUCT"
+                                                            ? commonLocaleData?.app_product
+                                                            : ""
                                                     }}
                                                     {{ commonLocaleData?.app_name }}
                                                     <span class="red-text product-name-star">*</span></label
@@ -80,11 +84,15 @@
                                         </div>
                                         <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-4">
-                                                <label
-                                                    >{{
+                                                <label>
+                                                    {{
                                                         stockForm.type === "FIXED_ASSETS"
                                                             ? localeData?.fixed_assets
-                                                            : (stockForm.type | titlecase)
+                                                            : stockForm.type === "SERVICE"
+                                                            ? commonLocaleData?.app_service
+                                                            : stockForm.type === "PRODUCT"
+                                                            ? commonLocaleData?.app_product
+                                                            : ""
                                                     }}
                                                     {{ commonLocaleData?.app_unit }}
                                                     <span class="red-text">*</span></label
@@ -122,11 +130,16 @@
                                                     [name]="'stockGroupName'"
                                                 >
                                                     <div class="select-quantity-option">
-                                                        <mat-option
-                                                            *ngFor="let group of stockGroups"
-                                                            [value]="group?.value"
-                                                        >
-                                                            {{ group.label }}
+                                                        <ng-container *ngIf="stockGroups?.length">
+                                                            <mat-option
+                                                                *ngFor="let group of stockGroups"
+                                                                [value]="group?.value"
+                                                            >
+                                                                {{ group.label }}
+                                                            </mat-option>
+                                                        </ng-container>
+                                                        <mat-option *ngIf="!stockGroups?.length">
+                                                            {{ commonLocaleData?.app_no_result_found }}
                                                         </mat-option>
                                                     </div>
                                                 </mat-select>
@@ -458,6 +471,9 @@
                                                                                     'fixedAssetTaxInclusive'
                                                                                 ]
                                                                             "
+                                                                            [disabled]="
+                                                                                !isFixedAssetsInformationEnabled
+                                                                            "
                                                                         ></mat-checkbox>
                                                                     </div>
                                                                     <div
@@ -473,8 +489,8 @@
                                                                         <div
                                                                             class="row add-new-field mr-b15"
                                                                             *ngFor="
-                                                                                let variantFixedAssetsUnitRate of stockForm
-                                                                                    ?.variants[0]
+                                                                                let variantFixedAssetsUnitRate of (stockForm
+                                                                                    ?.variants)[0]
                                                                                     ?.fixedAssetsInformation;
                                                                                 let j = index
                                                                             "
@@ -482,7 +498,12 @@
                                                                             <div class="col-sm-6 col-6">
                                                                                 <select-field
                                                                                     [cssClass]="
-                                                                                        'form-control unit-rates'
+                                                                                        (!variantFixedAssetsUnitRate?.stockUnitName &&
+                                                                                        checkUnitRateValidation[0]
+                                                                                            ?.fixedAssets
+                                                                                            ? 'error-box'
+                                                                                            : '') +
+                                                                                        ' form-control unit-rates'
                                                                                     "
                                                                                     [name]="
                                                                                         'variantFixedAssetsUnitRate' +
@@ -527,6 +548,11 @@
                                                                                     [readonly]="
                                                                                         !isFixedAssetsInformationEnabled
                                                                                     "
+                                                                                    [required]="
+                                                                                        isFixedAssetsInformationEnabled
+                                                                                    "
+                                                                                    [showError]="stockCreateEditForm.form.controls?.['variantFixedAssetsUnitRate' +
+                                                                                            j]?.invalid && checkUnitRateValidation[0]?.fixedAssets"
                                                                                 >
                                                                                 </text-field>
                                                                             </div>
@@ -630,6 +656,9 @@
                                                                                         'purchaseTaxInclusive'
                                                                                     ]
                                                                                 "
+                                                                                [disabled]="
+                                                                                    !isPurchaseInformationEnabled
+                                                                                "
                                                                             ></mat-checkbox>
                                                                         </div>
                                                                         <div class="col-sm-6 col-lg-5">
@@ -655,7 +684,7 @@
                                                                                 (selectedOption)="
                                                                                     stockForm?.purchaseAccountDetails.accountUniqueName =
                                                                                         $event?.value;
-                                                                                    stockForm?.variants[0]?.purchaseInformation.accountUniqueName =
+                                                                                    (stockForm?.variants)[0]?.purchaseInformation.accountUniqueName =
                                                                                         $event?.value;
                                                                                     purchaseAccountName = $event?.label
                                                                                 "
@@ -684,8 +713,8 @@
                                                                             <div
                                                                                 class="row mr-b15"
                                                                                 *ngFor="
-                                                                                    let variantPurchaseUnitRate of stockForm
-                                                                                        ?.variants[0]
+                                                                                    let variantPurchaseUnitRate of (stockForm
+                                                                                        ?.variants)[0]
                                                                                         ?.purchaseInformation;
                                                                                     let j = index
                                                                                 "
@@ -704,10 +733,7 @@
                                                                                             'form-control unit-rates'
                                                                                         "
                                                                                         [name]="
-                                                                                            'variantPurchaseUnit' +
-                                                                                            j +
-                                                                                            '_' +
-                                                                                            i
+                                                                                            'variantPurchaseUnit' + j
                                                                                         "
                                                                                         [placeholder]="
                                                                                             commonLocaleData?.app_unit
@@ -724,6 +750,13 @@
                                                                                         "
                                                                                         [defaultValue]="
                                                                                             variantPurchaseUnitRate?.stockUnitName
+                                                                                        "
+                                                                                        [cssClass]="
+                                                                                            !variantPurchaseUnitRate?.stockUnitName &&
+                                                                                            checkUnitRateValidation[0]
+                                                                                                ?.purchase
+                                                                                                ? 'error-box'
+                                                                                                : ''
                                                                                         "
                                                                                     ></select-field>
                                                                                 </div>
@@ -743,9 +776,7 @@
                                                                                         [placeholder]="'0.00'"
                                                                                         [name]="
                                                                                             'variantPurchaseUnitRate' +
-                                                                                            j +
-                                                                                            '_' +
-                                                                                            i
+                                                                                            j
                                                                                         "
                                                                                         [type]="'number'"
                                                                                         [placeholder]="
@@ -757,6 +788,11 @@
                                                                                         [readonly]="
                                                                                             !isPurchaseInformationEnabled
                                                                                         "
+                                                                                        [required]="
+                                                                                            isPurchaseInformationEnabled
+                                                                                        "
+                                                                                        [showError]="stockCreateEditForm.form.controls?.['variantPurchaseUnitRate' +
+                                                                                            j]?.invalid && checkUnitRateValidation[0]?.purchase"
                                                                                     >
                                                                                     </text-field>
                                                                                 </div>
@@ -864,10 +900,11 @@
                                                                                 color="primary"
                                                                                 name="salesTaxInclusive"
                                                                                 [(ngModel)]="
-                                                                                    stockForm?.variants[0][
+                                                                                    (stockForm?.variants)[0][
                                                                                         'salesTaxInclusive'
                                                                                     ]
                                                                                 "
+                                                                                [disabled]="!isSalesInformationEnabled"
                                                                             ></mat-checkbox>
                                                                         </div>
                                                                         <div class="col-sm-6 col-lg-5">
@@ -886,7 +923,7 @@
                                                                                 (selectedOption)="
                                                                                     stockForm?.salesAccountDetails.accountUniqueName =
                                                                                         $event?.value;
-                                                                                    stockForm?.variants[0]?.salesInformation.accountUniqueName =
+                                                                                    (stockForm?.variants)[0]?.salesInformation.accountUniqueName =
                                                                                         $event?.value;
                                                                                     salesAccountName = $event?.label
                                                                                 "
@@ -911,8 +948,9 @@
                                                                             <div
                                                                                 class="row mr-b15"
                                                                                 *ngFor="
-                                                                                    let variantSalesUnitRate of stockForm
-                                                                                        ?.variants[0]?.salesInformation;
+                                                                                    let variantSalesUnitRate of (stockForm
+                                                                                        ?.variants)[0]
+                                                                                        ?.salesInformation;
                                                                                     let j = index
                                                                                 "
                                                                             >
@@ -927,12 +965,7 @@
                                                                                 >
                                                                                     <select-field
                                                                                         [cssClass]="'form-control'"
-                                                                                        [name]="
-                                                                                            'variantSalesUnit' +
-                                                                                            j +
-                                                                                            '_' +
-                                                                                            i
-                                                                                        "
+                                                                                        [name]="'variantSalesUnit' + j"
                                                                                         [placeholder]="
                                                                                             commonLocaleData?.app_unit
                                                                                         "
@@ -948,6 +981,13 @@
                                                                                         "
                                                                                         [defaultValue]="
                                                                                             variantSalesUnitRate?.stockUnitName
+                                                                                        "
+                                                                                        [cssClass]="
+                                                                                            !variantSalesUnitRate?.stockUnitName &&
+                                                                                            checkUnitRateValidation[0]
+                                                                                                ?.sales
+                                                                                                ? 'error-box'
+                                                                                                : ''
                                                                                         "
                                                                                     ></select-field>
                                                                                 </div>
@@ -966,10 +1006,7 @@
                                                                                         "
                                                                                         [type]="'text'"
                                                                                         [name]="
-                                                                                            'variantSalesUnitRate' +
-                                                                                            j +
-                                                                                            '_' +
-                                                                                            i
+                                                                                            'variantSalesUnitRate' + j
                                                                                         "
                                                                                         [type]="'number'"
                                                                                         [placeholder]="
@@ -981,6 +1018,11 @@
                                                                                         [readonly]="
                                                                                             !isSalesInformationEnabled
                                                                                         "
+                                                                                        [required]="
+                                                                                            isSalesInformationEnabled
+                                                                                        "
+                                                                                        [showError]="stockCreateEditForm.form.controls?.['variantSalesUnitRate' +
+                                                                                            j]?.invalid && checkUnitRateValidation[0]?.sales"
                                                                                     >
                                                                                     </text-field>
                                                                                 </div>
@@ -991,12 +1033,12 @@
                                                                                     type="button"
                                                                                     (click)="
                                                                                         deleteVariantSalesUnitPrice(
-                                                                                            stockForm?.variants[0],
+                                                                                            (stockForm?.variants)[0],
                                                                                             j
                                                                                         )
                                                                                     "
                                                                                     *ngIf="
-                                                                                        stockForm?.variants[0]
+                                                                                        (stockForm?.variants)[0]
                                                                                             .salesInformation?.length >
                                                                                         1
                                                                                     "
@@ -1020,12 +1062,12 @@
                                                                                         disableRipple
                                                                                         (click)="
                                                                                             addNewVariantSalesUnitPrice(
-                                                                                                stockForm?.variants[0]
+                                                                                                (stockForm?.variants)[0]
                                                                                             )
                                                                                         "
                                                                                         *ngIf="
                                                                                             j ===
-                                                                                            stockForm?.variants[0]
+                                                                                            (stockForm?.variants)[0]
                                                                                                 ?.salesInformation
                                                                                                 ?.length -
                                                                                                 1
@@ -1184,7 +1226,11 @@
                                                     {{
                                                         stockForm.type === "FIXED_ASSETS"
                                                             ? localeData?.fixed_assets
-                                                            : (stockForm.type | lowercase)
+                                                            : stockForm.type === "SERVICE"
+                                                            ? (commonLocaleData?.app_service | lowercase)
+                                                            : stockForm.type === "PRODUCT"
+                                                            ? (commonLocaleData?.app_product | lowercase)
+                                                            : ""
                                                     }}
                                                     {{ localeData?.has_multiples }}
                                                 </mat-checkbox>
@@ -1300,14 +1346,18 @@
                                                                 {{ localeData?.variant_name
                                                                 }}<span class="red-text">*</span>
                                                             </th>
-                                                            <th class="unit-name table-heading-color">Unit</th>
+                                                            <th class="unit-name table-heading-color">
+                                                                {{ commonLocaleData?.app_unit }}
+                                                            </th>
                                                             <th class="opening-qty table-heading-color">
                                                                 {{ localeData?.opening_quantity }}
                                                             </th>
                                                             <th class="opening-amount table-heading-color">
                                                                 {{ localeData?.opening_amount }}
                                                             </th>
-                                                            <th class="sku-code table-heading-color">SKU Code</th>
+                                                            <th class="sku-code table-heading-color">
+                                                                {{ commonLocaleData?.app_sku_code }}
+                                                            </th>
                                                             <th
                                                                 class="sales-purchase-info table-heading-color"
                                                                 *ngIf="isPurchaseInformationEnabled"
@@ -1407,7 +1457,6 @@
                                                                 >
                                                                     <div class="sales-purchase-wrapper d-flex">
                                                                         <select-field
-                                                                            [cssClass]="'form-control unit-rates'"
                                                                             [name]="'variantPurchaseUnit' + i + '_' + j"
                                                                             [placeholder]="commonLocaleData?.app_unit"
                                                                             [options]="stockUnits"
@@ -1420,6 +1469,12 @@
                                                                             [defaultValue]="
                                                                                 variantPurchaseUnitRate?.stockUnitName
                                                                             "
+                                                                            [cssClass]="
+                                                                                (!variantPurchaseUnitRate?.stockUnitName &&
+                                                                                checkUnitRateValidation[i]?.purchase
+                                                                                    ? 'error-box'
+                                                                                    : '') + ' form-control unit-rates'
+                                                                            "
                                                                         ></select-field>
                                                                         <text-field
                                                                             [cssClass]="
@@ -1431,6 +1486,8 @@
                                                                             "
                                                                             [(ngModel)]="variantPurchaseUnitRate.rate"
                                                                             [type]="'number'"
+                                                                            [required]="true"
+                                                                            [showError]="stockCreateEditForm.form.controls?.[ 'variantPurchaseUnitRate' + i + '_' + j]?.invalid && checkUnitRateValidation[i]?.purchase"
                                                                         ></text-field>
                                                                         <button
                                                                             mat-icon-button
@@ -1457,7 +1514,10 @@
                                                                             type="button"
                                                                             disableRipple
                                                                             (click)="
-                                                                                addNewVariantPurchaseUnitPrice(variant)
+                                                                                addNewVariantPurchaseUnitPrice(
+                                                                                    variant,
+                                                                                    i
+                                                                                )
                                                                             "
                                                                             *ngIf="
                                                                                 j ===
@@ -1487,7 +1547,6 @@
                                                                 >
                                                                     <div class="sales-purchase-wrapper d-flex">
                                                                         <select-field
-                                                                            [cssClass]="'form-control unit-rates'"
                                                                             [name]="'variantSalesUnit' + i + '_' + j"
                                                                             [placeholder]="commonLocaleData?.app_unit"
                                                                             [options]="stockUnits"
@@ -1500,6 +1559,12 @@
                                                                             [defaultValue]="
                                                                                 variantSalesUnitRate?.stockUnitName
                                                                             "
+                                                                            [cssClass]="
+                                                                                (!variantSalesUnitRate?.stockUnitName &&
+                                                                                checkUnitRateValidation[i]?.sales
+                                                                                    ? 'error-box'
+                                                                                    : '') + ' form-control unit-rates'
+                                                                            "
                                                                         ></select-field>
                                                                         <text-field
                                                                             [cssClass]="
@@ -1511,6 +1576,8 @@
                                                                             "
                                                                             [(ngModel)]="variantSalesUnitRate.rate"
                                                                             [type]="'number'"
+                                                                            [required]="true"
+                                                                            [showError]="stockCreateEditForm.form.controls?.[ 'variantSalesUnitRate' + i + '_' + j]?.invalid && checkUnitRateValidation[i]?.sales"
                                                                         ></text-field>
                                                                         <button
                                                                             mat-icon-button
@@ -1532,7 +1599,7 @@
                                                                             type="button"
                                                                             disableRipple
                                                                             (click)="
-                                                                                addNewVariantSalesUnitPrice(variant)
+                                                                                addNewVariantSalesUnitPrice(variant, i)
                                                                             "
                                                                             *ngIf="
                                                                                 j ===
@@ -1562,7 +1629,6 @@
                                                                 >
                                                                     <div class="sales-purchase-wrapper d-flex">
                                                                         <select-field
-                                                                            [cssClass]="'form-control unit-rates'"
                                                                             [name]="
                                                                                 'variantFixedAssetsUnit' + j + '_' + i
                                                                             "
@@ -1576,6 +1642,12 @@
                                                                             "
                                                                             [defaultValue]="
                                                                                 variantFixedAssetsUnitRate?.stockUnitName
+                                                                            "
+                                                                            [cssClass]="
+                                                                                (!variantFixedAssetsUnitRate?.stockUnitName &&
+                                                                                checkUnitRateValidation[i]?.fixedAssets
+                                                                                    ? 'error-box'
+                                                                                    : '') + ' form-control unit-rates'
                                                                             "
                                                                         ></select-field>
                                                                         <text-field
@@ -1593,6 +1665,8 @@
                                                                                 variantFixedAssetsUnitRate.rate
                                                                             "
                                                                             [type]="'number'"
+                                                                            [required]="true"
+                                                                            [showError]="stockCreateEditForm.form.controls?.[ 'variantFixedAssetsUnitRate' + j + '_' + i]?.invalid && checkUnitRateValidation[i]?.fixedAssets"
                                                                         ></text-field>
 
                                                                         <button
@@ -1622,7 +1696,8 @@
                                                                             disableRipple
                                                                             (click)="
                                                                                 addNewVariantFixedAssetsUnitPrice(
-                                                                                    variant
+                                                                                    variant,
+                                                                                    i
                                                                                 )
                                                                             "
                                                                             *ngIf="
@@ -1977,7 +2052,7 @@
                                         </div>
                                     </div>
                                 </mat-tab>
-                                <mat-tab label="Manufacturing">
+                                <mat-tab [label]="localeData?.manufacturing">
                                     <create-recipe></create-recipe>
                                 </mat-tab>
                                 <mat-tab *ngIf="false" [label]="localeData?.variant">

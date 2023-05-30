@@ -3,7 +3,7 @@
     "enter_product": "उत्पादन प्रविष्ट करा",
     "select_unit": "युनिट निवडा",
     "under_group": "गट अंतर्गत",
-    "move": "हलवा",
+    "move": "गट हलवा",
     "enter_code": "कोड टाका",
     "applicable_tax": "लागू कर",
     "account": "खाते",
@@ -71,6 +71,7 @@
     "variant_1":"प्रकार 1",
     "other":"इतर",
     "variant":"प्रकार",
-    "enter_sac_code": "SAC कोड प्रविष्ट करा"
+    "enter_sac_code": "SAC कोड प्रविष्ट करा",
+    "manufacturing":"उत्पादन"
 }
 

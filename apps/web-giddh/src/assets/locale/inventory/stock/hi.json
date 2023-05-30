@@ -3,7 +3,7 @@
     "enter_product": "उत्पाद दर्ज करें",
     "select_unit": "इकाई का चयन करें",
     "under_group": "समूह के तहत",
-    "move": "कदम",
+    "move": "समूह बदलें",
     "enter_code": "कोड दर्ज करें",
     "applicable_tax": "लागू कर",
     "account": "खाता",
@@ -71,6 +71,7 @@
     "variant_1":"वेरिएंट 1",
     "other":"अन्य",
     "variant":"प्रकार",
-    "enter_sac_code": "सैक कोड दर्ज करें"
+    "enter_sac_code": "सैक कोड दर्ज करें",
+    "manufacturing":"उत्पादन"
 }
 
