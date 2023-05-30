@@ -431,36 +431,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public addVariantOption(): void {
-        if (this.isVariantAvailable) {
-            if (this.checkOptionValidity()) {
-                this.checkOptionValidation = false;
-                const optionIndex = this.stockForm.options?.length + 1;
-                this.stockForm.options.push({ name: "", values: [], order: optionIndex });
-            } else {
-                this.checkOptionValidation = true;
-            }
+        if (this.checkOptionValidity()) {
+            this.checkOptionValidation = false;
+            const optionIndex = this.stockForm.options?.length + 1;
+            this.stockForm.options.push({ name: "", values: [], order: optionIndex });
         } else {
-            let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                width: '40%',
-                data: {
-                    title: this.commonLocaleData?.app_confirmation,
-                    body: this.localeData?.remove_variant,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
-            });
-
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-                if (response) {
-                    this.stockForm.options = [];
-                    this.stockForm.variants = this.stockForm.variants.slice(0, 1);
-                    this.checkUnitRateValidation = this.checkUnitRateValidation.slice(0, 1);
-                } else {
-                    this.isVariantAvailable = true;
-                    this.changeDetection.detectChanges()
-                    return;
-                }
-            });
+            this.checkOptionValidation = true;
         }
     }
 
@@ -770,21 +746,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.taxes?.forEach(tax => {
             tax.isChecked = false;
             tax.isDisabled = false;
-            return tax;
-        });
-        this.changeDetection.detectChanges();
-    }
-
-    /**
-     * This will use for select group tax on update
-     *
-     * @memberof StockCreateEditComponent
-     */
-    public selectedGroupTaxes(): void {
-        this.taxes?.forEach(tax => {
-            if (tax?.isChecked) {
-                this.selectTax(tax);
-            }
             return tax;
         });
         this.changeDetection.detectChanges();
@@ -1157,7 +1118,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.inventoryService.updateStockV2(request, this.stockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
             if (response?.status === "success") {
-                this.selectedGroupTaxes();
                 this.toaster.showSnackBar("success", "Stock updated successfully");
                 this.backClicked();
             } else {
@@ -1819,5 +1779,36 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
         /** remove parent class from body after exiting new-inventory page */
         document.querySelector("body").classList.remove("stock-create-edit");
+    }
+
+    /**
+     * This will open modal to confirm if user wants to remove variants
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public confirmVariantsRemove(): void {
+        if (!this.isVariantAvailable && this.stockForm.options?.length && this.stockForm.options[0]?.values?.length) {
+            let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                width: '40%',
+                data: {
+                    title: this.commonLocaleData?.app_confirmation,
+                    body: this.localeData?.remove_variant,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
+            });
+
+            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                if (response) {
+                    this.stockForm.options = [];
+                    this.stockForm.variants = this.stockForm.variants.slice(0, 1);
+                    this.checkUnitRateValidation = this.checkUnitRateValidation.slice(0, 1);
+                } else {
+                    this.isVariantAvailable = true;
+                    this.changeDetection.detectChanges()
+                    return;
+                }
+            });
+        }
     }
 }

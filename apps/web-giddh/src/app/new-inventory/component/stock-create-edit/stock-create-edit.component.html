@@ -1221,6 +1221,7 @@
                                                     name="isVariantAvailable"
                                                     [(ngModel)]="isVariantAvailable"
                                                     (ngModelChange)="addVariantOption()"
+                                                    (change)="confirmVariantsRemove()"
                                                 >
                                                     {{ localeData?.variant_this }}
                                                     {{
