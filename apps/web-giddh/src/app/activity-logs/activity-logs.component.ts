@@ -19,7 +19,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
 import { ToasterService } from '../services/toaster.service';
 import { SearchService } from '../services/search.service';
-import { SelectFieldComponent } from '../theme/form-fields/select-field/select-field.component';
+
 /** This will use for interface */
 export interface GetActivityLogs {
     name: any;
@@ -267,6 +267,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                         this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                        this.changeDetection.detectChanges();
                     }
                 });
         }
@@ -315,6 +316,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
+                    this.changeDetection.detectChanges();
                 }
             });
         } else {
@@ -324,6 +326,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             this.preventDefaultScrollApiCall = true;
             setTimeout(() => {
                 this.preventDefaultScrollApiCall = false;
+                this.changeDetection.detectChanges();
             }, 500);
         }
     }
