@@ -186,9 +186,11 @@ textarea {
                 padding-left: 0;
             }
 
-            .mat-form-field-flex {
-                border: none !important;
-                align-items: inherit !important;
+            &:not(.date-border) {
+                .mat-form-field-appearance-fill .mat-form-field-flex {
+                    border: none !important;
+                    align-items: inherit !important;
+                }
             }
 
             .mat-datepicker-toggle {
