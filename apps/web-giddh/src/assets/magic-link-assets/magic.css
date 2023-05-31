@@ -166,11 +166,11 @@ body {
     padding-right: 25px;
 }
 
-.pdL-5 {
+.pd-l-5 {
     padding-left: 5px;
 }
 
-.pdR-5 {
+.pd-r-5 {
     padding-right: 5px;
 }
 
@@ -431,7 +431,7 @@ body {
 }
 
 .border-none {
-    border: none;
+    border: none !important;
 }
 
 .bd-rt {
@@ -576,6 +576,14 @@ body {
 
 .pad0 {
     padding: 0 !important;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+.position-relative {
+    position: relative !important;
 }
 
 /*structure style*/
@@ -829,7 +837,6 @@ table th[class*="col-"] {
 #contact {
     background-color: #f26122;
     padding: 60px 0;
-    /* font-family: 'Inconsolata', serif; */
     font-weight: 400;
     color: #fff;
     /* letter-spacing: 1px; */
@@ -943,10 +950,6 @@ h4 {
 
 .green {
     color: #00796b;
-}
-
-.inconsolata {
-    /* font-family: 'Inconsolata', monospace; */
 }
 
 .font-black {

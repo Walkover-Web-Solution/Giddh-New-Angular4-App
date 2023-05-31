@@ -1,0 +1,31 @@
+#list-manufacture {
+    .form-fileds {
+        .max-width-230 {
+            display: block;
+            width: auto;
+            max-width: 230px;
+        }
+        .gap-between {
+            gap: 1rem;
+        }
+    }
+    .table-wrapper {
+        border-top: 1px solid var(--color-secondary-input-bar-border);
+    }
+}
+
+@media (max-width: 1440px) {
+    #list-manufacture {
+        .form-fileds {
+            .max-width-230 {
+                width: 200px !important;
+            }
+        }
+    }
+}
+
+.advance-search-dialog {
+    .color-white {
+        color: var(--color-white);
+    }
+}

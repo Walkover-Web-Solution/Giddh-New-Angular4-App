@@ -38,6 +38,8 @@ export class WarehouseActions {
     public static readonly RESET_UPDATE_WAREHOUSE = 'RESET_UPDATE_WAREHOUSE';
     /** Action to reset create warehouse flag (triggered after successful warehouse creation) */
     public static readonly RESET_CREATE_WAREHOUSE = 'RESET_CREATE_WAREHOUSE';
+    /** Action to handle reset warehouse response */
+    public static readonly RESET_WAREHOUSES = 'RESET_WAREHOUSES';
 
     /**
      * Create warehouse effect
@@ -51,7 +53,7 @@ export class WarehouseActions {
         map((response: BaseResponse<any, any>) => {
             if (response?.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
-                return this.createWarehouseResponse(response);
+                return { type: 'EmptyAction' };
             }
             this.toast.successToast(this.localeService.translate("app_messages.warehouse_created"), this.localeService.translate("app_success"));
             return this.createWarehouseResponse(response);
@@ -242,4 +244,13 @@ export class WarehouseActions {
         return { type: WarehouseActions.RESET_DEFAULT_WAREHOUSE_DATA };
     }
 
+    /**
+     * Returns the action to reset warehouse data
+     *
+     * @returns {CustomActions} Action to reset default warehouse data
+     * @memberof WarehouseActions
+     */
+    public resetWarehouseResponse(): CustomActions {
+        return { type: WarehouseActions.RESET_WAREHOUSES };
+    }
 }

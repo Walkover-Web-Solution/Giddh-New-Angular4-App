@@ -2517,6 +2517,7 @@
                                         <div class="product-name">
                                             <div class="ng-select-wrap">
                                                 <select-field
+                                                    [autofocus]="true"
                                                     #selectAccount
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('item')"
@@ -5562,7 +5563,7 @@
             </div>
         </div>
     </ng-template>
-    <!-- region  delete attachment confirmation popup -->
+    <!-- region delete attachment confirmation popup -->
     <ng-template #attachmentDeleteConfirmationModel>
         <div class="modal-dialog modal-md">
             <div class="modal-content">

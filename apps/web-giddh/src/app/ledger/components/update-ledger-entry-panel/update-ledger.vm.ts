@@ -61,6 +61,8 @@ export class UpdateLedgerVm {
     public isAdvanceReceipt: boolean = false;
     /** True, if RCM is present */
     public isRcmEntry: boolean = false;
+    /** True, when amount needs to be calculated inclusive of tax */
+    public isInclusiveTax: boolean = false;
 
     // multi-currency variables
     public isMultiCurrencyAvailable: boolean = false;
@@ -91,6 +93,8 @@ export class UpdateLedgerVm {
     public voucherApiVersion: 1 | 2;
     /* Amount should have precision up to 16 digits for better calculation */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
+    /** True if entry value is calculated inclusively */
+    public isInclusiveEntry: boolean = false;
 
     constructor(
         private generalService: GeneralService,
@@ -417,12 +421,12 @@ export class UpdateLedgerVm {
     }
 
     public getUniqueName(txn: ILedgerTransactionItem) {
-        if ((txn.selectedAccount && txn.selectedAccount.stock)) {
+        if (txn?.selectedAccount?.stock) {
             return txn.particular?.uniqueName.split('#')[0];
-        } else if (txn.inventory && txn.inventory.stock) {
+        } else if (txn?.inventory?.stock) {
             return txn.particular?.uniqueName.split('#')[0];
         }
-        return txn.particular?.uniqueName;
+        return txn?.particular?.uniqueName;
     }
 
     public inventoryQuantityChanged(val: any) {
@@ -542,7 +546,9 @@ export class UpdateLedgerVm {
         }
 
         let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
-        if (this.isAdvanceReceipt || this.isRcmEntry) {
+        const particularAccount = this.getParticularAccount();
+        const ledgerAccount = this.getLedgerAccount(particularAccount);
+        if (this.isAdvanceReceipt || this.isRcmEntry || this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger?.voucher?.shortCode)) {
             this.totalAmount = this.grandTotal;
             this.generateGrandTotal();
         } else {
@@ -582,21 +588,14 @@ export class UpdateLedgerVm {
             }
         }
 
-        let particularAccount = this.getParticularAccount();
-        let ledgerAccount = this.getLedgerAccount(particularAccount);
-
-        if (this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger?.voucher?.shortCode)) {
-            this.totalAmount = this.grandTotal;
-            this.generateGrandTotal();
-        }
-
         this.getEntryTotal();
         this.generateCompoundTotal();
     }
 
     public unitChanged(stockUnitUniqueName: string) {
         let unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
-        this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
+        const unitRate = giddhRoundOff(unit.rate / (this.selectedLedger?.exchangeRate ?? 1), this.ratePrecision);
+        this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unitRate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
         this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
         this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
     }

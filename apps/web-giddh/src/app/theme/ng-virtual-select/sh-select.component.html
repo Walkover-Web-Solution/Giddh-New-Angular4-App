@@ -41,6 +41,7 @@
                 [placeholder]="selectedValues?.length > 0 ? filter : placeholder"
                 [(ngModel)]="filter"
                 (ngModelChange)="handleInputChange($event)"
+                [ngClass]="cssClass"
             />
         </div>
         <!--endregion-->
@@ -74,6 +75,7 @@
                         value="{{ selectedValues[0]?.label }}"
                         class="form-control selected-val cp"
                         [attr.style]="borderConfiguration?.style"
+                        [ngClass]="cssClass"
                     />
                 </div>
             </ng-container>
@@ -88,6 +90,7 @@
                     [disabled]="disabled"
                     [value]="filter"
                     (change)="!filter ? clear() : ''"
+                    [ngClass]="cssClass"
                 />
             </ng-container>
         </div>

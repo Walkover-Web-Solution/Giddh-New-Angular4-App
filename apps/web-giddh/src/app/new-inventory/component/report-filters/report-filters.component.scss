@@ -5,6 +5,7 @@
     font-size: 13px;
     min-width: 250px;
 }
+
 .transactional-filter-section {
     .transactional-wise-common-btn {
         height: 42px;
@@ -20,34 +21,43 @@
         color: var(--color-gray);
     }
 }
+
 .virtual-group-list {
     height: 193px;
 }
+
 .select-multiple-chiplist-inventory {
     font-weight: 400 !important;
     font-size: 14px !important;
     width: 84%;
+
     .mat-chip.mat-standard-chip {
         color: var(--color-chips-primary) !important;
         background-color: var(--color-body-background) !important;
         border: 1px solid var(--color-primary-login-box-body-text) !important;
         font-size: 12px !important;
+        border-radius: 5px !important;
     }
 }
+
 .searching-bar-chiplist {
     width: 83% !important;
 }
+
 .filter-dropdown-branch {
     max-width: 250px;
 }
+
 .back-btnn {
     float: left;
     width: 84px !important;
 }
+
 .report-back-button {
     height: 37px;
     margin-right: 0px !important;
 }
+
 .filter-dropdown-warehouse {
     max-width: 250px;
     margin-left: 5px;
@@ -79,6 +89,7 @@
                 float: left;
                 width: 60%;
             }
+
             .menu-btn-control {
                 width: 40%;
             }
@@ -98,4 +109,15 @@
     .stock-mat-salect {
         min-width: 199px;
     }
+}
+
+.edit-btn-inventory {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--color-secondary-input-bar-border);
+    padding: 5px;
+    border-radius: 4px;
+    height: 36px;
+    width: 36px;
 }
