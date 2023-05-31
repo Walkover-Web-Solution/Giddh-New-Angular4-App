@@ -13,6 +13,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DatepickerWrapperModule } from '../../../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { GiddhDatepickerModule } from '../../../theme/giddh-datepicker/giddh-datepicker.module';
 
 @NgModule({
     imports: [
@@ -27,7 +28,9 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
         MatDialogModule,
         MatTooltipModule,
         DatepickerWrapperModule,
-        PaginationModule.forRoot()
+        PaginationModule.forRoot(),
+        GiddhDatepickerModule
+
     ],
     exports: [
         CreateManufacturingComponent,
