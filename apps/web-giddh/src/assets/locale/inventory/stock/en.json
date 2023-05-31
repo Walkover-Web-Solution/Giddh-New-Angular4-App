@@ -71,6 +71,12 @@
     "variant_1":"variant 1",
     "other":"Other",
     "variant":"Variant",
-    "enter_sac_code": "Enter SAC Code"
+    "enter_sac_code": "Enter SAC Code",
+    "manufacturing":"Manufacturing",
+    "delete_stock":"Deleting this stock will un-link & delete it forever. Are you sure you want to delete the stock?",
+    "permanently_delete":"It will be deleted permanently and will no longer be accessible from any other module.",
+    "stock_delete_succesfully":"Stock deleted successfully.",
+    "stock_create_succesfully":"Stock created successfully.",
+    "remove_variant":"Doing the action will remove all the variants, Are your sure you want to unselect it?"
 }
 
