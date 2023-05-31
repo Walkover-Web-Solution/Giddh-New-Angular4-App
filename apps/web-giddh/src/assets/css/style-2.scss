@@ -186,11 +186,9 @@ textarea {
                 padding-left: 0;
             }
 
-            &:not(.date-border) {
-                .mat-form-field-appearance-fill .mat-form-field-flex {
-                    border: none !important;
-                    align-items: inherit !important;
-                }
+            .mat-form-field-flex {
+                border: none !important;
+                align-items: inherit !important;
             }
 
             .mat-datepicker-toggle {
@@ -13770,6 +13768,17 @@ body.hide-scroll-body.master-page {
     input {
         &:disabled {
             background-color: var(--color-white) !important;
+        }
+    }
+}
+.voucher-preview-edit {
+    .custom-date-entries {
+        giddh-datepicker {
+            .mat-form-field-appearance-fill {
+                .mat-form-field-flex {
+                    border: none !important;
+                }
+            }
         }
     }
 }
