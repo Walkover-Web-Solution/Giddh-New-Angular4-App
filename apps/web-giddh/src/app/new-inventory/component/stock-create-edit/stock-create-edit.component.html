@@ -180,6 +180,7 @@
                                                     [placeholder]="commonLocaleData?.app_select_tax"
                                                     multiple
                                                     [value]="stockForm.taxes"
+                                                    (openedChange)="openedSelectTax($event)"
                                                 >
                                                     <mat-option
                                                         *ngFor="let tax of taxes"

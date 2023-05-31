@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ReplaySubject } from "rxjs";
 import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
@@ -25,8 +25,7 @@ import { Location } from '@angular/common';
 @Component({
     selector: "stock-create-edit",
     templateUrl: "./stock-create-edit.component.html",
-    styleUrls: ["./stock-create-edit.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrls: ["./stock-create-edit.component.scss"]
 })
 export class StockCreateEditComponent implements OnInit, OnDestroy {
     /** Instance of stock create/edit form */
@@ -192,11 +191,15 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     /** Holds if hsn/sac selected */
     public hsnSac: string = 'HSN';
     /** True if variant unit rate check validation*/
-    public checkUnitRateValidation = [{
+    public checkUnitRateValidation: any[] = [{
         purchase: false,
         sales: false,
         fixedAssets: false
     }];
+    /** True if tax selection box is open */
+    public isTaxSelectionOpen: boolean = false;
+    /** Holds list of taxes processed while tax selection box was closed */
+    public processedTaxes: any[] = [];
 
     constructor(
         private inventoryService: InventoryService,
@@ -227,10 +230,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         this.getTaxes();
         this.getStockUnits();
+        this.getWarehouses();
         this.getCustomFields();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            this.getWarehouses();
             if (params?.type) {
                 this.stockForm.type = params?.type?.toUpperCase();
                 this.resetForm(this.stockCreateEditForm);
@@ -253,9 +256,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             if (this.stockForm.type === 'FIXED_ASSETS') {
                 this.getFixedAssetsAccounts();
             }
-        });
-        this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
-            this.warehouses = warehouses?.results;
         });
     }
 
@@ -767,7 +767,13 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public getWarehouses(): void {
-        this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
+        this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            if (!warehouses?.results?.length) {
+                this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
+            } else {
+                this.warehouses = warehouses?.results;
+            }
+        });
     }
 
     /**
@@ -1148,6 +1154,19 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Callback for tax selection box change event
+     *
+     * @param {boolean} event
+     * @memberof StockCreateEditComponent
+     */
+    public openedSelectTax(event: boolean): void {
+        this.isTaxSelectionOpen = event;
+        if (event) {
+            this.processedTaxes = [];
+        }
+    }
+
+    /**
      * Select tax
      *
      * @param {*} taxSelected
@@ -1157,6 +1176,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (!taxSelected) {
             return;
         }
+
+        if (!this.isTaxSelectionOpen) {
+            if (this.processedTaxes.includes(taxSelected.uniqueName)) {
+                return;
+            }
+            this.processedTaxes.push(taxSelected.uniqueName);
+        }
+
         let isSelected = this.selectedTaxes?.filter(selectedTax => selectedTax === taxSelected.uniqueName);
         if (taxSelected.taxType !== 'gstcess') {
             let index = findIndex(this.taxTempArray, (taxTemp) => taxTemp.taxType === taxSelected.taxType);
@@ -1223,8 +1250,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.selectedTaxes = this.taxTempArray.map(tax => tax?.uniqueName);
         this.changeDetection.detectChanges();
     }
-
-
 
     /**
      * Get custom fields
@@ -1403,6 +1428,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.inlineEditCustomField = 0;
         this.selectedTaxes = [];
         this.taxTempArray = [];
+        this.isTaxSelectionOpen = false;
+        this.processedTaxes = [];
         this.changeDetection.detectChanges();
     }
 
