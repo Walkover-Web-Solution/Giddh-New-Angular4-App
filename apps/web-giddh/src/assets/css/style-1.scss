@@ -3304,20 +3304,33 @@ input-field {
         .mat-form-field-underline {
             background-color: var(--color-primary-card-box-shadow) !important;
         }
+        &.mat-form-field-can-float {
+            &.mat-form-field-should-float {
+                .mat-form-field-label {
+                    transform: translateY(-10px) scale(0.75) perspective(100px) translateZ(0.001px);
+                }
+            }
+            .mat-input-server {
+                &:focus {
+                    & + .mat-form-field-label-wrapper {
+                        .mat-form-field-label {
+                            transform: translateY(-10px) scale(0.75) perspective(100px) translateZ(0.001px);
+                        }
+                    }
+                }
+            }
+        }
     }
-    .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
-    .mat-form-field-appearance-legacy.mat-form-field-can-float
-        .mat-input-server:focus
-        + .mat-form-field-label-wrapper
-        .mat-form-field-label {
-        transform: translateY(-10px) scale(0.75) perspective(100px) translateZ(0.001px);
+    .mat-form-field.mat-form-field-invalid {
+        .mat-form-field-ripple,
+        .mat-form-field-ripple.mat-accent {
+            background-color: var(--color-primary-login-hash-tag) !important;
+        }
     }
-    .mat-form-field.mat-form-field-invalid .mat-form-field-ripple,
-    .mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {
-        background-color: var(--color-primary-login-hash-tag) !important;
-    }
-    .mat-form-field.mat-focused .mat-form-field-ripple {
-        background-color: var(--color-common-senary-text) !important;
+    .mat-form-field.mat-focused {
+        .mat-form-field-ripple {
+            background-color: var(--color-common-senary-text) !important;
+        }
     }
     .mat-form-field-flex {
         padding-bottom: 5px;

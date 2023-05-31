@@ -88,7 +88,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /**
      * Lifecycle hook for component initialization
      *
-     * @memberof SelectFieldComponent
+     * @memberof DropdownFieldComponent
      */
     public ngOnInit(): void {
         if (this.enableDynamicSearch) {
@@ -131,7 +131,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
      * Lifecycle hook which detects any changes in values
      *
      * @param {SimpleChanges} changes
-     * @memberof SelectFieldComponent
+     * @memberof DropdownFieldComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
@@ -160,7 +160,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /**
      * Lifecycle hook which releases all memory
      *
-     * @memberof SelectFieldComponent
+     * @memberof DropdownFieldComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
@@ -172,7 +172,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
      *
      * @private
      * @param {string} search
-     * @memberof SelectFieldComponent
+     * @memberof DropdownFieldComponent
      */
     private filterOptions(search: string): void {
         let filteredOptions: IOption[] = [];
@@ -192,7 +192,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
      *
      * @param {*} option
      * @returns {string}
-     * @memberof SelectFieldComponent
+     * @memberof DropdownFieldComponent
      */
     public displayLabel(option: any): string {
         return option?.label;
@@ -203,7 +203,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
      * Emits the selected option data
      *
      * @param {*} event
-     * @memberof SelectFieldComponent
+     * @memberof DropdownFieldComponent
      */
     public optionSelected(event: any): void {
         if (event?.option?.value?.label) {
@@ -215,7 +215,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /**
      * Emits true if create new option is selected
      *
-     * @memberof SelectFieldComponent
+     * @memberof DropdownFieldComponent
      */
     public createNewRecord(): void {
         this.trigger?.closePanel();
@@ -225,7 +225,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /**
      * Emits true if scrolling end event
      *
-     * @memberof SelectFieldComponent
+     * @memberof DropdownFieldComponent
      */
     public scrollEndEvent(event: any): void {
         if (this.isPaginationEnabled && this.scrollableElementId === event) {
@@ -237,7 +237,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /**
      * This will use for open dropdown panel
      *
-     * @memberof SelectFieldComponent
+     * @memberof DropdownFieldComponent
      */
     public openDropdownPanel(): void {
         this.trigger?.openPanel();
@@ -248,7 +248,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /**
      * Callback event on blur
      *
-     * @memberof SelectFieldComponent
+     * @memberof DropdownFieldComponent
      */
     public onBlur(): void {
         setTimeout(() => {
@@ -262,7 +262,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /**
     * This will use for close dropdown panel
     *
-    * @memberof SelectFieldComponent
+    * @memberof DropdownFieldComponent
     */
     public closeDropdownPanel(): void {
         this.trigger?.closePanel();
@@ -274,7 +274,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
      * @param {Function} fun
      * @param {string} event
      * @param {*} [options]
-     * @memberof SelectFieldComponent
+     * @memberof DropdownFieldComponent
      */
     public addEventListenerWrapper(fun: Function, event: string, options?: any) {
         document?.addEventListener(event, fun.bind(this), options || {});
@@ -285,7 +285,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
      * @param {Function} fun
      * @param {string} event
      * @param {*} [options]
-     * @memberof SelectFieldComponent
+     * @memberof DropdownFieldComponent
      */
     public removeEventListenerWrapper(fun: Function, event: string, options?: any) {
         document?.removeEventListener(event, fun.bind(this), options || {});

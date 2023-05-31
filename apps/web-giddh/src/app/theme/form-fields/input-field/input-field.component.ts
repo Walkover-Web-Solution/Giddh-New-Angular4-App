@@ -73,7 +73,7 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
     /**
      * On Component Init
      *
-     * @memberof TextFieldComponent
+     * @memberof InputFieldComponent
      */
     public ngOnInit(): void {
 
@@ -82,7 +82,7 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
     /**
      * On Change of input properties
      *
-     * @memberof TextFieldComponent
+     * @memberof InputFieldComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (this.autoFocus) {
@@ -95,7 +95,7 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
     /**
      * Releases the memory on component destroy
      *
-     * @memberof TextFieldComponent
+     * @memberof InputFieldComponent
      */
     public ngOnDestroy() {
         this.stateChanges.complete();
@@ -107,7 +107,7 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
      * This is used to get the inner value of datepicker
      *
      * @type {*}
-     * @memberof TextFieldComponent
+     * @memberof InputFieldComponent
      */
     get value(): any {
         return this.ngModel;
@@ -116,7 +116,7 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
     /**
      * set accessor including call the onchange callback
      *
-     * @memberof TextFieldComponent
+     * @memberof InputFieldComponent
      */
     set value(value: any) {
         this.ngModel = value;
@@ -128,7 +128,7 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
     /**
      * Used to Set touched on blur
      *
-     * @memberof TextFieldComponent
+     * @memberof InputFieldComponent
      */
     public onBlur(): void {
         this.onTouchedCallback();
@@ -138,7 +138,7 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
      * Form ControlValueAccessor interface
      *
      * @param {*} value
-     * @memberof TextFieldComponent
+     * @memberof InputFieldComponent
      */
     public writeValue(value: any): void {
         this.value = value;
@@ -149,7 +149,7 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
      * Form ControlValueAccessor interface
      *
      * @param {*} fn
-     * @memberof TextFieldComponent
+     * @memberof InputFieldComponent
      */
     public registerOnChange(fn: any): void {
         this.onChangeCallback = fn;
@@ -159,7 +159,7 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
      * Form ControlValueAccessor interface
      *
      * @param {*} fn
-     * @memberof TextFieldComponent
+     * @memberof InputFieldComponent
      */
     public registerOnTouched(fn: any): void {
         this.onTouchedCallback = fn;
@@ -169,7 +169,7 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
      * This method is used by the <mat-form-field> to set element ids that should be used for the aria-describedby attribute of your control
      *
      * @param {string[]} ids
-     * @memberof TextFieldComponent
+     * @memberof InputFieldComponent
      */
     public setDescribedByIds(ids: string[]): void {
         const controlElement = this.elementRef.nativeElement.querySelector(".text-field-container")!;
@@ -179,7 +179,7 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
     /**
      * Callback for handing input data
      *
-     * @memberof TextFieldComponent
+     * @memberof InputFieldComponent
      */
     public handleInput(): void {
         this.onChangeCallback(this.value);
