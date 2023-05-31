@@ -23,7 +23,6 @@ import { GiddhDatepickerModule } from '../../../theme/giddh-datepicker/giddh-dat
         FormFieldsModule,
         MatButtonModule,
         ManufacturingRoutingModule,
-        MatButtonModule,
         MatTableModule,
         MatDialogModule,
         MatTooltipModule,

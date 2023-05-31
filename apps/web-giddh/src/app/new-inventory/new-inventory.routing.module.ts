@@ -22,6 +22,7 @@ import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component"
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
+import { BranchTransferComponent } from "./component/manufacturing/branch-transfer/branch-transfer.component";
 
 const routes: Routes = [
     {
@@ -128,6 +129,10 @@ const routes: Routes = [
     {
         path: "manufacturing",
         loadChildren: () => import('./component/manufacturing/manufacturing.module').then(module => module.ManufacturingModule)
+    },
+    {
+        path: "branch-transfer",
+        loadChildren: () => import('./component/branch-transfer/branch-transfer.module').then(module => module.BranchTransferModule)
     },
     {
         path: "inventory-dashboard",
