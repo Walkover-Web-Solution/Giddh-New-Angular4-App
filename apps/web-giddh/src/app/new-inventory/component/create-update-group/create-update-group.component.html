@@ -7,12 +7,12 @@
 >
     <div class="relative">
         <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-        <div class="col-md-1 col-sm-1" *ngIf="!showLoader">
-            <button *ngIf="groupUniqueName" (click)="backClicked()" class="btn-sky-blue mt-2" mat-button>
+        <span *ngIf="!showLoader">
+            <button *ngIf="groupUniqueName" (click)="backClicked()" class="btn-sky-blue btn-position-left" mat-button>
                 <i class="icon-left back-left"></i>
                 {{ commonLocaleData?.app_back }}
             </button>
-        </div>
+        </span>
         <ng-container *ngIf="!showLoader">
             <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">
                 <div class="container-fluid">
