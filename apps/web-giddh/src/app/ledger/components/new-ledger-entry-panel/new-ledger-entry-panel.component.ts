@@ -479,7 +479,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes);
-        } else if (this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.parentGroups && this.currentTxn.selectedAccount.parentGroups.length) {
+        } else if (this.currentTxn?.selectedAccount && this.currentTxn?.selectedAccount?.parentGroups && this.currentTxn?.selectedAccount?.parentGroups.length) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes);
         } else {
             this.taxListForStock = [];
@@ -573,7 +573,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             });
         }
-        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts) {
+        if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts) {
             this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
                 if (item && event.discount && item?.uniqueName === event.discount.discountUniqueName) {
                     item.isActive = event.isActive.target?.checked;
@@ -641,8 +641,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public amountChanged() {
         this.isInclusiveEntry = false;
-        if (this.currentTxn && this.currentTxn.selectedAccount) {
-            if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
+        if (this.currentTxn?.selectedAccount) {
+            if (this.currentTxn.selectedAccount?.stock && this.currentTxn.amount > 0) {
                 if (this.currentTxn.inventory.quantity) {
                     this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
                     this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
@@ -902,11 +902,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public unitChanged(stockUnitUniqueName: string) {
         // For V1 company, the unitRates is obtained in 'stock' and for v2 company, unitRates is obtained in 'stock.variant'
-        const unitRates = this.generalService.voucherApiVersion === 1 ? this.currentTxn.selectedAccount.stock?.unitRates : this.currentTxn.selectedAccount.stock?.variant?.unitRates
-        let unit = unitRates.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
+        const unitRates = this.generalService.voucherApiVersion === 1 ? this.currentTxn?.selectedAccount.stock?.unitRates : this.currentTxn?.selectedAccount?.stock?.variant?.unitRates
+        let unit = unitRates?.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
         this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
-        if (this.currentTxn.inventory.unit) {
-            this.changePrice(this.currentTxn.inventory.unit.rate?.toString(), true);
+        if (this.currentTxn?.inventory?.unit) {
+            this.changePrice(this.currentTxn?.inventory?.unit?.rate?.toString(), true);
         }
     }
 
@@ -1226,9 +1226,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (!this.blankLedger?.otherTaxModal) {
             this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
         }
-        this.blankLedger.otherTaxModal.itemLabel = this.currentTxn && this.currentTxn.selectedAccount ?
-            this.currentTxn.selectedAccount.stock ? `${this.currentTxn.selectedAccount.name}(${this.currentTxn.selectedAccount.stock.name})` :
-                this.currentTxn.selectedAccount.name : '';
+        this.blankLedger.otherTaxModal.itemLabel = this.currentTxn?.selectedAccount ? this.currentTxn.selectedAccount?.stock ? `${this.currentTxn?.selectedAccount?.name}(${this.currentTxn?.selectedAccount?.stock?.name})` : this.currentTxn?.selectedAccount?.name : '';
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
@@ -1259,7 +1257,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 totalTaxes += tax.taxDetail[0].taxValue;
             }
 
-            if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType)) {
+            if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn?.selectedAccount, this.blankLedger.voucherType)) {
                 let mainTaxPercentage = this.currentTxn?.taxesVm?.filter(p => p.isChecked)?.reduce((sum, current) => sum + current.amount, 0);
                 let tdsTaxPercentage = null;
                 let tcsTaxPercentage = null;
@@ -1643,8 +1641,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 tdsTotal: 0,
                 balanceDue: this.blankLedger.compoundTotal,
                 grandTotal: this.blankLedger.compoundTotal,
-                customerName: this.currentTxn.selectedAccount ? this.currentTxn.selectedAccount.name : '',
-                customerUniquename: this.currentTxn.selectedAccount ? this.currentTxn.selectedAccount.uniqueName : '',
+                customerName: this.currentTxn?.selectedAccount ? this.currentTxn?.selectedAccount?.name : '',
+                customerUniquename: this.currentTxn?.selectedAccount ? this.currentTxn?.selectedAccount?.uniqueName : '',
                 totalTaxableValue: this.blankLedger.compoundTotal,
                 subTotal: this.blankLedger.compoundTotal,
                 exchangeRate: this.blankLedger?.exchangeRate ?? 1
@@ -1722,7 +1720,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public preparePreAppliedDiscounts(): void {
-        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts && this.currentTxn.selectedAccount.accountApplicableDiscounts.length) {
+        if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.length) {
             this.currentTxn.selectedAccount.accountApplicableDiscounts.map(item => item.isActive = true);
             this.currentTxn.discounts?.map(item => { item.isActive = false });
             if (this.currentTxn.discounts && this.currentTxn.discounts.length === 1) {
@@ -2051,7 +2049,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         totalPercentage = this.currentTxn?.taxesVm?.reduce((pv, cv) => {
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
-        if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds && !this.salesTaxInclusive && !this.purchaseTaxInclusive && !this.fixedAssetTaxInclusive) {
+        if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn?.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds && !this.salesTaxInclusive && !this.purchaseTaxInclusive && !this.fixedAssetTaxInclusive) {
             this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(false, this.currentTxn.taxInclusiveAmount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
         } else {
             this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt || this.isInclusiveEntry, this.isInclusiveEntry ? this.currentTxn.total : this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
