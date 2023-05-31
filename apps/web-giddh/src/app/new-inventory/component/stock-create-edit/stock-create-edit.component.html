@@ -456,11 +456,7 @@
                                                                         </label>
                                                                     </div>
                                                                     <div
-                                                                        class="
-                                                                            col-xl-6 col-lg-5 col-sm-5 col-11
-                                                                            pl-0
-                                                                            mr-b15
-                                                                        "
+                                                                        class="col-xl-7 col-lg-7 col-sm-6 pl-0 mr-b15"
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
                                                                         <mat-checkbox
@@ -483,11 +479,11 @@
                                                                         <label>{{ localeData?.unit_price }}</label>
                                                                     </div>
                                                                     <div
-                                                                        class="col-xl-6 col-lg-7 col-sm-6 pl-0 mr-b15"
+                                                                        class="col-xl-7 col-lg-7 col-sm-6 pl-0 mr-b15"
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
                                                                         <div
-                                                                            class="row add-new-field mr-b15"
+                                                                            class="row mr-b15"
                                                                             *ngFor="
                                                                                 let variantFixedAssetsUnitRate of (stockForm
                                                                                     ?.variants)[0]
@@ -495,7 +491,15 @@
                                                                                 let j = index
                                                                             "
                                                                         >
-                                                                            <div class="col-sm-6 col-6">
+                                                                            <div
+                                                                                class="col-6"
+                                                                                [ngClass]="{
+                                                                                    'col-sm-5 col-xs-5 pr-0':
+                                                                                        stockForm.variants[0]
+                                                                                            .fixedAssetsInformation
+                                                                                            ?.length > 1
+                                                                                }"
+                                                                            >
                                                                                 <select-field
                                                                                     [cssClass]="
                                                                                         (!variantFixedAssetsUnitRate?.stockUnitName &&
@@ -529,7 +533,15 @@
                                                                                     "
                                                                                 ></select-field>
                                                                             </div>
-                                                                            <div class="col-sm-6 col-6">
+                                                                            <div
+                                                                                class="col-6"
+                                                                                [ngClass]="{
+                                                                                    'col-sm-5 col-xs-5 pr-0':
+                                                                                        stockForm.variants[0]
+                                                                                            .fixedAssetsInformation
+                                                                                            ?.length > 1
+                                                                                }"
+                                                                            >
                                                                                 <text-field
                                                                                     [cssClass]="
                                                                                         'form-control text-right unit-amount'
@@ -578,37 +590,41 @@
                                                                             >
                                                                                 <i class="icon-trash"></i>
                                                                             </button>
-                                                                            <button
-                                                                                mat-icon-button
-                                                                                class="icon-button-add"
-                                                                                role="button"
-                                                                                type="button"
-                                                                                disableRipple
-                                                                                (click)="
-                                                                                    addNewVariantFixedAssetsUnitPrice(
-                                                                                        stockForm.variants[0]
-                                                                                    )
-                                                                                "
-                                                                                *ngIf="
-                                                                                    j ===
-                                                                                    stockForm.variants[0]
-                                                                                        .fixedAssetsInformation
-                                                                                        ?.length -
-                                                                                        1
-                                                                                "
-                                                                                [disabled]="
-                                                                                    !isFixedAssetsInformationEnabled
-                                                                                "
-                                                                            >
-                                                                                <span
-                                                                                    *ngIf="
-                                                                                        isFixedAssetsInformationEnabled
+                                                                            <div class="col-sm-10 col-10">
+                                                                                <button
+                                                                                    mat-icon-button
+                                                                                    role="button"
+                                                                                    type="button"
+                                                                                    disableRipple
+                                                                                    (click)="
+                                                                                        addNewVariantFixedAssetsUnitPrice(
+                                                                                            stockForm.variants[0]
+                                                                                        )
                                                                                     "
-                                                                                    class="add-new-text-container"
+                                                                                    *ngIf="
+                                                                                        j ===
+                                                                                        stockForm.variants[0]
+                                                                                            .fixedAssetsInformation
+                                                                                            ?.length -
+                                                                                            1
+                                                                                    "
+                                                                                    [disabled]="
+                                                                                        !isFixedAssetsInformationEnabled
+                                                                                    "
                                                                                 >
-                                                                                    {{ localeData?.add_new }}
-                                                                                </span>
-                                                                            </button>
+                                                                                    <span
+                                                                                        *ngIf="
+                                                                                            isFixedAssetsInformationEnabled
+                                                                                        "
+                                                                                        class="
+                                                                                            add-new-text-container
+                                                                                            text-primary
+                                                                                        "
+                                                                                    >
+                                                                                        {{ localeData?.add_new }}
+                                                                                    </span>
+                                                                                </button>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -821,12 +837,7 @@
                                                                                 <div class="col-sm-10 col-10">
                                                                                     <button
                                                                                         mat-flat-button
-                                                                                        class="
-                                                                                            bg-transparent
-                                                                                            icon-button-add
-                                                                                            px-0
-                                                                                            pt-2
-                                                                                        "
+                                                                                        class="bg-transparent px-0 pt-2"
                                                                                         role="button"
                                                                                         type="button"
                                                                                         disableRipple
@@ -1051,12 +1062,7 @@
                                                                                 <div class="col-sm-10 col-10">
                                                                                     <button
                                                                                         mat-flat-button
-                                                                                        class="
-                                                                                            bg-transparent
-                                                                                            icon-button-add
-                                                                                            px-0
-                                                                                            pt-2
-                                                                                        "
+                                                                                        class="bg-transparent px-0 pt-2"
                                                                                         role="button"
                                                                                         type="button"
                                                                                         disableRipple
