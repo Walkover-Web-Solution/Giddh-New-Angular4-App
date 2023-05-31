@@ -23,13 +23,17 @@ import { SelectMultipleFieldsComponent } from "./select-multiple-fields/select-m
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatButtonModule } from "@angular/material/button";
+import { InputFieldComponent } from "./input-field/input-field.component";
+import { DropdownFieldComponent } from "./dropdown-field/dropdown-field.component";
 
 @NgModule({
     declarations: [
         TextFieldComponent,
         SelectFieldComponent,
         SelectMultipleFieldsComponent,
-        CdkScrollComponent
+        CdkScrollComponent,
+        InputFieldComponent,
+        DropdownFieldComponent
     ],
     imports: [
         CommonModule,
@@ -60,6 +64,8 @@ import { MatButtonModule } from "@angular/material/button";
         SelectMultipleFieldsComponent,
         MatFormFieldModule,
         CdkScrollComponent,
+        InputFieldComponent,
+        DropdownFieldComponent,
         CdkScrollModule,
         ScrollingModule
     ]
