@@ -1699,7 +1699,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         variant[key].forEach(value => {
             if (!value.rate || !value.stockUnitName) {
                 isValid = false;
-                return;
+                return false;
             }
         });
         return isValid;
