@@ -10,7 +10,11 @@
             <div class="row display-line">
                 <div class="col-sm-1" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <div class="back-btnn">
-                        <button class="btn btn-default back-button" (click)="backToSubscriptions()" *ngIf="!showLoader">
+                        <button
+                            class="btn btn-default back-button d-inline-flex"
+                            (click)="backToSubscriptions()"
+                            *ngIf="!showLoader"
+                        >
                             <i class="icon-left back-left"></i>
                             {{ commonLocaleData?.app_back }}
                         </button>
