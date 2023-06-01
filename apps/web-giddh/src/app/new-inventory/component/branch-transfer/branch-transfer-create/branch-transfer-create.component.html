@@ -1,0 +1,80 @@
+<section id="branch-transfer-dialog">
+    <div class="branch-transfer-header">
+        <h2>{{ whichComponent === "receipt-note" ? "Receipt Note" : "Delivery Challan" }}</h2>
+        <span><i mat-dialog-close class="icon-cross"></i></span>
+    </div>
+    <div class="branch-transfer-body">
+        <div class="branch-transfer-body-radio-btns">
+            <mat-radio-group
+                aria-label="Select Multiple Product or Sender"
+                name="products_sender"
+                [(ngModel)]="transferType"
+            >
+                <mat-radio-button color="primary" value="Products">Multiple Products</mat-radio-button>
+                <mat-radio-button color="primary" value="Senders">Multiple Senders</mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <div class="branch-transfer-body-multiple-wrapper">
+            <form>
+                <div class="multiple-products row clearfix">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="row mr-b2">
+                            <div class="col-xl-3 col-lg-4">
+                                <label>Date of Receipt <span class="red-text">*</span></label>
+                            </div>
+                            <div class="col-xl-6 col-lg-8">
+                                <giddh-datepicker
+                                    [cssClass]="'mat-field-border bdr form-control w-100'"
+                                    [showToggleIcon]="false"
+                                >
+                                </giddh-datepicker>
+                            </div>
+                        </div>
+                        <div class="row mr-b2">
+                            <div class="col-xl-3 col-lg-4">
+                                <label>Product's Name <span class="red-text">*</span></label>
+                            </div>
+                            <div class="col-xl-6 col-lg-8">
+                                <select-field
+                                    [cssClass]="'form-control mat-field-border'"
+                                    [name]="''"
+                                    [placeholder]="'Select Warehouse'"
+                                    [options]="product"
+                                    [defaultValue]=""
+                                >
+                                </select-field>
+                            </div>
+                        </div>
+                        <div class="row mr-b2">
+                            <div class="col-xl-3 col-lg-4">
+                                <label>SKU Code</label>
+                            </div>
+                            <div class="col-xl-6 col-lg-8">
+                                <text-field
+                                    [cssClass]="'form-control mat-field-border'"
+                                    [type]="'text'"
+                                    [name]="''"
+                                    [placeholder]="'Type to filter'"
+                                >
+                                </text-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-4">sss</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">aa</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="action-btn-wrapper">
+                            <button mat-stroked-button class="mr-3" mat-dialog-close>Cancel</button>
+                            <button mat-raised-button color="primary">Create</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

@@ -1,7 +1,8 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { MainComponent } from "./main.component";
-import { BranchTransferComponent } from "./branch-transfer/branch-transfer.component";
+import { BranchTransferListComponent } from "./branch-transfer-list/branch-transfer-list.component";
+import { BranchTransferCreateComponent } from "./branch-transfer-create/branch-transfer-create.component";
 
 const routes: Routes = [
     {
@@ -14,7 +15,11 @@ const routes: Routes = [
             },
             {
                 path: "list",
-                component: BranchTransferComponent
+                component: BranchTransferListComponent
+            },
+            {
+                path: "create",
+                component: BranchTransferCreateComponent
             }
         ]
     }

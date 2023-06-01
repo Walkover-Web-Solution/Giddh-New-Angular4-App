@@ -1,0 +1,32 @@
+#branch-transfer-dialog {
+    background-color: var(--color-white);
+
+    .branch-transfer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+        border-bottom: 1px solid var(--color-common-secondary-border);
+        font-size: 18px;
+
+        h2 {
+            color: var(--color-giddh-blue);
+            font-weight: 600;
+        }
+    }
+    .branch-transfer-body {
+        &-radio-btns {
+            font-size: 14px;
+            padding: 15px;
+            border-bottom: 1px solid var(--color-common-secondary-border);
+        }
+        &-multiple-wrapper {
+            padding: 15px 0;
+        }
+    }
+
+    .row {
+        margin-left: unset !important;
+        margin-right: unset !important;
+    }
+}
