@@ -826,6 +826,16 @@ aside-create-group {
             height: 100%;
             min-height: 670px;
         }
+        .inventory-sub-sideabar {
+            .item-list {
+                .mat-list-item-content {
+                    padding: 4px 10px;
+                    a {
+                        color: var(--color-black);
+                    }
+                }
+            }
+        }
     }
     .inventory-master {
         .item-list {
@@ -833,6 +843,13 @@ aside-create-group {
             height: 100%;
             width: 225px !important;
             float: left;
+            a {
+                &.isActive {
+                    .mat-list-base .mat-list-item {
+                        color: var(--color-secondary-button-text) !important;
+                    }
+                }
+            }
         }
         .mat-list-base .mat-list-item {
             width: 225px;
@@ -10207,8 +10224,6 @@ giddh-datepicker {
     }
     #main {
         #content-wrapper {
-            background-color: var(--color-common-septenary-background-for-all-components);
-
             .create-new-inventory-page {
                 .select-physical-product {
                     .product-detail-content {
@@ -10714,6 +10729,15 @@ body.update-scroll-hidden {
 }
 
 /*---- inventory-master ----*/
+
+inventory-master {
+    perfect-scrollbar {
+        height: 100% !important;
+    }
+    .ps-content {
+        height: 100% !important;
+    }
+}
 
 /* responsive  starts here*/
 @media (max-width: 1440px) {
