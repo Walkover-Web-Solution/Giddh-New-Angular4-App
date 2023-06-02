@@ -72,6 +72,11 @@
                 height: 28px;
                 line-height: 20px;
                 color: var(--color-black);
+                &.account-name {
+                    .mat-list-item-content {
+                        color: var(--color-master-page-sidebar-primary-group);
+                    }
+                }
             }
             .create-head {
                 color: var(--color-master-page-text-secondary-hover);
