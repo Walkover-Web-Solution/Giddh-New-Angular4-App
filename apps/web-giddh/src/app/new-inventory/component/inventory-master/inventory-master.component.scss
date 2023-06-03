@@ -3,7 +3,7 @@
     padding: 0 0 15px 0;
     flex-wrap: wrap;
     background-color: var(--color-white);
-    height: calc(100vh - 155px);
+    height: calc(100vh - 90px);
     .inventory-search {
         text-field {
             min-width: 250px;
@@ -64,11 +64,6 @@
             overflow-y: auto;
             a {
                 display: block;
-                overflow: hidden;
-                display: -webkit-box;
-                -webkit-line-clamp: 1;
-                line-clamp: 1;
-                -webkit-box-orient: horizontal;
                 height: 28px;
                 line-height: 20px;
                 color: var(--color-black);
@@ -84,6 +79,11 @@
                 background-color: var(--color-master-page-main-content-primary-background);
                 width: 100%;
                 padding: 4px 10px;
+                height: 37px;
+                line-height: 30px;
+                &:hover {
+                    text-decoration: underline;
+                }
             }
 
             // &.list-font {
@@ -95,6 +95,11 @@
                 &.map-item {
                     .mat-list-item-content {
                         float: right !important;
+                        width: 140px;
+                        overflow: hidden;
+                        display: inline-block;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
                     }
                 }
             }

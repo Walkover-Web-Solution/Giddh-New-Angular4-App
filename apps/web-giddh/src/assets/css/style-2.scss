@@ -828,11 +828,25 @@ aside-create-group {
         }
         .inventory-sub-sideabar {
             .item-list {
+                a {
+                    &.account-name {
+                        .mat-list-item-content {
+                            color: var(--color-master-page-sidebar-primary-group);
+                        }
+                    }
+                    &.isActive {
+                        .mat-list-item-content {
+                            color: var(--color-white);
+                        }
+                    }
+                }
                 .mat-list-item-content {
                     padding: 4px 10px;
-                    a {
-                        color: var(--color-black);
-                    }
+                    width: 190px;
+                    overflow: hidden;
+                    display: inline-block;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
                 }
             }
         }
@@ -851,13 +865,15 @@ aside-create-group {
                 }
             }
         }
-        .mat-list-base .mat-list-item {
-            width: 225px;
-            .mat-list-item-content {
-                a {
-                    color: var(--color-black);
-                    display: block;
-                    width: 100%;
+        .mat-list-base {
+            .mat-list-item {
+                width: 225px;
+                .mat-list-item-content {
+                    a {
+                        color: var(--color-black);
+                        display: block;
+                        width: 100%;
+                    }
                 }
             }
         }
