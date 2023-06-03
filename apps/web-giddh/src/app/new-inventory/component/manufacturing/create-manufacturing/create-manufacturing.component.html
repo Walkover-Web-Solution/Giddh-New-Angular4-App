@@ -14,16 +14,15 @@
                         </giddh-datepicker>
                     </div>
 
-                    <div class="col">
-                        <label>Warehouse</label>
-                        <select-field
-                            [cssClass]="'form-control mat-field-border'"
+                    <div class="col warehouse">
+                        <dropdown-field
+                            [cssClass]="'form-control'"
                             [name]="''"
                             [placeholder]="'Select Warehouse'"
                             [options]="product"
                             [defaultValue]=""
                         >
-                        </select-field>
+                        </dropdown-field>
                     </div>
 
                     <div class="col">
@@ -46,41 +45,38 @@
             <div class="col-3">
                 <div class="row">
                     <div class="form-fileds w-100">
-                        <div class="d-flex flex-column flex-wrap gap-between w-100">
+                        <div class="d-flex flex-column flex-wrap w-100">
                             <h1 class="section-head">Finished Stock</h1>
                             <div>
-                                <label>Product</label>
-                                <select-field
-                                    [cssClass]="'form-control mat-field-border'"
+                                <dropdown-field
+                                    [cssClass]="'form-control'"
                                     [name]="''"
                                     [placeholder]="'Select Product'"
                                     [options]="product"
                                     [defaultValue]=""
                                 >
-                                </select-field>
+                                </dropdown-field>
                             </div>
 
                             <div>
-                                <label>Variant</label>
-                                <select-field
-                                    [cssClass]="'form-control mat-field-border'"
+                                <dropdown-field
+                                    [cssClass]="'form-control'"
                                     [name]="''"
                                     [placeholder]="'Select Variant'"
                                     [options]="product"
                                     [defaultValue]=""
                                 >
-                                </select-field>
+                                </dropdown-field>
                             </div>
 
                             <div>
-                                <label>Quantity</label>
-                                <text-field
-                                    [cssClass]="'form-control mat-field-border'"
+                                <input-field
+                                    [cssClass]="'form-control'"
                                     [type]="'number'"
                                     [name]="''"
                                     [placeholder]="'Select Quantity'"
                                 >
-                                </text-field>
+                                </input-field>
                                 <small class="float-right pt-1">Multiple of <span>200</span> </small>
                             </div>
 
@@ -113,7 +109,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="position-relative before-line">FG</td>
+                                        <td class="position-relative">FG</td>
                                         <td>20</td>
                                         <td>kg</td>
                                         <td>12</td>
@@ -123,44 +119,41 @@
                                     <tr>
                                         <td>
                                             <div>
-                                                <select-field
-                                                    [cssClass]="'form-control mat-field-border'"
+                                                <dropdown-field
+                                                    [cssClass]="'form-control'"
                                                     [name]="''"
                                                     [placeholder]="'Select Product'"
                                                     [options]="product"
                                                     [defaultValue]=""
                                                 >
-                                                </select-field>
+                                                </dropdown-field>
                                             </div>
                                         </td>
                                         <td>
                                             <div>
-                                                <text-field
-                                                    [cssClass]="'form-control mat-field-border'"
-                                                    [type]="'number'"
-                                                >
-                                                </text-field>
+                                                <input-field [cssClass]="'form-control'" [type]="'number'">
+                                                </input-field>
                                             </div>
                                         </td>
                                         <td>
                                             <div>
-                                                <text-field
-                                                    [cssClass]="'form-control mat-field-border'"
+                                                <input-field
+                                                    [cssClass]="'form-control'"
                                                     [type]="'text'"
                                                     [readonly]="true"
                                                 >
-                                                </text-field>
+                                                </input-field>
                                             </div>
                                         </td>
                                         <td>
                                             <div>
                                                 <div>
-                                                    <text-field
-                                                        [cssClass]="'form-control mat-field-border'"
+                                                    <input-field
+                                                        [cssClass]="'form-control'"
                                                         [type]="'number'"
                                                         [readonly]="true"
                                                     >
-                                                    </text-field>
+                                                    </input-field>
                                                 </div>
                                             </div>
                                         </td>
