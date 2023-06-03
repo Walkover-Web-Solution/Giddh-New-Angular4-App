@@ -20,9 +20,6 @@
                         <div class="row">
                             <div class="col-xl-8 col-lg-8 col-md-6">
                                 <div class="row mr-b15">
-                                    <div class="col-sm-6 col-lg-4">
-                                        <label>{{ localeData?.group_name }} <span class="red-text">*</span></label>
-                                    </div>
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
                                         <input-field
                                             [cssClass]="'form-control'"
@@ -37,12 +34,6 @@
                                     </div>
                                 </div>
                                 <div class="row mr-b15">
-                                    <div class="col-sm-6 col-lg-4">
-                                        <label
-                                            >{{ commonLocaleData?.app_unique_name
-                                            }}<span class="red-text">*</span></label
-                                        >
-                                    </div>
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
                                         <input-field
                                             [cssClass]="'form-control '"
@@ -50,13 +41,13 @@
                                             [placeholder]="commonLocaleData?.app_unique_name_placeholder"
                                             formControlName="uniqueName"
                                             [type]="'text'"
+                                            [required]="true"
                                         >
                                         </input-field>
                                     </div>
                                 </div>
-
                                 <div class="row mr-b15">
-                                    <div class="col-sm-6 col-lg-4">
+                                    <div class="col-sm-6 col-lg-12">
                                         <mat-radio-group
                                             color="primary"
                                             name="groupForm.showCodeType"
@@ -104,49 +95,9 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="row mr-t15">
-                                    <div class="col-sm-6 col-lg-4">
-                                        <label>{{ localeData?.is_it_subgroup }}</label>
-                                    </div>
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
-                                        <mat-slide-toggle
-                                            color="primary"
-                                            name="isSubGroup"
-                                            formControlName="isSubGroup"
-                                        >
-                                            <span class="pull-left">{{
-                                                groupForm.get("isSubGroup").value
-                                                    ? commonLocaleData?.app_on
-                                                    : commonLocaleData?.app_off
-                                            }}</span>
-                                        </mat-slide-toggle>
-                                    </div>
-                                </div>
-                                <div class="row mr-t15">
-                                    <div class="col-sm-6 col-lg-4">
-                                        <label>{{ commonLocaleData?.app_parent_group }}</label>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-6 ml-lg-2">
-                                        <dropdown-field
-                                            [cssClass]="'form-control '"
-                                            [readonly]="!groupForm.get('isSubGroup')?.value"
-                                            [name]="'parentStockGroupUniqueName'"
-                                            [placeholder]="commonLocaleData?.app_select_group"
-                                            [options]="stockGroups"
-                                            (selectedOption)="
-                                                stockGroupUniqueName = $event?.value; stockGroupName = $event?.label
-                                            "
-                                            [defaultValue]="stockGroupName"
-                                        ></dropdown-field>
-                                    </div>
-                                </div>
-                                <div class="row mr-t15">
-                                    <div class="col-sm-6 col-lg-4">
-                                        <label>{{ commonLocaleData?.app_tax }}</label>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-6 ml-lg-2">
-                                        <mat-form-field appearance="fill">
+                                        <mat-form-field appearance="fill" class="w-100">
                                             <mat-label>Tax</mat-label>
                                             <mat-select
                                                 name="taxes"
@@ -173,11 +124,38 @@
                                         </mat-form-field>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-xl-4 col-lg-4 col-md-6">
-                                <div class="image-group relative">
-                                    <div class="group-vector">
-                                        <img src="{{ imgPath }}create-group-vector.svg" />
+                                <div class="row">
+                                    <div class="col-sm-6 col-lg-1 ml-lg-2">
+                                        <mat-slide-toggle
+                                            class="mt-1"
+                                            color="primary"
+                                            name="isSubGroup"
+                                            formControlName="isSubGroup"
+                                        >
+                                            <span class="pull-left">{{
+                                                groupForm.get("isSubGroup").value
+                                                    ? commonLocaleData?.app_on
+                                                    : commonLocaleData?.app_off
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-4">
+                                        <label>{{ localeData?.is_it_subgroup }}</label>
+                                    </div>
+                                </div>
+                                <div class="row mr-t15">
+                                    <div class="col-sm-6 col-lg-6 ml-lg-2">
+                                        <dropdown-field
+                                            [cssClass]="'form-control '"
+                                            [readonly]="!groupForm.get('isSubGroup')?.value"
+                                            [name]="'parentStockGroupUniqueName'"
+                                            [placeholder]="commonLocaleData?.app_select_group"
+                                            [options]="stockGroups"
+                                            (selectedOption)="
+                                                stockGroupUniqueName = $event?.value; stockGroupName = $event?.label
+                                            "
+                                            [defaultValue]="stockGroupName"
+                                        ></dropdown-field>
                                     </div>
                                 </div>
                             </div>
