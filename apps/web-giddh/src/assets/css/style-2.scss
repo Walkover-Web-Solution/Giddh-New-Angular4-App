@@ -850,6 +850,12 @@ aside-create-group {
                 }
             }
         }
+        mat-grid-list {
+            height: calc(100vh - 120px) !important;
+            mat-grid-tile {
+                height: 100% !important;
+            }
+        }
     }
     .inventory-master {
         .item-list {
@@ -886,6 +892,7 @@ aside-create-group {
     .mat-grid-tile-content {
         align-items: flex-start;
         .mat-list-base .mat-list-item {
+            height: 38px;
             &.map-item {
                 .mat-list-item-content {
                     justify-content: flex-end;
@@ -893,6 +900,9 @@ aside-create-group {
             }
             .mat-list-item-content {
                 padding: 0;
+                a {
+                    color: var(--color-black);
+                }
             }
         }
     }
