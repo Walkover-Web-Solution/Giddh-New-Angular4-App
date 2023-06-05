@@ -13,130 +13,144 @@
         <div class="branch-transfer-body-multiple-wrapper">
             <form>
                 <div class="row clearfix">
-                    <div class="col-lg-4">
+                    <div class="col-lg-8 px-0">
                         <div class="row">
-                            <div class="w-100">
-                                <giddh-datepicker
-                                    [cssClass]="'mat-field-border bdr form-control w-100'"
-                                    [showToggleIcon]="false"
-                                    [placeholder]="'Date of Receipt'"
-                                >
-                                </giddh-datepicker>
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-lg-6 pl-0">
+                                        <div class="w-100">
+                                            <mat-form-field appearance="outline" (click)="mainDatePicker.open()">
+                                                <mat-label
+                                                    >Date of
+                                                    {{
+                                                        branchTransferMode === "receipt-note" ? "Receipt" : "Supply"
+                                                    }}</mat-label
+                                                >
+                                                <input
+                                                    matInput
+                                                    readonly
+                                                    [matDatepicker]="mainDatePicker"
+                                                    name="date"
+                                                    [(ngModel)]="todayDate"
+                                                    required
+                                                />
+                                                <mat-datepicker #mainDatePicker></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mr-t1">
-                            <div class="w-100">
-                                <dropdown-field
-                                    [name]="''"
-                                    [placeholder]="SenderProductName"
-                                    [options]="product"
-                                    [defaultValue]=""
-                                    [required]="true"
-                                    [appearance]="'outline'"
-                                >
-                                </dropdown-field>
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="w-100">
+                                        <dropdown-field
+                                            [name]="''"
+                                            [placeholder]="SenderProductName"
+                                            [options]="product"
+                                            [defaultValue]=""
+                                            [required]="true"
+                                            [appearance]="'outline'"
+                                        >
+                                        </dropdown-field>
+                                    </div>
+                                </div>
+                                <div class="row" *ngIf="transferType === 'Senders'">
+                                    <div class="w-100">
+                                        <input-field
+                                            [type]="'text'"
+                                            [name]="''"
+                                            [placeholder]="'SKU Code'"
+                                            [appearance]="'outline'"
+                                        >
+                                        </input-field>
+                                    </div>
+                                </div>
+                                <div class="row mr-b1 mr-t1" *ngIf="transferType === 'Senders'">
+                                    <div class="w-100">
+                                        <mat-radio-group
+                                            name="sender_HsnSac"
+                                            class="d-flex font-14"
+                                            [(ngModel)]="senderHsnSacStatus"
+                                        >
+                                            <mat-radio-button color="primary" value="HSN">HSN Code</mat-radio-button>
+                                            <mat-radio-button color="primary" value="SAC">SAC Code</mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                </div>
+                                <div class="row" *ngIf="transferType === 'Senders' && senderHsnSacStatus">
+                                    <div class="w-100">
+                                        <input-field
+                                            [type]="'number'"
+                                            [name]="''"
+                                            [placeholder]="senderHsnSacStatus + ' Code'"
+                                            [appearance]="'outline'"
+                                        >
+                                        </input-field>
+                                    </div>
+                                </div>
+                                <div class="row" *ngIf="transferType === 'Products'">
+                                    <div class="w-100">
+                                        <dropdown-field
+                                            [name]="''"
+                                            [placeholder]="'Sender\'s Warehouse'"
+                                            [options]="product"
+                                            [defaultValue]=""
+                                            [required]="true"
+                                            [appearance]="'outline'"
+                                        >
+                                        </dropdown-field>
+                                    </div>
+                                </div>
+                                <div class="row" *ngIf="transferType === 'Products'">
+                                    <div class="w-100">
+                                        <mat-form-field appearance="outline" class="w-100">
+                                            <mat-label>Sender's Address</mat-label>
+                                            <textarea matInput rows="3"></textarea>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row" *ngIf="transferType === 'Senders'">
-                            <div class="w-100">
-                                <input-field
-                                    [type]="'text'"
-                                    [name]="''"
-                                    [placeholder]="'SKU Code'"
-                                    [appearance]="'outline'"
-                                >
-                                </input-field>
+
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="w-100">
+                                        <input-field
+                                            [type]="'text'"
+                                            [name]="''"
+                                            [placeholder]="'Receiver\'s Name'"
+                                            [required]="true"
+                                            [appearance]="'outline'"
+                                            [label]="'Receiver\'s Name'"
+                                        >
+                                        </input-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="w-100">
+                                        <dropdown-field
+                                            [name]="''"
+                                            [placeholder]="'Receiver\'s Warehouse'"
+                                            [options]="product"
+                                            [defaultValue]=""
+                                            [required]="true"
+                                            [appearance]="'outline'"
+                                        >
+                                        </dropdown-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="w-100">
+                                        <mat-form-field appearance="outline" class="w-100">
+                                            <mat-label>Receiver's Address</mat-label>
+                                            <textarea matInput rows="3"></textarea>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mr-b1" *ngIf="transferType === 'Senders'">
-                            <div class="w-100">
-                                <mat-radio-group
-                                    name="sender_HsnSac"
-                                    class="d-flex font-14"
-                                    [(ngModel)]="senderHsnSacStatus"
-                                >
-                                    <mat-radio-button color="primary" value="HSN">HSN Code</mat-radio-button>
-                                    <mat-radio-button color="primary" value="SAC">SAC Code</mat-radio-button>
-                                </mat-radio-group>
-                            </div>
-                        </div>
-                        <div class="row" *ngIf="transferType === 'Senders' && senderHsnSacStatus">
-                            <div class="w-100">
-                                <input-field
-                                    [type]="'number'"
-                                    [name]="''"
-                                    [placeholder]="senderHsnSacStatus + ' Code'"
-                                    [appearance]="'outline'"
-                                >
-                                </input-field>
-                            </div>
-                        </div>
-                        <div class="row" *ngIf="transferType === 'Products'">
-                            <div class="w-100">
-                                <dropdown-field
-                                    [name]="''"
-                                    [placeholder]="'Sender\'s Warehouse'"
-                                    [options]="product"
-                                    [defaultValue]=""
-                                    [required]="true"
-                                    [appearance]="'outline'"
-                                >
-                                </dropdown-field>
-                            </div>
-                        </div>
-                        <div class="row" *ngIf="transferType === 'Products'">
-                            <div class="w-100">
-                                <mat-form-field appearance="outline" class="w-100">
-                                    <mat-label>Sender's Address</mat-label>
-                                    <textarea matInput rows="3"></textarea>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="w-100">
-                                <input-field
-                                    [type]="'text'"
-                                    [name]="''"
-                                    [placeholder]="'Receiver\'s Name'"
-                                    [required]="true"
-                                    [appearance]="'outline'"
-                                    [label]="'Receiver\'s Name'"
-                                >
-                                </input-field>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="w-100">
-                                <dropdown-field
-                                    [name]="''"
-                                    [placeholder]="'Receiver\'s Warehouse'"
-                                    [options]="product"
-                                    [defaultValue]=""
-                                    [required]="true"
-                                    [appearance]="'outline'"
-                                >
-                                </dropdown-field>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="w-100">
-                                <mat-form-field appearance="outline" class="w-100">
-                                    <mat-label>Receiver's Address</mat-label>
-                                    <textarea matInput rows="3"></textarea>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="w-100"></div>
-                        </div>
-                        <div class="row">
-                            <div class="w-100"></div>
-                        </div>
-                        <div class="row">
-                            <div class="w-100"></div>
                         </div>
                     </div>
-                    <div class="col-lg-8">
+
+                    <div class="col-lg-4">
                         <div class="total-amount text-right">
                             <p>Total Amount</p>
                             <h3>₹ 0.00</h3>
@@ -211,7 +225,7 @@
                                                             >
                                                             </text-field>
                                                         </div>
-                                                        <div class="d-flex">
+                                                        <div class="d-flex mt-3">
                                                             <button mat-raised-button color="primary" class="w-100">
                                                                 Save
                                                             </button>
@@ -279,7 +293,7 @@
                                                             >
                                                             </text-field>
                                                         </div>
-                                                        <div class="d-flex">
+                                                        <div class="d-flex mt-3">
                                                             <button mat-raised-button color="primary" class="w-100">
                                                                 Save
                                                             </button>
@@ -375,12 +389,17 @@
                             <div class="row">
                                 <div class="col-sm-6 pl-0">
                                     <div class="w-100">
-                                        <giddh-datepicker
-                                            [cssClass]="'mat-field-border bdr form-control w-100'"
-                                            [showToggleIcon]="false"
-                                            [placeholder]="'Dispatched Date'"
-                                        >
-                                        </giddh-datepicker>
+                                        <mat-form-field appearance="outline" (click)="transportDatePicker.open()">
+                                            <mat-label>Date of Receipt</mat-label>
+                                            <input
+                                                matInput
+                                                readonly
+                                                [matDatepicker]="transportDatePicker"
+                                                name="transportDate"
+                                                [(ngModel)]="todayDate"
+                                            />
+                                            <mat-datepicker #transportDatePicker></mat-datepicker>
+                                        </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="col-sm-6 pr-0">

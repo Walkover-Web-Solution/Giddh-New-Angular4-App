@@ -28,6 +28,9 @@ export class BranchTransferCreateComponent implements OnInit {
    public branchTransferMode: 'receipt-note' | 'delivery-challan' = 'receipt-note';
    public SenderProductName:string= 'Product\'s Name';
    public productSenderDescription:string = 'Product Description';
+   /** Holds Current Date for Date Picker */
+   public todayDate:Date = new Date();
+
   constructor() { }
 
   ngOnInit() {

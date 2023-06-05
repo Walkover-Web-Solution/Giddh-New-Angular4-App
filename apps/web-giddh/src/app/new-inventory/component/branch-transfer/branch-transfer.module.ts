@@ -41,7 +41,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
         ClickOutsideModule,
         MatFormFieldModule,
         MatInputModule,
-        MatDatepickerModule 
+        MatDatepickerModule
 
     ],
     exports: [
