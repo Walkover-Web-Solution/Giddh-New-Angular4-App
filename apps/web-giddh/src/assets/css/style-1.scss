@@ -3267,86 +3267,19 @@ td.mat-footer-cell {
 
 dropdown-field,
 input-field {
-    width: 100%;
     .mat-form-field {
         width: 100%;
-        .mat-form-field-infix {
-            width: 100%;
-            padding: 0.4375em 0 !important;
-            input {
-                border: 0;
-                background-color: transparent !important;
-                height: auto;
-            }
-        }
     }
-    .mat-form-field-appearance-fill {
-        .mat-form-field-flex {
-            padding: 0 !important;
-        }
-        .mat-form-field-underline {
-            &::before {
-                background-color: var(--color-primary-card-box-shadow) !important;
-            }
-        }
-    }
-    .mat-form-field-wrapper {
-        padding: 0 0 10px 0;
-    }
-    .mat-form-field-appearance-legacy {
-        .mat-form-field-wrapper {
-            padding-bottom: 4px;
-        }
-        .mat-form-field-label {
-            top: 15px;
-        }
-        .mat-form-field-underline {
-            background-color: var(--color-primary-card-box-shadow) !important;
-        }
-        &.mat-form-field-can-float {
-            &.mat-form-field-should-float {
-                .mat-form-field-label {
-                    transform: translateY(-10px) scale(0.75) perspective(100px) translateZ(0.001px);
-                }
-            }
-            .mat-input-server {
-                &:focus {
-                    & + .mat-form-field-label-wrapper {
-                        .mat-form-field-label {
-                            transform: translateY(-10px) scale(0.75) perspective(100px) translateZ(0.001px);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    .mat-form-field.mat-form-field-invalid {
-        .mat-form-field-ripple,
-        .mat-form-field-ripple.mat-accent {
-            background-color: var(--color-primary-login-hash-tag) !important;
-        }
-    }
-    .mat-form-field.mat-focused {
-        .mat-form-field-ripple {
-            background-color: var(--color-common-senary-text) !important;
-        }
-    }
-    .mat-form-field-flex {
-        padding-bottom: 5px;
+    .mat-form-field .mat-form-field-wrapper .mat-form-field-underline {
+        display: block !important;
     }
 }
-dropdown-field {
+mat-form-field {
     width: 100%;
-    .mat-form-field-flex {
-        label {
-            padding-top: 5px;
-        }
-    }
 }
-input-field {
-    .mat-form-field-flex {
-        label {
-            padding-bottom: 15px;
-        }
-    }
+.mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+}
+.mat-form-field-underline {
+    position: unset !important;
 }
