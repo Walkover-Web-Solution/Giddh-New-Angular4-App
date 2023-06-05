@@ -35,8 +35,6 @@ export class AsideBranchTransferComponent implements OnInit {
         this.dialog.open(BranchTransferCreateComponent,{
           width: '100%',
           minHeight: '90vh',
-          maxWidth: '100vw',
-          position: {bottom:'0'},
           data: input
         })
     }

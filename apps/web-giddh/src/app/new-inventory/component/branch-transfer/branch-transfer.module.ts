@@ -17,6 +17,10 @@ import { DatepickerWrapperModule } from '../../../shared/datepicker-wrapper/date
 import { BranchTransferCreateComponent } from './branch-transfer-create/branch-transfer-create.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
+import { ClickOutsideModule } from 'ng-click-outside';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
     imports: [
@@ -34,7 +38,11 @@ import { FormsModule } from '@angular/forms';
         DatepickerWrapperModule,
         GiddhDatepickerModule,
         MatRadioModule,
-        FormsModule
+        FormsModule,
+        ClickOutsideModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule 
 
     ],
     exports: [

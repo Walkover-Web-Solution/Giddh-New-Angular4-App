@@ -16,7 +16,8 @@
         "recipe":"Recipe",
         "create_manufacturing":"Create Manufacturing",
         "report":"Report",
-        "master":"Master"
+        "master":"Master",
+        "create_branch_transfer": "Create Branch Transfer"
     },
     "reports":{
         "transaction_count":"Transaction Count",
