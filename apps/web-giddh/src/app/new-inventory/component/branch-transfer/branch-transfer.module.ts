@@ -12,7 +12,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { BranchTransferListComponent } from './branch-transfer-list/branch-transfer-list.component';
-import { AsideBranchTransferComponent } from './aside-branch-transfer/aside-branch-transfer.component';
 import { DatepickerWrapperModule } from '../../../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { BranchTransferCreateComponent } from './branch-transfer-create/branch-transfer-create.component';
 import { MatRadioModule } from '@angular/material/radio';
@@ -49,6 +48,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
         BranchTransferListComponent,
         BranchTransferCreateComponent
     ],
-    declarations: [MainComponent, BranchTransferListComponent, AsideBranchTransferComponent, BranchTransferCreateComponent]
+    declarations: [MainComponent, BranchTransferListComponent, BranchTransferCreateComponent]
 })
 export class BranchTransferModule { }

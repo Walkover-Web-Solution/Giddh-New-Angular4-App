@@ -8,18 +8,6 @@
             <form class="col-12 pl-0 pr-0 mr-b05 branch-transfer-form">
                 <div class="row">
                     <div class="d-flex flex-wrap gap-between w-100 mb-3">
-                        <div class="mt-auto">
-                            <button
-                                type="button"
-                                class="mr-0"
-                                mat-raised-button
-                                color="primary"
-                                (click)="branchTransferToggleAsidePane()"
-                            >
-                                + New Transfer
-                            </button>
-                        </div>
-
                         <div>
                             <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
                                 <i class="icon-calender calendar-addon"></i>
@@ -242,7 +230,3 @@
         </div>
     </div>
 </ng-template>
-<div class="aside-overlay" *ngIf="asideBranchTransfer === 'in'"></div>
-<div class="aside-position" *ngIf="asideBranchTransfer === 'in'">
-    <aside-branch-transfer (closeAsideEvent)="branchTransferToggleAsidePane()"></aside-branch-transfer>
-</div>

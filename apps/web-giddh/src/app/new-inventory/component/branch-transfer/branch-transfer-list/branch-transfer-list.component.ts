@@ -46,8 +46,7 @@ export class BranchTransferListComponent implements OnInit {
     public modalRef: BsModalRef;
      /** Pagination limit */
      public paginationLimit: number = PAGINATION_LIMIT;
-    /** Hold Branch Transfer Aside Hide/Show Status */
-     public asideBranchTransfer: string = 'out';
+
   constructor(
     public dialog: MatDialog,
     private modalService: BsModalService,
@@ -57,22 +56,6 @@ export class BranchTransferListComponent implements OnInit {
   ngOnInit() {
    
   }
-
- /* Create unit aside pane open function */
- public branchTransferToggleAsidePane(): void {
-  this.asideBranchTransfer = this.asideBranchTransfer === 'out' ? 'in' : 'out';
-  this.toggleBodyClass();
-}
-
-/* Aside pane toggle fixed class */
-public toggleBodyClass(): void {
-  if (this.asideBranchTransfer === 'in') {
-    document.querySelector('body').classList.add('fixed');
-  } else {
-    document.querySelector('body').classList.remove('fixed');
-  }
-}
-
 
 /**
  *  Function to open Dialog on Advance Filter Button
