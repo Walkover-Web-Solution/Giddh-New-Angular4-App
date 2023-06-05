@@ -183,7 +183,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     /** True if translations loaded */
     public translationLoaded: boolean = false;
     /** Holds active tab index */
-    private activeTabIndex: number;
+    public activeTabIndex: number;
     /** True if name has spacing */
     public hasSpacingError = false;
     /** True if variant option check validation*/
@@ -1613,7 +1613,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
    * @memberof StockCreateEditComponent
    */
     public selectVariantSalesPurchaseUnit(variantSalesUnitRate: any, event: any): void {
-        variantSalesUnitRate.stockUnitCode = event.additional?.additional?.code ? event.additional?.additional?.code : event.additional?.code;
+        variantSalesUnitRate.stockUnitCode = event.additional?.code;
         variantSalesUnitRate.stockUnitName = event?.label;
         variantSalesUnitRate.stockUnitUniqueName = event?.value;
     }
@@ -1626,7 +1626,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     * @memberof StockCreateEditComponent
     */
     public selectVariantFixedAssetsUnit(variantFixedAssetsUnitRate: any, event: any): void {
-        variantFixedAssetsUnitRate.stockUnitCode = event.additional?.additional?.code ? event.additional?.additional?.code : event.additional?.code;
+        variantFixedAssetsUnitRate.stockUnitCode = event.additional?.code;
         variantFixedAssetsUnitRate.stockUnitName = event?.label;
         variantFixedAssetsUnitRate.stockUnitUniqueName = event?.value;
     }
