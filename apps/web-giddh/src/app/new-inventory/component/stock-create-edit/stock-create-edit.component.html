@@ -56,19 +56,18 @@
                                         <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-6">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     [name]="'productName'"
                                                     [placeholder]="localeData?.enter_product"
                                                     [type]="'text'"
                                                     [(ngModel)]="stockForm.name"
                                                     (ngModelChange)="checkSpacingValidation(stockForm.name)"
                                                     [required]="true"
+                                                    [autocomplete]="'off'"
                                                 >
                                                 </input-field>
                                             </div>
                                             <div class="col-sm-6 col-lg-6">
                                                 <dropdown-field
-                                                    [cssClass]="'form-control'"
                                                     [name]="'stockUnitCode'"
                                                     [placeholder]="localeData?.select_unit"
                                                     [options]="stockUnits"
@@ -82,7 +81,6 @@
                                             </div>
                                             <div class="col-sm-6 col-lg-6 under-group-field-button-wrapper">
                                                 <dropdown-field
-                                                    [cssClass]="'form-control'"
                                                     [placeholder]="commonLocaleData?.app_select_group"
                                                     (selectionChange)="
                                                         stockGroupUniqueName = $event?.value;
@@ -100,13 +98,13 @@
                                                     class="btn-success min-width-100 move-stock"
                                                     (click)="moveStock()"
                                                     [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
+                                                    [autocomplete]="'off'"
                                                 >
                                                     {{ localeData?.move }}
                                                 </button>
                                             </div>
                                             <div class="col-sm-6 col-lg-6">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     [name]="'uniqueName'"
                                                     [placeholder]="commonLocaleData?.app_unique_name"
                                                     [type]="'text'"
@@ -606,7 +604,6 @@
                                                                         </div>
                                                                         <div class="col-sm-6 col-lg-12 pt-3 which-tab">
                                                                             <dropdown-field
-                                                                                [cssClass]="'form-control'"
                                                                                 [name]="'purchaseAccount'"
                                                                                 [placeholder]="
                                                                                     localeData?.linked_purchase_accounts
