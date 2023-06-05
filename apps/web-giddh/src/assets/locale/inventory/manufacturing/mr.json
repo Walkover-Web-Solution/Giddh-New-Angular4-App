@@ -1,0 +1,10 @@
+{
+    "total_cost": "एकूण किंमत",
+    "item_cost": "प्रति आयटम किंमत",
+    "finished_stock": "पूर्ण स्टॉक",
+    "multiple_of": "च्या अनेक",
+    "generate_manufacturing": "उत्पादन निर्माण करा",
+    "raw_stock": "कच्चा स्टॉक",
+    "add_stock": "+ स्टॉक जोडा",
+    "manufacturing_saved": "उत्पादन यशस्वीरित्या तयार केले गेले आहे."
+}

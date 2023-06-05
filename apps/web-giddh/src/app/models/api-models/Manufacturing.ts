@@ -14,6 +14,9 @@ export class ManufacturingLinkedStock {
     variant: ManufacturingVariant;
     variants?: ManufacturingVariant[];
     cssClass?: string;
+    stockNameError?: boolean;
+    variantNameError?: boolean;
+    quantityError?: boolean;
 
     constructor() {
         this.variant = new ManufacturingVariant();

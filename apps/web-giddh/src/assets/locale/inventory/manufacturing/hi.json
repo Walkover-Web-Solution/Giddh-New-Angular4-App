@@ -1,0 +1,10 @@
+{
+    "total_cost": "कुल लागत",
+    "item_cost": "लागत प्रति आइटम",
+    "finished_stock": "समाप्त स्टॉक",
+    "multiple_of": "के गुणक",
+    "generate_manufacturing": "विनिर्माण उत्पन्न करें",
+    "raw_stock": "कच्चा स्टॉक",
+    "add_stock": "+ स्टॉक जोड़ें",
+    "manufacturing_saved": "विनिर्माण सफलतापूर्वक बनाया गया है।"
+}

@@ -40,9 +40,13 @@ export class CreateManufacturingComponent implements OnInit {
     /** Index of active linked item */
     public activeLinkedStockIndex: number = 0;
     /** List of required fields */
-    public errorFields: any = { date: false, finishedStockName: false, finishedStockVariant: false, finishedQuantity: false, linkedStockName: false, linkedVariantName: false, linkedQuantity: false };
+    public errorFields: any = { date: false, finishedStockName: false, finishedStockVariant: false, finishedQuantity: false };
     /** True if is loading */
     public isLoading: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -56,6 +60,11 @@ export class CreateManufacturingComponent implements OnInit {
 
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof CreateManufacturingComponent
+     */
     public ngOnInit(): void {
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
@@ -88,6 +97,8 @@ export class CreateManufacturingComponent implements OnInit {
                 warehouses?.results?.forEach(warehouse => {
                     this.warehouses.push({ label: warehouse?.name, value: warehouse?.uniqueName });
                 });
+
+                this.changeDetectionRef.detectChanges();
             }
         });
     }
@@ -98,20 +109,31 @@ export class CreateManufacturingComponent implements OnInit {
      * @memberof CreateManufacturingComponent
      */
     public getStocks(): void {
-        this.store.pipe(select(state => state.inventory.stocksList), takeUntil(this.destroyed$)).subscribe((stocks: any) => {
-            if (!stocks?.results?.length) {
-                this.store.dispatch(this.inventoryAction.GetStock());
-            } else {
-                this.stocks = [];
+        this.store.dispatch(this.inventoryAction.GetStock());
 
+        this.store.pipe(select(state => state.inventory.stocksList), takeUntil(this.destroyed$)).subscribe((stocks: any) => {
+            if (stocks?.results?.length) {
+                this.stocks = [];
                 stocks?.results?.forEach(stock => {
                     this.stocks.push({ label: stock?.name, value: stock?.uniqueName, additional: { stockUnitCode: stock?.stockUnit?.code, stockUnitUniqueName: stock?.stockUnit?.uniqueName } });
                 });
+
+                this.changeDetectionRef.detectChanges();
             }
         });
     }
 
-    public getStockVariants(object: any, event: any, loadRecipe: boolean = false): void {
+    /**
+     * Get stock variants
+     *
+     * @param {*} object
+     * @param {*} event
+     * @param {boolean} [loadRecipe=false]
+     * @param {number} [index]
+     * @returns {void}
+     * @memberof CreateManufacturingComponent
+     */
+    public getStockVariants(object: any, event: any, loadRecipe: boolean = false, index?: number): void {
         object.stockUniqueName = event?.value;
         object.stockName = event?.label;
 
@@ -136,8 +158,13 @@ export class CreateManufacturingComponent implements OnInit {
                     if (loadRecipe) {
                         this.getVariantRecipe();
                     } else {
-                        this.getRateForStock(object);
+                        this.getRateForStock(object, index);
                     }
+                } else {
+                    object.variant = {
+                        name: "",
+                        uniqueName: ""
+                    };
                 }
             }
 
@@ -145,6 +172,11 @@ export class CreateManufacturingComponent implements OnInit {
         });
     }
 
+    /**
+     * Get variant recipe
+     *
+     * @memberof CreateManufacturingComponent
+     */
     public getVariantRecipe(): void {
         this.manufacturingObject.manufacturingDetails[0].linkedStocks = [];
 
@@ -191,7 +223,13 @@ export class CreateManufacturingComponent implements OnInit {
         });
     }
 
-    public getRateForStock(linkedStock: any): void {
+    /**
+     * Get rate for stock
+     *
+     * @param {*} linkedStock
+     * @memberof CreateManufacturingComponent
+     */
+    public getRateForStock(linkedStock: any, index: number): void {
         this.manufacturingService.getRateForStockV2(linkedStock.stockUniqueName, { quantity: 1, stockUnitUniqueName: linkedStock.selectedStock?.additional?.stockUnitUniqueName, variant: { uniqueName: linkedStock.variant.uniqueName } }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response.body) {
                 linkedStock.quantity = 1;
@@ -203,7 +241,7 @@ export class CreateManufacturingComponent implements OnInit {
                 linkedStock.amount = isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces);
             }
 
-            this.checkLinkedStockValidation();
+            this.checkLinkedStockValidation(index);
 
             if (this.activeLinkedStockIndex === null) {
                 this.hideBorder(linkedStock);
@@ -213,10 +251,18 @@ export class CreateManufacturingComponent implements OnInit {
         });
     }
 
+    /**
+     * Removes the unnecessary keys
+     *
+     * @returns {*}
+     * @memberof CreateManufacturingComponent
+     */
     public formatRequest(): any {
         let manufacturingObject = cloneDeep(this.manufacturingObject);
         delete manufacturingObject.manufacturingDetails[0].variants;
         delete manufacturingObject.manufacturingDetails[0].manufacturingUnitCode;
+
+        manufacturingObject.manufacturingDetails[0].linkedStocks = manufacturingObject.manufacturingDetails[0].linkedStocks?.filter(linkedStock => linkedStock?.variant?.uniqueName);
 
         manufacturingObject.manufacturingDetails[0].linkedStocks?.map(linkedStock => {
             delete linkedStock.stockUnitCode;
@@ -229,6 +275,12 @@ export class CreateManufacturingComponent implements OnInit {
         return manufacturingObject;
     }
 
+    /**
+     * Save manufacturing
+     *
+     * @returns {void}
+     * @memberof CreateManufacturingComponent
+     */
     public createManufacturing(): void {
         const isFormValid = this.isFormValid();
         if (!isFormValid) {
@@ -239,7 +291,7 @@ export class CreateManufacturingComponent implements OnInit {
         const manufacturingObject = this.formatRequest();
         this.manufacturingService.saveManufacturing(manufacturingObject.manufacturingDetails[0].stockUniqueName, manufacturingObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                this.toasterService.successToast("Manufacturing has been created successfully.");
+                this.toasterService.successToast(this.localeData?.manufacturing_saved);
                 this.resetForm();
             } else {
                 this.toasterService.errorToast(response?.body || response?.message);
@@ -264,28 +316,50 @@ export class CreateManufacturingComponent implements OnInit {
         });
     }
 
+    /**
+     * Add new linked stock row
+     *
+     * @memberof CreateManufacturingComponent
+     */
     public addNewLinkedStock(): void {
         this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(new ManufacturingLinkedStock());
     }
 
+    /**
+     * Remove linked stock row
+     *
+     * @param {number} index
+     * @memberof CreateManufacturingComponent
+     */
     public removeLinkedStock(index: number): void {
         this.manufacturingObject.manufacturingDetails[0].linkedStocks = this.manufacturingObject.manufacturingDetails[0].linkedStocks?.filter((linkedStock, i) => i !== index);
         this.calculateTotals();
     }
 
+    /**
+     * Calculates row total for linked stock
+     *
+     * @param {*} linkedStock
+     * @memberof CreateManufacturingComponent
+     */
     public calculateRowTotal(linkedStock: any): void {
         let amount = linkedStock.rate * linkedStock.quantity;
         linkedStock.amount = isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces);
         this.calculateTotals();
     }
 
+    /**
+     * Calculates grand total
+     *
+     * @memberof CreateManufacturingComponent
+     */
     public calculateTotals(): void {
         let totalRate = 0;
         let totalAmount = 0;
 
         this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
-            totalRate += linkedStock.rate;
-            totalAmount += linkedStock.amount;
+            totalRate += linkedStock.rate || 0;
+            totalAmount += linkedStock.amount || 0;
         });
 
         this.totals.totalRate = totalRate;
@@ -295,20 +369,37 @@ export class CreateManufacturingComponent implements OnInit {
         this.changeDetectionRef.detectChanges();
     }
 
+    /**
+     * Resets form
+     *
+     * @memberof CreateManufacturingComponent
+     */
     public resetForm(): void {
         this.manufacturingObject = new CreateManufacturing();
         this.manufacturingObject.manufacturingDetails[0].date = cloneDeep(this.universalDate);
 
-        this.errorFields = { date: false, finishedStockName: false, finishedStockVariant: false, finishedQuantity: false, linkedStockName: false, linkedVariantName: false, linkedQuantity: false };
+        this.errorFields = { date: false, finishedStockName: false, finishedStockVariant: false, finishedQuantity: false };
 
         this.calculateTotals();
         this.changeDetectionRef.detectChanges();
     }
 
+    /**
+     * Show border around linked fields on hover in
+     *
+     * @param {*} linkedStock
+     * @memberof CreateManufacturingComponent
+     */
     public showBorder(linkedStock: any): void {
         linkedStock.cssClass = 'form-control mat-field-border';
     }
 
+    /**
+     * Hide border around linked fields on hover out
+     *
+     * @param {*} linkedStock
+     * @memberof CreateManufacturingComponent
+     */
     public hideBorder(linkedStock: any): void {
         if (!linkedStock?.variant?.uniqueName) {
             linkedStock.cssClass = 'form-control mat-field-border';
@@ -317,6 +408,12 @@ export class CreateManufacturingComponent implements OnInit {
         }
     }
 
+    /**
+     * Validates form
+     *
+     * @returns {boolean}
+     * @memberof CreateManufacturingComponent
+     */
     public isFormValid(): boolean {
         let isValidForm = true;
         if (!this.manufacturingObject.manufacturingDetails[0].date) {
@@ -336,42 +433,79 @@ export class CreateManufacturingComponent implements OnInit {
             isValidForm = false;
         }
         if (!this.manufacturingObject.manufacturingDetails[0].linkedStocks?.length) {
-            this.errorFields.linkedStockName = true;
-            this.errorFields.linkedVariantName = true;
-            this.errorFields.linkedQuantity = true;
             isValidForm = false;
         }
-        if (this.manufacturingObject.manufacturingDetails[0].linkedStocks?.length && !this.manufacturingObject.manufacturingDetails[0].linkedStocks[0].selectedStock?.value) {
-            this.errorFields.linkedStockName = true;
-            isValidForm = false;
-        }
-        if (this.manufacturingObject.manufacturingDetails[0].linkedStocks?.length && !this.manufacturingObject.manufacturingDetails[0].linkedStocks[0].variant?.uniqueName) {
-            this.errorFields.linkedVariantName = true;
-            isValidForm = false;
-        }
-        if (this.manufacturingObject.manufacturingDetails[0].linkedStocks?.length && !this.manufacturingObject.manufacturingDetails[0].linkedStocks[0].quantity) {
-            this.errorFields.linkedQuantity = true;
-            isValidForm = false;
+        if (this.manufacturingObject.manufacturingDetails[0].linkedStocks?.length) {
+            this.manufacturingObject.manufacturingDetails[0].linkedStocks.forEach(linkedStock => {
+                if (!linkedStock?.selectedStock?.value) {
+                    linkedStock.stockNameError = true;
+                    isValidForm = false;
+                }
+                if (!linkedStock?.variant?.uniqueName) {
+                    linkedStock.variantNameError = true;
+                    isValidForm = false;
+                }
+                if (!linkedStock?.quantity) {
+                    linkedStock.quantityError = true;
+                    isValidForm = false;
+                }
+            });
         }
 
         return isValidForm;
     }
 
-    public checkLinkedStockValidation(): void {
-        if (!this.manufacturingObject.manufacturingDetails[0].linkedStocks[0].selectedStock?.value) {
-            this.errorFields.linkedStockName = true;
+    /**
+     * Validates linked stock fields
+     *
+     * @param {number} index
+     * @memberof CreateManufacturingComponent
+     */
+    public checkLinkedStockValidation(index: number): void {
+        this.validateSelectedStock(index);
+        this.validateSelectedVariant(index);
+        this.validateQuantity(index);
+    }
+
+    /**
+     * Validates linked stock
+     *
+     * @param {number} linkedStockIndex
+     * @memberof CreateManufacturingComponent
+     */
+    public validateSelectedStock(linkedStockIndex: number): void {
+        if (!this.manufacturingObject.manufacturingDetails[0].linkedStocks[linkedStockIndex].selectedStock?.value) {
+            this.manufacturingObject.manufacturingDetails[0].linkedStocks[linkedStockIndex].stockNameError = true;
         } else {
-            this.errorFields.linkedStockName = false;
+            this.manufacturingObject.manufacturingDetails[0].linkedStocks[linkedStockIndex].stockNameError = false;
         }
-        if (!this.manufacturingObject.manufacturingDetails[0].linkedStocks[0].variant?.uniqueName) {
-            this.errorFields.linkedVariantName = true;
+    }
+
+    /**
+     * Validates linked variant
+     *
+     * @param {number} linkedStockIndex
+     * @memberof CreateManufacturingComponent
+     */
+    public validateSelectedVariant(linkedStockIndex: number): void {
+        if (!this.manufacturingObject.manufacturingDetails[0].linkedStocks[linkedStockIndex].variant?.uniqueName) {
+            this.manufacturingObject.manufacturingDetails[0].linkedStocks[linkedStockIndex].variantNameError = true;
         } else {
-            this.errorFields.linkedVariantName = false;
+            this.manufacturingObject.manufacturingDetails[0].linkedStocks[linkedStockIndex].variantNameError = false;
         }
-        if (!this.manufacturingObject.manufacturingDetails[0].linkedStocks[0].quantity) {
-            this.errorFields.linkedQuantity = true;
+    }
+
+    /**
+     * Validates linked quantity
+     *
+     * @param {number} linkedStockIndex
+     * @memberof CreateManufacturingComponent
+     */
+    public validateQuantity(linkedStockIndex: number): void {
+        if (!this.manufacturingObject.manufacturingDetails[0].linkedStocks[linkedStockIndex].quantity) {
+            this.manufacturingObject.manufacturingDetails[0].linkedStocks[linkedStockIndex].quantityError = true;
         } else {
-            this.errorFields.linkedQuantity = false;
+            this.manufacturingObject.manufacturingDetails[0].linkedStocks[linkedStockIndex].quantityError = false;
         }
     }
 }
