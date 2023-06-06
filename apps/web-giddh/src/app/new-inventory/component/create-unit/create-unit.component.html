@@ -1,55 +1,50 @@
 <form>
     <div class="row">
         <div class="col-xl-5 col-lg-5 col-sm-5">
-            <label>Unit Group <span class="red-text">*</span></label>
-            <select-field [cssClass]="'form-control mat-field-border'" [placeholder]="'Select unit'"> </select-field>
+            <dropdown-field [placeholder]="'Select Unit Group'" [required]="true"> </dropdown-field>
         </div>
     </div>
     <div class="row mt-3">
         <div class="col-xl-5 col-lg-5 col-sm-5">
-            <label>Unit Name <span class="red-text">*</span></label>
-            <select-field [cssClass]="'form-control mat-field-border'" [placeholder]="'Select unit'"> </select-field>
+            <dropdown-field [placeholder]="'Select Unit Name'" [required]="true"> </dropdown-field>
         </div>
         <div class="col-xl-7 col-lg-7 col-sm-7">
-            <label>Unit Code <span class="red-text">*</span></label>
-            <text-field
-                [cssClass]="'form-control mat-field-border'"
+            <input-field
                 [name]="'hsnNumber'"
                 [type]="'text'"
                 [placeholder]="'Unique Name'"
                 [id]="'item-unit-code'"
+                [required]="true"
             >
-            </text-field>
+            </input-field>
         </div>
     </div>
     <!-- section-repeat -->
     <div class="unit-quantity mt-3">
         <div class="row">
             <div class="col-xl-5 col-lg-5 col-md-5 col-sm-6 unit-equal">
-                <label>Unit Name <span class="red-text">*</span></label>
-                <select-field
-                    [cssClass]="'form-control mat-field-border'"
+                <dropdown-field
                     [id]="'item-parent-unit'"
+                    [name]="''"
                     [placeholder]="'Choose a Parent Unit'"
+                    [required]="true"
                 >
-                </select-field>
+                </dropdown-field>
                 <span class="equal-sign">=</span>
             </div>
             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-2 pr-0 unit-responsive">
-                <label>Qty. per Unit <span class="red-text">*</span></label>
-                <text-field
-                    [cssClass]="'form-control text-right mat-field-border'"
+                <input-field
+                    [cssClass]="'text-right'"
                     [name]="'hsnNumber'"
                     [type]="'number'"
                     [placeholder]="'Quanitity'"
                     [id]="'quantity-per-unit'"
+                    [required]="true"
                 >
-                </text-field>
+                </input-field>
             </div>
             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 pl-2">
-                <label>Mapped Unit <span class="red-text">*</span></label>
-                <select-field [cssClass]="'form-control mat-field-border'" [placeholder]="'Choose unit'">
-                </select-field>
+                <dropdown-field [placeholder]="'Choose unit'" [required]="true"> </dropdown-field>
             </div>
             <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0">
                 <div class="inc-dec">

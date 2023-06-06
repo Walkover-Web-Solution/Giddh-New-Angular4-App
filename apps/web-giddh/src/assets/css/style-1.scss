@@ -3330,3 +3330,30 @@ input-field {
 .mat-form-field-underline {
     position: unset !important;
 }
+stock-create-edit {
+    .select-physical-product {
+        .text-field-container,
+        .product-detail-content {
+            input {
+                border: 0 !important;
+                background-color: transparent;
+            }
+        }
+    }
+    .mat-form-field-appearance-fill {
+        .mat-form-field-flex {
+            padding: 0 !important;
+        }
+    }
+}
+
+/*--- recipe ---*/
+.create-recipe {
+    .add-receipt {
+        button {
+            .mat-button-wrapper {
+                display: flex !important;
+            }
+        }
+    }
+}
