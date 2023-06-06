@@ -1,5 +1,5 @@
 .total-amount {
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 
 .customer-due-text {
@@ -11,7 +11,7 @@
 }
 
 span.month-dropdown {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     color: var(--color-abbey);
     vertical-align: top;
 }
@@ -38,18 +38,18 @@ span.month-dropdown {
 
 .dashboard-filter .icon-collapse-icon {
     margin-left: 8px;
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .due-amount {
     color: var(--color-common-primary-text);
-    font-size: 16px;
+    font-size: var(--font-size-16);
     margin: 0;
     padding: 0;
 }
 
 span.icon-rupees {
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .panel-body small {
@@ -94,12 +94,12 @@ span.icon-rupees {
 }
 @media (max-width: 360px) {
     .due-amount {
-        font-size: 14px;
+        font-size: var(--font-size-14);
         display: block;
     }
     .vendor-due-text,
     .customer-due-text {
-        font-size: 14px;
+        font-size: var(--font-size-14);
         float: none !important;
     }
     .panel-body small {

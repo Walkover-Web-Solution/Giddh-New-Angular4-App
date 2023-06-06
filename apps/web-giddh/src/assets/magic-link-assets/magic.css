@@ -130,7 +130,6 @@ radio,
 a {
     margin: 0;
     padding: 0;
-    font-size: 100%;
 }
 
 /*universal styles*/
@@ -143,7 +142,7 @@ body {
     color: #333333;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 .db {
     display: block;
@@ -550,7 +549,7 @@ body {
 }
 
 .thead {
-    font-size: 16px;
+    font-size: var(--font-size-16);
 }
 
 .scroll-item {
@@ -617,7 +616,7 @@ body {
     background: #fff !important;
 }
 #magicLink {
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .nav-link > .active {
@@ -626,19 +625,19 @@ body {
 
 #demo {
     padding-top: 25.833px;
-    font-size: 26px;
+    font-size: var(--font-size-26);
     color: #fff;
     font-weight: regular;
 }
 
 .account-name {
     font-weight: 300;
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .rec {
     font-weight: 600;
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .text-white {
@@ -670,15 +669,15 @@ body {
 }
 
 .font-12 {
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .font-16 {
-    font-size: 16px;
+    font-size: var(--font-size-16);
 }
 
 .font-18 {
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 
 .d-block {
@@ -702,11 +701,11 @@ body {
 }
 
 .head-block .vertical-center {
-    font-size: 26px;
+    font-size: var(--font-size-26);
 }
 
 .ledger-account-name {
-    font-size: 25px;
+    font-size: var(--font-size-25);
     color: #6d6e70;
 }
 
@@ -844,7 +843,7 @@ table th[class*="col-"] {
 }
 
 .header-line {
-    font-size: 30px;
+    font-size: var(--font-size-30);
     /* font-family: 'Arvo', serif; */
     color: white;
 }
@@ -852,12 +851,12 @@ table th[class*="col-"] {
 #contact p {
     margin: 0;
     line-height: 28px;
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 
 #contact label {
     color: white;
-    font-size: 18px;
+    font-size: var(--font-size-18);
     font-weight: 400;
 }
 
@@ -927,11 +926,11 @@ strong {
 }
 
 h3 {
-    font-size: 24px;
+    font-size: var(--font-size-24);
 }
 
 h4 {
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 
 #web_footer .h1,
@@ -1065,7 +1064,7 @@ body {
 
 .input-group-addon {
     padding: 6px 12px;
-    font-size: 14px;
+    font-size: var(--font-size-14);
     font-weight: 400;
     line-height: 1;
     color: #555;
@@ -1133,11 +1132,11 @@ body {
 }
 footer p {
     color: #1c1c1c;
-    font-size: 16px;
+    font-size: var(--font-size-16);
 }
 .top-footer {
     padding: 3.75rem 0;
-    font-size: 13px;
+    font-size: var(--font-size-13);
 }
 .inner-logos {
     display: flex;
@@ -1176,7 +1175,7 @@ li,
 footer .menu-item a {
     line-height: 35px;
     color: #1c1c1c;
-    font-size: 16px;
+    font-size: var(--font-size-16);
 }
 .contact_form input,
 .contact_form textarea {
@@ -1185,7 +1184,7 @@ footer .menu-item a {
     margin-bottom: 5px;
     border: 1px solid #d9d9d9;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: var(--font-size-16);
     box-shadow: none;
     border-radius: 2px;
     height: 40px;
@@ -1195,7 +1194,7 @@ footer .menu-item a {
 }
 #custom_html-2 ul li,
 #custom_html-2 ul li a {
-    font-size: 16px;
+    font-size: var(--font-size-16);
     color: #1a237e;
     line-height: 30px;
 }
@@ -1204,7 +1203,7 @@ footer .menu-item a {
     margin-top: 3rem !important;
 }
 .top-footer h4 {
-    font-size: 40px;
+    font-size: var(--font-size-40);
     color: #1a237e;
     font-weight: bold;
 }
@@ -1219,7 +1218,7 @@ footer .menu-item a {
     border: 1px solid #1a237e;
     border-radius: 25px;
     margin-top: 15px;
-    font-size: 18px;
+    font-size: var(--font-size-18);
     font-weight: bold;
     color: #1a237e;
     padding: 0px 22px;
@@ -1258,7 +1257,7 @@ footer .menu-item a {
         line-height: 28px;
     }
     :host ::ng-deep .header-line {
-        font-size: 18px;
+        font-size: var(--font-size-18);
     }
     #contact .form-control {
         background-color: transparent !important;
@@ -1298,7 +1297,7 @@ footer .menu-item a {
         display: none;
     }
     #contact .btn-lg {
-        font-size: 18px;
+        font-size: var(--font-size-18);
         letter-spacing: 1px;
         padding-left: 20px;
         padding-right: 20px;
@@ -1327,7 +1326,7 @@ footer .menu-item a {
         margin-left: 20px;
     }
     #contact .btn-lg {
-        font-size: 14px !important;
+        font-size: var(--font-size-14) !important;
         letter-spacing: 1px;
         padding-left: 10px;
         padding-right: 10px;
@@ -1348,10 +1347,10 @@ footer .menu-item a {
 
 @media (max-width: 600px) {
     #contact p {
-        font-size: 16 !important;
+        font-size: var(--font-size-16) !important;
     }
     /* .header-line {
-        font-size: 22px !important;
+        font-size: var(--font-size-22) !important;
     } */
 }
 
@@ -1385,7 +1384,7 @@ footer .menu-item a {
 
 .app_download li a {
     border: 1px solid #cc3f1c;
-    font-size: 17px;
+    font-size: var(--font-size-17);
     color: #fff;
     padding: 5px 9px;
     border-radius: 2px;

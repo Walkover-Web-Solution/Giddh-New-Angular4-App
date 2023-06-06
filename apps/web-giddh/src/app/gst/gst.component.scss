@@ -111,7 +111,7 @@ svg.icon.gstr-icon {
 }
 
 .font-xs {
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .return-body b {
@@ -140,7 +140,7 @@ svg.icon.gstr-icon {
 }
 
 .font-xxxlarge {
-    font-size: 24px;
+    font-size: var(--font-size-24);
 }
 
 .bottom-action,
@@ -221,7 +221,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .font-medium {
-    font-size: 15px;
+    font-size: var(--font-size-15);
 }
 
 .label-default {
@@ -246,7 +246,7 @@ hr {
 
 .filing-due-date .return-details > table {
     width: 100%;
-    font-size: 13px;
+    font-size: var(--font-size-13);
 }
 
 .filing-due-date .return-details > table > tbody > tr > td:first-child {
@@ -275,7 +275,7 @@ hr {
 }
 
 .return-body .notification .notify-title {
-    font-size: 13px;
+    font-size: var(--font-size-13);
     color: var(--color-gray);
 }
 
@@ -325,7 +325,7 @@ hr {
 }
 
 .font-normal {
-    font-size: 13px;
+    font-size: var(--font-size-13);
     color: var(--color-abbey);
 }
 
@@ -336,7 +336,7 @@ hr {
 .return-body .notification .faq-list li {
     padding: 6px 10px;
     color: var(--color-blue);
-    font-size: 13px;
+    font-size: var(--font-size-13);
 }
 
 .return-body .notification .faq-list li a:hover {
@@ -515,7 +515,7 @@ hr {
         background-color: var(--color-white);
     }
     .filing-steps .font-large {
-        font-size: 14px;
+        font-size: var(--font-size-14);
     }
     .return-content .content-graph {
         padding: 15px 0;

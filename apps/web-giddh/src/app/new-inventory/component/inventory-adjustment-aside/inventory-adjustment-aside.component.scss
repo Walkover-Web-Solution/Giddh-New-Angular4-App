@@ -15,7 +15,7 @@
     z-index: 9999999;
     background-color: transparent;
     color: var(--color-white);
-    font-size: 17px;
+    font-size: var(--font-size-17);
     top: 18px;
     margin-right: 0;
     border: 0;
@@ -80,7 +80,7 @@
     }
     ul {
         list-style: none;
-        font-size: 14px;
+        font-size: var(--font-size-14);
         line-height: 30px;
         color: var(--color-nero);
     }

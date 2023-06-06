@@ -63,7 +63,7 @@
 }
 
 .icon-pointer .font-xxs {
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .account-detail-modal-header {
@@ -104,7 +104,7 @@ button.mat-menu-item {
 
 .account-detail-custom-title {
     font-family: var(--font-semibold) !important;
-    font-size: 16px !important;
+    font-size: var(--font-size-16) !important;
     word-break: break-word !important;
     margin-top: 5%;
 }
@@ -120,7 +120,7 @@ button.mat-menu-item {
 .custom-detail h4 {
     color: var(--color-abbey);
     margin-top: 7px;
-    font-size: 14px !important;
+    font-size: var(--font-size-14) !important;
     font-family: var(--font-regular) !important;
 }
 
@@ -217,7 +217,7 @@ tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer
 
 .position-relative.word-wrap {
     .table-menu-first-td {
-        font-size: 14px;
+        font-size: var(--font-size-14);
         vertical-align: middle;
         display: none;
         color: var(--color-primary-contact-icon-dots-three-vertical);
@@ -307,7 +307,7 @@ i.icon-options {
     border: 1px solid var(--color-secondary-input-bar-border);
     background-color: var(--color-white);
     color: var(--color-primary-input-bar-text);
-    font-size: 20px;
+    font-size: var(--font-size-20);
     padding: 0;
     display: flex;
     justify-content: center;
@@ -346,7 +346,7 @@ span.input-addon {
     padding: 4px 9px;
     background-color: var(--color-blue);
     color: var(--color-white);
-    font-size: 18px;
+    font-size: var(--font-size-18);
     border-radius: 5px;
     height: 36px;
     top: 0;
@@ -405,7 +405,7 @@ span.input-addon {
 button.btn.btn-filter {
     background: var(--color-dark-fog);
     border: 1px solid var(--color-dark-fog);
-    font-size: 14px;
+    font-size: var(--font-size-14);
     color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
@@ -468,12 +468,12 @@ button.btn.btn-filter span.icon-cross {
 .total-customer-vendor-count {
     color: var(--color-primary-contact-total-customer-vendor-count) !important;
     font-weight: 400 !important;
-    font-size: 12px !important;
+    font-size: var(--font-size-12) !important;
     letter-spacing: 1px;
 
     strong {
         color: var(--color-giddh-blue) !important;
-        font-size: 16px;
+        font-size: var(--font-size-16);
     }
 }
 
@@ -487,7 +487,7 @@ button.btn.btn-filter span.icon-cross {
 
 .icon-search,
 .icon-sort-asc {
-    font-size: 16px !important;
+    font-size: var(--font-size-16) !important;
 }
 
 .mat-icon-button {
@@ -798,7 +798,7 @@ button.btn.btn-filter span.icon-cross {
         display: block;
     }
     .top-aging-table-top {
-        font-size: 14px;
+        font-size: var(--font-size-14);
         padding: 8px 3px !important;
     }
     .advance-icon {
@@ -814,7 +814,7 @@ button.btn.btn-filter span.icon-cross {
 
 @media (max-width: 414px) {
     .top-aging-table-top {
-        font-size: 14px;
+        font-size: var(--font-size-14);
     }
 }
 
@@ -927,7 +927,7 @@ button.btn.btn-filter span.icon-cross {
     position: absolute;
     right: 9px;
     top: 9px;
-    font-size: 25px;
+    font-size: var(--font-size-25);
     color: var(--color-popup-list-head-text);
 }
 .min-width-230 {

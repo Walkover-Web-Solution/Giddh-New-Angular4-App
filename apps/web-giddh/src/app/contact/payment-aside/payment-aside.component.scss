@@ -29,21 +29,21 @@
     line-height: 1.6;
 }
 .creditors-detail > p {
-    font-size: 16px;
+    font-size: var(--font-size-16);
     color: var(--color-primary-payment-aside-creditors-detail);
 }
 .creditors-detail span.red-text {
     color: var(--color-danger);
 }
 .contact-details p {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     color: var(--color-primary-payment-aside-contact-details);
 }
 .account-details {
     padding: 10px 0;
 }
 form label {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     margin-bottom: 0;
 }
 .account-details .btn-default {
@@ -102,7 +102,7 @@ form label {
     }
     .otp-success-msg {
         color: var(--color-teal);
-        font-size: 14px;
+        font-size: var(--font-size-14);
     }
 }
 .selected-bank-details {
@@ -111,7 +111,7 @@ form label {
     margin-top: 5px;
     .account-holder-name {
         display: flex;
-        font-size: 14px;
+        font-size: var(--font-size-14);
         .due-amount {
             max-width: 100%;
             width: 100%;
@@ -134,7 +134,7 @@ form label {
         .readonly-bank-details {
             width: 100%;
             max-width: 450px;
-            font-size: 14px;
+            font-size: var(--font-size-14);
             background-color: var(--color-dark-fog);
             padding: 10px;
             border-right: 1px solid var(--color-common-secondary-border);

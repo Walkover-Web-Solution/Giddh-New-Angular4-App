@@ -34,7 +34,7 @@
             padding: 5px 20px;
             border-radius: 30px;
             height: 36px;
-            font-size: 14px;
+            font-size: var(--font-size-14);
         }
     }
     .mobile-item-wrapper {
@@ -76,14 +76,14 @@
                     border-radius: 5px;
                 }
                 i {
-                    font-size: 20px;
+                    font-size: var(--font-size-20);
                     display: block;
                     color: var(--color-giddh-blue);
                 }
             }
             .mobile-item-name {
                 h4 {
-                    font-size: 10px;
+                    font-size: var(--font-size-10);
                     color: var(--color-giddh-blue);
                     text-align: center;
                     font-family: var(--font-semibold);
@@ -130,18 +130,18 @@
             .group-icon {
                 padding-right: 10px;
                 color: var(--color-abbey);
-                font-size: 12px;
+                font-size: var(--font-size-12);
                 .icon-account {
-                    font-size: 11px;
+                    font-size: var(--font-size-11);
                 }
             }
             .group-name {
                 h4 {
-                    font-size: 12px;
+                    font-size: var(--font-size-12);
                     color: var(--color-nero);
                 }
                 p {
-                    font-size: 10px;
+                    font-size: var(--font-size-10);
                     color: var(--color-abbey);
                 }
             }
@@ -153,7 +153,7 @@
                 }
                 .account-unique-name {
                     color: var(--color-abbey);
-                    font-size: 10px;
+                    font-size: var(--font-size-10);
                 }
             }
         }
@@ -198,7 +198,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 13px;
+        font-size: var(--font-size-13);
         color: var(--color-white);
         letter-spacing: -1px;
         p {
@@ -271,7 +271,7 @@
                 padding: 0 0 !important;
                 border-radius: 0;
                 height: auto !important;
-                font-size: 14px;
+                font-size: var(--font-size-14);
                 background-color: transparent !important;
                 display: inline-block;
                 &:focus {
@@ -285,7 +285,7 @@
         flex-wrap: wrap;
         width: 90%;
         .item-search-wrapper {
-            font-size: 14px;
+            font-size: var(--font-size-14);
             padding-left: 0;
             white-space: nowrap;
         }
@@ -309,7 +309,7 @@
     opacity: 0;
     visibility: hidden;
     i {
-        font-size: 20px;
+        font-size: var(--font-size-20);
         transform: rotate(180deg);
     }
 }

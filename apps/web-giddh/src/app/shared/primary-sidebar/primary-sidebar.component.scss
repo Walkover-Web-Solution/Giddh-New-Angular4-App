@@ -58,7 +58,7 @@
             }
             .icon-cross {
                 display: flex;
-                font-size: 12px;
+                font-size: var(--font-size-12);
                 color: var(--color-sidebar-content-text);
             }
             .head-nav {
@@ -82,13 +82,13 @@
                 align-items: center;
                 white-space: nowrap;
                 letter-spacing: -2px;
-                font-size: 13px !important;
+                font-size: var(--font-size-13) !important;
                 color: var(--color-sidebar-content-text);
             }
             .company-full-name {
                 white-space: normal;
                 word-break: break-word;
-                font-size: 14px;
+                font-size: var(--font-size-14);
                 padding-left: 5px;
                 .icon-branch-connect {
                     position: absolute;
@@ -107,7 +107,7 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                     font-family: var(--font-regular);
-                    font-size: 13px;
+                    font-size: var(--font-size-13);
                     margin-left: 18px;
                     margin-top: 7px;
                 }
@@ -172,7 +172,7 @@
             }
         }
         .input-group-append {
-            font-size: 12px;
+            font-size: var(--font-size-12);
             color: var(--color-sidebar-search-bar-text);
             right: 10px;
             top: 0;
@@ -205,7 +205,7 @@
             p {
                 display: block;
                 i {
-                    font-size: 18px;
+                    font-size: var(--font-size-18);
                     color: var(--color-primary-sidebar-account-collapse-i);
                 }
             }
@@ -231,7 +231,7 @@
                     &.show-more {
                         color: var(--color-primary-sidebar-show-more);
                         text-decoration: underline;
-                        font-size: 12px;
+                        font-size: var(--font-size-12);
                     }
                     &:hover {
                         color: var(--color-sidebar-anchor-text-hover);
@@ -311,7 +311,7 @@
                             display: flex;
                             align-items: center;
                             i {
-                                font-size: 22px;
+                                font-size: var(--font-size-22);
                                 margin-right: 10px;
                             }
                         }
@@ -363,7 +363,7 @@
                                 padding: 10px 0 10px 50px;
 
                                 i {
-                                    font-size: 22px;
+                                    font-size: var(--font-size-22);
                                     margin-right: 10px;
                                 }
                                 &.active {
@@ -404,7 +404,7 @@
             position: absolute;
             top: 70px;
             right: -10px;
-            font-size: 12px;
+            font-size: var(--font-size-12);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -469,7 +469,7 @@
                         margin-top: 15px;
                         font-family: var(--font-semibold);
                         letter-spacing: 0;
-                        font-size: 16px;
+                        font-size: var(--font-size-16);
                         height: 36px;
                         width: 36px;
                         min-width: 45px;
@@ -486,7 +486,7 @@
                     margin-top: 15px;
                     font-family: var(--font-semibold);
                     letter-spacing: 0;
-                    font-size: 16px;
+                    font-size: var(--font-size-16);
                     height: 36px;
                     width: 36px;
                 }
@@ -599,7 +599,7 @@
                                     display: none;
                                 }
                                 i {
-                                    font-size: 22px;
+                                    font-size: var(--font-size-22);
                                     margin-right: 0px !important;
                                     width: 22px !important;
                                     height: 20px;
@@ -673,13 +673,13 @@
                         }
                         span {
                             i {
-                                font-size: 20px;
+                                font-size: var(--font-size-20);
                                 color: var(--color-primary-sidebar-account-dropdown-i);
                                 transform: none;
                             }
                         }
                         i {
-                            font-size: 14px;
+                            font-size: var(--font-size-14);
                             display: inline-flex;
                             color: var(--color-primary-sidebar-account-dropdown-i);
                             width: 14px;

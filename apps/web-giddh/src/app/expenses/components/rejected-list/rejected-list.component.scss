@@ -5,13 +5,13 @@
 .search-icon {
     position: absolute;
     right: 12px;
-    font-size: 11px;
+    font-size: var(--font-size-11);
     color: var(--color-abbey);
     top: 13px;
 }
 
 .arrow-filter {
-    font-size: 11px;
+    font-size: var(--font-size-11);
     position: absolute;
     right: 10px;
     color: var(--color-gray);
@@ -25,7 +25,7 @@
     display: inline-block;
     padding: 0px 8px;
     color: var(--color-abbey);
-    font-size: 16px;
+    font-size: var(--font-size-16);
     cursor: pointer;
     display: inline-flex;
     justify-content: center;
@@ -40,7 +40,7 @@
 }
 
 .btn-icon .icon-trash {
-    font-size: 20px;
+    font-size: var(--font-size-20);
 }
 .icon-pointer .active-text-color {
     color: var(--color-blue) !important;

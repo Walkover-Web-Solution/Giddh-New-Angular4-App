@@ -160,10 +160,10 @@ section.billing-address-wrap {
 .aqua-color {
     a {
         color: var(--color-blue);
-        font-size: 12px;
+        font-size: var(--font-size-12);
     }
     i {
-        font-size: 16px;
+        font-size: var(--font-size-16);
     }
     &.blnc-drop {
         margin-top: -5px;
@@ -196,7 +196,7 @@ input.mat-input-element {
 }
 
 .switch-currency {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     color: var(--color-nero);
     max-width: 1000px;
     text-align: right;
@@ -370,7 +370,7 @@ input.form-control.edit-currency {
     background: transparent !important;
     box-shadow: none !important;
     border-radius: 0 !important;
-    font-size: 24px;
+    font-size: var(--font-size-24);
     color: var(--color-blue);
     padding: 15px;
 }

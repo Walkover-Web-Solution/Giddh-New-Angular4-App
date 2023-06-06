@@ -14,7 +14,7 @@
 .page-title-inventory {
     font-weight: bold;
     color: var(--color-giddh-blue);
-    font-size: 16px;
+    font-size: var(--font-size-16);
 }
 
 .create-new-inventory-page {
@@ -38,7 +38,7 @@
         justify-content: space-between;
         border-bottom: 1px solid var(--color-common-primary-border);
         margin-bottom: 15px;
-        font-size: 14px;
+        font-size: var(--font-size-14);
         padding-bottom: 5px;
 
         img {
@@ -65,7 +65,7 @@
                 position: absolute;
                 left: 18px;
                 top: 35px;
-                font-size: 12px;
+                font-size: var(--font-size-12);
                 z-index: 1;
                 font-weight: 600;
                 width: auto;
@@ -79,7 +79,7 @@
                     font-family: var(--font-regular);
                     position: relative;
                     cursor: pointer;
-                    font-size: 12px;
+                    font-size: var(--font-size-12);
                 }
             }
 
@@ -87,7 +87,7 @@
                 color: var(--color-gray);
                 position: absolute;
                 right: -20px;
-                font-size: 20px;
+                font-size: var(--font-size-20);
                 top: -5px;
                 z-index: 1;
             }
@@ -167,7 +167,7 @@
             }
 
             .inventory-category-field-input::placeholder {
-                font-size: 14px;
+                font-size: var(--font-size-14);
                 color: var(--color-common-primary-input-placeholder);
             }
 
@@ -421,13 +421,13 @@ table.stock-table {
         align-items: center;
         border-radius: 40px;
         color: var(--color-abbey);
-        font-size: 17px;
+        font-size: var(--font-size-17);
     }
 
     .delete-tb-tr-icon {
         position: absolute;
         right: -50px;
-        font-size: 16px;
+        font-size: var(--font-size-16);
         border: 1px solid var(--color-gray);
         line-height: 1;
         height: 29px;
@@ -474,7 +474,7 @@ table.stock-table {
 
                 i {
                     vertical-align: top;
-                    font-size: 20px;
+                    font-size: var(--font-size-20);
                     color: var(--color-abbey);
                 }
             }

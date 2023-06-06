@@ -1,6 +1,6 @@
 .template-editor h3 i {
     margin-right: 9px;
-    font-size: 22px;
+    font-size: var(--font-size-22);
 }
 .upload-button {
     background: var(--color-white);
@@ -41,7 +41,7 @@ label.upload-button {
     margin: -6px 0px 7px 7px !important;
 }
 .collapse-icons {
-    font-size: 12px !important;
+    font-size: var(--font-size-12) !important;
     border: 1px solid var(--color-nero);
     border-radius: 4px;
     padding: 2px;

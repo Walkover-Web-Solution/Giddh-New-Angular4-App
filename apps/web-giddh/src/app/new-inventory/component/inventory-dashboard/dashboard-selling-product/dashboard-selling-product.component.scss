@@ -29,7 +29,7 @@
                 align-items: center;
                 label {
                     min-width: 200px;
-                    font-size: 14px;
+                    font-size: var(--font-size-14);
                 }
                 .progress-bar {
                     background-color: var(--color-solitude-light);
@@ -69,7 +69,7 @@
                     align-items: flex-start;
                     label {
                         min-width: 100%;
-                        font-size: 14px;
+                        font-size: var(--font-size-14);
                     }
                     .progress-bar {
                         border-radius: 10px 10px;

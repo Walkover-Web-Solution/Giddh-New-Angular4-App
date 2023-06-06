@@ -22,7 +22,7 @@ input.form-control.date-range-picker {
     cursor: pointer;
 }
 .collapse-icons {
-    font-size: 10px;
+    font-size: var(--font-size-10);
     border: 1px solid var(--color-blue);
     border-radius: 4px;
     padding: 2px;

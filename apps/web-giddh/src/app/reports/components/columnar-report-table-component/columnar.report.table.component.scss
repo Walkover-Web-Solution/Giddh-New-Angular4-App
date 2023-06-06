@@ -1,12 +1,12 @@
 .invoice-footer {
     h3 {
-        font-size: 16px;
+        font-size: var(--font-size-16);
         color: var(--color-gray);
         display: inline-block;
         margin-right: 10px;
     }
     h1 {
-        font-size: 28px;
+        font-size: var(--font-size-28);
         color: var(--color-nero);
         display: inline-block;
     }
@@ -38,12 +38,12 @@
     border-right: 1px solid var(--color-iron);
     color: var(--color-gray);
     left: 0;
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 .btn-filter {
     background: var(--color-dark-fog);
     border: 1px solid var(--color-iron);
-    font-size: 16px;
+    font-size: var(--font-size-16);
     color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;

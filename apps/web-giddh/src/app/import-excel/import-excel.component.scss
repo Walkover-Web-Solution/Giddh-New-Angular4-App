@@ -59,7 +59,7 @@
 }
 
 .upload-icon {
-    font-size: 62px;
+    font-size: var(--font-size-62);
     float: none;
     color: var(--color-dark-fog);
 }
@@ -104,7 +104,7 @@
 }
 
 .lead {
-    font-size: 36px;
+    font-size: var(--font-size-36);
     margin-bottom: 10px;
 }
 

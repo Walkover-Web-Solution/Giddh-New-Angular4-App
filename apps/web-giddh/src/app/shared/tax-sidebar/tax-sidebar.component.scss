@@ -31,7 +31,7 @@
                                 i {
                                     color: var(--color-sidebar-create-company-list-text);
                                     margin-right: 10px;
-                                    font-size: 20px;
+                                    font-size: var(--font-size-20);
                                 }
                             }
                             &.disabled {
@@ -68,7 +68,7 @@
     ul {
         padding: 0;
         list-style: none;
-        font-size: 14px;
+        font-size: var(--font-size-14);
         font-family: var(--font-semibold);
         color: var(--color-primary-tax-sidebar-gst-menu-items-ul);
         li {
