@@ -1334,8 +1334,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 return rate.stockUnitUniqueName === this.currentTxn.inventory.unit.uniqueName;
             });
             const stockRate = stock ? stock.rate : 0;
-            this.currentTxn.inventory.rate = Number((stockRate / this.blankLedger?.exchangeRate).toFixed(this.ratePrecision));
-            this.changePrice(this.currentTxn.inventory.rate);
+            // this.currentTxn.inventory.rate = Number((stockRate / this.blankLedger?.exchangeRate).toFixed(this.ratePrecision));
+            this.changePrice(String(stockRate));
         } else {
             this.amountChanged();
             this.calculateTotal();
