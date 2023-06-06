@@ -19,6 +19,7 @@
             (keydown.enter)="$event.preventDefault()"
             (clickOutside)="closeDropdownPanel()"
             matAutocompletePosition="auto"
+            [required]="required"
         />
         <mat-autocomplete
             autoActiveFirstOption
