@@ -16,7 +16,7 @@
     z-index: 9999999;
     background-color: transparent;
     color: var(--color-primary-right-side-popup-header-text);
-    font-size: 17px;
+    font-size: var(--font-size-17);
     top: 16px;
     margin-right: 0;
     border: 0;
@@ -129,7 +129,7 @@
                     padding: 14px;
 
                     i {
-                        font-size: 18px;
+                        font-size: var(--font-size-18);
                     }
                 }
 
@@ -139,13 +139,13 @@
                     width: 100%;
 
                     h4 {
-                        font-size: 16px;
+                        font-size: var(--font-size-16);
                         font-family: var(--font-semibold);
                         margin-bottom: 5px;
                     }
 
                     p {
-                        font-size: 14px;
+                        font-size: var(--font-size-14);
                     }
                 }
             }
@@ -238,12 +238,12 @@
     .create-group-text-content {
         label {
             font-weight: 600;
-            font-size: 16px;
+            font-size: var(--font-size-16);
             margin-bottom: 5px;
         }
 
         p {
-            font-size: 14px;
+            font-size: var(--font-size-14);
             white-space: normal;
         }
     }

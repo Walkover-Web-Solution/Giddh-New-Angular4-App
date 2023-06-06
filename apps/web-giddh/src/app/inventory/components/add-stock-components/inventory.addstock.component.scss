@@ -45,7 +45,7 @@
         border-bottom: 1px solid var(--color-iron);
     }
     .new-custom-btn {
-        font-size: 12px;
+        font-size: var(--font-size-12);
         color: var(--color-blue);
         padding-top: 30px;
         cursor: pointer;
@@ -67,7 +67,7 @@ tr.fsstock td {
 .table-label strong {
     color: var(--color-nero);
     font-weight: normal !important;
-    font-size: 14px;
+    font-size: var(--font-size-14);
     font-family: var(--font-regular);
 }
 .input-label-stock {
@@ -81,7 +81,7 @@ tr.fsstock td {
     z-index: 9999999;
     background-color: transparent;
     color: var(--color-primary-right-side-popup-header-text);
-    font-size: 17px;
+    font-size: var(--font-size-17);
     top: 18px;
     margin-right: 0;
     border: 0;
@@ -98,7 +98,7 @@ tr.fsstock td {
 }
 
 .collapse-icons {
-    font-size: 10px;
+    font-size: var(--font-size-10);
     border: 1px solid var(--color-blue);
     border-radius: 4px;
     padding: 2px;

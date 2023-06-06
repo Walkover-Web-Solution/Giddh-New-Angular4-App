@@ -97,11 +97,11 @@
         padding: 41px;
         h2 {
             color: var(--color-gray);
-            font-size: 20px;
+            font-size: var(--font-size-20);
             margin-bottom: 10px;
         }
         h1 {
-            font-size: 32px;
+            font-size: var(--font-size-32);
         }
     }
 }
@@ -133,7 +133,7 @@
     margin-top: 200px;
 }
 .btn-download {
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 .btn-group.open.show {
     display: inline-flex !important;
@@ -196,7 +196,7 @@
     li {
         color: var(--color-nero);
         padding: 3px 7px !important;
-        font-size: 12px;
+        font-size: var(--font-size-12);
     }
     li:last-child {
         border: none;
@@ -245,19 +245,19 @@ button[aria-expanded="true"] i {
             min-width: 120px;
         }
         .operators {
-            font-size: 39px;
+            font-size: var(--font-size-39);
             color: var(--color-gray);
         }
         h2 {
-            font-size: 18px;
+            font-size: var(--font-size-18);
             line-height: 20px;
         }
         h3 {
-            font-size: 14px;
+            font-size: var(--font-size-14);
             line-height: 20px;
         }
         h4 {
-            font-size: 14px;
+            font-size: var(--font-size-14);
             line-height: 20px;
         }
     }
@@ -284,7 +284,7 @@ button[aria-expanded="true"] i {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
+    font-size: var(--font-size-18);
     margin-left: 10px;
     border: 1px solid var(--color-iron);
     border-radius: 5px;
@@ -304,7 +304,7 @@ button[aria-expanded="true"] i {
 button.btn.btn-filter {
     background: var(--color-dark-fog);
     border: 1px solid var(--color-iron);
-    font-size: 14px;
+    font-size: var(--font-size-14);
     color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
@@ -315,7 +315,7 @@ button.btn.btn-filter {
     text-transform: none;
 }
 .head-report {
-    font-size: 20px;
+    font-size: var(--font-size-20);
     font-weight: bold;
     text-transform: capitalize;
 }
@@ -378,7 +378,7 @@ button.btn.btn-filter {
     .wrap-head-report {
         width: 55%;
         .head-report {
-            font-size: 16px;
+            font-size: var(--font-size-16);
             white-space: normal;
             word-break: break-all;
         }
@@ -395,10 +395,10 @@ button.btn.btn-filter {
         display: none;
     }
     .head-report {
-        font-size: 16px;
+        font-size: var(--font-size-16);
     }
     .btn-link {
-        font-size: 12px;
+        font-size: var(--font-size-12);
         margin-right: 0 !important;
         margin-top: 0 !important;
     }

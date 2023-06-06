@@ -19,7 +19,7 @@
     z-index: 9999999;
     background-color: transparent;
     color: var(--color-white);
-    font-size: 17px;
+    font-size: var(--font-size-17);
     top: 18px;
     margin-right: 0;
     border: 0;
@@ -32,7 +32,7 @@
     z-index: 9999999;
     background-color: transparent;
     color: var(--color-white);
-    font-size: 17px;
+    font-size: var(--font-size-17);
     top: 18px;
     margin-right: 0;
     border: 0;
@@ -61,7 +61,7 @@
     position: relative;
     margin-top: 15px;
     .single-history-block {
-        font-size: 14px;
+        font-size: var(--font-size-14);
         border-bottom: 1px solid var(--color-iron);
         padding-bottom: 5px;
         margin-bottom: 10px;

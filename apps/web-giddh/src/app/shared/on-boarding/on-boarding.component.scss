@@ -16,7 +16,7 @@ label .required {
 }
 
 .modal-body p {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     color: var(--color-primary-on-boarding-modal-body-p);
     text-align: center;
     margin-left: -28px;
@@ -49,7 +49,7 @@ label .required {
     }
 }
 .welcome-header h1 {
-    font-size: 30px;
+    font-size: var(--font-size-30);
     font-family: var(--font-regular);
     color: var(--color-giddh-blue);
 }
@@ -68,7 +68,7 @@ label .required {
 
 .name-error {
     color: var(--color-danger);
-    font-size: 11px;
+    font-size: var(--font-size-11);
     float: right;
 }
 
@@ -89,7 +89,7 @@ label .required {
         display: block;
     }
     .welcome-header h1 {
-        font-size: 20px !important;
+        font-size: var(--font-size-20) !important;
     }
     .welcome-wrapper {
         padding: 15px 0;

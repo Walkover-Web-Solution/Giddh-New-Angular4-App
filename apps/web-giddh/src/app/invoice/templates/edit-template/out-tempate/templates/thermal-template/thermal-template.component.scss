@@ -35,7 +35,7 @@
     border-bottom: 1px dashed;
     padding-bottom: 15px;
     margin-top: 11px;
-    font-size: 18px;
+    font-size: var(--font-size-18);
     font-weight: bold;
 }
 * {
@@ -56,11 +56,11 @@
 }
 
 .font-11 {
-    font-size: 11px !important;
+    font-size: var(--font-size-11) !important;
 }
 
 .font-10 {
-    font-size: 10px !important;
+    font-size: var(--font-size-10) !important;
 }
 
 .pb-1 {
@@ -75,11 +75,11 @@ p {
 }
 /* heading */
 #thermal_template header h1 {
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 #thermal_template header h2 {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     font-weight: bold;
 }
 .invdate {
@@ -118,7 +118,7 @@ p {
 
 #thermal_template body {
     box-sizing: border-box;
-    font-size: 12px;
+    font-size: var(--font-size-12);
     margin: 0 auto;
     overflow: hidden;
     padding: 0.1in;
@@ -356,7 +356,7 @@ header img {
 }
 
 #thermal_template .subfooter h4 {
-    font-size: 16px;
+    font-size: var(--font-size-16);
     margin: 0;
 }
 
@@ -480,7 +480,7 @@ strong {
     white-space: pre-line;
     line-height: 1.2em;
     text-align: center;
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .inner {

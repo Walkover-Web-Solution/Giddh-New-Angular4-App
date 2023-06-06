@@ -42,7 +42,7 @@ export class DaterangepickerConfig {
                       .daterangepicker th{text-align:center;width:20px;height:20px;border-radius:4px;border:1px solid transparent;
                         white-space:nowrap;cursor:pointer}.daterangepicker td.available:hover,
                         .daterangepicker th.available:hover{background-color:#eee;border-color:transparent;color:inherit}
-                        .daterangepicker td.week,.daterangepicker th.week{font-size:80%;color:#ccc}.daterangepicker td.off,
+                        .daterangepicker td.week,.daterangepicker th.week{font-size:var(--font-size-13);color:#ccc}.daterangepicker td.off,
                         .daterangepicker td.off.end-date,.daterangepicker td.off.in-range,
                         .daterangepicker td.off.start-date{background-color:#fff;border-color:transparent;color:#999}
                         .daterangepicker td.in-range{background-color:#ebf4f8;border-color:transparent;color:#000;border-radius:0}
@@ -52,7 +52,7 @@ export class DaterangepickerConfig {
                         .daterangepicker td.active:hover{background-color:#357ebd;border-color:transparent;color:#fff}
                         .daterangepicker th.month{width:auto}.daterangepicker option.disabled,
                         .daterangepicker td.disabled{color:#999;cursor:not-allowed;text-decoration:line-through}
-                        .daterangepicker select.monthselect,.daterangepicker select.yearselect{font-size:12px;padding:1px;height:auto;
+                        .daterangepicker select.monthselect,.daterangepicker select.yearselect{font-size:var(--font-size-12);padding:1px;height:auto;
                           margin:0;cursor:default}.daterangepicker select.monthselect{margin-right:2%;width:56%}
                           .daterangepicker select.yearselect{width:40%}.daterangepicker select.ampmselect,
                           .daterangepicker select.hourselect,.daterangepicker select.minuteselect,
@@ -66,8 +66,8 @@ export class DaterangepickerConfig {
                             .daterangepicker.rtl .daterangepicker_input i{left:auto;right:8px}
                             .daterangepicker .calendar-time{text-align:center;margin:5px auto;line-height:30px;position:relative;
                               padding-left:28px}.daterangepicker .calendar-time select.disabled{color:#ccc;cursor:not-allowed}
-                              .ranges{font-size:11px;margin:4px;text-align:left}.ranges ul{list-style:none;margin:0 auto;padding:0;
-                                width:100%}.ranges li{font-size:13px;background:#f5f5f5;border:1px solid #f5f5f5;border-radius:4px;
+                              .ranges{font-size:var(--font-size-11);margin:4px;text-align:left}.ranges ul{list-style:none;margin:0 auto;padding:0;
+                                width:100%}.ranges li{font-size:var(--font-size-13);background:#f5f5f5;border:1px solid #f5f5f5;border-radius:4px;
                                   color:#08c;padding:3px 12px;margin-bottom:8px;cursor:pointer}
                                   .ranges li.active,.ranges li:hover{background:#08c;border:1px solid #08c;color:#fff}
                                   @media (min-width:564px){.daterangepicker.ltr .calendar.right .calendar-table,.daterangepicker.rtl

@@ -17,7 +17,7 @@ body.unresponsive {
 
 .btn-lg {
     padding: 10px 16px;
-    font-size: 16px;
+    font-size: var(--font-size-16);
     line-height: 1.3333333;
 }
 
@@ -31,7 +31,7 @@ body.unresponsive {
 
 .modal-header h3 {
     color: var(--color-white);
-    font-size: 1.3rem;
+    font-size: var(--font-size-20);
 }
 
 .login {
@@ -40,7 +40,7 @@ body.unresponsive {
 
 .login .brand-heading {
     color: var(--color-white);
-    font-size: 40px;
+    font-size: var(--font-size-40);
     margin-bottom: 80px;
 }
 
@@ -168,7 +168,7 @@ body.unresponsive {
 
 .intro .lead {
     text-align: center;
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 
 .btn-login.btn-default {
@@ -198,7 +198,7 @@ body.unresponsive {
 
 button.close {
     float: right;
-    font-size: 21px;
+    font-size: var(--font-size-21);
     font-weight: 700;
     line-height: 1;
     color: var(--color-white);
@@ -217,13 +217,13 @@ button.close {
 .form-control,
 :host ::ng-deep .form-control {
     height: 41px;
-    font-size: 16px;
+    font-size: var(--font-size-16);
     color: var(--color-primary-login-signup-input-box) !important;
 }
 
 :host ::ng-deep .clear {
     top: 50% !important;
-    font-size: 22px !important;
+    font-size: var(--font-size-22) !important;
     right: 6px !important;
 }
 
@@ -240,7 +240,7 @@ strong {
 }
 
 h1 {
-    font-size: 24px;
+    font-size: var(--font-size-24);
 }
 
 .slide-content {
@@ -290,7 +290,7 @@ small {
     line-height: 40px;
     text-align: center;
     position: relative;
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .google-ico span {
@@ -338,7 +338,7 @@ small {
 }
 
 .slide-content h1 {
-    font-size: 24px;
+    font-size: var(--font-size-24);
     text-align: left;
     font-weight: 500;
     line-height: 34px;
@@ -370,7 +370,7 @@ small {
 }
 
 .feature-list li > p {
-    font-size: 20px;
+    font-size: var(--font-size-20);
     text-align: left;
 }
 
@@ -392,13 +392,13 @@ small {
 }
 
 .client-testimonial p {
-    font-size: 20px;
+    font-size: var(--font-size-20);
     margin-bottom: 10px;
     text-align: left;
 }
 
 .client-testimonial h4 {
-    font-size: 20px;
+    font-size: var(--font-size-20);
 }
 
 .hash-tag {
@@ -416,7 +416,7 @@ small {
 }
 
 .hint ul {
-    font-size: 13px;
+    font-size: var(--font-size-13);
     padding: 7px;
     padding-left: 18px;
 }
@@ -500,7 +500,7 @@ small {
 }
 .accounting-space h4 {
     color: var(--color-primary-login-box-body-text);
-    font-size: 20px;
+    font-size: var(--font-size-20);
 }
 .btn-outline-primary {
     background-color: var(--color-blue);
@@ -509,7 +509,7 @@ small {
     border-radius: 5px;
     color: var(--color-white);
     margin-bottom: 10px;
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
@@ -519,7 +519,7 @@ small {
 }
 .login-with {
     color: var(--color-primary-login-box-body-text);
-    font-size: 14px;
+    font-size: var(--font-size-14);
     margin-top: 10px;
     a {
         color: var(--color-primary-login-box-body-text);

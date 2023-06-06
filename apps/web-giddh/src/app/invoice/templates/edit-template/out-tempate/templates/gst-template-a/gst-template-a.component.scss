@@ -16,16 +16,16 @@
 }
 
 .font-11 {
-    font-size: 11px !important;
+    font-size: var(--font-size-11) !important;
 }
 
 .font-10 {
-    font-size: 10px !important;
+    font-size: var(--font-size-10) !important;
 }
 
 /*
   .font-12 {
-  font-size: 12px !important;
+  font-size: var(--font-size-12) !important;
   } */
 .pb-1 {
     padding-bottom: 10px;
@@ -40,12 +40,12 @@ p {
 /* heading */
 #default header h1 {
     /* color: #df4927; */
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 #default header h2 {
     /* color: #df4927; */
-    font-size: 14px;
+    font-size: var(--font-size-14);
     font-weight: bold;
 }
 /* table */
@@ -68,7 +68,7 @@ p {
 
 #default body {
     box-sizing: border-box;
-    font-size: 12px;
+    font-size: var(--font-size-12);
     margin: 0 auto;
     overflow: hidden;
     padding: 0.1in;
@@ -276,7 +276,7 @@ header img {
 
 /* #default table.item tr th,
   #default table.item tfoot tr th {
-  font-size: 10px;
+  font-size: var(--font-size-10);
   } */
 
 #default table.item td {
@@ -302,7 +302,7 @@ header img {
     width: 50%;
     text-align: right;
     padding: 0 2px;
-    /* font-size: 11px; */
+    /* font-size: var(--font-size-11); */
 }
 
 /* aside */
@@ -481,7 +481,7 @@ strong {
     white-space: pre-line;
     line-height: 1.2em;
     text-align: center;
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .inner {

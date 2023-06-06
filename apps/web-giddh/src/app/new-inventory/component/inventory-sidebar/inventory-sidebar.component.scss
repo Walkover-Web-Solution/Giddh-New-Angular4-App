@@ -25,7 +25,7 @@
                 bottom: 25px;
                 z-index: 1;
                 text-align: center;
-                font-size: 20px;
+                font-size: var(--font-size-20);
                 font-family: var(--font-regular);
             }
             .icon-back-arrow {
@@ -49,7 +49,7 @@
                                 i {
                                     color: var(--color-lavender);
                                     margin-right: 10px;
-                                    font-size: 14px;
+                                    font-size: var(--font-size-14);
                                 }
                             }
                         }
@@ -87,7 +87,7 @@
                         letter-spacing: 0.14px;
                         height: 27px;
                         align-items: center;
-                        font: normal normal 600 14px/30px var(--font-regular);
+                        font: normal normal 600 var(--font-size-14) / 30px var(--font-regular);
                         &:hover {
                             color: var(--color-white-tertiary);
                             background-color: var(--color-sidebar-anchor-text-hover);
@@ -124,7 +124,7 @@
                         cursor: pointer;
                         letter-spacing: 0.14px;
                         height: 27px;
-                        font: normal normal 600 14px/30px;
+                        font: normal normal 600 var(--font-size-14) / 30px;
                         font-family: var(--font-regular);
                         color: var(--color-sidebar-content-text);
                         &:last-child {
@@ -157,7 +157,7 @@
     ul {
         padding: 0;
         list-style: none;
-        font-size: 14px;
+        font-size: var(--font-size-14);
         font-family: var(--font-semibold);
 
         li {

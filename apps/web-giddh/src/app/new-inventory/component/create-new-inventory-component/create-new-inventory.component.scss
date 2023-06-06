@@ -17,7 +17,7 @@
         justify-content: space-between;
         border-bottom: 1px solid var(--color-tab-primary-border-bottom);
         margin-bottom: 15px;
-        font-size: 14px;
+        font-size: var(--font-size-14);
         padding-bottom: 5px;
 
         img {
@@ -50,7 +50,7 @@
                 color: var(--color-red);
                 position: absolute;
                 right: -25px;
-                font-size: 20px;
+                font-size: var(--font-size-20);
                 top: -5px;
                 z-index: 1;
             }
@@ -189,13 +189,13 @@ table.stock-table th {
         align-items: center;
         border-radius: 40px;
         color: var(--color-gray);
-        font-size: 17px;
+        font-size: var(--font-size-17);
     }
 
     .delete-tb-tr-icon {
         position: absolute;
         right: -50px;
-        font-size: 16px;
+        font-size: var(--font-size-16);
         border: 1px solid #999999;
         line-height: 1;
         height: 29px;
@@ -243,7 +243,7 @@ table.stock-table th {
                 background-color: var(--color-white);
                 i {
                     vertical-align: top;
-                    font-size: 20px;
+                    font-size: var(--font-size-20);
                     color: var(--color-gray);
                 }
             }

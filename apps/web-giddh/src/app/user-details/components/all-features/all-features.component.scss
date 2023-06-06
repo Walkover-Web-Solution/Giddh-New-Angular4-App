@@ -7,7 +7,7 @@
     li {
         list-style-type: none;
         color: var(--color-popup-list-all-features-text);
-        font-size: 12px;
+        font-size: var(--font-size-12);
         padding: 3px 0;
         line-height: 20px;
         display: flex;
@@ -16,7 +16,7 @@
             margin-left: 15px;
         }
         i.icon-tick {
-            font-size: 8px;
+            font-size: var(--font-size-8);
             float: left;
             margin-right: 0;
             margin-left: 6px;
@@ -24,14 +24,14 @@
         i.icon-back-arrow {
             transform: rotate(180deg);
             display: none;
-            font-size: 12px;
+            font-size: var(--font-size-12);
             float: left;
             margin-right: 0;
         }
     }
 }
 .money-back-guarantee {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     background-color: var(--color-popup-secondary-background);
     color: var(--color-all-features-money-back-guarantee);
     padding-left: 20px;
@@ -42,7 +42,7 @@
         color: var(--color-common-senary-text);
         margin-bottom: 10px;
         i {
-            font-size: 21px;
+            font-size: var(--font-size-21);
             color: var(--color-common-senary-text);
         }
     }

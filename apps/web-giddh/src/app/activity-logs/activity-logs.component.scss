@@ -14,7 +14,7 @@
     }
 
     .remove-filter {
-        font-size: 16px;
+        font-size: var(--font-size-16);
     }
 
     .filter-wrapper {
@@ -33,7 +33,7 @@
     .and-text {
         margin-left: 10px !important;
         margin-right: 10px !important;
-        font-size: 16px;
+        font-size: var(--font-size-16);
         color: var(--color-table-tertiary-content) !important;
         margin: auto;
     }
@@ -47,7 +47,7 @@
         height: 44px;
         cursor: pointer;
         background-color: var(--color-sidebar-company-background);
-        font-size: 24px;
+        font-size: var(--font-size-24);
         padding-left: 0px !important;
         padding-right: 0px !important;
         min-width: 44px !important;

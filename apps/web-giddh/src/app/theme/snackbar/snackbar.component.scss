@@ -20,13 +20,13 @@
         right: 10px;
         top: -2px;
         float: right;
-        font-size: 25px;
+        font-size: var(--font-size-25);
         color: var(--color-toast-primary-text);
         opacity: 1;
         font-weight: normal;
 
         i {
-            font-size: 15px;
+            font-size: var(--font-size-15);
         }
     }
     .snack-close-button:after {

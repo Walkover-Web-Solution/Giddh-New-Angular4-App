@@ -36,24 +36,24 @@ table.width-100 {
 }
 
 .modal-header ng-select div a.ng-star-inserted {
-    font-size: 18px;
+    font-size: var(--font-size-18);
     color: var(--color-white);
 }
 
 .modal-header ng-select div i.fa.fa-caret-up::before {
     color: var(--color-white);
-    font-size: 24px;
+    font-size: var(--font-size-24);
 }
 
 ng-select > div i.fa.fa-caret-down::before {
     color: var(--color-white);
-    font-size: 20px;
+    font-size: var(--font-size-20);
 }
 
 ng-select > div a.ng-star-inserted {
     color: var(--color-white);
     text-transform: uppercase;
-    font-size: 16px;
+    font-size: var(--font-size-16);
 }
 
 ng-select > div {
@@ -63,7 +63,7 @@ ng-select > div {
 
 ng-select .select-drop i.fa.fa-caret-up::before {
     color: var(--color-white);
-    font-size: 20px;
+    font-size: var(--font-size-20);
 }
 
 .transaction-particular-name {
@@ -84,7 +84,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .amount-total {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     color: var(--color-gray);
 }
 
@@ -140,7 +140,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     display: flex;
     align-items: center;
     padding: 10px 10px 0 10px;
-    font-size: 12px;
+    font-size: var(--font-size-12);
     height: 60px;
     label {
         margin-top: 10px;
@@ -167,13 +167,13 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 span.eligible-ITC {
-    font-size: 11px;
+    font-size: var(--font-size-11);
     cursor: pointer;
     padding-top: 5px;
     display: inline-block;
     span {
         color: var(--color-blue);
-        font-size: 10px;
+        font-size: var(--font-size-10);
     }
 }
 
@@ -226,7 +226,7 @@ span.eligible-ITC {
         tr {
             td.remove-invoice {
                 span:first-child {
-                    font-size: 16px;
+                    font-size: var(--font-size-16);
                     vertical-align: middle;
                     color: var(--color-abbey);
                     padding-right: 8px;
@@ -234,7 +234,7 @@ span.eligible-ITC {
                 .remove-invoice-label {
                     vertical-align: middle;
                     color: var(--color-abbey);
-                    font-size: 13px;
+                    font-size: var(--font-size-13);
                 }
             }
         }
@@ -294,13 +294,13 @@ p.edit-message {
     text-align: center;
     padding: 8px 0;
     border-top: 1px solid var(--color-common-secondary-border);
-    font-size: 16px;
+    font-size: var(--font-size-16);
     font-family: var(--font-semibold);
     margin-top: 15px;
 }
 
 .collapse-icons {
-    font-size: 10px;
+    font-size: var(--font-size-10);
     border: 1px solid;
     padding: 2px;
 }
@@ -319,7 +319,7 @@ p.edit-message {
     margin-top: 1px;
     a {
         color: var(--color-dark-gray);
-        font-size: 15px;
+        font-size: var(--font-size-15);
     }
 }
 /* responsive */

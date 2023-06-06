@@ -9,7 +9,7 @@
         border-color: var(--color-primary-cancel-button-background-hover);
         color: var(--color-secondary-button-text);
         i {
-            font-size: 21px;
+            font-size: var(--font-size-21);
             float: left;
             margin-top: 15%;
         }

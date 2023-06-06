@@ -10,7 +10,7 @@
         }
 
         .img-label {
-            font-size: 12px;
+            font-size: var(--font-size-12);
             font-weight: 600;
             color: rgb(106, 108, 133);
             transform: translateY(7px);
@@ -25,7 +25,7 @@
         }
 
         .balance-value {
-            font-size: 14px;
+            font-size: var(--font-size-14);
             font-weight: 700;
             color: rgb(33, 37, 40);
             transform: translateY(7px);
@@ -36,7 +36,7 @@
         }
 
         .add-extra-value {
-            font-size: 10px;
+            font-size: var(--font-size-10);
             color: rgb(166, 167, 182);
             transform: translateY(15px);
         }
@@ -47,7 +47,7 @@
         }
 
         .slider-value {
-            font-size: 14px;
+            font-size: var(--font-size-14);
             font-weight: 600;
             background-color: rgb(231, 233, 235);
             color: rgb(33, 37, 40);
@@ -59,14 +59,14 @@
         }
 
         .total-value {
-            font-size: 16px;
+            font-size: var(--font-size-16);
             font-weight: 700;
             color: rgb(33, 37, 40);
             transform: translateY(-14px);
         }
 
         .per-value {
-            font-size: 10px;
+            font-size: var(--font-size-10);
             color: rgb(122, 124, 126);
             transform: translateY(-18px);
         }
@@ -96,18 +96,18 @@
     height: 131px;
 
     .label {
-        font-size: 14px;
+        font-size: var(--font-size-14);
         color: rgb(106, 108, 133);
     }
 
     .amount {
-        font-size: 24px;
+        font-size: var(--font-size-24);
         font-weight: 700;
         margin-top: -3px;
         color: rgb(33, 37, 40);
 
         span {
-            font-size: 12px;
+            font-size: var(--font-size-12);
             font-weight: 400;
             color: rgb(106, 108, 133);
         }
@@ -118,7 +118,7 @@
     }
 
     .cancel {
-        font-size: 14px;
+        font-size: var(--font-size-14);
         text-decoration: underline;
         font-weight: 600;
         color: rgb(122, 124, 126);
@@ -128,12 +128,12 @@
 
 @media screen and (max-width: 1024px) and (orientation: landscape) {
     .small-text {
-        font-size: 10px;
+        font-size: var(--font-size-10);
     }
 }
 
 @media screen and (min-width: 768px) and (orientation: portrait) {
     .small-text {
-        font-size: 9px;
+        font-size: var(--font-size-9);
     }
 }

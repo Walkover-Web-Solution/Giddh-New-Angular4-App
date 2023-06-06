@@ -4,7 +4,7 @@
 }
 .clear-filter-close a {
     color: var(--color-popup-list-head-text);
-    font-size: 14px;
+    font-size: var(--font-size-14);
     line-height: 2.2;
 }
 .modal-header {
@@ -17,11 +17,11 @@
     opacity: 1;
     font-weight: 100;
     text-shadow: none;
-    font-size: 30px;
+    font-size: var(--font-size-30);
     cursor: pointer;
 }
 .collapse-icons {
-    font-size: 10px;
+    font-size: var(--font-size-10);
     border: 1px solid var(--color-blue);
     border-radius: 4px;
     padding: 2px;
