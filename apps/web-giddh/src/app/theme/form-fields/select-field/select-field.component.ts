@@ -4,7 +4,6 @@ import { FormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
-import { cloneDeep } from "../../../lodash-optimized";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
 
 @Component({
@@ -135,11 +134,11 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
-            this.fieldFilteredOptions = cloneDeep(changes.options.currentValue);
+            this.fieldFilteredOptions = changes.options.currentValue;
         }
         if (changes?.defaultValue) {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
-            if(!this.options || this.options?.length === 0) {
+            if (!this.options || this.options?.length === 0) {
                 if (this.enableDynamicSearch) {
                     this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
                 } else {
@@ -178,7 +177,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         let filteredOptions: IOption[] = [];
         this.options?.forEach(option => {
             if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
-                filteredOptions.push({ label: option.label, value: option?.value, additional: option });
+                filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
             }
         });
 

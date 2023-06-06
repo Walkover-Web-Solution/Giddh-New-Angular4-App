@@ -125,4 +125,37 @@ export class ManufacturingService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
     }
+
+    public getVariantRecipe(stockUniqueName: string, variantUniqueNames: string[], withRate: boolean = false): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + MANUFACTURING_API.GET_RECIPE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))?.replace(':withRate', String(withRate)), variantUniqueNames).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.queryString = stockUniqueName;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
+    }
+
+    public getRateForStockV2(stockUniqueName: string, model: any): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + MANUFACTURING_API.GET_RATE_FOR_STOCK?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.queryString = stockUniqueName;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
+    }
+
+    public saveManufacturing(stockUniqueName: string, model: any): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + MANUFACTURING_API.CREATE_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.queryString = stockUniqueName;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
+    }
 }

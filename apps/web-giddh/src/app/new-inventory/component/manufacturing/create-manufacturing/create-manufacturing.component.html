@@ -1,183 +1,323 @@
-<section id="create-manufacturing" class="clearfix">
-    <hamburger-menu [pageHeading]="'Create Manufacture'"></hamburger-menu>
-    <div class="manufacturing-wrapper">
-        <div class="row">
-            <div class="form-fileds w-100">
-                <div class="d-inline-flex flex-wrap align-items-end">
-                    <div class="col">
-                        <label>Date</label>
-                        <giddh-datepicker
-                            name="from"
-                            [cssClass]="'mat-field-border bdr form-control w-100'"
-                            [showToggleIcon]="false"
-                        >
-                        </giddh-datepicker>
-                    </div>
-
-                    <div class="col warehouse">
-                        <dropdown-field
-                            [cssClass]="'form-control'"
-                            [name]="''"
-                            [placeholder]="'Select Warehouse'"
-                            [options]="product"
-                            [defaultValue]=""
-                        >
-                        </dropdown-field>
-                    </div>
-
-                    <div class="col">
-                        <div class="custom-card bg-green">
-                            <p class="card-head-text">Total Cost</p>
-                            <p class="card-text">0</p>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="custom-card bg-vivid-gamboge">
-                            <p class="card-head-text">Cost per Item</p>
-                            <p class="card-text">3.0</p>
-                        </div>
-                    </div>
-                </div>
-                <hr class="my-3 max-width-1300" />
-            </div>
-        </div>
-        <div class="row max-width-1300">
-            <div class="col-3">
+<ng-container
+    appTranslate
+    [file]="'inventory/manufacturing'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <section id="create-manufacturing" class="clearfix">
+        <hamburger-menu></hamburger-menu>
+        <div class="manufacturing-wrapper">
+            <form autocomplete="off" novalidate #manufacturingForm="ngForm">
                 <div class="row">
                     <div class="form-fileds w-100">
-                        <div class="d-flex flex-column flex-wrap w-100">
-                            <h1 class="section-head">Finished Stock</h1>
-                            <div>
-                                <dropdown-field
-                                    [cssClass]="'form-control'"
-                                    [name]="''"
-                                    [placeholder]="'Select Product'"
-                                    [options]="product"
-                                    [defaultValue]=""
+                        <div class="d-inline-flex flex-wrap align-items-end">
+                            <div class="col">
+                                <label>{{ commonLocaleData?.app_date }}<span class="text-danger">*</span></label>
+                                <giddh-datepicker
+                                    name="date"
+                                    [cssClass]="
+                                        'mat-field-border bdr form-control w-100' +
+                                        (errorFields.date ? ' required-field-error' : '')
+                                    "
+                                    [showToggleIcon]="false"
+                                    [(ngModel)]="manufacturingObject.manufacturingDetails[0].date"
+                                    (dateSelected)="errorFields.date = false"
                                 >
-                                </dropdown-field>
+                                </giddh-datepicker>
                             </div>
-
-                            <div>
-                                <dropdown-field
-                                    [cssClass]="'form-control'"
-                                    [name]="''"
-                                    [placeholder]="'Select Variant'"
-                                    [options]="product"
-                                    [defaultValue]=""
+                            <div class="col" *ngIf="warehouses?.length > 1">
+                                <label>{{ commonLocaleData?.app_warehouse }}</label>
+                                <select-field
+                                    [cssClass]="'form-control mat-field-border'"
+                                    [name]="'warehouseUniqueName'"
+                                    [placeholder]="commonLocaleData?.app_select_warehouse"
+                                    [options]="warehouses"
+                                    (selectedOption)="
+                                        manufacturingObject.manufacturingDetails[0].warehouseUniqueName = $event.value
+                                    "
                                 >
-                                </dropdown-field>
+                                </select-field>
                             </div>
-
-                            <div>
-                                <input-field
-                                    [cssClass]="'form-control'"
-                                    [type]="'number'"
-                                    [name]="''"
-                                    [placeholder]="'Select Quantity'"
-                                >
-                                </input-field>
-                                <small class="float-right pt-1">Multiple of <span>200</span> </small>
+                            <div class="col">
+                                <div class="custom-card bg-green">
+                                    <p class="card-head-text">{{ localeData?.total_cost }}</p>
+                                    <p class="card-text">{{ totals.totalAmount }}</p>
+                                </div>
                             </div>
+                            <div class="col">
+                                <div class="custom-card bg-vivid-gamboge">
+                                    <p class="card-head-text">{{ localeData?.item_cost }}</p>
+                                    <p class="card-text">{{ totals.costPerItem }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-3 max-width-1300" />
+                    </div>
+                </div>
+                <div class="row max-width-1300">
+                    <div class="col-3">
+                        <div class="row">
+                            <div class="form-fileds w-100">
+                                <div class="d-flex flex-column flex-wrap gap-between w-100">
+                                    <h1 class="section-head">{{ localeData?.finished_stock }}</h1>
+                                    <div>
+                                        <label
+                                            >{{ commonLocaleData?.app_name }}<span class="text-danger">*</span></label
+                                        >
+                                        <select-field
+                                            [cssClass]="
+                                                'form-control mat-field-border' +
+                                                (errorFields.finishedStockName ? ' required-field-error' : '')
+                                            "
+                                            [name]="'stockUniqueName'"
+                                            [placeholder]="commonLocaleData?.app_select_stock"
+                                            [options]="stocks"
+                                            (selectedOption)="
+                                                errorFields.finishedStockName = false;
+                                                getStockVariants(
+                                                    manufacturingObject.manufacturingDetails[0],
+                                                    $event,
+                                                    true
+                                                )
+                                            "
+                                            [defaultValue]="manufacturingObject.manufacturingDetails[0].stockName"
+                                            [required]="true"
+                                        >
+                                        </select-field>
+                                    </div>
 
-                            <div class="d-flex justify-content-space-between">
-                                <button mat-raised-button color="primary" class="mt-2">Generate Manufacturing</button>
-                                <button mat-stroked-button class="mt-2">Clear</button>
+                                    <div *ngIf="manufacturingObject.manufacturingDetails[0].variants?.length > 1">
+                                        <label
+                                            >{{ commonLocaleData?.app_variant
+                                            }}<span class="text-danger">*</span></label
+                                        >
+                                        <select-field
+                                            [cssClass]="
+                                                'form-control mat-field-border' +
+                                                (errorFields.finishedStockVariant ? ' required-field-error' : '')
+                                            "
+                                            [name]="'variantUniqueName'"
+                                            [placeholder]="commonLocaleData?.app_select_variant"
+                                            [options]="manufacturingObject.manufacturingDetails[0].variants"
+                                            (selectedOption)="
+                                                errorFields.finishedStockVariant = false;
+                                                manufacturingObject.manufacturingDetails[0].variant.name = $event.label;
+                                                manufacturingObject.manufacturingDetails[0].variant.uniqueName =
+                                                    $event.value;
+                                                getVariantRecipe()
+                                            "
+                                            [defaultValue]="manufacturingObject.manufacturingDetails[0].variant.name"
+                                            [required]="true"
+                                        >
+                                        </select-field>
+                                    </div>
+
+                                    <div>
+                                        <label
+                                            >{{ commonLocaleData?.app_quantity
+                                            }}<span class="text-danger">*</span></label
+                                        >
+                                        <small class="float-right pt-1">{{
+                                            manufacturingObject.manufacturingDetails[0].manufacturingUnitCode
+                                        }}</small>
+                                        <text-field
+                                            [cssClass]="
+                                                'form-control mat-field-border' +
+                                                (errorFields.finishedQuantity ? ' required-field-error' : '')
+                                            "
+                                            [type]="'number'"
+                                            [name]="'manufacturingQuantity'"
+                                            [placeholder]="commonLocaleData?.app_quantity"
+                                            [(ngModel)]="
+                                                manufacturingObject.manufacturingDetails[0].manufacturingQuantity
+                                            "
+                                            (change)="errorFields.finishedQuantity = false; calculateTotals()"
+                                        >
+                                        </text-field>
+                                        <small class="float-right pt-1"
+                                            >{{ localeData?.multiple_of }}
+                                            <span>{{
+                                                manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf
+                                            }}</span>
+                                        </small>
+                                    </div>
+
+                                    <div class="d-flex justify-content-space-between">
+                                        <button
+                                            mat-raised-button
+                                            color="primary"
+                                            class="mt-2"
+                                            [disabled]="isLoading"
+                                            (click)="createManufacturing()"
+                                        >
+                                            {{ localeData?.generate_manufacturing }}
+                                        </button>
+                                        <button mat-stroked-button class="mt-2" (click)="resetForm()">
+                                            {{ commonLocaleData?.app_clear }}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-1 d-flex justify-content-center align-items-center">
-                <span class="less-than-text"> <i class="icon-left"></i></span>
-            </div>
-            <div class="col-8 pr-0">
-                <div class="row">
-                    <div class="consumption-details-wrapper w-100">
-                        <h1 class="section-head">Raw Stock</h1>
-                        <div class="mt-2">
-                            <table id="table-raw-stock">
-                                <thead>
-                                    <tr>
-                                        <th>Product Name</th>
-                                        <th>Quantity</th>
-                                        <th>Unit</th>
-                                        <th>Rate</th>
-                                        <th>Amount</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="position-relative">FG</td>
-                                        <td>20</td>
-                                        <td>kg</td>
-                                        <td>12</td>
-                                        <td>200</td>
-                                        <td><i class="icon-cross" aria-hidden="true"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div>
-                                                <dropdown-field
-                                                    [cssClass]="'form-control'"
-                                                    [name]="''"
-                                                    [placeholder]="'Select Product'"
-                                                    [options]="product"
-                                                    [defaultValue]=""
+                    <div
+                        class="col-1 d-flex justify-content-center align-items-center"
+                        *ngIf="manufacturingObject.manufacturingDetails[0].variant.uniqueName"
+                    >
+                        <span class="less-than-text"> <i class="icon-left"></i></span>
+                    </div>
+                    <div class="col-8 pr-0" *ngIf="manufacturingObject.manufacturingDetails[0].variant.uniqueName">
+                        <div class="row">
+                            <div class="consumption-details-wrapper w-100">
+                                <h1 class="section-head">{{ localeData?.raw_stock }}</h1>
+                                <div class="mt-2">
+                                    <table id="table-raw-stock">
+                                        <thead>
+                                            <tr>
+                                                <th>{{ commonLocaleData?.app_name }}</th>
+                                                <th>{{ commonLocaleData?.app_variant }}</th>
+                                                <th>{{ commonLocaleData?.app_quantity }}</th>
+                                                <th>{{ commonLocaleData?.app_unit }}</th>
+                                                <th>{{ commonLocaleData?.app_rate }}</th>
+                                                <th>{{ commonLocaleData?.app_amount }}</th>
+                                                <th>&nbsp;</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody (mouseleave)="activeLinkedStockIndex = null">
+                                            <ng-container
+                                                *ngFor="
+                                                    let linkedStock of manufacturingObject.manufacturingDetails[0]
+                                                        .linkedStocks;
+                                                    let i = index
+                                                "
+                                            >
+                                                <tr
+                                                    (mouseenter)="activeLinkedStockIndex = i; showBorder(linkedStock)"
+                                                    (mouseleave)="
+                                                        activeLinkedStockIndex = null; hideBorder(linkedStock)
+                                                    "
                                                 >
-                                                </dropdown-field>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <input-field [cssClass]="'form-control'" [type]="'number'">
-                                                </input-field>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <input-field
-                                                    [cssClass]="'form-control'"
-                                                    [type]="'text'"
-                                                    [readonly]="true"
-                                                >
-                                                </input-field>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <div>
-                                                    <input-field
-                                                        [cssClass]="'form-control'"
-                                                        [type]="'number'"
-                                                        [readonly]="true"
+                                                    <td>
+                                                        <div>
+                                                            <select-field
+                                                                [cssClass]="
+                                                                    linkedStock.cssClass +
+                                                                    (linkedStock.stockNameError
+                                                                        ? ' required-field-error'
+                                                                        : '')
+                                                                "
+                                                                [name]="'stock' + i"
+                                                                [placeholder]="commonLocaleData?.app_select_stock"
+                                                                [options]="stocks"
+                                                                (selectedOption)="
+                                                                    linkedStock.selectedStock = $event;
+                                                                    validateSelectedStock(i);
+                                                                    getStockVariants(linkedStock, $event, false, i)
+                                                                "
+                                                                [defaultValue]="linkedStock.selectedStock?.label"
+                                                            >
+                                                            </select-field>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <select-field
+                                                                [cssClass]="
+                                                                    linkedStock.cssClass +
+                                                                    (linkedStock.variantNameError
+                                                                        ? ' required-field-error'
+                                                                        : '')
+                                                                "
+                                                                [name]="'variantUniqueName' + i"
+                                                                [placeholder]="commonLocaleData?.app_select_variant"
+                                                                [options]="linkedStock.variants"
+                                                                (selectedOption)="
+                                                                    linkedStock.variant.name = $event.label;
+                                                                    linkedStock.variant.uniqueName = $event.value;
+                                                                    validateSelectedVariant(i);
+                                                                    getRateForStock(linkedStock, i)
+                                                                "
+                                                                [defaultValue]="linkedStock.variant.name"
+                                                            >
+                                                            </select-field>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <text-field
+                                                                [cssClass]="
+                                                                    linkedStock.cssClass +
+                                                                    (linkedStock.quantityError
+                                                                        ? ' required-field-error'
+                                                                        : '')
+                                                                "
+                                                                [type]="'number'"
+                                                                [name]="'quantity' + i"
+                                                                [(ngModel)]="linkedStock.quantity"
+                                                                [placeholder]="commonLocaleData?.app_quantity"
+                                                                (change)="
+                                                                    validateQuantity(i); calculateRowTotal(linkedStock)
+                                                                "
+                                                            >
+                                                            </text-field>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <div>
+                                                                {{ linkedStock.stockUnitCode }}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            {{ linkedStock.rate }}
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ linkedStock.amount }}</td>
+                                                    <td>
+                                                        <i
+                                                            [ngClass]="{
+                                                                'unvisible':
+                                                                    activeLinkedStockIndex !== i ||
+                                                                    manufacturingObject.manufacturingDetails[0]
+                                                                        .linkedStocks?.length <= 1
+                                                            }"
+                                                            class="icon-trash cursor-pointer"
+                                                            aria-hidden="true"
+                                                            (click)="removeLinkedStock(i)"
+                                                        ></i>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                            <tr>
+                                                <td colspan="7">
+                                                    <button
+                                                        mat-stroked-button
+                                                        color="primary"
+                                                        class="mb-2"
+                                                        (click)="addNewLinkedStock()"
                                                     >
-                                                    </input-field>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>0</td>
-                                        <td><i class="icon-add" aria-hidden="true"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="6">
-                                            <button mat-stroked-button color="primary" class="mb-2">+ Add Stock</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td>Total</td>
-                                        <td colspan="3">20</td>
-                                        <td>200</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                                                        {{ localeData?.add_stock }}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td>{{ commonLocaleData?.app_total }}</td>
+                                                <td colspan="4">{{ totals.totalRate }}</td>
+                                                <td>{{ totals.totalAmount }}</td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
-    </div>
-</section>
+    </section>
+</ng-container>
