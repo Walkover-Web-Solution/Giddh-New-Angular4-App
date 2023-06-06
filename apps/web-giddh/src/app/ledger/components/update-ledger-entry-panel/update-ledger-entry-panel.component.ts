@@ -2498,7 +2498,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private assignStockVariantDetails(): void {
         this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res?.length) {
+            if (res?.length && res.findIndex(variant => variant.value === this.selectedStockVariant.uniqueName) === -1) {
+                // Only reset the stock variant when the stock is changed
                 this.selectedStockVariant = {name: res[0].label, uniqueName: res[0].value};
             }
         });
