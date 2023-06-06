@@ -1,21 +1,21 @@
 body{
     --font-size-8 : 8px;    /* Used at 2 place in 2 file */
     --font-size-9 : 9px;    /* Used at 7 place in 6 file */
-    --font-size-10 : 10px;  /* Used at 39 place in 21 file */
-    --font-size-11 : 11px;  /* Used at 36 place in 18 file */
-    --font-size-12 : 12px;  /* Used at 212 place in 70 file */
-    --font-size-13 : 13px;  /* Used at 103 place in 36 file */
-    --font-size-14 : 14px;  /* Used at 443 place in 157 file */
+    --font-size-10 : 10px;  /* Used at 41 place in 22 file */
+    --font-size-11 : 11px;  /* Used at 40 place in 20 file */
+    --font-size-12 : 12px;  /* Used at 217 place in 71 file */
+    --font-size-13 : 13px;  /* Used at 110 place in 37 file */
+    --font-size-14 : 14px;  /* Used at 455 place in 158 file */
     --font-size-15 : 15px;  /* Used at 22 place in 20 file */
-    --font-size-16 : 16px;  /* Used at 191 place in 99 file */
-    --font-size-17 : 17px;  /* Used at 38 place in 33 file */
+    --font-size-16 : 16px;  /* Used at 195 place in 99 file */
+    --font-size-17 : 17px;  /* Used at 40 place in 33 file */
     --font-size-18 : 18px;  /* Used at 108 place in 60 file */
-    --font-size-19 : 19px;  /* Used at 5 place in 4 file */
-    --font-size-20 : 20px;  /* Used at 88 place in 48 file */
-    --font-size-21 : 21px;  /* Used at 10 place in 8 file */
+    --font-size-19 : 19px;  /* Used at 6 place in 5 file */
+    --font-size-20 : 20px;  /* Used at 90 place in 48 file */
+    --font-size-21 : 21px;  /* Used at 12 place in 8 file */
     --font-size-22 : 22px;  /* Used at 29 place in 17 file */
     --font-size-23 : 23px;  /* Used at 1 place in 1 file */
-    --font-size-24 : 24px;  /* Used at 25 place in 19 files */
+    --font-size-24 : 24px;  /* Used at 26 place in 20 files */
     --font-size-25 : 25px;  /* Used at 13 place in 13 files */
     --font-size-26 : 26px;  /* Used at 10 place in 5 files */
     --font-size-28 : 28px;  /* Used at 4 place in 4 files */
@@ -26,16 +26,8 @@ body{
     --font-size-36 : 36px;  /* Used at 12 place in 12 files */
     --font-size-37 : 37px;  /* Used at 1 place in 1 files */
     --font-size-39 : 39px;  /* Used at 3 place in 3 files */
-    --font-size-40 : 40px;  /* Used at 6 place in 6 files */
+    --font-size-40 : 40px;  /* Used at 7 place in 7 files */
     --font-size-48 : 48px;  /* Used at 1 place in 1 files */
     --font-size-62 : 62px;  /* Used at 2 place in 2 files */
     --font-size-74 : 74px;  /* Used at 1 place in 1 files */
 }
-
-/*
-
-font-size: var(--font-size-)
-
-
-
-*/
