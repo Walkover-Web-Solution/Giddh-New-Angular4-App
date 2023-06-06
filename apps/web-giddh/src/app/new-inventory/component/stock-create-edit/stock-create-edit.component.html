@@ -53,7 +53,7 @@
                             <div class="col-xl-8 col-lg-12">
                                 <div class="row flex-column-reverse flex-md-row">
                                     <div class="col-md-8 col-lg-8 col-xl-6 col-12 upper-common-form-label-field">
-                                        <div class="row mr-b1">
+                                        <div class="row mr-b2 input-gap">
                                             <div class="col-sm-6 col-lg-6">
                                                 <input-field
                                                     [name]="'productName'"
@@ -119,7 +119,6 @@
                                                     <mat-label>Tax</mat-label>
                                                     <mat-select
                                                         name="taxes"
-                                                        [cssClass]="'form-control'"
                                                         [placeholder]="commonLocaleData?.app_select_tax"
                                                         multiple
                                                         [value]="stockForm.taxes"
@@ -179,7 +178,7 @@
                                                                         </div>
                                                                         <div class="col-sm-6 col-lg-6">
                                                                             <input-field
-                                                                                [cssClass]="'form-control'"
+                                                                                
                                                                                 id="inventory-account"
                                                                                 type="text"
                                                                                 value=""
@@ -196,7 +195,7 @@
                                                                         </div>
                                                                         <div class="col-sm-6 col-lg-6">
                                                                             <input-field
-                                                                                [cssClass]="'form-control'"
+                                                                                
                                                                                 id="opening-quantity"
                                                                                 type="text"
                                                                                 value=""
@@ -211,7 +210,7 @@
                                                                         </div>
                                                                         <div class="col-sm-6 col-lg-6">
                                                                             <input-field
-                                                                                [cssClass]="'form-control'"
+                                                                                
                                                                                 id="rate"
                                                                                 type="text"
                                                                                 value="Auto Calculate"
@@ -233,7 +232,7 @@
                                                                         </div>
                                                                         <div class="col-sm-6 col-lg-6">
                                                                             <input-field
-                                                                                [cssClass]="'form-control'"
+                                                                                
                                                                                 id="low-stock-report"
                                                                                 type="text"
                                                                                 value=""
@@ -249,7 +248,7 @@
                                                                         </div>
                                                                         <div class="col-sm-6 col-lg-6">
                                                                             <input-field
-                                                                                [cssClass]="'form-control'"
+                                                                                
                                                                                 id="amount"
                                                                                 type="text"
                                                                                 value="200"
@@ -280,7 +279,7 @@
                                                                         </div>
                                                                         <div class="col-sm-6 col-lg-6">
                                                                             <input-field
-                                                                                [cssClass]="'form-control'"
+                                                                                
                                                                                 id="stock-output-qty"
                                                                                 type="text"
                                                                                 placeholder="Enter Qty"
@@ -311,7 +310,7 @@
                                                                 </div>
                                                                 <div class="col-lg-6 col-sm-6 col-xl-4">
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
+                                                                        
                                                                         type="text"
                                                                         placeholder="Stock Name"
                                                                     ></input-field>
@@ -374,7 +373,6 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                                         <dropdown-field
-                                                                            [cssClass]="'form-control'"
                                                                             [name]="'fixedAssetsAccounts'"
                                                                             [placeholder]="localeData?.linked_accounts"
                                                                             [options]="fixedAssetsAccounts"
@@ -443,8 +441,7 @@
                                                                                         checkUnitRateValidation[0]
                                                                                             ?.fixedAssets
                                                                                             ? 'error-box'
-                                                                                            : '') +
-                                                                                        ' form-control unit-rates'
+                                                                                            : '') + 'unit-rates'
                                                                                     "
                                                                                     [name]="
                                                                                         'variantFixedAssetsUnitRate' +
@@ -473,7 +470,7 @@
                                                                             <div class="col-sm-6 col-6">
                                                                                 <input-field
                                                                                     [cssClass]="
-                                                                                        'form-control text-right unit-amount'
+                                                                                        'text-right unit-amount'
                                                                                     "
                                                                                     [placeholder]="'0.00'"
                                                                                     [name]="
@@ -627,6 +624,7 @@
                                                                             class="
                                                                                 col-xl-12 col-lg-12 col-sm-6
                                                                                 mr-b15
+                                                                                pt-3
                                                                                 which-tab-3
                                                                             "
                                                                             *ngIf="!isVariantAvailable"
@@ -650,9 +648,7 @@
                                                                                     }"
                                                                                 >
                                                                                     <dropdown-field
-                                                                                        [cssClass]="
-                                                                                            'form-control unit-rates'
-                                                                                        "
+                                                                                        [cssClass]="'unit-rates'"
                                                                                         [name]="
                                                                                             'variantPurchaseUnit' + j
                                                                                         "
@@ -693,7 +689,7 @@
                                                                                 >
                                                                                     <input-field
                                                                                         [cssClass]="
-                                                                                            'form-control text-right unit-amount'
+                                                                                            'text-right unit-amount'
                                                                                         "
                                                                                         [placeholder]="'0.00'"
                                                                                         [name]="
@@ -817,7 +813,6 @@
                                                                         </div>
                                                                         <div class="col-sm-6 col-lg-12 pt-3">
                                                                             <dropdown-field
-                                                                                [cssClass]="'form-control'"
                                                                                 [name]="'salesAccount'"
                                                                                 [placeholder]="
                                                                                     localeData?.linked_sales_accounts
@@ -836,7 +831,11 @@
                                                                             </dropdown-field>
                                                                         </div>
                                                                         <div
-                                                                            class="col-xl-12 col-lg-12 col-sm-6 mr-b15"
+                                                                            class="
+                                                                                col-xl-12 col-lg-12 col-sm-6
+                                                                                mr-b15
+                                                                                pt-3
+                                                                            "
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
@@ -858,7 +857,6 @@
                                                                                     }"
                                                                                 >
                                                                                     <dropdown-field
-                                                                                        [cssClass]="'form-control'"
                                                                                         [name]="'variantSalesUnit' + j"
                                                                                         [placeholder]="
                                                                                             commonLocaleData?.app_unit
@@ -896,9 +894,7 @@
                                                                                     }"
                                                                                 >
                                                                                     <input-field
-                                                                                        [cssClass]="
-                                                                                            'form-control text-right'
-                                                                                        "
+                                                                                        [cssClass]="'text-right'"
                                                                                         [type]="'text'"
                                                                                         [name]="
                                                                                             'variantSalesUnitRate' + j
@@ -1024,7 +1020,7 @@
                                                                         </div>
                                                                         <div class="col-sm-6 col-lg-6">
                                                                             <input-field
-                                                                                [cssClass]="'form-control'"
+                                                                                
                                                                                 type="text"
                                                                                 id="output-qty"
                                                                                 placeholder="Enter"
@@ -1037,7 +1033,7 @@
                                                                         </div>
                                                                         <div class="col-sm-6 col-lg-6">
                                                                             <input-field
-                                                                                [cssClass]="'form-control'"
+                                                                                
                                                                                 type="text"
                                                                                 id="stock-unit"
                                                                                 placeholder="Amount"
@@ -1054,7 +1050,7 @@
                                                                 </div>
                                                                 <div class="col-lg-6 col-sm-6 col-xl-4">
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
+                                                                        
                                                                         type="text"
                                                                         id="select-stock-nme"
                                                                         placeholder="Select Stock"
@@ -1218,7 +1214,6 @@
                                                         >
                                                             <div class="col-lg-4">
                                                                 <input-field
-                                                                    [cssClass]="'form-control'"
                                                                     [placeholder]="'Option name'"
                                                                     [name]="'option-' + i"
                                                                     [(ngModel)]="option.name"
@@ -1351,7 +1346,6 @@
                                                             <td class="variant-name-column">{{ variant.name }}</td>
                                                             <td class="unit-name">
                                                                 <dropdown-field
-                                                                    [cssClass]="'form-control'"
                                                                     [name]="'variantUnit' + i"
                                                                     [placeholder]="commonLocaleData?.app_unit"
                                                                     [options]="stockUnits"
@@ -1366,7 +1360,7 @@
                                                             </td>
                                                             <td class="opening-qty">
                                                                 <input-field
-                                                                    [cssClass]="'form-control text-right'"
+                                                                    [cssClass]="'text-right'"
                                                                     [placeholder]="'0.00'"
                                                                     [name]="'variantOpeningQuantity' + i"
                                                                     [(ngModel)]="
@@ -1378,7 +1372,7 @@
                                                             </td>
                                                             <td class="opening-amount">
                                                                 <input-field
-                                                                    [cssClass]="'form-control text-right'"
+                                                                    [cssClass]="'text-right'"
                                                                     [placeholder]="'0.00'"
                                                                     [name]="'variantOpeningAmount' + i"
                                                                     [(ngModel)]="
@@ -1390,7 +1384,7 @@
                                                             </td>
                                                             <td class="sku-code">
                                                                 <input-field
-                                                                    [cssClass]="'form-control text-right'"
+                                                                    [cssClass]="'text-right'"
                                                                     [placeholder]="'-'"
                                                                     [name]="'variantSkuCode' + i"
                                                                     [(ngModel)]="variant.skuCode"
@@ -1430,14 +1424,12 @@
                                                                                 (!variantPurchaseUnitRate?.stockUnitName &&
                                                                                 checkUnitRateValidation[i]?.purchase
                                                                                     ? 'error-box'
-                                                                                    : '') + ' form-control unit-rates'
+                                                                                    : '') + 'unit-rates'
                                                                             "
                                                                         >
                                                                         </dropdowm-field>
                                                                         <input-field
-                                                                            [cssClass]="
-                                                                                'form-control text-right unit-amount'
-                                                                            "
+                                                                            [cssClass]="'text-right unit-amount'"
                                                                             [placeholder]="'0.00'"
                                                                             [name]="
                                                                                 'variantPurchaseUnitRate' + i + '_' + j
@@ -1522,13 +1514,11 @@
                                                                                 (!variantSalesUnitRate?.stockUnitName &&
                                                                                 checkUnitRateValidation[i]?.sales
                                                                                     ? 'error-box'
-                                                                                    : '') + ' form-control unit-rates'
+                                                                                    : '') + 'unit-rates'
                                                                             "
                                                                         ></dropdowm-field>
                                                                         <input-field
-                                                                            [cssClass]="
-                                                                                'form-control text-right unit-amount'
-                                                                            "
+                                                                            [cssClass]="'text-right unit-amount'"
                                                                             [placeholder]="'0.00'"
                                                                             [name]="
                                                                                 'variantSalesUnitRate' + i + '_' + j
@@ -1607,13 +1597,11 @@
                                                                                 (!variantFixedAssetsUnitRate?.stockUnitName &&
                                                                                 checkUnitRateValidation[i]?.fixedAssets
                                                                                     ? 'error-box'
-                                                                                    : '') + ' form-control unit-rates'
+                                                                                    : '') + 'unit-rates'
                                                                             "
                                                                         ></dropdowm-field>
                                                                         <input-field
-                                                                            [cssClass]="
-                                                                                'form-control text-right unit-amount'
-                                                                            "
+                                                                            [cssClass]="'text-right unit-amount'"
                                                                             [
                                                                             placeholder]="'0.00'"
                                                                             [name]="
@@ -1756,7 +1744,6 @@
                                                     <div class="col-sm-6 col-lg-6">
                                                         <input-field
                                                             *ngIf="hsnSac === 'HSN'"
-                                                            [cssClass]="'form-control'"
                                                             [name]="'hsnNumber'"
                                                             [type]="'text'"
                                                             [placeholder]="localeData?.enter_hsn_code"
@@ -1765,7 +1752,6 @@
                                                         </input-field>
                                                         <input-field
                                                             *ngIf="hsnSac === 'SAC'"
-                                                            [cssClass]="'form-control'"
                                                             [name]="'sacNumber'"
                                                             [type]="'text'"
                                                             [placeholder]="localeData?.enter_sac_code"
@@ -1783,7 +1769,6 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 [name]="'skuCode'"
                                                                 [type]="'text'"
                                                                 [placeholder]="localeData?.enter_code"
@@ -1800,7 +1785,6 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 [name]="'openingQuantity'"
                                                                 [type]="'text'"
                                                                 [placeholder]="'0'"
@@ -1817,7 +1801,6 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 [name]="'openingAmount'"
                                                                 [type]="'text'"
                                                                 [placeholder]="'0'"
@@ -1847,7 +1830,6 @@
                                                         </label>
                                                         <input-field
                                                             *ngIf="inlineEditCustomField === 1"
-                                                            [cssClass]="'form-control'"
                                                             [name]="'customField1Heading'"
                                                             [placeholder]="localeData?.custom_field"
                                                             [type]="'text'"
@@ -1868,13 +1850,14 @@
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
                                                         <input-field> </input-field>
-                                                        <input-field
-                                                            [cssClass]="'form-control'"
-                                                            [name]="'customField1Value'"
-                                                            [placeholder]="localeData?.custom_field"
-                                                            [type]="'text'"
-                                                            [(ngModel)]="stockForm.customField1Value"
-                                                        ></input-field>
+                                                        <div class="pt-3">
+                                                            <input-field
+                                                                [name]="'customField1Value'"
+                                                                [placeholder]="localeData?.custom_field"
+                                                                [type]="'text'"
+                                                                [(ngModel)]="stockForm.customField1Value"
+                                                            ></input-field>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1897,7 +1880,6 @@
                                                         </label>
                                                         <input-field
                                                             *ngIf="inlineEditCustomField === 2"
-                                                            [cssClass]="'form-control'"
                                                             [name]="'customField2Heading'"
                                                             [placeholder]="localeData?.custom_field"
                                                             [type]="'text'"
@@ -1918,7 +1900,6 @@
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
                                                         <input-field
-                                                            [cssClass]="'form-control'"
                                                             [name]="'customField2Value'"
                                                             [placeholder]="localeData?.custom_field"
                                                             [type]="'text'"
@@ -1950,7 +1931,7 @@
                                                                     customField.fieldType?.type ===
                                                                         availableFieldTypes.Barcode
                                                                 "
-                                                                [cssClass]="'form-control custom-field'"
+                                                                [cssClass]="'custom-field'"
                                                                 [name]="customField?.uniqueName"
                                                                 [type]="'text'"
                                                                 [placeholder]="customField?.fieldInfo"
@@ -1965,7 +1946,7 @@
                                                                     customField.fieldType?.type ===
                                                                     availableFieldTypes.Number
                                                                 "
-                                                                [cssClass]="'form-control custom-field'"
+                                                                [cssClass]="'custom-field'"
                                                                 [name]="customField?.uniqueName"
                                                                 [type]="'number'"
                                                                 [placeholder]="customField?.fieldInfo"
@@ -2010,7 +1991,6 @@
                                                             <label> {{ localeData?.variant_1 }} </label>
                                                             <!-- vaiant will be auto fill and readonly view -->
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="variant-name"
                                                                 [placeholder]="localeData?.variant_name"
@@ -2021,7 +2001,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_sku }} </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="variant-sku"
                                                                 [placeholder]="commonLocaleData?.app_sku"
@@ -2030,7 +2009,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ localeData?.opening_balance }} </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="variant-opening-balance"
                                                                 [placeholder]="localeData?.enter_amount"
@@ -2040,7 +2018,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ localeData?.opening_quantity }} </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="variant-qty"
                                                                 [placeholder]="localeData?.enter_qty"
@@ -2050,7 +2027,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_rate }} </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="variant-rate"
                                                                 [placeholder]="localeData?.enter_rate"
@@ -2080,7 +2056,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ localeData?.add_item }} </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="addon-item"
                                                                 [placeholder]="localeData?.add_item"
@@ -2090,7 +2065,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ localeData?.quantity }} </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="addon-qty"
                                                                 [placeholder]="localeData?.enter_qty"
@@ -2100,7 +2074,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_sku }} </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="addon-sku"
                                                                 [placeholder]="localeData?.enter_sku_number"
@@ -2110,7 +2083,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_unit }} </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="addon-unit"
                                                                 [placeholder]="commonLocaleData?.app_unit_cm_mm"
@@ -2120,7 +2092,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_rate }} </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="addon-rate"
                                                                 [placeholder]="localeData?.enter_rate"
@@ -2159,7 +2130,6 @@
                                                                     <label> {{ commonLocaleData?.app_sku }} </label>
                                                                     <!-- All variant list will show in dropdown -->
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="variant-sku-number"
                                                                         [placeholder]="localeData?.enter_sku_number"
@@ -2196,7 +2166,6 @@
                                                                 <div class="width-30-percent">
                                                                     <label> {{ localeData?.final_product_1 }} </label>
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="final-product-1"
                                                                         [placeholder]="localeData?.product_1"
@@ -2207,7 +2176,6 @@
                                                                 <div class="width-30-percent" hidden>
                                                                     <label> {{ localeData?.final_product_2 }} </label>
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="final-product-2"
                                                                         [placeholder]="localeData?.product_2"
@@ -2217,7 +2185,6 @@
                                                                 <div class="width-30-percent">
                                                                     <label> {{ localeData?.output_qty }} </label>
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="recipe-output-qty"
                                                                         [placeholder]="localeData?.enter_qty"
@@ -2227,7 +2194,6 @@
                                                                 <div class="width-30-percent">
                                                                     <label> {{ localeData?.output_unit }} </label>
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="recipe-output-unit"
                                                                         [placeholder]="commonLocaleData?.app_unit_cm_mm"
@@ -2265,7 +2231,6 @@
                                                                 <div class="width-30-percent">
                                                                     <label> {{ localeData?.attribute }} </label>
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="recipe-input-attribute"
                                                                         [placeholder]="localeData?.add_item"
@@ -2275,7 +2240,6 @@
                                                                 <div class="width-30-percent">
                                                                     <label> {{ localeData?.input_qty }} </label>
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="recipe-input-qty"
                                                                         [placeholder]="localeData?.enter_qty"
@@ -2285,7 +2249,6 @@
                                                                 <div class="width-30-percent">
                                                                     <label>{{ localeData?.input_unit }} </label>
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="recipe-input-unit"
                                                                         [placeholder]="commonLocaleData?.app_unit_cm_mm"
@@ -2352,7 +2315,6 @@
                                                     >
                                                         <div class="width-30-percent">
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="expense-assets"
                                                                 [placeholder]="localeData?.liability_assets"
@@ -2362,7 +2324,6 @@
                                                         <span class="to-span"> {{ localeData?.to }} </span>
                                                         <div class="width-30-percent">
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="expense-account"
                                                                 [placeholder]="localeData?.expense_acc"
@@ -2370,7 +2331,6 @@
                                                         </div>
                                                         <div class="width-30-percent">
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 id="expense-amount"
                                                                 type="text"
                                                                 [placeholder]="commonLocaleData?.app_amount"
@@ -2424,7 +2384,6 @@
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     id="combo-name"
                                                     type="text"
                                                     [placeholder]="localeData?.enter_name"
@@ -2468,7 +2427,6 @@
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     id="combo-unique-name"
                                                     type="text"
                                                     [placeholder]="commonLocaleData?.app_unique_name_placeholder"
@@ -2482,7 +2440,6 @@
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     id="combo-unique-name"
                                                     type="text"
                                                     [placeholder]="localeData?.enter_hsn_code"
@@ -2495,7 +2452,6 @@
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     id="combo-unique-name"
                                                     type="text"
                                                     [placeholder]="localeData?.enter_sku_code"
@@ -2531,7 +2487,6 @@
                                             </td>
                                             <td width="20%">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     id="select-product"
                                                     type="text"
                                                     [placeholder]="localeData?.product_service"
@@ -2539,7 +2494,6 @@
                                             </td>
                                             <td width="20%">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     id="unit-field"
                                                     type="text"
                                                     [placeholder]="commonLocaleData?.app_unit"
@@ -2547,7 +2501,6 @@
                                             </td>
                                             <td width="16%">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     id="value-field"
                                                     type="text"
                                                     value="2"
@@ -2575,7 +2528,6 @@
                                             </td>
                                             <td width="20%">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     id="select-product"
                                                     type="text"
                                                     [placeholder]="localeData?.product_service"
@@ -2583,7 +2535,6 @@
                                             </td>
                                             <td width="20%">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     id="unit-field"
                                                     type="text"
                                                     [placeholder]="commonLocaleData?.app_unit"
@@ -2591,7 +2542,6 @@
                                             </td>
                                             <td width="16%">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     id="value-field"
                                                     type="text"
                                                     value="2"
@@ -2674,7 +2624,6 @@
                                                             <div class="row add-new-field mr-b15">
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="select-unit"
                                                                         [placeholder]="localeData?.select_unit"
@@ -2683,7 +2632,6 @@
                                                                 </div>
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
@@ -2702,7 +2650,6 @@
                                                             <div class="row add-new-field">
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="select-unit"
                                                                         [placeholder]="localeData?.select_unit"
@@ -2711,7 +2658,6 @@
                                                                 </div>
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
@@ -2782,7 +2728,6 @@
                                                             <div class="row add-new-field mr-b15">
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="sales-select-unit"
                                                                         [placeholder]="localeData?.select_unit"
@@ -2791,7 +2736,6 @@
                                                                 </div>
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="sales-rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
@@ -2811,7 +2755,6 @@
                                                             <div class="row add-new-field">
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="sales-select-unit"
                                                                         [placeholder]="localeData?.select_unit"
@@ -2820,7 +2763,6 @@
                                                                 </div>
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="sales-rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
@@ -2866,7 +2808,6 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <input-field
-                                                                            [cssClass]="'form-control'"
                                                                             id="inventory-account"
                                                                             type="text"
                                                                             value=""
@@ -2885,7 +2826,6 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <input-field
-                                                                            [cssClass]="'form-control'"
                                                                             id="opening-quantity"
                                                                             type="text"
                                                                             value=""
@@ -2904,7 +2844,6 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <input-field
-                                                                            [cssClass]="'form-control'"
                                                                             id="rate"
                                                                             type="text"
                                                                             value="Auto Calculate"
@@ -2927,7 +2866,6 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <input-field
-                                                                            [cssClass]="'form-control'"
                                                                             id="low-stock-report"
                                                                             type="text"
                                                                             value=""
@@ -2946,7 +2884,6 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <input-field
-                                                                            [cssClass]="'form-control'"
                                                                             id="amount"
                                                                             type="text"
                                                                             value="200"
@@ -2978,7 +2915,6 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <input-field
-                                                                            [cssClass]="'form-control'"
                                                                             id="stock-output-qty"
                                                                             type="text"
                                                                             [placeholder]="localeData?.enter_qty"
@@ -3010,7 +2946,6 @@
                                                             </div>
                                                             <div class="col-lg-6 col-sm-6 col-xl-4">
                                                                 <input-field
-                                                                    [cssClass]="'form-control'"
                                                                     type="text"
                                                                     [placeholder]="commonLocaleData?.app_stock_name"
                                                                 >
@@ -3021,7 +2956,6 @@
                                                             </div>
                                                             <div class="qty-unit col-sm-6 col-lg-6 col-xl-4">
                                                                 <input-field
-                                                                    [cssClass]="'form-control'"
                                                                     type="text"
                                                                     id="enter-qty"
                                                                     [placeholder]="localeData?.enter_qty"
@@ -3092,7 +3026,6 @@
                                                                 <div class="row add-new-field mr-b15">
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
-                                                                            [cssClass]="'form-control'"
                                                                             type="text"
                                                                             id="select-unit"
                                                                             [placeholder]="localeData?.select_unit"
@@ -3100,7 +3033,6 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
-                                                                            [cssClass]="'form-control'"
                                                                             type="text"
                                                                             id="rate"
                                                                             [placeholder]="commonLocaleData?.app_rate"
@@ -3119,7 +3051,6 @@
                                                                 <div class="row add-new-field">
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
-                                                                            [cssClass]="'form-control'"
                                                                             type="text"
                                                                             id="select-unit"
                                                                             [placeholder]="localeData?.select_unit"
@@ -3127,7 +3058,6 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
-                                                                            [cssClass]="'form-control'"
                                                                             type="text"
                                                                             id="rate"
                                                                             [placeholder]="commonLocaleData?.app_rate"
@@ -3199,7 +3129,6 @@
                                                                 <div class="row add-new-field mr-b15">
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
-                                                                            [cssClass]="'form-control'"
                                                                             type="text"
                                                                             id="sales-select-unit"
                                                                             [placeholder]="localeData?.select_unit"
@@ -3209,7 +3138,6 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
-                                                                            [cssClass]="'form-control'"
                                                                             type="text"
                                                                             id="sales-rate"
                                                                             [placeholder]="commonLocaleData?.app_rate"
@@ -3220,7 +3148,6 @@
                                                                 <div class="row add-new-field">
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
-                                                                            [cssClass]="'form-control'"
                                                                             type="text"
                                                                             id="sales-select-unit"
                                                                             [placeholder]="localeData?.select_unit"
@@ -3230,7 +3157,6 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
-                                                                            [cssClass]="'form-control'"
                                                                             type="text"
                                                                             id="sales-rate"
                                                                             [placeholder]="commonLocaleData?.app_rate"
@@ -3271,7 +3197,6 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="output-qty"
                                                                 placeholder="Enter"
@@ -3284,7 +3209,6 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="stock-unit"
                                                                 placeholder="Amount"
@@ -3301,7 +3225,6 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="select-stock-nme"
                                                                 placeholder="Select Stock"
@@ -3315,7 +3238,6 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="select-stock-qty"
                                                                 placeholder="Qty."
@@ -3328,7 +3250,6 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="select-stock-unit"
                                                                 [placeholder]="localeData?.select_unit"
@@ -3374,7 +3295,6 @@
                                                             <div class="col-sm-6 col-lg-4">
                                                                 <label>Option 1</label>
                                                                 <input-field
-                                                                    [cssClass]="'form-control'"
                                                                     type="text"
                                                                     placeholder="Size"
                                                                     id="select-option"
@@ -3393,7 +3313,6 @@
                                                         <div class="row mr-b15">
                                                             <div class="col-sm-6 col-lg-4">
                                                                 <input-field
-                                                                    [cssClass]="'form-control'"
                                                                     type="text"
                                                                     placeholder="Ex: Size, Color"
                                                                     id="select-size-color"
@@ -3402,7 +3321,6 @@
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6">
                                                                 <input-field
-                                                                    [cssClass]="'form-control'"
                                                                     type="text"
                                                                     placeholder="Separate options with a comma"
                                                                 >
@@ -3428,11 +3346,7 @@
                                                         <label>Combo Display Name</label>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
-                                                        <input-field
-                                                            [cssClass]="'form-control'"
-                                                            type="text"
-                                                            id="stock-display-name"
-                                                        ></input-field>
+                                                        <input-field type="text" id="stock-display-name"></input-field>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3483,7 +3397,6 @@
 
                                                     <div class="col-sm-6 col-lg-6" *ngIf="isHSN">
                                                         <input-field
-                                                            [cssClass]="'form-control'"
                                                             id="product-name"
                                                             type="text"
                                                             placeholder="Enter HSN Code"
@@ -3491,7 +3404,6 @@
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6" *ngIf="!isHSN">
                                                         <input-field
-                                                            [cssClass]="'form-control'"
                                                             id="product-name"
                                                             type="text"
                                                             placeholder="Enter SAC Code"
@@ -3505,12 +3417,7 @@
                                                         <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
-                                                        <input-field
-                                                            [cssClass]="'form-control'"
-                                                            id="bar-code"
-                                                            type="text"
-                                                        >
-                                                        </input-field>
+                                                        <input-field id="bar-code" type="text"> </input-field>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3520,12 +3427,7 @@
                                                         <label>Custom Field</label>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
-                                                        <input-field
-                                                            [cssClass]="'form-control'"
-                                                            id="expiry-code"
-                                                            class="form-control"
-                                                            type="text"
-                                                        ></input-field>
+                                                        <input-field id="expiry-code" type="text"></input-field>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3542,7 +3444,6 @@
                                                             <label> variant 1 </label>
                                                             <!-- vaiant will be auto fill and readonly view -->
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="combo-variant-name"
                                                                 placeholder="Variant Name"
@@ -3553,7 +3454,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> SKU </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="combo-variant-sku"
                                                                 placeholder="SKU"
@@ -3562,7 +3462,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> Opening Balance </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="combo-variant-opening-balance"
                                                                 placeholder="Enter amount"
@@ -3572,7 +3471,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label>{{ localeData?.opening_quantity }} </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="combo-variant-qty"
                                                                 placeholder="Enter Qty"
@@ -3582,7 +3480,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_rate }} </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="combo-variant-rate"
                                                                 [placeholder]="localeData?.enter_rate"
@@ -3612,7 +3509,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> Item </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="combo-addon-item"
                                                                 placeholder="Add item"
@@ -3622,7 +3518,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> Quantity </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="combo-addon-qty"
                                                                 placeholder="Enter Quantity"
@@ -3632,7 +3527,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> SKU </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="combo-sku"
                                                                 placeholder="Enter SKU Number"
@@ -3642,7 +3536,6 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> Unit </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="addon-unit"
                                                                 placeholder="eg. cm, kg, m, box"
@@ -3652,10 +3545,8 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_rate }} </label>
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="combo-addon-rate"
-                                                                class="form-control"
                                                                 [placeholder]="localeData?.enter_rate"
                                                             >
                                                             </input-field>
@@ -3693,7 +3584,6 @@
                                                                     <label> SKU </label>
                                                                     <!-- All variant list will show in dropdown -->
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="combo-sku-number"
                                                                         placeholder="Enter SKU Number"
@@ -3729,7 +3619,6 @@
                                                                 <div class="width-30-percent">
                                                                     <label> Final Product 1 </label>
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="combo-final-product-1"
                                                                         placeholder="Product 1"
@@ -3740,7 +3629,6 @@
                                                                 <div class="width-30-percent" hidden>
                                                                     <label> Final Product 2 </label>
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="combo-final-product-2"
                                                                         placeholder="Product 2"
@@ -3750,7 +3638,6 @@
                                                                 <div class="width-30-percent">
                                                                     <label> Output Qty </label>
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="combo-recipe-output-qty"
                                                                         placeholder="Enter Qty"
@@ -3760,7 +3647,6 @@
                                                                 <div class="width-30-percent">
                                                                     <label> Output Unit </label>
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="combo-recipe-output-unit"
                                                                         placeholder="eg. cm, kg, m, box"
@@ -3795,7 +3681,6 @@
                                                                 <div class="width-30-percent">
                                                                     <label> Attribute </label>
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="combo-recipe-input-attribute"
                                                                         placeholder="Add item"
@@ -3805,7 +3690,6 @@
                                                                 <div class="width-30-percent">
                                                                     <label> Input Qty </label>
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="combo-recipe-input-qty"
                                                                         placeholder="Enter Qty"
@@ -3815,7 +3699,6 @@
                                                                 <div class="width-30-percent">
                                                                     <label> Input Unit </label>
                                                                     <input-field
-                                                                        [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="combo-recipe-input-unit"
                                                                         placeholder="eg. cm, kg, m, box"
@@ -3878,7 +3761,6 @@
                                                     >
                                                         <div class="width-30-percent">
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="combo-expense-assets"
                                                                 placeholder="Liability/Asset A/c"
@@ -3888,7 +3770,6 @@
                                                         <span class="to-span"> to </span>
                                                         <div class="width-30-percent">
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="combo-expense-account"
                                                                 placeholder="Expense A/c"
@@ -3897,7 +3778,6 @@
                                                         </div>
                                                         <div class="width-30-percent">
                                                             <input-field
-                                                                [cssClass]="'form-control'"
                                                                 id="combo-expense-amount"
                                                                 type="text"
                                                                 placeholder="Amount"
@@ -4912,7 +4792,7 @@
                                     <div class="input-group search-text-padding">
                                         <i class="icon-search input-addon"></i>
                                         <input-field
-                                            [cssClass]="'form-control form-check'"
+                                            [cssClass]="'form-check'"
                                             [cssStyle]="'padding-left: 28px !important;'"
                                             type="text"
                                             placeholder="Search"
@@ -4953,17 +4833,10 @@
                                         <tr>
                                             <td data-title="#" class="pd list-number">1</td>
                                             <td data-title="Stock Name">
-                                                <input-field
-                                                    [cssClass]="'form-control'"
-                                                    type="text"
-                                                    id="stock-name-field"
-                                                    readonly
-                                                >
-                                                </input-field>
+                                                <input-field type="text" id="stock-name-field" readonly> </input-field>
                                             </td>
                                             <td data-title="Unique Name">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     type="text"
                                                     placeholder="Enter"
                                                     id="stock-unique-name"
@@ -4990,7 +4863,6 @@
                                             </td>
                                             <td data-title="Opening Amount">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     type="text"
                                                     placeholder="Enter"
                                                     id="opening-amount"
@@ -5022,7 +4894,6 @@
                                             </td>
                                             <td data-title="HSN/SAC Code">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     type="text"
                                                     placeholder="Enter"
                                                     id="hsn-sac-code"
@@ -5030,7 +4901,6 @@
                                             </td>
                                             <td data-title="SAC Code">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     type="text"
                                                     placeholder="Enter"
                                                     id="sku-code"
@@ -5038,7 +4908,6 @@
                                             </td>
                                             <td data-title="Barcode">
                                                 <input-field
-                                                    [cssClass]="'form-control'"
                                                     type="text"
                                                     placeholder="Enter"
                                                     id="bar-code"
@@ -5057,13 +4926,7 @@
                                     <i class="icon-plus text-primary"></i>
                                 </button>
                                 <span class="d-flex align-items-center">
-                                    <input-field
-                                        [cssClass]="'form-control'"
-                                        class="mr-1"
-                                        id="fill-number"
-                                        placeholder="0"
-                                    >
-                                    </input-field>
+                                    <input-field class="mr-1" id="fill-number" placeholder="0"> </input-field>
                                     <span class="font-14">More rows at bottom</span>
                                 </span>
                             </div>

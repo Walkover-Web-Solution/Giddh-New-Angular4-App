@@ -17,12 +17,11 @@
             <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">
                 <div class="container-fluid">
                     <div class="create-group-page">
-                        <div class="row">
+                        <div class="row input-gap">
                             <div class="col-xl-8 col-lg-8 col-md-6">
                                 <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
                                         <input-field
-                                            [cssClass]="'form-control'"
                                             [name]="'productName'"
                                             [placeholder]="localeData?.enter_group"
                                             [type]="'text'"
@@ -36,7 +35,6 @@
                                 <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
                                         <input-field
-                                            [cssClass]="'form-control '"
                                             [name]="'uniqueName'"
                                             [placeholder]="commonLocaleData?.app_unique_name_placeholder"
                                             formControlName="uniqueName"
@@ -68,7 +66,6 @@
                                             *ngIf="groupForm.get('showCodeType')?.value === 'hsn'"
                                         >
                                             <input-field
-                                                [cssClass]="'form-control  '"
                                                 [name]="'hsnCode'"
                                                 [placeholder]="localeData?.enter_hsn"
                                                 [type]="'number'"
@@ -83,7 +80,6 @@
                                             *ngIf="groupForm.get('showCodeType')?.value === 'sac'"
                                         >
                                             <input-field
-                                                [cssClass]="'form-control '"
                                                 [name]="'sacCode'"
                                                 [placeholder]="localeData?.enter_sac"
                                                 [type]="'number'"
@@ -101,7 +97,6 @@
                                             <mat-label>Tax</mat-label>
                                             <mat-select
                                                 name="taxes"
-                                                [cssClass]="'form-control'"
                                                 [placeholder]="commonLocaleData?.app_select_tax"
                                                 formControlName="taxes"
                                                 multiple
@@ -146,7 +141,6 @@
                                 <div class="row mr-t15">
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
                                         <dropdown-field
-                                            [cssClass]="'form-control '"
                                             [readonly]="!groupForm.get('isSubGroup')?.value"
                                             [name]="'parentStockGroupUniqueName'"
                                             [placeholder]="commonLocaleData?.app_select_group"

@@ -1,137 +1,10 @@
-<!-- <div class="create-recipe mt-2">
-    <div class="create-recipe-wrapper">
-        <div class="row px-3">
-            <div class="mb-3">
-                <div>
-                    <dropdown-field
-                        class="width-280"
-                        [cssClass]="'form-control'"
-                        [name]="''"
-                        [placeholder]="'Select Stock'"
-                        [options]="stock"
-                        [defaultValue]=""
-                    >
-                    </dropdown-field>
-                </div>
-            </div>
-        </div>
-        <hr class="my-2" />
-        <div class="row mt-3 ml-0">
-            <div class="repeatable-container py-3 col-md-11 col-sm-11">
-                <div class="d-flex flex-wrap mb-3">
-                    <div class="mr-3 mb-3">
-                        <dropdown-field
-                            class="width-280"
-                            [cssClass]="'form-control'"
-                            [name]="''"
-                            [placeholder]="'Select Output Variant'"
-                            [options]="stock"
-                            [defaultValue]=""
-                        >
-                        </dropdown-field>
-                    </div>
-
-                    <div class="mr-3 mb-3">
-                        <input-field
-                            class="width-280"
-                            type="text"
-                            name="''"
-                            [placeholder]="'Enter Output Quantity'"
-                            [cssClass]="'form-control'"
-                        ></input-field>
-                    </div>
-
-                    <div class="mr-3 mb-3">
-                        <dropdown-field
-                            class="width-280"
-                            [cssClass]="'form-control'"
-                            [name]="''"
-                            [placeholder]="'Select Output Stock Unit'"
-                            [options]="stock"
-                            [defaultValue]=""
-                        >
-                        </dropdown-field>
-                    </div>
-                </div>
-                <div class="d-flex flex-wrap mb-3">
-                    <div class="mr-3 mb-3">
-                        <dropdown-field
-                            class="width-280"
-                            [cssClass]="'form-control'"
-                            [name]="''"
-                            [placeholder]="'Select Stock'"
-                            [options]="stock"
-                            [defaultValue]=""
-                        >
-                        </dropdown-field>
-                    </div>
-                    <div class="mr-3 mb-3">
-                        <dropdown-field
-                            class="width-280"
-                            [cssClass]="'form-control'"
-                            [name]="''"
-                            [placeholder]="'Select Variant'"
-                            [options]="stock"
-                            [defaultValue]=""
-                        >
-                        </dropdown-field>
-                    </div>
-
-                    <div class="mr-3 mb-3">
-                        <input-field
-                            class="width-280"
-                            type="text"
-                            name="''"
-                            [placeholder]="'Enter Quantity'"
-                            [cssClass]="'form-control'"
-                        ></input-field>
-                    </div>
-
-                    <div class="mr-3 mb-3">
-                        <dropdown-field
-                            class="width-280"
-                            [cssClass]="'form-control'"
-                            [name]="''"
-                            [placeholder]="'Select Stock Unit'"
-                            [options]="stock"
-                            [defaultValue]=""
-                        >
-                        </dropdown-field>
-                    </div>
-
-                    <div class="d-flex justify-content-center align-items-end mr-3 mb-3">
-                        <button mat-icon-button class="edit-btn mb-1">
-                            <i class="icon-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                <div>
-                    <a href="javascript:void(0);" class="text-primary font-14 text-right">+ Add New</a>
-                </div>
-            </div>
-            <div class="col-md-1 col-sm-1 d-flex justify-content-start align-items-center">
-                <div>
-                    <button mat-icon-button class="edit-btn">
-                        <i class="icon-trash"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="my-3">
-            <a href="javascript:void(0);" class="text-primary font-14 text-right">+ Add New</a>
-        </div>
-    </div>
-</div> -->
-
 <section class="create-recipe">
     <div class="recipe-wrapper">
         <div class="row">
             <div class="col-3">
                 <div>
-                    <!-- <span class="pb-2 d-block">Select Stock</span> -->
                     <dropdown-field
                         class="width-280"
-                        [cssClass]="'form-control'"
                         [name]="''"
                         [placeholder]="'Select Stock'"
                         [options]="stock"
@@ -141,22 +14,15 @@
                 </div>
             </div>
         </div>
-        <div class="row pb-4 manufacturing-border">
+        <div class="row py-4 manufacturing-border">
             <div class="col-3">
                 <div class="row">
                     <div class="form-fileds w-100">
-                        <div class="d-flex flex-column flex-wrap w-100">
-                            <h1 class="section-head">Finished Stock</h1>
-                            <!-- div show filled fields -->
-                            <!-- <div>
-                                <span>Variant</span>
-                                <span class="mx-4">4500</span>
-                                <span>722</span>
-                            </div> -->
+                        <div class="d-flex flex-column flex-wrap w-100 gap-between">
+                            <h1 class="section-head p-0">Finished Stock</h1>
                             <div>
                                 <dropdown-field
                                     class="width-280"
-                                    [cssClass]="'form-control'"
                                     [name]="''"
                                     [placeholder]="'Select Output Variant'"
                                     [options]="stock"
@@ -170,13 +36,11 @@
                                     type="text"
                                     name="''"
                                     [placeholder]="'Enter Output Quantity'"
-                                    [cssClass]="'form-control'"
                                 ></input-field>
                                 <small class="d-block text-right multiple">Multiple of <span>200</span> </small>
                             </div>
                             <div>
                                 <dropdown-field
-                                    [cssClass]="'form-control'"
                                     [name]="''"
                                     [placeholder]="'Select Output Stock Unit'"
                                     [options]="stock"
@@ -210,9 +74,7 @@
                                     <tr>
                                         <td>
                                             <div>
-                                                <!-- <span>Select Stock</span> -->
                                                 <dropdown-field
-                                                    [cssClass]="'form-control'"
                                                     [name]="''"
                                                     [placeholder]="'Select Stock'"
                                                     [options]="stock"
@@ -223,9 +85,7 @@
                                         </td>
                                         <td>
                                             <div>
-                                                <!-- <span>Variant</span> -->
                                                 <dropdown-field
-                                                    [cssClass]="'form-control'"
                                                     [name]="''"
                                                     [placeholder]="'Select Variant'"
                                                     [options]="stock"
@@ -236,21 +96,17 @@
                                         </td>
                                         <td>
                                             <div>
-                                                <!-- <span>Quantity</span> -->
                                                 <input-field
                                                     class="text-right"
                                                     type="number"
                                                     name="''"
                                                     [placeholder]="'Enter Quantity'"
-                                                    [cssClass]="'form-control'"
                                                 ></input-field>
                                             </div>
                                         </td>
                                         <td>
                                             <div>
-                                                <!-- <span>Stock Unit</span> -->
                                                 <dropdown-field
-                                                    [cssClass]="'form-control'"
                                                     [name]="''"
                                                     [placeholder]="'Select Stock Unit'"
                                                     [options]="stock"
@@ -275,7 +131,7 @@
 </section>
 
 <!-- view-mode -->
-<section class="create-recipe">
+<!-- <section class="create-recipe">
     <div class="recipe-wrapper">
         <div class="row">
             <div class="col-3 pb-3">
@@ -310,15 +166,6 @@
                         <h1 class="section-head">Raw Stock</h1>
                         <div class="mt-2 d-flex align-items-baseline">
                             <table id="table-raw-stock" class="table-filled view-mode-table">
-                                <!-- <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Variant</th>
-                                        <th>Quantity</th>
-                                        <th>Unit</th>
-                                        <th></th>
-                                    </tr>
-                                </thead> -->
                                 <tbody>
                                     <tr>
                                         <td>
@@ -346,4 +193,4 @@
             <button mat-stroked-button class="mb-2">Done</button>
         </div>
     </div>
-</section>
+</section> -->
