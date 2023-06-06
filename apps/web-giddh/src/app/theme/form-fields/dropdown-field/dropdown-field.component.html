@@ -1,6 +1,6 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
-    <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>{{ placeholder }}</mat-label>
+    <mat-form-field [appearance]="appearance">
+        <mat-label>{{ label ? label : placeholder }}</mat-label>
         <input
             type="text"
             [ngClass]="cssClass"
@@ -19,6 +19,7 @@
             (keydown.enter)="$event.preventDefault()"
             (clickOutside)="closeDropdownPanel()"
             matAutocompletePosition="auto"
+            [required]="required"
         />
         <mat-autocomplete
             autoActiveFirstOption
