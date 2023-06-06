@@ -336,8 +336,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public getDateFromMonth(selectedMonth) {
         let firstDay = '', lastDay = '';
         if (this.activeFinacialYr) {
-            let mdyFrom = this.activeFinacialYr.financialYearStarts.split('-');
-            let mdyTo = this.activeFinacialYr.financialYearEnds.split('-');
+            let mdyFrom = this.activeFinacialYr.financialYearStarts?.split('-');
+            let mdyTo = this.activeFinacialYr.financialYearEnds?.split('-');
 
             let startDate;
 
@@ -451,8 +451,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
      * @memberof ReportsDetailsComponent
      */
     public export(): void {
-        let startDate = this.activeFinacialYr.financialYearStarts?.toString();
-        let endDate = this.activeFinacialYr.financialYearEnds?.toString();
+        let startDate = this.activeFinacialYr?.financialYearStarts?.toString();
+        let endDate = this.activeFinacialYr?.financialYearEnds?.toString();
         if (this.selectedMonth) {
             let startEndDate = this.getDateFromMonth(this.monthNames?.indexOf(this.selectedMonth) + 1);
             startDate = startEndDate.firstDay;

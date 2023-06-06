@@ -81,6 +81,10 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'legacy';
+    /** Holds Mat Input Label */
+    @Input() public label:string;
+    
     constructor(private cdr: ChangeDetectorRef
     ) {
     }
