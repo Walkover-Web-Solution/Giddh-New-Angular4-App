@@ -33,8 +33,10 @@
                                     [placeholder]="commonLocaleData?.app_select_warehouse"
                                     [options]="warehouses"
                                     (selectedOption)="
-                                        manufacturingObject.manufacturingDetails[0].warehouseUniqueName = $event.value
+                                        manufacturingObject.manufacturingDetails[0].warehouseUniqueName = $event.value;
+                                        selectedWarehouseName = $event.label
                                     "
+                                    [defaultValue]="selectedWarehouseName"
                                 >
                                 </select-field>
                             </div>
@@ -70,10 +72,14 @@
                                                 (errorFields.finishedStockName ? ' required-field-error' : '')
                                             "
                                             [name]="'stockUniqueName'"
+                                            [scrollableElementId]="'finishedStockDropdown'"
                                             [placeholder]="commonLocaleData?.app_select_stock"
-                                            [options]="stocks"
+                                            [options]="manufacturingObject.manufacturingDetails[0].stocks"
                                             (selectedOption)="
+                                                manufacturingObject.manufacturingDetails[0].manufacturingUnitCode =
+                                                    $event?.additional?.stockUnitCode;
                                                 errorFields.finishedStockName = false;
+                                                selectedInventoryType = $event?.additional?.inventoryType;
                                                 getStockVariants(
                                                     manufacturingObject.manufacturingDetails[0],
                                                     $event,
@@ -81,7 +87,12 @@
                                                 )
                                             "
                                             [defaultValue]="manufacturingObject.manufacturingDetails[0].stockName"
-                                            [required]="true"
+                                            [enableDynamicSearch]="true"
+                                            [isPaginationEnabled]="true"
+                                            (dynamicSearchedQuery)="
+                                                getStocks(manufacturingObject.manufacturingDetails[0], 1, $event)
+                                            "
+                                            (scrollEnd)="stockScrollEnd(manufacturingObject.manufacturingDetails[0])"
                                         >
                                         </select-field>
                                     </div>
@@ -107,7 +118,6 @@
                                                 getVariantRecipe()
                                             "
                                             [defaultValue]="manufacturingObject.manufacturingDetails[0].variant.name"
-                                            [required]="true"
                                         >
                                         </select-field>
                                     </div>
@@ -207,14 +217,26 @@
                                                                         : '')
                                                                 "
                                                                 [name]="'stock' + i"
+                                                                [scrollableElementId]="'stock' + i"
                                                                 [placeholder]="commonLocaleData?.app_select_stock"
-                                                                [options]="stocks"
+                                                                [options]="linkedStock.stocks"
                                                                 (selectedOption)="
                                                                     linkedStock.selectedStock = $event;
                                                                     validateSelectedStock(i);
                                                                     getStockVariants(linkedStock, $event, false, i)
                                                                 "
                                                                 [defaultValue]="linkedStock.selectedStock?.label"
+                                                                [enableDynamicSearch]="true"
+                                                                [isPaginationEnabled]="true"
+                                                                (dynamicSearchedQuery)="
+                                                                    getStocks(
+                                                                        linkedStock,
+                                                                        1,
+                                                                        $event,
+                                                                        selectedInventoryType
+                                                                    )
+                                                                "
+                                                                (scrollEnd)="stockScrollEnd(linkedStock)"
                                                             >
                                                             </select-field>
                                                         </div>
