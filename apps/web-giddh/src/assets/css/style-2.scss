@@ -839,6 +839,36 @@ aside-create-group {
             height: 100%;
             min-height: 670px;
         }
+        .inventory-sub-sideabar {
+            .item-list {
+                a {
+                    &.account-name {
+                        .mat-list-item-content {
+                            color: var(--color-master-page-sidebar-primary-group);
+                        }
+                    }
+                    &.isActive {
+                        .mat-list-item-content {
+                            color: var(--color-white);
+                        }
+                    }
+                }
+                .mat-list-item-content {
+                    padding: 4px 10px;
+                    width: 190px;
+                    overflow: hidden;
+                    display: inline-block;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+            }
+        }
+        mat-grid-list {
+            height: calc(100vh - 120px) !important;
+            mat-grid-tile {
+                height: 100% !important;
+            }
+        }
     }
     .inventory-master {
         .item-list {
@@ -846,14 +876,23 @@ aside-create-group {
             height: 100%;
             width: 225px !important;
             float: left;
+            a {
+                &.isActive {
+                    .mat-list-base .mat-list-item {
+                        color: var(--color-secondary-button-text) !important;
+                    }
+                }
+            }
         }
-        .mat-list-base .mat-list-item {
-            width: 225px;
-            .mat-list-item-content {
-                a {
-                    color: var(--color-black);
-                    display: block;
-                    width: 100%;
+        .mat-list-base {
+            .mat-list-item {
+                width: 225px;
+                .mat-list-item-content {
+                    a {
+                        color: var(--color-black);
+                        display: block;
+                        width: 100%;
+                    }
                 }
             }
         }
@@ -866,6 +905,7 @@ aside-create-group {
     .mat-grid-tile-content {
         align-items: flex-start;
         .mat-list-base .mat-list-item {
+            height: 38px;
             &.map-item {
                 .mat-list-item-content {
                     justify-content: flex-end;
@@ -873,6 +913,9 @@ aside-create-group {
             }
             .mat-list-item-content {
                 padding: 0;
+                a {
+                    color: var(--color-black);
+                }
             }
         }
     }
@@ -9818,9 +9861,9 @@ giddh-datepicker {
         padding-bottom: 0;
     }
 
-    .mat-focused .mat-form-field-flex {
-        border: 1px solid var(--color-blue) !important;
-    }
+    // .mat-focused .mat-form-field-flex {
+    //     border: 1px solid var(--color-blue) !important;
+    // }
 
     .mat-form-field-underline {
         display: none !important;
@@ -10252,8 +10295,6 @@ giddh-datepicker {
     }
     #main {
         #content-wrapper {
-            background-color: var(--color-common-septenary-background-for-all-components);
-
             .create-new-inventory-page {
                 .select-physical-product {
                     .product-detail-content {
@@ -10806,6 +10847,15 @@ body.update-scroll-hidden {
 }
 
 /*---- inventory-master ----*/
+
+inventory-master {
+    perfect-scrollbar {
+        height: 100% !important;
+    }
+    .ps-content {
+        height: 100% !important;
+    }
+}
 
 /* responsive  starts here*/
 @media (max-width: 1440px) {
@@ -14115,17 +14165,6 @@ body.hide-scroll-body.master-page {
         }
     }
 }
-.voucher-preview-edit {
-    .custom-date-entries {
-        giddh-datepicker {
-            .mat-form-field-appearance-fill {
-                .mat-form-field-flex {
-                    border: none !important;
-                }
-            }
-        }
-    }
-}
 
 @media (max-width: 320px) {
     .on-mobile-view tbody td {
@@ -14139,21 +14178,15 @@ body.hide-scroll-body.master-page {
         }
     }
 }
-@media (max-width: 575px) {
-    aside-create-unit,
-    aside-create-group {
-        max-width: 370px;
-        .aside-pane {
-            max-width: 370px;
-        }
-    }
-}
-@media (max-width: 375px) {
-    aside-create-unit,
-    aside-create-group {
-        max-width: 310px;
-        .aside-pane {
-            max-width: 310px;
+
+.voucher-preview-edit {
+    .custom-date-entries {
+        giddh-datepicker {
+            .mat-form-field-appearance-fill {
+                .mat-form-field-flex {
+                    border: none !important;
+                }
+            }
         }
     }
 }
