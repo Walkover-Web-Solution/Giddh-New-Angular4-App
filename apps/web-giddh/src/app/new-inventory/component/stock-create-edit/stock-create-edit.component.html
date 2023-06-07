@@ -53,7 +53,7 @@
                             <div class="col-xl-8 col-lg-12">
                                 <div class="row flex-column-reverse flex-md-row">
                                     <div class="col-md-8 col-lg-8 col-xl-6 col-12 upper-common-form-label-field">
-                                        <div class="row mr-b2 input-gap">
+                                        <div class="row">
                                             <div class="col-sm-6 col-lg-6">
                                                 <input-field
                                                     [name]="'productName'"
@@ -63,6 +63,7 @@
                                                     (ngModelChange)="checkSpacingValidation(stockForm.name)"
                                                     [required]="true"
                                                     [autocomplete]="'off'"
+                                                    [appearance]="'outline'"
                                                 >
                                                 </input-field>
                                             </div>
@@ -76,6 +77,7 @@
                                                         stockUnitName = $event.label
                                                     "
                                                     [defaultValue]="stockUnitName"
+                                                    [appearance]="'outline'"
                                                 >
                                                 </dropdown-field>
                                             </div>
@@ -90,6 +92,7 @@
                                                     [(ngModel)]="stockGroupUniqueName"
                                                     [name]="'stockGroupName'"
                                                     [options]="stockGroups"
+                                                    [appearance]="'outline'"
                                                 >
                                                 </dropdown-field>
                                                 <button
@@ -109,13 +112,14 @@
                                                     [placeholder]="commonLocaleData?.app_unique_name"
                                                     [type]="'text'"
                                                     [(ngModel)]="stockForm.uniqueName"
+                                                    [appearance]="'outline'"
                                                 >
                                                 </input-field>
                                             </div>
                                         </div>
                                         <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-6">
-                                                <mat-form-field appearance="fill" class="w-100">
+                                                <mat-form-field class="w-100" [appearance]="'outline'">
                                                     <mat-label>Tax</mat-label>
                                                     <mat-select
                                                         name="taxes"
@@ -387,6 +391,7 @@
                                                                                 !isFixedAssetsInformationEnabled
                                                                             "
                                                                             [defaultValue]="fixedAssetsAccountName"
+                                                                            [appearance]="'outline'"
                                                                         >
                                                                         </dropdown-field>
                                                                     </div>
@@ -465,6 +470,7 @@
                                                                                     [defaultValue]="
                                                                                         variantFixedAssetsUnitRate?.stockUnitName
                                                                                     "
+                                                                                    [appearance]="'outline'"
                                                                                 ></dropdown-field>
                                                                             </div>
                                                                             <div class="col-sm-6 col-6">
@@ -491,6 +497,7 @@
                                                                                     "
                                                                                     [showError]="stockCreateEditForm.form.controls?.['variantFixedAssetsUnitRate' +
                                                                                             j]?.invalid && checkUnitRateValidation[0]?.fixedAssets"
+                                                                                    [appearance]="'outline'"
                                                                                 >
                                                                                 </input-field>
                                                                             </div>
@@ -617,6 +624,7 @@
                                                                                     !isPurchaseInformationEnabled
                                                                                 "
                                                                                 [defaultValue]="purchaseAccountName"
+                                                                                [appearance]="'outline'"
                                                                             >
                                                                             </dropdown-field>
                                                                         </div>
@@ -624,7 +632,6 @@
                                                                             class="
                                                                                 col-xl-12 col-lg-12 col-sm-6
                                                                                 mr-b15
-                                                                                pt-3
                                                                                 which-tab-3
                                                                             "
                                                                             *ngIf="!isVariantAvailable"
@@ -675,6 +682,7 @@
                                                                                                 ? 'error-box'
                                                                                                 : ''
                                                                                         "
+                                                                                        [appearance]="'outline'"
                                                                                     >
                                                                                     </dropdown-field>
                                                                                 </div>
@@ -711,6 +719,7 @@
                                                                                         "
                                                                                         [showError]="stockCreateEditForm.form.controls?.['variantPurchaseUnitRate' +
                                                                                                 j]?.invalid && checkUnitRateValidation[0]?.purchase"
+                                                                                        [appearance]="'outline'"
                                                                                     >
                                                                                     </input-field>
                                                                                 </div>
@@ -827,15 +836,12 @@
                                                                                 "
                                                                                 [readonly]="!isSalesInformationEnabled"
                                                                                 [defaultValue]="salesAccountName"
+                                                                                [appearance]="'outline'"
                                                                             >
                                                                             </dropdown-field>
                                                                         </div>
                                                                         <div
-                                                                            class="
-                                                                                col-xl-12 col-lg-12 col-sm-6
-                                                                                mr-b15
-                                                                                pt-3
-                                                                            "
+                                                                            class="col-xl-12 col-lg-12 col-sm-6 mr-b15"
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
@@ -881,6 +887,7 @@
                                                                                                 ? 'error-box'
                                                                                                 : ''
                                                                                         "
+                                                                                        [appearance]="'outline'"
                                                                                     >
                                                                                     </dropdown-field>
                                                                                 </div>
@@ -914,6 +921,7 @@
                                                                                         "
                                                                                         [showError]="stockCreateEditForm.form.controls?.['variantSalesUnitRate' +
                                                                                             j]?.invalid && checkUnitRateValidation[0]?.sales"
+                                                                                        [appearance]="'outline'"
                                                                                     >
                                                                                     </input-field>
                                                                                 </div>
@@ -1220,6 +1228,7 @@
                                                                     [type]="'text'"
                                                                     [required]="true"
                                                                     [showError]="stockCreateEditForm.form.controls?.['option-'+i]?.invalid && checkOptionValidation"
+                                                                    [appearance]="'outline'"
                                                                 >
                                                                 </input-field>
                                                             </div>
@@ -1250,6 +1259,7 @@
                                                                         (matChipInputTokenEnd)="addOption($event, i)"
                                                                         class="inventory-category-field-input"
                                                                         [placeholder]="'Option values'"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -1355,6 +1365,7 @@
                                                                     [defaultValue]="
                                                                         variant.warehouseBalance[0]?.stockUnit?.name
                                                                     "
+                                                                    [appearance]="'outline'"
                                                                 >
                                                                 </dropdown-field>
                                                             </td>
@@ -1367,6 +1378,7 @@
                                                                         variant.warehouseBalance[0].openingQuantity
                                                                     "
                                                                     [type]="'number'"
+                                                                    [appearance]="'outline'"
                                                                 >
                                                                 </input-field>
                                                             </td>
@@ -1379,6 +1391,7 @@
                                                                         variant.warehouseBalance[0].openingAmount
                                                                     "
                                                                     [type]="'number'"
+                                                                    [appearance]="'outline'"
                                                                 >
                                                                 </input-field>
                                                             </td>
@@ -1389,6 +1402,7 @@
                                                                     [name]="'variantSkuCode' + i"
                                                                     [(ngModel)]="variant.skuCode"
                                                                     [type]="'text'"
+                                                                    [appearance]="'outline'"
                                                                 >
                                                                 </input-field>
                                                             </td>
@@ -1438,6 +1452,7 @@
                                                                             [type]="'number'"
                                                                             [required]="true"
                                                                             [showError]="stockCreateEditForm.form.controls?.[ 'variantPurchaseUnitRate' + i + '_' + j]?.invalid && checkUnitRateValidation[i]?.purchase"
+                                                                            [appearance]="'outline'"
                                                                         >
                                                                         </input-field>
                                                                         <button
@@ -1527,6 +1542,7 @@
                                                                             [type]="'number'"
                                                                             [required]="true"
                                                                             [showError]="stockCreateEditForm.form.controls?.[ 'variantSalesUnitRate' + i + '_' + j]?.invalid && checkUnitRateValidation[i]?.sales"
+                                                                            [appearance]="'outline'"
                                                                         >
                                                                         </input-field>
                                                                         <button
@@ -1616,6 +1632,7 @@
                                                                             [type]="'number'"
                                                                             [required]="true"
                                                                             [showError]="stockCreateEditForm.form.controls?.[ 'variantFixedAssetsUnitRate' + j + '_' + i]?.invalid && checkUnitRateValidation[i]?.fixedAssets"
+                                                                            [appearance]="'outline'"
                                                                         >
                                                                         </input-field>
                                                                         <button
@@ -1750,7 +1767,7 @@
                                     <div class="tab-container-new px-3">
                                         <div class="row">
                                             <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                <div class="row mr-b1">
+                                                <div class="row">
                                                     <div class="col-sm-6 col-lg-4">
                                                         <mat-radio-group
                                                             color="primary"
@@ -1772,6 +1789,7 @@
                                                             [type]="'text'"
                                                             [placeholder]="localeData?.enter_hsn_code"
                                                             [(ngModel)]="stockForm.hsnNumber"
+                                                            [appearance]="'outline'"
                                                         >
                                                         </input-field>
                                                         <input-field
@@ -1780,6 +1798,7 @@
                                                             [type]="'text'"
                                                             [placeholder]="localeData?.enter_sac_code"
                                                             [(ngModel)]="stockForm.sacNumber"
+                                                            [appearance]="'outline'"
                                                         >
                                                         </input-field>
                                                     </div>
@@ -1787,7 +1806,7 @@
                                             </div>
                                             <ng-container *ngIf="!isVariantAvailable">
                                                 <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                    <div class="row mr-b1">
+                                                    <div class="row">
                                                         <div class="col-sm-6 col-lg-4">
                                                             <label>{{ commonLocaleData?.app_sku_code }}</label>
                                                         </div>
@@ -1797,13 +1816,14 @@
                                                                 [type]="'text'"
                                                                 [placeholder]="localeData?.enter_code"
                                                                 [(ngModel)]="stockForm.skuCode"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                    <div class="row mr-b1">
+                                                    <div class="row">
                                                         <div class="col-sm-6 col-lg-4">
                                                             <label>{{ localeData?.opening_quantity }}</label>
                                                         </div>
@@ -1813,13 +1833,14 @@
                                                                 [type]="'text'"
                                                                 [placeholder]="'0'"
                                                                 [(ngModel)]="stockForm.openingQuantity"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                    <div class="row mr-b1">
+                                                    <div class="row">
                                                         <div class="col-sm-6 col-lg-4">
                                                             <label>{{ localeData?.opening_amount }}</label>
                                                         </div>
@@ -1829,6 +1850,7 @@
                                                                 [type]="'text'"
                                                                 [placeholder]="'0'"
                                                                 [(ngModel)]="stockForm.openingAmount"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -1836,7 +1858,7 @@
                                                 </div>
                                             </ng-container>
                                             <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                <div class="row mr-b1">
+                                                <div class="row">
                                                     <div class="col-sm-6 col-lg-4">
                                                         <label *ngIf="inlineEditCustomField !== 1"
                                                             >{{
@@ -1860,6 +1882,7 @@
                                                             [(ngModel)]="stockForm.customField1Heading"
                                                             [autoFocus]="true"
                                                             class="common-custom-field-width"
+                                                            [appearance]="'outline'"
                                                         >
                                                         </input-field>
                                                         <span
@@ -1873,20 +1896,21 @@
                                                         </span>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
-                                                        <input-field> </input-field>
-                                                        <div class="pt-3">
+                                                        <input-field [appearance]="'outline'"> </input-field>
+                                                        <div>
                                                             <input-field
                                                                 [name]="'customField1Value'"
                                                                 [placeholder]="localeData?.custom_field"
                                                                 [type]="'text'"
                                                                 [(ngModel)]="stockForm.customField1Value"
+                                                                [appearance]="'outline'"
                                                             ></input-field>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                <div class="row mr-b1">
+                                                <div class="row">
                                                     <div class="col-sm-6 col-lg-4">
                                                         <label *ngIf="inlineEditCustomField !== 2"
                                                             >{{
@@ -1910,6 +1934,7 @@
                                                             [(ngModel)]="stockForm.customField2Heading"
                                                             [autoFocus]="true"
                                                             class="common-custom-field-width"
+                                                            [appearance]="'outline'"
                                                         >
                                                         </input-field>
                                                         <span
@@ -1928,6 +1953,7 @@
                                                             [placeholder]="localeData?.custom_field"
                                                             [type]="'text'"
                                                             [(ngModel)]="stockForm.customField2Value"
+                                                            [appearance]="'outline'"
                                                         >
                                                         </input-field>
                                                     </div>
@@ -1963,6 +1989,7 @@
                                                                 [maxlength]="customField.dataRange?.max"
                                                                 [pattern]="customField.regex"
                                                                 [required]="customField.isMandatory"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                             <input-field
@@ -1980,6 +2007,7 @@
                                                                 [pattern]="customField.regex"
                                                                 [required]="customField.isMandatory"
                                                                 [allowDecimalDigitsOnly]="true"
+                                                                [appearance]="'outline'"
                                                             ></input-field>
                                                             <mat-radio-group
                                                                 color="primary"
@@ -2019,6 +2047,7 @@
                                                                 id="variant-name"
                                                                 [placeholder]="localeData?.variant_name"
                                                                 readonly
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -2028,6 +2057,7 @@
                                                                 type="text"
                                                                 id="variant-sku"
                                                                 [placeholder]="commonLocaleData?.app_sku"
+                                                                [appearance]="'outline'"
                                                             ></input-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
@@ -2036,6 +2066,7 @@
                                                                 type="text"
                                                                 id="variant-opening-balance"
                                                                 [placeholder]="localeData?.enter_amount"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -2045,6 +2076,7 @@
                                                                 type="text"
                                                                 id="variant-qty"
                                                                 [placeholder]="localeData?.enter_qty"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -2054,6 +2086,7 @@
                                                                 type="text"
                                                                 id="variant-rate"
                                                                 [placeholder]="localeData?.enter_rate"
+                                                                [appearance]="'outline'"
                                                             ></input-field>
                                                         </div>
                                                     </div>
@@ -2083,6 +2116,7 @@
                                                                 type="text"
                                                                 id="addon-item"
                                                                 [placeholder]="localeData?.add_item"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -2092,6 +2126,7 @@
                                                                 type="text"
                                                                 id="addon-qty"
                                                                 [placeholder]="localeData?.enter_qty"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -2101,6 +2136,7 @@
                                                                 type="text"
                                                                 id="addon-sku"
                                                                 [placeholder]="localeData?.enter_sku_number"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -2110,6 +2146,7 @@
                                                                 type="text"
                                                                 id="addon-unit"
                                                                 [placeholder]="commonLocaleData?.app_unit_cm_mm"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -2119,6 +2156,7 @@
                                                                 type="text"
                                                                 id="addon-rate"
                                                                 [placeholder]="localeData?.enter_rate"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -2157,6 +2195,7 @@
                                                                         type="text"
                                                                         id="variant-sku-number"
                                                                         [placeholder]="localeData?.enter_sku_number"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -2193,6 +2232,7 @@
                                                                         type="text"
                                                                         id="final-product-1"
                                                                         [placeholder]="localeData?.product_1"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -2203,6 +2243,7 @@
                                                                         type="text"
                                                                         id="final-product-2"
                                                                         [placeholder]="localeData?.product_2"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -2212,6 +2253,7 @@
                                                                         type="text"
                                                                         id="recipe-output-qty"
                                                                         [placeholder]="localeData?.enter_qty"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -2221,6 +2263,7 @@
                                                                         type="text"
                                                                         id="recipe-output-unit"
                                                                         [placeholder]="commonLocaleData?.app_unit_cm_mm"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -2258,6 +2301,7 @@
                                                                         type="text"
                                                                         id="recipe-input-attribute"
                                                                         [placeholder]="localeData?.add_item"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -2267,6 +2311,7 @@
                                                                         type="text"
                                                                         id="recipe-input-qty"
                                                                         [placeholder]="localeData?.enter_qty"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -2276,6 +2321,7 @@
                                                                         type="text"
                                                                         id="recipe-input-unit"
                                                                         [placeholder]="commonLocaleData?.app_unit_cm_mm"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -2342,6 +2388,7 @@
                                                                 type="text"
                                                                 id="expense-assets"
                                                                 [placeholder]="localeData?.liability_assets"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -2351,6 +2398,7 @@
                                                                 type="text"
                                                                 id="expense-account"
                                                                 [placeholder]="localeData?.expense_acc"
+                                                                [appearance]="'outline'"
                                                             ></input-field>
                                                         </div>
                                                         <div class="width-30-percent">
@@ -2358,6 +2406,7 @@
                                                                 id="expense-amount"
                                                                 type="text"
                                                                 [placeholder]="commonLocaleData?.app_amount"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -2411,6 +2460,7 @@
                                                     id="combo-name"
                                                     type="text"
                                                     [placeholder]="localeData?.enter_name"
+                                                    [appearance]="'outline'"
                                                 ></input-field>
                                             </div>
                                         </div>
@@ -2454,6 +2504,7 @@
                                                     id="combo-unique-name"
                                                     type="text"
                                                     [placeholder]="commonLocaleData?.app_unique_name_placeholder"
+                                                    [appearance]="'outline'"
                                                 >
                                                 </input-field>
                                             </div>
@@ -2467,6 +2518,7 @@
                                                     id="combo-unique-name"
                                                     type="text"
                                                     [placeholder]="localeData?.enter_hsn_code"
+                                                    [appearance]="'outline'"
                                                 ></input-field>
                                             </div>
                                         </div>
@@ -2479,6 +2531,7 @@
                                                     id="combo-unique-name"
                                                     type="text"
                                                     [placeholder]="localeData?.enter_sku_code"
+                                                    [appearance]="'outline'"
                                                 ></input-field>
                                             </div>
                                         </div>
@@ -2514,6 +2567,7 @@
                                                     id="select-product"
                                                     type="text"
                                                     [placeholder]="localeData?.product_service"
+                                                    [appearance]="'outline'"
                                                 ></input-field>
                                             </td>
                                             <td width="20%">
@@ -2521,6 +2575,7 @@
                                                     id="unit-field"
                                                     type="text"
                                                     [placeholder]="commonLocaleData?.app_unit"
+                                                    [appearance]="'outline'"
                                                 ></input-field>
                                             </td>
                                             <td width="16%">
@@ -2529,6 +2584,7 @@
                                                     type="text"
                                                     value="2"
                                                     placeholder="0"
+                                                    [appearance]="'outline'"
                                                 ></input-field>
                                             </td>
                                             <td width="20%">0.00</td>
@@ -2555,6 +2611,7 @@
                                                     id="select-product"
                                                     type="text"
                                                     [placeholder]="localeData?.product_service"
+                                                    [appearance]="'outline'"
                                                 ></input-field>
                                             </td>
                                             <td width="20%">
@@ -2562,6 +2619,7 @@
                                                     id="unit-field"
                                                     type="text"
                                                     [placeholder]="commonLocaleData?.app_unit"
+                                                    [appearance]="'outline'"
                                                 ></input-field>
                                             </td>
                                             <td width="16%">
@@ -2570,6 +2628,7 @@
                                                     type="text"
                                                     value="2"
                                                     placeholder="0"
+                                                    [appearance]="'outline'"
                                                 ></input-field>
                                             </td>
                                             <td width="20%">0.00</td>
@@ -2651,6 +2710,7 @@
                                                                         type="text"
                                                                         id="select-unit"
                                                                         [placeholder]="localeData?.select_unit"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -2659,6 +2719,7 @@
                                                                         type="text"
                                                                         id="rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -2677,6 +2738,7 @@
                                                                         type="text"
                                                                         id="select-unit"
                                                                         [placeholder]="localeData?.select_unit"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -2685,6 +2747,7 @@
                                                                         type="text"
                                                                         id="rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -2756,6 +2819,7 @@
                                                                         id="sales-select-unit"
                                                                         [placeholder]="localeData?.select_unit"
                                                                         disabled
+                                                                        [appearance]="'outline'"
                                                                     ></input-field>
                                                                 </div>
                                                                 <div class="col-sm-6 col-6">
@@ -2764,6 +2828,7 @@
                                                                         id="sales-rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
                                                                         disabled
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -2783,6 +2848,7 @@
                                                                         id="sales-select-unit"
                                                                         [placeholder]="localeData?.select_unit"
                                                                         disabled
+                                                                        [appearance]="'outline'"
                                                                     ></input-field>
                                                                 </div>
                                                                 <div class="col-sm-6 col-6">
@@ -2791,6 +2857,7 @@
                                                                         id="sales-rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
                                                                         disabled
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -2835,6 +2902,7 @@
                                                                             id="inventory-account"
                                                                             type="text"
                                                                             value=""
+                                                                            [appearance]="'outline'"
                                                                         >
                                                                         </input-field>
                                                                     </div>
@@ -2853,6 +2921,7 @@
                                                                             id="opening-quantity"
                                                                             type="text"
                                                                             value=""
+                                                                            [appearance]="'outline'"
                                                                         >
                                                                         </input-field>
                                                                     </div>
@@ -2871,6 +2940,7 @@
                                                                             id="rate"
                                                                             type="text"
                                                                             value="Auto Calculate"
+                                                                            [appearance]="'outline'"
                                                                         ></input-field>
                                                                     </div>
                                                                 </div>
@@ -2893,6 +2963,7 @@
                                                                             id="low-stock-report"
                                                                             type="text"
                                                                             value=""
+                                                                            [appearance]="'outline'"
                                                                         >
                                                                         </input-field>
                                                                     </div>
@@ -2911,6 +2982,7 @@
                                                                             id="amount"
                                                                             type="text"
                                                                             value="200"
+                                                                            [appearance]="'outline'"
                                                                         >
                                                                         </input-field>
                                                                     </div>
@@ -2942,6 +3014,7 @@
                                                                             id="stock-output-qty"
                                                                             type="text"
                                                                             [placeholder]="localeData?.enter_qty"
+                                                                            [appearance]="'outline'"
                                                                         >
                                                                         </input-field>
                                                                     </div>
@@ -2972,6 +3045,7 @@
                                                                 <input-field
                                                                     type="text"
                                                                     [placeholder]="commonLocaleData?.app_stock_name"
+                                                                    [appearance]="'outline'"
                                                                 >
                                                                 </input-field>
                                                             </div>
@@ -2983,11 +3057,13 @@
                                                                     type="text"
                                                                     id="enter-qty"
                                                                     [placeholder]="localeData?.enter_qty"
+                                                                    [appearance]="'outline'"
                                                                 ></input-field>
                                                                 <sh-select
                                                                     id="select-stock-unit"
                                                                     class="ml-3"
                                                                     [placeholder]="localeData?.select_unit"
+                                                                    [appearance]="'outline'"
                                                                 >
                                                                 </sh-select>
                                                                 <button mat-icon-button role="button" type="button">
@@ -3053,6 +3129,7 @@
                                                                             type="text"
                                                                             id="select-unit"
                                                                             [placeholder]="localeData?.select_unit"
+                                                                            [appearance]="'outline'"
                                                                         ></input-field>
                                                                     </div>
                                                                     <div class="col-sm-6 col-6">
@@ -3060,6 +3137,7 @@
                                                                             type="text"
                                                                             id="rate"
                                                                             [placeholder]="commonLocaleData?.app_rate"
+                                                                            [appearance]="'outline'"
                                                                         >
                                                                         </input-field>
                                                                     </div>
@@ -3078,6 +3156,7 @@
                                                                             type="text"
                                                                             id="select-unit"
                                                                             [placeholder]="localeData?.select_unit"
+                                                                            [appearance]="'outline'"
                                                                         ></input-field>
                                                                     </div>
                                                                     <div class="col-sm-6 col-6">
@@ -3085,6 +3164,7 @@
                                                                             type="text"
                                                                             id="rate"
                                                                             [placeholder]="commonLocaleData?.app_rate"
+                                                                            [appearance]="'outline'"
                                                                         >
                                                                         </input-field>
                                                                     </div>
@@ -3157,6 +3237,7 @@
                                                                             id="sales-select-unit"
                                                                             [placeholder]="localeData?.select_unit"
                                                                             disabled
+                                                                            [appearance]="'outline'"
                                                                         >
                                                                         </input-field>
                                                                     </div>
@@ -3166,6 +3247,7 @@
                                                                             id="sales-rate"
                                                                             [placeholder]="commonLocaleData?.app_rate"
                                                                             disabled
+                                                                            [appearance]="'outline'"
                                                                         ></input-field>
                                                                     </div>
                                                                 </div>
@@ -3176,6 +3258,7 @@
                                                                             id="sales-select-unit"
                                                                             [placeholder]="localeData?.select_unit"
                                                                             disabled
+                                                                            [appearance]="'outline'"
                                                                         >
                                                                         </input-field>
                                                                     </div>
@@ -3185,6 +3268,7 @@
                                                                             id="sales-rate"
                                                                             [placeholder]="commonLocaleData?.app_rate"
                                                                             disabled
+                                                                            [appearance]="'outline'"
                                                                         ></input-field>
                                                                     </div>
                                                                 </div>
@@ -3224,6 +3308,7 @@
                                                                 type="text"
                                                                 id="output-qty"
                                                                 placeholder="Enter"
+                                                                [appearance]="'outline'"
                                                             ></input-field>
                                                         </div>
                                                     </div>
@@ -3236,6 +3321,7 @@
                                                                 type="text"
                                                                 id="stock-unit"
                                                                 placeholder="Amount"
+                                                                [appearance]="'outline'"
                                                             ></input-field>
                                                         </div>
                                                     </div>
@@ -3252,6 +3338,7 @@
                                                                 type="text"
                                                                 id="select-stock-nme"
                                                                 placeholder="Select Stock"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -3265,6 +3352,7 @@
                                                                 type="text"
                                                                 id="select-stock-qty"
                                                                 placeholder="Qty."
+                                                                [appearance]="'outline'"
                                                             ></input-field>
                                                         </div>
                                                     </div>
@@ -3277,6 +3365,7 @@
                                                                 type="text"
                                                                 id="select-stock-unit"
                                                                 [placeholder]="localeData?.select_unit"
+                                                                [appearance]="'outline'"
                                                             ></input-field>
                                                         </div>
                                                     </div>
@@ -3322,6 +3411,7 @@
                                                                     type="text"
                                                                     placeholder="Size"
                                                                     id="select-option"
+                                                                    [appearance]="'outline'"
                                                                 ></input-field>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6">
@@ -3340,6 +3430,7 @@
                                                                     type="text"
                                                                     placeholder="Ex: Size, Color"
                                                                     id="select-size-color"
+                                                                    [appearance]="'outline'"
                                                                 >
                                                                 </input-field>
                                                             </div>
@@ -3347,6 +3438,7 @@
                                                                 <input-field
                                                                     type="text"
                                                                     placeholder="Separate options with a comma"
+                                                                    [appearance]="'outline'"
                                                                 >
                                                                 </input-field>
                                                             </div>
@@ -3370,7 +3462,11 @@
                                                         <label>Combo Display Name</label>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
-                                                        <input-field type="text" id="stock-display-name"></input-field>
+                                                        <input-field
+                                                            type="text"
+                                                            id="stock-display-name"
+                                                            [appearance]="'outline'"
+                                                        ></input-field>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3424,6 +3520,7 @@
                                                             id="product-name"
                                                             type="text"
                                                             placeholder="Enter HSN Code"
+                                                            [appearance]="'outline'"
                                                         ></input-field>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6" *ngIf="!isHSN">
@@ -3431,6 +3528,7 @@
                                                             id="product-name"
                                                             type="text"
                                                             placeholder="Enter SAC Code"
+                                                            [appearance]="'outline'"
                                                         ></input-field>
                                                     </div>
                                                 </div>
@@ -3441,7 +3539,8 @@
                                                         <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
-                                                        <input-field id="bar-code" type="text"> </input-field>
+                                                        <input-field id="bar-code" type="text" [appearance]="'outline'">
+                                                        </input-field>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3451,7 +3550,11 @@
                                                         <label>Custom Field</label>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
-                                                        <input-field id="expiry-code" type="text"></input-field>
+                                                        <input-field
+                                                            id="expiry-code"
+                                                            type="text"
+                                                            [appearance]="'outline'"
+                                                        ></input-field>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3472,6 +3575,7 @@
                                                                 id="combo-variant-name"
                                                                 placeholder="Variant Name"
                                                                 readonly
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -3481,6 +3585,7 @@
                                                                 type="text"
                                                                 id="combo-variant-sku"
                                                                 placeholder="SKU"
+                                                                [appearance]="'outline'"
                                                             ></input-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
@@ -3489,6 +3594,7 @@
                                                                 type="text"
                                                                 id="combo-variant-opening-balance"
                                                                 placeholder="Enter amount"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -3498,6 +3604,7 @@
                                                                 type="text"
                                                                 id="combo-variant-qty"
                                                                 placeholder="Enter Qty"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -3507,6 +3614,7 @@
                                                                 type="text"
                                                                 id="combo-variant-rate"
                                                                 [placeholder]="localeData?.enter_rate"
+                                                                [appearance]="'outline'"
                                                             ></input-field>
                                                         </div>
                                                     </div>
@@ -3536,6 +3644,7 @@
                                                                 type="text"
                                                                 id="combo-addon-item"
                                                                 placeholder="Add item"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -3545,6 +3654,7 @@
                                                                 type="text"
                                                                 id="combo-addon-qty"
                                                                 placeholder="Enter Quantity"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -3554,6 +3664,7 @@
                                                                 type="text"
                                                                 id="combo-sku"
                                                                 placeholder="Enter SKU Number"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -3563,6 +3674,7 @@
                                                                 type="text"
                                                                 id="addon-unit"
                                                                 placeholder="eg. cm, kg, m, box"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -3572,6 +3684,7 @@
                                                                 type="text"
                                                                 id="combo-addon-rate"
                                                                 [placeholder]="localeData?.enter_rate"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -3611,6 +3724,7 @@
                                                                         type="text"
                                                                         id="combo-sku-number"
                                                                         placeholder="Enter SKU Number"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -3646,6 +3760,7 @@
                                                                         type="text"
                                                                         id="combo-final-product-1"
                                                                         placeholder="Product 1"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -3656,6 +3771,7 @@
                                                                         type="text"
                                                                         id="combo-final-product-2"
                                                                         placeholder="Product 2"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -3665,6 +3781,7 @@
                                                                         type="text"
                                                                         id="combo-recipe-output-qty"
                                                                         placeholder="Enter Qty"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -3674,6 +3791,7 @@
                                                                         type="text"
                                                                         id="combo-recipe-output-unit"
                                                                         placeholder="eg. cm, kg, m, box"
+                                                                        [appearance]="'outline'"
                                                                     ></input-field>
                                                                 </div>
                                                                 <div class="d-none-mobile pl-0 pr-0">
@@ -3708,6 +3826,7 @@
                                                                         type="text"
                                                                         id="combo-recipe-input-attribute"
                                                                         placeholder="Add item"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -3717,6 +3836,7 @@
                                                                         type="text"
                                                                         id="combo-recipe-input-qty"
                                                                         placeholder="Enter Qty"
+                                                                        [appearance]="'outline'"
                                                                     >
                                                                     </input-field>
                                                                 </div>
@@ -3726,6 +3846,7 @@
                                                                         type="text"
                                                                         id="combo-recipe-input-unit"
                                                                         placeholder="eg. cm, kg, m, box"
+                                                                        [appearance]="'outline'"
                                                                     ></input-field>
                                                                 </div>
                                                                 <div class="d-none-mobile">
@@ -3788,6 +3909,7 @@
                                                                 type="text"
                                                                 id="combo-expense-assets"
                                                                 placeholder="Liability/Asset A/c"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -3797,6 +3919,7 @@
                                                                 type="text"
                                                                 id="combo-expense-account"
                                                                 placeholder="Expense A/c"
+                                                                [appearance]="'outline'"
                                                             >
                                                             </input-field>
                                                         </div>
@@ -3805,6 +3928,7 @@
                                                                 id="combo-expense-amount"
                                                                 type="text"
                                                                 placeholder="Amount"
+                                                                [appearance]="'outline'"
                                                             ></input-field>
                                                         </div>
                                                         <div
@@ -4820,6 +4944,7 @@
                                             [cssStyle]="'padding-left: 28px !important;'"
                                             type="text"
                                             placeholder="Search"
+                                            [appearance]="'outline'"
                                         >
                                         </input-field>
                                     </div>
@@ -4857,7 +4982,13 @@
                                         <tr>
                                             <td data-title="#" class="pd list-number">1</td>
                                             <td data-title="Stock Name">
-                                                <input-field type="text" id="stock-name-field" readonly> </input-field>
+                                                <input-field
+                                                    type="text"
+                                                    id="stock-name-field"
+                                                    readonly
+                                                    [appearance]="'outline'"
+                                                >
+                                                </input-field>
                                             </td>
                                             <td data-title="Unique Name">
                                                 <input-field
@@ -4865,6 +4996,7 @@
                                                     placeholder="Enter"
                                                     id="stock-unique-name"
                                                     readonly
+                                                    [appearance]="'outline'"
                                                 ></input-field>
                                             </td>
                                             <td data-title="Inventory Type">
@@ -4890,6 +5022,7 @@
                                                     type="text"
                                                     placeholder="Enter"
                                                     id="opening-amount"
+                                                    [appearance]="'outline'"
                                                 ></input-field>
                                             </td>
                                             <td data-title="Purchase Account Name">
@@ -4921,6 +5054,7 @@
                                                     type="text"
                                                     placeholder="Enter"
                                                     id="hsn-sac-code"
+                                                    [appearance]="'outline'"
                                                 ></input-field>
                                             </td>
                                             <td data-title="SAC Code">
@@ -4928,6 +5062,7 @@
                                                     type="text"
                                                     placeholder="Enter"
                                                     id="sku-code"
+                                                    [appearance]="'outline'"
                                                 ></input-field>
                                             </td>
                                             <td data-title="Barcode">
@@ -4935,6 +5070,7 @@
                                                     type="text"
                                                     placeholder="Enter"
                                                     id="bar-code"
+                                                    [appearance]="'outline'"
                                                 ></input-field>
                                             </td>
                                             <td data-title="Expiry Date">
@@ -4950,7 +5086,8 @@
                                     <i class="icon-plus text-primary"></i>
                                 </button>
                                 <span class="d-flex align-items-center">
-                                    <input-field class="mr-1" id="fill-number" placeholder="0"> </input-field>
+                                    <input-field class="mr-1" id="fill-number" placeholder="0" [appearance]="'outline'">
+                                    </input-field>
                                     <span class="font-14">More rows at bottom</span>
                                 </span>
                             </div>

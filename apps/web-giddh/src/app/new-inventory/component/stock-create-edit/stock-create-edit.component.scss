@@ -661,7 +661,6 @@ table.stock-table {
 }
 .mat-select {
     min-width: unset !important;
-    border-bottom: 1px solid var(--color-primary-card-box-shadow) !important;
 }
 /* responsive */
 @media (max-width: 1440px) {
@@ -965,7 +964,4 @@ table.stock-table {
     right: 15px;
     z-index: 1;
     top: 18px;
-}
-.input-gap {
-    row-gap: 20px;
 }
