@@ -59,7 +59,7 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
     private onChangeCallback: (_: any) => void = noop;
     /** True if field is autocomplete */
     @Input() public autocomplete: string;
-    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'legacy';
+    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
     /** Holds Mat Input Label */
     @Input() public label:string;
 
