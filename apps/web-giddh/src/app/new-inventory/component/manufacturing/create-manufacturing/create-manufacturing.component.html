@@ -62,9 +62,7 @@
                                     <h1 class="section-head">{{ localeData?.finished_stock }}</h1>
                                     <div>
                                         <dropdown-field
-                                            [cssClass]="
-                                                '' + (errorFields.finishedStockName ? ' required-field-error' : '')
-                                            "
+                                            [cssClass]="errorFields.finishedStockName ? ' required-field-error' : ''"
                                             [name]="'stockUniqueName'"
                                             [scrollableElementId]="'finishedStockDropdown'"
                                             [placeholder]="commonLocaleData?.app_select_stock"
@@ -93,9 +91,7 @@
 
                                     <div *ngIf="manufacturingObject.manufacturingDetails[0].variants?.length > 1">
                                         <dropdown-field
-                                            [cssClass]="
-                                                '' + (errorFields.finishedStockVariant ? ' required-field-error' : '')
-                                            "
+                                            [cssClass]="errorFields.finishedStockVariant ? ' required-field-error' : ''"
                                             [name]="'variantUniqueName'"
                                             [placeholder]="commonLocaleData?.app_select_variant"
                                             [options]="manufacturingObject.manufacturingDetails[0].variants"
@@ -116,9 +112,7 @@
                                             manufacturingObject.manufacturingDetails[0].manufacturingUnitCode
                                         }}</small>
                                         <input-field
-                                            [cssClass]="
-                                                '' + (errorFields.finishedQuantity ? ' required-field-error' : '')
-                                            "
+                                            [cssClass]="errorFields.finishedQuantity ? ' required-field-error' : ''"
                                             [type]="'number'"
                                             [name]="'manufacturingQuantity'"
                                             [placeholder]="commonLocaleData?.app_quantity"

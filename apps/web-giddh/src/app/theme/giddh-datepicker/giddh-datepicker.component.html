@@ -1,5 +1,5 @@
 <mat-form-field [appearance]="appearance" [floatLabel]="'auto'">
-    <mat-label>{{ placeholder }}</mat-label>
+    <mat-label *ngIf="appearance === 'outline'">{{ placeholder }}</mat-label>
     <input
         matInput
         [matDatepicker]="picker"
