@@ -77,6 +77,6 @@
     "permanently_delete":"It will be deleted permanently and will no longer be accessible from any other module.",
     "stock_delete_succesfully":"Stock deleted successfully.",
     "stock_create_succesfully":"Stock created successfully.",
-    "remove_variant":"Doing the action will remove all the variants, Are your sure you want to unselect it?"
+    "stock_update_succesfully":"Stock updated successfully.",
+    "remove_variant":"Doing the action will remove all the variants, Are you sure you want to unselect it?"
 }
-
