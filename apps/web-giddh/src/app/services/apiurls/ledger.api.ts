@@ -50,8 +50,8 @@ export const LEDGER_API = {
     ACCOUNT_SEARCH_PREDICTION: 'company/:companyUniqueName/account-search-predicted?accountUniqueName=:accountUniqueName',
 
     // Run Auto-paid
-    RUN_AUTOPAID: 'company/:companyUniqueName/accounts/:accountUniqueName/autopaid',
+   RUN_AUTOPAID: 'company/:companyUniqueName/accounts/:accountUniqueName/autopaid',
 
-    // Load stock variant
-    GET_STOCK_VARIANTS: 'company/:companyUniqueName/stock/:stockUniqueName/variants'
+   // Load stock variant
+   GET_STOCK_VARIANTS: 'company/:companyUniqueName/stock/:stockUniqueName/variants'
 };

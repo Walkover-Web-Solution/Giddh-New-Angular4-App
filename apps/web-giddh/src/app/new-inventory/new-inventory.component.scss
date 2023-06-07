@@ -97,10 +97,8 @@ sh-select::ng-deep input {
 }
 .inventory-card {
     border-radius: 5px;
+    overflow: hidden;
 }
-//button {
-//    border-radius: 50px !important;
-//}
 button#more-btn-inventory {
     min-width: 90px;
     display: flex;
