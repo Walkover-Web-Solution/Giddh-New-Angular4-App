@@ -247,8 +247,10 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
     public showCodeType: string;
     public highPrecisionAmount?: number;
-    /* Amount should have precision up to 16 digits for better calculation */
+    /* Rate should have precision up to 16 digits for better calculation */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
+    /** Stores the selected stock variant */
+    public variant: {uniqueName: string};
 
     constructor() {
         super();
@@ -258,6 +260,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         this.hsnOrSac = 'hsn';
         this.taxableValue = 0;
         this.showCodeType = "";
+        this.variant = {uniqueName: ''};
     }
 
     // basic check for valid transaction
@@ -664,6 +667,7 @@ export class TransactionClassMulticurrency {
     public account: INameUniqueName;
     public amount: AmountClassMulticurrency;
     public stock?: SalesAddBulkStockItems;
+    public variant?: {uniqueName: string};
     public description?: string;
 
     constructor() {
@@ -672,6 +676,7 @@ export class TransactionClassMulticurrency {
             uniqueName: 'sales';
         };
         this.amount = new AmountClassMulticurrency();
+        this.variant = {uniqueName: ''};
     }
 }
 

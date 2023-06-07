@@ -61,9 +61,9 @@ import {
     VoucherDetailsClass,
     VoucherTypeEnum
 } from '../models/api-models/Sales';
-import { auditTime, debounceTime, delay, filter, take, takeUntil } from 'rxjs/operators';
+import { auditTime, debounceTime, delay, filter, map, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
-import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { FormControl, NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
@@ -87,7 +87,7 @@ import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { InvoiceReceiptFilter, ReciptResponse } from '../models/api-models/recipt';
 import { LedgerService } from '../services/ledger.service';
 import { TaxControlComponent } from '../theme/tax-control/tax-control.component';
-import { LedgerResponseDiscountClass } from "../models/api-models/Ledger";
+import { IVariant, LedgerResponseDiscountClass } from "../models/api-models/Ledger";
 import { OnboardingFormRequest } from '../models/api-models/Common';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
@@ -753,6 +753,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public giddhRoundOff: any = giddhRoundOff;
     /** True if einvoice is generated for the voucher */
     public isEinvoiceGenerated: boolean = false;
+    /** Stores the stock variants */
+    public stockVariants: BehaviorSubject<Array<Observable<Array<IOption>>>> = new BehaviorSubject([]);
+
+    /** Stores the current transaction request obj for the API */
+    private currentTxnRequestObject: Array<any> = [];
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1720,6 +1725,21 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
                 this.defaultCustomerSuggestions = [];
                 this.onSearchQueryChanged(value[1]?.body?.name, 1, 'customer');
+            }
+        });
+
+        this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res?.length) {
+                const currentEntryStockVariantUniqueName = this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName;
+                let stockAllVariants;
+                res[this.activeIndx].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
+                if (stockAllVariants.findIndex(variant => variant.value === currentEntryStockVariantUniqueName) === -1) {
+                    // Only reset the stock variant when the stock is changed
+                    this.currentTxnRequestObject[this.activeIndx].txn.variant = { uniqueName: stockAllVariants[0].value };
+                    // include the variant unique name for the API call
+                    this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName = stockAllVariants[0].value;
+                    this.loadDetails(this.currentTxnRequestObject[0]);
+                }
             }
         });
     }
@@ -3366,108 +3386,30 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.invFormData.entries[entryIndex] = entry;
         this.invFormData.entries[entryIndex].transactions[0] = txn;
         if ((selectedAcc?.value || isBulkItem) && selectedAcc.additional && selectedAcc.additional?.uniqueName) {
-            let requestObject;
+            let params;
             if (selectedAcc.additional.stock) {
-                requestObject = {
+                params = {
                     stockUniqueName: selectedAcc.additional.stock?.uniqueName
                 };
             }
             if (isBulkItem) {
                 txn = this.calculateItemValues(selectedAcc, txn, entry, true, true);
             } else {
-                this.searchService.loadDetails(selectedAcc.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data && data.body) {
-                        // Take taxes of parent group and stock's own taxes
-                        const taxes = this.generalService.fetchTaxesOnPriority(
-                            data.body.stock?.taxes ?? [],
-                            data.body.stock?.groupTaxes ?? [],
-                            data.body.taxes ?? [],
-                            data.body.groupTaxes ?? []);
-                        const taxComponent = this.taxControlComponent?.find((item, index) => index === entryIndex);
-                        if (taxComponent) {
-                            taxComponent.enableAllTheTaxes();
-                        }
-                        let maxQuantity = 0;
-
-                        if (isLinkedPoItem) {
-                            maxQuantity = selectedAcc.additional.maxQuantity;
-                        }
-
-                        // directly assign additional property
-                        selectedAcc.additional = {
-                            ...selectedAcc.additional,
-                            label: selectedAcc.label,
-                            value: selectedAcc?.value,
-                            applicableTaxes: taxes,
-                            currency: data.body.currency,
-                            currencySymbol: data.body.currencySymbol,
-                            email: data.body.emails,
-                            isFixed: data.body.isFixed,
-                            mergedAccounts: data.body.mergedAccounts,
-                            mobileNo: data.body.mobileNo,
-                            nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.name).join(', ') : '',
-                            stock: (isLinkedPoItem && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
-                            hsnNumber: selectedAcc.stock?.hsnNumber ? selectedAcc.stock.hsnNumber : data.body.hsnNumber,
-                            sacNumber: selectedAcc.stock?.sacNumber ? selectedAcc.stock.sacNumber : data.body.sacNumber,
-                            uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
-                        };
-                        txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem);
-
-                        if (isLinkedPoItem) {
-                            txn.applicableTaxes = entry.taxList;
-
-                            if (selectedAcc.stock) {
-                                txn.stockDetails = selectedAcc.stock;
-
-                                if (txn.stockDetails?.uniqueName) {
-                                    let stockUniqueName = txn.stockDetails?.uniqueName.split('#');
-                                    txn.stockDetails.uniqueName = stockUniqueName[1];
-                                }
-
-                                if (selectedAcc.stock.quantity) {
-                                    txn.quantity = selectedAcc.stock.quantity;
-                                }
-                                if (selectedAcc.stock.rate) {
-                                    txn.rate = selectedAcc.stock.rate.amountForAccount;
-                                    txn.isStockTxn = true;
-                                }
-                            }
-
-                            if (selectedAcc.stock && selectedAcc.stock.quantity && selectedAcc.stock.rate) {
-                                this.calculateStockEntryAmount(txn);
-                            } else {
-                                if (selectedAcc.amount) {
-                                    txn.amount = selectedAcc.amount.amountForAccount;
-                                    txn.highPrecisionAmount = txn.amount;
-                                }
-                            }
-
-                            txn.maxQuantity = maxQuantity;
-
-                            this.calculateWhenTrxAltered(entry, txn);
-
-                            this.linkedPoItemsAdded++;
-                        }
-                        this.focusOnDescription();
-                    }
-                }, () => {
-                    txn.isStockTxn = false;
-                    txn.amount = 0;
-                    txn.highPrecisionAmount = txn.amount;
-                    txn.accountName = null;
-                    txn.accountUniqueName = null;
-                    txn.hsnOrSac = 'sac';
-                    txn.total = null;
-                    txn.rate = null;
-                    txn.sacNumber = null;
-                    txn.sacNumberExists = false;
-                    txn.taxableValue = 0;
-                    txn.applicableTaxes = [];
-                    this.focusOnDescription();
-                    return txn;
-                });
+                this.currentTxnRequestObject[this.activeIndx] = {
+                    selectedAcc,
+                    isLinkedPoItem,
+                    txn,
+                    entry,
+                    params,
+                    entryIndex
+                };
+                if (selectedAcc.additional.stock) {
+                    txn.isStockTxn = true;
+                    this.loadStockVariants(selectedAcc.additional.stock.uniqueName);
+                } else {
+                    this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
+                }
             }
-
         } else {
             txn.isStockTxn = false;
             txn.amount = 0;
@@ -3570,8 +3512,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 text: o.stock.stockUnitCode
             };
             transaction.stockList = [];
-            if (o.stock && o.stock.unitRates && o.stock.unitRates.length) {
-                transaction.stockList = this.prepareUnitArr(o.stock.unitRates);
+            const unitRates = (this.generalService.voucherApiVersion === 1 ? o.stock?.unitRates : o.stock?.variant?.unitRates) ?? [];
+            if (o.stock && unitRates.length) {
+                transaction.stockList = this.prepareUnitArr(unitRates);
                 transaction.stockUnit = transaction.stockList[0].id;
                 transaction.stockUnitCode = transaction.stockList[0].text;
                 transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
@@ -4248,6 +4191,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     transactionClassMul.account.uniqueName = tr.accountUniqueName;
                     transactionClassMul.account.name = tr.accountName;
                     transactionClassMul.amount.amountForAccount = tr.amount;
+                    transactionClassMul.variant.uniqueName = tr.variant.uniqueName;
                     salesEntryClass.hsnNumber = tr.hsnNumber;
                     salesEntryClass.sacNumber = tr.sacNumber;
                     salesEntryClass.description = tr.description;
@@ -4961,8 +4905,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             }
                             newTrxObj.sku_and_customfields = description.join(', ');
                         }
-
-                        stock.unitRates = stock.unitRates || [];
+                        const unitRates = (this.generalService.voucherApiVersion === 1 ? stock?.unitRates : stock?.variant?.unitRates) ?? [];
+                        stock.unitRates = unitRates || [];
                         const unitRate = stock.unitRates.find(rate => rate.stockUnitCode === stock.stockUnit.code);
 
                         let stockUnit: IStockUnit = {
@@ -5137,6 +5081,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 transactionClassMul.account.uniqueName = tr.accountUniqueName;
                 transactionClassMul.account.name = tr.accountName;
                 transactionClassMul.amount.amountForAccount = tr.amount;
+                transactionClassMul.variant.uniqueName = tr.variant.uniqueName;
                 salesEntryClass.hsnNumber = (tr.showCodeType === 'hsn') ? tr.hsnNumber : "";
                 salesEntryClass.sacNumber = (tr.showCodeType === 'sac') ? tr.sacNumber : "";
                 salesEntryClass.description = tr.description;
@@ -5254,8 +5199,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     }
                 });
                 if (t.stock) {
+                    const unitRates = (this.generalService.voucherApiVersion === 1 ? t.stock?.unitRates : t.stock?.variant?.unitRates) ?? [];
                     if (!t.stock.stockUnit?.uniqueName && t.stock.stockUnit?.code) {
-                        const unitFound = t.stock?.unitRates?.filter(unit => unit?.stockUnitCode === t.stock.stockUnit?.code);
+                        const unitFound = unitRates?.filter(unit => unit?.stockUnitCode === t.stock.stockUnit?.code);
                         if (unitFound?.length) {
                             t.stock.stockUnit.uniqueName = unitFound[0]?.stockUnitUniqueName;
                         }
@@ -5268,7 +5214,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     salesTransactionItemClass.stockDetails.customField2 = t.stock.customField2;
                     salesTransactionItemClass.stockDetails.stockUnit = t.stock.stockUnit;
                     salesTransactionItemClass.stockDetails.stockUnitCode = t.stock.stockUnitCode;
-                    salesTransactionItemClass.stockDetails.unitRates = t.stock.unitRates;
+                    salesTransactionItemClass.stockDetails.unitRates = unitRates;
                     salesTransactionItemClass.stockDetails.uniqueName = t.stock.uniqueName;
                     salesTransactionItemClass.stockDetails.skuCodeHeading = t.stock.skuCodeHeading;
                     salesTransactionItemClass.quantity = t.stock.quantity;
@@ -8477,5 +8423,138 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71)) {
             this.isCreatingNewAccount = false;
         }
+    }
+
+    /**
+     * Loads the stock variants
+     *
+     * @private
+     * @param {string} stockUniqueName Uniquename of the stock
+     * @memberof VoucherComponent
+     */
+    private loadStockVariants(stockUniqueName: string): void {
+        this._ledgerService.loadStockVariants(stockUniqueName).pipe(
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
+                const allStockVariants = this.stockVariants.getValue();
+                allStockVariants[this.activeIndx] = observableOf(res);
+                this.stockVariants.next(allStockVariants);
+                // this.chan.detectChanges();
+            });
+    }
+
+    /**
+     * Variant change handler
+     *
+     * @param {IOption} event Change event
+     * @memberof VoucherComponent
+     */
+    public variantChanged(event: IOption): void {
+        // this.stockVariantSelected.emit(event.value);
+        if (this.currentTxnRequestObject[this.activeIndx]?.params) {
+            this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName = event.value;
+            this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
+        }
+    }
+
+    private loadDetails(requestObject: any): void {
+        let {
+            selectedAcc,
+            isLinkedPoItem,
+            txn,
+            entry,
+            params,
+            entryIndex
+        } = requestObject;
+        this.searchService.loadDetails(selectedAcc.additional?.uniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data && data.body) {
+                // Take taxes of parent group and stock's own taxes
+                const taxes = this.generalService.fetchTaxesOnPriority(
+                    data.body.stock?.taxes ?? [],
+                    data.body.stock?.groupTaxes ?? [],
+                    data.body.taxes ?? [],
+                    data.body.groupTaxes ?? []);
+                const taxComponent = this.taxControlComponent?.find((item, index) => index === entryIndex);
+                if (taxComponent) {
+                    taxComponent.enableAllTheTaxes();
+                }
+                let maxQuantity = 0;
+
+                if (isLinkedPoItem) {
+                    maxQuantity = selectedAcc.additional.maxQuantity;
+                }
+
+                // directly assign additional property
+                selectedAcc.additional = {
+                    ...selectedAcc.additional,
+                    label: selectedAcc.label,
+                    value: selectedAcc?.value,
+                    applicableTaxes: taxes,
+                    currency: data.body.currency,
+                    currencySymbol: data.body.currencySymbol,
+                    email: data.body.emails,
+                    isFixed: data.body.isFixed,
+                    mergedAccounts: data.body.mergedAccounts,
+                    mobileNo: data.body.mobileNo,
+                    nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.name).join(', ') : '',
+                    stock: (isLinkedPoItem && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
+                    hsnNumber: selectedAcc.stock?.hsnNumber ? selectedAcc.stock.hsnNumber : data.body.hsnNumber,
+                    sacNumber: selectedAcc.stock?.sacNumber ? selectedAcc.stock.sacNumber : data.body.sacNumber,
+                    uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
+                };
+                txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem);
+
+                if (isLinkedPoItem) {
+                    txn.applicableTaxes = entry.taxList;
+
+                    if (selectedAcc.stock) {
+                        txn.stockDetails = selectedAcc.stock;
+
+                        if (txn.stockDetails?.uniqueName) {
+                            let stockUniqueName = txn.stockDetails?.uniqueName.split('#');
+                            txn.stockDetails.uniqueName = stockUniqueName[1];
+                        }
+
+                        if (selectedAcc.stock.quantity) {
+                            txn.quantity = selectedAcc.stock.quantity;
+                        }
+                        if (selectedAcc.stock.rate) {
+                            txn.rate = selectedAcc.stock.rate.amountForAccount;
+                            txn.isStockTxn = true;
+                        }
+                    }
+
+                    if (selectedAcc.stock && selectedAcc.stock.quantity && selectedAcc.stock.rate) {
+                        this.calculateStockEntryAmount(txn);
+                    } else {
+                        if (selectedAcc.amount) {
+                            txn.amount = selectedAcc.amount.amountForAccount;
+                            txn.highPrecisionAmount = txn.amount;
+                        }
+                    }
+
+                    txn.maxQuantity = maxQuantity;
+
+                    this.calculateWhenTrxAltered(entry, txn);
+
+                    this.linkedPoItemsAdded++;
+                }
+                this.focusOnDescription();
+            }
+        }, () => {
+            txn.isStockTxn = false;
+            txn.amount = 0;
+            txn.highPrecisionAmount = txn.amount;
+            txn.accountName = null;
+            txn.accountUniqueName = null;
+            txn.hsnOrSac = 'sac';
+            txn.total = null;
+            txn.rate = null;
+            txn.sacNumber = null;
+            txn.sacNumberExists = false;
+            txn.taxableValue = 0;
+            txn.applicableTaxes = [];
+            this.focusOnDescription();
+            return txn;
+        });
     }
 }

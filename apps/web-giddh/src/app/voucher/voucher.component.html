@@ -2576,6 +2576,36 @@
                                                 </select-field>
                                             </div>
                                         </div>
+                                        <ng-container
+                                            *ngIf="
+                                                transaction?.isStockTxn &&
+                                                ((stockVariants | async)[activeIndx] | async) as variants
+                                            "
+                                        >
+                                            <div *ngIf="variants?.length > 1" class="variant-name">
+                                                <!-- <select-field
+                                                    [disabled]="isReadOnly"
+                                                    [cssClass]="'form-control mat-field-border'"
+                                                    [placeholder]="localeData?.select_variant"
+                                                    (selectedOption)="variantChanged($event)"
+                                                    [options]="variants"
+                                                    [required]="true"
+                                                    [name]="'variant' + entryIdx"
+                                                    [(ngModel)]="transaction.variant.uniqueName"
+                                                >
+                                                </select-field> -->
+                                                <sh-select
+                                                    [disabled]="isReadOnly"
+                                                    [class.disabled-ledger]="isReadOnly"
+                                                    [placeholder]="localeData?.select_variant"
+                                                    [options]="variants"
+                                                    (selected)="variantChanged($event)"
+                                                    [isRequired]="true"
+                                                    name="{{ 'variant' + entryIdx }}"
+                                                    [(ngModel)]="transaction.variant.uniqueName"
+                                                ></sh-select>
+                                            </div>
+                                        </ng-container>
                                         <div *ngIf="transaction.fakeAccForSelect2">
                                             <div class="sku-number">
                                                 <label>{{ commonLocaleData?.app_sku }}:</label

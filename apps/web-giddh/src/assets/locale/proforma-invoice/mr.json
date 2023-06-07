@@ -62,7 +62,7 @@
     "add_customer": "ग्राहक जोडा",
     "add_vendor": "विक्रेता जोडा",
     "invoice_no": "बीजक #",
-    "bill_number":"बिल क्रमांक",
+    "bill_number": "बिल क्रमांक",
     "proforma_no": "प्रोफार्मा #",
     "estimate_no": "अंदाज #",
     "purchase_bill_no": "खरेदी बिल #",
@@ -109,5 +109,6 @@
     "enter_amount": "कृपया ठेव रक्कम प्रविष्ट करा",
     "voucher_number_required": "व्हाउचर क्रमांक अनिवार्य आहे",
     "invalid_contact_number": "अवैध संपर्क क्रमांक",
-    "account": "खाते"
+    "account": "खाते",
+    "select_variant": "प्रकार निवडा"
 }
