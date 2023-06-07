@@ -229,6 +229,7 @@
                                                                         : '')
                                                                 "
                                                                 [name]="'variantUniqueName' + i"
+                                                                [scrollableElementId]="'variant' + i"
                                                                 [placeholder]="commonLocaleData?.app_select_variant"
                                                                 [options]="linkedStock.variants"
                                                                 (selectedOption)="
@@ -265,13 +266,36 @@
                                                     <td>
                                                         <div>
                                                             <div>
-                                                                {{ linkedStock.stockUnitCode }}
+                                                                <select-field
+                                                                    [cssClass]="linkedStock.cssClass"
+                                                                    [name]="'variantUnit' + i"
+                                                                    [scrollableElementId]="'variantUnit' + i"
+                                                                    [placeholder]="commonLocaleData?.app_unit"
+                                                                    [options]="
+                                                                        linkedStock.selectedStock?.additional?.unitsList
+                                                                    "
+                                                                    (selectedOption)="
+                                                                        linkedStock.stockUnitUniqueName = $event.value;
+                                                                        linkedStock.stockUnitCode = $event.label;
+                                                                        getRateForStock(linkedStock, i)
+                                                                    "
+                                                                    [defaultValue]="linkedStock.stockUnitCode"
+                                                                >
+                                                                </select-field>
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div>
-                                                            {{ linkedStock.rate }}
+                                                            <text-field
+                                                                [cssClass]="linkedStock.cssClass"
+                                                                [type]="'number'"
+                                                                [name]="'rate' + i"
+                                                                [(ngModel)]="linkedStock.rate"
+                                                                [placeholder]="commonLocaleData?.app_rate"
+                                                                (change)="calculateRowTotal(linkedStock)"
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                     </td>
                                                     <td>{{ linkedStock.amount }}</td>
