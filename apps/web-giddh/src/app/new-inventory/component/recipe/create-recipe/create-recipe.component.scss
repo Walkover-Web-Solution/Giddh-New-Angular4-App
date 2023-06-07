@@ -35,8 +35,8 @@
             margin-left: unset;
             margin-right: unset;
         }
-        .max-width-1300 {
-            max-width: 1300px;
+        .max-width-950 {
+            max-width: 950px;
         }
         .manufacturing-border {
             border-bottom: 1px solid var(--color-iron);
@@ -50,7 +50,7 @@
         }
         .form-fileds {
             .gap-between {
-                gap: 1rem;
+                gap: 10px;
             }
             .max-width-230 {
                 display: block;
@@ -64,7 +64,7 @@
                 font-weight: 400;
             }
             .multiple {
-                margin-top: -8px;
+                margin-top: -6px;
             }
         }
         .consumption-details-wrapper {
@@ -113,6 +113,9 @@
                     th,
                     td {
                         text-align: left;
+                    }
+                    &.view-mode-table {
+                        max-width: 360px;
                     }
                 }
             }

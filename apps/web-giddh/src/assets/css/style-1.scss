@@ -3264,6 +3264,7 @@ td.mat-footer-cell {
 }
 
 /*-- input-new-form-field --*/
+create-update-group,
 giddh-datepicker,
 stock-create-edit,
 dropdown-field,
@@ -3379,26 +3380,6 @@ stock-create-edit {
                 border: 0 !important;
                 background-color: transparent;
             }
-        }
-    }
-}
-stock-create-edit {
-    .mat-form-field {
-        width: 100%;
-        .mat-form-field-infix {
-            input {
-                height: 28px;
-            }
-        }
-    }
-    .mat-form-field-appearance-fill {
-        .mat-form-field-flex {
-            padding: 0;
-        }
-    }
-    .variant-field-wrap {
-        .error-box {
-            border: 0 !important;
         }
     }
 }

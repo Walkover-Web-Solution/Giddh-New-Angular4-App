@@ -96,6 +96,19 @@
             </perfect-scrollbar>
         </div>
         <div class="inventory-btnside">
+            <div class="searchbar d-flex justify-content-end pt-3">
+                <input
+                    type="text"
+                    name="grpSrch"
+                    #grpSrch
+                    id="grpSrch"
+                    class="form-control"
+                    [placeholder]="'Search accounts'"
+                    financial-accordion="search"
+                    [style.width.px]="260"
+                    autocomplete="off"
+                />
+            </div>
             <div
                 class="create-btn-grp create-btn-inventory"
                 *ngIf="createUpdateGroup !== 'in' && createUpdateStock !== 'in'"
