@@ -165,191 +165,7 @@
                             >
                                 <mat-tab [label]="localeData?.account">
                                     <div class="tab-container-new">
-                                        <!-- <form>
-                                            <div class="row">
-                                                <div class="col-xl-8 col-md-12 col-xs-12 col-sm-12">
-                                                    <div class="row">
-                                                        <div class="col-md-12 col-lg-8 col-xl-6 col-12">
-                                                            <div class="row">
-                                                                <div class="col-12 col-xl-12">
-                                                                    <div class="row mr-b15">
-                                                                        <div class="col-sm-6 col-lg-6">
-                                                                            <label
-                                                                                >Inventory Account <span class="red-text"></span>
-                                                                                <i class="icon-info text-gray"></i
-                                                                            ></label>
-                                                                        </div>
-                                                                        <div class="col-sm-6 col-lg-6">
-                                                                            <input-field
-                                                                                [cssClass]="'form-control'"
-                                                                                id="inventory-account"
-                                                                                type="text"
-                                                                                value=""
-                                                                            ></input-field>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-12 col-xl-12">
-                                                                    <div class="row mr-b15">
-                                                                        <div class="col-sm-6 col-lg-6">
-                                                                            <label
-                                                                                >Opening Qty <span class="red-text"></span
-                                                                            ></label>
-                                                                        </div>
-                                                                        <div class="col-sm-6 col-lg-6">
-                                                                            <input-field
-                                                                                [cssClass]="'form-control'"
-                                                                                id="opening-quantity"
-                                                                                type="text"
-                                                                                value=""
-                                                                            ></input-field>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-12 col-xl-12">
-                                                                    <div class="row mr-b15">
-                                                                        <div class="col-sm-6 col-lg-6">
-                                                                            <label>Rate <span class="red-text"></span></label>
-                                                                        </div>
-                                                                        <div class="col-sm-6 col-lg-6">
-                                                                            <input-field
-                                                                                [cssClass]="'form-control'"
-                                                                                id="rate"
-                                                                                type="text"
-                                                                                value="Auto Calculate"
-                                                                            ></input-field>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-12 col-lg-8 col-xl-6 col-12">
-                                                            <div class="row">
-                                                                <div class="col-12 col-xl-12">
-                                                                    <div class="row mr-b15">
-                                                                        <div class="col-sm-6 col-lg-6">
-                                                                            <label
-                                                                                >Low stock alert <span class="red-text"></span>
-                                                                                <i class="icon-info text-gray"></i
-                                                                            ></label>
-                                                                        </div>
-                                                                        <div class="col-sm-6 col-lg-6">
-                                                                            <input-field
-                                                                                [cssClass]="'form-control'"
-                                                                                id="low-stock-report"
-                                                                                type="text"
-                                                                                value=""
-                                                                            ></input-field>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-12 col-xl-12">
-                                                                    <div class="row mr-b15">
-                                                                        <div class="col-sm-6 col-lg-6">
-                                                                            <label>Amount <span class="red-text"></span></label>
-                                                                        </div>
-                                                                        <div class="col-sm-6 col-lg-6">
-                                                                            <input-field
-                                                                                [cssClass]="'form-control'"
-                                                                                id="amount"
-                                                                                type="text"
-                                                                                value="200"
-                                                                            ></input-field>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="stock-made-with">
-                                                <p>Finished Stock (Made with)</p>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xl-8">
-                                                    <div class="row">
-                                                        <div class="col-md-12 col-lg-8 col-xl-6 col-12">
-                                                            <div class="row">
-                                                                <div class="col-12 col-xl-12">
-                                                                    <div class="row mr-b15">
-                                                                        <div class="col-sm-6 col-lg-6">
-                                                                            <label
-                                                                                >Output Qty<span class="red-text">*</span>
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-sm-6 col-lg-6">
-                                                                            <input-field
-                                                                                [cssClass]="'form-control'"
-                                                                                id="stock-output-qty"
-                                                                                type="text"
-                                                                                placeholder="Enter Qty"
-                                                                            ></input-field>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row mr-b15">
-                                                                        <div class="col-sm-6 col-lg-6">
-                                                                            <label
-                                                                                >Stock Unit <span class="red-text">*</span>
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-sm-6 col-lg-6">
-                                                                            <sh-select
-                                                                                id="stock-output-unit"
-                                                                                placeholder="Enter Qty"
-                                                                            >
-                                                                            </sh-select>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-12 col-lg-8 col-xl-9 col-12">
-                                                            <div class="row mr-b15">
-                                                                <div class="col-lg-6 col-sm-6 col-xl-4">
-                                                                    <label>Input Stock Details</label>
-                                                                </div>
-                                                                <div class="col-lg-6 col-sm-6 col-xl-4">
-                                                                    <input-field
-                                                                        [cssClass]="'form-control'"
-                                                                        type="text"
-                                                                        placeholder="Stock Name"
-                                                                    ></input-field>
-                                                                </div>
-                                                                <div class="col-lg-6 col-sm-6 col-xl-4 show-on-mobile">
-                                                                    <label>&nbsp;</label>
-                                                                </div>
-                                                                <div class="qty-unit col-sm-6 col-lg-6 col-xl-4">
-                                                                    <input-field
-                                                                        [cssClass]="'form-control '"
-                                                                        type="text"
-                                                                        id="enter-qty"
-                                                                        placeholder="Enter Qty"
-                                                                    ></input-field>
-                                                                    <sh-select
-                                                                        class="ml-3"
-                                                                        id="select-stock-unit"
-                                                                        placeholder="Select Unit"
-                                                                    >
-                                                                    </sh-select>
-                                                                    <button mat-icon-button role="button" type="button">
-                                                                        <i class="icon-plus pd cp"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form> -->
                                         <div class="sales-purchase-details">
-                                            <!-- <div class="mb-3">
-                                                <mat-checkbox color="primary" class="font-14"
-                                                    >Is the Product/Service eligible for Sale or Purchase?
-                                                </mat-checkbox>
-                                            </div> -->
                                             <div class="row">
                                                 <div class="col-12 col-lg-12">
                                                     <div class="row sales-purchase-width">
@@ -490,9 +306,6 @@
                                                                                     "
                                                                                     [readonly]="
                                                                                         !isFixedAssetsInformationEnabled
-                                                                                    "
-                                                                                    [required]="
-                                                                                        isFixedAssetsInformationEnabled
                                                                                     "
                                                                                     [showError]="stockCreateEditForm.form.controls?.['variantFixedAssetsUnitRate' +
                                                                                             j]?.invalid && checkUnitRateValidation[0]?.fixedAssets"
@@ -704,9 +517,6 @@
                                                                                         [readonly]="
                                                                                             !isPurchaseInformationEnabled
                                                                                         "
-                                                                                        [required]="
-                                                                                            isPurchaseInformationEnabled
-                                                                                        "
                                                                                         [showError]="stockCreateEditForm.form.controls?.['variantPurchaseUnitRate' +
                                                                                                 j]?.invalid && checkUnitRateValidation[0]?.purchase"
                                                                                     >
@@ -905,9 +715,6 @@
                                                                                         "
                                                                                         [readonly]="
                                                                                             !isSalesInformationEnabled
-                                                                                        "
-                                                                                        [required]="
-                                                                                            isSalesInformationEnabled
                                                                                         "
                                                                                         [showError]="stockCreateEditForm.form.controls?.['variantSalesUnitRate' +
                                                                                             j]?.invalid && checkUnitRateValidation[0]?.sales"
