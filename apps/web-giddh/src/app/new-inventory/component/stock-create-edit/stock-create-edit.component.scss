@@ -661,7 +661,6 @@ table.stock-table {
 }
 .mat-select {
     min-width: unset !important;
-    border-bottom: 1px solid var(--color-primary-card-box-shadow) !important;
 }
 /* responsive */
 @media (max-width: 1440px) {
@@ -713,7 +712,22 @@ table.stock-table {
         }
     }
 }
-
+.sales-information,
+.purchase-information {
+    .rate-head {
+        column-gap: 12px;
+    }
+    .section-head {
+        font-size: 16px;
+    }
+}
+.option-color {
+    color: var(--color-primary-button-text);
+    padding: 0 15px;
+    .add-option {
+        font-size: 20px;
+    }
+}
 .mat-input-element.mat-form-field-autofill-control.form-control.form-check.ng-pristine.ng-valid.cdk-text-field-autofill-monitored.ng-touched {
     border: none !important;
 }
@@ -929,7 +943,7 @@ table.stock-table {
     margin-bottom: 15px;
     border-radius: 7px;
     .sales-purchase-width {
-        max-width: 1000px;
+        max-width: 900px;
     }
     p {
         padding: 0 15px;

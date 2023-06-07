@@ -14187,6 +14187,21 @@ body.hide-scroll-body.master-page {
     }
 }
 
+/*---- radio-button -----*/
+.mat-radio-button {
+    .mat-radio-container {
+        width: 15px !important;
+        height: 15px !important;
+        .mat-radio-outer-circle {
+            width: 15px !important;
+            height: 15px !important;
+        }
+        .mat-radio-inner-circle {
+            width: 15px !important;
+            height: 15px !important;
+        }
+    }
+}
 .required-field-error {
     border: 1px solid var(--color-danger) !important;
     color: var(--color-danger) !important;
