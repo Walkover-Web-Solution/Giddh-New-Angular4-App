@@ -252,10 +252,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.getPurchaseAccounts();
                 this.getSalesAccounts();
             }
-
             if (this.stockForm.type === 'FIXED_ASSETS') {
                 this.getFixedAssetsAccounts();
             }
+            this.hsnSac = "HSN";
         });
     }
 
@@ -730,7 +730,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public getTaxes(): void {
         this.store.dispatch(this.companyAction.getTax());
         this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.length > 0) {
+            if (response?.length > 0 && !this.processedTaxes?.length) {
                 this.taxes = response || [];
             }
             this.changeDetection.detectChanges();
@@ -767,12 +767,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public getWarehouses(): void {
+        this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
+
         this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
-            if (!warehouses?.results?.length) {
-                this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
-            } else {
-                this.warehouses = warehouses?.results;
-            }
+            this.warehouses = warehouses?.results;
         });
     }
 
@@ -860,7 +858,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             if (response?.status === "success") {
                 this.resetForm(this.stockCreateEditForm);
                 this.resetTaxes();
-                this.toaster.showSnackBar("success", "Stock created successfully");
+                this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
                 this.backClicked();
             } else {
                 this.toaster.showSnackBar("error", response?.message);
@@ -1124,7 +1122,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.inventoryService.updateStockV2(request, this.stockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
             if (response?.status === "success") {
-                this.toaster.showSnackBar("success", "Stock updated successfully");
+                this.toaster.showSnackBar("success", this.localeData?.stock_update_succesfully);
                 this.backClicked();
             } else {
                 this.toaster.showSnackBar("error", response?.message);
