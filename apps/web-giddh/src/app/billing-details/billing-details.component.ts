@@ -7,7 +7,6 @@ import { IOption } from '../theme/sales-ng-virtual-select/sh-options.interface';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
-import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { take, takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { FormControl, NgForm } from '@angular/forms';
@@ -29,11 +28,7 @@ import { StateCode } from '../models/api-models/Sales';
 })
 export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Form instance */
-    @ViewChild('billingForm', { static: true }) billingForm: NgForm;
-    /** Billing state instance */
-    @ViewChild('billingState', { static: true }) billingState: ElementRef;
-    /** Billing country  instance */
-    @ViewChild('billingCountry', { static: true }) billingCountry: ElementRef;
+    @ViewChild('billingForm', { static: false }) billingForm: NgForm;
     public userDetails: UserDetails;
     public billingDetailsObj: BillingDetails = {
         name: '',
@@ -91,6 +86,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public companyStatesSource: IOption[] = [];
     /** This will use for tax percentage */
     public taxPercentage: number = 0.18;
+    /** Holds if state field is disabled for selection */
+    public isStateDisabled: boolean = false;
 
     constructor(private store: Store<AppState>, private generalService: GeneralService, private toasty: ToasterService, private route: Router, private companyService: CompanyService, private generalActions: GeneralActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef,
         private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions, private settingsProfileService: SettingsProfileService, private salesService: SalesService,) {
@@ -105,8 +102,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.settingsProfileService.GetProfileInfo().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.getUpdatedStateCodes(response?.body?.countryV2?.alpha3CountryCode, true);
-                this.showGstAndTaxUsingCountryName(response?.body?.countryV2?.countryName);
                 this.activeCompany = response?.body;
+                this.showGstAndTaxUsingCountryName(response?.body?.countryV2?.countryName);
                 this.reFillForm();
                 this.getStates();
                 this.getOnboardingForm();
@@ -172,7 +169,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
-    public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent): void {
+    public getStateCode(gstNo: HTMLInputElement): void {
         if (this.createNewCompany.country === "IN") {
             let gstVal: string = gstNo?.value;
             this.billingDetailsObj.gstin = gstVal;
@@ -181,13 +178,14 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.statesSource$.pipe(take(1)).subscribe(state => {
                     let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
                     let s = state.find(st => st?.value === stateCode);
-                    statesEle?.setDisabledState(false);
+                    this.isStateDisabled = false;
 
                     if (s) {
-                        this.billingDetailsObj.stateCode = s?.value;
-                        statesEle?.setDisabledState(true);
+                        this.billingDetailsObj.stateCode = s.value;
+                        this.searchBillingStates = s.label;
+                        this.isStateDisabled = true;
                     } else {
-                        statesEle?.setDisabledState(false);
+                        this.isStateDisabled = false;
                         this.toasty.clearAllToaster();
                         if (this.formFields['taxName'] && !this.billingForm.form.get('gstin')?.valid) {
                             this.billingDetailsObj.stateCode = '';
@@ -198,7 +196,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 });
             } else {
-                statesEle?.setDisabledState(false);
+                this.isStateDisabled = false;
                 this.billingDetailsObj.stateCode = '';
             }
         }
@@ -386,9 +384,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.billingDetailsObj.contactNo = this.createNewCompany.contactNo;
         this.billingDetailsObj.email = this.createNewCompany.subscriptionRequest.userUniqueName;
 
-        let selectedBusinesstype = this.createNewCompany.businessType;
-        if (selectedBusinesstype === 'Registered') {
+        if (this.createNewCompany.addresses?.length && this.createNewCompany.addresses[0]?.taxNumber) {
             this.billingDetailsObj.gstin = this.createNewCompany.addresses[0]?.taxNumber;
+            this.isStateDisabled = true;
         }
         this.billingDetailsObj.address = this.createNewCompany.address;
     }
