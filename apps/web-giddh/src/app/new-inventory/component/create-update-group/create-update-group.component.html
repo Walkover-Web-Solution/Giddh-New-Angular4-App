@@ -28,7 +28,6 @@
                                             formControlName="name"
                                             [required]="true"
                                             (change)="!groupUniqueName ? generateUniqueName() : ''"
-                                            [appearance]="'outline'"
                                         >
                                         </input-field>
                                     </div>
@@ -41,7 +40,6 @@
                                             formControlName="uniqueName"
                                             [type]="'text'"
                                             [required]="true"
-                                            [appearance]="'outline'"
                                         >
                                         </input-field>
                                     </div>
@@ -74,7 +72,6 @@
                                                 formControlName="hsnNumber"
                                                 [max]="10"
                                                 [allowDecimalDigitsOnly]="true"
-                                                [appearance]="'outline'"
                                             >
                                             </input-field>
                                         </div>
@@ -89,7 +86,6 @@
                                                 formControlName="sacNumber"
                                                 [max]="10"
                                                 [allowDecimalDigitsOnly]="true"
-                                                [appearance]="'outline'"
                                             >
                                             </input-field>
                                         </div>
@@ -97,7 +93,7 @@
                                 </div>
                                 <div class="row mr-t15">
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
-                                        <mat-form-field [appearance]="'outline'" class="w-100">
+                                        <mat-form-field class="w-100">
                                             <mat-label>Tax</mat-label>
                                             <mat-select
                                                 name="taxes"
@@ -153,7 +149,6 @@
                                                 stockGroupUniqueName = $event?.value; stockGroupName = $event?.label
                                             "
                                             [defaultValue]="stockGroupName"
-                                            [appearance]="'outline'"
                                         ></dropdown-field>
                                     </div>
                                 </div>
