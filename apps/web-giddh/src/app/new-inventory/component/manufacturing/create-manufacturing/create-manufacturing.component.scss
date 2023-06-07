@@ -29,6 +29,9 @@
                 font-size: 14px;
                 font-weight: 400;
             }
+            .date-alignment {
+                margin-bottom: -17px;
+            }
         }
 
         .consumption-details-wrapper {
@@ -160,4 +163,7 @@
             }
         }
     }
+}
+.generate-clear {
+    column-gap: 10px;
 }
