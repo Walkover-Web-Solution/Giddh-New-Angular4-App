@@ -20,11 +20,6 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-sm-11">
-                    <h2 class="giddh-heading" [ngClass]="{ 'skeleton-common-class': showLoader }">
-                        {{ localeData?.welcome_to_giddh }}
-                    </h2>
-                </div>
             </div>
         </div>
         <div class="welcome-msg">
@@ -138,9 +133,13 @@
                                         maxlength="15"
                                         [(ngModel)]="billingDetailsObj.gstin"
                                         #gstinNumberField
+                                        [placeholder]="
+                                            showGstinNo
+                                                ? commonLocaleData?.app_enter_gstin
+                                                : commonLocaleData?.app_enter_trn
+                                        "
                                         (keyup)="
-                                            getStateCode(gstinNumberField, states);
-                                            checkGstNumValidation(gstinNumberField)
+                                            getStateCode(gstinNumberField); checkGstNumValidation(gstinNumberField)
                                         "
                                         matInput
                                     />
@@ -164,6 +163,7 @@
                                         (selectedOption)="onStateChange($event)"
                                         [defaultValue]="searchBillingStates"
                                         [required]="true"
+                                        [readonly]="isStateDisabled"
                                     >
                                     </select-field>
                                 </div>
