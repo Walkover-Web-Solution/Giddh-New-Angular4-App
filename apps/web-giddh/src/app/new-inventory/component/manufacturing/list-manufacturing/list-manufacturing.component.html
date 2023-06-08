@@ -1,7 +1,5 @@
 <section id="list-manufacture" class="p-3 clearfix">
-    <!-- page Title -->
-    <hamburger-menu *ngIf="true" [pageHeading]="'Manufacturing List'"></hamburger-menu>
-    <!-- form -->
+    <hamburger-menu></hamburger-menu>
     <div class="col-12 col-sm-12">
         <div class="form-fileds clearfix">
             <form class="col-12 pl-0 pr-0 mr-b05 manufacturing-form">
@@ -75,6 +73,7 @@
                                 [name]="'warehouse'"
                                 [placeholder]="'Select Warehouse'"
                                 [options]="warehouses"
+                                [defaultValue]="selectedWarehouseName"
                                 (selectedOption)="
                                     selectedWarehouseName = $event.label;
                                     manufacturingSearchRequest.warehouseUniqueName = $event.value
@@ -90,7 +89,15 @@
                         </div>
 
                         <div class="mt-auto">
-                            <button type="button" class="mr-0" mat-raised-button color="primary">Clear</button>
+                            <button
+                                type="button"
+                                class="mr-0"
+                                mat-raised-button
+                                color="primary"
+                                (click)="initializeSearchReqObj()"
+                            >
+                                Clear
+                            </button>
                         </div>
 
                         <div class="ml-auto mt-auto">
@@ -112,14 +119,17 @@
         </div>
     </div>
     <!-- search form end -->
-    <section *ngIf="false" class="clearfix mr-t100 col-md-12">
+    <section *ngIf="isReportLoading$ | async" class="clearfix mr-t100 col-md-12">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </section>
-    <div class="no-data mr-t100 col-12 col-sm-12" *ngIf="false">
+    <div
+        class="no-data mr-t100 col-12 col-sm-12"
+        *ngIf="!(isReportLoading$ | async) && dataSource && dataSource?.length === 0"
+    >
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>
     </div>
-    <section class="table-wrapper">
+    <section class="table-wrapper" *ngIf="!(isReportLoading$ | async) && dataSource?.length > 0">
         <table mat-table [dataSource]="dataSource" class="w-100">
             <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef>Date</th>
@@ -221,7 +231,7 @@
                                 [name]="'searchBy'"
                                 [placeholder]="'Select Search By'"
                                 [options]="searchByFilters"
-                                [defaultValue]=""
+                                [defaultValue]="selectedOperationName"
                                 (selectedOption)="
                                     manufacturingSearchRequest.searchBy = $event.value;
                                     selectedOperationName = $event.label
@@ -240,7 +250,7 @@
                                 [name]="'searchOperation'"
                                 [placeholder]="'Select Operation'"
                                 [options]="operatorFilters"
-                                [defaultValue]=""
+                                [defaultValue]="selectedFilterByName"
                                 (selectedOption)="
                                     manufacturingSearchRequest.searchOperation = $event.value;
                                     selectedFilterByName = $event.label
