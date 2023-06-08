@@ -1,6 +1,6 @@
 import { cloneDeep, forEach, isNull, pick } from '../../lodash-optimized';
 import { LedgerDiscountClass } from './SettingsDiscount';
-import { LedgerResponseDiscountClass } from './Ledger';
+import { IVariant, LedgerResponseDiscountClass } from './Ledger';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { INameUniqueName } from '../interfaces/name-unique-name.interface';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
@@ -250,7 +250,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     /* Rate should have precision up to 16 digits for better calculation */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
     /** Stores the selected stock variant */
-    public variant: {uniqueName: string};
+    public variant: IVariant;
 
     constructor() {
         super();
@@ -260,7 +260,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         this.hsnOrSac = 'hsn';
         this.taxableValue = 0;
         this.showCodeType = "";
-        this.variant = {uniqueName: ''};
+        this.variant = { name: '', uniqueName: '' };
     }
 
     // basic check for valid transaction
@@ -618,6 +618,7 @@ export class SalesAddBulkStockItems {
     stockUnitCode?: CodeStockMulticurrency;
     stockUnit?: CodeStockMulticurrency;
     additional?: any;
+    variant?: IVariant;
 }
 
 export class CodeStockMulticurrency {
@@ -667,7 +668,6 @@ export class TransactionClassMulticurrency {
     public account: INameUniqueName;
     public amount: AmountClassMulticurrency;
     public stock?: SalesAddBulkStockItems;
-    public variant?: {uniqueName: string};
     public description?: string;
 
     constructor() {
@@ -676,7 +676,6 @@ export class TransactionClassMulticurrency {
             uniqueName: 'sales';
         };
         this.amount = new AmountClassMulticurrency();
-        this.variant = {uniqueName: ''};
     }
 }
 

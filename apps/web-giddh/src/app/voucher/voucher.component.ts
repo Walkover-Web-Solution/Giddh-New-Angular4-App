@@ -1735,10 +1735,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 res[this.activeIndx].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
                 if (stockAllVariants.findIndex(variant => variant.value === currentEntryStockVariantUniqueName) === -1) {
                     // Only reset the stock variant when the stock is changed
-                    this.currentTxnRequestObject[this.activeIndx].txn.variant = { uniqueName: stockAllVariants[0].value };
+                    this.currentTxnRequestObject[this.activeIndx].txn.variant = { name: stockAllVariants[0].label, uniqueName: stockAllVariants[0].value };
                     // include the variant unique name for the API call
                     this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName = stockAllVariants[0].value;
-                    this.loadDetails(this.currentTxnRequestObject[0]);
+                    this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
                 }
             }
         });
@@ -4191,7 +4191,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     transactionClassMul.account.uniqueName = tr.accountUniqueName;
                     transactionClassMul.account.name = tr.accountName;
                     transactionClassMul.amount.amountForAccount = tr.amount;
-                    transactionClassMul.variant.uniqueName = tr.variant.uniqueName;
+                    transactionClassMul.stock.variant = tr.stock.variant;
                     salesEntryClass.hsnNumber = tr.hsnNumber;
                     salesEntryClass.sacNumber = tr.sacNumber;
                     salesEntryClass.description = tr.description;
@@ -5081,23 +5081,23 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 transactionClassMul.account.uniqueName = tr.accountUniqueName;
                 transactionClassMul.account.name = tr.accountName;
                 transactionClassMul.amount.amountForAccount = tr.amount;
-                transactionClassMul.variant.uniqueName = tr.variant.uniqueName;
                 salesEntryClass.hsnNumber = (tr.showCodeType === 'hsn') ? tr.hsnNumber : "";
                 salesEntryClass.sacNumber = (tr.showCodeType === 'sac') ? tr.sacNumber : "";
                 salesEntryClass.description = tr.description;
                 if (tr.isStockTxn) {
-                    let saalesAddBulkStockItems = new SalesAddBulkStockItems();
-                    saalesAddBulkStockItems.name = tr.stockDetails?.name;
-                    saalesAddBulkStockItems.uniqueName = tr.stockDetails?.uniqueName;
-                    saalesAddBulkStockItems.quantity = tr.quantity;
-                    saalesAddBulkStockItems.rate = {};
-                    saalesAddBulkStockItems.rate.amountForAccount = tr.rate;
-                    saalesAddBulkStockItems.sku = tr.stockDetails.skuCode;
-                    saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
-                    saalesAddBulkStockItems.stockUnit.uniqueName = tr.stockUnit;
-                    saalesAddBulkStockItems.stockUnit.code = tr.stockUnitCode;
+                    let salesAddBulkStockItems = new SalesAddBulkStockItems();
+                    salesAddBulkStockItems.name = tr.stockDetails?.name;
+                    salesAddBulkStockItems.uniqueName = tr.stockDetails?.uniqueName;
+                    salesAddBulkStockItems.quantity = tr.quantity;
+                    salesAddBulkStockItems.rate = {};
+                    salesAddBulkStockItems.rate.amountForAccount = tr.rate;
+                    salesAddBulkStockItems.sku = tr.stockDetails.skuCode;
+                    salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
+                    salesAddBulkStockItems.stockUnit.uniqueName = tr.stockUnit;
+                    salesAddBulkStockItems.stockUnit.code = tr.stockUnitCode;
+                    salesAddBulkStockItems.variant = tr.variant;
 
-                    transactionClassMul.stock = saalesAddBulkStockItems;
+                    transactionClassMul.stock = salesAddBulkStockItems;
                 }
                 salesEntryClass.transactions.push(transactionClassMul);
             });
@@ -5199,6 +5199,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     }
                 });
                 if (t.stock) {
+                    this.currentTxnRequestObject[voucherClassConversion.entries.length] = {
+                        params: {
+                            variantUniqueName: t.stock.variant.uniqueName
+                        }
+                    };
+                    this.loadStockVariants(t.stock.uniqueName);
                     const unitRates = (this.generalService.voucherApiVersion === 1 ? t.stock?.unitRates : t.stock?.variant?.unitRates) ?? [];
                     if (!t.stock.stockUnit?.uniqueName && t.stock.stockUnit?.code) {
                         const unitFound = unitRates?.filter(unit => unit?.stockUnitCode === t.stock.stockUnit?.code);
