@@ -552,9 +552,6 @@
                                                                                     }"
                                                                                 >
                                                                                     <select-field
-                                                                                        [cssClass]="
-                                                                                            'form-control unit-rates'
-                                                                                        "
                                                                                         [name]="
                                                                                             'variantPurchaseUnit' + j
                                                                                         "
@@ -579,7 +576,7 @@
                                                                                             checkUnitRateValidation[0]
                                                                                                 ?.purchase
                                                                                                 ? 'error-box'
-                                                                                                : ''
+                                                                                                : 'form-control unit-rates'
                                                                                         "
                                                                                     ></select-field>
                                                                                 </div>
