@@ -2,6 +2,7 @@ import { INameUniqueName } from '../api-models/Inventory';
 import { IPagination } from './paginated-response.interface';
 import { IFlattenAccountsResultItem } from './flatten-accounts-result-item.interface';
 import { IInventoryUnit, WarehouseDetails } from '../../ledger/ledger.vm';
+import { IVariant } from '../api-models/Ledger';
 
 /**
  * interface used in transaction item everywhere
@@ -34,6 +35,8 @@ export interface IInventory {
     stock?: INameUniqueName;
     unit: IInventoryUnit;
     warehouse?: WarehouseDetails;
+    variant?: IVariant;
+    taxInclusive?: boolean;
 }
 
 export interface IUnit {

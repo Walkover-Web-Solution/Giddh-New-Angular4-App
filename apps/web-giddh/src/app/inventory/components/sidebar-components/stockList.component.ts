@@ -59,7 +59,7 @@ export class StockListComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.sub = this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if(params) {
+            if (params) {
                 this.groupUniqueName = params['groupUniqueName'];
             }
         });
