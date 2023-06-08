@@ -126,6 +126,15 @@ export class ManufacturingService {
             catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
     }
 
+    /**
+     * Get recipe for variant
+     *
+     * @param {string} stockUniqueName
+     * @param {string[]} variantUniqueNames
+     * @param {boolean} [withRate=false]
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof ManufacturingService
+     */
     public getVariantRecipe(stockUniqueName: string, variantUniqueNames: string[], withRate: boolean = false): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + MANUFACTURING_API.GET_RECIPE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))?.replace(':withRate', String(withRate)), variantUniqueNames).pipe(
@@ -137,6 +146,14 @@ export class ManufacturingService {
             catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
     }
 
+    /**
+     * Get rate for stock
+     *
+     * @param {string} stockUniqueName
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof ManufacturingService
+     */
     public getRateForStockV2(stockUniqueName: string, model: any): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + MANUFACTURING_API.GET_RATE_FOR_STOCK?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).pipe(
@@ -148,6 +165,14 @@ export class ManufacturingService {
             catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
     }
 
+    /**
+     * Saves manufacturing details
+     *
+     * @param {string} stockUniqueName
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof ManufacturingService
+     */
     public saveManufacturing(stockUniqueName: string, model: any): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + MANUFACTURING_API.CREATE_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).pipe(
@@ -156,6 +181,25 @@ export class ManufacturingService {
                 data.queryString = stockUniqueName;
                 return data;
             }),
-            catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+    }
+
+    /**
+     * Saves recipe details
+     *
+     * @param {string} stockUniqueName
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof ManufacturingService
+     */
+    public saveRecipe(stockUniqueName: string, model: any): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + MANUFACTURING_API.CREATE_RECIPE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.queryString = stockUniqueName;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
     }
 }
