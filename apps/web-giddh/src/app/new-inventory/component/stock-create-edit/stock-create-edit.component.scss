@@ -954,7 +954,7 @@ table.stock-table {
         display: none;
         i {
             font-size: 9px;
-            border: 1px solid 1px solid var(--color-iron);
+            border: 1px solid var(--color-iron);
             border-radius: 50%;
             width: 18px;
             height: 18px;
@@ -970,7 +970,7 @@ table.stock-table {
         left: -15px;
         i {
             font-size: 10px;
-            border: 1px solid 1px solid var(--color-iron);
+            border: 1px solid var(--color-iron);
             border-radius: 50%;
             width: 18px;
             height: 18px;
