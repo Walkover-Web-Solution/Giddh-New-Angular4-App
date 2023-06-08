@@ -2178,6 +2178,15 @@
                                             <label>{{ commonLocaleData?.app_sku }}:</label
                                             >{{ commonLocaleData?.app_number }}
                                         </div>
+                                        <p
+                                            *ngIf="
+                                                transaction.variant &&
+                                                ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                            "
+                                            class="variant"
+                                        >
+                                            {{ localeData?.variant + ": " + transaction.variant?.name }}
+                                        </p>
                                         <div class="description">
                                             {{ transaction.description }}
                                         </div>
@@ -2579,7 +2588,7 @@
                                         <ng-container
                                             *ngIf="
                                                 transaction?.isStockTxn &&
-                                                ((stockVariants | async)[activeIndx] | async) as variants
+                                                ((stockVariants | async)[entryIdx] | async) as variants
                                             "
                                         >
                                             <div *ngIf="variants?.length > 1" class="variant-name">
@@ -3807,6 +3816,15 @@
                                                         >({{ transaction.stockDetails?.name }})</span
                                                     >
                                                 </div>
+                                                <p
+                                                    *ngIf="
+                                                        transaction.variant &&
+                                                        ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                                    "
+                                                    class="variant"
+                                                >
+                                                    {{ localeData?.variant + ": " + transaction.variant?.name }}
+                                                </p>
                                                 <p class="description">
                                                     {{ transaction.description }}
                                                 </p>

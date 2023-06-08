@@ -758,6 +758,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     /** Stores the current transaction request obj for the API */
     private currentTxnRequestObject: Array<any> = [];
+    /** Stores the index of current stock variants being loaded */
+    private currentlyLoadedStockVariantIndex: number;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1732,15 +1734,21 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (res?.length) {
                 const currentEntryStockVariantUniqueName = this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName;
                 let stockAllVariants;
-                res[this.activeIndx].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
+                res[this.currentlyLoadedStockVariantIndex ?? this.activeIndx].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
                 if (stockAllVariants.findIndex(variant => variant.value === currentEntryStockVariantUniqueName) === -1) {
                     // Only reset the stock variant when the stock is changed
-                    this.currentTxnRequestObject[this.activeIndx].txn.variant = { name: stockAllVariants[0].label, uniqueName: stockAllVariants[0].value };
-                    // include the variant unique name for the API call
-                    this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName = stockAllVariants[0].value;
-                    this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
+                    if (this.currentTxnRequestObject[this.activeIndx].txn) {
+                        /* If transaction is present then it means the user has changed the stock of any entry
+                            otherwise the user has opened the invoice for edit flow
+                        */
+                        this.currentTxnRequestObject[this.activeIndx].txn.variant = { name: stockAllVariants[0].label, uniqueName: stockAllVariants[0].value };
+                        // include the variant unique name for the API call
+                        this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName = stockAllVariants[0].value;
+                        this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
+                    }
                 }
             }
+            this.currentlyLoadedStockVariantIndex = null;
         });
     }
 
@@ -3618,8 +3626,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.focusOnDescription();
         if (calculateTransaction) {
-            this.calculateStockEntryAmount(transaction);
-            this.calculateWhenTrxAltered(entry, transaction);
+            const variant = o.stock?.variant;
+            if (variant?.purchaseTaxInclusive || variant?.salesTaxInclusive || variant?.fixedAssetTaxInclusive) {
+                setTimeout(() => {
+                    // Settimeout is used as tax component is not rendered at the tiem control is reached here
+                    transaction.total = transaction.quantity * transaction.rate;
+                    this.calculateTransactionValueInclusively(entry, transaction);
+                }, 100);
+            } else {
+                this.calculateStockEntryAmount(transaction);
+                this.calculateWhenTrxAltered(entry, transaction);
+            }
         }
         if (!isBulkItem) {
             this._cdr.detectChanges();
@@ -4878,6 +4895,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 newTrxObj.showCodeType = trx.hsnNumber ? "hsn" : "sac";
                 newTrxObj.isStockTxn = trx.isStockTxn;
                 newTrxObj.applicableTaxes = entry.taxList;
+                newTrxObj.variant = trx.variant;
 
                 // check if stock details is available then assign uniquename as we have done while creating option
                 if (trx.isStockTxn) {
@@ -5204,7 +5222,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             variantUniqueName: t.stock.variant.uniqueName
                         }
                     };
-                    this.loadStockVariants(t.stock.uniqueName);
+                    this.loadStockVariants(t.stock.uniqueName, voucherClassConversion.entries.length);
                     const unitRates = (this.generalService.voucherApiVersion === 1 ? t.stock?.unitRates : t.stock?.variant?.unitRates) ?? [];
                     if (!t.stock.stockUnit?.uniqueName && t.stock.stockUnit?.code) {
                         const unitFound = unitRates?.filter(unit => unit?.stockUnitCode === t.stock.stockUnit?.code);
@@ -5229,6 +5247,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     salesTransactionItemClass.stockUnit = t.stock.stockUnit.uniqueName;
                     salesTransactionItemClass.stockUnitCode = t.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName;
+                    salesTransactionItemClass.variant = t.stock.variant;
                 }
 
                 if (this.isPurchaseInvoice && entry.purchaseOrderLinkSummaries && entry.purchaseOrderLinkSummaries.length > 0) {
@@ -8438,11 +8457,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {string} stockUniqueName Uniquename of the stock
      * @memberof VoucherComponent
      */
-    private loadStockVariants(stockUniqueName: string): void {
+    private loadStockVariants(stockUniqueName: string, index?: number): void {
         this._ledgerService.loadStockVariants(stockUniqueName).pipe(
             map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
                 const allStockVariants = this.stockVariants.getValue();
-                allStockVariants[this.activeIndx] = observableOf(res);
+                this.currentlyLoadedStockVariantIndex = index;
+                allStockVariants[this.currentlyLoadedStockVariantIndex ?? this.activeIndx] = observableOf(res);
                 this.stockVariants.next(allStockVariants);
                 // this.chan.detectChanges();
             });

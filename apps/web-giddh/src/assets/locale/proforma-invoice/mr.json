@@ -110,5 +110,6 @@
     "voucher_number_required": "व्हाउचर क्रमांक अनिवार्य आहे",
     "invalid_contact_number": "अवैध संपर्क क्रमांक",
     "account": "खाते",
-    "select_variant": "प्रकार निवडा"
+    "select_variant": "प्रकार निवडा",
+    "variant": "प्रकार"
 }

@@ -110,5 +110,6 @@
     "voucher_number_required": "Voucher number is mandatory.",
     "invalid_contact_number": "Invalid Contact number",
     "account": "Account",
-    "select_variant": "Select Variant"
+    "select_variant": "Select Variant",
+    "variant": "Variant"
 }
