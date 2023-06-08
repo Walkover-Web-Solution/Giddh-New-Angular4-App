@@ -10711,6 +10711,7 @@ body.update-scroll-hidden {
 
 .cdk-overlay-pane {
     height: auto !important;
+    transform: translateX(-5px) translateY(-13px) !important;
 }
 
 /*---- inventory-master ----*/
@@ -13887,10 +13888,10 @@ hamburger-menu {
 #mat-select-0-panel,
 #mat-select-1-panel,
 #mat-select-2-panel {
-    min-width: calc(100% + 24px) !important;
+    min-width: calc(100% + 12px) !important;
     position: absolute;
     top: 44px;
-    left: 28px;
+    left: 0px;
 
     button {
         span.mat-button-wrapper {
