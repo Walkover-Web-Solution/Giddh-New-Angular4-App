@@ -8482,6 +8482,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
+    /**
+     * Loads the details of selected entry
+     *
+     * @private
+     * @param {*} requestObject Request object for the API
+     * @memberof VoucherComponent
+     */
     private loadDetails(requestObject: any): void {
         let {
             selectedAcc,
