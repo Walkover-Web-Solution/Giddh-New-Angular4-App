@@ -2600,7 +2600,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             to fetch the correct stock details as the first preference is always the current ledger account and then particular account
             This logic is only required in ledger.
         */
-        const accountUniqueName = event.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+        const accountUniqueName = event.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses' || currentLedgerCategory === 'fixedassets') ?
             this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '' :
             event.additional?.uniqueName;
         this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
