@@ -1,4 +1,4 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event" class="position-relative">
     <mat-form-field [appearance]="appearance">
         <mat-label>{{ label ? label : placeholder }}</mat-label>
         <input
@@ -113,5 +113,6 @@
                 </app-cdk-scroll>
             </ng-template>
         </mat-autocomplete>
+        <span class="arrow-dropdown"></span>
     </mat-form-field>
 </ng-container>
