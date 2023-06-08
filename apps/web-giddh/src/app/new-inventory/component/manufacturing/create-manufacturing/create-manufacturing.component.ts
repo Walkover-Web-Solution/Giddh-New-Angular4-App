@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Store, select } from '@ngrx/store';
+import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CreateManufacturing, ManufacturingLinkedStock } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
@@ -10,9 +12,10 @@ import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/acti
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { giddhRoundOff } from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
 import { AppState } from 'apps/web-giddh/src/app/store';
+import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'create-manufacturing',
@@ -51,6 +54,10 @@ export class CreateManufacturingComponent implements OnInit {
     public selectedInventoryType: string = "";
     /** This will hold api calls if one is already in progress */
     public preventStocksApiCall: boolean = false;
+    /** True if recipe exists for finished stock */
+    private recipeExists: boolean = false;
+    /** Holds existing recipe */
+    private existingRecipe: any = [];
 
     constructor(
         private store: Store<AppState>,
@@ -59,7 +66,8 @@ export class CreateManufacturingComponent implements OnInit {
         private ledgerService: LedgerService,
         private manufacturingService: ManufacturingService,
         private toasterService: ToasterService,
-        private inventoryService: InventoryService
+        private inventoryService: InventoryService,
+        private dialog: MatDialog
     ) {
 
     }
@@ -208,7 +216,9 @@ export class CreateManufacturingComponent implements OnInit {
 
         this.manufacturingService.getVariantRecipe(this.manufacturingObject.manufacturingDetails[0].stockUniqueName, [this.manufacturingObject.manufacturingDetails[0].variant.uniqueName], true).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.manufacturingDetails?.length) {
+                this.recipeExists = true;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingUnitCode = response.body.manufacturingDetails[0].manufacturingUnitCode;
+                this.manufacturingObject.manufacturingDetails[0].manufacturingUnitUniqueName = response.body.manufacturingDetails[0].manufacturingUnitUniqueName;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = response.body.manufacturingDetails[0].manufacturingQuantity;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = response.body.manufacturingDetails[0].manufacturingMultipleOf;
 
@@ -228,7 +238,9 @@ export class CreateManufacturingComponent implements OnInit {
                         }
                     );
                 });
+                this.existingRecipe = this.formatRecipeRequest();
             } else {
+                this.recipeExists = false;
                 this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(
                     {
                         selectedStock: { label: "", value: "", additional: { stockUnitCode: "", stockUnitUniqueName: "", unitsList: [] } },
@@ -297,6 +309,7 @@ export class CreateManufacturingComponent implements OnInit {
         delete manufacturingObject.manufacturingDetails[0].stocksQ
         delete manufacturingObject.manufacturingDetails[0].variants;
         delete manufacturingObject.manufacturingDetails[0].manufacturingUnitCode;
+        delete manufacturingObject.manufacturingDetails[0].manufacturingUnitUniqueName;
 
         if (manufacturingObject.manufacturingDetails[0].date) {
             manufacturingObject.manufacturingDetails[0].date = (typeof manufacturingObject.manufacturingDetails[0].date === "object") ? dayjs(manufacturingObject.manufacturingDetails[0].date).format(GIDDH_DATE_FORMAT) : dayjs(manufacturingObject.manufacturingDetails[0].date, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -320,6 +333,41 @@ export class CreateManufacturingComponent implements OnInit {
     }
 
     /**
+     * Creates recipe request
+     *
+     * @returns {*}
+     * @memberof CreateManufacturingComponent
+     */
+    public formatRecipeRequest(): any {
+        let recipeObject = { manufacturingDetails: [] };
+
+        this.manufacturingObject.manufacturingDetails?.forEach(manufacturingDetail => {
+            let linkedStocks = [];
+
+            manufacturingDetail.linkedStocks?.forEach(linkedStock => {
+                linkedStocks.push({
+                    stockUniqueName: linkedStock.stockUniqueName,
+                    stockUnitUniqueName: linkedStock.stockUnitUniqueName,
+                    quantity: Number(linkedStock.quantity),
+                    rate: Number(linkedStock.rate)
+                });
+            });
+
+            recipeObject.manufacturingDetails.push({
+                manufacturingQuantity: Number(manufacturingDetail.manufacturingQuantity),
+                manufacturingUnitUniqueName: manufacturingDetail.manufacturingUnitUniqueName,
+                variant: {
+                    uniqueName: manufacturingDetail.variant.uniqueName
+                },
+                linkedStocks: linkedStocks
+            });
+        });
+
+
+        return recipeObject;
+    }
+
+    /**
      * Save manufacturing
      *
      * @returns {void}
@@ -333,6 +381,41 @@ export class CreateManufacturingComponent implements OnInit {
 
         this.isLoading = true;
         const manufacturingObject = this.formatRequest();
+        const recipeObject = this.formatRecipeRequest();
+        if (this.recipeExists) {
+            if (!isEqual(this.existingRecipe, recipeObject)) {
+                let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: this.commonLocaleData?.app_confirmation,
+                        body: this.localeData?.confirm_update_recipe,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no
+                    }
+                });
+
+                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    if (response) {
+                        this.saveRecipe(manufacturingObject, recipeObject, false);
+                    }
+                });
+            }
+        } else {
+            let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                data: {
+                    title: this.commonLocaleData?.app_confirmation,
+                    body: this.localeData?.confirm_save_recipe,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
+            });
+
+            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                if (response) {
+                    this.saveRecipe(manufacturingObject, recipeObject, true);
+                }
+            });
+        }
+
         this.manufacturingService.saveManufacturing(manufacturingObject.manufacturingDetails[0].stockUniqueName, manufacturingObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasterService.successToast(this.localeData?.manufacturing_saved);
@@ -343,6 +426,25 @@ export class CreateManufacturingComponent implements OnInit {
             this.isLoading = false;
 
             this.changeDetectionRef.detectChanges();
+        });
+    }
+
+    /**
+     * Save recipe
+     *
+     * @private
+     * @param {*} manufacturingObject
+     * @param {*} recipeObject
+     * @param {boolean} isNewRecipe
+     * @memberof CreateManufacturingComponent
+     */
+    private saveRecipe(manufacturingObject: any, recipeObject: any, isNewRecipe: boolean): void {
+        this.manufacturingService.saveRecipe(manufacturingObject.manufacturingDetails[0].stockUniqueName, recipeObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toasterService.successToast(this.localeData?.recipe_saved);
+            } else {
+                this.toasterService.errorToast(response?.body || response?.message);
+            }
         });
     }
 

@@ -42,6 +42,7 @@ export class CreateManufacturingClass {
     variant: ManufacturingVariant;
     variants?: ManufacturingVariant[];
     manufacturingUnitCode?: string;
+    manufacturingUnitUniqueName?: string;
     stockName?: string;
     stocks: any[];
     stocksPageNumber: number;
