@@ -636,8 +636,7 @@
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
                                                                                 <div class="col-sm-10 col-10">
-                                                                                    <button
-                                                                                        mat-flat-button
+                                                                                    <a
                                                                                         class="bg-transparent px-0 pt-2"
                                                                                         role="button"
                                                                                         type="button"
@@ -669,7 +668,7 @@
                                                                                         >
                                                                                             {{ localeData?.add_new }}
                                                                                         </span>
-                                                                                    </button>
+                                                                                    </a>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -1121,20 +1120,15 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button
-                                                    mat-button
+                                                <a
+                                                    href="javascript:void(0)"
                                                     class="text-primary mr-b15 d-block cp another-option-btn"
                                                     disableRipple
                                                     *ngIf="stockForm.options?.length < 3"
                                                     (click)="addVariantOption()"
                                                 >
                                                     {{ localeData?.another_option }}
-                                                </button>
-                                                <!-- <div class="mt-3 mb-3">
-                                                    <button mat-stroked-button class="bdr-radius-50">
-                                                        <i class="icon-options mr-2"></i>Customise
-                                                    </button>
-                                                </div> -->
+                                                </a>
                                                 <div
                                                     class="table-responsive"
                                                     *ngIf="
