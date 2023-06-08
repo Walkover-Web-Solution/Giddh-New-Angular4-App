@@ -92,10 +92,10 @@ export class CreateManufacturingComponent implements OnInit {
      * @memberof CreateManufacturingComponent
      */
     public getWarehouses(): void {
+        this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
+
         this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
-            if (!warehouses?.results?.length) {
-                this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
-            } else {
+            if (warehouses?.results?.length) {
                 this.warehouses = [];
                 warehouses?.results?.forEach(warehouse => {
                     this.warehouses.push({ label: warehouse?.name, value: warehouse?.uniqueName });
@@ -132,7 +132,13 @@ export class CreateManufacturingComponent implements OnInit {
                     stockObject.stocks = [];
                 }
                 response?.body?.results?.forEach(stock => {
-                    stockObject.stocks.push({ label: stock?.name, value: stock?.uniqueName, additional: { stockUnitCode: stock?.stockUnit?.code, stockUnitUniqueName: stock?.stockUnit?.uniqueName, inventoryType: stock.inventoryType } });
+                    let unitsList = [];
+
+                    stock?.stockUnits?.forEach(unit => {
+                        unitsList.push({ label: unit.code, value: unit.uniqueName });
+                    });
+
+                    stockObject.stocks.push({ label: stock?.name, value: stock?.uniqueName, additional: { stockUnitCode: stock?.stockUnits[0]?.code, stockUnitUniqueName: stock?.stockUnits[0]?.uniqueName, inventoryType: stock.inventoryType, unitsList: unitsList } });
                 });
 
                 this.changeDetectionRef.detectChanges();
@@ -211,7 +217,7 @@ export class CreateManufacturingComponent implements OnInit {
 
                     this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(
                         {
-                            selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } },
+                            selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName, unitsList: linkedStock.unitsList } },
                             stockUniqueName: linkedStock.stockUniqueName,
                             quantity: linkedStock.quantity,
                             stockUnitUniqueName: linkedStock.stockUnitUniqueName,
@@ -225,7 +231,7 @@ export class CreateManufacturingComponent implements OnInit {
             } else {
                 this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(
                     {
-                        selectedStock: { label: "", value: "", additional: { stockUnitCode: "", stockUnitUniqueName: "" } },
+                        selectedStock: { label: "", value: "", additional: { stockUnitCode: "", stockUnitUniqueName: "", unitsList: [] } },
                         stockUniqueName: "",
                         quantity: 1,
                         stockUnitUniqueName: "",
@@ -253,12 +259,15 @@ export class CreateManufacturingComponent implements OnInit {
      * @memberof CreateManufacturingComponent
      */
     public getRateForStock(linkedStock: any, index: number): void {
-        this.manufacturingService.getRateForStockV2(linkedStock.stockUniqueName, { quantity: 1, stockUnitUniqueName: linkedStock.selectedStock?.additional?.stockUnitUniqueName, variant: { uniqueName: linkedStock.variant.uniqueName } }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.manufacturingService.getRateForStockV2(linkedStock.stockUniqueName, { quantity: 1, stockUnitUniqueName: (linkedStock?.stockUnitUniqueName || linkedStock.selectedStock?.additional?.stockUnitUniqueName), variant: { uniqueName: linkedStock.variant.uniqueName } }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response.body) {
                 linkedStock.quantity = 1;
                 linkedStock.rate = response.body.rate;
-                linkedStock.stockUnitCode = linkedStock.selectedStock?.additional?.stockUnitCode;
-                linkedStock.stockUnitUniqueName = linkedStock.selectedStock?.additional?.stockUnitUniqueName;
+
+                if (!linkedStock.stockUnitUniqueName) {
+                    linkedStock.stockUnitCode = linkedStock.selectedStock?.additional?.stockUnitCode;
+                    linkedStock.stockUnitUniqueName = linkedStock.selectedStock?.additional?.stockUnitUniqueName;
+                }
 
                 let amount = linkedStock.rate * linkedStock.quantity;
                 linkedStock.amount = isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces);
@@ -395,8 +404,8 @@ export class CreateManufacturingComponent implements OnInit {
         let totalAmount = 0;
 
         this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
-            totalRate += linkedStock.rate || 0;
-            totalAmount += linkedStock.amount || 0;
+            totalRate += Number(linkedStock.rate) || 0;
+            totalAmount += Number(linkedStock.amount) || 0;
         });
 
         this.totals.totalRate = totalRate;
