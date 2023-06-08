@@ -75,6 +75,9 @@ export class ManufacturingService {
         if ((model.product)) {
             url = url + 'product=' + model.product + '&';
         }
+        if ((model.productVariant)) {
+            url = url + 'productVariant=' + model.productVariant + '&';
+        }
         if ((model.searchBy)) {
             url = url + 'searchBy=' + model.searchBy + '&';
         }

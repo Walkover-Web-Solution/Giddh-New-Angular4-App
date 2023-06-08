@@ -116,4 +116,5 @@ export interface IMfStockSearchRequest {
     dateRange?: Date[];
     branchUniqueName?: string;
     warehouseUniqueName?: any;
+    productVariant?: string;
 }
