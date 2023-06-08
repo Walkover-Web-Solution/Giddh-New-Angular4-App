@@ -586,7 +586,7 @@
         <div class="modal-dialog modal-md" *ngIf="confirmationModal?.isShown">
             <div class="modal-content">
                 <confirm-modal
-                    [body]="localeData?.payment?.delete_login | replace : '[LOGIN_ID]' : activeBankAccount?.loginId"
+                    [body]="localeData?.payment?.delete_login | replace: '[LOGIN_ID]':activeBankAccount?.loginId"
                     (cancelCallBack)="confirmationModal?.hide()"
                     (successCallBack)="deleteBankAccountLogin(true)"
                 >

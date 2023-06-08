@@ -17,7 +17,6 @@ import { AboutProductServiceDetailComponent } from "./component/about-product-se
 import { InventoryComboListComponent } from "./component/combo-list/inventory-combo-list.component";
 import { AboutComboDetailComponent } from "./component/about-combo-detail/about-combo-detail.component";
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
-import { InventoryCustomFieldComponent } from "./component/inventory-custom-field/inventory-custom-field.component";
 import { CreateCustomFieldComponent } from "./component/create-custom-field/create-custom-field.component";
 import { AdjustInventoryComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 import { AsideAdjustInventoryComponent } from "./component/adjust-inventory-aside/adjust-inventory-aside.component";
@@ -68,6 +67,16 @@ import { ReportFiltersComponent } from "./component/report-filters/report-filter
 import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
 import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
+import { CustomUnitsComponent } from "./component/custom-units/custom-units.component";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatListModule } from "@angular/material/list";
+import { MatDivider } from "@angular/material/divider";
+import { AsideCreateNewUnitComponent } from "./component/aside-create-unit/aside-create-unit.component";
+import { CreateGroupComponent } from "./component/create-group/create-group.component";
+import { AsideCreatGroupComponent } from "./component/aside-create-group/aside-create-group.component";
+import { RecipeModule } from "./component/recipe/recipe.module";
+import { ManufacturingModule } from "../manufacturing/manufacturing.module";
+import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 
 @NgModule({
@@ -85,7 +94,6 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         AboutComboDetailComponent,
         CreateComboComponent,
         InventoryTransactionListComponent,
-        InventoryCustomFieldComponent,
         CreateCustomFieldComponent,
         AdjustInventoryComponent,
         AsideAdjustInventoryComponent,
@@ -110,7 +118,12 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         ItemWiseComponent,
         VariantWiseComponent,
         ReportFiltersComponent,
-        ReportsComponent
+        ReportsComponent,
+        AsideCreateNewUnitComponent,
+        CreateGroupComponent,
+        AsideCreatGroupComponent,
+        CustomUnitsComponent,
+        InventoryMasterComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -143,6 +156,10 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         MatDialogModule,
         MatAutocompleteModule,
         MatTooltipModule,
+        MatGridListModule,
+        MatListModule,
+        RecipeModule,
+        ManufacturingModule,
         SelectTableColumnModule
     ],
     exports: [
@@ -160,7 +177,6 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         AboutComboDetailComponent,
         CreateComboComponent,
         InventoryTransactionListComponent,
-        InventoryCustomFieldComponent,
         CreateCustomFieldComponent,
         AdjustInventoryComponent,
         AsideAdjustInventoryComponent,
@@ -178,7 +194,8 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         DashboardPurchaseReport,
         DashboardSalesReport,
         DashboardSellingReport,
-        ReportFiltersComponent
+        ReportFiltersComponent,
+        MatDivider
     ]
 })
 export class NewInventoryModule { }

@@ -2239,6 +2239,9 @@ form#groupDetailForm {
     .universal-date {
         margin-right: 0;
     }
+    .aside-pane {
+        max-width: 600px;
+    }
 }
 @media only screen and (max-width: 1024px) {
     .pd-t1-md {
@@ -2463,11 +2466,7 @@ form#groupDetailForm {
 .aside-body {
     padding: 0 15px;
 }
-@media (max-width: 768px) {
-    .aside-pane {
-        max-width: 600px;
-    }
-}
+
 @media (max-width: 575px) {
     .aside-pane {
         max-width: 370px;

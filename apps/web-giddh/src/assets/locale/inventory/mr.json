@@ -5,13 +5,18 @@
         "create_new":"नवीन तयार करा",
         "item_wise":"वस्तूनुसार",
         "group_wise":"गटवार",
-        "variant_wise":"'प्रकारानुसार",
+        "variant_wise":"प्रकारानुसार",
         "transactions":"व्यवहार",
         "services":"सेवा",
         "fixed_assets":"स्थिर मालमत्ता",
         "branch_transfer":"शाखा हस्तांतरण",
         "manufacturing":"उत्पादन",
-        "warehouse_balance":"गोदाम उघडण्याची शिल्लक"
+        "warehouse_balance":"गोदाम उघडण्याची शिल्लक",
+        "custom_units":"सानुकूल युनिट",
+        "recipe":"कृती",
+        "create_manufacturing":"मॅन्युफॅक्चरिंग तयार करा",
+        "report":"अहवाल द्या",
+        "master":"मास्टर"
     },
     "reports":{
         "transaction_count":"व्यवहाराची संख्या",

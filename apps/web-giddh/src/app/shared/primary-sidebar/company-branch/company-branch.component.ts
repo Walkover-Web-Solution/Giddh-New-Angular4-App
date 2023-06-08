@@ -15,6 +15,7 @@ import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchService } from '../../../services/settings.branch.service';
 import { AppState } from '../../../store';
 import { AuthService } from '../../../theme/ng-social-login-module';
+import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
 
 @Component({
     selector: 'company-branch',
@@ -78,7 +79,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         private changeDetectorRef: ChangeDetectorRef,
         private companyService: CompanyService,
         private router: Router,
-        private invoiceAction: InvoiceActions
+        private invoiceAction: InvoiceActions,
+        private warehouseAction: WarehouseActions
     ) {
 
     }
@@ -186,6 +188,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      */
     public changeCompany(company: any, selectBranchUniqueName: string, fetchLastState?: boolean) {
         this.store.dispatch(this.companyActions.resetActiveCompanyData());
+        this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
         this.generalService.companyUniqueName = company?.uniqueName;
         this.generalService.voucherApiVersion = company?.voucherVersion;
         const details = {
@@ -399,6 +402,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     public changeBranch(company: any, branchUniqueName: string, event: any): void {
         event.stopPropagation();
         event.preventDefault();
+
+        this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
 
         if (this.activeCompany?.uniqueName !== company?.uniqueName) {
             this.changeCompany(company, branchUniqueName, false);
