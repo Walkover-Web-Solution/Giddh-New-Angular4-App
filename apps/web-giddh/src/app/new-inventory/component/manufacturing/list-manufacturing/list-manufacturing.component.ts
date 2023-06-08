@@ -45,9 +45,7 @@ export class ListManufacturingComponent implements OnInit {
     @ViewChild("advance_filter_dialog") public advanceFilterComponent: TemplateRef<any>;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
-    /** Manufacturing list  product dropdown items*/
-    public product: any = [];
-    /** Material table elements */
+    /** Table columns */
     public displayedColumns: string[] = ['date', 'voucher_no', 'stock', 'finished_variant', 'qty_outwards', 'qty_outwards_unit', 'material_used', 'qty_inwards', 'qty_inwards_unit', 'warehouse'];
     /** Holds list of data */
     public dataSource: any = [];
@@ -75,8 +73,6 @@ export class ListManufacturingComponent implements OnInit {
     private universalDate: Date[];
     /** Clears all the memory leakes */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Observable to store the branches of current company */
-    public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
     public currentCompanyBranches: Array<any>;
     /** Stores the current branch */
@@ -91,17 +87,29 @@ export class ListManufacturingComponent implements OnInit {
     public currentOrganizationType: OrganizationType;
     /** Holds if report is loading */
     public isReportLoading$: Observable<boolean>;
+    /** List of stocks */
     public stockList: any[] = [];
+    /** List of variants */
     public variantList: any[] = [];
+    /** Selected stock name */
     public selectedStockName: string = "";
+    /** Selected variant name */
     public selectedVariantName: string = "";
+    /** Selected branch name */
     public selectedBranchName: string = "";
+    /** Selected warehouse name */
     public selectedWarehouseName: string = "";
+    /** Selected operation name */
     public selectedOperationName: string = "";
+    /** Selected filter by name */
     public selectedFilterByName: string = "";
+    /** Selected inventory type name */
     public selectedInventoryTypeName: string = "";
+    /** Total items count */
     public totalItems: number = 0;
+    /** List of all warehouses */
     public allWarehouses: any[] = [];
+    /** List of operator filters */
     public operatorFilters: any[] = [
         { label: 'Greater', value: 'greaterThan' },
         { label: 'Less Than', value: 'lessThan' },
@@ -109,10 +117,12 @@ export class ListManufacturingComponent implements OnInit {
         { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
         { label: 'Equals', value: 'equals' }
     ];
+    /** List of search by filters */
     public searchByFilters: any[] = [
         { label: 'Quantity Outward', value: 'quantityOutward' },
         { label: 'Voucher Number', value: 'voucherNumber' }
     ];
+    /** List of inventory type filters */
     public inventoryTypeFilters: any[] = [
         { label: 'PRODUCT', value: 'PRODUCT' },
         { label: 'SERVICE', value: 'SERVICE' },
@@ -120,7 +130,7 @@ export class ListManufacturingComponent implements OnInit {
     ];
 
     constructor(
-        public dialog: MatDialog,
+        private dialog: MatDialog,
         private modalService: BsModalService,
         private generalService: GeneralService,
         private store: Store<AppState>,
@@ -131,12 +141,14 @@ export class ListManufacturingComponent implements OnInit {
         private manufacturingService: ManufacturingService,
         private ledgerService: LedgerService
     ) {
-        this.manufacturingSearchRequest.product = '';
-        this.manufacturingSearchRequest.searchBy = '';
-        this.manufacturingSearchRequest.searchOperation = '';
         this.isReportLoading$ = this.store.pipe(select(state => state.manufacturing.isMFReportLoading), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof ListManufacturingComponent
+     */
     public ngOnInit(): void {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.getWarehouses();
@@ -145,7 +157,7 @@ export class ListManufacturingComponent implements OnInit {
             this.getAllWarehouses();
         }
 
-        // Refresh the stock list
+        // Refresh the manufactured stock list
         this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 
         this.store.pipe(select(state => state.inventory.manufacturingStockList), takeUntil(this.destroyed$)).subscribe((response: any) => {
@@ -179,47 +191,50 @@ export class ListManufacturingComponent implements OnInit {
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            this.activeCompany = activeCompany;
-        });
+            if (!this.activeCompany) {
+                this.activeCompany = activeCompany;
 
-        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.currentCompanyBranches$.subscribe(response => {
-            if (response && response.length) {
-                this.currentCompanyBranches = response.map(branch => ({
-                    label: branch?.alias,
-                    value: branch?.uniqueName,
-                    name: branch?.name,
-                    parentBranch: branch?.parentBranch
-                }));
-                this.currentCompanyBranches.unshift({
-                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                    name: this.activeCompany ? this.activeCompany.name : '',
-                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
-                    isCompany: true
-                });
-                this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches?.length > 2;
-                let currentBranchUniqueName;
-                if (!this.currentBranch?.uniqueName) {
-                    // Assign the current branch only when it is not selected. This check is necessary as
-                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
-                    // branches are loaded
-                    if (this.currentOrganizationType === OrganizationType.Branch) {
-                        currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
-                    } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
-                        this.currentBranch = {
+                this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response && response.length) {
+                        this.currentCompanyBranches = response.map(branch => ({
+                            label: branch?.alias,
+                            value: branch?.uniqueName,
+                            name: branch?.name,
+                            parentBranch: branch?.parentBranch
+                        }));
+                        this.currentCompanyBranches.unshift({
+                            label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
-                        };
+                            value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            isCompany: true
+                        });
+                        this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches?.length > 2;
+                        let currentBranchUniqueName;
+                        if (!this.currentBranch?.uniqueName) {
+                            // Assign the current branch only when it is not selected. This check is necessary as
+                            // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                            // branches are loaded
+                            if (this.currentOrganizationType === OrganizationType.Branch) {
+                                currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                                this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                            } else {
+                                currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
+                                this.currentBranch = {
+                                    name: this.activeCompany ? this.activeCompany.name : '',
+                                    alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                                    uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
+                                };
+                            }
+                        }
+
+                        this.changeDetectionRef.detectChanges();
+                    } else {
+                        if (this.generalService.companyUniqueName) {
+                            // Avoid API call if new user is onboarded
+                            this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                        }
                     }
-                }
-            } else {
-                if (this.generalService.companyUniqueName) {
-                    // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
-                }
+                });
             }
         });
     }
@@ -227,7 +242,7 @@ export class ListManufacturingComponent implements OnInit {
     /**
      * Get warehouses
      *
-     * @memberof CreateManufacturingComponent
+     * @memberof ListManufacturingComponent
      */
     public getWarehouses(): void {
         this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
@@ -243,6 +258,11 @@ export class ListManufacturingComponent implements OnInit {
         });
     }
 
+    /**
+     * Get stock variants
+     *
+     * @memberof ListManufacturingComponent
+     */
     public getVariants(): void {
         this.variantList = [];
         this.selectedVariantName = "";
@@ -257,14 +277,42 @@ export class ListManufacturingComponent implements OnInit {
         });
     }
 
+    /**
+     * Initiates search object
+     *
+     * @memberof ListManufacturingComponent
+     */
     public initializeSearchReqObj(): void {
         this.manufacturingSearchRequest.product = '';
+        this.manufacturingSearchRequest.productVariant = '';
+        this.manufacturingSearchRequest.warehouseUniqueName = '';
+        this.manufacturingSearchRequest.branchUniqueName = '';
         this.manufacturingSearchRequest.searchBy = '';
         this.manufacturingSearchRequest.searchOperation = '';
+        this.manufacturingSearchRequest.searchValue = '';
+        this.manufacturingSearchRequest.inventoryType = '';
         this.manufacturingSearchRequest.page = 1;
         this.manufacturingSearchRequest.count = this.paginationLimit;
+        this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+        this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.manufacturingSearchRequest.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.manufacturingSearchRequest.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.selectedStockName = "";
+        this.selectedVariantName = "";
+        this.selectedBranchName = "";
+        this.selectedWarehouseName = "";
+        this.selectedOperationName = "";
+        this.selectedFilterByName = "";
+        this.selectedInventoryTypeName = "";
+        this.totalItems = 0;
+        this.getReport();
     }
 
+    /**
+     * Get manufacturing report
+     *
+     * @memberof ListManufacturingComponent
+     */
     public getReport() {
         let data = cloneDeep(this.manufacturingSearchRequest);
         this.dataSource = [];
@@ -296,7 +344,9 @@ export class ListManufacturingComponent implements OnInit {
     }
 
     /**
-     *  Function to open Dialog on click on Advance Filter Button
+     * Open advance filter modal
+     *
+     * @memberof ListManufacturingComponent
      */
     public openAdvanceFilterDialog(): void {
         this.dialog.open(this.advanceFilterComponent, {
@@ -305,7 +355,7 @@ export class ListManufacturingComponent implements OnInit {
     }
 
     /**
-      *To show the datepicker
+      * To show the datepicker
       *
       * @param {*} element
       * @memberof ListManufacturingComponent
@@ -323,7 +373,7 @@ export class ListManufacturingComponent implements OnInit {
     /**
       * This will hide the datepicker
       *
-      * @memberof InvoicePreviewComponent
+      * @memberof ListManufacturingComponent
       */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -333,7 +383,7 @@ export class ListManufacturingComponent implements OnInit {
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof ActivityLogsComponent
+     * @memberof ListManufacturingComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
@@ -354,6 +404,12 @@ export class ListManufacturingComponent implements OnInit {
         }
     }
 
+    /**
+     * Branch change callback
+     *
+     * @param {*} selectedEntity
+     * @memberof ListManufacturingComponent
+     */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity?.label;
         this.manufacturingSearchRequest.branchUniqueName = selectedEntity?.value;
@@ -361,6 +417,11 @@ export class ListManufacturingComponent implements OnInit {
         this.warehouses = this.allWarehouses[selectedEntity?.value];
     }
 
+    /**
+     * Get warehouses of all branches
+     *
+     * @memberof ListManufacturingComponent
+     */
     public getAllWarehouses(): void {
         this.store.pipe(select(state => state.inventoryBranchTransfer.linkedStocks), takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
             if (branches) {

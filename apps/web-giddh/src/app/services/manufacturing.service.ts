@@ -87,6 +87,9 @@ export class ManufacturingService {
         if ((model.searchValue)) {
             url = url + 'searchValue=' + model.searchValue + '&';
         }
+        if ((model.inventoryType)) {
+            url = url + 'inventoryType=' + model.inventoryType + '&';
+        }
         if ((model.from)) {
             url = url + 'from=' + model.from + '&';
         }
