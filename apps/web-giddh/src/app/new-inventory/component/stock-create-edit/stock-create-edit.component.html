@@ -1596,19 +1596,27 @@
                                                         </input-field>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-3 custom-label">
+                                                        <span class="pull-right right-fix-pencil-icon">
+                                                            <i
+                                                                *ngIf="inlineEditCustomField !== 1"
+                                                                class="icon-edit-pencil cursor-pointer"
+                                                                (click)="showCustomFieldLabelInlineEdit(1)"
+                                                            ></i>
+                                                        </span>
+                                                        <span
+                                                            class="pull-right right-fix-save-icon"
+                                                            *ngIf="inlineEditCustomField === 1"
+                                                        >
+                                                            <i
+                                                                class="icon-save cursor-pointer"
+                                                                (click)="showCustomFieldLabelInlineEdit(0)"
+                                                            ></i>
+                                                        </span>
                                                         <label *ngIf="inlineEditCustomField !== 1"
                                                             >{{
                                                                 stockForm.customField1Heading ||
                                                                     localeData?.custom_field
                                                             }}
-
-                                                            <span class="pull-right right-fix-pencil-icon">
-                                                                <i
-                                                                    *ngIf="inlineEditCustomField !== 1"
-                                                                    class="icon-edit-pencil cursor-pointer"
-                                                                    (click)="showCustomFieldLabelInlineEdit(1)"
-                                                                ></i>
-                                                            </span>
                                                         </label>
                                                         <input-field
                                                             *ngIf="inlineEditCustomField === 1"
@@ -1620,15 +1628,6 @@
                                                             class="common-custom-field-width"
                                                         >
                                                         </input-field>
-                                                        <span
-                                                            class="pull-right right-fix-save-icon"
-                                                            *ngIf="inlineEditCustomField === 1"
-                                                        >
-                                                            <i
-                                                                class="icon-save cursor-pointer"
-                                                                (click)="showCustomFieldLabelInlineEdit(0)"
-                                                            ></i>
-                                                        </span>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-3">
                                                         <div>
@@ -1661,19 +1660,27 @@
                                                         </input-field>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-3 custom-label">
+                                                        <span class="pull-right right-fix-pencil-icon">
+                                                            <i
+                                                                *ngIf="inlineEditCustomField !== 2"
+                                                                class="icon-edit-pencil cursor-pointer"
+                                                                (click)="showCustomFieldLabelInlineEdit(2)"
+                                                            ></i>
+                                                        </span>
+                                                        <span
+                                                            class="pull-right right-fix-save-icon"
+                                                            *ngIf="inlineEditCustomField === 2"
+                                                        >
+                                                            <i
+                                                                class="icon-save cursor-pointer"
+                                                                (click)="showCustomFieldLabelInlineEdit(0)"
+                                                            ></i>
+                                                        </span>
                                                         <label *ngIf="inlineEditCustomField !== 2"
                                                             >{{
                                                                 stockForm.customField2Heading ||
                                                                     localeData?.custom_field
                                                             }}
-
-                                                            <span class="pull-right right-fix-pencil-icon">
-                                                                <i
-                                                                    *ngIf="inlineEditCustomField !== 2"
-                                                                    class="icon-edit-pencil cursor-pointer"
-                                                                    (click)="showCustomFieldLabelInlineEdit(2)"
-                                                                ></i>
-                                                            </span>
                                                         </label>
                                                         <input-field
                                                             *ngIf="inlineEditCustomField === 2"
@@ -1685,15 +1692,6 @@
                                                             class="common-custom-field-width"
                                                         >
                                                         </input-field>
-                                                        <span
-                                                            class="pull-right right-fix-save-icon"
-                                                            *ngIf="inlineEditCustomField === 2"
-                                                        >
-                                                            <i
-                                                                class="icon-save cursor-pointer"
-                                                                (click)="showCustomFieldLabelInlineEdit(0)"
-                                                            ></i>
-                                                        </span>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-3">
                                                         <input-field
