@@ -24,8 +24,6 @@ import { take, takeUntil } from 'rxjs/operators';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateManufacturingComponent implements OnInit {
-    /** Create Manufacturing dropdown items*/
-    public product: any = [];
     /**  This will use for universal date */
     public universalDate: any;
     /** List of warehouses */
@@ -348,8 +346,7 @@ export class CreateManufacturingComponent implements OnInit {
                 linkedStocks.push({
                     stockUniqueName: linkedStock.stockUniqueName,
                     stockUnitUniqueName: linkedStock.stockUnitUniqueName,
-                    quantity: Number(linkedStock.quantity),
-                    rate: Number(linkedStock.rate)
+                    quantity: Number(linkedStock.quantity)
                 });
             });
 
