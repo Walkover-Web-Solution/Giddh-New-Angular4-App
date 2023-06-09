@@ -155,9 +155,13 @@ export class CreateManufacturingComponent implements OnInit {
 
                     stockObject.stocks.push({ label: stock?.name, value: stock?.uniqueName, additional: { stockUnitCode: stock?.stockUnits[0]?.code, stockUnitUniqueName: stock?.stockUnits[0]?.uniqueName, inventoryType: stock.inventoryType, unitsList: unitsList } });
                 });
-
-                this.changeDetectionRef.detectChanges();
+            } else {
+                stockObject.stocks = [];
+                stockObject.stocksTotalPages = 1;
             }
+
+            this.changeDetectionRef.detectChanges();
+
             setTimeout(() => {
                 this.preventStocksApiCall = false;
             }, 500);
