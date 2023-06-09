@@ -10,7 +10,7 @@ const routes: Routes = [
         component: MainComponent,
         children: [
             {
-                path: "new",
+                path: "create",
                 component: CreateManufacturingComponent
             },
             {

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -65,7 +66,8 @@ export class CreateManufacturingComponent implements OnInit {
         private manufacturingService: ManufacturingService,
         private toasterService: ToasterService,
         private inventoryService: InventoryService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private route: ActivatedRoute
     ) {
 
     }
@@ -76,6 +78,13 @@ export class CreateManufacturingComponent implements OnInit {
      * @memberof CreateManufacturingComponent
      */
     public ngOnInit(): void {
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params?.uniqueName) {
+
+            }
+        });
+
+
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {

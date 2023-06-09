@@ -1,7 +1,7 @@
 {
     "sidebar":{
         "inventory":"भंडार",
-        "stock":"भंडार",
+        "stock":"उत्पाद",
         "create_new":"नया निर्माण",
         "item_wise":"आइटम के लिहाज से",
         "group_wise":"गटवार",
