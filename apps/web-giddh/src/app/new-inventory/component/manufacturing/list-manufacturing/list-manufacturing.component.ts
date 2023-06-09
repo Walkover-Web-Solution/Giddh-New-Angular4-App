@@ -21,19 +21,6 @@ import { Observable } from 'rxjs/internal/Observable';
 import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 import { takeUntil } from 'rxjs/operators';
 
-export interface ManufacturingList {
-    date: string,
-    voucher_no: number,
-    finished_variant: string,
-    stock: string,
-    qty_outwards: number,
-    qty_outwards_unit: string,
-    material_used: string,
-    qty_inwards: number,
-    qty_inwards_unit: string,
-    warehouse: string
-}
-
 @Component({
     selector: 'list-manufacturing',
     templateUrl: './list-manufacturing.component.html',
@@ -45,6 +32,10 @@ export class ListManufacturingComponent implements OnInit {
     @ViewChild("advance_filter_dialog") public advanceFilterComponent: TemplateRef<any>;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** Table columns */
     public displayedColumns: string[] = ['date', 'voucher_no', 'stock', 'finished_variant', 'qty_outwards', 'qty_outwards_unit', 'material_used', 'qty_inwards', 'qty_inwards_unit', 'warehouse'];
     /** Holds list of data */
@@ -86,7 +77,7 @@ export class ListManufacturingComponent implements OnInit {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Holds if report is loading */
-    public isReportLoading$: Observable<boolean>;
+    public isReportLoading: boolean = false;
     /** List of stocks */
     public stockList: any[] = [];
     /** List of variants */
@@ -110,24 +101,11 @@ export class ListManufacturingComponent implements OnInit {
     /** List of all warehouses */
     public allWarehouses: any[] = [];
     /** List of operator filters */
-    public operatorFilters: any[] = [
-        { label: 'Greater', value: 'greaterThan' },
-        { label: 'Less Than', value: 'lessThan' },
-        { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-        { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-        { label: 'Equals', value: 'equals' }
-    ];
+    public operatorFilters: any[] = [];
     /** List of search by filters */
-    public searchByFilters: any[] = [
-        { label: 'Quantity Outward', value: 'quantityOutward' },
-        { label: 'Voucher Number', value: 'voucherNumber' }
-    ];
+    public searchByFilters: any[] = [];
     /** List of inventory type filters */
-    public inventoryTypeFilters: any[] = [
-        { label: 'PRODUCT', value: 'PRODUCT' },
-        { label: 'SERVICE', value: 'SERVICE' },
-        { label: 'FIXED ASSET', value: 'FIXED_ASSET' }
-    ];
+    public inventoryTypeFilters: any[] = [];
 
     constructor(
         private dialog: MatDialog,
@@ -141,7 +119,7 @@ export class ListManufacturingComponent implements OnInit {
         private manufacturingService: ManufacturingService,
         private ledgerService: LedgerService
     ) {
-        this.isReportLoading$ = this.store.pipe(select(state => state.manufacturing.isMFReportLoading), takeUntil(this.destroyed$));
+        
     }
 
     /**
@@ -313,9 +291,10 @@ export class ListManufacturingComponent implements OnInit {
      *
      * @memberof ListManufacturingComponent
      */
-    public getReport() {
+    public getReport(): void {
         let data = cloneDeep(this.manufacturingSearchRequest);
         this.dataSource = [];
+        this.isReportLoading = true;
 
         this.manufacturingService.GetMfReport(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.results?.length) {
@@ -332,14 +311,16 @@ export class ListManufacturingComponent implements OnInit {
                         qty_outwards: item.manufacturingQuantity,
                         qty_outwards_unit: item.manufacturingUnit,
                         linkedStocks: item.linkedStocks,
-                        warehouse: item.warehouse?.name
+                        warehouse: item.warehouse?.name,
+                        uniqueName: item.uniqueName
                     });
-                })
+                });
 
                 this.dataSource = reportData;
-
-                this.changeDetectionRef.detectChanges();
             }
+
+            this.isReportLoading = false;
+            this.changeDetectionRef.detectChanges();
         });
     }
 
@@ -443,5 +424,28 @@ export class ListManufacturingComponent implements OnInit {
                 this.store.dispatch(this.inventoryAction.GetAllLinkedStocks());
             }
         });
+    }
+
+    public translationComplete(event: any): void {
+        if (event) {
+            this.operatorFilters = [
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
+                { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than_equals, value: 'greaterThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than_equals, value: 'lessThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' }
+            ];
+
+            this.searchByFilters = [
+                { label: this.localeData?.search_by_filters?.quantity_outward, value: 'quantityOutward' },
+                { label: this.localeData?.search_by_filters?.voucher_no, value: 'voucherNumber' }
+            ];
+
+            this.inventoryTypeFilters = [
+                { label: this.commonLocaleData?.app_inventory_types?.product, value: 'PRODUCT' },
+                { label: this.commonLocaleData?.app_inventory_types?.service, value: 'SERVICE' },
+                { label: this.commonLocaleData?.app_inventory_types?.fixed_assets, value: 'FIXED_ASSETS' }
+            ];
+        }
     }
 }
