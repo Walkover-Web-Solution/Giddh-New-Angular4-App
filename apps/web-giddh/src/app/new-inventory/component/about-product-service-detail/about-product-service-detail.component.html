@@ -7,7 +7,7 @@
                         <img src="{{ imgPath }}Login-Page-Image.png" alt="group-icon" />
                     </div>
                     <div class="group-name">
-                        <a href="javascript:void(0);" [routerLink]="['pages/new-inventory/create-new-inventory']"></a>
+                        <a href="javascript:void(0);" [routerLink]="['pages/inventory/v2/create-inventory/v2']"></a>
                         <h4>Product Dummy Name Furniture</h4>
                         <p class="text-gray font-14">(Product Unique Name)</p>
                     </div>
@@ -61,7 +61,7 @@
                                 <a
                                     class="dropdown-item"
                                     href="javascript:void(0);"
-                                    [routerLink]="['/pages/new-inventory/adjust-inventory']"
+                                    [routerLink]="['/pages/inventory/v2/adjust-inventory']"
                                     >Adjust Product or service</a
                                 >
                             </li>
@@ -86,11 +86,11 @@
                         id="create-inventory-btn"
                         class="btn btn-sky-blue bdr-radius-50"
                         *ngIf="!isMobileScreen"
-                        [routerLink]="['/pages/new-inventory/create-new-inventory']"
+                        [routerLink]="['/pages/inventory/v2/create-inventory/v2']"
                     >
                         + Add Inventory
                     </button>
-                    <i class="icon-undo pd cursor-pointer" tooltip="Back" [routerLink]="['/pages/new-inventory']"></i>
+                    <i class="icon-undo pd cursor-pointer" tooltip="Back" [routerLink]="['/pages/inventory/v2']"></i>
                 </div>
             </div>
         </div>

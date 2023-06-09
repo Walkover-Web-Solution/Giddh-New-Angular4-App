@@ -37,7 +37,7 @@
                                 <a
                                     class="dropdown-item"
                                     href="javascript:void(0);"
-                                    [routerLink]="['/pages/new-inventory/adjust-inventory']"
+                                    [routerLink]="['/pages/inventory/v2/adjust-inventory']"
                                     >Adjust Group</a
                                 >
                             </li>
@@ -54,11 +54,11 @@
                     <button
                         class="btn btn-sky-blue bdr-radius-50"
                         *ngIf="!isMobileScreen"
-                        [routerLink]="['/pages/new-inventory/create-new-inventory']"
+                        [routerLink]="['/pages/inventory/v2/create-inventory/v2']"
                     >
                         + Add Inventory
                     </button>
-                    <i class="icon-undo pd cursor-pointer" tooltip="Back" [routerLink]="['/pages/new-inventory']"></i>
+                    <i class="icon-undo pd cursor-pointer" tooltip="Back" [routerLink]="['/pages/inventory/v2']"></i>
                 </div>
             </div>
         </div>
