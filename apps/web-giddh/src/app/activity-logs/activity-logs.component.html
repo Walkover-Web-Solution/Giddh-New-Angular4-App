@@ -87,7 +87,7 @@
                     <select-field
                         [cssClass]="'form-control mat-field-border'"
                         [name]="'accounts'"
-                        [placeholder]="commonLocaleData?.app_import_type?.accounts"
+                        [placeholder]="commonLocaleData?.app_import_type?.base_accounts"
                         [options]="accounts"
                         (selectedOption)="selecteAccountType($event); activityObjLabels.accounts = $event.label"
                         [defaultValue]="activityObjLabels?.accounts"
