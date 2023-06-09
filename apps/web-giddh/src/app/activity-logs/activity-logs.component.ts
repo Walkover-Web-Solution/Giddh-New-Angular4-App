@@ -749,6 +749,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (!event?.value) {
             this.activityObjLabels.account = '';
             this.activityObj.accountUniqueNames = [];
+            this.loadDefaultAccountsSuggestions();
         }
     }
 
@@ -865,7 +866,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                     value: "ENTITY_DATE"
                 },
                 {
-                    label: this.commonLocaleData?.app_import_type?.accounts,
+                    label: this.commonLocaleData?.app_import_type?.base_accounts,
                     value: "ACCOUNTS"
                 },
             ];
