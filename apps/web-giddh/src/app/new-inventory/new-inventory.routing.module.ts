@@ -146,7 +146,7 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [],
-    imports: [RouterModule.forChild(routes), StockCreateEditModule, GroupCreateEditModule],
+    imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
 export class NewInventoryRoutingModule {

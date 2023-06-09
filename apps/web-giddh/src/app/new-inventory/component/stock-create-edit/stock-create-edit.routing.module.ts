@@ -9,32 +9,17 @@ const routes: Routes = [
         component: MainComponent,
         children: [
             {
-                path: "product/create",
-                component: StockCreateEditComponent
+                path: ":type/create",
+                component: StockCreateEditComponent,
+                pathMatch: 'full'
             },
             {
-                path: "service/create",
-                component: StockCreateEditComponent
-            },
-            {
-                path: "fixedassets/create",
-                component: StockCreateEditComponent
-            },
-            {
-                path: "product/edit/:stockUniqueName",
-                component: StockCreateEditComponent
-            },
-            {
-                path: "service/edit/:stockUniqueName",
-                component: StockCreateEditComponent
-            },
-            {
-                path: "fixedassets/edit/:stockUniqueName",
-                component: StockCreateEditComponent
+                path: ":type/edit/:stockUniqueName",
+                component: StockCreateEditComponent,
+                pathMatch: 'full'
             }
         ]
-    },
-    
+    }
 ];
 
 @NgModule({
