@@ -16,6 +16,8 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { GiddhDatepickerModule } from '../../../theme/giddh-datepicker/giddh-datepicker.module';
 import { FormsModule } from '@angular/forms';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
+import { NoDataModule } from '../../../shared/no-data/no-data.module';
+import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
 
 @NgModule({
     imports: [
@@ -33,7 +35,9 @@ import { TranslateDirectiveModule } from '../../../theme/translate/translate.dir
         PaginationModule.forRoot(),
         GiddhDatepickerModule,
         FormsModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        NoDataModule,
+        GiddhPageLoaderModule
     ],
     exports: [
         CreateManufacturingComponent,

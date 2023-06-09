@@ -438,6 +438,7 @@
     "app_order": "Order",
     "app_permanently_delete_message": "It will be deleted permanently and will no longer be accessible from any other module.",
     "app_filter": "Filter",
+    "app_advanced_filter": "Advanced Filter",
     "app_by": "by",
     "app_ac": "A/c",
     "app_generate_voucher": "Generate Voucher",
@@ -688,5 +689,10 @@
     "app_invalid_contact_too_long": "Too long",
     "app_attachment_not_allowed": "To upload attachment, go to branch",
     "app_entry_no": "Entry No.",
-    "app_special_note": "Note: Some details of the Voucher can’t be updated as E-invoice is generated for the same."
+    "app_special_note": "Note: Some details of the Voucher can’t be updated as E-invoice is generated for the same.",
+    "app_inventory_types": {
+        "product": "PRODUCT",
+        "service": "SERVICE",
+        "fixed_assets": "FIXED ASSETS"
+    }
 }

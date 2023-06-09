@@ -14,6 +14,10 @@ const routes: Routes = [
                 component: CreateManufacturingComponent
             },
             {
+                path: "edit/:uniqueName",
+                component: CreateManufacturingComponent
+            },
+            {
                 path: "list",
                 component: ListManufacturingComponent
             }
