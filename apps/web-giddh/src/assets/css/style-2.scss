@@ -388,7 +388,7 @@ textarea {
     }
 }
 .trigger-dropdown {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
 }
 
 .compose-trigger-dropdowns {
@@ -400,7 +400,7 @@ textarea {
             padding-bottom: 1em !important;
         }
         .mat-form-field-label {
-            font-size: var(--font-size-13) !important;
+            font-size: var(--font-size-14) !important;
             color: var(--color-common-senary-background-for-all-components) !important;
             padding-top: 10px;
         }
@@ -434,11 +434,11 @@ textarea {
 }
 .trigger-form {
     .form-control {
-        font-size: var(--font-size-13) !important;
+        font-size: var(--font-size-14) !important;
     }
 }
 .button-trigger-form {
-    font-size: var(--font-size-13) !important;
+    font-size: var(--font-size-14) !important;
 }
 .trigger-form-right-side {
     .border-left {
@@ -463,7 +463,7 @@ textarea {
             color: var(--color-chips-primary) !important;
             background-color: var(--color-body-background) !important;
             border: 1px solid var(--color-primary-login-box-body-text) !important;
-            font-size: var(--font-size-13) !important;
+            font-size: var(--font-size-14) !important;
 
             &:hover {
                 background-color: var(--color-sidebar-company-background) !important;
@@ -474,7 +474,7 @@ textarea {
             }
 
             .mat-chip-remove {
-                font-size: var(--font-size-12);
+                font-size: 12px;
                 margin-top: 6px;
                 color: var(--color-chips-primary) !important;
             }
@@ -493,7 +493,7 @@ textarea {
             }
 
             .mat-form-field-label {
-                font-size: var(--font-size-13) !important;
+                font-size: var(--font-size-14) !important;
                 color: var(--color-common-senary-background-for-all-components) !important;
                 padding-top: 10px;
                 font-weight: normal !important;
@@ -528,7 +528,7 @@ textarea {
         border: 1px solid var(--color-secondary-input-bar-border);
         border-radius: 5px !important;
         padding: 8px;
-        font-size: var(--font-size-13);
+        font-size: var(--font-size-14);
         min-width: 202px;
     }
 
@@ -677,7 +677,7 @@ textarea {
     border: 1px solid var(--color-secondary-input-bar-border);
     background-color: var(--color-white);
     color: var(--color-primary-input-bar-text);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     padding: 0;
     display: flex;
     justify-content: center;
@@ -814,7 +814,7 @@ textarea {
 
     .select-multiple-chiplist {
         mat-chip.mat-standard-chip {
-            font-size: var(--font-size-10) !important;
+            font-size: var(--font-size-9) !important;
         }
     }
 
@@ -1317,7 +1317,7 @@ input {
             float: left !important;
             width: 100% !important;
             color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
-            font-size: var(--font-size-13);
+            font-size: var(--font-size-14);
         }
 
         .mat-option-text {
@@ -1428,7 +1428,7 @@ input {
 }
 
 .company-list button.btn-link {
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     color: var(--color-blue) !important;
     display: block;
     padding: 7px 10px;
@@ -1457,7 +1457,7 @@ ul.sub-list {
 }
 
 .user-dropdown-header > li > a .icon-arrow-down {
-    font-size: var(--font-size-9);
+    font-size: 9px;
     float: right;
     padding-top: 4px;
     transform: rotate(270deg);
@@ -1471,7 +1471,7 @@ ul.sub-list {
 }
 
 .sub-list li a {
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     text-overflow: ellipsis;
     display: block;
     padding-right: 40px;
@@ -1573,7 +1573,7 @@ ul.sub-list {
 }
 
 .tab-integration .nav-tabs > li > a > span {
-    font-size: var(--font-size-30);
+    font-size: var(--font-size-32);
     color: var(--color-rectangular-tab-inactive-primary-icon);
     opacity: 0.4;
     margin-bottom: 6px;
@@ -1584,7 +1584,7 @@ ul.sub-list {
 }
 
 .customer-footer-box .number-total {
-    font-size: var(--font-size-26);
+    font-size: var(--font-size-24);
     color: var(--color-blue);
 }
 
@@ -2155,7 +2155,7 @@ modal-container.modal {
 .btn-filter {
     background: var(--color-white);
     border: 1px solid var(--color-iron);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     padding: 4px 8px;
     line-height: initial !important;
     color: var(--color-gray);
@@ -2245,7 +2245,7 @@ modal-container.modal {
     i {
         position: absolute;
         z-index: 11;
-        font-size: var(--font-size-13);
+        font-size: 14px;
         top: 11px;
         left: 10px;
         color: var(--color-sidebar-search-bar-text);
@@ -2287,7 +2287,7 @@ modal-container.modal {
     left: 0;
     top: 0;
     z-index: 9;
-    font-size: var(--font-size-17);
+    font-size: 17px;
     color: var(--color-abbey);
     height: 36px;
     width: 36px;
@@ -2414,7 +2414,7 @@ input:-moz-placeholder {
 }
 
 .company-name .company-text .company-name {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     text-transform: capitalize;
     display: inline-flex;
     width: 28px;
@@ -3064,7 +3064,7 @@ input[type="checkbox"]:checked:after {
 
 .filterForm label {
     display: block;
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     font-weight: 400;
 }
 
@@ -3090,12 +3090,12 @@ input[type="checkbox"]:checked:after {
     padding-top: 7px;
 }
 
-.font-10 {
-    font-size: var(--font-size-10);
+.font-9 {
+    font-size: var(--font-size-9);
 }
 
-.font-11 {
-    font-size: var(--font-size-11) !important;
+.icon-font-11 {
+    font-size: 11px !important;
 }
 
 .font-12 {
@@ -3106,24 +3106,16 @@ input[type="checkbox"]:checked:after {
     font-size: var(--font-size-14);
 }
 
-.font-16 {
-    font-size: var(--font-size-16) !important;
-}
-
 .font-18 {
     font-size: var(--font-size-18);
 }
 
-.font-20 {
-    font-size: var(--font-size-20);
+.icon-font-22 {
+    font-size: 22px;
 }
 
-.font-22 {
-    font-size: var(--font-size-22);
-}
-
-.font-26 {
-    font-size: var(--font-size-26);
+.font-24 {
+    font-size: var(--font-size-24);
 }
 
 .word-wrap {
@@ -3266,7 +3258,7 @@ input[type="checkbox"]:checked:after {
 .download-invoice-ledger {
     padding-left: 15px;
     align-items: center;
-    font-size: var(--font-size-15);
+    font-size: var(--font-size-14);
 }
 
 .popover.bottom > .arrow:after {
@@ -3400,7 +3392,7 @@ footer {
     padding: 10px 20px;
     text-align: center;
     color: var(--color-abbey);
-    font-size: var(--font-size-17);
+    font-size: var(--font-size-18);
     margin-top: 20px;
     width: 100%;
     float: left;
@@ -3414,7 +3406,7 @@ footer > div > a {
     margin: 0 22px;
     color: var(--color-abbey);
     padding: 0;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
 }
 
 footer > div > a:hover {
@@ -3756,7 +3748,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .shared-list li {
     list-style: none !important;
     color: var(--color-abbey);
-    font-size: var(--font-size-16) !important;
+    font-size: var(--font-size-14) !important;
     padding: 5px 0 2px 0 !important;
     border-bottom: 1px solid var(--color-iron) !important;
 }
@@ -3846,7 +3838,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .select-drop i {
     position: absolute;
     right: 4px;
-    font-size: var(--font-size-16);
+    font-size: 16px;
     color: var(--color-abbey);
     top: 50%;
     transform: translateY(-50%);
@@ -4194,7 +4186,7 @@ label {
 }
 
 .breadcrumbs {
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     overflow: hidden;
 }
 
@@ -4332,7 +4324,7 @@ label {
     padding-left: 20px;
     font-weight: 500;
     float: right;
-    font-size: var(--font-size-20);
+    font-size: 20px;
     cursor: pointer;
     line-height: 19px;
     opacity: 0.6;
@@ -4356,7 +4348,7 @@ label {
 .breadcrumb > li + li:before {
     padding-left: 4px;
     content: ">";
-    font-size: var(--font-size-13);
+    font-size: 13px;
     color: var(--color-abbey);
 }
 
@@ -4432,7 +4424,7 @@ label {
 }
 
 .section-title {
-    font-size: var(--font-size-19);
+    font-size: var(--font-size-18);
 }
 
 .top-bar h1.section-title.inline {
@@ -4604,7 +4596,7 @@ label {
 }
 
 .no-result h1 {
-    font-size: var(--font-size-21);
+    font-size: var(--font-size-24);
 }
 
 /**************** Create company modal **********************/
@@ -4698,7 +4690,7 @@ label {
 
 #manufacture .section-title {
     color: var(--color-abbey);
-    font-size: var(--font-size-20);
+    font-size: var(--font-size-18);
     line-height: 34px;
     vertical-align: middle;
 }
@@ -4781,7 +4773,7 @@ label {
 }
 
 #single-role .lead {
-    font-size: var(--font-size-22);
+    font-size: var(--font-size-24);
 }
 
 #single-role thead tr th:first-child {
@@ -5022,7 +5014,7 @@ label {
 }
 
 #customInvoice h2 {
-    font-size: var(--font-size-20);
+    font-size: var(--font-size-18);
     margin-bottom: 20px;
 }
 
@@ -5265,7 +5257,7 @@ input[type="checkbox"][disabled] {
 .section-head {
     padding-bottom: 10px;
     font-family: var(--font-semibold);
-    font-size: var(--font-size-17);
+    font-size: var(--font-size-18);
     color: var(--color-common-quaternary-text);
 }
 
@@ -5284,7 +5276,7 @@ input[type="checkbox"][disabled] {
 }
 
 .empty-table h1 {
-    font-size: var(--font-size-21);
+    font-size: var(--font-size-18);
     color: var(--color-gray);
     padding: 8px;
 }
@@ -5308,7 +5300,7 @@ input[type="checkbox"][disabled] {
 }
 
 .subHead {
-    font-size: var(--font-size-17);
+    font-size: var(--font-size-18);
     color: var(--color-common-quinary-text);
     padding-bottom: 10px;
 }
@@ -5372,7 +5364,7 @@ datepicker-inner .well {
 datepicker-inner .well table button.btn.btn-default.btn-sm {
     line-height: 1;
     background-color: transparent !important;
-    font-size: var(--font-size-20);
+    font-size: var(--font-size-18);
     color: var(--color-nero) !important;
     box-shadow: none !important;
 }
@@ -5450,14 +5442,14 @@ input[type="checkbox"][disabled]:after {
 
 .toggle-btn i {
     margin-right: 9px;
-    font-size: var(--font-size-20);
+    font-size: 20px;
     position: relative;
     top: 2px;
 }
 
 .toggle-btn label {
     color: var(--color-blue);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
 }
 
 .table-container {
@@ -5470,7 +5462,7 @@ input[type="checkbox"][disabled]:after {
 }
 
 .welcome-header h2 {
-    font-size: var(--font-size-26);
+    font-size: var(--font-size-24);
     font-family: var(--font-regular);
     color: var(--color-common-primary-text);
 }
@@ -5738,7 +5730,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     opacity: 1 !important;
     font-weight: 100;
     text-shadow: none;
-    font-size: var(--font-size-30);
+    font-size: 30px;
     cursor: pointer;
     padding: 0 !important;
     margin: 0 !important;
@@ -5753,7 +5745,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .welcome-header h1 {
-    font-size: var(--font-size-30);
+    font-size: var(--font-size-32);
     font-family: var(--font-regular);
     color: var(--color-giddh-blue);
 }
@@ -5785,7 +5777,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .welcome-header h2 {
-    font-size: var(--font-size-26);
+    font-size: var(--font-size-24);
     font-family: var(--font-regular);
     color: var(--color-common-primary-text);
     position: relative;
@@ -5918,7 +5910,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     padding: 8px !important;
     border-bottom: 1px solid var(--color-iron);
     border-right: 1px solid var(--color-iron);
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     color: var(--color-common-secondary-text);
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -5935,7 +5927,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .ledg-head.entry-popup table td[class*="col-"] {
     border-bottom: 1px solid var(--color-common-primary-border);
     border-right: 1px solid var(--color-common-primary-border);
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     color: var(--color-abbey);
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -6152,7 +6144,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .user-dropdown-header > li > a {
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     padding: 6px 15px !important;
     color: var(--color-nero);
 }
@@ -6203,7 +6195,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .user-name-wrap {
     width: calc(100% - 40px);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     line-height: initial;
 }
 
@@ -6406,7 +6398,7 @@ GST filing
 }
 
 .tax-engine .transactions-list .list-filter {
-    font-size: var(--font-size-17);
+    font-size: var(--font-size-18);
     font-weight: 600;
 }
 
@@ -6527,7 +6519,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .hamburger-menu h4 {
-    font-size: var(--font-size-20);
+    font-size: var(--font-size-18);
     text-transform: capitalize;
     width: auto;
     color: var(--color-giddh-blue);
@@ -6605,7 +6597,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .nav-tabs > li a {
-    font-size: var(--font-size-15);
+    font-size: var(--font-size-14);
     color: var(--color-abbey);
     margin-right: 0;
     height: 100%;
@@ -6684,7 +6676,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .gstr-transactions-summary .table > thead > tr > th {
     padding: 10px;
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     font-weight: 600;
 }
 
@@ -6742,7 +6734,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     border: none;
     background-color: var(--color-white);
     border-right: 1px solid var(--color-table-primary-content-bar-border);
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     padding: 13px;
 }
 
@@ -6778,7 +6770,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     cursor: pointer;
     font-style: italic;
     padding: 14px 25px;
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     background: none !important;
 }
 
@@ -6952,7 +6944,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .font-xxlarge {
-    font-size: var(--font-size-22);
+    font-size: var(--font-size-24);
 }
 
 .tax-engine .sub-filter-nav-band ul {
@@ -6969,7 +6961,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     cursor: pointer;
     font-style: italic;
     padding: 14px 25px;
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     color: var(--color-blue);
 }
 
@@ -7029,7 +7021,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .table.reconciliations-table tbody > tr > td,
 .tax-engine .table.reconciliations-table thead > tr > th {
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     padding: 13px;
 }
 
@@ -7058,7 +7050,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .font-xxs {
-    font-size: var(--font-size-11);
+    font-size: var(--font-size-9);
 }
 
 .tax-engine .table.reconciliations-table tbody > tr > td.primary-details {
@@ -7279,12 +7271,12 @@ app-header {
 }
 
 .sticky-footer-sale-amount .total-due h3 {
-    font-size: var(--font-size-20);
+    font-size: var(--font-size-18);
     padding-right: 13px;
 }
 
 .sticky-footer-sale-amount .totalSale h3 {
-    font-size: var(--font-size-20);
+    font-size: var(--font-size-18);
     color: var(--color-abbey);
     padding-right: 13px;
 }
@@ -7734,7 +7726,7 @@ span.red-text {
 
 .total-sales-tabs .nav-tabs li a {
     color: var(--color-nero);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     padding: 0 5px;
     position: relative;
 }
@@ -7967,7 +7959,7 @@ ul.dropdown-menu p.lead.pd {
 
 .aside-panel-ledger button.btn.btn-lg.btn-primary {
     min-width: 150px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
 }
 
 .setting-page ul.nav.nav-tabs {
@@ -8152,7 +8144,7 @@ button.btn.btn-filter {
 
 .td-search-box div i.icon-search {
     color: var(--color-table-secondary-heading) !important;
-    font-size: var(--font-size-16);
+    font-size: 16px;
 }
 
 .mobileCode .menu {
@@ -8403,7 +8395,7 @@ highcharts-chart {
             float: left !important;
             width: 100% !important;
             color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
-            font-size: var(--font-size-13);
+            font-size: var(--font-size-14);
         }
 
         .option-value-stock {
@@ -8776,7 +8768,7 @@ input.checkbox-custom[type="checkbox"] {
 
 .select2-parent.select2-ledger .update-ledger-account sh-select .header input {
     padding-left: 3px !important;
-    font-size: var(--font-size-13) !important;
+    font-size: var(--font-size-14) !important;
     padding-right: 27px !important;
 }
 
@@ -8794,7 +8786,7 @@ input.checkbox-custom[type="checkbox"] {
 
 .select2-parent.select2-ledger .ledger-account-label sh-select .header input {
     padding-left: 3px !important;
-    font-size: var(--font-size-13) !important;
+    font-size: var(--font-size-14) !important;
 
     &::placeholder {
         color: var(--color-common-secondary-input-placeholder);
@@ -8811,7 +8803,7 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 .aside-body .btn-lg.btn-primary {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     min-width: 150px;
 }
 
@@ -8849,7 +8841,7 @@ input.checkbox-custom[type="checkbox"] {
         padding-bottom: 40px;
 
         h4 {
-            font-size: var(--font-size-22);
+            font-size: var(--font-size-24);
             margin-top: 10px;
             margin-bottom: 20px;
         }
@@ -8891,7 +8883,7 @@ ngx-daterangepicker-material {
     .edit-date-modal {
         h5 {
             color: var(--color-abbey);
-            font-size: var(--font-size-13);
+            font-size: var(--font-size-14);
         }
 
         .modal-date-range {
@@ -9077,7 +9069,7 @@ span#HW_badge_cont:nth-child(3) {
                     i {
                         color: var(--color-sidebar-primary-anchor-text);
                         margin-right: 10px;
-                        font-size: var(--font-size-22);
+                        font-size: 22px;
                     }
                 }
             }
@@ -9444,7 +9436,7 @@ span#HW_badge_cont:nth-child(3) {
         .nav-tabs {
             .nav-item {
                 .nav-link {
-                    font-size: var(--font-size-16) !important;
+                    font-size: var(--font-size-14) !important;
                     color: var(--color-tab-primary-inactive) !important;
                 }
             }
@@ -9495,7 +9487,7 @@ span#HW_badge_cont:nth-child(3) {
 
 .max-character-label {
     padding-left: 6px;
-    font-size: var(--font-size-11);
+    font-size: var(--font-size-12);
     color: var(--color-abbey);
 }
 
@@ -10626,7 +10618,7 @@ body.update-scroll-hidden {
 /* responsive  starts here*/
 @media (max-width: 1440px) {
     .font-xxlarge {
-        font-size: var(--font-size-20);
+        font-size: var(--font-size-18);
     }
 
     .date-column {
@@ -10636,7 +10628,7 @@ body.update-scroll-hidden {
     .right-side {
         .whole-renewal {
             .amount-field-content {
-                font-size: var(--font-size-21);
+                font-size: var(--font-size-24);
                 margin-top: 1%;
             }
         }
@@ -10704,7 +10696,7 @@ body.update-scroll-hidden {
 
     .select-multiple-chiplist {
         mat-chip.mat-standard-chip {
-            font-size: var(--font-size-10) !important;
+            font-size: var(--font-size-12) !important;
         }
     }
 
@@ -11160,7 +11152,7 @@ body.update-scroll-hidden {
     }
 
     .tab-integration .nav-tabs > li > a > span {
-        font-size: var(--font-size-22);
+        font-size: var(--font-size-24);
     }
 
     .tab-integration .nav-tabs > li > a span:first-child {
@@ -11295,11 +11287,11 @@ body.update-scroll-hidden {
 
         h3,
         h4 {
-            font-size: var(--font-size-16) !important;
+            font-size: var(--font-size-14) !important;
         }
 
         .close {
-            font-size: var(--font-size-26);
+            font-size: 26px;
         }
     }
 
@@ -12174,7 +12166,7 @@ body.update-scroll-hidden {
 
         ul {
             li {
-                font-size: var(--font-size-11);
+                font-size: var(--font-size-12);
                 padding: 3px 4px;
             }
         }
@@ -12285,7 +12277,7 @@ body.update-scroll-hidden {
     }
 
     .branch .box h1 {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-14);
         padding-right: 0;
         display: block;
     }
@@ -12298,7 +12290,7 @@ body.update-scroll-hidden {
     }
 
     .welcome-header h1 {
-        font-size: var(--font-size-25) !important;
+        font-size: var(--font-size-24) !important;
     }
 
     .welcome-header:after {
@@ -12312,7 +12304,7 @@ body.update-scroll-hidden {
 
 @media only screen and (max-width: 1400px) {
     .font-xxlarge {
-        font-size: var(--font-size-20);
+        font-size: var(--font-size-18);
     }
 }
 
@@ -12639,7 +12631,7 @@ body.update-scroll-hidden {
                     margin-right: 15px;
 
                     p {
-                        font-size: var(--font-size-20);
+                        font-size: var(--font-size-18);
                         margin-top: 15px;
                         width: 110px;
                         margin-bottom: 20px;
@@ -12713,7 +12705,7 @@ body.update-scroll-hidden {
     input[type="number"],
     input[type="email"],
     input[type="url"] {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-14);
     }
 }
 
@@ -12732,7 +12724,7 @@ body.update-scroll-hidden {
     input[type="number"],
     input[type="email"],
     input[type="url"] {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-14);
     }
 }
 
@@ -12751,7 +12743,7 @@ body.update-scroll-hidden {
     input[type="number"],
     input[type="email"],
     input[type="url"] {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-14);
     }
 }
 
@@ -12770,7 +12762,7 @@ body.update-scroll-hidden {
     input[type="number"],
     input[type="email"],
     input[type="url"] {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-14);
     }
 }
 
@@ -13000,11 +12992,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
     .mat-input-element {
         border: 1px solid var(--color-secondary-input-bar-border) !important;
     }
-}
-
-.susbcription-plan-amount {
-    font-size: var(--font-size-21) !important;
-    font-weight: bold !important;
 }
 
 .susbcription-plan-years {
@@ -13480,7 +13467,7 @@ hamburger-menu {
     display: block;
     width: 100%;
     padding: 0.375rem 0.75rem;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     font-weight: 400;
     line-height: 1.5;
     color: var(--color-nero);
@@ -13518,7 +13505,7 @@ hamburger-menu {
             margin-top: -16px;
             padding: 16px 0px;
             padding-top: 17px;
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-14);
 
             .mat-select-placeholder,
             mat-select-trigger {
@@ -13593,7 +13580,7 @@ hamburger-menu {
                 height: 34px;
                 color: var(--color-white);
                 padding-top: 22px;
-                font-size: var(--font-size-13);
+                font-size: var(--font-size-14);
             }
         }
 
@@ -13609,7 +13596,7 @@ hamburger-menu {
                     width: 167px;
                     padding-left: 32px !important;
                     background-color: var(--color-sidebar-primary-search-bar-background) !important;
-                    font-size: var(--font-size-13) !important;
+                    font-size: var(--font-size-14) !important;
                     padding-top: 7px !important;
                     border-radius: 5px;
                     &::placeholder {

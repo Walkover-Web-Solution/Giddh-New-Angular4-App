@@ -50,7 +50,7 @@
                 color: var(--color-red);
                 position: absolute;
                 right: -25px;
-                font-size: var(--font-size-20);
+                font-size: 20px;
                 top: -5px;
                 z-index: 1;
             }
@@ -189,13 +189,13 @@ table.stock-table th {
         align-items: center;
         border-radius: 40px;
         color: var(--color-gray);
-        font-size: var(--font-size-17);
+        font-size: 17px;
     }
 
     .delete-tb-tr-icon {
         position: absolute;
         right: -50px;
-        font-size: var(--font-size-16);
+        font-size: 16px;
         border: 1px solid #999999;
         line-height: 1;
         height: 29px;
@@ -243,7 +243,7 @@ table.stock-table th {
                 background-color: var(--color-white);
                 i {
                     vertical-align: top;
-                    font-size: var(--font-size-20);
+                    font-size: 20px;
                     color: var(--color-gray);
                 }
             }
@@ -609,4 +609,7 @@ table.stock-table th {
     background-color: #f8f8f8;
     margin-bottom: 15px;
     border-radius: 7px;
+}
+.icon-font-22 {
+    font-size: 22px;
 }

@@ -36,7 +36,7 @@
         }
 
         .add-extra-value {
-            font-size: var(--font-size-10);
+            font-size: var(--font-size-9);
             color: rgb(166, 167, 182);
             transform: translateY(15px);
         }
@@ -59,14 +59,14 @@
         }
 
         .total-value {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-14);
             font-weight: 700;
             color: rgb(33, 37, 40);
             transform: translateY(-14px);
         }
 
         .per-value {
-            font-size: var(--font-size-10);
+            font-size: var(--font-size-9);
             color: rgb(122, 124, 126);
             transform: translateY(-18px);
         }
@@ -128,7 +128,7 @@
 
 @media screen and (max-width: 1024px) and (orientation: landscape) {
     .small-text {
-        font-size: var(--font-size-10);
+        font-size: var(--font-size-9);
     }
 }
 

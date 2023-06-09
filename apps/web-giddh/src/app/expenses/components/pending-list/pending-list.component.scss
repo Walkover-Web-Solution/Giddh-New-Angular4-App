@@ -2,23 +2,6 @@
     position: relative;
 }
 
-.search-icon {
-    position: absolute;
-    right: 12px;
-    font-size: var(--font-size-11);
-    color: var(--color-abbey);
-    top: 13px;
-}
-
-.arrow-filter {
-    font-size: var(--font-size-11);
-    position: absolute;
-    right: 10px;
-    color: var(--color-gray);
-    cursor: pointer;
-    top: 12px;
-}
-
 .icon-pointer {
     cursor: pointer;
     .active-text-color {

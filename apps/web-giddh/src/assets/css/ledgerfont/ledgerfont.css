@@ -46,7 +46,7 @@
     /* Font smoothing. That was taken from TWBS */
     -webkit-font-smoothing: antialiased !important;
     -moz-osx-font-smoothing: grayscale !important;
-    font-size: var(--font-size-11) !important;
+    font-size: 11px !important;
     font-variant: normal !important;
     text-transform: none !important;
     line-height: 0.5em !important;

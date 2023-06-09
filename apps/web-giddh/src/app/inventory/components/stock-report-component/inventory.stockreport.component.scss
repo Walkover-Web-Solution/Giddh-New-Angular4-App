@@ -97,7 +97,7 @@
         padding: 41px;
         h2 {
             color: var(--color-gray);
-            font-size: var(--font-size-20);
+            font-size: var(--font-size-18);
             margin-bottom: 10px;
         }
         h1 {
@@ -245,7 +245,7 @@ button[aria-expanded="true"] i {
             min-width: 120px;
         }
         .operators {
-            font-size: var(--font-size-39);
+            font-size: var(--font-size-32);
             color: var(--color-gray);
         }
         h2 {
@@ -315,7 +315,7 @@ button.btn.btn-filter {
     text-transform: none;
 }
 .head-report {
-    font-size: var(--font-size-20);
+    font-size: var(--font-size-18);
     font-weight: bold;
     text-transform: capitalize;
 }
@@ -378,7 +378,7 @@ button.btn.btn-filter {
     .wrap-head-report {
         width: 55%;
         .head-report {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-14);
             white-space: normal;
             word-break: break-all;
         }
@@ -395,7 +395,7 @@ button.btn.btn-filter {
         display: none;
     }
     .head-report {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-14);
     }
     .btn-link {
         font-size: var(--font-size-12);

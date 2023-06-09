@@ -8,7 +8,7 @@
         <div class="header">
             <button
                 aria-hidden="true"
-                class="cursor-pointer font-16 d-flex p-0 attachment-back-button"
+                class="cursor-pointer font-14 d-flex p-0 attachment-back-button"
                 [attr.aria-label]="commonLocaleData?.app_back"
                 #close
                 disableRipple
@@ -85,7 +85,7 @@
                             branches?.length > 1
                         " type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
                         [uploadInput]="uploadInput" [options]="fileUploadOptions" (uploadOutput)="onUploadOutput($event)" />
-                    <label for="invoiceFile" class="cp font-16">
+                    <label for="invoiceFile" class="cp font-14">
                         <i [ngClass]="
                                 !isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'
                             "></i>

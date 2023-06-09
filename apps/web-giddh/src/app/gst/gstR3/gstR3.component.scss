@@ -44,7 +44,7 @@ svg.icon.icon-sm {
 }
 
 .font-large {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-18);
 }
 
 .text-primary {
@@ -224,7 +224,7 @@ svg.icon.icon-xxlg {
 }
 
 .font-medium {
-    font-size: var(--font-size-15);
+    font-size: var(--font-size-14);
 }
 
 .table,
@@ -249,7 +249,7 @@ address {
 .tax-engine .summary-content .gstr-3b-report.table > thead > tr > td {
     border: 1px solid var(--color-table-primary-header-bar-border) !important;
     padding: 6px;
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
 }
 
 .btn-link:focus,
@@ -269,7 +269,7 @@ table {
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     border: 1px solid var(--color-table-primary-content-bar-border) !important;
     padding: 6px;
 }
@@ -606,7 +606,7 @@ ul#dropdown-menu {
             width: 100%;
             padding-bottom: 15px;
             .font-xlarge {
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-14);
             }
             .dropdown {
                 margin-left: 0;

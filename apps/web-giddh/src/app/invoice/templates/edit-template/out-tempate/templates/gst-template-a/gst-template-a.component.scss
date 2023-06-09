@@ -15,18 +15,10 @@
     font-weight: bold;
 }
 
-.font-11 {
-    font-size: var(--font-size-11) !important;
+.font-12 {
+    font-size: var(--font-size-12) !important;
 }
 
-.font-10 {
-    font-size: var(--font-size-10) !important;
-}
-
-/*
-  .font-12 {
-  font-size: var(--font-size-12) !important;
-  } */
 .pb-1 {
     padding-bottom: 10px;
 }
@@ -274,11 +266,6 @@ header img {
     border-left: 0px !important;
 }
 
-/* #default table.item tr th,
-  #default table.item tfoot tr th {
-  font-size: var(--font-size-10);
-  } */
-
 #default table.item td {
     border-radius: 0;
     padding: 7px;
@@ -302,7 +289,6 @@ header img {
     width: 50%;
     text-align: right;
     padding: 0 2px;
-    /* font-size: var(--font-size-11); */
 }
 
 /* aside */

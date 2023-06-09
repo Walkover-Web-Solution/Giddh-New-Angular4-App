@@ -58,7 +58,7 @@
             }
             .icon-cross {
                 display: flex;
-                font-size: var(--font-size-12);
+                font-size: 12px;
                 color: var(--color-sidebar-content-text);
             }
             .head-nav {
@@ -82,7 +82,7 @@
                 align-items: center;
                 white-space: nowrap;
                 letter-spacing: -2px;
-                font-size: var(--font-size-13) !important;
+                font-size: var(--font-size-14) !important;
                 color: var(--color-sidebar-content-text);
             }
             .company-full-name {
@@ -107,7 +107,7 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                     font-family: var(--font-regular);
-                    font-size: var(--font-size-13);
+                    font-size: var(--font-size-12);
                     margin-left: 18px;
                     margin-top: 7px;
                 }
@@ -311,7 +311,7 @@
                             display: flex;
                             align-items: center;
                             i {
-                                font-size: var(--font-size-22);
+                                font-size: 22px;
                                 margin-right: 10px;
                             }
                         }
@@ -363,7 +363,7 @@
                                 padding: 10px 0 10px 50px;
 
                                 i {
-                                    font-size: var(--font-size-22);
+                                    font-size: 22px;
                                     margin-right: 10px;
                                 }
                                 &.active {
@@ -404,7 +404,7 @@
             position: absolute;
             top: 70px;
             right: -10px;
-            font-size: var(--font-size-12);
+            font-size: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -464,7 +464,7 @@
                         margin-top: 15px;
                         font-family: var(--font-semibold);
                         letter-spacing: 0;
-                        font-size: var(--font-size-16);
+                        font-size: var(--font-size-14);
                         height: 36px;
                         width: 36px;
                         min-width: 45px;
@@ -481,7 +481,7 @@
                     margin-top: 15px;
                     font-family: var(--font-semibold);
                     letter-spacing: 0;
-                    font-size: var(--font-size-16);
+                    font-size: var(--font-size-14);
                     height: 36px;
                     width: 36px;
                 }
@@ -594,7 +594,7 @@
                                     display: none;
                                 }
                                 i {
-                                    font-size: var(--font-size-22);
+                                    font-size: 22px;
                                     margin-right: 0px !important;
                                     width: 22px !important;
                                     height: 20px;
@@ -668,7 +668,7 @@
                         }
                         span {
                             i {
-                                font-size: var(--font-size-20);
+                                font-size: 20px;
                                 color: var(--color-primary-sidebar-account-dropdown-i);
                                 transform: none;
                             }

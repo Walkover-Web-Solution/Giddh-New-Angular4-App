@@ -44,7 +44,7 @@ label .required {
 }
 
 .welcome-header h1 {
-    font-size: var(--font-size-30);
+    font-size: var(--font-size-32);
     font-family: var(--font-regular);
     color: var(--color-common-senary-text);
     background-color: var(--color-common-primary-background-for-all-components);
@@ -85,7 +85,7 @@ input::placeholder {
         display: block;
     }
     .welcome-header h1 {
-        font-size: var(--font-size-20) !important;
+        font-size: var(--font-size-18) !important;
     }
     .welcome-wrapper {
         padding: 15px 0;

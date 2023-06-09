@@ -56,6 +56,15 @@
     text-rendering: optimizeLegibility;
 }
 
+body{
+    --font-size-12 : 12px;
+    --font-size-14 : 14px;
+    --font-size-18 : 18px;
+    --font-size-24 : 24px;
+    --font-size-32 : 32px;
+    --font-size-48 : 48px;
+}
+
 html,
 body,
 div,
@@ -130,6 +139,7 @@ radio,
 a {
     margin: 0;
     padding: 0;
+    font-size: 100%;
 }
 
 /*universal styles*/
@@ -549,7 +559,7 @@ body {
 }
 
 .thead {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
 }
 
 .scroll-item {
@@ -617,7 +627,7 @@ body {
 
 #demo {
     padding-top: 25.833px;
-    font-size: var(--font-size-26);
+    font-size: var(--font-size-24);
     color: #fff;
     font-weight: regular;
 }
@@ -664,8 +674,8 @@ body {
     font-size: var(--font-size-12);
 }
 
-.font-16 {
-    font-size: var(--font-size-16);
+.font-14 {
+    font-size: var(--font-size-14);
 }
 
 .font-18 {
@@ -693,11 +703,11 @@ body {
 }
 
 .head-block .vertical-center {
-    font-size: var(--font-size-26);
+    font-size: var(--font-size-24);
 }
 
 .ledger-account-name {
-    font-size: var(--font-size-25);
+    font-size: var(--font-size-24);
     color: #6d6e70;
 }
 
@@ -836,7 +846,7 @@ table th[class*="col-"] {
 }
 
 .header-line {
-    font-size: var(--font-size-30);
+    font-size: var(--font-size-32);
     /* font-family: 'Arvo', serif; */
     color: white;
 }
@@ -1129,11 +1139,11 @@ body {
 }
 footer p {
     color: #1c1c1c;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
 }
 .top-footer {
     padding: 3.75rem 0;
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
 }
 .inner-logos {
     display: flex;
@@ -1172,7 +1182,7 @@ li,
 footer .menu-item a {
     line-height: 35px;
     color: #1c1c1c;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
 }
 .contact_form input,
 .contact_form textarea {
@@ -1181,7 +1191,7 @@ footer .menu-item a {
     margin-bottom: 5px;
     border: 1px solid #d9d9d9;
     border-radius: 5px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     box-shadow: none;
     border-radius: 2px;
     height: 40px;
@@ -1191,7 +1201,7 @@ footer .menu-item a {
 }
 #custom_html-2 ul li,
 #custom_html-2 ul li a {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     color: #1a237e;
     line-height: 30px;
 }
@@ -1200,7 +1210,7 @@ footer .menu-item a {
     margin-top: 3rem !important;
 }
 .top-footer h4 {
-    font-size: var(--font-size-40);
+    font-size: var(--font-size-48);
     color: #1a237e;
     font-weight: bold;
 }
@@ -1344,11 +1354,8 @@ footer .menu-item a {
 
 @media (max-width: 600px) {
     #contact p {
-        font-size: var(--font-size-16) !important;
+        font-size: var(--font-size-14) !important;
     }
-    /* .header-line {
-        font-size: var(--font-size-22) !important;
-    } */
 }
 
 @media only screen and (max-width: 1300px) {
@@ -1381,7 +1388,7 @@ footer .menu-item a {
 
 .app_download li a {
     border: 1px solid #cc3f1c;
-    font-size: var(--font-size-17);
+    font-size: var(--font-size-18);
     color: #fff;
     padding: 5px 9px;
     border-radius: 2px;

@@ -56,7 +56,7 @@
                                 <!-- | number:'1.2-2' -->
                                 <span class="font-18 text-color">{{legderBalanceData.forwardedBalance.amount | currency
                                     }}</span>
-                                <span class="font-16 text-color">{{legderBalanceData.forwardedBalance.type === 'DEBIT' ?
+                                <span class="font-14 text-color">{{legderBalanceData.forwardedBalance.type === 'DEBIT' ?
                                     'Dr' : 'Cr' }}</span>
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                                 Closing
                             </div>
                             <div v-if="legderBalanceData && legderBalanceData.closingBalance">
-                                <span class="font-16 text-color">{{ legderBalanceData.closingBalance.type === 'DEBIT' ?
+                                <span class="font-14 text-color">{{ legderBalanceData.closingBalance.type === 'DEBIT' ?
                                     'Dr' : 'Cr' }}</span>
                                 <!-- | number:'1.2-2' -->
                                 <span class="font-18 text-color">{{legderBalanceData.closingBalance.amount | currency
@@ -411,7 +411,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-3">
-                            <!--<span class="primary-color mr-b1" style="font-size: var(--font-size-12)">{{cDate.startDate | date:'dd-MMM-yyyy'}} - {{cDate.endDate | date:'dd-MMM-yyyy'}}</span>-->
+                            <!--<span class="primary-color mr-b1" style="font-size: 12px">{{cDate.startDate | date:'dd-MMM-yyyy'}} - {{cDate.endDate | date:'dd-MMM-yyyy'}}</span>-->
                             <h1>Total Transactions
                                 <span class="primary-color">{{ledgerData.ledgersTransactions.totalItems}}</span>
                             </h1>

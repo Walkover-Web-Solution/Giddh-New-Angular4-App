@@ -105,7 +105,7 @@
 }
 
 .invoice-detail-header h3.invoice-num {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     font-weight: 600;
 }
 
@@ -125,7 +125,7 @@
 .invoice-detail-header .edit-change-status .edit-link {
     color: var(--color-blue);
     padding-right: 10px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
 }
 
 .invoice-detail-header .edit-change-status .edit-link img {
@@ -225,7 +225,7 @@
         justify-content: center;
         align-items: center;
         height: 100%;
-        font-size: var(--font-size-36);
+        font-size: var(--font-size-32);
         max-width: 60%;
         margin: 0 auto;
         color: var(--color-danger);
@@ -237,7 +237,7 @@
         padding: 50px 0px 0 0px;
     }
     .preview-not-supported-attachment {
-        font-size: var(--font-size-15);
+        font-size: var(--font-size-14);
         margin: 16px;
     }
     .pdf-preview {
@@ -404,7 +404,7 @@ span.close-modal.cp.pull-right {
         span {
             padding: 10px;
             p {
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-14);
                 font-weight: bold;
             }
         }
@@ -605,14 +605,6 @@ label.labeled {
 
 .strong {
     font-weight: bold;
-}
-
-.font-11 {
-    font-size: var(--font-size-11) !important;
-}
-
-.font-10 {
-    font-size: var(--font-size-10) !important;
 }
 
 /*
@@ -889,7 +881,7 @@ p {
 }
 
 .title-template {
-    font-size: var(--font-size-20);
+    font-size: var(--font-size-18);
     font-family: var(--font-semibold);
 }
 
@@ -916,7 +908,6 @@ p {
     width: 50%;
     text-align: right;
     padding: 0 2px;
-    /* font-size: var(--font-size-11); */
 }
 
 /* aside */

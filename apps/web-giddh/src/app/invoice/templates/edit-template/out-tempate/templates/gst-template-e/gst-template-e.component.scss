@@ -3,7 +3,7 @@ strong,
     font-weight: bold;
 }
 body {
-    font-size: var(--font-size-12);
+    font-size: 12px;
     background: var(--color-common-primary-background-for-all-components);
 }
 #template-header {
@@ -12,14 +12,8 @@ body {
 .strong {
     font-weight: bold;
 }
-.font-11 {
-    font-size: var(--font-size-11) !important;
-}
-.font-10 {
-    font-size: var(--font-size-10) !important;
-}
 .font-12 {
-    font-size: var(--font-size-12) !important;
+    font-size: 12px !important;
 }
 .max-width-180 {
     /* max-width: 180px !important; */
@@ -29,7 +23,7 @@ body {
     border-top: 1px solid var(--color-gray);
 }
 #royal {
-    font: var(--font-size-12) / 1 var(--font-regular);
+    font: 12px / 1 var(--font-regular);
     overflow: auto;
     background: var(--color-white-tertiary);
     border: 1px solid var(--color-common-secondary-border);
@@ -39,11 +33,11 @@ body {
 }
 #royal header h1 {
     font-weight: bolder;
-    font-size: var(--font-size-74);
+    font-size: 74px;
     color: var(--color-common-secondary-text);
 }
 #royal header .sub_head {
-    font-size: var(--font-size-16);
+    font-size: 16px;
 }
 #royal .text-right {
     text-align: right;
@@ -78,7 +72,7 @@ body {
     float: right;
 }
 #royal .total-amount h2 {
-    font-size: var(--font-size-25);
+    font-size: 25px;
     font-weight: bold;
     line-height: normal;
     margin-right: 10px;
@@ -104,7 +98,7 @@ tfoot.table-details tr th {
 }
 #royal .meta h4 {
     font-weight: bold;
-    font-size: var(--font-size-18);
+    font-size: 18px;
     line-height: 19px;
 }
 #royal .product-table {
@@ -198,13 +192,13 @@ tfoot.table-details tr th {
 }
 
 #royal .subfooter h1 {
-    font-size: var(--font-size-24);
+    font-size: 24px;
     display: inline-block;
     font-weight: bolder;
 }
 
 #royal .subfooter .normal {
-    font-size: var(--font-size-12);
+    font-size: 12px;
     vertical-align: baseline;
 }
 
@@ -231,7 +225,7 @@ tfoot.table-details tr th {
 
 #royal .note li {
     list-style-type: initial;
-    font-size: var(--font-size-10);
+    font-size: 10px;
     line-height: initial;
 }
 
@@ -353,11 +347,11 @@ img {
 }
 #royal .product-table tfoot tr th {
     padding: 0 8px;
-    font-size: var(--font-size-11);
+    font-size: 11px;
     font-weight: normal;
 }
 #royal footer p {
-    font-size: var(--font-size-10);
+    font-size: 10px;
     color: var(--color-nero);
 }
 #royal .tax-table.item tfoot tr th {

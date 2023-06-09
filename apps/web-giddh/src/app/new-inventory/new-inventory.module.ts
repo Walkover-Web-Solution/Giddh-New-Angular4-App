@@ -17,7 +17,6 @@ import { AboutProductServiceDetailComponent } from "./component/about-product-se
 import { InventoryComboListComponent } from "./component/combo-list/inventory-combo-list.component";
 import { AboutComboDetailComponent } from "./component/about-combo-detail/about-combo-detail.component";
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
-import { InventoryCustomFieldComponent } from "./component/inventory-custom-field/inventory-custom-field.component";
 import { CreateCustomFieldComponent } from "./component/create-custom-field/create-custom-field.component";
 import { AdjustInventoryComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 import { AsideAdjustInventoryComponent } from "./component/adjust-inventory-aside/adjust-inventory-aside.component";
@@ -85,7 +84,6 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         AboutComboDetailComponent,
         CreateComboComponent,
         InventoryTransactionListComponent,
-        InventoryCustomFieldComponent,
         CreateCustomFieldComponent,
         AdjustInventoryComponent,
         AsideAdjustInventoryComponent,
@@ -160,7 +158,6 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         AboutComboDetailComponent,
         CreateComboComponent,
         InventoryTransactionListComponent,
-        InventoryCustomFieldComponent,
         CreateCustomFieldComponent,
         AdjustInventoryComponent,
         AsideAdjustInventoryComponent,

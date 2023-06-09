@@ -89,7 +89,7 @@
 .appearance-none {
     background: var(--color-dark-fog) !important;
     border: 0 !important;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     color: var(--color-nero);
 }
 
@@ -160,7 +160,7 @@ input[name="entryDate"] {
     color: var(--color-nero);
     height: auto;
     width: 100px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
 }
 
 textarea[name="narration"] {

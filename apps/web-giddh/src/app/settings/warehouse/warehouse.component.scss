@@ -33,7 +33,7 @@
     }
 }
 .create-warehouse h2 {
-    font-size: var(--font-size-20);
+    font-size: var(--font-size-18);
     font-family: var(--font-semibold);
     margin: 10px 0;
 }
@@ -97,7 +97,7 @@
         padding: 0;
         color: var(--color-abbey);
         margin-right: 0;
-        font-size: var(--font-size-20);
+        font-size: var(--font-size-18);
         position: relative;
         right: -10px;
         top: -2px;
@@ -118,7 +118,7 @@
 }
 
 .warehouse-card h3 {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     font-family: var(--font-semibold);
     float: left;
     width: 66%;

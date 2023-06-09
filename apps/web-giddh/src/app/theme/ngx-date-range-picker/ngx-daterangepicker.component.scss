@@ -204,7 +204,7 @@
 
             span {
                 pointer-events: none;
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-14);
             }
         }
         /* new calendar */
@@ -358,7 +358,7 @@
         }
 
         &.week {
-            font-size: var(--font-size-13);
+            font-size: var(--font-size-12);
             color: var(--color-iron);
         }
     }
@@ -1166,24 +1166,6 @@ td span {
     opacity: 0;
 }
 
-.d-container {
-    width: 100%;
-    background-color: var(--color-white);
-    z-index: 100;
-    // overflow-x: hidden;
-    // overflow-y: auto;
-    // transition: 30ms all;
-    h2 {
-        position: relative;
-        padding-left: 10px;
-        font-size: var(--font-size-13);
-        color: var(--color-abbey);
-        margin: 9px 0 0;
-        font-style: normal;
-        text-align: left;
-    }
-}
-
 .dropdown-containt {
     display: flex;
     flex-wrap: wrap;
@@ -1497,7 +1479,7 @@ td span {
         width: 240px;
         justify-content: center;
         align-items: center;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-14);
         .prev.available {
             display: inline-flex;
             transform: rotate(270deg);
@@ -1812,7 +1794,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                 display: flex;
                 align-items: center;
                 width: 100%;
-                font-size: var(--font-size-17);
+                font-size: 17px;
                 font-style: initial;
                 flex-direction: column;
                 box-shadow: 0 2px 3px var(--color-primary-common-box-shadow);

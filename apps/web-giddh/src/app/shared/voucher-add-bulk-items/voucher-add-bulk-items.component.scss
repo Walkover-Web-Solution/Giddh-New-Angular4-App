@@ -43,7 +43,7 @@
     .right-content {
         span {
             &.selected-stock-number {
-                font-size: var(--font-size-20);
+                font-size: var(--font-size-18);
             }
         }
         h4 {
@@ -105,7 +105,7 @@
         border-right: 1px solid var(--color-common-secondary-border);
     }
     .modal-title {
-        font-size: var(--font-size-22) !important;
+        font-size: var(--font-size-24) !important;
         color: var(--color-popup-list-head-text);
     }
     .table-custom-invoice {

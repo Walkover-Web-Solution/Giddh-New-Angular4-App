@@ -35,7 +35,7 @@ table {
 }
 
 .head-report {
-    font-size: var(--font-size-20);
+    font-size: var(--font-size-18);
     font-weight: bold;
     text-transform: capitalize;
     max-width: 600px;
@@ -151,7 +151,7 @@ table {
         padding: 41px;
         h2 {
             color: var(--color-gray);
-            font-size: var(--font-size-20);
+            font-size: var(--font-size-18);
             margin-bottom: 10px;
         }
         h1 {
@@ -230,7 +230,7 @@ table {
             min-width: 20px;
         }
         .operators {
-            font-size: var(--font-size-39);
+            font-size: var(--font-size-32);
             color: var(--color-gray);
         }
         h2 {
@@ -368,7 +368,7 @@ button.btn.btn-filter {
 @media (max-width: 991px) {
     .wrap-head-report {
         .head-report {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-14);
             white-space: normal;
             word-break: break-all;
         }
@@ -392,7 +392,7 @@ button.btn.btn-filter {
     }
     .head-report {
         margin-right: 0 !important;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-14);
     }
     .btn-link {
         margin-right: 0 !important;

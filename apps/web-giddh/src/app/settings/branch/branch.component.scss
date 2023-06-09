@@ -78,7 +78,7 @@
     }
 }
 .card-basic-details h2 {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     color: var(--color-common-senary-text);
     font-family: var(--font-bold);
     margin-bottom: 12px;
@@ -125,7 +125,7 @@
 }
 .card-basic-details a#button-basic {
     color: var(--color-abbey);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     width: 32px;
     height: 32px;
     display: inline-block;
@@ -213,7 +213,7 @@
 .status-bullet {
     &:before {
         content: " \2022";
-        font-size: var(--font-size-34);
+        font-size: 34px;
     }
 }
 
@@ -223,7 +223,7 @@
 
 .star-radio {
     visibility: hidden;
-    font-size: var(--font-size-30);
+    font-size: var(--font-size-32);
     cursor: pointer;
     top: -3px;
     position: relative;

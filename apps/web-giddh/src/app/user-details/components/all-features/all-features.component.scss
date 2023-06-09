@@ -16,7 +16,7 @@
             margin-left: 15px;
         }
         i.icon-tick {
-            font-size: var(--font-size-8);
+            font-size: 8px;
             float: left;
             margin-right: 0;
             margin-left: 6px;
@@ -24,7 +24,7 @@
         i.icon-back-arrow {
             transform: rotate(180deg);
             display: none;
-            font-size: var(--font-size-12);
+            font-size: 12px;
             float: left;
             margin-right: 0;
         }
@@ -42,7 +42,7 @@
         color: var(--color-common-senary-text);
         margin-bottom: 10px;
         i {
-            font-size: var(--font-size-21);
+            font-size: 21px;
             color: var(--color-common-senary-text);
         }
     }
