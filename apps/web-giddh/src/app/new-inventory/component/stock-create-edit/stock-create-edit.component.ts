@@ -119,7 +119,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         },
                         stockUnit: {
                             name: "",
-                            code: ""
+                            uniqueName: ""
                         },
                         openingQuantity: 0,
                         openingAmount: 0
@@ -562,7 +562,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         },
                         stockUnit: {
                             name: this.stockUnitName,
-                            code: this.stockForm.stockUnitUniqueName
+                            uniqueName: this.stockForm.stockUnitUniqueName
                         },
                         openingQuantity: 0,
                         openingAmount: 0
@@ -614,7 +614,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         },
                         stockUnit: {
                             name: "",
-                            code: ""
+                            uniqueName: ""
                         },
                         openingQuantity: 0,
                         openingAmount: 0
@@ -719,7 +719,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public selectVariantUnit(variant: any, event: any): void {
-        variant.warehouseBalance[0].stockUnit = { name: event.label, code: event?.value };
+        variant.warehouseBalance[0].stockUnit = { name: event.label, uniqueName: event?.value };
     }
 
     /**
@@ -929,7 +929,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     },
                     stockUnit: {
                         name: variant.warehouseBalance[0].stockUnit?.name,
-                        code: variant.warehouseBalance[0].stockUnit?.code
+                        uniqueName: variant.warehouseBalance[0].stockUnit?.uniqueName
                     },
                     openingQuantity: this.isVariantAvailable ? variant.warehouseBalance[0].openingQuantity : this.stockForm.openingQuantity,
                     openingAmount: this.isVariantAvailable ? variant.warehouseBalance[0].openingAmount : this.stockForm.openingAmount
@@ -1400,7 +1400,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                             },
                             stockUnit: {
                                 name: "",
-                                code: ""
+                                uniqueName: ""
                             },
                             openingQuantity: 0,
                             openingAmount: 0

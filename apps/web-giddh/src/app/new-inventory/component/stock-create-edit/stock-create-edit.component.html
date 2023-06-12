@@ -1241,7 +1241,6 @@
                                                                             "
                                                                             [(ngModel)]="variantPurchaseUnitRate.rate"
                                                                             [type]="'number'"
-                                                                            [required]="true"
                                                                             [showError]="stockCreateEditForm.form.controls?.[ 'variantPurchaseUnitRate' + i + '_' + j]?.invalid && checkUnitRateValidation[i]?.purchase"
                                                                         >
                                                                         </text-field>
@@ -1332,7 +1331,6 @@
                                                                             "
                                                                             [(ngModel)]="variantSalesUnitRate.rate"
                                                                             [type]="'number'"
-                                                                            [required]="true"
                                                                             [showError]="stockCreateEditForm.form.controls?.[ 'variantSalesUnitRate' + i + '_' + j]?.invalid && checkUnitRateValidation[i]?.sales"
                                                                         >
                                                                         </text-field>
@@ -1421,7 +1419,6 @@
                                                                                 variantFixedAssetsUnitRate.rate
                                                                             "
                                                                             [type]="'number'"
-                                                                            [required]="true"
                                                                             [showError]="stockCreateEditForm.form.controls?.[ 'variantFixedAssetsUnitRate' + j + '_' + i]?.invalid && checkUnitRateValidation[i]?.fixedAssets"
                                                                         >
                                                                         </input-field>
@@ -1595,7 +1592,7 @@
                                                             [name]="'skuCode'"
                                                             [type]="'text'"
                                                             [placeholder]="commonLocaleData?.app_sku_code"
-                                                            [(ngModel)]="stockForm.skuCode"
+                                                            [(ngModel)]="stockForm.variants[0].skuCode"
                                                         >
                                                         </input-field>
                                                     </div>
