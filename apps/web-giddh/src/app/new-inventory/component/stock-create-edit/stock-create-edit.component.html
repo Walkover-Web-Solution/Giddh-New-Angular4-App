@@ -79,8 +79,25 @@
                                                 >
                                                 </dropdown-field>
                                             </div>
-                                            <div class="col-sm-6 col-lg-6 under-group-field-button-wrapper">
+                                            <div class="col-sm-6 col-lg-6">
+                                                <input-field
+                                                    [name]="'uniqueName'"
+                                                    [placeholder]="commonLocaleData?.app_unique_name"
+                                                    [type]="'text'"
+                                                    [(ngModel)]="stockForm.uniqueName"
+                                                    [autocomplete]="'off'"
+                                                >
+                                                </input-field>
+                                            </div>
+                                            <div
+                                                class="
+                                                    col-sm-6 col-lg-6
+                                                    under-group-field-button-wrapper
+                                                    position-relative
+                                                "
+                                            >
                                                 <dropdown-field
+                                                    class="w-100"
                                                     [placeholder]="commonLocaleData?.app_select_group"
                                                     (selectionChange)="
                                                         stockGroupUniqueName = $event?.value;
@@ -95,23 +112,13 @@
                                                 <button
                                                     *ngIf="queryParams?.stockUniqueName"
                                                     mat-raised-button
-                                                    class="btn-success min-width-100 move-stock"
+                                                    class="btn-success min-width-100 move-stock mr-0"
                                                     (click)="moveStock()"
                                                     [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
                                                     [autocomplete]="'off'"
                                                 >
                                                     {{ localeData?.move }}
                                                 </button>
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6">
-                                                <input-field
-                                                    [name]="'uniqueName'"
-                                                    [placeholder]="commonLocaleData?.app_unique_name"
-                                                    [type]="'text'"
-                                                    [(ngModel)]="stockForm.uniqueName"
-                                                    [autocomplete]="'off'"
-                                                >
-                                                </input-field>
                                             </div>
                                         </div>
                                         <div class="row mr-b1">
@@ -168,11 +175,11 @@
                                                 <div class="col-12 col-lg-12">
                                                     <div class="row sales-purchase-width">
                                                         <div
-                                                            class="col-xl-6 col-12 pl-4 fixed-assets"
+                                                            class="col-xl-6 col-12 fixed-assets"
                                                             *ngIf="stockForm.type === 'FIXED_ASSETS'"
                                                         >
                                                             <div class="purchase-information fixed-assets-information">
-                                                                <div class="select-puchase-info mr-b15">
+                                                                <!-- <div class="select-puchase-info mr-b15">
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         id="purchase-info-check"
@@ -183,12 +190,35 @@
                                                                     >
                                                                         {{ localeData?.fixed_assets_information }}
                                                                     </mat-checkbox>
-                                                                </div>
+                                                                </div> -->
                                                                 <div class="row">
-                                                                    <div class="col-sm-6 col-lg-5">
-                                                                        <label>{{ localeData?.linked_accounts }}</label>
+                                                                    <div
+                                                                        class="
+                                                                            col-lg-12
+                                                                            d-flex
+                                                                            align-items-center
+                                                                            rate-head
+                                                                        "
+                                                                    >
+                                                                        <div>
+                                                                            <h1 class="section-head p-0">Rate :</h1>
+                                                                        </div>
+                                                                        <div>
+                                                                            <mat-radio-group
+                                                                                color="primary"
+                                                                                name="hsn_sac"
+                                                                                [(ngModel)]="hsnSac"
+                                                                            >
+                                                                                <mat-radio-button value="inclusive">
+                                                                                    MRP(Inclusive)
+                                                                                </mat-radio-button>
+                                                                                <mat-radio-button value="exclusive">
+                                                                                    Exclusive
+                                                                                </mat-radio-button>
+                                                                            </mat-radio-group>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
+                                                                    <div class="col-sm-6 col-lg-12 pt-3">
                                                                         <dropdown-field
                                                                             [name]="'fixedAssetsAccounts'"
                                                                             [placeholder]="localeData?.linked_accounts"
@@ -208,38 +238,7 @@
                                                                         </dropdown-field>
                                                                     </div>
                                                                     <div
-                                                                        class="col-sm-6 col-lg-5"
-                                                                        *ngIf="!isVariantAvailable"
-                                                                    >
-                                                                        <label
-                                                                            >{{ localeData?.is_fixed_assets_inclusive }}
-                                                                        </label>
-                                                                    </div>
-                                                                    <div
-                                                                        class="col-xl-7 col-lg-7 col-sm-6 pl-0 mr-b15"
-                                                                        *ngIf="!isVariantAvailable"
-                                                                    >
-                                                                        <mat-checkbox
-                                                                            name="fixedAssetTaxInclusive"
-                                                                            color="primary"
-                                                                            [(ngModel)]="
-                                                                                stockForm.variants[0][
-                                                                                    'fixedAssetTaxInclusive'
-                                                                                ]
-                                                                            "
-                                                                            [disabled]="
-                                                                                !isFixedAssetsInformationEnabled
-                                                                            "
-                                                                        ></mat-checkbox>
-                                                                    </div>
-                                                                    <div
-                                                                        class="col-sm-6 col-lg-5"
-                                                                        *ngIf="!isVariantAvailable"
-                                                                    >
-                                                                        <label>{{ localeData?.unit_price }}</label>
-                                                                    </div>
-                                                                    <div
-                                                                        class="col-xl-7 col-lg-7 col-sm-6 pl-0 mr-b15"
+                                                                        class="col-lg-12 col-sm-6 mr-b15"
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
                                                                         <div
@@ -486,7 +485,7 @@
                                                                                             checkUnitRateValidation[0]
                                                                                                 ?.purchase
                                                                                                 ? 'error-box'
-                                                                                                : ''
+                                                                                                : 'unit-rates'
                                                                                         "
                                                                                     >
                                                                                     </dropdown-field>
@@ -547,8 +546,7 @@
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
                                                                                 <div class="col-sm-10 col-10">
-                                                                                    <button
-                                                                                        mat-flat-button
+                                                                                    <a
                                                                                         class="bg-transparent px-0 pt-2"
                                                                                         role="button"
                                                                                         type="button"
@@ -576,11 +574,12 @@
                                                                                             class="
                                                                                                 add-new-text-container
                                                                                                 text-primary
+                                                                                                font-14
                                                                                             "
                                                                                         >
                                                                                             {{ localeData?.add_new }}
                                                                                         </span>
-                                                                                    </button>
+                                                                                    </a>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -1067,8 +1066,8 @@
                                                                         <i class="icon-trash"></i>
                                                                     </button>
                                                                 </div>
-                                                                <div class="edit-btn">
-                                                                    <button mat-stroked-button class="">Done</button>
+                                                                <div class="done-btn mb-3">
+                                                                    <button mat-stroked-button>Done</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1148,7 +1147,7 @@
                                                         >
                                                             <td class="variant-name-column">{{ variant.name }}</td>
                                                             <td class="unit-name">
-                                                                <dropdown-field
+                                                                <select-field
                                                                     [name]="'variantUnit' + i"
                                                                     [placeholder]="commonLocaleData?.app_unit"
                                                                     [options]="stockUnits"
@@ -1158,12 +1157,13 @@
                                                                     [defaultValue]="
                                                                         variant.warehouseBalance[0]?.stockUnit?.name
                                                                     "
+                                                                    [cssClass]="'form-control'"
                                                                 >
-                                                                </dropdown-field>
+                                                                </select-field>
                                                             </td>
                                                             <td class="opening-qty">
-                                                                <input-field
-                                                                    [cssClass]="'text-right'"
+                                                                <text-field
+                                                                    [cssClass]="'text-right form-control'"
                                                                     [placeholder]="'0.00'"
                                                                     [name]="'variantOpeningQuantity' + i"
                                                                     [(ngModel)]="
@@ -1171,11 +1171,11 @@
                                                                     "
                                                                     [type]="'number'"
                                                                 >
-                                                                </input-field>
+                                                                </text-field>
                                                             </td>
                                                             <td class="opening-amount">
-                                                                <input-field
-                                                                    [cssClass]="'text-right'"
+                                                                <text-field
+                                                                    [cssClass]="'text-right form-control'"
                                                                     [placeholder]="'0.00'"
                                                                     [name]="'variantOpeningAmount' + i"
                                                                     [(ngModel)]="
@@ -1183,17 +1183,17 @@
                                                                     "
                                                                     [type]="'number'"
                                                                 >
-                                                                </input-field>
+                                                                </text-field>
                                                             </td>
                                                             <td class="sku-code">
-                                                                <input-field
-                                                                    [cssClass]="'text-right'"
+                                                                <text-field
+                                                                    [cssClass]="'text-right form-control'"
                                                                     [placeholder]="'-'"
                                                                     [name]="'variantSkuCode' + i"
                                                                     [(ngModel)]="variant.skuCode"
                                                                     [type]="'text'"
                                                                 >
-                                                                </input-field>
+                                                                </text-field>
                                                             </td>
                                                             <td
                                                                 class="
@@ -1210,7 +1210,7 @@
                                                                     "
                                                                 >
                                                                     <div class="sales-purchase-wrapper d-flex">
-                                                                        <dropdowm-field
+                                                                        <select-field
                                                                             [name]="'variantPurchaseUnit' + i + '_' + j"
                                                                             [placeholder]="commonLocaleData?.app_unit"
                                                                             [options]="stockUnits"
@@ -1227,12 +1227,14 @@
                                                                                 (!variantPurchaseUnitRate?.stockUnitName &&
                                                                                 checkUnitRateValidation[i]?.purchase
                                                                                     ? 'error-box'
-                                                                                    : '') + 'unit-rates'
+                                                                                    : '') + 'unit-rates form-control'
                                                                             "
                                                                         >
-                                                                        </dropdowm-field>
-                                                                        <input-field
-                                                                            [cssClass]="'text-right unit-amount'"
+                                                                        </select-field>
+                                                                        <text-field
+                                                                            [cssClass]="
+                                                                                'text-right unit-amount form-control'
+                                                                            "
                                                                             [placeholder]="'0.00'"
                                                                             [name]="
                                                                                 'variantPurchaseUnitRate' + i + '_' + j
@@ -1242,7 +1244,7 @@
                                                                             [required]="true"
                                                                             [showError]="stockCreateEditForm.form.controls?.[ 'variantPurchaseUnitRate' + i + '_' + j]?.invalid && checkUnitRateValidation[i]?.purchase"
                                                                         >
-                                                                        </input-field>
+                                                                        </text-field>
                                                                         <button
                                                                             mat-icon-button
                                                                             role="button"
@@ -1300,7 +1302,7 @@
                                                                     "
                                                                 >
                                                                     <div class="sales-purchase-wrapper d-flex">
-                                                                        <dropdowm-field
+                                                                        <select-field
                                                                             [name]="'variantSalesUnit' + i + '_' + j"
                                                                             [placeholder]="commonLocaleData?.app_unit"
                                                                             [options]="stockUnits"
@@ -1317,11 +1319,13 @@
                                                                                 (!variantSalesUnitRate?.stockUnitName &&
                                                                                 checkUnitRateValidation[i]?.sales
                                                                                     ? 'error-box'
-                                                                                    : '') + 'unit-rates'
+                                                                                    : '') + 'unit-rates form-control'
                                                                             "
-                                                                        ></dropdowm-field>
-                                                                        <input-field
-                                                                            [cssClass]="'text-right unit-amount'"
+                                                                        ></select-field>
+                                                                        <text-field
+                                                                            [cssClass]="
+                                                                                'text-right unit-amount form-control'
+                                                                            "
                                                                             [placeholder]="'0.00'"
                                                                             [name]="
                                                                                 'variantSalesUnitRate' + i + '_' + j
@@ -1331,7 +1335,7 @@
                                                                             [required]="true"
                                                                             [showError]="stockCreateEditForm.form.controls?.[ 'variantSalesUnitRate' + i + '_' + j]?.invalid && checkUnitRateValidation[i]?.sales"
                                                                         >
-                                                                        </input-field>
+                                                                        </text-field>
                                                                         <button
                                                                             mat-icon-button
                                                                             role="button"
@@ -1381,7 +1385,7 @@
                                                                     "
                                                                 >
                                                                     <div class="sales-purchase-wrapper d-flex">
-                                                                        <dropdowm-field
+                                                                        <select-field
                                                                             [name]="
                                                                                 'variantFixedAssetsUnit' + j + '_' + i
                                                                             "
@@ -1402,7 +1406,7 @@
                                                                                     ? 'error-box'
                                                                                     : '') + 'unit-rates'
                                                                             "
-                                                                        ></dropdowm-field>
+                                                                        ></select-field>
                                                                         <input-field
                                                                             [cssClass]="'text-right unit-amount'"
                                                                             [
@@ -1554,7 +1558,7 @@
                                         <div class="row">
                                             <div class="col-lg-8">
                                                 <div class="row">
-                                                    <div class="col-sm-6 col-lg-12">
+                                                    <div class="col-sm-6 col-lg-12 mb-3">
                                                         <mat-radio-group
                                                             color="primary"
                                                             name="hsn_sac"

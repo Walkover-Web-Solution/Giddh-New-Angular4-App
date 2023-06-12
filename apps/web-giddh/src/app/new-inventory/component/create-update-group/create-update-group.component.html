@@ -8,7 +8,12 @@
     <div class="relative">
         <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
         <span *ngIf="!showLoader">
-            <button *ngIf="groupUniqueName" (click)="backClicked()" class="btn-sky-blue btn-position-left" mat-button>
+            <button
+                *ngIf="groupUniqueName"
+                (click)="backClicked()"
+                class="btn-sky-blue btn-position-left mt-2 ml-3"
+                mat-button
+            >
                 <i class="icon-left back-left"></i>
                 {{ commonLocaleData?.app_back }}
             </button>

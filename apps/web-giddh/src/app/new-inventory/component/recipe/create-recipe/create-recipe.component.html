@@ -74,45 +74,49 @@
                                     <tr>
                                         <td>
                                             <div>
-                                                <dropdown-field
+                                                <select-field
+                                                    [cssClass]="'form-control'"
                                                     [name]="''"
                                                     [placeholder]="'Select Stock'"
                                                     [options]="stock"
                                                     [defaultValue]=""
                                                 >
-                                                </dropdown-field>
+                                                </select-field>
                                             </div>
                                         </td>
                                         <td>
                                             <div>
-                                                <dropdown-field
+                                                <select-field
+                                                    [cssClass]="'form-control'"
                                                     [name]="''"
                                                     [placeholder]="'Select Variant'"
                                                     [options]="stock"
                                                     [defaultValue]=""
                                                 >
-                                                </dropdown-field>
+                                                </select-field>
                                             </div>
                                         </td>
                                         <td>
                                             <div>
-                                                <input-field
+                                                <text-field
+                                                    [cssClass]="'form-control'"
                                                     class="text-right"
                                                     type="number"
                                                     name="''"
                                                     [placeholder]="'Enter Quantity'"
-                                                ></input-field>
+                                                ></text-field>
                                             </div>
                                         </td>
                                         <td>
                                             <div>
-                                                <dropdown-field
+                                                <select-field
+                                                    [cssClass]="'form-control'"
                                                     [name]="''"
                                                     [placeholder]="'Select Stock Unit'"
                                                     [options]="stock"
                                                     [defaultValue]=""
                                                 >
-                                                </dropdown-field>
+                                                </select-field>
                                             </div>
                                         </td>
                                         <td><i class="icon-add" aria-hidden="true"></i></td>
@@ -124,8 +128,8 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-2 add-receipt">
-            <button mat-button class="mb-2"><span>+</span> Add Receipt</button>
+        <div class="row mt-2 add-recipe">
+            <button mat-button class="mb-2"><span>+</span> Add Recipe</button>
         </div>
     </div>
 </section>

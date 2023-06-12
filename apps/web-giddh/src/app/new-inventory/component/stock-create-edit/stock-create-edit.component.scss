@@ -203,6 +203,7 @@
         .another-option-btn {
             position: relative;
             right: 15px;
+            color: var(--color-ledger-heading) !important;
         }
 
         .category-label {
@@ -293,30 +294,29 @@
 
     .select-physical-product {
         .product-detail-content {
-            .upper-common-form-container {
-                background-color: var(--color-common-septenary-background-for-all-components);
+            .upper-common-form-label-field {
+                margin-left: 5px;
 
-                .upper-common-form-label-field {
-                    margin-left: 5px;
+                .under-group-field-button-wrapper {
+                    display: flex;
+                    align-items: center;
 
-                    .under-group-field-button-wrapper {
+                    .move-stock {
+                        margin-left: 10px;
                         display: flex;
                         align-items: center;
-
-                        .move-stock {
-                            margin-left: 10px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                        }
+                        justify-content: center;
+                        position: absolute;
+                        top: 10px;
+                        right: -64px;
                     }
+                }
 
-                    .product-name-label {
-                        position: relative;
+                .product-name-label {
+                    position: relative;
 
-                        .product-name-star {
-                            position: absolute;
-                        }
+                    .product-name-star {
+                        position: absolute;
                     }
                 }
             }
