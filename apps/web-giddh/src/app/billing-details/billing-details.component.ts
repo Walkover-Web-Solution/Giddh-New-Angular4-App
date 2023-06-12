@@ -384,8 +384,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.billingDetailsObj.contactNo = this.createNewCompany.contactNo;
         this.billingDetailsObj.email = this.createNewCompany.subscriptionRequest.userUniqueName;
 
-        if (this.createNewCompany.addresses?.length && this.createNewCompany.addresses[0]?.taxNumber) {
-            this.billingDetailsObj.gstin = this.createNewCompany.addresses[0]?.taxNumber;
+        if (this.createNewCompany.addresses?.length) {
+            this.createNewCompany.addresses?.forEach(address => {
+                if (!this.billingDetailsObj.gstin && address.taxNumber) {
+                    this.billingDetailsObj.gstin = address.taxNumber;
+                }
+            });
             this.isStateDisabled = true;
         }
         this.billingDetailsObj.address = this.createNewCompany.address;
@@ -472,7 +476,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public showGstAndTaxUsingCountryName(name: string): void {
         if (this.activeCompany?.country === name) {
-            if (name !== 'India') {
+            if (name === 'India') {
                 this.showGstinNo = true;
                 this.showTrnNo = false;
             } else {
