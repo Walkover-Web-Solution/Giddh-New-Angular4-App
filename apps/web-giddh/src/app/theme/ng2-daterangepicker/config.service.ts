@@ -42,7 +42,7 @@ export class DaterangepickerConfig {
                       .daterangepicker th{text-align:center;width:20px;height:20px;border-radius:4px;border:1px solid transparent;
                         white-space:nowrap;cursor:pointer}.daterangepicker td.available:hover,
                         .daterangepicker th.available:hover{background-color:#eee;border-color:transparent;color:inherit}
-                        .daterangepicker td.week,.daterangepicker th.week{font-size:13px;color:#ccc}.daterangepicker td.off,
+                        .daterangepicker td.week,.daterangepicker th.week{font-size:80%;color:#ccc}.daterangepicker td.off,
                         .daterangepicker td.off.end-date,.daterangepicker td.off.in-range,
                         .daterangepicker td.off.start-date{background-color:#fff;border-color:transparent;color:#999}
                         .daterangepicker td.in-range{background-color:#ebf4f8;border-color:transparent;color:#000;border-radius:0}
