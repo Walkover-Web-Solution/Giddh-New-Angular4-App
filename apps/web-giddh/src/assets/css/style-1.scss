@@ -22,7 +22,7 @@ body {
     color: var(--color-nero);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-14) !important;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
