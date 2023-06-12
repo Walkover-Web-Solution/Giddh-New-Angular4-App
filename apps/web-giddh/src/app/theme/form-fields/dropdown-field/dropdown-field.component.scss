@@ -11,3 +11,9 @@
     top: 22px;
     right: 4px;
 }
+.select-field-container {
+    input {
+        border: 0 !important;
+        background-color: transparent;
+    }
+}
