@@ -1,11 +1,12 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'branch-transfer-create',
   templateUrl: './branch-transfer-create.component.html',
-  styleUrls: ['./branch-transfer-create.component.scss']
+  styleUrls: ['./branch-transfer-create.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class BranchTransferCreateComponent implements OnInit {

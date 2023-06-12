@@ -12,36 +12,36 @@
 
         <div class="branch-transfer-body-multiple-wrapper">
             <form>
-                <div class="row clearfix">
+                <div class="row clearfix primary-form-wrapper">
                     <div class="col-lg-8 px-0">
                         <div class="row">
-                            <div class="col-lg-12">
-                                <div class="row">
-                                    <div class="col-lg-6 pl-0">
-                                        <div class="w-100">
-                                            <mat-form-field appearance="outline" (click)="mainDatePicker.open()">
-                                                <mat-label
-                                                    >Date of
-                                                    {{
-                                                        branchTransferMode === "receipt-note" ? "Receipt" : "Supply"
-                                                    }}</mat-label
-                                                >
-                                                <input
-                                                    matInput
-                                                    readonly
-                                                    [matDatepicker]="mainDatePicker"
-                                                    name="date"
-                                                    [(ngModel)]="todayDate"
-                                                    required
-                                                />
-                                                <mat-datepicker #mainDatePicker></mat-datepicker>
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-lg-6">
-                                <div class="row">
+                                <!-- <div class="col-lg-6 pl-0"> -->
+                                <div class="w-100">
+                                    <mat-form-field appearance="outline" (click)="mainDatePicker.open()">
+                                        <mat-label
+                                            >Date of
+                                            {{
+                                                branchTransferMode === "receipt-note" ? "Receipt" : "Supply"
+                                            }}</mat-label
+                                        >
+                                        <input
+                                            matInput
+                                            readonly
+                                            [matDatepicker]="mainDatePicker"
+                                            name="date"
+                                            [(ngModel)]="todayDate"
+                                            required
+                                        />
+                                        <mat-datepicker #mainDatePicker></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div>
                                     <div class="w-100">
                                         <dropdown-field
                                             [name]="''"
@@ -54,7 +54,7 @@
                                         </dropdown-field>
                                     </div>
                                 </div>
-                                <div class="row" *ngIf="transferType === 'Senders'">
+                                <div *ngIf="transferType === 'Senders'">
                                     <div class="w-100">
                                         <input-field
                                             [type]="'text'"
@@ -65,7 +65,7 @@
                                         </input-field>
                                     </div>
                                 </div>
-                                <div class="row mr-b1 mr-t1" *ngIf="transferType === 'Senders'">
+                                <div class="mr-b1 mr-t1" *ngIf="transferType === 'Senders'">
                                     <div class="w-100">
                                         <mat-radio-group
                                             name="sender_HsnSac"
@@ -77,7 +77,7 @@
                                         </mat-radio-group>
                                     </div>
                                 </div>
-                                <div class="row" *ngIf="transferType === 'Senders' && senderHsnSacStatus">
+                                <div *ngIf="transferType === 'Senders' && senderHsnSacStatus">
                                     <div class="w-100">
                                         <input-field
                                             [type]="'number'"
@@ -88,7 +88,7 @@
                                         </input-field>
                                     </div>
                                 </div>
-                                <div class="row" *ngIf="transferType === 'Products'">
+                                <div *ngIf="transferType === 'Products'">
                                     <div class="w-100">
                                         <dropdown-field
                                             [name]="''"
@@ -101,7 +101,7 @@
                                         </dropdown-field>
                                     </div>
                                 </div>
-                                <div class="row" *ngIf="transferType === 'Products'">
+                                <div *ngIf="transferType === 'Products'">
                                     <div class="w-100">
                                         <mat-form-field appearance="outline" class="w-100">
                                             <mat-label>Sender's Address</mat-label>
@@ -112,7 +112,7 @@
                             </div>
 
                             <div class="col-lg-6">
-                                <div class="row">
+                                <div>
                                     <div class="w-100">
                                         <input-field
                                             [type]="'text'"
@@ -125,7 +125,7 @@
                                         </input-field>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div>
                                     <div class="w-100">
                                         <dropdown-field
                                             [name]="''"
@@ -138,8 +138,11 @@
                                         </dropdown-field>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="w-100">
+                                <div>
+                                    <div
+                                        class="w-100"
+                                        [ngClass]="{ 'height-full': senderHsnSacStatus && transferType === 'Senders' }"
+                                    >
                                         <mat-form-field appearance="outline" class="w-100">
                                             <mat-label>Receiver's Address</mat-label>
                                             <textarea matInput rows="3"></textarea>

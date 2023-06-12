@@ -21,13 +21,25 @@
         &-multiple-wrapper {
             padding-top: 15px;
 
-            .total-amount {
-                h3 {
-                    font-size: 26px;
-                    font-weight: 600;
+            .primary-form-wrapper {
+                .height-full {
+                    .mat-form-field-flex {
+                        height: 115px;
+                    }
                 }
-                p {
-                    font-size: 14px;
+                .total-amount {
+                    h3 {
+                        font-size: 26px;
+                        font-weight: 600;
+                    }
+                    p {
+                        font-size: 14px;
+                    }
+                }
+                .mat-form-field-appearance-outline {
+                    .mat-form-field-wrapper {
+                        margin: 0.5em 0;
+                    }
                 }
             }
 
