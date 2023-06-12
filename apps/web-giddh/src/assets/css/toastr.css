@@ -18,7 +18,7 @@
     right: 17px;
     top: 6px;
     float: right;
-    font-size: var(--font-size-25);
+    font-size: 25px;
     color: var(--color-white);
     opacity: 1;
     font-weight: normal;
@@ -215,7 +215,7 @@ button.toast-close-button {
 }
 .toast-info .toast-title {
     color: var(--color-white);
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     margin-right: 10px;
 }
 .toast-warning {
@@ -223,7 +223,7 @@ button.toast-close-button {
 }
 .toast-warning .toast-title {
     color: var(--color-white);
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     margin-right: 10px;
 }
 .toast-progress {
@@ -235,7 +235,7 @@ button.toast-close-button {
     opacity: 0.4;
 }
 .toast-error .toast-title {
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     margin-right: 10px;
     color: var(--color-white);
 }

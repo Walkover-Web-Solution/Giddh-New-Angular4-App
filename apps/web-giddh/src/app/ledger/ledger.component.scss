@@ -82,12 +82,11 @@ input {
     display: flex;
     justify-content: space-between;
 }
-.ledg-head .mat-grid-list .mat-grid-tile,
-.ledg-head .mat-grid-list .mat-grid-tile .select2-container {
+.ledg-head .mat-grid-list .mat-grid-tile {
     padding: 8px 10px;
     border-bottom: 1px solid var(--color-ledger-grid-border-color) !important;
     border-right: 1px solid var(--color-ledger-grid-border-color);
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     text-overflow: ellipsis;
     white-space: nowrap;
     display: flex;
@@ -117,7 +116,7 @@ table.ledger-footer-1 td[class*="col-"] {
     padding-bottom: 1px !important;
     border-bottom: 1px solid var(--color-iron);
     border-right: 1px solid var(--color-iron);
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -362,15 +361,7 @@ table.ledger-footer-1 td[class*="col-"] {
     display: flex;
     justify-content: flex-end;
 }
-.date-step {
-    padding: 0 !important;
-    font-size: var(--font-size-13);
-    height: 48px;
-    line-height: 1;
-    &.focus-unset {
-        padding-left: 7px !important;
-    }
-}
+
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -586,7 +577,7 @@ sh-select:focus {
     .btn-danger,
     .btn-success,
     .btn-warning {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-14);
         width: 36px !important;
         padding: 0px !important;
         height: 36px !important;
@@ -645,7 +636,7 @@ sh-select:focus {
     align-items: center;
 }
 .icon-download-circle {
-    font-size: var(--font-size-15);
+    font-size: 15px;
     top: 0 !important;
     margin-top: 1px !important;
 }
@@ -666,7 +657,7 @@ sh-select:focus {
         tbody {
             background-color: var(--color-white);
             .transaction-date {
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-14);
                 font-family: var(--font-semibold);
             }
             td {
@@ -792,7 +783,7 @@ sh-select:focus {
     }
 }
 .icon-upload {
-    font-size: var(--font-size-16);
+    font-size: 14px;
 }
 .account-placeholder {
     color: var(--color-gray);

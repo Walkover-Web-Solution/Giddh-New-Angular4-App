@@ -210,7 +210,7 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header [class^="icon-"] {
-    font-size: var(--font-size-20);
+    font-size: 20px;
     display: none;
 }
 
@@ -249,7 +249,7 @@ a[vr-item]:focus {
 
 .left-fixed-header h6 {
     color: var(--color-giddh-blue);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     padding-left: 15px;
     padding-right: 15px;
     font-family: var(--font-semibold);
@@ -260,7 +260,7 @@ a[vr-item]:focus {
 
 .left-fixed-header > h6 > i {
     float: right;
-    font-size: var(--font-size-10);
+    font-size: 10px;
     background: var(--color-giddh-blue);
     display: inline-block;
     width: 15px;
@@ -275,7 +275,7 @@ a[vr-item]:focus {
 
 .other i {
     float: right;
-    font-size: var(--font-size-20);
+    font-size: 20px;
     background: transparent;
     display: inline-block;
     width: 15px;
@@ -344,25 +344,6 @@ a[vr-item]:focus {
     z-index: 9;
 }
 
-.sub-menu > a > i {
-    font-size: var(--font-size-13);
-    vertical-align: middle;
-    text-align: right;
-    position: relative;
-    color: var(--color-gray);
-    top: 6px;
-}
-
-.sub-menu > li {
-    position: relative;
-}
-
-.sub-menu > li > a {
-    display: block;
-    padding: 8px 20px;
-    color: var(--color-primary-header-sub-menu-li-a);
-}
-
 .left-fixed-header > li > a > i {
     position: relative;
     top: 3px;
@@ -422,7 +403,7 @@ a[vr-item]:focus {
         left: 16px;
         padding: 0 20px;
         color: var(--color-white);
-        font-size: var(--font-size-20);
+        font-size: 20px;
     }
 }
 
@@ -496,7 +477,7 @@ span.icon-support.dropdown-toggle {
     background-color: var(--color-primary-icon-support-dropdown-toggle);
     color: var(--color-white);
     padding: 6px 7px;
-    font-size: var(--font-size-17);
+    font-size: var(--font-size-18);
     border: 1px solid var(--color-primary-icon-support-dropdown-toggle);
     border-radius: 1px;
     position: relative;
@@ -614,11 +595,6 @@ ul.sub-list {
     padding: 0 0 3px 0;
 }
 
-.company-name .text-ellipsis {
-    font-size: var(--font-size-13);
-    font-family: var(--font-regular);
-}
-
 .overlay-cal {
     background: rgba(43, 38, 38, 0.6901960784313725);
     width: 100%;
@@ -641,7 +617,7 @@ ul.sub-list {
     border: 0px;
     color: var(--color-nero);
     cursor: pointer;
-    font-size: var(--font-size-20);
+    font-size: 20px;
     z-index: 9999;
     width: 40px;
     height: 40px;
@@ -660,7 +636,7 @@ ul.sub-list {
 .help-setting-icons {
     color: var(--color-white);
     i {
-        font-size: var(--font-size-20);
+        font-size: var(--font-size-18);
         line-height: 1.3;
     }
 }
@@ -677,7 +653,7 @@ ul.sub-list {
     background-color: var(--color-primary-header-notification-background);
     padding: 10px 15px;
     margin-bottom: 10px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
     margin-top: 10px;
     color: var(--color-primary-header-notification-text);
@@ -692,7 +668,7 @@ ul.sub-list {
 
     span.icon-traingle-info {
         color: var(--color-primary-header-icon-traingle-info);
-        font-size: var(--font-size-15);
+        font-size: var(--font-size-14);
         margin-right: 10px;
     }
     span.icon-info-icon {
@@ -945,7 +921,7 @@ ul.sub-list {
         .header-utility-icons {
             i {
                 padding: 3px !important;
-                font-size: var(--font-size-22);
+                font-size: 22px;
             }
             &.disable-icon {
                 i {
@@ -1029,7 +1005,7 @@ aside-setting {
             width: 32px;
             padding: 4px 4px 3px 0;
             i {
-                font-size: var(--font-size-22) !important;
+                font-size: 22px !important;
             }
         }
     }
@@ -1075,7 +1051,7 @@ aside-setting {
                 li {
                     display: flex;
                     i {
-                        font-size: var(--font-size-24);
+                        font-size: 24px;
                     }
                 }
                 .select-today {
@@ -1123,7 +1099,7 @@ aside-setting {
     }
     .help-setting-icons {
         i {
-            font-size: var(--font-size-22);
+            font-size: 22px;
             line-height: 1.4;
         }
     }
@@ -1139,7 +1115,7 @@ aside-setting {
             margin-right: 0;
             height: 34px;
             align-items: center;
-            font-size: var(--font-size-22);
+            font-size: 22px;
         }
     }
     .universal-date {

@@ -17,7 +17,7 @@ body.unresponsive {
 
 .btn-lg {
     padding: 10px 16px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     line-height: 1.3333333;
 }
 
@@ -31,7 +31,7 @@ body.unresponsive {
 
 .modal-header h3 {
     color: var(--color-white);
-    font-size: var(--font-size-20);
+    font-size: var(--font-size-18);
 }
 
 .login {
@@ -40,7 +40,7 @@ body.unresponsive {
 
 .login .brand-heading {
     color: var(--color-white);
-    font-size: var(--font-size-40);
+    font-size: var(--font-size-32);
     margin-bottom: 80px;
 }
 
@@ -180,7 +180,7 @@ body.unresponsive {
 
 button.close {
     float: right;
-    font-size: var(--font-size-21);
+    font-size: 21px;
     font-weight: 700;
     line-height: 1;
     color: var(--color-white);
@@ -199,13 +199,13 @@ button.close {
 .form-control,
 :host ::ng-deep .form-control {
     height: 41px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     color: var(--color-primary-login-signup-input-box) !important;
 }
 
 :host ::ng-deep .clear {
     top: 50% !important;
-    font-size: var(--font-size-22) !important;
+    font-size: var(--font-size-24) !important;
     right: 6px !important;
 }
 
@@ -482,7 +482,7 @@ small {
 }
 .accounting-space h4 {
     color: var(--color-primary-login-box-body-text);
-    font-size: var(--font-size-20);
+    font-size: var(--font-size-18);
 }
 .btn-outline-primary {
     background-color: var(--color-blue);

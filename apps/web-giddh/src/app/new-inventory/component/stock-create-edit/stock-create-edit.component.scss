@@ -14,7 +14,7 @@
 .page-title-inventory {
     font-weight: bold;
     color: var(--color-giddh-blue);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
 }
 
 .create-new-inventory-page {
@@ -65,7 +65,7 @@
                 position: absolute;
                 left: 18px;
                 top: 35px;
-                font-size: var(--font-size-12);
+                font-size: 12px;
                 z-index: 1;
                 font-weight: 600;
                 width: auto;
@@ -87,7 +87,7 @@
                 color: var(--color-gray);
                 position: absolute;
                 right: -20px;
-                font-size: var(--font-size-20);
+                font-size: 20px;
                 top: -5px;
                 z-index: 1;
             }
@@ -421,13 +421,13 @@ table.stock-table {
         align-items: center;
         border-radius: 40px;
         color: var(--color-abbey);
-        font-size: var(--font-size-17);
+        font-size: 17px;
     }
 
     .delete-tb-tr-icon {
         position: absolute;
         right: -50px;
-        font-size: var(--font-size-16);
+        font-size: 16px;
         border: 1px solid var(--color-gray);
         line-height: 1;
         height: 29px;
@@ -474,7 +474,7 @@ table.stock-table {
 
                 i {
                     vertical-align: top;
-                    font-size: var(--font-size-20);
+                    font-size: 20px;
                     color: var(--color-abbey);
                 }
             }
@@ -858,10 +858,6 @@ table.stock-table {
         left: 21px;
     }
 }
-
-.btn-position-left {
-    position: absolute;
-    right: 15px;
-    z-index: 1;
-    top: 18px;
+.icon-font-22 {
+    font-size: 22px;
 }

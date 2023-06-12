@@ -16,7 +16,7 @@
     z-index: 9999999;
     background-color: transparent;
     color: var(--color-primary-right-side-popup-header-text);
-    font-size: var(--font-size-17);
+    font-size: 17px;
     top: 16px;
     margin-right: 0;
     border: 0;
@@ -139,7 +139,7 @@
                     width: 100%;
 
                     h4 {
-                        font-size: var(--font-size-16);
+                        font-size: var(--font-size-14);
                         font-family: var(--font-semibold);
                         margin-bottom: 5px;
                     }
@@ -238,7 +238,7 @@
     .create-group-text-content {
         label {
             font-weight: 600;
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-14);
             margin-bottom: 5px;
         }
 

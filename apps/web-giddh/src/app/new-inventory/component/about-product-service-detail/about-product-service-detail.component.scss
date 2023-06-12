@@ -11,7 +11,7 @@
         .group-name {
             h4 {
                 font-family: var(--font-semibold);
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-14);
             }
         }
     }
@@ -115,6 +115,9 @@
     .add-new-final-product {
         display: none;
     }
+}
+.icon-font-22 {
+    font-size: 22px;
 }
 /* responsive */
 @media (max-width: 1440px) {

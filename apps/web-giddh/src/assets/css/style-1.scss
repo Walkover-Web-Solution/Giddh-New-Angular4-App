@@ -23,7 +23,7 @@ body {
     color: var(--color-nero);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-14) !important;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -108,6 +108,7 @@ radio,
 a {
     margin: 0;
     padding: 0;
+    font-size: 100%;
 }
 /*end typo*/
 
@@ -125,7 +126,7 @@ button.ui-datepicker-trigger {
 }
 .small,
 small {
-    font-size: var(--font-size-12);
+    font-size: var(--font-size-14);
 }
 
 a,
@@ -522,7 +523,7 @@ aside-menu-account .container-fluid {
     cursor: pointer;
 }
 .thead {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
 }
 .scroll-item {
     overflow: auto;
@@ -534,7 +535,7 @@ aside-menu-account .container-fluid {
     font-size: var(--font-size-14);
 }
 .date {
-    font-size: var(--font-size-11);
+    font-size: var(--font-size-12);
 }
 .company-list .ui-icon {
     margin: 4px 4px 20px;
@@ -559,7 +560,7 @@ aside-menu-account .container-fluid {
         font-size: var(--font-size-12);
         color: var(--color-total-details-heading);
         .number-total {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-18);
             font-weight: 500;
             color: var(--color-total-details-primary-content);
         }
@@ -650,20 +651,13 @@ aside-menu-account .container-fluid {
     height: auto;
 }
 /*typography styles*/
-.font-13 {
-    font-size: var(--font-size-13);
-}
+
 .font-14 {
     font-size: var(--font-size-14);
 }
-.font-16 {
-    font-size: var(--font-size-16);
-}
+
 .font-18 {
     font-size: var(--font-size-18);
-}
-.font-20 {
-    font-size: var(--font-size-20);
 }
 /*accounts list style*/
 .search-loading {
@@ -775,7 +769,7 @@ aside-menu-account .container-fluid {
 .ledg-head {
     a {
         i {
-            font-size: var(--font-size-24);
+            font-size: 24px;
             line-height: 34px;
         }
     }
@@ -858,7 +852,7 @@ aside-menu-account .container-fluid {
 }
 /* styles for trial-balance */
 .page-title {
-    font-size: var(--font-size-15);
+    font-size: var(--font-size-14);
     margin: 10px 0 0 10px;
 }
 .table-container tr > td:first-child {
@@ -898,7 +892,7 @@ aside-menu-account .container-fluid {
 }
 .tb-pl-bs-data {
     height: 60vh !important;
-    font-size: var(--font-size-31) !important;
+    font-size: var(--font-size-32) !important;
     color: var(--color-gray) !important;
 }
 .new-icon-img {
@@ -1079,7 +1073,7 @@ aside-menu-account .container-fluid {
 .no-data {
     text-align: center;
     margin-top: 150px;
-    font-size: var(--font-size-36);
+    font-size: var(--font-size-32);
     color: var(--color-gray);
 }
 .no-data > img {
@@ -1165,7 +1159,7 @@ table:focus {
     box-shadow: 0 5px 5px 0 var(--color-primary-common-box-shadow);
 }
 .account-card > h1 {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     padding-bottom: 5px;
     padding-right: 45px;
     margin-bottom: 5px;
@@ -1191,11 +1185,6 @@ table:focus {
     white-space: nowrap;
     overflow: hidden;
     color: var(--color-abbey);
-}
-.account-card > .balances ul li {
-    font-size: var(--font-size-10);
-    list-style-type: disc;
-    margin-left: 15px;
 }
 .account-card .account-number,
 .account-card .account-date {
@@ -1237,7 +1226,7 @@ table:focus {
     right: 12px;
     top: 10px;
     cursor: pointer;
-    font-size: var(--font-size-16);
+    font-size: 16px;
 }
 #yodleeModal {
     min-height: 200px;
@@ -1264,7 +1253,7 @@ table:focus {
     transition: all 0.2s ease-in-out;
 }
 .audit-log > h1 {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     text-transform: uppercase;
 }
 .audit-log table.table {
@@ -1791,7 +1780,7 @@ ul.pills li {
     text-transform: uppercase;
 }
 .rate {
-    font-size: var(--font-size-10);
+    font-size: var(--font-size-9);
     right: calc(50% + 10px);
     top: 22px;
     color: var(--color-gray);
@@ -2406,7 +2395,7 @@ form#groupDetailForm {
         transform: translate(-50%, -50%) !important;
     }
     .no-data {
-        font-size: var(--font-size-26);
+        font-size: var(--font-size-24);
     }
     #setting-tab .nav > li > a:hover {
         color: inherit !important;
@@ -2462,7 +2451,7 @@ form#groupDetailForm {
         max-width: 370px;
     }
     .advance-icon {
-        font-size: var(--font-size-16) !important;
+        font-size: 16px !important;
     }
 }
 @media (max-width: 375px) {
@@ -2701,7 +2690,7 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 }
 .mat-snack-bar-container {
     color: var(--color-toast-primary-text) !important;
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
 }
 .mat-snack-bar-container.error {
     background-color: var(--color-red-toast) !important;
@@ -3205,7 +3194,7 @@ td.mat-footer-cell {
         .mat-tab-label {
             .mat-tab-label-content {
                 letter-spacing: 0px;
-                font: normal normal normal var(--font-size-16) / 22px;
+                font: normal normal normal var(--font-size-14) / 22px;
                 font-family: var(--font-regular);
                 color: var(--color-tab-primary-inactive) !important;
             }
@@ -3213,7 +3202,7 @@ td.mat-footer-cell {
             :active {
                 .mat-tab-label-content {
                     letter-spacing: 0px;
-                    font: normal normal 600 var(--font-size-16) / 22px;
+                    font: normal normal 600 var(--font-size-14) / 22px;
                     font-family: var(--font-regular);
                     color: var(--color-tab-primary-active) !important;
                 }
@@ -3327,4 +3316,13 @@ input-field {
 }
 .mat-form-field-underline {
     position: unset !important;
+}
+.aside-pane {
+    .help-aside-body {
+        .inventory-items {
+            h5 {
+                font-size: 14px;
+            }
+        }
+    }
 }

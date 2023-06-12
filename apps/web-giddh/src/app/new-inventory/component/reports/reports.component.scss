@@ -59,7 +59,7 @@ td {
     border: 1px solid var(--color-secondary-input-bar-border);
     border-radius: 5px !important;
     padding: 8px;
-    font-size: var(--font-size-13);
+    font-size: var(--font-size-14);
     min-width: 250px;
 }
 
@@ -74,7 +74,7 @@ td {
     }
 
     .icon-download-circle {
-        font-size: var(--font-size-16);
+        font-size: 16px;
         color: var(--color-gray);
     }
 }
@@ -156,7 +156,7 @@ td {
     text-align: center;
     margin-top: 100px;
     padding-bottom: 100px;
-    font-size: var(--font-size-36);
+    font-size: var(--font-size-32);
     color: var(--color-gray);
 }
 

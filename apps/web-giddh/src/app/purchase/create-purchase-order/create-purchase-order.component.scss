@@ -282,10 +282,6 @@ form {
     font-size: var(--font-size-12);
 }
 
-.font-11 {
-    font-size: var(--font-size-11);
-}
-
 .w-100 {
     width: 100%;
 }
@@ -523,7 +519,7 @@ span.edit-icon {
     text-align: center;
     color: var(--color-iron);
     padding: 5px 8px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
 }
 
 .hsn-code-dropdown .btn-group {
@@ -794,7 +790,7 @@ table.table.table-custom-invoice.basic {
 }
 
 .wrap-td-data .icon-rupees {
-    font-size: var(--font-size-11);
+    font-size: 11px;
 }
 
 b,
@@ -843,16 +839,6 @@ label.checkbox-custom-label {
     line-height: initial !important;
 }
 
-span.eligible-ITC {
-    font-size: var(--font-size-11);
-    cursor: pointer;
-    padding-top: 5px;
-    display: inline-block;
-    span {
-        color: var(--color-blue);
-        font-size: var(--font-size-10);
-    }
-}
 .deposit-payment-mode {
     display: flex;
     align-items: center;
@@ -1086,7 +1072,7 @@ ul.change-address-dropdown {
     align-self: flex-end;
     justify-self: flex-end;
     span.icon-rupees {
-        font-size: var(--font-size-11);
+        font-size: 11px;
     }
 }
 .item-discount,
@@ -1282,7 +1268,6 @@ ul.change-address-dropdown {
         background-color: var(--color-dark-fog);
         border: 1px solid var(--color-iron);
         padding: 3px;
-        font-size: var(--font-size-13);
     }
     .other-taxes div {
         align-items: flex-end !important;

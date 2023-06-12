@@ -17,12 +17,12 @@
             padding-right: 18px !important;
             height: 37px;
             .back-left {
-                font-size: var(--font-size-21);
+                font-size: 21px;
                 float: left;
             }
         }
         .giddh-heading {
-            font-size: var(--font-size-37);
+            font-size: var(--font-size-32);
             font-weight: bold;
             float: left;
             width: 30%;
@@ -39,7 +39,7 @@
             padding-bottom: 20px;
         }
         .user-title {
-            font-size: var(--font-size-19);
+            font-size: var(--font-size-18);
             font-weight: bold;
             margin-bottom: 4px;
         }
@@ -61,7 +61,7 @@
             margin-bottom: 20px;
         }
         .billing-name {
-            font-size: var(--font-size-20);
+            font-size: var(--font-size-18);
             font-weight: 700;
             color: var(--color-gray);
         }
@@ -113,7 +113,7 @@
         }
         .billing-details form label {
             color: var(--color-gray);
-            font-size: var(--font-size-15);
+            font-size: var(--font-size-14);
             font-weight: 400;
         }
         .billing-details form {
@@ -153,7 +153,7 @@
             }
             .renewal-card-subtitle {
                 color: var(--color-slate);
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-14);
                 font-weight: bold;
                 margin-bottom: 0px !important;
             }
@@ -204,7 +204,7 @@
                 }
             }
             .new-payable {
-                font-size: var(--font-size-15) !important;
+                font-size: var(--font-size-14) !important;
                 padding-left: 5px;
                 margin-bottom: 7px !important;
             }
@@ -234,7 +234,7 @@
                 float: left;
             }
             .including-tax {
-                font-size: var(--font-size-13);
+                font-size: var(--font-size-12);
                 font-weight: 300;
                 margin-left: 5px;
             }
@@ -243,7 +243,7 @@
                 width: 102px;
                 font-weight: bolder;
                 height: 38px;
-                font-size: var(--font-size-17);
+                font-size: var(--font-size-18);
                 color: var(--color-senary-button-text);
                 background-color: var(--color-senary-button-background);
                 &:hover {

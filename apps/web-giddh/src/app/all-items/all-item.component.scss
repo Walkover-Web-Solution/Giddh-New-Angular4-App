@@ -13,7 +13,7 @@
             }
             input {
                 height: 50px;
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-14);
                 border: none;
                 border-top-left-radius: 0px !important;
                 border-bottom-left-radius: 0px !important;
@@ -31,7 +31,7 @@
                 color: var(--color-primary-all-items-page-heading);
                 font-family: var(--font-semibold);
                 i {
-                    font-size: var(--font-size-22);
+                    font-size: 22px;
                 }
             }
             .sub-item-block {
@@ -48,7 +48,7 @@
                         align-items: center;
                         color: var(--color-primary-all-items-page-single-menu-items-heading);
                         i {
-                            font-size: var(--font-size-22);
+                            font-size: 22px;
 
                             &.unit-mapping-icon {
                                 background-image: url("../../assets/images/unit-mapping.svg");

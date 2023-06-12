@@ -3,7 +3,7 @@
 }
 
 .input-group-btn {
-    font-size: var(--font-size-21);
+    font-size: 21px;
     color: var(--color-rectangular-tab-active-primary-text) !important;
     cursor: pointer;
     margin-right: 5px;
@@ -206,7 +206,7 @@
     i {
         padding: 5px 0;
         color: var(--color-abbey);
-        font-size: var(--font-size-20);
+        font-size: 20px;
     }
 }
 
@@ -466,23 +466,6 @@
             .input-field {
                 input {
                     width: 250px;
-                }
-            }
-        }
-
-        .main-content {
-            table {
-                .mat-cell {
-                    .small-button {
-                        height: 35px;
-                        font-size: var(--font-size-10);
-                        padding: 0px;
-                        min-width: 100%;
-                    }
-
-                    .right-side {
-                        width: 95%;
-                    }
                 }
             }
         }

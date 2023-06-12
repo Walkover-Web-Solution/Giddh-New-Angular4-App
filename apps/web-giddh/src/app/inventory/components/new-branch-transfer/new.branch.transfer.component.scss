@@ -99,7 +99,7 @@ tfoot td .table-sec.form-group {
 }
 
 .right-total-amount h3 {
-    font-size: var(--font-size-26);
+    font-size: var(--font-size-24);
     font-family: var(--font-semibold);
 }
 .multiple-products-wrapper form {
@@ -162,7 +162,7 @@ tfoot td .table-sec.form-group {
     text-align: center;
     color: var(--color-secondary-input-bar-border);
     padding: 5px 8px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
 }
 
 .hsn-code-dropdown .btn-group {
@@ -383,7 +383,7 @@ tfoot td .table-sec.form-group {
 }
 .close-receipt {
     color: var(--color-abbey);
-    font-size: var(--font-size-24);
+    font-size: 24px;
 }
 .form-control[readonly] {
     background-color: var(--color-white) !important;
@@ -425,6 +425,9 @@ tfoot td .table-sec.form-group {
             right: -55px;
         }
     }
+}
+.icon-plus {
+    font-size: 10px;
 }
 /* responsive starts here*/
 @media (max-width: 1280px) {

@@ -90,7 +90,7 @@ input.focusBorder[type="checkbox"]:focus:after {
     z-index: 9999999;
     background-color: transparent;
     color: var(--color-white);
-    font-size: var(--font-size-17);
+    font-size: 17px;
     top: 18px;
     margin-right: 0;
     border: 0;
@@ -99,7 +99,7 @@ input.focusBorder[type="checkbox"]:focus:after {
 }
 
 .collapse-icons {
-    font-size: var(--font-size-10);
+    font-size: 10px;
     border: 1px solid var(--color-blue);
     border-radius: 4px;
     padding: 2px;

@@ -107,12 +107,12 @@
         float: left !important;
         width: 100%;
         font-weight: 600;
-        font-size: var(--font-size-25);
+        font-size: var(--font-size-24);
     }
     .sub-plan-duration {
         font-weight: normal;
         text-transform: lowercase;
-        font-size: var(--font-size-15);
+        font-size: var(--font-size-14);
     }
     .grid-title-list-changes:nth-child(even) {
         background-color: var(--color-dark-fog) !important;
@@ -155,7 +155,7 @@
         border-bottom: 1px solid var(--color-common-primary-border);
         width: 205px;
         font-weight: 500;
-        font-size: var(--font-size-13);
+        font-size: var(--font-size-14);
     }
     .all-feature-button {
         margin-right: 0 !important;
@@ -171,7 +171,7 @@
         border-bottom: 1px solid var(--color-common-primary-border);
         width: 205px;
         font-weight: 500;
-        font-size: var(--font-size-13);
+        font-size: var(--font-size-14);
     }
     .bottom-grid-list-div {
         .grid-title-left {
@@ -308,7 +308,7 @@
     }
 }
 .inner-your-account > h3 {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     color: var(--color-common-senary-text);
     font-weight: bold;
     margin-bottom: 5px;
@@ -342,7 +342,7 @@
     .close {
         color: var(--color-nero);
         opacity: 1;
-        font-size: var(--font-size-16);
+        font-size: 16px;
         position: absolute;
         right: 10px;
         top: 12px;
@@ -362,7 +362,7 @@
     filter: grayscale(100%);
 }
 .price-cross {
-    font-size: var(--font-size-22) !important;
+    font-size: 24px !important;
     position: relative;
     &:after {
         content: "";
@@ -411,7 +411,7 @@
     margin-bottom: 20px;
 }
 .btn-group .close {
-    font-size: var(--font-size-16);
+    font-size: 16px;
     color: var(--color-abbey);
     opacity: 1;
 }
@@ -419,7 +419,7 @@
     position: absolute;
     right: 10px;
     top: 10px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     color: var(--color-nero);
 }
 .btn-green:focus {
@@ -437,7 +437,7 @@
         padding-top: 0 !important;
     }
     .text-gray {
-        font-size: var(--font-size-17);
+        font-size: var(--font-size-18);
         font-weight: 500;
     }
     .footer-plan {
@@ -491,7 +491,7 @@
     padding-right: 18px !important;
     height: 37px;
     .back-left {
-        font-size: var(--font-size-21);
+        font-size: 21px;
         float: left;
         margin-top: 15% !important;
     }
@@ -515,7 +515,7 @@
 }
 .explore-other {
     text-decoration: underline;
-    font-size: var(--font-size-17);
+    font-size: var(--font-size-18);
     font-weight: bolder;
     margin-top: 15px;
     float: left;
@@ -543,7 +543,7 @@
 }
 .renewal-card-subtitle {
     color: var(--color-gray);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     font-weight: bold;
     margin-bottom: 0 !important;
 }
@@ -582,17 +582,17 @@
 .features {
     line-height: 1.7;
     color: var(--color-gray);
-    font-size: var(--font-size-19);
+    font-size: var(--font-size-18);
 }
 .renewal-card-content a {
     text-decoration: underline;
-    font-size: var(--font-size-19);
+    font-size: var(--font-size-18);
     margin-bottom: 33px;
     float: left;
     width: 100%;
 }
 .pay-now {
-    font-size: var(--font-size-21);
+    font-size: var(--font-size-18);
     height: 44px;
     width: 44%;
 }
@@ -601,7 +601,7 @@
 }
 .extra-addons-content {
     margin-top: 6px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-14);
     float: left;
     width: 24%;
     .extra-addons-value {
@@ -701,7 +701,7 @@
         width: 100%;
     }
     .close.close-2 {
-        font-size: var(--font-size-16);
+        font-size: 16px;
     }
 }
 @media only screen and (max-width: 1199px) {
@@ -1106,7 +1106,7 @@
         }
     }
     .select-plan-head {
-        font-size: var(--font-size-20);
+        font-size: var(--font-size-18);
         padding: 12px 15px;
     }
     .select-plan-block {
