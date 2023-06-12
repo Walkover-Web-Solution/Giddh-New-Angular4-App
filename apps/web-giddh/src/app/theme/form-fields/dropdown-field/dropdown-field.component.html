@@ -1,118 +1,124 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
-    <mat-form-field [appearance]="appearance">
-        <mat-label>{{ label ? label : placeholder }}</mat-label>
-        <input
-            type="text"
-            [ngClass]="cssClass"
-            class="select-field-input"
-            [placeholder]="placeholder"
-            matInput
-            [matAutocomplete]="auto"
-            (blur)="onBlur()"
-            [name]="name"
-            [formControl]="searchFormControl"
-            [readonly]="readonly"
-            (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
-            [autocomplete]="autocomplete"
-            #trigger="matAutocompleteTrigger"
-            #selectField
-            (keydown.enter)="$event.preventDefault()"
-            (clickOutside)="closeDropdownPanel()"
-            matAutocompletePosition="auto"
-            [required]="required"
-        />
-        <mat-autocomplete
-            autoActiveFirstOption
-            [displayWith]="displayLabel"
-            (optionSelected)="optionSelected($event)"
-            #auto="matAutocomplete"
-            [ngClass]="customPanelClass"
-        >
-            <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()" class="custom-class-create">
-                <div class="item create-new">{{ createNewText }}</div>
-                <div class="item create-new-command">
-                    {{ commonLocaleData?.app_alt_c }}
-                </div>
-            </a>
-            <ng-container *ngIf="fieldFilteredOptions?.length <= 5; else scrollData">
-                <mat-option
-                    *ngFor="let option of fieldFilteredOptions"
-                    [value]="option"
-                    [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
-                >
-                    <ng-template
-                        [ngTemplateOutletContext]="{ option: option }"
-                        [ngTemplateOutlet]="optionTemplate"
-                    ></ng-template>
-                    <ng-container *ngIf="!optionTemplate">
-                        <span class="option-label"> {{ option?.label }}</span>
-                        <span class="option-value" *ngIf="showValueInLabel">{{ option.additional?.uniqueName }}</span>
-                    </ng-container>
-                </mat-option>
-                <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
-                <mat-option
-                    value=""
-                    *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew"
-                    (click)="createNewRecord()"
-                >
-                    <a href="javascript:;" class="options-class-create">
-                        {{ commonLocaleData?.app_create_new }}
-                    </a></mat-option
-                >
-            </ng-container>
-
-            <ng-template #scrollData>
-                <app-cdk-scroll
-                    (fetchNextPage)="isPaginationEnabled ? scrollEndEvent($event) : ''"
-                    [scrollableElementId]="scrollableElementId"
-                >
-                    <cdk-virtual-scroll-viewport
-                        class="virtual-group-list overflow-x-hidden"
-                        [itemSize]="33"
-                        [minBufferPx]="300"
-                        [maxBufferPx]="300"
-                        [id]="scrollableElementId"
-                        [ngStyle]="{
-                            'height':
-                                (fieldFilteredOptions?.length * 51 > 193
-                                    ? 193
-                                    : showCreateNew
-                                    ? 51
-                                    : fieldFilteredOptions?.length * 51
-                                    ? fieldFilteredOptions?.length * 51
-                                    : 51) + 'px'
-                        }"
+    <div class="select-field-container">
+        <mat-form-field [appearance]="appearance">
+            <mat-label>{{ label ? label : placeholder }}</mat-label>
+            <input
+                type="text"
+                [ngClass]="cssClass"
+                class="select-field-input"
+                [placeholder]="placeholder"
+                matInput
+                [matAutocomplete]="auto"
+                (blur)="onBlur()"
+                [name]="name"
+                [formControl]="searchFormControl"
+                [readonly]="readonly"
+                (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
+                [autocomplete]="autocomplete"
+                #trigger="matAutocompleteTrigger"
+                #selectField
+                (keydown.enter)="$event.preventDefault()"
+                (clickOutside)="closeDropdownPanel()"
+                matAutocompletePosition="auto"
+                [required]="required"
+            />
+            <mat-autocomplete
+                autoActiveFirstOption
+                [displayWith]="displayLabel"
+                (optionSelected)="optionSelected($event)"
+                #auto="matAutocomplete"
+                [ngClass]="customPanelClass"
+            >
+                <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()" class="custom-class-create">
+                    <div class="item create-new">{{ createNewText }}</div>
+                    <div class="item create-new-command">
+                        {{ commonLocaleData?.app_alt_c }}
+                    </div>
+                </a>
+                <ng-container *ngIf="fieldFilteredOptions?.length <= 5; else scrollData">
+                    <mat-option
+                        *ngFor="let option of fieldFilteredOptions"
+                        [value]="option"
+                        [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
                     >
-                        <mat-option
-                            *ngFor="let option of fieldFilteredOptions"
-                            [value]="option"
-                            [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
+                        <ng-template
+                            [ngTemplateOutletContext]="{ option: option }"
+                            [ngTemplateOutlet]="optionTemplate"
+                        ></ng-template>
+                        <ng-container *ngIf="!optionTemplate">
+                            <span class="option-label"> {{ option?.label }}</span>
+                            <span class="option-value" *ngIf="showValueInLabel">{{
+                                option.additional?.uniqueName
+                            }}</span>
+                        </ng-container>
+                    </mat-option>
+                    <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
+                    <mat-option
+                        value=""
+                        *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew"
+                        (click)="createNewRecord()"
+                    >
+                        <a href="javascript:;" class="options-class-create">
+                            {{ commonLocaleData?.app_create_new }}
+                        </a></mat-option
+                    >
+                </ng-container>
+
+                <ng-template #scrollData>
+                    <app-cdk-scroll
+                        (fetchNextPage)="isPaginationEnabled ? scrollEndEvent($event) : ''"
+                        [scrollableElementId]="scrollableElementId"
+                    >
+                        <cdk-virtual-scroll-viewport
+                            class="virtual-group-list overflow-x-hidden"
+                            [itemSize]="33"
+                            [minBufferPx]="300"
+                            [maxBufferPx]="300"
+                            [id]="scrollableElementId"
+                            [ngStyle]="{
+                                'height':
+                                    (fieldFilteredOptions?.length * 51 > 193
+                                        ? 193
+                                        : showCreateNew
+                                        ? 51
+                                        : fieldFilteredOptions?.length * 51
+                                        ? fieldFilteredOptions?.length * 51
+                                        : 51) + 'px'
+                            }"
                         >
-                            <ng-template
-                                [ngTemplateOutletContext]="{ option: option }"
-                                [ngTemplateOutlet]="optionTemplate"
-                            ></ng-template>
-                            <ng-container *ngIf="!optionTemplate">
-                                <span class="option-label"> {{ option?.label }}</span>
-                                <span class="option-value" *ngIf="showValueInLabel">{{
-                                    option.additional?.uniqueName
-                                }}</span>
-                            </ng-container>
-                        </mat-option>
-                        <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
-                        <mat-option
-                            value=""
-                            *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew"
-                            (click)="createNewRecord()"
-                        >
-                            <a href="javascript:;" class="options-class-create">
-                                {{ commonLocaleData?.app_create_new }}
-                            </a></mat-option
-                        >
-                    </cdk-virtual-scroll-viewport>
-                </app-cdk-scroll>
-            </ng-template>
-        </mat-autocomplete>
-        <span class="arrow-dropdown"></span>
-    </mat-form-field>
+                            <mat-option
+                                *ngFor="let option of fieldFilteredOptions"
+                                [value]="option"
+                                [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
+                            >
+                                <ng-template
+                                    [ngTemplateOutletContext]="{ option: option }"
+                                    [ngTemplateOutlet]="optionTemplate"
+                                ></ng-template>
+                                <ng-container *ngIf="!optionTemplate">
+                                    <span class="option-label"> {{ option?.label }}</span>
+                                    <span class="option-value" *ngIf="showValueInLabel">{{
+                                        option.additional?.uniqueName
+                                    }}</span>
+                                </ng-container>
+                            </mat-option>
+                            <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0"
+                                >No results found</mat-option
+                            >
+                            <mat-option
+                                value=""
+                                *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew"
+                                (click)="createNewRecord()"
+                            >
+                                <a href="javascript:;" class="options-class-create">
+                                    {{ commonLocaleData?.app_create_new }}
+                                </a></mat-option
+                            >
+                        </cdk-virtual-scroll-viewport>
+                    </app-cdk-scroll>
+                </ng-template>
+            </mat-autocomplete>
+            <span class="arrow-dropdown"></span>
+        </mat-form-field>
+    </div>
 </ng-container>
