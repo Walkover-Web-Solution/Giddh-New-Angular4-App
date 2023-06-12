@@ -680,4 +680,17 @@ export class CreateManufacturingComponent implements OnInit {
         stockObject.stocksPageNumber = stockObject.stocksPageNumber + 1;
         this.getStocks(stockObject, stockObject.stocksPageNumber, stockObject.stocksQ ?? '', this.selectedInventoryType);
     }
+
+    /**
+     * Resets the stock list
+     *
+     * @param {*} stockObject
+     * @param {string} [inventoryType]
+     * @memberof CreateManufacturingComponent
+     */
+    public resetStocks(stockObject: any, inventoryType?: string): void {
+        stockObject.stocksQ = "";
+        stockObject.stocksPageNumber = 1;
+        this.getStocks(stockObject, 1, "", inventoryType);
+    }
 }

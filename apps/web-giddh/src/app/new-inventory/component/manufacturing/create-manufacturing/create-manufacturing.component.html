@@ -85,6 +85,8 @@
                                                 getStocks(manufacturingObject.manufacturingDetails[0], 1, $event)
                                             "
                                             (scrollEnd)="stockScrollEnd(manufacturingObject.manufacturingDetails[0])"
+                                            [allowValueReset]="true"
+                                            (onClear)="resetStocks(manufacturingObject.manufacturingDetails[0])"
                                         >
                                         </dropdown-field>
                                     </div>
@@ -215,6 +217,10 @@
                                                                     )
                                                                 "
                                                                 (scrollEnd)="stockScrollEnd(linkedStock)"
+                                                                [allowValueReset]="true"
+                                                                (onClear)="
+                                                                    resetStocks(linkedStock, selectedInventoryType)
+                                                                "
                                                             >
                                                             </select-field>
                                                         </div>
