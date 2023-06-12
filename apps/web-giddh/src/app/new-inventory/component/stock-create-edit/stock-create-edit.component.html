@@ -217,7 +217,7 @@
                                                 <div class="col-12 col-lg-11">
                                                     <div class="row">
                                                         <div
-                                                            class="col-xl-6 col-12 pl-4 fixed-assets"
+                                                            class="col-xl-6 col-12 fixed-assets"
                                                             *ngIf="stockForm.type === 'FIXED_ASSETS'"
                                                         >
                                                             <div class="purchase-information fixed-assets-information">
@@ -232,6 +232,33 @@
                                                                     >
                                                                         {{ localeData?.fixed_assets_information }}
                                                                     </mat-checkbox>
+                                                                </div>
+                                                                <div class="row align-items-center mr-b15">
+                                                                    <div
+                                                                        class="col-sm-6 col-lg-5"
+                                                                        *ngIf="!isVariantAvailable"
+                                                                    >
+                                                                        <label
+                                                                            >{{ localeData?.is_rate_inclusive }}
+                                                                        </label>
+                                                                    </div>
+                                                                    <div
+                                                                        class="col-xl-7 col-lg-7 col-sm-6 pl-0"
+                                                                        *ngIf="!isVariantAvailable"
+                                                                    >
+                                                                        <mat-checkbox
+                                                                            name="fixedAssetTaxInclusive"
+                                                                            color="primary"
+                                                                            [(ngModel)]="
+                                                                                stockForm.variants[0][
+                                                                                    'fixedAssetTaxInclusive'
+                                                                                ]
+                                                                            "
+                                                                            [disabled]="
+                                                                                !isFixedAssetsInformationEnabled
+                                                                            "
+                                                                        ></mat-checkbox>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="col-sm-6 col-lg-5">
@@ -256,31 +283,6 @@
                                                                             [defaultValue]="fixedAssetsAccountName"
                                                                         >
                                                                         </select-field>
-                                                                    </div>
-                                                                    <div
-                                                                        class="col-sm-6 col-lg-5"
-                                                                        *ngIf="!isVariantAvailable"
-                                                                    >
-                                                                        <label
-                                                                            >{{ localeData?.is_fixed_assets_inclusive }}
-                                                                        </label>
-                                                                    </div>
-                                                                    <div
-                                                                        class="col-xl-7 col-lg-7 col-sm-6 pl-0 mr-b15"
-                                                                        *ngIf="!isVariantAvailable"
-                                                                    >
-                                                                        <mat-checkbox
-                                                                            name="fixedAssetTaxInclusive"
-                                                                            color="primary"
-                                                                            [(ngModel)]="
-                                                                                stockForm.variants[0][
-                                                                                    'fixedAssetTaxInclusive'
-                                                                                ]
-                                                                            "
-                                                                            [disabled]="
-                                                                                !isFixedAssetsInformationEnabled
-                                                                            "
-                                                                        ></mat-checkbox>
                                                                     </div>
                                                                     <div
                                                                         class="col-sm-6 col-lg-5"
