@@ -130,6 +130,10 @@ const routes: Routes = [
         loadChildren: () => import('./component/manufacturing/manufacturing.module').then(module => module.ManufacturingModule)
     },
     {
+        path: "branch-transfer",
+        loadChildren: () => import('./component/branch-transfer/branch-transfer.module').then(module => module.BranchTransferModule)
+    },
+    {
         path: "inventory-dashboard",
         component: InventoryDashboardComponent,
     },
