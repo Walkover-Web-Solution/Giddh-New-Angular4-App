@@ -4,7 +4,7 @@
         box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
         margin: 0 15px;
         label {
-            font-size: 14px;
+            font-size: var(--font-size-14);
             line-height: 34px;
             display: inline-block;
         }
@@ -13,7 +13,7 @@
             margin-bottom: 15px;
             span {
                 color: var(--color-gray) !important;
-                font-size: 12px !important;
+                font-size: var(--font-size-12) !important;
             }
         }
 
@@ -25,7 +25,7 @@
             position: absolute;
             top: -24px;
             right: 15px;
-            font-size: 12px;
+            font-size: var(--font-size-12);
             color: var(--color-abbey);
             text-align: left;
         }
@@ -103,7 +103,7 @@
     width: 36px;
     height: 36px;
     i.icon-trash {
-        font-size: 18px;
+        font-size: var(--font-size-18);
     }
 }
 .verify-tick-icon {

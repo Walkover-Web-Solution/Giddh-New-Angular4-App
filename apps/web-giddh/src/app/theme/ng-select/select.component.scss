@@ -3,7 +3,7 @@ ng-select {
     margin: 0;
     position: relative;
     outline: none;
-    font-size: 14px;
+    font-size: var(--font-size-14);
     * {
         box-sizing: border-box;
     }
@@ -50,10 +50,10 @@ ng-select {
                 }
             }
             > div.clear {
-                font-size: 18px;
+                font-size: var(--font-size-18);
             }
             > div.toggle {
-                font-size: 14px;
+                font-size: var(--font-size-14);
             }
         }
         > div.multiple {
@@ -71,14 +71,14 @@ ng-select {
                 cursor: default;
                 display: inline-block;
                 flex-shrink: 0;
-                font-size: 14px;
+                font-size: var(--font-size-14);
                 line-height: 22px;
                 margin: 3px 5px 3px 0;
                 padding: 0 4px;
                 span.deselect-option {
                     color: var(--color-gray);
                     cursor: pointer;
-                    font-size: 14px;
+                    font-size: var(--font-size-14);
                     height: 20px;
                     line-height: 20px;
                     &:hover {
@@ -103,7 +103,7 @@ ng-select {
     label {
         color: rgba(0, 0, 0, 0.6);
         display: block;
-        font-size: 13px;
+        font-size: var(--font-size-14);
         padding: 4px 0;
     }
     select-dropdown {

@@ -903,7 +903,7 @@
         <div class="row">
             <div class="col-12 col-md-12 clearfix mr-t1">
                 <div class="mr-r1 form-group pull-left cp">
-                    <label class="pull-left cp font-16">
+                    <label class="pull-left cp font-14">
                         <mat-checkbox
                             color="primary"
                             id="ledger-generate-voucher"
@@ -977,7 +977,7 @@
                                 href="javascript:void(0)"
                                 (click)="currencyChange()"
                             >
-                                <i class="icon-switch-icon font-16"></i>
+                                <i class="icon-switch-icon font-14"></i>
                             </a>
                         </li>
                         <li>
@@ -1016,7 +1016,7 @@
                         class="upload-div pd-r15"
                         [ngClass]="{ hide: blankLedger?.generateInvoice || blankLedger?.attachedFile }"
                     >
-                        <label for="invoiceFile" class="cp font-16">
+                        <label for="invoiceFile" class="cp font-14">
                             <i [ngClass]="!isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'"></i>
                             {{ localeData?.attach_file }}</label
                         >

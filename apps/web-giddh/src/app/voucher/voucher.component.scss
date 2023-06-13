@@ -100,7 +100,7 @@
 }
 
 .item-unique {
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 // select box
@@ -324,17 +324,13 @@ a[type="button"] {
 }
 
 .list-item {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     border-bottom: 1px solid var(--color-common-secondary-border);
     display: flex !important;
 }
 
 .font-12 {
-    font-size: 12px;
-}
-
-.font-11 {
-    font-size: 11px;
+    font-size: var(--font-size-12);
 }
 
 .table-sec {
@@ -432,19 +428,15 @@ textarea:focus {
     display: block;
     color: var(--color-abbey);
     line-height: 1.2rem;
-    font-size: 14px;
+    font-size: var(--font-size-14);
     font-weight: 500;
 }
 
 .sp-rupees {
     display: block;
-    font-size: 26px;
+    font-size: var(--font-size-24);
     line-height: 1.2;
     font-family: var(--font-semibold);
-}
-
-.sp-rupees span.icon-rupees {
-    font-size: 20px;
 }
 
 .table-custom-invoice {
@@ -519,7 +511,7 @@ textarea:focus {
     background: transparent !important;
     box-shadow: none !important;
     border-radius: 0 !important;
-    font-size: 24px;
+    font-size: var(--font-size-24);
     padding: 3px 0 0 0 !important;
 }
 
@@ -618,7 +610,7 @@ textarea:focus {
 
 .modal-invoice-footer .btn {
     background: var(--color-gray);
-    font-size: 12px;
+    font-size: var(--font-size-12);
     border-radius: 90px;
     padding: 1px 6px;
     vertical-align: middle;
@@ -657,7 +649,7 @@ textarea:focus {
 
 .other-options a {
     color: var(--color-blue);
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .form-control {
@@ -665,7 +657,7 @@ textarea:focus {
 }
 
 form label {
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .billing-address .selected-val {
@@ -698,7 +690,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
 }
 
 .billing-address-full p {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     color: var(--color-abbey);
     margin-bottom: 5px;
 }
@@ -795,7 +787,7 @@ a.copy-invoice img {
 }
 
 .entry-date label {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     display: block;
 }
 
@@ -805,7 +797,7 @@ a.copy-invoice img {
     width: 66px;
     background: transparent !important;
     height: 25px !important;
-    font-size: 12px !important;
+    font-size: var(--font-size-12) !important;
     padding-right: 0 !important;
     padding-left: 0 !important;
     padding-top: 0 !important;
@@ -817,26 +809,26 @@ a.copy-invoice img {
 
 .hsn-code.text-right {
     padding-top: 3px;
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .hsn-code label {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     display: block;
 }
 
 .entry-date {
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .sku-number,
 .sku-number label {
-    font-size: 12px !important;
+    font-size: var(--font-size-12) !important;
     display: none;
 }
 
 .add-bulk-items {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     padding-bottom: 0;
     color: var(--color-blue);
 }
@@ -860,7 +852,7 @@ a.copy-invoice img {
     vertical-align: middle;
     line-height: 0;
     width: 88px !important;
-    font-size: 12px;
+    font-size: var(--font-size-12);
     background-color: transparent !important;
 }
 
@@ -905,7 +897,7 @@ span.edit-icon {
 }
 
 .hsn-code-dropdown label {
-    font-size: 12px !important;
+    font-size: var(--font-size-12) !important;
     margin-bottom: 5px;
     display: block;
 }
@@ -928,7 +920,7 @@ span.edit-icon {
     text-align: center;
     color: var(--color-iron);
     padding: 5px 8px;
-    font-size: 16px;
+    font-size: var(--font-size-14);
 }
 
 .hsn-code-dropdown .btn-group {
@@ -954,7 +946,7 @@ span.edit-icon {
 }
 
 .select-account-label {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     color: var(--color-gray);
     padding-bottom: 3px;
 }
@@ -1125,7 +1117,7 @@ section.new-table {
 }
 
 .single-card-row label.card-label {
-    font-size: 14px !important;
+    font-size: var(--font-size-14) !important;
     font-weight: 500;
     display: block;
     font-family: var(--font-semibold);
@@ -1137,7 +1129,7 @@ section.new-table {
 
 .single-card-row p {
     color: var(--color-abbey);
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .card-invoice-table {
@@ -1150,7 +1142,7 @@ section.new-table {
     right: 15px;
     top: 11px;
     color: var(--color-danger);
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 
 .edit-card img {
@@ -1239,11 +1231,11 @@ section.new-table {
 
 .add-bulk-item-modal .single-product-wrapper h5 {
     color: var(--color-nero);
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .add-bulk-item-modal .single-product-wrapper p {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     padding-top: 4px;
 }
 
@@ -1254,11 +1246,11 @@ section.new-table {
 }
 
 .add-bulk-item-modal .right-content span.selected-stock-number {
-    font-size: 20px;
+    font-size: var(--font-size-18);
 }
 
 .add-bulk-item-modal .right-content h4 {
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .add-bulk-item-modal .right-content hr {
@@ -1273,7 +1265,7 @@ section.new-table {
 }
 
 .add-bulk-item-modal .single-selected-stock p {
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .add-bulk-item-modal .wrap-selected-stocks {
@@ -1316,7 +1308,7 @@ section.new-table {
 }
 
 .add-bulk-item-modal .modal-title {
-    font-size: 22px !important;
+    font-size: var(--font-size-24) !important;
     color: var(--color-white);
 }
 
@@ -1340,12 +1332,12 @@ section.new-table {
 }
 
 .gst-treatment-header > span {
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .aqua-color a {
     color: var(--color-blue);
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .aqua-color i {
@@ -1457,12 +1449,12 @@ table.table.table-custom-invoice.basic,
 
 .sku-and-custom-fields {
     white-space: normal;
-    font-size: 12px !important;
+    font-size: var(--font-size-12) !important;
 }
 
 .differ-currency {
     color: var(--color-gray);
-    font-size: 14px;
+    font-size: var(--font-size-14);
     text-align: right;
     bottom: 3px;
     right: 8px;
@@ -1472,17 +1464,13 @@ table.table.table-custom-invoice.basic,
     justify-self: flex-end;
 }
 
-.differ-currency span.icon-rupees {
-    font-size: 11px;
-}
-
 .date-hsn-code {
     position: relative;
     top: 7px;
 }
 
 .switch-currency {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     color: var(--color-nero);
     max-width: 1000px;
     text-align: right;
@@ -1521,22 +1509,8 @@ label.sales-country-label {
     padding-bottom: 0;
 }
 
-.bigger-dollar .icon-rupees {
-    font-size: 12px;
-}
-
-.table-cell.figure-cell span.icon-rupees {
-    font-size: 11px;
-    margin-right: 2px;
-}
-
 .table-cell.figure-cell span.icon-dollar {
     margin-right: 2px;
-}
-
-.tax-in-currency span.icon-rupees {
-    font-size: 11px;
-    color: var(--color-gray);
 }
 
 .thead-sales-invoice {
@@ -1607,10 +1581,6 @@ label.sales-country-label {
     -moz-transform: translateY(-40px);
 }
 
-.wrap-td-data .icon-rupees {
-    font-size: 11px;
-}
-
 b,
 strong {
     font-family: var(--font-bold);
@@ -1646,18 +1616,6 @@ strong {
 
 label.checkbox-custom-label {
     line-height: initial !important;
-}
-
-span.eligible-ITC {
-    font-size: 11px;
-    cursor: pointer;
-    padding-top: 5px;
-    display: inline-block;
-
-    span {
-        color: var(--color-blue);
-        font-size: 10px;
-    }
 }
 
 .deposit-payment-mode {
@@ -1702,18 +1660,12 @@ span.eligible-ITC {
     justify-content: center;
     margin-right: 15px;
     height: 33px;
-    font-size: 14px;
+    font-size: var(--font-size-14);
 
     span:first-child {
         font-size: 16px;
         vertical-align: middle;
         color: var(--color-abbey);
-    }
-
-    .label {
-        vertical-align: middle;
-        color: var(--color-abbey);
-        font-size: 13px;
     }
 }
 
@@ -1859,7 +1811,7 @@ span.eligible-ITC {
     }
 
     .customer-invoice-table label {
-        font-size: 13px;
+        font-size: var(--font-size-14);
     }
 
     .wrapper-customer-table .col-sm-2 {
@@ -1976,7 +1928,7 @@ span.eligible-ITC {
         background-color: var(--color-dark-fog);
         border: 1px solid var(--color-iron);
         padding: 3px;
-        font-size: 13px;
+        font-size: var(--font-size-14);
     }
 
     .other-taxes div {
@@ -2069,7 +2021,7 @@ span.eligible-ITC {
     }
 
     .sp-rupees {
-        font-size: 20px;
+        font-size: var(--font-size-18);
     }
 
     .wrap-other-tax {
@@ -2199,7 +2151,7 @@ span.eligible-ITC {
     a {
         color: var(--color-dropdown-list);
         background-color: var(--color-dropdown-primary-background);
-        font-size: 16px;
+        font-size: var(--font-size-14);
 
         &:hover {
             color: var(--color-dropdown-list-hover-text) !important;

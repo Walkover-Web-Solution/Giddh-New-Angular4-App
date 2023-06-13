@@ -155,7 +155,7 @@ ul.select-action-dropdown {
 }
 .select-action-dropdown a {
     color: var(--color-nero);
-    font-size: 14px;
+    font-size: var(--font-size-14);
     padding: 5px 10px;
     display: block;
 }
@@ -208,7 +208,7 @@ ul.select-action-dropdown {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
+    font-size: var(--font-size-18);
     margin-left: 10px;
     border: 1px solid var(--color-iron);
     border-radius: 5px;
@@ -221,7 +221,7 @@ ul.select-action-dropdown {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 14px;
+    font-size: var(--font-size-14);
     border-radius: 5px;
     align-items: center;
     justify-content: center;
@@ -234,7 +234,7 @@ ul.select-action-dropdown {
 button.btn.btn-filter {
     background: var(--color-dark-fog);
     border: 1px solid var(--color-common-secondary-border);
-    font-size: 14px;
+    font-size: var(--font-size-14);
     color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
@@ -323,7 +323,7 @@ span.icon-advance-filter {
         align-items: center;
         margin-bottom: 0;
         line-height: 1;
-        font-size: 14px;
+        font-size: var(--font-size-14);
         min-height: 20px;
         .checkbox-img {
             img {
@@ -339,9 +339,6 @@ span.icon-advance-filter {
     .index-no {
         display: flex;
         justify-content: flex-start;
-    }
-    .mobile-search .input-container input {
-        font-size: 13px;
     }
     .mobile-search button.btn.btn-sky-blue {
         width: 100%;
@@ -379,7 +376,7 @@ span.icon-advance-filter {
     .small-loading {
         padding-left: 0;
         color: var(--color-nero);
-        font-size: 12px;
+        font-size: var(--font-size-12);
         position: relative;
         top: 2px;
         padding-right: 0;
@@ -390,7 +387,7 @@ span.icon-advance-filter {
         width: 100%;
         justify-content: center;
         margin-bottom: 5px;
-        font-size: 14px;
+        font-size: var(--font-size-14);
     }
     .form-group div {
         display: block;

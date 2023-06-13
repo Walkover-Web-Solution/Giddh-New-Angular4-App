@@ -21,11 +21,11 @@
 }
 .dashboard-option li.secondary-dark-bg {
     color: var(--color-primary-revenue-chart-secondary-dark-bg);
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 .dashboard-option li.secondary-light-bg {
     color: var(--color-primary-revenue-chart-secondary-dark-bg);
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .dashboard-option li h3 {
@@ -38,23 +38,23 @@
 span.this-week {
     color: var(--color-abbey);
     padding-left: 5px;
-    font-size: 16px;
+    font-size: var(--font-size-14);
 }
 .total-sale-detail {
     text-align: right;
     padding-right: 11px;
 }
 .total-sale-detail p {
-    font-size: 18px;
+    font-size: var(--font-size-18);
     color: var(--color-abbey);
 }
 .total-sale-detail h3 {
-    font-size: 22px;
+    font-size: var(--font-size-24);
     color: var(--color-nero);
 }
 
 .total-sale-detail span {
-    font-size: 18px;
+    font-size: var(--font-size-18);
     color: var(--color-common-septenary-text);
 }
 .single-sale-detail {
@@ -72,14 +72,14 @@ span.icon-collapse-icon:hover {
 /* CSS FOR LINE CHART */
 
 p.bankName {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     color: var(--color-giddh-blue);
     margin-bottom: 5px;
 }
 
 p.bank-balance {
     color: var(--color-abbey);
-    font-size: 14px;
+    font-size: var(--font-size-14);
     display: flex;
     justify-content: space-between;
 }
@@ -92,7 +92,7 @@ a.connect-bank {
     position: absolute;
     bottom: 10px;
     color: var(--color-nero);
-    font-size: 14px;
+    font-size: var(--font-size-14);
     text-decoration: underline;
 }
 .dashboard-container {
@@ -105,7 +105,7 @@ a.connect-bank {
     padding: 15px 15px 20px;
 }
 .dashboard-container label {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     color: var(--color-nero);
     margin-bottom: 3px;
 }
@@ -130,7 +130,7 @@ a.connect-bank {
 }
 .page-title h1 {
     color: var(--color-giddh-blue);
-    font-size: 24px;
+    font-size: var(--font-size-24);
     text-align: center;
     font-weight: 600;
     line-height: 2.3;
@@ -164,7 +164,7 @@ a.connect-bank {
 
 .about-date {
     display: inline-flex;
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 .active-date {
     color: var(--color-giddh-blue);
@@ -207,16 +207,16 @@ a.connect-bank {
 }
 .single-sale-data p {
     color: var(--color-nero);
-    font-size: 16px;
+    font-size: var(--font-size-14);
 }
 .single-sale-data h3 {
-    font-size: 22px;
+    font-size: var(--font-size-24);
     color: var(--color-giddh-blue);
     margin-top: 6px;
 }
 span.date-wise-sale {
     color: var(--color-giddh-blue);
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 
 .single-sale-data {
@@ -257,18 +257,18 @@ input:read-only:focus {
 }
 @media (max-width: 991px) {
     .about-date {
-        font-size: 16px;
+        font-size: var(--font-size-14);
         display: flex;
         flex-direction: column;
     }
     .total-sales-tabs a {
-        font-size: 14px;
+        font-size: var(--font-size-14);
     }
     .total-income-wrap {
         flex-direction: column-reverse;
         .page-title {
             h1 {
-                font-size: 16px;
+                font-size: var(--font-size-14);
                 line-height: 1.3;
             }
         }
@@ -277,7 +277,7 @@ input:read-only:focus {
             width: 20px;
             margin-left: 10px;
             .icon-collapse-icon {
-                font-size: 18px;
+                font-size: var(--font-size-18);
             }
         }
     }
@@ -291,11 +291,11 @@ input:read-only:focus {
             padding-bottom: 10px;
         }
         p {
-            font-size: 14px;
+            font-size: var(--font-size-14);
         }
         h3 {
             padding-top: 3px;
-            font-size: 18px;
+            font-size: var(--font-size-18);
         }
     }
     .left-column {
@@ -332,27 +332,27 @@ input:read-only:focus {
         min-height: auto;
         margin-bottom: 15px;
         p {
-            font-size: 14px;
+            font-size: var(--font-size-14);
         }
         h3 {
-            font-size: 18px;
+            font-size: var(--font-size-18);
         }
     }
     .about-date {
         display: flex;
-        font-size: 14px;
+        font-size: var(--font-size-14);
         flex-direction: column;
         align-items: baseline;
     }
     .date-range-block {
         padding-bottom: 10px;
-        font-size: 14px;
+        font-size: var(--font-size-14);
     }
     .page-title {
         h1 {
             display: flex;
             float: left;
-            font-size: 20px;
+            font-size: var(--font-size-18);
         }
         .collapse-close {
             height: 40px;
