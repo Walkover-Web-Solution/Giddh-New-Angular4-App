@@ -1,4 +1,4 @@
-<section id="branch-transfer-dialog">
+<section id="branch-transfer-create">
     <div class="branch-transfer-header">
         <h2>{{ branchTransferMode === "receipt-note" ? "Receipt Note" : "Delivery Challan" }}</h2>
     </div>
@@ -176,11 +176,11 @@
                                                 >
                                                 </select-field>
                                                 <div
-                                                    class="showSKU-Code-position"
+                                                    class="show-sku-code-position"
                                                     *ngIf="activeRow"
                                                     mat-button
                                                     [matMenuTriggerFor]="sku_Menu"
-                                                    #sku_MenuTrigger="matMenuTrigger"
+                                                    #skuMenuTrigger="matMenuTrigger"
                                                 >
                                                     <label>SKU Code: </label>
                                                     <span
@@ -192,7 +192,7 @@
                                                 </div>
 
                                                 <mat-menu #sku_Menu="matMenu" xPosition="before">
-                                                    <div class="showCode-menu" (click)="$event.stopPropagation()">
+                                                    <div class="show-code-menu" (click)="$event.stopPropagation()">
                                                         <div>
                                                             <text-field
                                                                 [cssClass]="'form-control mat-field-border'"
@@ -227,11 +227,11 @@
                                                     ></textarea>
                                                 </div>
                                                 <div
-                                                    class="showCode-position"
+                                                    class="show-code-position"
                                                     *ngIf="activeRow"
                                                     mat-button
                                                     [matMenuTriggerFor]="hsn_sac_Menu"
-                                                    #hsn_sac_MenuTrigger="matMenuTrigger"
+                                                    #hsnSacMenuTrigger="matMenuTrigger"
                                                 >
                                                     <label>{{ showCodeType }} Code: </label>
                                                     <span
@@ -246,7 +246,7 @@
                                                     </span>
                                                 </div>
                                                 <mat-menu #hsn_sac_Menu="matMenu" xPosition="after">
-                                                    <div class="showCode-menu" (click)="$event.stopPropagation()">
+                                                    <div class="show-code-menu" (click)="$event.stopPropagation()">
                                                         <div class="radio-btns">
                                                             <mat-radio-group
                                                                 name="code_type"
@@ -419,7 +419,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row position-bottom">
                     <div class="action-btn-wrapper text-right w-100">
                         <button mat-stroked-button class="mr-3" mat-dialog-close>Cancel</button>
                         <button mat-raised-button color="primary">Create</button>

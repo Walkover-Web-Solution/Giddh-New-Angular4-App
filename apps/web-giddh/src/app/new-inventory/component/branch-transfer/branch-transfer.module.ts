@@ -19,7 +19,6 @@ import { FormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 @NgModule({
     imports: [
@@ -28,7 +27,6 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
         HamburgerMenuModule,
         BranchTransferRoutingModule,
         FormFieldsModule,
-        GiddhDatepickerModule,
         MatButtonModule,
         MatTooltipModule,
         MatTableModule,
@@ -41,7 +39,6 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
         ClickOutsideModule,
         MatFormFieldModule,
         MatInputModule,
-        MatDatepickerModule,
         PaginationModule.forRoot()
 
     ],
