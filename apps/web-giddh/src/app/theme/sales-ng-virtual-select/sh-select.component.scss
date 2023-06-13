@@ -54,7 +54,7 @@ i.close.icon.clear:hover::after {
     padding-right: 2px;
     top: 15px;
     cursor: pointer;
-    font-size: var(--font-size-24);
+    font-size: 25px;
     font-weight: 500;
     line-height: 100%;
     opacity: 0.5;
@@ -73,7 +73,7 @@ i.close.icon.clear:hover::after {
     display: inline-block;
     padding: 0 7px;
     height: 30px;
-    font-size: var(--font-size-14);
+    font-size: 14px;
     line-height: 30px;
     border-radius: 4px;
     background-color: var(--color-chips-primary-background);
@@ -142,7 +142,7 @@ i.close.icon.clear:hover::after {
     cursor: pointer;
     background: var(--color-wild-sand);
     color: var(--color-abbey);
-    font-size: var(--font-size-14);
+    font-size: 16px;
 }
 
 button.form-control:focus {
@@ -158,7 +158,7 @@ button.form-control:focus {
     background: transparent !important;
     box-shadow: none !important;
     border-radius: 0 !important;
-    font-size: var(--font-size-18);
+    font-size: 20px;
     color: var(--color-nero);
 }
 

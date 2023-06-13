@@ -209,7 +209,7 @@
                 ></div>
             </div>
         </div>
-        <p [ngClass]="{ 'skeleton-common-class': showLoader }" class="extra-addons-content font-14">
+        <p [ngClass]="{ 'skeleton-common-class': showLoader }" class="extra-addons-content font-16">
             {{ localeData?.subscription?.extra_addons }}:<span *ngIf="!showLoader" class="extra-addons-value">
                 {{ localeData?.subscription?.per_transaction }}</span
             >
@@ -263,7 +263,7 @@
                         <div class="activation-key mr-b1">
                             <h2
                                 [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-plan': showLoader }"
-                                class="font-24 text-gray bold mb-3 redeem-plan"
+                                class="font-26 text-gray bold mb-3 redeem-plan"
                             >
                                 {{ localeData?.subscription?.redeem }}
                                 {{ localeData?.subscription?.activation_key }}

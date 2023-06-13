@@ -22,7 +22,7 @@
             }
         }
         .giddh-heading {
-            font-size: var(--font-size-32);
+            font-size: 37px;
             font-weight: bold;
             float: left;
             width: 30%;
@@ -38,7 +38,7 @@
             padding-bottom: 20px;
         }
         .user-title {
-            font-size: var(--font-size-18);
+            font-size: 19px;
             font-weight: bold;
             margin-bottom: 4px;
         }
@@ -60,7 +60,7 @@
             margin-bottom: 20px;
         }
         .billing-name {
-            font-size: var(--font-size-18);
+            font-size: 20px;
             font-weight: 700;
             color: var(--color-gray);
         }
@@ -112,7 +112,7 @@
         }
         .billing-details form label {
             color: var(--color-gray);
-            font-size: var(--font-size-14);
+            font-size: 15px;
             font-weight: 400;
         }
         .billing-details form {
@@ -152,7 +152,7 @@
             }
             .renewal-card-subtitle {
                 color: var(--color-slate);
-                font-size: var(--font-size-14);
+                font-size: 16px;
                 font-weight: bold;
                 margin-bottom: 0px !important;
             }
@@ -161,7 +161,7 @@
                 width: 100%;
             }
             .year {
-                font-size: var(--font-size-14);
+                font-size: 14px;
                 margin-left: 3px;
                 text-transform: lowercase;
             }
@@ -182,7 +182,7 @@
             }
             .renewal-off {
                 color: var(--color-slate);
-                font-size: var(--font-size-12);
+                font-size: 12px;
                 font-weight: 600;
                 padding-left: 4px;
             }
@@ -203,7 +203,7 @@
                 }
             }
             .new-payable {
-                font-size: var(--font-size-14) !important;
+                font-size: 15px !important;
                 padding-left: 5px;
                 margin-bottom: 7px !important;
             }
@@ -221,7 +221,7 @@
             }
             .renewal-amount {
                 padding-left: 5px;
-                font-size: var(--font-size-24);
+                font-size: 24px;
                 font-weight: bolder;
                 float: left;
                 width: 100%;
@@ -233,7 +233,7 @@
                 float: left;
             }
             .including-tax {
-                font-size: var(--font-size-12);
+                font-size: 13px;
                 font-weight: 300;
                 margin-left: 5px;
             }
@@ -242,7 +242,7 @@
                 width: 102px;
                 font-weight: bolder;
                 height: 38px;
-                font-size: var(--font-size-18);
+                font-size: 17px;
                 color: var(--color-senary-button-text);
                 background-color: var(--color-senary-button-background);
                 &:hover {
@@ -257,7 +257,7 @@
         padding-top: 12px;
         padding-bottom: 13px;
         color: var(--color-gray);
-        font-size: var(--font-size-14);
+        font-size: 14px;
         padding-left: 5px;
         .renewal-subscription-extra {
             height: 20px;

@@ -127,10 +127,10 @@
                             </div>
                             <div class="account clearfix row" *ngIf="plData && plData.incomeStatment && !hideData">
                                 <div class="col-8 group pd-1">
-                                    <strong class="font-14">{{ localeData?.gross_profit }}</strong>
+                                    <strong>{{ localeData?.gross_profit }}</strong>
                                 </div>
                                 <div class="col-4 group text-right pull-right bd-rl pd-1">
-                                    <strong class="font-14">
+                                    <strong>
                                         <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="plData?.incomeStatment.grossProfit.amount"
@@ -226,14 +226,14 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="account clearfix font-14 row"
+                                            class="account clearfix font-16 row"
                                             *ngIf="grp.groupName && grp?.uniqueName === 'operatingcost'"
                                         >
                                             <div class="col-8 group pd-1">
-                                                <strong class="font-14">{{ localeData?.operating_profit_loss }}</strong>
+                                                <strong class="font-16">{{ localeData?.operating_profit_loss }}</strong>
                                             </div>
                                             <div class="col-4 group text-right pull-right bd-rl pd-1">
-                                                <strong class="font-14">
+                                                <strong class="font-16">
                                                     <span class="d-inline-flex">
                                                         <amount-field
                                                             [amount]="plData?.incomeStatment.operatingProfit.amount"
@@ -292,10 +292,10 @@
                     </div>
                     <div class="account clearfix row" *ngIf="plData && plData?.incomeStatment && !hideData">
                         <div class="col-8 group pd-1">
-                            <strong class="font-14">{{ localeData?.income_before_taxes }}</strong>
+                            <strong>{{ localeData?.income_before_taxes }}</strong>
                         </div>
                         <div class="col-4 group text-right pull-right bd-rl pd-1">
-                            <strong class="font-14">
+                            <strong>
                                 <span
                                     *ngIf="
                                         plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' &&

@@ -14,7 +14,7 @@
     }
     .name-error {
         color: var(--color-danger);
-        font-size: var(--font-size-12);
+        font-size: 11px;
         float: right;
     }
     .applicable-tax-btn:focus {
@@ -36,7 +36,7 @@
 }
 
 .welcome-container form label {
-    font-size: var(--font-size-14);
+    font-size: 14px;
     color: var(--color-nero);
 }
 
@@ -82,12 +82,12 @@
 
 .addCmpnyAddrs p {
     color: var(--color-blue);
-    font-size: var(--font-size-12);
+    font-size: 12px;
 }
 
 .change-preference,
 .taxation-not-supported {
-    font-size: var(--font-size-14);
+    font-size: 14px;
     color: var(--color-abbey);
 }
 
@@ -100,7 +100,7 @@
     color: var(--color-nero);
 }
 .welcome-container p.welcome-title {
-    font-size: var(--font-size-14);
+    font-size: 14px;
     color: var(--color-gray);
     margin-top: 25px;
 }
@@ -130,7 +130,7 @@ fieldset[disabled] {
         color: var(--color-white);
         margin: 4px;
         padding: 2px 10px;
-        font-size: var(--font-size-14);
+        font-size: 14px;
         border-radius: 3px;
         cursor: pointer;
         display: inline-block;
@@ -140,7 +140,7 @@ fieldset[disabled] {
     }
 }
 span.same-as-head {
-    font-size: var(--font-size-14);
+    font-size: 14px;
     position: relative;
     top: 8px;
     display: flex;

@@ -68,7 +68,7 @@
 
 .account-detail-custom-title {
     font-family: var(--font-semibold) !important;
-    font-size: var(--font-size-14) !important;
+    font-size: 16px !important;
 }
 
 .account-detail-padding {
@@ -79,7 +79,7 @@
 .custom-detail h4 {
     color: var(--color-abbey);
     margin-top: 7px;
-    font-size: var(--font-size-14) !important;
+    font-size: 14px !important;
     font-family: var(--font-regular) !important;
 }
 
@@ -195,7 +195,7 @@ ul#dropdown-nested li .caret {
 }
 
 .icon-pointer .font-xxs {
-    font-size: var(--font-size-12);
+    font-size: 12px;
 }
 
 table th {
@@ -228,7 +228,7 @@ table th {
     -webkit-box-align: center;
     align-items: center;
     background-color: var(--color-white);
-    font-size: var(--font-size-18);
+    font-size: 18px;
     color: var(--color-giddh-blue);
     border: 1px solid var(--color-primary-button-border);
     border-radius: 5px;
@@ -296,7 +296,7 @@ table th {
     .nav-report {
         li {
             font-family: var(--font-semibold);
-            font-size: var(--font-size-18);
+            font-size: 20px;
             a {
                 color: var(--color-giddh-blue);
             }
@@ -306,7 +306,7 @@ table th {
         font-family: var(--font-semibold);
         color: var(--color-giddh-blue);
         .btn {
-            font-size: var(--font-size-18);
+            font-size: 19px;
             padding: 0;
         }
         li {
@@ -350,12 +350,12 @@ table th {
         padding-left: 15px !important;
         .nav-report {
             li {
-                font-size: var(--font-size-14);
+                font-size: 16px;
             }
         }
         .custom-month-select {
             .btn {
-                font-size: var(--font-size-14);
+                font-size: 16px;
             }
         }
     }

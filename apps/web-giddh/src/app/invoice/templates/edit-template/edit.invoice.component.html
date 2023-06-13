@@ -32,7 +32,7 @@
 
             <div class="template-grid">
                 <h3 class="text-left">Design Template</h3>
-                <small class="mr-t2 text-left grey d-block">
+                <small class="mr-t3 text-left grey d-block">
                     Click to add a template from our gallery. You can customize the template title, columns,and headers
                     in line item table.
                 </small>
@@ -44,12 +44,12 @@
                     <div class="template-info text-center">
                         <h3 class="primary-color text-ellipsis">{{ template.name }}</h3>
 
-                        <span *ngIf="template.isDefault" class="badge btn-sky-blue mr-t2 font-12"
+                        <span *ngIf="template.isDefault" class="badge btn-sky-blue mr-t2"
                             ><i class="icon-favorite-selected"></i> Default Template</span
                         >
                         <span
                             *ngIf="!template.isDefault"
-                            class="badge btn-success mr-t2 cp font-12"
+                            class="badge btn-success mr-t2 cp"
                             (click)="onSetTemplateAsDefault(template, 'invoice')"
                             ><i class="icon-favorite-selected"></i> Set as Default</span
                         >
@@ -66,7 +66,7 @@
                         </button>
                         <button
                             [disabled]="template.isDefault"
-                            class="btn btn-default mr-0"
+                            class="btn btn-default"
                             (click)="onDeleteTemplate(template)"
                         >
                             <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>
@@ -83,12 +83,12 @@
                         <div class="template-info text-center">
                             <h3 class="primary-color text-ellipsis">{{ template.name }}</h3>
 
-                            <span *ngIf="template.isDefaultForVoucher" class="badge btn-sky-blue mr-t2 font-12"
+                            <span *ngIf="template.isDefaultForVoucher" class="badge btn-sky-blue mr-t2"
                                 ><i class="icon-favorite-selected"></i> Default Template</span
                             >
                             <span
                                 *ngIf="!template.isDefaultForVoucher"
-                                class="badge btn-success mr-t2 cp font-12"
+                                class="badge btn-success mr-t2 cp"
                                 (click)="onSetTemplateAsDefault(template, 'voucher')"
                                 ><i class="icon-favorite-selected"></i> Set as Default</span
                             >
@@ -105,7 +105,7 @@
                             </button>
                             <button
                                 [disabled]="template.isDefaultForVoucher"
-                                class="btn btn-default mr-0"
+                                class="btn btn-default"
                                 (click)="onDeleteTemplate(template)"
                             >
                                 <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>

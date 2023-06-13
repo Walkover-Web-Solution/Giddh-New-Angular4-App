@@ -1267,7 +1267,6 @@
                                     >
                                         <strong class="slogan-pre-line">
                                             <small
-                                                class="font-12"
                                                 *ngIf="
                                                     fieldsAndVisibility.footer.slogan?.label ||
                                                     fieldsAndVisibility.footer.slogan?.label === ''
@@ -1340,7 +1339,7 @@
                         </table>
                     </aside>
                     <footer style="text-align: center" [ngStyle]="{ 'border-color': inputTemplate.templateColor }">
-                        <p class="font-12" *ngIf="fieldsAndVisibility.footer.companyName?.display">
+                        <p class="font-10" *ngIf="fieldsAndVisibility.footer.companyName?.display" class="font-10">
                             <strong>{{ fieldsAndVisibility.header.companyName?.label }}</strong>
                         </p>
                         <p

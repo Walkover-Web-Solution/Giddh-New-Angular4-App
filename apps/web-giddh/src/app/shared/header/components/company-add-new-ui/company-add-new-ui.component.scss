@@ -16,7 +16,7 @@ label .required {
 }
 
 .modal-body p {
-    font-size: var(--font-size-14);
+    font-size: 14px;
     color: var(--color-gray);
     text-align: center;
     margin-left: -28px;
@@ -44,7 +44,7 @@ label .required {
 }
 
 .welcome-header h1 {
-    font-size: var(--font-size-32);
+    font-size: 30px;
     font-family: var(--font-regular);
     color: var(--color-common-senary-text);
     background-color: var(--color-common-primary-background-for-all-components);
@@ -85,7 +85,7 @@ input::placeholder {
         display: block;
     }
     .welcome-header h1 {
-        font-size: var(--font-size-18) !important;
+        font-size: 20px !important;
     }
     .welcome-wrapper {
         padding: 15px 0;

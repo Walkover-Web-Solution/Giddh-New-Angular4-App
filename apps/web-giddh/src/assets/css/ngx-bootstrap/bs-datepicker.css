@@ -82,7 +82,7 @@
 }
 .bs-datepicker-head button.next span,
 .bs-datepicker-head button.previous span {
-    font-size: var(--font-size-24);
+    font-size: 28px;
     line-height: 0.9;
     display: inline-block;
     position: relative;
@@ -122,7 +122,7 @@
     /* .bs-datepicker-body table.weeks */
 }
 .bs-datepicker-body table th {
-    font-size: var(--font-size-14);
+    font-size: 13px;
     color: var(--color-gray);
     font-weight: 400;
     text-align: center;
@@ -136,7 +136,7 @@
 .bs-datepicker-body table td span {
     display: block;
     margin: 0 auto;
-    font-size: var(--font-size-14);
+    font-size: 13px;
     border-radius: 50%;
     position: relative;
     /*z-index: 1;*/
@@ -264,7 +264,7 @@
 }
 .bs-datepicker .current-timedate {
     color: var(--color-abbey);
-    font-size: var(--font-size-14);
+    font-size: 15px;
     text-align: center;
     height: 30px;
     line-height: 30px;
@@ -377,7 +377,7 @@
     border: 0;
     background-color: var(--color-dark-fog);
     color: var(--color-abbey);
-    font-size: var(--font-size-14);
+    font-size: 16px;
     font-weight: 700;
     vertical-align: middle;
     line-height: 0;
@@ -403,7 +403,7 @@
     border: 1px solid var(--color-dark-fog);
     background: var(--color-white);
     color: var(--color-abbey);
-    font-size: var(--font-size-14);
+    font-size: 13px;
 }
 .bs-timepicker .switch-time-format img {
     vertical-align: initial;

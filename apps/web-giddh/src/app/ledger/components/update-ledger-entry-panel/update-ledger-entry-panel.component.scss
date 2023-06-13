@@ -36,7 +36,7 @@ table.width-100 {
 }
 
 .modal-header ng-select div a.ng-star-inserted {
-    font-size: var(--font-size-18);
+    font-size: 18px;
     color: var(--color-white);
 }
 
@@ -53,7 +53,7 @@ ng-select > div i.fa.fa-caret-down::before {
 ng-select > div a.ng-star-inserted {
     color: var(--color-white);
     text-transform: uppercase;
-    font-size: var(--font-size-14);
+    font-size: 16px;
 }
 
 ng-select > div {
@@ -84,7 +84,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .amount-total {
-    font-size: var(--font-size-12);
+    font-size: 12px;
     color: var(--color-gray);
 }
 
@@ -166,6 +166,17 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     display: contents;
 }
 
+span.eligible-ITC {
+    font-size: 11px;
+    cursor: pointer;
+    padding-top: 5px;
+    display: inline-block;
+    span {
+        color: var(--color-blue);
+        font-size: 10px;
+    }
+}
+
 .taxable-amount-section {
     display: inline-block;
     margin-bottom: 12px;
@@ -223,7 +234,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
                 .remove-invoice-label {
                     vertical-align: middle;
                     color: var(--color-abbey);
-                    font-size: var(--font-size-14);
+                    font-size: 13px;
                 }
             }
         }
@@ -234,7 +245,6 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 .edit-adjustment {
     padding: 0 5px 0;
-    font-size: 10px;
 }
 .icon-info {
     color: var(--color-abbey);
@@ -284,7 +294,7 @@ p.edit-message {
     text-align: center;
     padding: 8px 0;
     border-top: 1px solid var(--color-common-secondary-border);
-    font-size: var(--font-size-14);
+    font-size: 16px;
     font-family: var(--font-semibold);
     margin-top: 15px;
 }
@@ -309,7 +319,7 @@ p.edit-message {
     margin-top: 1px;
     a {
         color: var(--color-dark-gray);
-        font-size: var(--font-size-14);
+        font-size: 15px;
     }
 }
 /* responsive */

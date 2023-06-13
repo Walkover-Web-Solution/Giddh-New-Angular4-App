@@ -16,7 +16,7 @@
                 p {
                     &.value {
                         color: var(--color-red);
-                        font-size: var(--font-size-18);
+                        font-size: 20px;
                     }
                 }
             }
@@ -25,7 +25,7 @@
                 p {
                     &.value {
                         color: var(--color-teal);
-                        font-size: var(--font-size-18);
+                        font-size: 20px;
                     }
                 }
             }
@@ -34,7 +34,7 @@
                 p {
                     &.value {
                         color: var(--color-red);
-                        font-size: var(--font-size-18);
+                        font-size: 20px;
                     }
                 }
             }
@@ -42,7 +42,7 @@
     }
     .total-item-list {
         .total-item {
-            font-size: var(--font-size-14);
+            font-size: 14px;
             justify-content: space-between;
             border-bottom: 1px solid var(--color-iron);
             padding-bottom: 7px;
