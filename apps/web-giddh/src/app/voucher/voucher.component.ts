@@ -1732,7 +1732,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.length) {
-                const currentEntryStockVariantUniqueName = this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName;
+                const currentEntryStockVariantUniqueName = this.currentTxnRequestObject[this.currentlyLoadedStockVariantIndex ?? this.activeIndx].params.variantUniqueName;
                 let stockAllVariants;
                 res[this.currentlyLoadedStockVariantIndex ?? this.activeIndx].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
                 if (stockAllVariants.findIndex(variant => variant.value === currentEntryStockVariantUniqueName) === -1) {
@@ -3138,7 +3138,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         // Calculate amount with inclusive tax
         transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
-            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.highPrecisionRate);
+            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
         transaction.highPrecisionAmount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
             (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.highPrecisionRate);
         let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), this.highPrecisionRate);
@@ -3450,7 +3450,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true, isBulkItem?: boolean): SalesTransactionItemClass {
         let o = cloneDeep(selectedAcc.additional);
-
+        const variant = o.stock?.variant;
+        const isInclusiveEntry = variant?.purchaseTaxInclusive || variant?.salesTaxInclusive || variant?.fixedAssetTaxInclusive;
         // check if we have quantity in additional object. it's for only bulk add mode
         transaction.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
         transaction.applicableTaxes = [];
@@ -3520,12 +3521,23 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 text: o.stock.stockUnitCode
             };
             transaction.stockList = [];
-            const unitRates = (this.generalService.voucherApiVersion === 1 ? o.stock?.unitRates : o.stock?.variant?.unitRates) ?? [];
+            /*
+                From API, in get voucher API, unit rates are received within stock key.
+                And in particular API, the unit rates are received within stock.variant key.
+                This method is common for both the flows therefore we are searching the unitRates
+                in both the keys
+            */
+            const unitRates = o.stock?.unitRates ?? o.stock?.variant?.unitRates ?? [];
             if (o.stock && unitRates.length) {
                 transaction.stockList = this.prepareUnitArr(unitRates);
                 transaction.stockUnit = transaction.stockList[0].id;
                 transaction.stockUnitCode = transaction.stockList[0].text;
-                transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                if (!isInclusiveEntry) {
+                    /* For inclusive entry we calculate the rate at the time of amount calculation,
+                        this is done to avoid the fluctuation of rate from exclusive to inclusive
+                    */
+                    transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                }
             } else {
                 transaction.stockList.push(obj);
                 transaction.stockUnit = o.stock.stockUnit.uniqueName;
@@ -3626,13 +3638,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.focusOnDescription();
         if (calculateTransaction) {
-            const variant = o.stock?.variant;
-            if (variant?.purchaseTaxInclusive || variant?.salesTaxInclusive || variant?.fixedAssetTaxInclusive) {
+            if (isInclusiveEntry) {
                 setTimeout(() => {
                     // Settimeout is used as tax component is not rendered at the tiem control is reached here
+                    transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                     transaction.total = transaction.quantity * transaction.rate;
                     this.calculateTransactionValueInclusively(entry, transaction);
-                }, 100);
+                });
             } else {
                 this.calculateStockEntryAmount(transaction);
                 this.calculateWhenTrxAltered(entry, transaction);
@@ -4027,7 +4039,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         find(txn.stockList, (o) => {
             if (o.id === selectedUnit?.value) {
                 txn.stockUnitCode = o.text;
-                return txn.rate = o.rate;
+                return txn.rate = giddhRoundOff(o.rate  / this.exchangeRate, this.highPrecisionRate);
             }
         });
     }
@@ -4928,7 +4940,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             }
                             newTrxObj.sku_and_customfields = description.join(', ');
                         }
-                        const unitRates = (this.generalService.voucherApiVersion === 1 ? stock?.unitRates : stock?.variant?.unitRates) ?? [];
+                        /*
+                            From API, in get voucher API, unit rates are received within stock key.
+                            And in particular API, the unit rates are received within stock.variant key.
+                            This method is common for both the flows therefore we are searching the unitRates
+                            in both the keys
+                        */
+                        const unitRates = stock?.unitRates ?? stock?.variant?.unitRates ?? [];
                         stock.unitRates = unitRates || [];
                         const unitRate = stock.unitRates.find(rate => rate.stockUnitCode === stock.stockUnit.code);
 
@@ -5223,12 +5241,24 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 });
                 if (t.stock) {
                     this.currentTxnRequestObject[voucherClassConversion.entries.length] = {
+                        ...this.currentTxnRequestObject[voucherClassConversion.entries.length],
                         params: {
                             variantUniqueName: t.stock.variant.uniqueName
+                        },
+                        isLinkedPoItem: t.additional?.maxQuantity > 0,
+                        selectedAcc: {
+                            stock: {
+                                name: t.stock.name,
+                                uniqueName: t.stock.uniqueName,
+                            },
+                            additional: {
+                                name: t.account.name,
+                                uniqueName: t.account.uniqueName,
+                            }
                         }
                     };
                     this.loadStockVariants(t.stock.uniqueName, voucherClassConversion.entries.length);
-                    const unitRates = (this.generalService.voucherApiVersion === 1 ? t.stock?.unitRates : t.stock?.variant?.unitRates) ?? [];
+                    const unitRates = t.stock?.unitRates ?? [];
                     if (!t.stock.stockUnit?.uniqueName && t.stock.stockUnit?.code) {
                         const unitFound = unitRates?.filter(unit => unit?.stockUnitCode === t.stock.stockUnit?.code);
                         if (unitFound?.length) {
@@ -5776,7 +5806,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public handleOutsideClick(event: any): void {
-        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && this.accountAsideMenuState === 'out' && this.asideMenuStateForProductService === 'out' && this.asideMenuStateForRecurringEntry === 'out' && this.asideMenuStateForOtherTaxes === 'out') {
+        if ((typeof event?.target?.className === "string" &&
+            event?.target?.className?.indexOf("option") === -1) &&
+            event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1 &&
+            this.accountAsideMenuState === 'out' && this.asideMenuStateForProductService === 'out' &&
+            this.asideMenuStateForRecurringEntry === 'out' && this.asideMenuStateForOtherTaxes === 'out') {
             this.activeIndx = null;
             this.checkVoucherEntries();
         }
@@ -8477,10 +8511,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Variant change handler
      *
      * @param {IOption} event Change event
+     * @param {SalesTransactionItemClass} transaction Current transaction
+     * @param {SalesEntryClass} entry Current entry
      * @memberof VoucherComponent
      */
-    public variantChanged(event: IOption): void {
-        // this.stockVariantSelected.emit(event.value);
+    public variantChanged(event: IOption, transaction: SalesTransactionItemClass, entry: SalesEntryClass): void {
+        transaction.variant.name = event.label;
+        this.currentTxnRequestObject[this.activeIndx].txn = transaction;
+        this.currentTxnRequestObject[this.activeIndx].entry = entry;
         if (this.currentTxnRequestObject[this.activeIndx]?.params) {
             this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName = event.value;
             this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
@@ -8533,11 +8571,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     isFixed: data.body.isFixed,
                     mergedAccounts: data.body.mergedAccounts,
                     mobileNo: data.body.mobileNo,
-                    nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.name).join(', ') : '',
+                    nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.name).join(', ') : data.body.parentGroups.join(', '),
                     stock: (isLinkedPoItem && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
                     hsnNumber: selectedAcc.stock?.hsnNumber ? selectedAcc.stock.hsnNumber : data.body.hsnNumber,
                     sacNumber: selectedAcc.stock?.sacNumber ? selectedAcc.stock.sacNumber : data.body.sacNumber,
-                    uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
+                    uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : data.body.parentGroups.join(', '),
                 };
                 txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem);
 
