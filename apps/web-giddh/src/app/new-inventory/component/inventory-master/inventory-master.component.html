@@ -1,4 +1,9 @@
 <div class="mat-grid-wrapper">
+    <!-- <div class="d-flex justify-content-end inventory-search mt-4">
+        <text-field [type]="'text'" [cssClass]="
+            'form-control mat-field-border cash-invoice-input'
+        " [placeholder]="'Search Accounts'"></text-field>
+    </div> -->
     <div class="mat-list-wrap">
         <div class="inventory-sideabar border-grid">
             <perfect-scrollbar
@@ -9,48 +14,101 @@
                 [scrollIndicators]="true"
             >
                 <div class="inventory-sub-sideabar">
-                    <mat-list class="item-list border-grid">
-                        <strong class="pb-2 list-font">Create New</strong>
-                        <mat-divider></mat-divider>
-                        <mat-list-item class="items">
-                            <a href="javascript:;">Group 1</a>
-                        </mat-list-item>
-                        <mat-divider></mat-divider>
-                        <mat-list-item class="items">
-                            <a href="javascript:;">Group 2</a>
-                        </mat-list-item>
-                        <mat-divider></mat-divider>
-                        <mat-list-item class="items">
-                            <a href="javascript:;">Group 3</a>
-                        </mat-list-item>
+                    <mat-list class="item-list border-grid pt-0">
+                        <a href="javascript:void(0);" class="create-head d-inline-block"> Create new </a>
+                        <a href="javascript:void(0);" matTooltip="Group 1">
+                            <mat-list-item class="items">Group 1</mat-list-item>
+                        </a>
+                        <a href="javascript:void(0);" matTooltip="Group 2">
+                            <mat-list-item class="items">Group 2</mat-list-item>
+                        </a>
+                        <a href="javascript:void(0);" matTooltip="Group 3">
+                            <mat-list-item class="items">Group 3</mat-list-item>
+                        </a>
                     </mat-list>
-                    <mat-list class="item-list border-grid">
-                        <strong class="pb-2 list-font">Create New</strong>
-                        <mat-divider></mat-divider>
-                        <mat-list-item class="items">
-                            <a href="javascript:;">Stock 1</a>
-                        </mat-list-item>
-                        <mat-divider></mat-divider>
-                        <mat-list-item class="items">
-                            <a href="javascript:;">Stock 2</a>
-                        </mat-list-item>
-                        <mat-divider></mat-divider>
-                        <mat-list-item class="items">
-                            <a href="javascript:;">Stock 3</a>
-                        </mat-list-item>
-                        <mat-divider></mat-divider>
-                        <mat-list-item class="items">
-                            <a href="javascript:;">Stock 4</a>
-                        </mat-list-item>
-                        <mat-divider></mat-divider>
-                        <mat-list-item class="items">
-                            <a href="javascript:;">Stock 5</a>
-                        </mat-list-item>
+                    <mat-list class="item-list border-grid pt-0">
+                        <a href="javascript:void(0);" class="create-head"> Create new </a>
+                        <a href="javascript:void(0);" matTooltip="StockStock 1">
+                            <mat-list-item class="items">Stock 1</mat-list-item>
+                        </a>
+                        <a href="javascript:void(0);" matTooltip="Stock 2">
+                            <mat-list-item class="items">Stock 2</mat-list-item>
+                        </a>
+                        <a href="javascript:void(0);" matTooltip="Stock 3">
+                            <mat-list-item class="items">Stock 3</mat-list-item>
+                        </a>
+                        <a href="javascript:void(0);" matTooltip="Stock 4">
+                            <mat-list-item class="items">Stock 4</mat-list-item>
+                        </a>
+                        <a href="javascript:void(0);" matTooltip="Stock 5">
+                            <mat-list-item class="items">Stock 5</mat-list-item>
+                        </a>
+                    </mat-list>
+                    <mat-list class="item-list border-grid pt-0">
+                        <a href="javascript:void(0);" class="create-head d-inline-block"> Create new </a>
+                        <a href="javascript:void(0);" matTooltip="Group 1">
+                            <mat-list-item class="items">Group 1</mat-list-item>
+                        </a>
+                        <a href="javascript:void(0);" matTooltip="Group 2">
+                            <mat-list-item class="items">Group 2</mat-list-item>
+                        </a>
+                        <a href="javascript:void(0);" matTooltip="Group 3">
+                            <mat-list-item class="items">Group 3</mat-list-item>
+                        </a>
+                    </mat-list>
+                    <mat-list class="item-list border-grid pt-0">
+                        <a href="javascript:void(0);" class="create-head"> Create new </a>
+                        <a href="javascript:void(0);" matTooltip="Stock 1" class="account-name">
+                            <mat-list-item class="items">Stock 1</mat-list-item>
+                        </a>
+                        <a href="javascript:void(0);" matTooltip="Stock 2" class="account-name">
+                            <mat-list-item class="items">Stock 2</mat-list-item>
+                        </a>
+                        <a href="javascript:void(0);" matTooltip="Stock 3" class="account-name">
+                            <mat-list-item class="items">Stock 3</mat-list-item>
+                        </a>
+                        <a href="javascript:void(0);" matTooltip="Stock 4" class="account-name">
+                            <mat-list-item class="items">Stock 4</mat-list-item>
+                        </a>
+                        <a
+                            href="javascript:void(0);"
+                            matTooltip="Stock Stock Stock Stock Stock Stock Stock Stock Stock Stock Stock Stock Stock Stock"
+                        >
+                            <mat-list-item class="items"
+                                >Stock Stock Stock Stock Stock Stock Stock Stock Stock Stock Stock Stock Stock
+                                Stock</mat-list-item
+                            >
+                        </a>
+                    </mat-list>
+                    <mat-list class="item-list border-grid pt-0">
+                        <a href="javascript:void(0);" class="create-head d-inline-block"> Create new </a>
+                        <a href="javascript:void(0);" matTooltip="Group 1">
+                            <mat-list-item class="items">Group 1</mat-list-item>
+                        </a>
+                        <a href="javascript:void(0);" matTooltip="Group 2">
+                            <mat-list-item class="items">Group 2</mat-list-item>
+                        </a>
+                        <a href="javascript:void(0);" matTooltip="Group 3">
+                            <mat-list-item class="items">Group 3</mat-list-item>
+                        </a>
                     </mat-list>
                 </div>
             </perfect-scrollbar>
         </div>
         <div class="inventory-btnside">
+            <div class="searchbar d-flex justify-content-end pt-3">
+                <input
+                    type="text"
+                    name="grpSrch"
+                    #grpSrch
+                    id="grpSrch"
+                    class="form-control"
+                    [placeholder]="'Search accounts'"
+                    financial-accordion="search"
+                    [style.width.px]="260"
+                    autocomplete="off"
+                />
+            </div>
             <div
                 class="create-btn-grp create-btn-inventory"
                 *ngIf="createUpdateGroup !== 'in' && createUpdateStock !== 'in'"
@@ -63,14 +121,16 @@
                 </button>
             </div>
             <div>
-                <create-update-group
-                    *ngIf="createUpdateGroup === 'in'"
-                    (closeAsideEvent)="createGroupToggleAsidePane()"
-                ></create-update-group>
-                <stock-create-edit
-                    *ngIf="createUpdateStock === 'in'"
-                    (closeAsideEvent)="createStockToggleAsidePane()"
-                ></stock-create-edit>
+                <div *ngIf="createUpdateGroup === 'in' || createUpdateStock === 'in'" class="inventory-modal">
+                    <create-update-group
+                        *ngIf="createUpdateGroup === 'in'"
+                        (closeAsideEvent)="createGroupToggleAsidePane()"
+                    ></create-update-group>
+                    <stock-create-edit
+                        *ngIf="createUpdateStock === 'in'"
+                        (closeAsideEvent)="createStockToggleAsidePane()"
+                    ></stock-create-edit>
+                </div>
             </div>
         </div>
     </div>

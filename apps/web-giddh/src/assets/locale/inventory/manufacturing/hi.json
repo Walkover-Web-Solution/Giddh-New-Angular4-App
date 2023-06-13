@@ -6,5 +6,22 @@
     "generate_manufacturing": "विनिर्माण उत्पन्न करें",
     "raw_stock": "कच्चा स्टॉक",
     "add_stock": "+ स्टॉक जोड़ें",
-    "manufacturing_saved": "विनिर्माण सफलतापूर्वक बनाया गया है।"
+    "manufacturing_saved": "विनिर्माण सफलतापूर्वक बनाया गया है।",
+    "confirm_save_recipe": "क्या आप तैयार स्टॉक के लिए नुस्खा सहेजना चाहते हैं?",
+    "confirm_update_recipe": "क्या आप तैयार स्टॉक के लिए नुस्खा अपडेट करना चाहते हैं?",
+    "recipe_saved": "नुस्खा सफलतापूर्वक बनाया गया है।",
+    "recipe_updated": "नुस्खा सफलतापूर्वक अद्यतन किया गया है।",
+    "search_by_filters": {
+        "quantity_outward": "मात्रा जावक",
+        "voucher_no": "रसीद संक्या"
+    },
+    "finished_variant": "समाप्त संस्करण",
+    "qty_outwards": "मात्रा बाहर",
+    "qty_inwards": "मात्रा अंदर",
+    "material_used": "उपयोग की गई सामग्री",
+    "search_by": "खोजें",
+    "select_search_by": "खोज का चयन करें",
+    "operation": "ऑपरेशन",
+    "select_operation": "ऑपरेशन चुनें",
+    "enter_value": "मूल्य दर्ज करें"
 }

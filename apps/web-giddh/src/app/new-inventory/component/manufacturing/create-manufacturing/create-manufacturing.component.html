@@ -11,17 +11,15 @@
                 <div class="row">
                     <div class="form-fileds w-100">
                         <div class="d-inline-flex flex-wrap align-items-end">
-                            <div class="col">
-                                <label>{{ commonLocaleData?.app_date }}<span class="text-danger">*</span></label>
+                            <div class="col date-alignment">
                                 <giddh-datepicker
                                     name="date"
-                                    [cssClass]="
-                                        'mat-field-border bdr form-control w-100' +
-                                        (errorFields.date ? ' required-field-error' : '')
-                                    "
+                                    [cssClass]="'w-100' + (errorFields.date ? ' required-field-error' : '')"
                                     [showToggleIcon]="false"
                                     [(ngModel)]="manufacturingObject.manufacturingDetails[0].date"
                                     (dateSelected)="errorFields.date = false"
+                                    [placeholder]="commonLocaleData?.app_date"
+                                    [appearance]="'outline'"
                                 >
                                 </giddh-datepicker>
                             </div>
@@ -33,8 +31,10 @@
                                     [placeholder]="commonLocaleData?.app_select_warehouse"
                                     [options]="warehouses"
                                     (selectedOption)="
-                                        manufacturingObject.manufacturingDetails[0].warehouseUniqueName = $event.value
+                                        manufacturingObject.manufacturingDetails[0].warehouseUniqueName = $event.value;
+                                        selectedWarehouseName = $event.label
                                     "
+                                    [defaultValue]="selectedWarehouseName"
                                 >
                                 </select-field>
                             </div>
@@ -61,19 +61,17 @@
                                 <div class="d-flex flex-column flex-wrap gap-between w-100">
                                     <h1 class="section-head">{{ localeData?.finished_stock }}</h1>
                                     <div>
-                                        <label
-                                            >{{ commonLocaleData?.app_name }}<span class="text-danger">*</span></label
-                                        >
-                                        <select-field
-                                            [cssClass]="
-                                                'form-control mat-field-border' +
-                                                (errorFields.finishedStockName ? ' required-field-error' : '')
-                                            "
+                                        <dropdown-field
+                                            [cssClass]="errorFields.finishedStockName ? ' required-field-error' : ''"
                                             [name]="'stockUniqueName'"
+                                            [scrollableElementId]="'finishedStockDropdown'"
                                             [placeholder]="commonLocaleData?.app_select_stock"
-                                            [options]="stocks"
+                                            [options]="manufacturingObject.manufacturingDetails[0].stocks"
                                             (selectedOption)="
+                                                manufacturingObject.manufacturingDetails[0].manufacturingUnitCode =
+                                                    $event?.additional?.stockUnitCode;
                                                 errorFields.finishedStockName = false;
+                                                selectedInventoryType = $event?.additional?.inventoryType;
                                                 getStockVariants(
                                                     manufacturingObject.manufacturingDetails[0],
                                                     $event,
@@ -81,21 +79,21 @@
                                                 )
                                             "
                                             [defaultValue]="manufacturingObject.manufacturingDetails[0].stockName"
-                                            [required]="true"
+                                            [enableDynamicSearch]="true"
+                                            [isPaginationEnabled]="true"
+                                            (dynamicSearchedQuery)="
+                                                getStocks(manufacturingObject.manufacturingDetails[0], 1, $event)
+                                            "
+                                            (scrollEnd)="stockScrollEnd(manufacturingObject.manufacturingDetails[0])"
+                                            [allowValueReset]="true"
+                                            (onClear)="resetStocks(manufacturingObject.manufacturingDetails[0])"
                                         >
-                                        </select-field>
+                                        </dropdown-field>
                                     </div>
 
                                     <div *ngIf="manufacturingObject.manufacturingDetails[0].variants?.length > 1">
-                                        <label
-                                            >{{ commonLocaleData?.app_variant
-                                            }}<span class="text-danger">*</span></label
-                                        >
-                                        <select-field
-                                            [cssClass]="
-                                                'form-control mat-field-border' +
-                                                (errorFields.finishedStockVariant ? ' required-field-error' : '')
-                                            "
+                                        <dropdown-field
+                                            [cssClass]="errorFields.finishedStockVariant ? ' required-field-error' : ''"
                                             [name]="'variantUniqueName'"
                                             [placeholder]="commonLocaleData?.app_select_variant"
                                             [options]="manufacturingObject.manufacturingDetails[0].variants"
@@ -107,24 +105,16 @@
                                                 getVariantRecipe()
                                             "
                                             [defaultValue]="manufacturingObject.manufacturingDetails[0].variant.name"
-                                            [required]="true"
                                         >
-                                        </select-field>
+                                        </dropdown-field>
                                     </div>
 
                                     <div>
-                                        <label
-                                            >{{ commonLocaleData?.app_quantity
-                                            }}<span class="text-danger">*</span></label
-                                        >
                                         <small class="float-right pt-1">{{
                                             manufacturingObject.manufacturingDetails[0].manufacturingUnitCode
                                         }}</small>
-                                        <text-field
-                                            [cssClass]="
-                                                'form-control mat-field-border' +
-                                                (errorFields.finishedQuantity ? ' required-field-error' : '')
-                                            "
+                                        <input-field
+                                            [cssClass]="errorFields.finishedQuantity ? ' required-field-error' : ''"
                                             [type]="'number'"
                                             [name]="'manufacturingQuantity'"
                                             [placeholder]="commonLocaleData?.app_quantity"
@@ -133,8 +123,8 @@
                                             "
                                             (change)="errorFields.finishedQuantity = false; calculateTotals()"
                                         >
-                                        </text-field>
-                                        <small class="float-right pt-1"
+                                        </input-field>
+                                        <small class="float-right"
                                             >{{ localeData?.multiple_of }}
                                             <span>{{
                                                 manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf
@@ -142,7 +132,7 @@
                                         </small>
                                     </div>
 
-                                    <div class="d-flex justify-content-space-between">
+                                    <div class="d-flex generate-clear">
                                         <button
                                             mat-raised-button
                                             color="primary"
@@ -207,14 +197,30 @@
                                                                         : '')
                                                                 "
                                                                 [name]="'stock' + i"
+                                                                [scrollableElementId]="'stock' + i"
                                                                 [placeholder]="commonLocaleData?.app_select_stock"
-                                                                [options]="stocks"
+                                                                [options]="linkedStock.stocks"
                                                                 (selectedOption)="
                                                                     linkedStock.selectedStock = $event;
                                                                     validateSelectedStock(i);
                                                                     getStockVariants(linkedStock, $event, false, i)
                                                                 "
                                                                 [defaultValue]="linkedStock.selectedStock?.label"
+                                                                [enableDynamicSearch]="true"
+                                                                [isPaginationEnabled]="true"
+                                                                (dynamicSearchedQuery)="
+                                                                    getStocks(
+                                                                        linkedStock,
+                                                                        1,
+                                                                        $event,
+                                                                        selectedInventoryType
+                                                                    )
+                                                                "
+                                                                (scrollEnd)="stockScrollEnd(linkedStock)"
+                                                                [allowValueReset]="true"
+                                                                (onClear)="
+                                                                    resetStocks(linkedStock, selectedInventoryType)
+                                                                "
                                                             >
                                                             </select-field>
                                                         </div>
@@ -229,6 +235,7 @@
                                                                         : '')
                                                                 "
                                                                 [name]="'variantUniqueName' + i"
+                                                                [scrollableElementId]="'variant' + i"
                                                                 [placeholder]="commonLocaleData?.app_select_variant"
                                                                 [options]="linkedStock.variants"
                                                                 (selectedOption)="
@@ -265,13 +272,36 @@
                                                     <td>
                                                         <div>
                                                             <div>
-                                                                {{ linkedStock.stockUnitCode }}
+                                                                <select-field
+                                                                    [cssClass]="linkedStock.cssClass"
+                                                                    [name]="'variantUnit' + i"
+                                                                    [scrollableElementId]="'variantUnit' + i"
+                                                                    [placeholder]="commonLocaleData?.app_unit"
+                                                                    [options]="
+                                                                        linkedStock.selectedStock?.additional?.unitsList
+                                                                    "
+                                                                    (selectedOption)="
+                                                                        linkedStock.stockUnitUniqueName = $event.value;
+                                                                        linkedStock.stockUnitCode = $event.label;
+                                                                        getRateForStock(linkedStock, i)
+                                                                    "
+                                                                    [defaultValue]="linkedStock.stockUnitCode"
+                                                                >
+                                                                </select-field>
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div>
-                                                            {{ linkedStock.rate }}
+                                                            <text-field
+                                                                [cssClass]="linkedStock.cssClass"
+                                                                [type]="'number'"
+                                                                [name]="'rate' + i"
+                                                                [(ngModel)]="linkedStock.rate"
+                                                                [placeholder]="commonLocaleData?.app_rate"
+                                                                (change)="calculateRowTotal(linkedStock)"
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                     </td>
                                                     <td>{{ linkedStock.amount }}</td>

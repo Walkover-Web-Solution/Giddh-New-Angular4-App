@@ -355,6 +355,7 @@
     "app_import_type": {
         "groups": "गट",
         "accounts": "खाती",
+        "base_accounts": "बेस खाती",
         "inventory": "यादी",
         "entries": "नोंदी",
         "trial_balance": "चाचणी शिल्लक",
@@ -438,6 +439,7 @@
     "app_order": "ऑर्डर",
     "app_permanently_delete_message": "हे कायमचे हटविले जाईल आणि यापुढे इतर कोणत्याही मॉड्यूलवरून प्रवेशयोग्य राहणार नाही.",
     "app_filter": "फिल्टर करा",
+    "app_advanced_filter": "प्रगत फिल्टर",
     "app_by": "द्वारा",
     "app_ac": "खाते",
     "app_generate_voucher": "व्हाउचर व्युत्पन्न करा",
@@ -686,5 +688,10 @@
     "app_invalid_contact_too_long": "खूप लांब",
     "app_attachment_not_allowed": "संलग्नक अपलोड करण्यासाठी, शाखेत जा",
     "app_entry_no": "प्रवेश क्र.",
-    "app_special_note": "टीप: व्हाउचर काही तपशील अपडेट केले जाऊ शकत नाहीत कारण त्यासाठी ई-इनव्हॉइस तयार केले जाते."
+    "app_special_note": "टीप: व्हाउचर काही तपशील अपडेट केले जाऊ शकत नाहीत कारण त्यासाठी ई-इनव्हॉइस तयार केले जाते.",
+    "app_inventory_types": {
+        "product": "उत्पादन",
+        "service": "सेवा",
+        "fixed_assets": "स्थिर मालमत्ता"
+    }
 }

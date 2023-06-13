@@ -17,11 +17,18 @@ export class ManufacturingLinkedStock {
     stockNameError?: boolean;
     variantNameError?: boolean;
     quantityError?: boolean;
+    stocks?: any[];
+    stocksPageNumber?: number;
+    stocksTotalPages?: number;
+    stocksQ?: any;
 
     constructor() {
         this.variant = new ManufacturingVariant();
         this.variants = [new ManufacturingVariant()];
         this.cssClass = "form-control mat-field-border";
+        this.stocksPageNumber = 1;
+        this.stocksTotalPages = 1;
+        this.stocksQ = "";
     }
 }
 
@@ -35,7 +42,12 @@ export class CreateManufacturingClass {
     variant: ManufacturingVariant;
     variants?: ManufacturingVariant[];
     manufacturingUnitCode?: string;
+    manufacturingUnitUniqueName?: string;
     stockName?: string;
+    stocks: any[];
+    stocksPageNumber: number;
+    stocksTotalPages: number;
+    stocksQ: any;
 
     constructor() {
         this.manufacturingQuantity = 1;
@@ -44,6 +56,9 @@ export class CreateManufacturingClass {
         this.linkedStocks = [];
         this.variant = new ManufacturingVariant();
         this.variants = [new ManufacturingVariant()];
+        this.stocksPageNumber = 1;
+        this.stocksTotalPages = 1;
+        this.stocksQ = "";
     }
 }
 

@@ -1,23 +1,30 @@
 .mat-grid-wrapper {
     justify-content: space-between;
-    padding: 15px 0;
+    padding: 0 0 15px 0;
     flex-wrap: wrap;
     background-color: var(--color-white);
-    height: 100%;
+    height: calc(100vh - 90px);
+    .inventory-search {
+        text-field {
+            min-width: 250px;
+        }
+    }
     .mat-list-wrap {
         overflow-x: auto;
         display: flex;
+        height: 100%;
         .inventory-sideabar {
             max-width: 58.33%;
             float: left;
             .inventory-sub-sideabar {
                 display: inline-flex;
                 float: left;
+                height: 100%;
             }
         }
         .inventory-btnside {
             position: relative;
-            overflow-x: hidden;
+            overflow-x: scroll;
             width: 100%;
             padding-left: 15px;
             .create-btn-grp {
@@ -42,28 +49,57 @@
                     }
                 }
             }
+            .inventory-modal {
+                width: 100%;
+                // overflow: auto;
+            }
         }
         .item-list {
             width: 205px;
-            margin: 0 15px;
-            padding-right: 15px;
-            height: calc(100vh - 125px);
+            // margin: 0 0 0 15px;
+            // padding-right: 15px;
+            height: 100%;
             float: left;
             position: relative;
             overflow-y: auto;
-            strong {
-                color: var(--color-table-secondary-heading);
-                font-size: 14px;
-                display: inline-block;
-                &.list-font {
-                    font-size: 16px;
+            a {
+                display: block;
+                height: 28px;
+                line-height: 20px;
+                color: var(--color-black);
+                &.account-name {
+                    .mat-list-item-content {
+                        color: var(--color-master-page-sidebar-primary-group);
+                    }
                 }
             }
+            .create-head {
+                color: var(--color-master-page-text-secondary-hover);
+                font-size: 14px;
+                background-color: var(--color-master-page-main-content-primary-background);
+                width: 100%;
+                padding: 4px 10px;
+                height: 37px;
+                line-height: 30px;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+
+            // &.list-font {
+            //     font-size: 16px;
+            // }
             .items {
                 font-size: 14px;
+                height: auto;
                 &.map-item {
                     .mat-list-item-content {
                         float: right !important;
+                        width: 140px;
+                        overflow: hidden;
+                        display: inline-block;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
                     }
                 }
             }

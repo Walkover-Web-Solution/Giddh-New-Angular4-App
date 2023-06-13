@@ -13,6 +13,9 @@
     "is_sales_inclusive":"Is Sales Rate Tax Inclusive?",
     "purchase_information": "Purchase Information",
     "linked_accounts": "Linked Accounts",
+    "linked_account": "Linked Account",
+    "linked_purchase_accounts": "Linked Purchase Accounts",
+    "linked_sales_accounts": "Linked Sales Accounts",
     "unit_price": "Unit & Price",
     "add_new":"+ Add New",
     "sales_information": "Sales Information",
@@ -77,6 +80,6 @@
     "permanently_delete":"It will be deleted permanently and will no longer be accessible from any other module.",
     "stock_delete_succesfully":"Stock deleted successfully.",
     "stock_create_succesfully":"Stock created successfully.",
-    "remove_variant":"Doing the action will remove all the variants, Are your sure you want to unselect it?"
+    "stock_update_succesfully":"Stock updated successfully.",
+    "remove_variant":"Doing the action will remove all the variants, Are you sure you want to unselect it?"
 }
-

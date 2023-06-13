@@ -1,10 +1,19 @@
-.select-field-input {
-    height: 36px;
-    border-radius: 5px;
-}
 .virtual-group-list {
     height: 193px;
 }
-dropdown-field {
-    width: 100%;
+.arrow-dropdown {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid;
+    top: 22px;
+    right: 4px;
+}
+.select-field-container {
+    input {
+        border: 0 !important;
+        background-color: transparent;
+    }
 }

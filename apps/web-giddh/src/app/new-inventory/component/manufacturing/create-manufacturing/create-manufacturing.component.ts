@@ -1,8 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
+import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CreateManufacturing, ManufacturingLinkedStock } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
+import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ManufacturingService } from 'apps/web-giddh/src/app/services/manufacturing.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -10,9 +13,10 @@ import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/acti
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { giddhRoundOff } from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
 import { AppState } from 'apps/web-giddh/src/app/store';
+import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'create-manufacturing',
@@ -21,14 +25,10 @@ import { takeUntil } from 'rxjs/operators';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateManufacturingComponent implements OnInit {
-    /** Create Manufacturing dropdown items*/
-    public product: any = [];
     /**  This will use for universal date */
     public universalDate: any;
     /** List of warehouses */
     public warehouses: any[] = [];
-    /** List of stocks */
-    public stocks: any[] = [];
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -47,15 +47,27 @@ export class CreateManufacturingComponent implements OnInit {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds selected warehouse name */
+    public selectedWarehouseName: string = "";
+    /** Holds selected inventory type */
+    public selectedInventoryType: string = "";
+    /** This will hold api calls if one is already in progress */
+    public preventStocksApiCall: boolean = false;
+    /** True if recipe exists for finished stock */
+    private recipeExists: boolean = false;
+    /** Holds existing recipe */
+    private existingRecipe: any = [];
 
     constructor(
         private store: Store<AppState>,
         private warehouseAction: WarehouseActions,
         private changeDetectionRef: ChangeDetectorRef,
-        private inventoryAction: InventoryAction,
         private ledgerService: LedgerService,
         private manufacturingService: ManufacturingService,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private inventoryService: InventoryService,
+        private dialog: MatDialog,
+        private route: ActivatedRoute
     ) {
 
     }
@@ -66,6 +78,13 @@ export class CreateManufacturingComponent implements OnInit {
      * @memberof CreateManufacturingComponent
      */
     public ngOnInit(): void {
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params?.uniqueName) {
+
+            }
+        });
+
+
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {
@@ -79,7 +98,7 @@ export class CreateManufacturingComponent implements OnInit {
         });
         this.getProfile();
         this.getWarehouses();
-        this.getStocks();
+        this.getStocks(this.manufacturingObject.manufacturingDetails[0], 1, "");
     }
 
     /**
@@ -88,16 +107,15 @@ export class CreateManufacturingComponent implements OnInit {
      * @memberof CreateManufacturingComponent
      */
     public getWarehouses(): void {
-        this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
-            if (!warehouses?.results?.length) {
-                this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
-            } else {
-                this.warehouses = [];
+        this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
 
+        this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            if (warehouses?.results?.length) {
+                this.warehouses = [];
                 warehouses?.results?.forEach(warehouse => {
                     this.warehouses.push({ label: warehouse?.name, value: warehouse?.uniqueName });
                 });
-
+                this.selectedWarehouseName = this.warehouses[0].label;
                 this.changeDetectionRef.detectChanges();
             }
         });
@@ -108,18 +126,45 @@ export class CreateManufacturingComponent implements OnInit {
      *
      * @memberof CreateManufacturingComponent
      */
-    public getStocks(): void {
-        this.store.dispatch(this.inventoryAction.GetStock());
+    public getStocks(stockObject: any, page: number = 1, q?: string, inventoryType?: string): void {
+        if (page > stockObject.stocksTotalPages || this.preventStocksApiCall || q === undefined) {
+            return;
+        }
 
-        this.store.pipe(select(state => state.inventory.stocksList), takeUntil(this.destroyed$)).subscribe((stocks: any) => {
-            if (stocks?.results?.length) {
-                this.stocks = [];
-                stocks?.results?.forEach(stock => {
-                    this.stocks.push({ label: stock?.name, value: stock?.uniqueName, additional: { stockUnitCode: stock?.stockUnit?.code, stockUnitUniqueName: stock?.stockUnit?.uniqueName } });
+        this.preventStocksApiCall = true;
+
+        if (q) {
+            stockObject.stocksQ = q;
+        } else if (stockObject.stocksQ) {
+            q = stockObject.stocksQ;
+        }
+
+        stockObject.stocksPageNumber = page;
+        this.inventoryService.getStocksV2({ inventoryType: inventoryType, page: page, q: q }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response?.status === "success" && response?.body?.results?.length) {
+                stockObject.stocksTotalPages = response.body.totalPages;
+                if (page === 1) {
+                    stockObject.stocks = [];
+                }
+                response?.body?.results?.forEach(stock => {
+                    let unitsList = [];
+
+                    stock?.stockUnits?.forEach(unit => {
+                        unitsList.push({ label: unit.code, value: unit.uniqueName });
+                    });
+
+                    stockObject.stocks.push({ label: stock?.name, value: stock?.uniqueName, additional: { stockUnitCode: stock?.stockUnits[0]?.code, stockUnitUniqueName: stock?.stockUnits[0]?.uniqueName, inventoryType: stock.inventoryType, unitsList: unitsList } });
                 });
-
-                this.changeDetectionRef.detectChanges();
+            } else {
+                stockObject.stocks = [];
+                stockObject.stocksTotalPages = 1;
             }
+
+            this.changeDetectionRef.detectChanges();
+
+            setTimeout(() => {
+                this.preventStocksApiCall = false;
+            }, 500);
         });
     }
 
@@ -182,7 +227,9 @@ export class CreateManufacturingComponent implements OnInit {
 
         this.manufacturingService.getVariantRecipe(this.manufacturingObject.manufacturingDetails[0].stockUniqueName, [this.manufacturingObject.manufacturingDetails[0].variant.uniqueName], true).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.manufacturingDetails?.length) {
+                this.recipeExists = true;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingUnitCode = response.body.manufacturingDetails[0].manufacturingUnitCode;
+                this.manufacturingObject.manufacturingDetails[0].manufacturingUnitUniqueName = response.body.manufacturingDetails[0].manufacturingUnitUniqueName;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = response.body.manufacturingDetails[0].manufacturingQuantity;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = response.body.manufacturingDetails[0].manufacturingMultipleOf;
 
@@ -191,7 +238,7 @@ export class CreateManufacturingComponent implements OnInit {
 
                     this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(
                         {
-                            selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } },
+                            selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName, unitsList: linkedStock.unitsList } },
                             stockUniqueName: linkedStock.stockUniqueName,
                             quantity: linkedStock.quantity,
                             stockUnitUniqueName: linkedStock.stockUnitUniqueName,
@@ -202,10 +249,12 @@ export class CreateManufacturingComponent implements OnInit {
                         }
                     );
                 });
+                this.existingRecipe = this.formatRecipeRequest();
             } else {
+                this.recipeExists = false;
                 this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(
                     {
-                        selectedStock: { label: "", value: "", additional: { stockUnitCode: "", stockUnitUniqueName: "" } },
+                        selectedStock: { label: "", value: "", additional: { stockUnitCode: "", stockUnitUniqueName: "", unitsList: [] } },
                         stockUniqueName: "",
                         quantity: 1,
                         stockUnitUniqueName: "",
@@ -219,6 +268,9 @@ export class CreateManufacturingComponent implements OnInit {
                 this.showBorder(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0]);
             }
 
+            this.preventStocksApiCall = false;
+            this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0], 1, '', this.selectedInventoryType);
+
             this.calculateTotals();
         });
     }
@@ -230,12 +282,15 @@ export class CreateManufacturingComponent implements OnInit {
      * @memberof CreateManufacturingComponent
      */
     public getRateForStock(linkedStock: any, index: number): void {
-        this.manufacturingService.getRateForStockV2(linkedStock.stockUniqueName, { quantity: 1, stockUnitUniqueName: linkedStock.selectedStock?.additional?.stockUnitUniqueName, variant: { uniqueName: linkedStock.variant.uniqueName } }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.manufacturingService.getRateForStockV2(linkedStock.stockUniqueName, { quantity: 1, stockUnitUniqueName: (linkedStock?.stockUnitUniqueName || linkedStock.selectedStock?.additional?.stockUnitUniqueName), variant: { uniqueName: linkedStock.variant.uniqueName } }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response.body) {
                 linkedStock.quantity = 1;
                 linkedStock.rate = response.body.rate;
-                linkedStock.stockUnitCode = linkedStock.selectedStock?.additional?.stockUnitCode;
-                linkedStock.stockUnitUniqueName = linkedStock.selectedStock?.additional?.stockUnitUniqueName;
+
+                if (!linkedStock.stockUnitUniqueName) {
+                    linkedStock.stockUnitCode = linkedStock.selectedStock?.additional?.stockUnitCode;
+                    linkedStock.stockUnitUniqueName = linkedStock.selectedStock?.additional?.stockUnitUniqueName;
+                }
 
                 let amount = linkedStock.rate * linkedStock.quantity;
                 linkedStock.amount = isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces);
@@ -259,12 +314,25 @@ export class CreateManufacturingComponent implements OnInit {
      */
     public formatRequest(): any {
         let manufacturingObject = cloneDeep(this.manufacturingObject);
+        delete manufacturingObject.manufacturingDetails[0].stocks;
+        delete manufacturingObject.manufacturingDetails[0].stocksPageNumber
+        delete manufacturingObject.manufacturingDetails[0].stocksTotalPages
+        delete manufacturingObject.manufacturingDetails[0].stocksQ
         delete manufacturingObject.manufacturingDetails[0].variants;
         delete manufacturingObject.manufacturingDetails[0].manufacturingUnitCode;
+        delete manufacturingObject.manufacturingDetails[0].manufacturingUnitUniqueName;
+
+        if (manufacturingObject.manufacturingDetails[0].date) {
+            manufacturingObject.manufacturingDetails[0].date = (typeof manufacturingObject.manufacturingDetails[0].date === "object") ? dayjs(manufacturingObject.manufacturingDetails[0].date).format(GIDDH_DATE_FORMAT) : dayjs(manufacturingObject.manufacturingDetails[0].date, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        }
 
         manufacturingObject.manufacturingDetails[0].linkedStocks = manufacturingObject.manufacturingDetails[0].linkedStocks?.filter(linkedStock => linkedStock?.variant?.uniqueName);
 
         manufacturingObject.manufacturingDetails[0].linkedStocks?.map(linkedStock => {
+            delete linkedStock.stocks;
+            delete linkedStock.stocksPageNumber;
+            delete linkedStock.stocksTotalPages;
+            delete linkedStock.stocksQ;
             delete linkedStock.stockUnitCode;
             delete linkedStock.variants;
             delete linkedStock.selectedStock;
@@ -273,6 +341,40 @@ export class CreateManufacturingComponent implements OnInit {
         });
 
         return manufacturingObject;
+    }
+
+    /**
+     * Creates recipe request
+     *
+     * @returns {*}
+     * @memberof CreateManufacturingComponent
+     */
+    public formatRecipeRequest(): any {
+        let recipeObject = { manufacturingDetails: [] };
+
+        this.manufacturingObject.manufacturingDetails?.forEach(manufacturingDetail => {
+            let linkedStocks = [];
+
+            manufacturingDetail.linkedStocks?.forEach(linkedStock => {
+                linkedStocks.push({
+                    stockUniqueName: linkedStock.stockUniqueName,
+                    stockUnitUniqueName: linkedStock.stockUnitUniqueName,
+                    quantity: Number(linkedStock.quantity)
+                });
+            });
+
+            recipeObject.manufacturingDetails.push({
+                manufacturingQuantity: Number(manufacturingDetail.manufacturingQuantity),
+                manufacturingUnitUniqueName: manufacturingDetail.manufacturingUnitUniqueName,
+                variant: {
+                    uniqueName: manufacturingDetail.variant.uniqueName
+                },
+                linkedStocks: linkedStocks
+            });
+        });
+
+
+        return recipeObject;
     }
 
     /**
@@ -289,6 +391,41 @@ export class CreateManufacturingComponent implements OnInit {
 
         this.isLoading = true;
         const manufacturingObject = this.formatRequest();
+        const recipeObject = this.formatRecipeRequest();
+        if (this.recipeExists) {
+            if (!isEqual(this.existingRecipe, recipeObject)) {
+                let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: this.commonLocaleData?.app_confirmation,
+                        body: this.localeData?.confirm_update_recipe,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no
+                    }
+                });
+
+                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    if (response) {
+                        this.saveRecipe(manufacturingObject, recipeObject, false);
+                    }
+                });
+            }
+        } else {
+            let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                data: {
+                    title: this.commonLocaleData?.app_confirmation,
+                    body: this.localeData?.confirm_save_recipe,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
+            });
+
+            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                if (response) {
+                    this.saveRecipe(manufacturingObject, recipeObject, true);
+                }
+            });
+        }
+
         this.manufacturingService.saveManufacturing(manufacturingObject.manufacturingDetails[0].stockUniqueName, manufacturingObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasterService.successToast(this.localeData?.manufacturing_saved);
@@ -299,6 +436,25 @@ export class CreateManufacturingComponent implements OnInit {
             this.isLoading = false;
 
             this.changeDetectionRef.detectChanges();
+        });
+    }
+
+    /**
+     * Save recipe
+     *
+     * @private
+     * @param {*} manufacturingObject
+     * @param {*} recipeObject
+     * @param {boolean} isNewRecipe
+     * @memberof CreateManufacturingComponent
+     */
+    private saveRecipe(manufacturingObject: any, recipeObject: any, isNewRecipe: boolean): void {
+        this.manufacturingService.saveRecipe(manufacturingObject.manufacturingDetails[0].stockUniqueName, recipeObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toasterService.successToast(this.localeData?.recipe_saved);
+            } else {
+                this.toasterService.errorToast(response?.body || response?.message);
+            }
         });
     }
 
@@ -323,6 +479,8 @@ export class CreateManufacturingComponent implements OnInit {
      */
     public addNewLinkedStock(): void {
         this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(new ManufacturingLinkedStock());
+        this.preventStocksApiCall = false;
+        this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[(this.manufacturingObject.manufacturingDetails[0].linkedStocks?.length - 1)], 1, '', this.selectedInventoryType);
     }
 
     /**
@@ -358,8 +516,8 @@ export class CreateManufacturingComponent implements OnInit {
         let totalAmount = 0;
 
         this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
-            totalRate += linkedStock.rate || 0;
-            totalAmount += linkedStock.amount || 0;
+            totalRate += Number(linkedStock.rate) || 0;
+            totalAmount += Number(linkedStock.amount) || 0;
         });
 
         this.totals.totalRate = totalRate;
@@ -378,6 +536,9 @@ export class CreateManufacturingComponent implements OnInit {
         this.manufacturingObject = new CreateManufacturing();
         this.manufacturingObject.manufacturingDetails[0].date = cloneDeep(this.universalDate);
 
+        this.selectedWarehouseName = (this.warehouses?.length) ? this.warehouses[0].label : "";
+        this.selectedInventoryType = "";
+        this.preventStocksApiCall = false;
         this.errorFields = { date: false, finishedStockName: false, finishedStockVariant: false, finishedQuantity: false };
 
         this.calculateTotals();
@@ -507,5 +668,30 @@ export class CreateManufacturingComponent implements OnInit {
         } else {
             this.manufacturingObject.manufacturingDetails[0].linkedStocks[linkedStockIndex].quantityError = false;
         }
+    }
+
+    /**
+     * Callback for scroll end event
+     *
+     * @param {*} stockObject
+     * @memberof CreateManufacturingComponent
+     */
+    public stockScrollEnd(stockObject: any): void {
+        stockObject.stocksPageNumber = stockObject.stocksPageNumber + 1;
+        this.getStocks(stockObject, stockObject.stocksPageNumber, stockObject.stocksQ ?? '', this.selectedInventoryType);
+    }
+
+    /**
+     * Resets the stock list
+     *
+     * @param {*} stockObject
+     * @param {string} [inventoryType]
+     * @memberof CreateManufacturingComponent
+     */
+    public resetStocks(stockObject: any, inventoryType?: string): void {
+        stockObject.stocksQ = "";
+        stockObject.stocksPageNumber = 1;
+        stockObject.stocksTotalPages = 1;
+        this.getStocks(stockObject, 1, "", inventoryType);
     }
 }

@@ -2171,6 +2171,15 @@
                                             <label>{{ commonLocaleData?.app_sku }}:</label
                                             >{{ commonLocaleData?.app_number }}
                                         </div>
+                                        <p
+                                            *ngIf="
+                                                transaction.variant &&
+                                                ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                            "
+                                            class="variant"
+                                        >
+                                            {{ localeData?.variant + ": " + transaction.variant?.name }}
+                                        </p>
                                         <div class="description">
                                             {{ transaction.description }}
                                         </div>
@@ -2570,6 +2579,36 @@
                                                 </select-field>
                                             </div>
                                         </div>
+                                        <ng-container
+                                            *ngIf="
+                                                transaction?.isStockTxn &&
+                                                ((stockVariants | async)[entryIdx] | async) as variants
+                                            "
+                                        >
+                                            <div *ngIf="variants?.length > 1" class="variant-name">
+                                                <!-- <select-field
+                                                    [disabled]="isReadOnly"
+                                                    [cssClass]="'form-control mat-field-border'"
+                                                    [placeholder]="localeData?.select_variant"
+                                                    (selectedOption)="variantChanged($event)"
+                                                    [options]="variants"
+                                                    [required]="true"
+                                                    [name]="'variant' + entryIdx"
+                                                    [(ngModel)]="transaction.variant.uniqueName"
+                                                >
+                                                </select-field> -->
+                                                <sh-select
+                                                    [disabled]="isReadOnly"
+                                                    [class.disabled-ledger]="isReadOnly"
+                                                    [placeholder]="localeData?.select_variant"
+                                                    [options]="variants"
+                                                    (selected)="variantChanged($event)"
+                                                    [isRequired]="true"
+                                                    name="{{ 'variant' + entryIdx }}"
+                                                    [(ngModel)]="transaction.variant.uniqueName"
+                                                ></sh-select>
+                                            </div>
+                                        </ng-container>
                                         <div *ngIf="transaction.fakeAccForSelect2">
                                             <div class="sku-number">
                                                 <label>{{ commonLocaleData?.app_sku }}:</label
@@ -3773,6 +3812,15 @@
                                                         >({{ transaction.stockDetails?.name }})</span
                                                     >
                                                 </div>
+                                                <p
+                                                    *ngIf="
+                                                        transaction.variant &&
+                                                        ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                                    "
+                                                    class="variant"
+                                                >
+                                                    {{ localeData?.variant + ": " + transaction.variant?.name }}
+                                                </p>
                                                 <p class="description">
                                                     {{ transaction.description }}
                                                 </p>
