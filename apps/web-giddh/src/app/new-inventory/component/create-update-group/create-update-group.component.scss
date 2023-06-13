@@ -1,5 +1,6 @@
 .create-group-page {
     margin-top: 20px;
+    padding: 0 15px 0 0;
 
     .image-group {
         padding-top: 35px;
@@ -10,19 +11,16 @@
             top: 60px;
         }
     }
+    .input-width {
+        width: auto;
+        min-width: 530px;
+        display: inline-block;
+    }
 }
 
 .delete-button {
     color: var(--color-danger) !important;
     border-color: var(--color-dark-fog) !important;
-}
-
-.clear-btn {
-    width: 89px;
-    height: 36px;
-    color: var(--color-primary-button-text);
-    margin-right: 15px;
-    border: 1px solid var(--color-secondary-button-border);
 }
 
 .create-inventory-btn {

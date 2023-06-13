@@ -269,7 +269,7 @@
             column-gap: 20px;
             flex-wrap: wrap;
             .chip-svg-wrap {
-                min-width: 500px;
+                min-width: 440px;
             }
         }
     }
@@ -326,6 +326,12 @@
                 width: 100%;
                 right: 15px;
             }
+        }
+        .stock-width {
+            max-width: 500px;
+        }
+        .other-width {
+            max-width: 1095px;
         }
     }
 
@@ -679,6 +685,13 @@ table.stock-table {
             }
         }
     }
+    .create-new-inventory-page {
+        .product-option-wrapper {
+            .mat-edit-wrap {
+                flex-wrap: unset;
+            }
+        }
+    }
 }
 
 @media (max-width: 1199px) {
@@ -716,6 +729,7 @@ table.stock-table {
 .purchase-information {
     .rate-head {
         column-gap: 12px;
+        flex-wrap: wrap;
     }
     .section-head {
         font-size: 16px;
