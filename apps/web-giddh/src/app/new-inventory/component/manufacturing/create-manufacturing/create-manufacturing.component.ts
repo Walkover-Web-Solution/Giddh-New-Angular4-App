@@ -59,6 +59,8 @@ export class CreateManufacturingComponent implements OnInit {
     private existingRecipe: any = [];
     /** Holds unique name in edit mode */
     public manufactureUniqueName: string = '';
+    /** True if we need to redirect to report page after update manufacturing */
+    private readyToRedirect: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -129,7 +131,7 @@ export class CreateManufacturingComponent implements OnInit {
      *
      * @memberof CreateManufacturingComponent
      */
-    public getStocks(stockObject: any, page: number = 1, q?: string, inventoryType?: string): void {
+    public getStocks(stockObject: any, page: number = 1, q?: string, inventoryType?: string, callback?: Function): void {
         if (page > stockObject.stocksTotalPages || this.preventStocksApiCall || q === undefined) {
             return;
         }
@@ -145,19 +147,23 @@ export class CreateManufacturingComponent implements OnInit {
         stockObject.stocksPageNumber = page;
         this.inventoryService.getStocksV2({ inventoryType: inventoryType, page: page, q: q }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success" && response?.body?.results?.length) {
-                stockObject.stocksTotalPages = response.body.totalPages;
-                if (page === 1) {
-                    stockObject.stocks = [];
-                }
-                response?.body?.results?.forEach(stock => {
-                    let unitsList = [];
+                if (!callback) {
+                    stockObject.stocksTotalPages = response.body.totalPages;
+                    if (page === 1) {
+                        stockObject.stocks = [];
+                    }
+                    response?.body?.results?.forEach(stock => {
+                        let unitsList = [];
 
-                    stock?.stockUnits?.forEach(unit => {
-                        unitsList.push({ label: unit.code, value: unit.uniqueName });
+                        stock?.stockUnits?.forEach(unit => {
+                            unitsList.push({ label: unit.code, value: unit.uniqueName });
+                        });
+
+                        stockObject.stocks.push({ label: stock?.name, value: stock?.uniqueName, additional: { stockUnitCode: stock?.stockUnits[0]?.code, stockUnitUniqueName: stock?.stockUnits[0]?.uniqueName, inventoryType: stock.inventoryType, unitsList: unitsList } });
                     });
-
-                    stockObject.stocks.push({ label: stock?.name, value: stock?.uniqueName, additional: { stockUnitCode: stock?.stockUnits[0]?.code, stockUnitUniqueName: stock?.stockUnits[0]?.uniqueName, inventoryType: stock.inventoryType, unitsList: unitsList } });
-                });
+                } else {
+                    callback(response);
+                }
             } else {
                 stockObject.stocks = [];
                 stockObject.stocksTotalPages = 1;
@@ -198,12 +204,12 @@ export class CreateManufacturingComponent implements OnInit {
                 });
 
                 if (object.variants?.length === 1) {
-                    object.variant = {
-                        name: object.variants[0].label,
-                        uniqueName: object.variants[0].value
-                    };
-
                     if (!isEdit) {
+                        object.variant = {
+                            name: object.variants[0].label,
+                            uniqueName: object.variants[0].value
+                        };
+
                         if (loadRecipe) {
                             this.getVariantRecipe();
                         } else {
@@ -211,10 +217,12 @@ export class CreateManufacturingComponent implements OnInit {
                         }
                     }
                 } else {
-                    object.variant = {
-                        name: "",
-                        uniqueName: ""
-                    };
+                    if (!isEdit) {
+                        object.variant = {
+                            name: "",
+                            uniqueName: ""
+                        };
+                    }
                 }
             }
 
@@ -410,7 +418,7 @@ export class CreateManufacturingComponent implements OnInit {
 
                 dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
                     if (response) {
-                        this.saveRecipe(manufacturingObject, recipeObject, false);
+                        this.saveRecipe(manufacturingObject, recipeObject);
                     }
                 });
             }
@@ -426,17 +434,17 @@ export class CreateManufacturingComponent implements OnInit {
 
             dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
                 if (response) {
-                    this.saveRecipe(manufacturingObject, recipeObject, true);
+                    this.saveRecipe(manufacturingObject, recipeObject);
                 }
             });
         }
 
         this.manufacturingService.saveManufacturing(manufacturingObject.manufacturingDetails[0].stockUniqueName, manufacturingObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                this.toasterService.successToast(this.localeData?.manufacturing_saved);
+                this.toasterService.showSnackBar("success", this.localeData?.manufacturing_saved);
                 this.resetForm();
             } else {
-                this.toasterService.errorToast(response?.body || response?.message);
+                this.toasterService.showSnackBar("error", response?.body || response?.message);
             }
             this.isLoading = false;
 
@@ -450,15 +458,18 @@ export class CreateManufacturingComponent implements OnInit {
      * @private
      * @param {*} manufacturingObject
      * @param {*} recipeObject
-     * @param {boolean} isNewRecipe
      * @memberof CreateManufacturingComponent
      */
-    private saveRecipe(manufacturingObject: any, recipeObject: any, isNewRecipe: boolean): void {
+    private saveRecipe(manufacturingObject: any, recipeObject: any): void {
         this.manufacturingService.saveRecipe(manufacturingObject.manufacturingDetails[0].stockUniqueName, recipeObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                this.toasterService.successToast(this.localeData?.recipe_saved);
+                this.toasterService.showSnackBar("success", this.localeData?.recipe_saved);
+
+                if (this.manufactureUniqueName) {
+                    this.redirectToReport();
+                }
             } else {
-                this.toasterService.errorToast(response?.body || response?.message);
+                this.toasterService.showSnackBar("error", response?.body || response?.message);
             }
         });
     }
@@ -714,28 +725,60 @@ export class CreateManufacturingComponent implements OnInit {
                 this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = response.body.manufacturingMultipleOf;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = response.body.manufacturingQuantity;
 
+                this.selectedInventoryType = response.body.inventoryType;
+
                 let linkedStocks = [];
                 response.body.linkedStocks?.forEach(linkedStock => {
                     let amount = linkedStock.rate * linkedStock.manufacturingQuantity;
 
+                    let unitsList = [];
+
+                    linkedStock?.stockUnits?.forEach(unit => {
+                        unitsList.push({ label: unit.code, value: unit.uniqueName });
+                    });
+
                     linkedStocks.push({
-                        selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName, unitsList: linkedStock.unitsList } },
+                        selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.manufacturingUnitCode, stockUnitUniqueName: linkedStock.manufacturingUnitUniqueName, unitsList: unitsList } },
                         stockUniqueName: linkedStock.stockUniqueName,
                         quantity: linkedStock.manufacturingQuantity,
-                        stockUnitUniqueName: linkedStock.stockUnitUniqueName,
-                        stockUnitCode: linkedStock.stockUnitCode,
+                        stockUnitUniqueName: linkedStock.manufacturingUnitUniqueName,
+                        stockUnitCode: linkedStock.manufacturingUnitCode,
                         rate: linkedStock.rate,
                         amount: isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces),
                         variant: linkedStock.variant
                     });
                 });
-
                 this.manufacturingObject.manufacturingDetails[0].linkedStocks = linkedStocks;
 
                 this.getStockVariants(this.manufacturingObject.manufacturingDetails[0], { label: response.body.stockName, value: response.body.stockUniqueName }, true, 0, true);
 
-                this.calculateTotals();
+                this.preventStocksApiCall = false;
+                this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0], 1, '', this.selectedInventoryType, (response: any) => {
+                    if (response?.status === "success" && response.body?.results?.length) {
+                        this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
+                            linkedStock.stocksPageNumber = 1;
+                            linkedStock.stocksQ = '';
+                            linkedStock.stocksTotalPages = response.body.totalPages;
+                            linkedStock.stocks = [];
 
+                            response?.body?.results?.forEach(stock => {
+                                let unitsList = [];
+
+                                stock?.stockUnits?.forEach(unit => {
+                                    unitsList.push({ label: unit.code, value: unit.uniqueName });
+                                });
+
+                                linkedStock.stocks.push({ label: stock?.name, value: stock?.uniqueName, additional: { stockUnitCode: stock?.stockUnits[0]?.code, stockUnitUniqueName: stock?.stockUnits[0]?.uniqueName, inventoryType: stock.inventoryType, unitsList: unitsList } });
+                            });
+                        });
+                    }
+
+                    this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
+                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value }, false, 0, true);
+                    });
+                });
+
+                this.calculateTotals();
                 this.changeDetectionRef.detectChanges();
             } else {
                 this.toasterService.showSnackBar("error", response.message);
@@ -772,5 +815,86 @@ export class CreateManufacturingComponent implements OnInit {
                 });
             }
         });
+    }
+
+    /**
+     * Updates manufacturing
+     *
+     * @returns {void}
+     * @memberof CreateManufacturingComponent
+     */
+    public updateManufacturing(): void {
+        const isFormValid = this.isFormValid();
+        if (!isFormValid) {
+            return;
+        }
+
+        this.readyToRedirect = false;
+        this.isLoading = true;
+        const manufacturingObject = this.formatRequest();
+        const recipeObject = this.formatRecipeRequest();
+
+        if (this.recipeExists) {
+            if (!isEqual(this.existingRecipe, recipeObject)) {
+                let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: this.commonLocaleData?.app_confirmation,
+                        body: this.localeData?.confirm_update_recipe,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no
+                    }
+                });
+
+                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    if (response) {
+                        this.saveRecipe(manufacturingObject, recipeObject);
+                    } else {
+                        this.redirectToReport();
+                    }
+                });
+            }
+        } else {
+            let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                data: {
+                    title: this.commonLocaleData?.app_confirmation,
+                    body: this.localeData?.confirm_save_recipe,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
+            });
+
+            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                if (response) {
+                    this.saveRecipe(manufacturingObject, recipeObject);
+                } else {
+                    this.redirectToReport();
+                }
+            });
+        }
+
+        this.manufacturingService.updateManufacturing(this.manufactureUniqueName, manufacturingObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toasterService.showSnackBar("success", this.localeData?.manufacturing_updated);
+                this.redirectToReport();
+            } else {
+                this.toasterService.showSnackBar("error", response?.body || response?.message);
+                this.isLoading = false;
+                this.changeDetectionRef.detectChanges();
+            }
+        });
+    }
+
+    /**
+     * Redirects to report page after success
+     *
+     * @memberof CreateManufacturingComponent
+     */
+    public redirectToReport(): void {
+        if (this.readyToRedirect) {
+            this.readyToRedirect = false;
+            this.router.navigate(['/pages/inventory/v2/manufacturing/list']);
+        } else {
+            this.readyToRedirect = true;
+        }
     }
 }

@@ -7,11 +7,11 @@
     "update_manufacturing": "उत्पादन अद्यतनित करा",
     "raw_stock": "कच्चा स्टॉक",
     "add_stock": "+ स्टॉक जोडा",
-    "manufacturing_saved": "उत्पादन यशस्वीरित्या तयार केले गेले आहे.",
+    "manufacturing_saved": "उत्पादन यशस्वीरित्या तयार केले गेले.",
+    "manufacturing_updated": "उत्पादन यशस्वीरित्या अद्यतनित केले.",
     "confirm_save_recipe": "तुम्हाला तयार स्टॉकची रेसिपी जतन करायची आहे का?",
     "confirm_update_recipe": "तुम्हाला तयार स्टॉकची रेसिपी अपडेट करायची आहे का?",
-    "recipe_saved": "कृती यशस्वीरित्या तयार केली गेली आहे.",
-    "recipe_updated": "रेसिपी यशस्वीरित्या अपडेट केली गेली आहे.",
+    "recipe_saved": "कृती यशस्वीरित्या तयार केली गेली.",
     "search_by_filters": {
         "quantity_outward": "प्रमाण जावक",
         "voucher_no": "पावती क्रमांक"

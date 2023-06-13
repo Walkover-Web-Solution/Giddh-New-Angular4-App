@@ -244,4 +244,23 @@ export class ManufacturingService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
     }
+
+    /**
+     * Update manufacturing
+     *
+     * @param {string} manufactureUniqueName
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof ManufacturingService
+     */
+    public updateManufacturing(manufactureUniqueName: string, model: any): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.put(this.config.apiUrl + MANUFACTURING_API.GET_MANUFACTURING?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':manufactureUniqueName', encodeURIComponent(manufactureUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.queryString = manufactureUniqueName;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+    }
 }
