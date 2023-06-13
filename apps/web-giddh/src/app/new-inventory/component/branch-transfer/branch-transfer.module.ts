@@ -20,6 +20,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 @NgModule({
     imports: [
         CommonModule,
@@ -40,7 +41,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
         ClickOutsideModule,
         MatFormFieldModule,
         MatInputModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        PaginationModule.forRoot()
 
     ],
     exports: [
