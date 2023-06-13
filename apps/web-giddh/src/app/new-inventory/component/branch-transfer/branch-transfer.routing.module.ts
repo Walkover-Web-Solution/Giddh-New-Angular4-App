@@ -18,7 +18,7 @@ const routes: Routes = [
                 component: BranchTransferListComponent
             },
             {
-                path: "new",
+                path: "create",
                 component: BranchTransferCreateComponent
             }
         ]
