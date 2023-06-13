@@ -1,4 +1,4 @@
-<div class="inventory-filter-bar top-main-bar">
+<div class="inventory-filter-bar top-main-bar align-items-center">
     <div class="back-btnn" *ngIf="reportUniqueName">
         <button mat-raised-button mat-button class="report-back-button" color="primary" (click)="backToPreviousPage()">
             {{ commonLocaleData?.app_back }}
@@ -68,6 +68,23 @@
         <button mat-raised-button class="create-btn-inventory ml-3 mr-0" color="primary" (click)="resetFilter()">
             <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
         </button>
+    </div>
+    <div
+        class="clear-filter ml-auto"
+        *ngIf="
+            (stockReportRequest.stockGroupUniqueNames?.length ||
+                stockReportRequest.stockUniqueNames?.length ||
+                stockReportRequest.variantUniqueNames?.length) &&
+            searchPage === 'TRANSACTION'
+        "
+    >
+        <span
+            class="edit-btn-inventory ml-3 mr-0"
+            (click)="editInventory()"
+            *ngIf="filtersChipList?.length === 1 && !isVariantSelected"
+        >
+            <i class="icon-edit-pencil text-blue font-18 cursor-pointer"></i>
+        </span>
     </div>
 </div>
 <div class="inventory-filter-bar">
