@@ -26,11 +26,9 @@ export class BranchTransferCreateComponent implements OnInit {
    /** Close the  HSN/SAC Opened Menu*/
    @ViewChild('hsn_sac_MenuTrigger') hsn_sac_MenuTrigger: MatMenuTrigger;
    @ViewChild('sku_MenuTrigger') sku_MenuTrigger: MatMenuTrigger;
-   public branchTransferMode: 'receipt-note' | 'delivery-challan' = 'receipt-note';
+   public branchTransferMode: 'receipt-note' | 'delivery-challan' = 'delivery-challan';
    public SenderProductName:string= 'Product\'s Name';
    public productSenderDescription:string = 'Product Description';
-   /** Holds Current Date for Date Picker */
-   public todayDate:Date = new Date();
 
   constructor() { }
 

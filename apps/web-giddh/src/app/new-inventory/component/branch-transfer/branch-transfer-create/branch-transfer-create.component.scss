@@ -24,7 +24,10 @@
             .primary-form-wrapper {
                 .height-full {
                     .mat-form-field-flex {
-                        height: 115px;
+                        height: 106px;
+                    }
+                    .mat-form-field-wrapper {
+                        padding-bottom: 0;
                     }
                 }
                 .total-amount {
@@ -34,11 +37,6 @@
                     }
                     p {
                         font-size: 14px;
-                    }
-                }
-                .mat-form-field-appearance-outline {
-                    .mat-form-field-wrapper {
-                        margin: 0.5em 0;
                     }
                 }
             }
