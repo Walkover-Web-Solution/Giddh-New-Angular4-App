@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { NewInventoryComponent } from "./new-inventory.component";
-import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
 import { AboutGroupDetailComponent } from "./component/about-group-detail/about-group-detail.component";
 import { AboutProductServiceDetailComponent } from "./component/about-product-service-detail/about-product-service-detail.component";
 import { InventoryComboListComponent } from "./component/combo-list/inventory-combo-list.component";
@@ -21,6 +20,8 @@ import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.c
 import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
 import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
+import { CustomUnitsComponent } from "./component/custom-units/custom-units.component"
+import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 
 const routes: Routes = [
     {
@@ -45,6 +46,10 @@ const routes: Routes = [
                 component: InventoryTransactionListComponent,
             },
             {
+                path: ":type/master",
+                component: InventoryMasterComponent,
+            },
+            {
                 path: "reports/:type/transaction/:uniqueName",
                 component: InventoryTransactionListComponent,
             },
@@ -60,6 +65,10 @@ const routes: Routes = [
                 path: "reports/:type/:reportType/:uniqueName",
                 component: ReportsComponent,
             },
+            {
+                path: "custom-units",
+                component: CustomUnitsComponent,
+            }
         ],
     },
 
@@ -111,6 +120,14 @@ const routes: Routes = [
     {
         path: "group",
         loadChildren: () => import('./component/create-update-group/create-update-group.module').then(module => module.GroupCreateEditModule)
+    },
+    {
+        path: "recipe",
+        loadChildren: () => import('./component/recipe/recipe.module').then(module => module.RecipeModule)
+    },
+    {
+        path: "manufacturing",
+        loadChildren: () => import('./component/manufacturing/manufacturing.module').then(module => module.ManufacturingModule)
     },
     {
         path: "inventory-dashboard",

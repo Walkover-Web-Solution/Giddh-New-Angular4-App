@@ -1,6 +1,6 @@
 <div class="text-field-container">
-    <mat-form-field>
-        <mat-label>{{ placeholder }}</mat-label>
+    <mat-form-field [appearance]="appearance">
+        <mat-label>{{ label ? label : placeholder }}</mat-label>
         <input
             matInput
             [name]="name"

@@ -18,7 +18,8 @@ import { cloneDeep } from "../../../lodash-optimized";
 import { AppState } from "../../../store";
 import { select, Store } from "@ngrx/store";
 import { Location } from '@angular/common';
-import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
+import { Router } from "@angular/router";
+import { InventoryModuleName } from "../../inventory.enum";
 
 @Component({
     selector: "report-filters",
@@ -135,6 +136,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public autoSelectSearchOption: boolean = false;
     /** Observable to subscribe for refresh columns on select chiplist */
     public refreshColumns = new Subject<void>();
+    /** This will hold if variant is selected on chip list */
+    public isVariantSelected : boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -144,7 +147,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         private inventoryService: InventoryService,
         private generalService: GeneralService,
         private toaster: ToasterService,
-        private store: Store<AppState>
+        private store: Store<AppState>,
+        public router: Router
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -679,7 +683,13 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         if (this.searchRequest.page === 1 || this.searchRequest.page <= this.searchRequest.totalPages) {
             delete this.searchRequest.totalItems;
             delete this.searchRequest.totalPages;
+            if (this.searchRequest.variantUniqueNames?.length) {
+                this.isVariantSelected = true;
+            } else {
+                this.isVariantSelected = false;
+            }
             let searchRequest = cloneDeep(this.searchRequest);
+
             if (this.autoSelectSearchOption) {
                 searchRequest.searchPage = searchRequest.searchPage === 'STOCK' ? 'GROUP' : searchRequest.searchPage === 'VARIANT' ? 'STOCK' : searchRequest.searchPage === 'TRANSACTION' ? 'VARIANT' : 'GROUP';
             }
@@ -747,4 +757,21 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public resetWarehouse(): void {
         this.stockReportRequest.warehouseUniqueNames = [];
     }
+
+    /**
+     * Edit transactions of stock , group , and variant
+     *
+     * @memberof ReportFiltersComponent
+     */
+    public editInventory(): void {
+        let type = this.filtersChipList[0]?.type;
+        let uniqueName = this.filtersChipList[0]?.uniqueName;
+        if (type === 'STOCK GROUP') {
+            this.router.navigate(['/pages/inventory/v2/group', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
+        }
+        if (type === 'STOCK') {
+            this.router.navigate(['/pages/inventory/v2/stock', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
+        }
+    }
 }
+

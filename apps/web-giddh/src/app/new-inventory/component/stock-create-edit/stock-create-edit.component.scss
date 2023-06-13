@@ -48,7 +48,7 @@
 
     .sales-purchase-details {
         background-color: var(--color-white);
-        padding: 15px 15px;
+        padding: 15px 10px;
         border-radius: 7px;
 
         .select-puchase-info {
@@ -104,6 +104,9 @@
                 content: "";
                 left: -20px;
                 top: 0;
+            }
+            .bg-transparent {
+                background-color: transparent !important;
             }
         }
     }
@@ -167,6 +170,7 @@
                 font-size: var(--font-size-14);
                 color: var(--color-common-primary-input-placeholder);
             }
+
             .s-chip {
                 background-color: var(--color-chips-primary-background) !important;
             }
@@ -191,6 +195,7 @@
         .another-option-btn {
             position: relative;
             right: 15px;
+            color: var(--color-ledger-heading) !important;
         }
 
         .category-label {
@@ -200,6 +205,7 @@
 
     .combo-detail-content {
         min-height: 63vh;
+
         .table-responsive {
             .table.combo-table {
                 thead {
@@ -207,22 +213,26 @@
                         min-width: 235px;
                     }
                 }
+
                 td {
                     min-width: 87px;
                 }
             }
         }
     }
+
     .select-physical-product {
         .product-detail-content {
             .upper-common-form-container {
                 background-color: var(--color-common-septenary-background-for-all-components);
+
                 .upper-common-form-label-field {
                     margin-left: 5px;
 
                     .under-group-field-button-wrapper {
                         display: flex;
                         align-items: center;
+
                         .move-stock {
                             margin-left: 10px;
                             display: flex;
@@ -230,14 +240,17 @@
                             justify-content: center;
                         }
                     }
+
                     .product-name-label {
                         position: relative;
+
                         .product-name-star {
                             position: absolute;
                         }
                     }
                 }
             }
+
             .other-group {
                 position: relative;
                 width: 84.5vw;
@@ -245,6 +258,7 @@
             }
         }
     }
+
     .icon-plus {
         color: var(--color-blue);
     }
@@ -280,6 +294,7 @@
     position: static;
     width: 100%;
     padding-left: 15px;
+
     .inner-content-footer {
         .clear-btn {
             width: 89px;
@@ -288,15 +303,18 @@
             margin-right: 15px;
             border: 1px solid var(--color-secondary-button-border);
         }
+
         .create-inventory-btn {
             width: 198px;
             height: 36px;
             color: var(--color-nonary-button-text);
             background-color: var(--color-nonary-button-background);
+
             &:disabled {
                 background-color: var(--color-success-disable);
             }
         }
+
         .button-group {
             .btn-danger {
                 background-color: var(--color-primary-button-background) !important;
@@ -305,13 +323,86 @@
     }
 }
 
-::ng-deep table.stock-table td input {
-    border: none;
-}
+table.stock-table {
+    table-layout: fixed;
 
-table.stock-table td,
-table.stock-table th {
-    padding: 7px 15px;
+    .table-heading-color {
+        color: var(--color-ledger-heading);
+    }
+
+    tr {
+        display: flex;
+
+        td,
+        th {
+            padding: 7px 10px;
+            display: inline-block;
+            border: 1px solid var(--color-secondary-input-bar-border);
+
+            &.archive {
+                max-width: 80px;
+                min-width: 80px;
+            }
+
+            &.sales-purchase-info {
+                max-width: 332px;
+                min-width: 332px;
+
+                select-field,
+                text-field {
+                    display: table-cell;
+                }
+            }
+
+            .icon-button-remove-sales {
+                width: 20px !important;
+            }
+
+            .icon-button-add-sales {
+                width: 40px !important;
+            }
+
+            &.variant-name-column {
+                max-width: 180px;
+                min-width: 180px;
+            }
+
+            &.unit-name {
+                max-width: 140px;
+                min-width: 140px;
+            }
+
+            &.opening-qty {
+                max-width: 150px;
+                min-width: 150px;
+            }
+
+            &.opening-amount {
+                max-width: 140px;
+                min-width: 140px;
+            }
+
+            &.sku-code {
+                max-width: 130px;
+                min-width: 130px;
+            }
+
+            &.is-rate-inclusive {
+                max-width: 165px;
+                min-width: 165px;
+            }
+        }
+    }
+
+    table {
+        .stock-table {
+            td {
+                input {
+                    border: none;
+                }
+            }
+        }
+    }
 }
 
 .combo-table.table,
@@ -345,7 +436,6 @@ table.stock-table th {
     }
 }
 
-.stock-table td,
 .combo-table tr,
 .combo-table th,
 .combo-table td,
@@ -365,7 +455,6 @@ table.stock-table th {
 }
 
 .combo-table th:first-child,
-.stock-table th:first-child,
 .bulk-create-table td:first-child {
     min-width: auto !important;
 }
@@ -524,6 +613,7 @@ table.stock-table th {
     .pl-5 {
         padding-left: 15px !important;
     }
+
     .create-new-inventory-page {
         .sales-purchase-details {
             .mt-5 {
@@ -569,9 +659,11 @@ table.stock-table th {
             margin-bottom: 15px;
         }
     }
+
     .d-none-mobile {
         display: none;
     }
+
     .final-product-recipe {
         input {
             margin-bottom: 15px;
@@ -690,6 +782,7 @@ table.stock-table th {
             padding-bottom: 10px;
         }
     }
+
     .checkbox-custom-label,
     .radio-custom-label {
         display: inline-block !important;
@@ -725,6 +818,7 @@ table.stock-table th {
             display: none;
         }
     }
+
     .final-product-recipe {
         .width-30-percent {
             min-width: 100%;
@@ -743,6 +837,10 @@ table.stock-table th {
         .hide-label-on-mobile {
             display: none !important;
         }
+    }
+    .btn-position-left {
+        right: 16px !important;
+        top: 6px !important;
     }
 }
 
