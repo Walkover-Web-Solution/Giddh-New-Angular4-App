@@ -761,6 +761,14 @@ table.stock-table th {
         left: 21px;
     }
 }
+
+.btn-position-left {
+    position: absolute;
+    right: 15px;
+    z-index: 1;
+    top: 18px;
+}
+
 .icon-font-22 {
     font-size: 22px;
 }
