@@ -350,7 +350,16 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="element?.stockGroup?.name ? element?.stockGroup?.name : ''"
                                 >
-                                    {{ element?.stockGroup?.name ?? "-" }}
+                                    <div class="v-align-center">
+                                        {{ element?.stockGroup?.name ?? "-" }}
+                                        <a
+                                            (click)="editGroup(element)"
+                                            class="edit-icon pl-1"
+                                            *ngIf="reportType === 'GROUP'"
+                                        >
+                                            <i class="icon-edit-pencil font-18 pr-1 cursor-pointer"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="stock_name">
@@ -366,7 +375,16 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="element?.stock?.name ? element?.stock?.name : ''"
                                 >
-                                    {{ element?.stock?.name ?? "-" }}
+                                    <div class="v-align-center">
+                                        {{ element?.stock?.name ?? "-" }}
+                                        <a
+                                            (click)="editStock(element)"
+                                            class="edit-icon pl-1"
+                                            *ngIf="reportType === 'STOCK'"
+                                        >
+                                            <i class="icon-edit-pencil font-18 pr-1 cursor-pointer"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="variant_name">
@@ -382,7 +400,16 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="element?.variant?.name ? element?.variant?.name : ''"
                                 >
-                                    {{ element?.variant?.name ?? "-" }}
+                                    <div class="v-align-center">
+                                        {{ element?.variant?.name ?? "-" }}
+                                        <a
+                                            (click)="editVariant(element)"
+                                            class="edit-icon pl-1"
+                                            *ngIf="reportType === 'VARIANT'"
+                                        >
+                                            <i class="icon-edit-pencil font-18 pr-1 cursor-pointer"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="unit_name">

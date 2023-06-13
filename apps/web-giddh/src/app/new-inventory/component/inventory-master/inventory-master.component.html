@@ -1,0 +1,77 @@
+<div class="mat-grid-wrapper">
+    <div class="mat-list-wrap">
+        <div class="inventory-sideabar border-grid">
+            <perfect-scrollbar
+                #perfectdirective
+                class="scroll-container"
+                fxFlex="auto"
+                [config]="config"
+                [scrollIndicators]="true"
+            >
+                <div class="inventory-sub-sideabar">
+                    <mat-list class="item-list border-grid">
+                        <strong class="pb-2 list-font">Create New</strong>
+                        <mat-divider></mat-divider>
+                        <mat-list-item class="items">
+                            <a href="javascript:;">Group 1</a>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item class="items">
+                            <a href="javascript:;">Group 2</a>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item class="items">
+                            <a href="javascript:;">Group 3</a>
+                        </mat-list-item>
+                    </mat-list>
+                    <mat-list class="item-list border-grid">
+                        <strong class="pb-2 list-font">Create New</strong>
+                        <mat-divider></mat-divider>
+                        <mat-list-item class="items">
+                            <a href="javascript:;">Stock 1</a>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item class="items">
+                            <a href="javascript:;">Stock 2</a>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item class="items">
+                            <a href="javascript:;">Stock 3</a>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item class="items">
+                            <a href="javascript:;">Stock 4</a>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item class="items">
+                            <a href="javascript:;">Stock 5</a>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+            </perfect-scrollbar>
+        </div>
+        <div class="inventory-btnside">
+            <div
+                class="create-btn-grp create-btn-inventory"
+                *ngIf="createUpdateGroup !== 'in' && createUpdateStock !== 'in'"
+            >
+                <button mat-raised-button class="btn-sky-blue mr-0" (click)="createGroupToggleAsidePane()">
+                    Create Group
+                </button>
+                <button mat-raised-button class="btn-sky-blue mr-0" (click)="createStockToggleAsidePane()">
+                    Create Stock
+                </button>
+            </div>
+            <div>
+                <create-update-group
+                    *ngIf="createUpdateGroup === 'in'"
+                    (closeAsideEvent)="createGroupToggleAsidePane()"
+                ></create-update-group>
+                <stock-create-edit
+                    *ngIf="createUpdateStock === 'in'"
+                    (closeAsideEvent)="createStockToggleAsidePane()"
+                ></stock-create-edit>
+            </div>
+        </div>
+    </div>
+</div>

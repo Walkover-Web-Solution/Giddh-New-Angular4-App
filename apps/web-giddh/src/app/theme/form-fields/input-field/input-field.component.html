@@ -1,0 +1,122 @@
+<div class="text-field-container">
+    <mat-form-field [appearance]="appearance">
+        <mat-label>{{ label ? label : placeholder }}</mat-label>
+        <input
+            matInput
+            [name]="name"
+            [type]="type"
+            [id]="id"
+            [class]="cssClass"
+            [placeholder]="placeholder"
+            [(ngModel)]="ngModel"
+            (ngModelChange)="handleChange()"
+            (input)="handleInput()"
+            [maxlength]="maxlength"
+            [readonly]="readonly"
+            [ngClass]="{ 'error-box': showError }"
+            [attr.pattern]="pattern"
+            [required]="required"
+            [attr.min]="min"
+            [attr.max]="max"
+            [maxLength]="maxlength"
+            [customDecimalPlaces]="customDecimalPlaces"
+            *ngIf="!allowDecimalDigitsOnly && !allowDigitsOnly && !useMask"
+            #textField
+            (keydown.enter)="$event.preventDefault()"
+            [autocomplete]="autocomplete"
+        />
+
+        <input
+            matInput
+            [name]="name"
+            type="number"
+            [id]="id"
+            [class]="cssClass"
+            [placeholder]="placeholder"
+            [(ngModel)]="ngModel"
+            (ngModelChange)="handleChange()"
+            (input)="handleInput()"
+            [readonly]="readonly"
+            [ngClass]="{ 'error-box': showError }"
+            [attr.pattern]="pattern"
+            [required]="required"
+            [attr.min]="min"
+            [attr.max]="max"
+            *ngIf="allowDecimalDigitsOnly && !useMask"
+            [customDecimalPlaces]="customDecimalPlaces"
+            decimalDigitsDirective
+            #textField
+            (keydown.enter)="$event.preventDefault()"
+            [autocomplete]="autocomplete"
+        />
+        <input
+            matInput
+            [name]="name"
+            type="number"
+            [id]="id"
+            [class]="cssClass"
+            [placeholder]="placeholder"
+            [(ngModel)]="ngModel"
+            (ngModelChange)="handleChange()"
+            (input)="handleInput()"
+            [readonly]="readonly"
+            [ngClass]="{ 'error-box': showError }"
+            [attr.pattern]="pattern"
+            [required]="required"
+            [attr.min]="min"
+            [attr.max]="max"
+            *ngIf="allowDigitsOnly && !useMask"
+            [customDecimalPlaces]="customDecimalPlaces"
+            digitsOnlyDirective
+            #textField
+            (keydown.enter)="$event.preventDefault()"
+            [autocomplete]="autocomplete"
+        />
+        <input
+            matInput
+            [name]="name"
+            type="type"
+            [id]="id"
+            [class]="cssClass"
+            [placeholder]="placeholder"
+            [(ngModel)]="ngModel"
+            (ngModelChange)="handleChange()"
+            (input)="handleInput()"
+            [readonly]="readonly"
+            [ngClass]="{ 'error-box': showError }"
+            [attr.pattern]="pattern"
+            [required]="required"
+            [prefix]="prefix"
+            [suffix]="suffix"
+            [mask]="mask"
+            *ngIf="!allowDigitsOnly && useMask"
+            #textField
+            (keydown.enter)="$event.preventDefault()"
+            [autocomplete]="autocomplete"
+        />
+        <input
+            matInput
+            [name]="name"
+            type="type"
+            [id]="id"
+            [class]="cssClass"
+            [placeholder]="placeholder"
+            [(ngModel)]="ngModel"
+            (ngModelChange)="handleChange()"
+            (input)="handleInput()"
+            [readonly]="readonly"
+            [ngClass]="{ 'error-box': showError }"
+            [attr.pattern]="pattern"
+            [required]="required"
+            [prefix]="prefix"
+            [suffix]="suffix"
+            [mask]="mask"
+            *ngIf="allowDigitsOnly && useMask"
+            [customDecimalPlaces]="customDecimalPlaces"
+            digitsOnlyDirective
+            #textField
+            (keydown.enter)="$event.preventDefault()"
+            [autocomplete]="autocomplete"
+        />
+    </mat-form-field>
+</div>
