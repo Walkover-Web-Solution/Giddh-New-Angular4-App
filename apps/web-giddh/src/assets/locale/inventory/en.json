@@ -1,7 +1,7 @@
 {
     "sidebar":{
         "inventory":"INVENTORY",
-        "stock":"Stock",
+        "stock":"Product",
         "create_new":"Create New",
         "item_wise":"Item-wise",
         "group_wise":"Group-wise",

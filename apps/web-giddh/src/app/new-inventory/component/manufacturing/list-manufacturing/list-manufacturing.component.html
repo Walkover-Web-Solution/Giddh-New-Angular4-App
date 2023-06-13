@@ -1,292 +1,363 @@
-<section id="list-manufacture" class="p-3 clearfix">
-    <!-- page Title -->
-    <hamburger-menu *ngIf="true" [pageHeading]="'Manufacturing List'"></hamburger-menu>
-    <!-- form -->
-    <div class="col-12 col-sm-12">
-        <div class="form-fileds clearfix">
-            <form class="col-12 pl-0 pr-0 mr-b05 manufacturing-form">
-                <div class="row">
-                    <div class="d-flex flex-wrap gap-between w-100 mb-3">
-                        <div>
-                            <label>Date</label>
-                            <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i class="icon-calender calendar-addon"></i>
-                                <input
-                                    type="text"
-                                    name="selectedDateRange"
-                                    [value]="''"
-                                    class="giddh-datepicker date-range-picker border-radius-2"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <label>Product</label>
-                            <select-field
-                                class="max-width-230"
-                                [cssClass]="'form-control'"
-                                [name]="''"
-                                [placeholder]="'Select Product'"
-                                [options]="product"
-                                [defaultValue]=""
-                            >
-                            </select-field>
-                        </div>
-
-                        <div>
-                            <label>Variant</label>
-                            <select-field
-                                class="max-width-230"
-                                [cssClass]="'form-control'"
-                                [name]="''"
-                                [placeholder]="'Select Variant'"
-                                [options]="product"
-                                [defaultValue]=""
-                            >
-                            </select-field>
-                        </div>
-
-                        <div>
-                            <label>Warehouse</label>
-                            <select-field
-                                class="max-width-230"
-                                [cssClass]="'form-control'"
-                                [name]="''"
-                                [placeholder]="'Select Warehouse'"
-                                [options]="product"
-                                [defaultValue]=""
-                            >
-                            </select-field>
-                        </div>
-
-                        <div class="mt-auto">
-                            <button type="button" class="mr-0" mat-raised-button color="primary">Search</button>
-                        </div>
-
-                        <div class="mt-auto">
-                            <button type="button" class="mr-0" mat-raised-button color="primary">Clear</button>
-                        </div>
-
-                        <div class="ml-auto mt-auto">
-                            <button
-                                matTooltip="Advanced Filter"
-                                matTooltipPosition="left"
-                                type="button"
-                                (click)="openAdvanceFilterDialog()"
-                                mat-stroked-button
-                                color="primary"
-                            >
-                                Filter
-                                <span class="icon-advance-filter"></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- search form end -->
-    <section *ngIf="false" class="clearfix mr-t100 col-md-12">
-        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-    </section>
-    <div class="no-data mr-t100 col-12 col-sm-12" *ngIf="false">
-        <h1>No entries found within given criteria.</h1>
-        <h1>Do search with some other dates</h1>
-    </div>
-    <section class="table-wrapper">
-        <table mat-table [dataSource]="dataSource" class="w-100">
-            <!-- Date Column -->
-            <ng-container matColumnDef="date">
-                <th mat-header-cell *matHeaderCellDef>Date</th>
-                <td mat-cell *matCellDef="let element">{{ element.date }}</td>
-            </ng-container>
-
-            <!-- Voucher No. Column -->
-            <ng-container matColumnDef="voucher_no">
-                <th mat-header-cell *matHeaderCellDef>Voucher No.</th>
-                <td mat-cell *matCellDef="let element">{{ element.voucher_no }}</td>
-            </ng-container>
-
-            <!-- Finished Variant Column -->
-            <ng-container matColumnDef="finished_variant">
-                <th mat-header-cell *matHeaderCellDef>Finished Variant</th>
-                <td mat-cell *matCellDef="let element">{{ element.finished_variant }}</td>
-            </ng-container>
-
-            <!-- Stock Column -->
-            <ng-container matColumnDef="stock">
-                <th mat-header-cell *matHeaderCellDef>Stock</th>
-                <td mat-cell *matCellDef="let element">{{ element.stock }}</td>
-            </ng-container>
-
-            <!-- Qty Outwards Column -->
-            <ng-container matColumnDef="qty_outwards">
-                <th mat-header-cell *matHeaderCellDef>Qty Outwards</th>
-                <td mat-cell *matCellDef="let element">{{ element.qty_outwards }}</td>
-            </ng-container>
-
-            <!-- Unit Column -->
-            <ng-container matColumnDef="qty_outwards_unit">
-                <th mat-header-cell *matHeaderCellDef>Unit</th>
-                <td mat-cell *matCellDef="let element">{{ element.qty_outwards_unit }}</td>
-            </ng-container>
-
-            <!-- Matrial Used Column -->
-            <ng-container matColumnDef="material_used">
-                <th mat-header-cell *matHeaderCellDef>Matrial Used</th>
-                <td mat-cell *matCellDef="let element">{{ element.material_used }}</td>
-            </ng-container>
-
-            <!-- Qty Inwards Column -->
-            <ng-container matColumnDef="qty_inwards">
-                <th mat-header-cell *matHeaderCellDef>Qty Inwards</th>
-                <td mat-cell *matCellDef="let element">{{ element.qty_inwards }}</td>
-            </ng-container>
-
-            <!-- Unit Column -->
-            <ng-container matColumnDef="qty_inwards_unit">
-                <th mat-header-cell *matHeaderCellDef>Unit</th>
-                <td mat-cell *matCellDef="let element">{{ element.qty_inwards_unit }}</td>
-            </ng-container>
-
-            <!-- Warehouse Column -->
-            <ng-container matColumnDef="warehouse">
-                <th mat-header-cell *matHeaderCellDef>Warehouse</th>
-                <td mat-cell *matCellDef="let element">{{ element.warehouse }}</td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
-
-        <div class="pagination-wrapper">
-            <pagination
-                [totalItems]="500"
-                [maxSize]="5"
-                class="pagination-sm"
-                [boundaryLinks]="true"
-                [itemsPerPage]="paginationLimit"
-                [rotate]="false"
-                [firstText]="'First'"
-                [previousText]="'Previous'"
-                [nextText]="'Next'"
-                [lastText]="'Last'"
-            ></pagination>
-        </div>
-    </section>
-</section>
-
-<!--Mat Dialog for Advance Filter-->
-
-<ng-template #advance_filter_dialog>
-    <div class="advance-search-dialog">
-        <div class="modal-header theme-bg pd-l2 pd-r2">
-            <h3 class="modal-title bg" id="modal-title">Advanced Filter</h3>
-            <i mat-dialog-close class="icon-cross color-white"></i>
-        </div>
-
-        <div class="modal-body clearfix">
+<ng-container
+    appTranslate
+    [file]="'inventory/manufacturing'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <section id="list-manufacture" class="p-3 clearfix">
+        <hamburger-menu></hamburger-menu>
+        <div class="col-12 col-sm-12">
             <div class="form-fileds clearfix">
-                <form class="col-md-12 pl-0 pr-0 mr-b05">
-                    <div class="row mt-2">
-                        <div class="col-md-4 col-sm-12">
-                            <label>Search By</label>
-                        </div>
-                        <div class="col-md-8 col-sm-12">
-                            <select-field
-                                [cssClass]="'form-control'"
-                                [name]="''"
-                                [placeholder]="'Select Search By'"
-                                [options]="product"
-                                [defaultValue]=""
-                            >
-                            </select-field>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-4 col-sm-12">
-                            <label>Operation</label>
-                        </div>
-                        <div class="col-md-8 col-sm-12">
-                            <select-field
-                                [cssClass]="'form-control'"
-                                [name]="''"
-                                [placeholder]="'Select Operation'"
-                                [options]="product"
-                                [defaultValue]=""
-                            >
-                            </select-field>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-4 col-sm-12">
-                            <label>Value</label>
-                        </div>
-                        <div class="col-md-8 col-sm-12">
-                            <text-field
-                                [type]="'text'"
-                                [name]="''"
-                                [placeholder]="'Enter Value'"
-                                [cssClass]="'form-control'"
-                                [(ngModel)]="searchStr"
-                                (ngModelChange)="searchStr$.next($event)"
-                            ></text-field>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-4 col-sm-12">
-                            <label>Inventory Type</label>
-                        </div>
-                        <div class="col-md-8 col-sm-12">
-                            <select-field
-                                [cssClass]="'form-control'"
-                                [name]="''"
-                                [placeholder]="'Select Operation'"
-                                [options]="product"
-                                [defaultValue]=""
-                            >
-                            </select-field>
-                        </div>
-                    </div>
+                <form class="col-12 pl-0 pr-0 mr-b05 manufacturing-form">
+                    <div class="row">
+                        <div class="d-flex flex-wrap gap-between w-100 mb-3">
+                            <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
+                                <label>{{ commonLocaleData?.app_branch }}</label>
+                                <select-field
+                                    class="max-width-230"
+                                    [cssClass]="'form-control'"
+                                    [name]="'branch'"
+                                    [placeholder]="commonLocaleData?.app_select_branch"
+                                    [options]="currentCompanyBranches"
+                                    (selectedOption)="handleBranchChange($event)"
+                                    [defaultValue]="selectedBranchName"
+                                >
+                                </select-field>
+                            </div>
+                            <div>
+                                <label>{{ commonLocaleData?.app_date }}</label>
+                                <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                    <i class="icon-calender calendar-addon"></i>
+                                    <input
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker border-radius-2"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label>{{ commonLocaleData?.app_stock }}</label>
+                                <select-field
+                                    class="max-width-230"
+                                    [cssClass]="'form-control'"
+                                    [name]="'stock'"
+                                    [placeholder]="commonLocaleData?.app_select_stock"
+                                    [options]="stockList"
+                                    (selectedOption)="
+                                        selectedStockName = $event.label;
+                                        manufacturingSearchRequest.product = $event.value;
+                                        getVariants()
+                                    "
+                                    [defaultValue]="selectedStockName"
+                                >
+                                </select-field>
+                            </div>
 
-                    <div class="d-flex justify-content-end mt-4">
-                        <div class="mr-2">
-                            <button type="button" class="mr-0" mat-raised-button color="primary">Search</button>
-                        </div>
-                        <div class="ml-2">
-                            <button type="button" mat-dialog-close class="mr-0" mat-stroked-button color="primary">
-                                Cancel
-                            </button>
+                            <div>
+                                <label>{{ commonLocaleData?.app_variant }}</label>
+                                <select-field
+                                    class="max-width-230"
+                                    [cssClass]="'form-control'"
+                                    [name]="'variant'"
+                                    [placeholder]="commonLocaleData?.app_select_variant"
+                                    [options]="variantList"
+                                    (selectedOption)="
+                                        selectedVariantName = $event.label;
+                                        manufacturingSearchRequest.productVariant = $event.value
+                                    "
+                                    [defaultValue]="selectedVariantName"
+                                >
+                                </select-field>
+                            </div>
+
+                            <div>
+                                <label>{{ commonLocaleData?.app_warehouse }}</label>
+                                <select-field
+                                    class="max-width-230"
+                                    [cssClass]="'form-control'"
+                                    [name]="'warehouse'"
+                                    [placeholder]="commonLocaleData?.app_select_warehouse"
+                                    [options]="warehouses"
+                                    [defaultValue]="selectedWarehouseName"
+                                    (selectedOption)="
+                                        selectedWarehouseName = $event.label;
+                                        manufacturingSearchRequest.warehouseUniqueName = $event.value
+                                    "
+                                >
+                                </select-field>
+                            </div>
+
+                            <div class="mt-auto">
+                                <button
+                                    type="button"
+                                    class="mr-0"
+                                    mat-raised-button
+                                    color="primary"
+                                    (click)="getReport()"
+                                >
+                                    {{ commonLocaleData?.app_search }}
+                                </button>
+                            </div>
+
+                            <div class="mt-auto">
+                                <button
+                                    type="button"
+                                    class="mr-0"
+                                    mat-raised-button
+                                    color="primary"
+                                    (click)="initializeSearchReqObj()"
+                                >
+                                    {{ commonLocaleData?.app_clear }}
+                                </button>
+                            </div>
+
+                            <div class="ml-auto mt-auto">
+                                <button
+                                    [matTooltip]="commonLocaleData?.app_advanced_filter"
+                                    matTooltipPosition="left"
+                                    type="button"
+                                    (click)="openAdvanceFilterDialog()"
+                                    mat-stroked-button
+                                    color="primary"
+                                >
+                                    {{ commonLocaleData?.app_filter }}
+                                    <span class="icon-advance-filter"></span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
-</ng-template>
-
-<!-- Date Picker  -->
-
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            >
-            </app-datepicker-wrapper>
+        <!-- search form end -->
+        <section *ngIf="isReportLoading" class="clearfix mr-t100 col-md-12">
+            <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+        </section>
+        <div class="no-data mr-t100 col-12 col-sm-12" *ngIf="!isReportLoading && dataSource?.length === 0">
+            <no-data [secondaryMessageClass]="'p-0'"></no-data>
         </div>
-    </div>
-</ng-template>
+        <section class="table-wrapper" *ngIf="!isReportLoading && dataSource?.length > 0">
+            <table mat-table [dataSource]="dataSource" class="w-100">
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_date }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+                </ng-container>
+                <ng-container matColumnDef="voucher_no">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_voucher_no }}</th>
+                    <td
+                        mat-cell
+                        *matCellDef="let element"
+                        class="cursor-pointer"
+                        [routerLink]="['/pages/inventory/v2/manufacturing/edit/' + element.uniqueName]"
+                    >
+                        {{ element.voucher_no }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="stock">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_stock }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.stock }}</td>
+                </ng-container>
+                <ng-container matColumnDef="finished_variant">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.finished_variant }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.variant }}</td>
+                </ng-container>
+                <ng-container matColumnDef="qty_outwards">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.qty_outwards }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.qty_outwards }}</td>
+                </ng-container>
+                <ng-container matColumnDef="qty_outwards_unit">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_unit }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.qty_outwards_unit }}</td>
+                </ng-container>
+                <ng-container matColumnDef="material_used">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.material_used }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
+                            <div class="d-flex flex-column">
+                                <span>{{ row.stockName }}</span>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="qty_inwards">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.qty_inwards }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
+                            <div class="d-flex flex-column">
+                                <span>{{ row.manufacturingQuantity }}</span>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="qty_inwards_unit">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_unit }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
+                            <div class="d-flex flex-column">
+                                <span>{{ row.manufacturingUnit }}</span>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="warehouse">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_warehouse }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.warehouse }}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+            <div class="pagination-wrapper" [hidden]="totalItems <= paginationLimit">
+                <pagination
+                    [totalItems]="totalItems"
+                    [maxSize]="5"
+                    class="pagination-sm"
+                    [boundaryLinks]="true"
+                    [itemsPerPage]="paginationLimit"
+                    [rotate]="false"
+                    [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous"
+                    [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last"
+                ></pagination>
+            </div>
+        </section>
+    </section>
+
+    <!-- Advance Filter Modal -->
+
+    <ng-template #advance_filter_dialog>
+        <div class="advance-search-dialog">
+            <div class="modal-header theme-bg pd-l2 pd-r2">
+                <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_advanced_filter }}</h3>
+                <i mat-dialog-close class="icon-cross color-white"></i>
+            </div>
+
+            <div class="modal-body clearfix">
+                <div class="form-fileds clearfix">
+                    <form class="col-md-12 pl-0 pr-0 mr-b05">
+                        <div class="row mt-2">
+                            <div class="col-md-4 col-sm-12">
+                                <label>{{ localeData?.search_by }}</label>
+                            </div>
+                            <div class="col-md-8 col-sm-12">
+                                <select-field
+                                    [cssClass]="'form-control'"
+                                    [name]="'searchBy'"
+                                    [placeholder]="localeData?.select_search_by"
+                                    [options]="searchByFilters"
+                                    [defaultValue]="selectedOperationName"
+                                    (selectedOption)="
+                                        manufacturingSearchRequest.searchBy = $event.value;
+                                        selectedOperationName = $event.label
+                                    "
+                                >
+                                </select-field>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-4 col-sm-12">
+                                <label>{{ localeData?.operation }}</label>
+                            </div>
+                            <div class="col-md-8 col-sm-12">
+                                <select-field
+                                    [cssClass]="'form-control'"
+                                    [name]="'searchOperation'"
+                                    [placeholder]="localeData?.select_operation"
+                                    [options]="operatorFilters"
+                                    [defaultValue]="selectedFilterByName"
+                                    (selectedOption)="
+                                        manufacturingSearchRequest.searchOperation = $event.value;
+                                        selectedFilterByName = $event.label
+                                    "
+                                >
+                                </select-field>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-4 col-sm-12">
+                                <label>{{ commonLocaleData?.app_value }}</label>
+                            </div>
+                            <div class="col-md-8 col-sm-12">
+                                <text-field
+                                    [type]="'number'"
+                                    [name]="'searchValue'"
+                                    [placeholder]="localeData?.enter_value"
+                                    [cssClass]="'form-control'"
+                                    [(ngModel)]="manufacturingSearchRequest.searchValue"
+                                    [allowDecimalDigitsOnly]="true"
+                                ></text-field>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-4 col-sm-12">
+                                <label>{{ commonLocaleData?.app_inventory_type }}</label>
+                            </div>
+                            <div class="col-md-8 col-sm-12">
+                                <select-field
+                                    [cssClass]="'form-control'"
+                                    [name]="'inventoryType'"
+                                    [placeholder]="commonLocaleData?.app_select_inventory_type"
+                                    [options]="inventoryTypeFilters"
+                                    [defaultValue]="selectedInventoryTypeName"
+                                    (selectedOption)="
+                                        inventoryType = $event.value; selectedInventoryTypeName = $event.label
+                                    "
+                                >
+                                </select-field>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-4">
+                            <div class="mr-2">
+                                <button
+                                    type="button"
+                                    class="mr-0"
+                                    mat-raised-button
+                                    color="primary"
+                                    mat-dialog-close
+                                    (click)="getReport()"
+                                >
+                                    {{ commonLocaleData?.app_search }}
+                                </button>
+                            </div>
+                            <div class="ml-2">
+                                <button type="button" mat-dialog-close class="mr-0" mat-stroked-button color="primary">
+                                    {{ commonLocaleData?.app_cancel }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- Date Picker  -->
+
+    <ng-template #datepickerTemplate>
+        <div class="datepicker-modal">
+            <div class="modal-body">
+                <app-datepicker-wrapper
+                    [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate"
+                    [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOption"
+                    [selectedRangeLabel]="selectedRangeLabel"
+                    [showCustomRangeLabel]="true"
+                    [showClearButton]="false"
+                    [showCancel]="true"
+                    [linkedCalendars]="true"
+                    [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)"
+                    (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false"
+                    [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"
+                >
+                </app-datepicker-wrapper>
+            </div>
+        </div>
+    </ng-template>
+</ng-container>

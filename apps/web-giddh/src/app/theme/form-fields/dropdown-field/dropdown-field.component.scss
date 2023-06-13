@@ -1,3 +1,19 @@
 .virtual-group-list {
     height: 193px;
 }
+.arrow-dropdown {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid;
+    top: 22px;
+    right: 4px;
+}
+.select-field-container {
+    input {
+        border: 0 !important;
+        background-color: transparent;
+    }
+}

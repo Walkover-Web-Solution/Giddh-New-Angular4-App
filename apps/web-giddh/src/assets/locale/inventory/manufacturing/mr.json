@@ -1,0 +1,27 @@
+{
+    "total_cost": "एकूण किंमत",
+    "item_cost": "प्रति आयटम किंमत",
+    "finished_stock": "पूर्ण स्टॉक",
+    "multiple_of": "च्या अनेक",
+    "generate_manufacturing": "उत्पादन निर्माण करा",
+    "raw_stock": "कच्चा स्टॉक",
+    "add_stock": "+ स्टॉक जोडा",
+    "manufacturing_saved": "उत्पादन यशस्वीरित्या तयार केले गेले आहे.",
+    "confirm_save_recipe": "तुम्हाला तयार स्टॉकची रेसिपी जतन करायची आहे का?",
+    "confirm_update_recipe": "तुम्हाला तयार स्टॉकची रेसिपी अपडेट करायची आहे का?",
+    "recipe_saved": "कृती यशस्वीरित्या तयार केली गेली आहे.",
+    "recipe_updated": "रेसिपी यशस्वीरित्या अपडेट केली गेली आहे.",
+    "search_by_filters": {
+        "quantity_outward": "प्रमाण जावक",
+        "voucher_no": "पावती क्रमांक"
+    },
+    "finished_variant": "पूर्ण व्हेरियंट",
+    "qty_outwards": "प्रमाण बाहेरील",
+    "qty_inwards": "प्रमाण आवक",
+    "material_used": "साहित्य वापरले",
+    "search_by": "शोधा",
+    "select_search_by": "शोधा निवडा",
+    "operation": "ऑपरेशन",
+    "select_operation": "ऑपरेशन निवडा",
+    "enter_value": "मूल्य प्रविष्ट करा"
+}

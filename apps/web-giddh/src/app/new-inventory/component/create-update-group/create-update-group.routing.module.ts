@@ -8,13 +8,28 @@ const routes: Routes = [
         path: "",
         component: MainGroupComponent,
         children: [
-
             {
-                path: ":type/create",
+                path: "product/create",
                 component: CreateUpdateGroupComponent
             },
             {
-                path: ":type/edit/:groupUniqueName",
+                path: "service/create",
+                component: CreateUpdateGroupComponent
+            },
+            {
+                path: "fixedassets/create",
+                component: CreateUpdateGroupComponent
+            },
+            {
+                path: "product/edit/:groupUniqueName",
+                component: CreateUpdateGroupComponent
+            },
+            {
+                path: "service/edit/:groupUniqueName",
+                component: CreateUpdateGroupComponent
+            },
+            {
+                path: "fixedassets/edit/:groupUniqueName",
                 component: CreateUpdateGroupComponent
             }
         ]

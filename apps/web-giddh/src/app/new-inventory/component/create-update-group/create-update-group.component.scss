@@ -70,12 +70,13 @@
     font-size: 16px;
 }
 
-.btn-position-left {
-    position: absolute;
-    top: -1px;
-    right: 15px;
-    z-index: 1;
+.mat-select {
+    min-width: unset !important;
 }
+.input-gap {
+    row-gap: 20px;
+}
+
 @media (max-width: 1440px) {
     .hsnsac-field {
         margin-top: 20px;

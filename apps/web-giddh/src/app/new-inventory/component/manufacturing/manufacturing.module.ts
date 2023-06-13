@@ -14,6 +14,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DatepickerWrapperModule } from '../../../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { GiddhDatepickerModule } from '../../../theme/giddh-datepicker/giddh-datepicker.module';
+import { FormsModule } from '@angular/forms';
+import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
+import { NoDataModule } from '../../../shared/no-data/no-data.module';
+import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
 
 @NgModule({
     imports: [
@@ -28,8 +32,11 @@ import { GiddhDatepickerModule } from '../../../theme/giddh-datepicker/giddh-dat
         MatTooltipModule,
         DatepickerWrapperModule,
         PaginationModule.forRoot(),
-        GiddhDatepickerModule
-
+        GiddhDatepickerModule,
+        FormsModule,
+        TranslateDirectiveModule,
+        NoDataModule,
+        GiddhPageLoaderModule
     ],
     exports: [
         CreateManufacturingComponent,
