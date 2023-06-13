@@ -262,9 +262,10 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     /**
     * This will use for close dropdown panel
     *
+    * @param {*} event Pointer event
     * @memberof SelectFieldComponent
     */
-    public closeDropdownPanel(event?): void {
+    public closeDropdownPanel(event?: any): void {
         if (event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") > -1) {
             /*
                 Don't close the panel if the user clicks at the corner of the input field,
