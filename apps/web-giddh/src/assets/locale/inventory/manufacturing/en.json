@@ -4,6 +4,7 @@
     "finished_stock": "Finished Stock",
     "multiple_of": "Multiple of",
     "generate_manufacturing": "Generate Manufacturing",
+    "update_manufacturing": "Update Manufacturing",
     "raw_stock": "Raw Stock",
     "add_stock": "+ Add Stock",
     "manufacturing_saved": "Manufacturing has been created successfully.",
@@ -23,5 +24,6 @@
     "select_search_by": "Select Search By",
     "operation": "Operation",
     "select_operation": "Select Operation",
-    "enter_value": "Enter Value"
+    "enter_value": "Enter Value",
+    "confirm_delete_manufacturing": "Do you want to delete the manufacturing?"
 }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -57,6 +57,8 @@ export class CreateManufacturingComponent implements OnInit {
     private recipeExists: boolean = false;
     /** Holds existing recipe */
     private existingRecipe: any = [];
+    /** Holds unique name in edit mode */
+    public manufactureUniqueName: string = '';
 
     constructor(
         private store: Store<AppState>,
@@ -67,7 +69,8 @@ export class CreateManufacturingComponent implements OnInit {
         private toasterService: ToasterService,
         private inventoryService: InventoryService,
         private dialog: MatDialog,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router
     ) {
 
     }
@@ -80,10 +83,10 @@ export class CreateManufacturingComponent implements OnInit {
     public ngOnInit(): void {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.uniqueName) {
-
+                this.manufactureUniqueName = params?.uniqueName;
+                this.getManufacturingDetails(params?.uniqueName);
             }
         });
-
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
@@ -178,7 +181,7 @@ export class CreateManufacturingComponent implements OnInit {
      * @returns {void}
      * @memberof CreateManufacturingComponent
      */
-    public getStockVariants(object: any, event: any, loadRecipe: boolean = false, index?: number): void {
+    public getStockVariants(object: any, event: any, loadRecipe: boolean = false, index: number, isEdit: boolean = false): void {
         object.stockUniqueName = event?.value;
         object.stockName = event?.label;
 
@@ -200,10 +203,12 @@ export class CreateManufacturingComponent implements OnInit {
                         uniqueName: object.variants[0].value
                     };
 
-                    if (loadRecipe) {
-                        this.getVariantRecipe();
-                    } else {
-                        this.getRateForStock(object, index);
+                    if (!isEdit) {
+                        if (loadRecipe) {
+                            this.getVariantRecipe();
+                        } else {
+                            this.getRateForStock(object, index);
+                        }
                     }
                 } else {
                     object.variant = {
@@ -693,5 +698,79 @@ export class CreateManufacturingComponent implements OnInit {
         stockObject.stocksPageNumber = 1;
         stockObject.stocksTotalPages = 1;
         this.getStocks(stockObject, 1, "", inventoryType);
+    }
+
+    public getManufacturingDetails(uniqueName: string): void {
+        this.manufacturingService.getManufacturingDetails(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response.body) {
+                this.manufacturingObject.manufacturingDetails[0].date = dayjs(response.body.date, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.manufacturingObject.manufacturingDetails[0].warehouseUniqueName = response.body.warehouse.uniqueName;
+                this.selectedWarehouseName = response.body.warehouse.name;
+                this.manufacturingObject.manufacturingDetails[0].manufacturingUnitCode = response.body.manufacturingUnit;
+                this.manufacturingObject.manufacturingDetails[0].stockName = response.body.stockName;
+                this.manufacturingObject.manufacturingDetails[0].stockUniqueName = response.body.stockUniqueName;
+                this.manufacturingObject.manufacturingDetails[0].variant.name = response.body.variant.name;
+                this.manufacturingObject.manufacturingDetails[0].variant.uniqueName = response.body.variant.uniqueName;
+                this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = response.body.manufacturingMultipleOf;
+                this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = response.body.manufacturingQuantity;
+
+                let linkedStocks = [];
+                response.body.linkedStocks?.forEach(linkedStock => {
+                    let amount = linkedStock.rate * linkedStock.manufacturingQuantity;
+
+                    linkedStocks.push({
+                        selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName, unitsList: linkedStock.unitsList } },
+                        stockUniqueName: linkedStock.stockUniqueName,
+                        quantity: linkedStock.manufacturingQuantity,
+                        stockUnitUniqueName: linkedStock.stockUnitUniqueName,
+                        stockUnitCode: linkedStock.stockUnitCode,
+                        rate: linkedStock.rate,
+                        amount: isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces),
+                        variant: linkedStock.variant
+                    });
+                });
+
+                this.manufacturingObject.manufacturingDetails[0].linkedStocks = linkedStocks;
+
+                this.getStockVariants(this.manufacturingObject.manufacturingDetails[0], { label: response.body.stockName, value: response.body.stockUniqueName }, true, 0, true);
+
+                this.calculateTotals();
+
+                this.changeDetectionRef.detectChanges();
+            } else {
+                this.toasterService.showSnackBar("error", response.message);
+                this.router.navigate(['/pages/inventory/v2/manufacturing/list']);
+            }
+        });
+    }
+
+    /**
+     * Delete manufacturing
+     *
+     * @memberof CreateManufacturingComponent
+     */
+    public deleteManufacturing(): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.confirm_delete_manufacturing,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: this.commonLocaleData?.app_permanently_delete_message
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.manufacturingService.deleteManufacturing(this.manufactureUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === "success") {
+                        this.toasterService.showSnackBar("success", response.body);
+                        this.router.navigate(['/pages/inventory/v2/manufacturing/list']);
+                    } else {
+                        this.toasterService.showSnackBar("error", response.message);
+                    }
+                });
+            }
+        });
     }
 }

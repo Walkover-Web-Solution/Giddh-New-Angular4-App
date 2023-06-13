@@ -208,4 +208,40 @@ export class ManufacturingService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
     }
+
+    /**
+     * Get manufacturing details
+     *
+     * @param {string} manufactureUniqueName
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof ManufacturingService
+     */
+    public getManufacturingDetails(manufactureUniqueName: string): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + MANUFACTURING_API.GET_MANUFACTURING?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':manufactureUniqueName', encodeURIComponent(manufactureUniqueName))).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.queryString = manufactureUniqueName;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+    }
+
+    /**
+     * Delete manufacturing
+     *
+     * @param {string} manufactureUniqueName
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof ManufacturingService
+     */
+    public deleteManufacturing(manufactureUniqueName: string): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.delete(this.config.apiUrl + MANUFACTURING_API.GET_MANUFACTURING?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':manufactureUniqueName', encodeURIComponent(manufactureUniqueName))).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.queryString = manufactureUniqueName;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+    }
 }
