@@ -31,9 +31,9 @@ export class BranchTransferListComponent implements OnInit {
    displayedColumns: string[] = ['s_no','date', 'voucher_type', 'voucher_no', 'sender_receiver', 'from_warehouse', 'to_warehouse', 'total_amount','action'];
    dataSource = ELEMENT_DATA;
    /** Instance of Mat Dialog for Advance Filter */
-  @ViewChild("advance_filter_dialog") public advanceFilterComponent: TemplateRef<any>;
-  /** directive to get reference of element */
-  @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+   @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
+   /** directive to get reference of element */
+   @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     public selectedDateRange: any;
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;

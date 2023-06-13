@@ -1,12 +1,4 @@
-#branch-transfer {
-    .form-fileds {
-        .max-width-230 {
-            display: block;
-            width: auto;
-            max-width: 230px;
-        }
-    }
-
+#branch-transfer-list {
     .mat-raised-button,
     .mat-stroked-button {
         &:focus {
@@ -18,25 +10,4 @@
     &:focus {
         box-shadow: none !important;
     }
-}
-
-@media (max-width: 1440px) {
-    #branch-transfer {
-        .form-fileds {
-            .max-width-230 {
-                width: 200px !important;
-            }
-        }
-    }
-}
-
-.aside-position {
-    position: fixed;
-    left: auto;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    max-width: 760px;
-    z-index: 9999;
 }

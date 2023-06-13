@@ -1,4 +1,4 @@
-#branch-transfer-dialog {
+#branch-transfer-create {
     background-color: var(--color-white);
     color: var(--color-nero);
 
@@ -79,12 +79,12 @@
                             .placeholder-color {
                                 color: var(--color-table-primary-content-bar-border);
                             }
-                            .showCode-position {
+                            .show-code-position {
                                 position: absolute;
                                 right: 0;
                                 bottom: -12px;
                             }
-                            .showSKU-Code-position {
+                            .show-sku-code-position {
                                 position: absolute;
                                 left: 0;
                                 bottom: -32px;
@@ -133,5 +133,8 @@
     .row {
         margin-left: unset !important;
         margin-right: unset !important;
+    }
+    .position-bottom {
+        margin-bottom: -25px;
     }
 }
