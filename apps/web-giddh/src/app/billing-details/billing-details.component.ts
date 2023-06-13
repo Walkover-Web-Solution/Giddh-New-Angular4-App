@@ -166,6 +166,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         } else {
             ele.classList.remove('error-box');
+            this.isStateDisabled = false;
         }
     }
 
@@ -388,9 +389,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this.createNewCompany.addresses?.forEach(address => {
                 if (!this.billingDetailsObj.gstin && address.taxNumber) {
                     this.billingDetailsObj.gstin = address.taxNumber;
+                    this.isStateDisabled = true;
                 }
             });
-            this.isStateDisabled = true;
         }
         this.billingDetailsObj.address = this.createNewCompany.address;
     }
