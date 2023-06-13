@@ -91,18 +91,32 @@
                                         <div
                                             class="col-sm-6 col-lg-6 under-group-field-button-wrapper position-relative"
                                         >
-                                            <dropdown-field
-                                                class="w-100"
-                                                [placeholder]="commonLocaleData?.app_select_group"
-                                                (selectionChange)="
-                                                    stockGroupUniqueName = $event?.value; stockGroupName = $event.label
-                                                "
-                                                [value]="stockGroupUniqueName"
-                                                [(ngModel)]="stockGroupUniqueName"
-                                                [name]="'stockGroupName'"
-                                                [options]="stockGroups"
-                                            >
-                                            </dropdown-field>
+                                            <mat-form-field class="w-100" appearance="outline">
+                                                <mat-select
+                                                    [placeholder]="commonLocaleData?.app_select_group"
+                                                    (selectionChange)="
+                                                        stockGroupUniqueName = $event?.value;
+                                                        stockGroupName = $event.label
+                                                    "
+                                                    [value]="stockGroupUniqueName"
+                                                    [(ngModel)]="stockGroupUniqueName"
+                                                    [name]="'stockGroupName'"
+                                                >
+                                                    <div class="select-quantity-option">
+                                                        <ng-container *ngIf="stockGroups?.length">
+                                                            <mat-option
+                                                                *ngFor="let group of stockGroups"
+                                                                [value]="group?.value"
+                                                            >
+                                                                {{ group.label }}
+                                                            </mat-option>
+                                                        </ng-container>
+                                                        <mat-option *ngIf="!stockGroups?.length">
+                                                            {{ commonLocaleData?.app_no_result_found }}
+                                                        </mat-option>
+                                                    </div>
+                                                </mat-select>
+                                            </mat-form-field>
                                             <button
                                                 *ngIf="queryParams?.stockUniqueName"
                                                 mat-raised-button
@@ -1606,7 +1620,10 @@
                                                         ></i>
                                                     </span>
                                                     <label *ngIf="inlineEditCustomField !== 1"
-                                                        >{{ stockForm.customField1Heading || localeData?.custom_field }}
+                                                        >{{
+                                                            stockForm.customField1Heading || localeData?.custom_field
+                                                        }}
+                                                        :
                                                     </label>
                                                     <input-field
                                                         *ngIf="inlineEditCustomField === 1"
@@ -1667,7 +1684,10 @@
                                                         ></i>
                                                     </span>
                                                     <label *ngIf="inlineEditCustomField !== 2"
-                                                        >{{ stockForm.customField2Heading || localeData?.custom_field }}
+                                                        >{{
+                                                            stockForm.customField2Heading || localeData?.custom_field
+                                                        }}
+                                                        :
                                                     </label>
                                                     <input-field
                                                         *ngIf="inlineEditCustomField === 2"
@@ -4717,32 +4737,29 @@
                 </form>
             </div>
         </div>
-        <div class="inventory-footer sticky-footer">
+        <div class="">
             <div class="inner-content-footer">
                 <div class="d-flex">
                     <div class="button-group">
                         <button
                             *ngIf="!queryParams?.stockUniqueName"
-                            mat-flat-button
-                            class="clear-btn"
+                            mat-stroked-button
+                            class="mr-3"
                             (click)="resetForm(stockCreateEditForm)"
                         >
                             {{ commonLocaleData?.app_clear }}
                         </button>
                         <button
                             *ngIf="!queryParams?.stockUniqueName"
-                            mat-flat-button
-                            class="create-inventory-btn"
+                            mat-raised-button
+                            color="primary"
                             (click)="createStock(stockCreateEditForm)"
-                            [disabled]="
-                                stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError
-                            "
                         >
                             {{ localeData?.create_inventory }}
                         </button>
                         <button
                             *ngIf="queryParams?.stockUniqueName"
-                            mat-raised-button
+                            mat-stroked-button
                             class="btn-primary min-width-100"
                             (click)="cancelEdit()"
                         >
@@ -4750,7 +4767,7 @@
                         </button>
                         <button
                             *ngIf="queryParams?.stockUniqueName"
-                            mat-raised-button
+                            mat-stroked-button
                             class="btn-danger min-width-100"
                             (click)="deleteStock()"
                         >
@@ -4758,7 +4775,7 @@
                         </button>
                         <button
                             *ngIf="queryParams?.stockUniqueName"
-                            mat-raised-button
+                            mat-stroked-button
                             class="btn-success min-width-100"
                             (click)="updateStock(stockCreateEditForm)"
                             [disabled]="

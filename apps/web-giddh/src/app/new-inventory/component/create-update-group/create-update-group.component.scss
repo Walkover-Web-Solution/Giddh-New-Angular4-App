@@ -2,6 +2,11 @@
     margin-top: 20px;
     padding: 0 15px 0 0;
 
+    .toggle-childgroup {
+        display: flex;
+        column-gap: 30px;
+    }
+
     .image-group {
         padding-top: 35px;
 
@@ -46,20 +51,8 @@
         display: flex;
     }
 }
-
-.create-group-footer {
-    background-color: var(--color-dark-fog);
-    height: 60px;
-    text-align: left;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    position: static;
-    margin-top: 20px;
-
-    .footer-wrapper {
-        padding: 15px;
-    }
+.footer-wrapper {
+    padding: 15px;
 }
 
 .page-title-inventory {

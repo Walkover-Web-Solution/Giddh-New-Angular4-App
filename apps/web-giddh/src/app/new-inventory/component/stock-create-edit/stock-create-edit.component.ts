@@ -1317,9 +1317,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             openingQuantity: null,
             openingAmount: null,
             skuCodeHeading: null,
-            customField1Heading: "Custom Field 1 :",
+            customField1Heading: "Custom Field 1",
             customField1Value: null,
-            customField2Heading: "Custom Field 2 :",
+            customField2Heading: "Custom Field 2",
             customField2Value: null,
             purchaseAccountDetails: {
                 accountUniqueName: null,

@@ -46,7 +46,7 @@
                                 >
                                 </input-field>
                             </div>
-                            <div class="col-sm-6 col-lg-12 ml-lg-2">
+                            <div class="col-sm-6 col-lg-12 ml-lg-2 mb-2">
                                 <mat-radio-group
                                     color="primary"
                                     name="groupForm.showCodeType"
@@ -114,22 +114,17 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-6 col-lg-1 ml-lg-2">
-                                <mat-slide-toggle
-                                    class="mt-1"
-                                    color="primary"
-                                    name="isSubGroup"
-                                    formControlName="isSubGroup"
-                                >
-                                    <span class="pull-left">{{
-                                        groupForm.get("isSubGroup").value
-                                            ? commonLocaleData?.app_on
-                                            : commonLocaleData?.app_off
-                                    }}</span>
-                                </mat-slide-toggle>
-                            </div>
-                            <div class="col-sm-6 col-lg-4">
-                                <label>{{ localeData?.is_it_subgroup }}</label>
+                            <div class="col-sm-6 col-lg-4 ml-lg-2">
+                                <div class="d-flex toggle-childgroup">
+                                    <mat-slide-toggle
+                                        class="mt-1"
+                                        color="primary"
+                                        name="isSubGroup"
+                                        formControlName="isSubGroup"
+                                    >
+                                    </mat-slide-toggle>
+                                    <label>{{ localeData?.is_it_childgroup }}</label>
+                                </div>
                             </div>
                         </div>
                         <div class="row mr-t15">
@@ -138,48 +133,47 @@
                                     class="input-width"
                                     [readonly]="!groupForm.get('isSubGroup')?.value"
                                     [name]="'parentStockGroupUniqueName'"
-                                    [placeholder]="commonLocaleData?.app_select_group"
+                                    [placeholder]="commonLocaleData?.app_select_parent_group"
                                     [options]="stockGroups"
                                     (selectedOption)="
                                         stockGroupUniqueName = $event?.value; stockGroupName = $event?.label
                                     "
                                     [defaultValue]="stockGroupName"
+                                    [autocomplete]="true"
                                 ></dropdown-field>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="create-group-footer sticky-footer">
-                    <div class="footer-wrapper">
-                        <div class="button-group">
-                            <button *ngIf="!groupUniqueName" mat-stroked-button class="mr-3" (click)="resetGroupForm()">
-                                {{ commonLocaleData?.app_clear }}
-                            </button>
+                <div class="footer-wrapper">
+                    <div class="button-group">
+                        <button *ngIf="!groupUniqueName" mat-stroked-button class="mr-3" (click)="resetGroupForm()">
+                            {{ commonLocaleData?.app_clear }}
+                        </button>
 
-                            <button
-                                *ngIf="groupUniqueName"
-                                mat-stroked-button
-                                class="btn-primary min-width-100"
-                                (click)="cancelEdit()"
-                            >
-                                {{ commonLocaleData?.app_close }}
-                            </button>
-                            <button
-                                *ngIf="groupUniqueName"
-                                mat-stroked-button
-                                class="delete-button min-width-100"
-                                (click)="deleteGroup()"
-                            >
-                                {{ commonLocaleData?.app_delete }}
-                            </button>
-                            <button mat-raised-button color="primary" class="" (click)="saveGroup()">
-                                {{
-                                    groupUniqueName
-                                        ? commonLocaleData?.app_update_group
-                                        : commonLocaleData?.app_create_group
-                                }}
-                            </button>
-                        </div>
+                        <button
+                            *ngIf="groupUniqueName"
+                            mat-stroked-button
+                            class="btn-primary min-width-100"
+                            (click)="cancelEdit()"
+                        >
+                            {{ commonLocaleData?.app_close }}
+                        </button>
+                        <button
+                            *ngIf="groupUniqueName"
+                            mat-stroked-button
+                            class="delete-button min-width-100"
+                            (click)="deleteGroup()"
+                        >
+                            {{ commonLocaleData?.app_delete }}
+                        </button>
+                        <button mat-raised-button color="primary" class="" (click)="saveGroup()">
+                            {{
+                                groupUniqueName
+                                    ? commonLocaleData?.app_update_group
+                                    : commonLocaleData?.app_create_group
+                            }}
+                        </button>
                     </div>
                 </div>
             </form>
