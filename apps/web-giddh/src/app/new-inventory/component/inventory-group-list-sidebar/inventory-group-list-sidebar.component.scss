@@ -10,7 +10,7 @@
     overflow-x: auto;
     height: 400px;
     h4.product-name {
-        font-size: var(--font-size-14);
+        font-size: 16px;
         font-family: var(--font-semibold);
         padding: 10px 15px;
         background-color: var(--color-sidebar-list-background-hover);
@@ -28,7 +28,7 @@
         }
         li {
             padding: 6px 15px;
-            font-size: var(--font-size-14);
+            font-size: 14px;
             a {
                 color: var(--color-gray);
             }

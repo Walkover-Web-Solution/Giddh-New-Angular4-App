@@ -100,7 +100,7 @@
                                             [matTooltipPosition]="'above'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-trash font-14"></i>
+                                            <i class="icon-trash font-16"></i>
                                         </button>
 
                                         <button
@@ -116,7 +116,7 @@
                                             [matTooltipPosition]="'above'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-generate-invoice font-14"></i>
+                                            <i class="icon-generate-invoice font-16"></i>
                                         </button>
                                     </div>
                                     <button
@@ -124,7 +124,7 @@
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
-                                        class="btn btn-success mr-0 font-14"
+                                        class="btn btn-success mr-0 font-16"
                                         id="attach-file-mobile-view"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
@@ -249,7 +249,7 @@
                                         [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
-                                        <i class="icon-trash font-14"></i>
+                                        <i class="icon-trash font-16"></i>
                                     </button>
 
                                     <button
@@ -264,7 +264,7 @@
                                         [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
-                                        <i class="icon-generate-invoice font-14"></i>
+                                        <i class="icon-generate-invoice font-16"></i>
                                     </button>
 
                                     <button
@@ -279,7 +279,7 @@
                                         [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
-                                        <i class="icon-file-path font-14"></i>
+                                        <i class="icon-file-path font-16"></i>
                                     </button>
                                     <input
                                         type="file"
@@ -1271,8 +1271,8 @@
                             "
                             class="hidden-xs sticky-header pr-0 no-right-border"
                         >
-                            <b class="blue-heading font-14"> {{ lc.ledgerUnderStandingObj.text.dr }}</b>
-                            <span class="dr-cr-category font-14 pull-right text-gray">{{ localeData?.dr }}</span>
+                            <b class="blue-heading font-16"> {{ lc.ledgerUnderStandingObj.text.dr }}</b>
+                            <span class="dr-cr-category font-16 pull-right text-gray">{{ localeData?.dr }}</span>
                         </mat-grid-tile>
                         <mat-grid-tile
                             [ngClass]="
@@ -1283,8 +1283,8 @@
                             "
                             class="hidden-xs sticky-header pl-0 no-right-border"
                         >
-                            <b class="blue-heading font-14"> {{ lc.ledgerUnderStandingObj.text.cr }}</b>
-                            <span class="dr-cr-category font-14 pull-right text-gray">{{ localeData?.cr }}</span>
+                            <b class="blue-heading font-16"> {{ lc.ledgerUnderStandingObj.text.cr }}</b>
+                            <span class="dr-cr-category font-16 pull-right text-gray">{{ localeData?.cr }}</span>
                         </mat-grid-tile>
                     </mat-grid-list>
                     <!-- endregion -->
@@ -2465,7 +2465,7 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6 col-12 text-right">
                                     {{ localeData?.balance_bank }}
-                                    <h3 class="font-18 primary-color">
+                                    <h3 class="font-20 primary-color">
                                         <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="reconcileClosingBalanceForBank?.amount"
@@ -2479,7 +2479,7 @@
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-12 text-left">
                                     {{ localeData?.pending_cheque }}
-                                    <h3 class="font-18 primary-color">
+                                    <h3 class="font-20 primary-color">
                                         <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="closingBalanceBeforeReconcile?.amount"

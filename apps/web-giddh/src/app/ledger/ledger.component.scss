@@ -82,11 +82,12 @@ input {
     display: flex;
     justify-content: space-between;
 }
-.ledg-head .mat-grid-list .mat-grid-tile {
+.ledg-head .mat-grid-list .mat-grid-tile,
+.ledg-head .mat-grid-list .mat-grid-tile .select2-container {
     padding: 8px 10px;
     border-bottom: 1px solid var(--color-ledger-grid-border-color) !important;
     border-right: 1px solid var(--color-ledger-grid-border-color);
-    font-size: var(--font-size-14);
+    font-size: 13px;
     text-overflow: ellipsis;
     white-space: nowrap;
     display: flex;
@@ -116,7 +117,7 @@ table.ledger-footer-1 td[class*="col-"] {
     padding-bottom: 1px !important;
     border-bottom: 1px solid var(--color-iron);
     border-right: 1px solid var(--color-iron);
-    font-size: var(--font-size-14);
+    font-size: 13px;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -203,7 +204,7 @@ table.ledger-footer-1 td[class*="col-"] {
     padding: 10px 15px 0;
     background: var(--color-common-primary-background-for-all-components);
     color: var(--color-abbey);
-    font-size: var(--font-size-18);
+    font-size: 18px;
     box-shadow: 0px 2px 6px var(--color-primary-ledger-box-shadow);
     position: relative;
     z-index: -1;
@@ -265,7 +266,7 @@ table.ledger-footer-1 td[class*="col-"] {
     bottom: 100px;
     background: var(--color-common-primary-background-for-all-components);
     padding: 5px;
-    font-size: var(--font-size-12);
+    font-size: 12px;
     z-index: 0;
 }
 #pagination {
@@ -300,7 +301,7 @@ table.ledger-footer-1 td[class*="col-"] {
     font-weight: 400;
     border-bottom: 1px solid var(--color-iron);
     font-family: var(--font-semibold);
-    font-size: var(--font-size-14);
+    font-size: 14px;
     border-top: 1px solid var(--color-iron);
 }
 .ledger-main .form-control,
@@ -361,7 +362,15 @@ table.ledger-footer-1 td[class*="col-"] {
     display: flex;
     justify-content: flex-end;
 }
-
+.date-step {
+    padding: 0 !important;
+    font-size: 13px;
+    height: 48px;
+    line-height: 1;
+    &.focus-unset {
+        padding-left: 7px !important;
+    }
+}
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -380,7 +389,7 @@ sh-select:focus {
     padding: 2px 5px !important;
 }
 .amount-total {
-    font-size: var(--font-size-12);
+    font-size: 12px;
     color: var(--color-gray);
     padding-left: 5px;
 }
@@ -486,7 +495,7 @@ sh-select:focus {
 }
 .ledger-stat h1 {
     color: var(--color-common-primary-text);
-    font-size: var(--font-size-14);
+    font-size: 14px;
     margin-bottom: 10px;
 }
 .digit-blue {
@@ -494,11 +503,11 @@ sh-select:focus {
 }
 .grey-text-color {
     color: var(--color-common-secondary-text) !important;
-    font-size: var(--font-size-14);
+    font-size: 14px;
 }
 
 .ledger-stat h3 {
-    font-size: var(--font-size-14);
+    font-size: 14px;
 }
 .stat-block {
     border-right: 1px solid var(--color-common-secondary-border);
@@ -561,7 +570,7 @@ sh-select:focus {
     border-radius: 5px;
     border: 1px solid var(--color-primary-button-border);
     color: var(--color-abbey);
-    font-size: var(--font-size-14);
+    font-size: 14px;
     background-color: var(--color-white);
     width: 36px;
     height: 36px;
@@ -571,13 +580,13 @@ sh-select:focus {
     padding: 3px;
 }
 .clear-filter-btn i {
-    font-size: var(--font-size-18);
+    font-size: 18px;
 }
 .search-ledger-field {
     .btn-danger,
     .btn-success,
     .btn-warning {
-        font-size: var(--font-size-14);
+        font-size: 16px;
         width: 36px !important;
         padding: 0px !important;
         height: 36px !important;
@@ -611,7 +620,7 @@ sh-select:focus {
     z-index: 99;
     cursor: default;
     top: 0;
-    font-size: var(--font-size-14);
+    font-size: 14px;
     padding-right: 10px !important;
     height: 32px;
     min-width: 180px !important;
@@ -657,14 +666,14 @@ sh-select:focus {
         tbody {
             background-color: var(--color-white);
             .transaction-date {
-                font-size: var(--font-size-14);
+                font-size: 16px;
                 font-family: var(--font-semibold);
             }
             td {
                 padding-top: 8px;
                 padding-bottom: 8px;
                 border-bottom: 1px solid var(--color-iron);
-                font-size: var(--font-size-14);
+                font-size: 14px;
             }
             .second-row {
                 td {
@@ -711,7 +720,7 @@ sh-select:focus {
     padding-left: 0;
 }
 .transaction-mapped-table {
-    font-size: var(--font-size-14);
+    font-size: 14px;
     .transaction-mapped {
         padding: 0 !important;
         position: static;
@@ -784,12 +793,12 @@ sh-select:focus {
     }
 }
 .icon-upload {
-    font-size: 14px;
+    font-size: 16px;
 }
 .account-placeholder {
     color: var(--color-gray);
     padding-left: 12px;
-    font-size: var(--font-size-14);
+    font-size: 14px;
     min-height: 49px;
     display: flex;
     padding-top: 14px;
@@ -799,7 +808,7 @@ sh-select:focus {
     color: var(--color-nero) !important;
 }
 a#reload-bank-transaction i.icon-refresh {
-    font-size: var(--font-size-18) !important;
+    font-size: 18px !important;
 }
 input#ledger-search {
     padding-left: 27px !important;
@@ -1036,11 +1045,11 @@ input#ledger-search {
         margin-bottom: 10px;
     }
     .ledger-btn .btn {
-        font-size: var(--font-size-12) !important;
+        font-size: 12px !important;
         padding: 6px;
     }
     .ledger-btn button.btn {
-        font-size: var(--font-size-12) !important;
+        font-size: 12px !important;
         padding: 6px;
     }
     .left-col-new .width-100.h-table .mat-grid-list .mat-grid-title:first-child,
@@ -1122,7 +1131,7 @@ input#ledger-search {
         .btn {
             background-color: transparent;
             color: var(--color-nero);
-            font-size: var(--font-size-18);
+            font-size: 18px;
         }
         ul {
             left: auto !important;
@@ -1201,7 +1210,7 @@ input#ledger-search {
         .btn {
             background-color: transparent;
             color: var(--color-white);
-            font-size: var(--font-size-18);
+            font-size: 18px;
         }
     }
     .search-ledger-field {
@@ -1255,7 +1264,7 @@ input#ledger-search {
     .ledg-head {
         .single-search-box {
             .clear-filter-btn {
-                font-size: var(--font-size-12);
+                font-size: 12px;
             }
         }
     }

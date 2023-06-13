@@ -6,7 +6,7 @@
     vertical-align: middle;
     height: 36px;
 
-    font-size: var(--font-size-14);
+    font-size: 14px;
 }
 .tb-btn-apply {
     margin-top: 5px;
@@ -38,7 +38,7 @@
     justify-content: center;
     align-items: center;
     background-color: var(--color-white);
-    font-size: var(--font-size-18);
+    font-size: 18px;
     color: var(--color-giddh-blue) !important;
     border: 1px solid var(--color-secondary-input-bar-border);
     border-radius: 5px;
@@ -54,7 +54,7 @@
         justify-content: center;
         align-items: center;
         background-color: var(--color-white);
-        font-size: var(--font-size-14);
+        font-size: 16px;
         color: var(--color-giddh-blue) !important;
         border: 1px solid var(--color-secondary-input-bar-border);
         border-radius: 5px;
@@ -168,12 +168,12 @@
             justify-content: center;
             align-items: center;
             background-color: var(--color-white);
-            font-size: var(--font-size-14);
+            font-size: 16px;
             color: var(--color-giddh-blue) !important;
             border: 1px solid var(--color-iron);
         }
     }
     .list-inline > li {
-        font-size: var(--font-size-12);
+        font-size: 12px;
     }
 }

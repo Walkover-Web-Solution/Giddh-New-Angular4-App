@@ -1,6 +1,6 @@
 .select-plan-block .your-account span {
     color: var(--color-gray);
-    font-size: var(--font-size-14);
+    font-size: 14px;
     padding: 4px 0;
     display: inline-block;
 }
@@ -107,12 +107,12 @@
         float: left !important;
         width: 100%;
         font-weight: 600;
-        font-size: var(--font-size-24);
+        font-size: 25px;
     }
     .sub-plan-duration {
         font-weight: normal;
         text-transform: lowercase;
-        font-size: var(--font-size-14);
+        font-size: 15px;
     }
     .grid-title-list-changes:nth-child(even) {
         background-color: var(--color-dark-fog) !important;
@@ -155,7 +155,7 @@
         border-bottom: 1px solid var(--color-common-primary-border);
         width: 205px;
         font-weight: 500;
-        font-size: var(--font-size-14);
+        font-size: 13px;
     }
     .all-feature-button {
         margin-right: 0 !important;
@@ -171,7 +171,7 @@
         border-bottom: 1px solid var(--color-common-primary-border);
         width: 205px;
         font-weight: 500;
-        font-size: var(--font-size-14);
+        font-size: 13px;
     }
     .bottom-grid-list-div {
         .grid-title-left {
@@ -187,12 +187,12 @@
 }
 .payment-log-list {
     list-style-type: none;
-    font-size: var(--font-size-14);
+    font-size: 14px;
     color: var(--color-abbey);
 }
 .payment-log-list {
     list-style-type: none;
-    font-size: var(--font-size-14);
+    font-size: 14px;
     color: var(--color-abbey);
 }
 .payment-log-list > li {
@@ -236,7 +236,7 @@
 .select-plan-head {
     text-align: center;
     background: var(--color-upgrade-plan-primary-background);
-    font-size: var(--font-size-18);
+    font-size: 18px;
     padding: 20px 15px;
     h2 {
         color: var(--color-common-senary-text);
@@ -299,7 +299,7 @@
     min-height: 190px;
     margin-top: 5px;
     li {
-        font-size: var(--font-size-14);
+        font-size: 14px;
         padding: 8px 0;
         position: relative;
         position: relative;
@@ -308,13 +308,13 @@
     }
 }
 .inner-your-account > h3 {
-    font-size: var(--font-size-14);
+    font-size: 16px;
     color: var(--color-common-senary-text);
     font-weight: bold;
     margin-bottom: 5px;
     .plans-head-top {
         h3 {
-            font-size: var(--font-size-18) !important;
+            font-size: 18px !important;
             margin-bottom: 0 !important;
         }
     }
@@ -362,7 +362,7 @@
     filter: grayscale(100%);
 }
 .price-cross {
-    font-size: 24px !important;
+    font-size: 22px !important;
     position: relative;
     &:after {
         content: "";
@@ -419,7 +419,7 @@
     position: absolute;
     right: 10px;
     top: 10px;
-    font-size: var(--font-size-14);
+    font-size: 16px;
     color: var(--color-nero);
 }
 .btn-green:focus {
@@ -437,7 +437,7 @@
         padding-top: 0 !important;
     }
     .text-gray {
-        font-size: var(--font-size-18);
+        font-size: 17px;
         font-weight: 500;
     }
     .footer-plan {
@@ -515,7 +515,7 @@
 }
 .explore-other {
     text-decoration: underline;
-    font-size: var(--font-size-18);
+    font-size: 17px;
     font-weight: bolder;
     margin-top: 15px;
     float: left;
@@ -543,7 +543,7 @@
 }
 .renewal-card-subtitle {
     color: var(--color-gray);
-    font-size: var(--font-size-14);
+    font-size: 16px;
     font-weight: bold;
     margin-bottom: 0 !important;
 }
@@ -556,7 +556,7 @@
     margin-top: 8px !important;
 }
 .year {
-    font-size: var(--font-size-14);
+    font-size: 14px;
     margin-left: -3px;
 }
 .renewal-list {
@@ -571,7 +571,7 @@
 }
 .renewal-off {
     color: var(--color-gray);
-    font-size: var(--font-size-12);
+    font-size: 12px;
     font-weight: 600;
     padding-left: 4px;
 }
@@ -582,17 +582,17 @@
 .features {
     line-height: 1.7;
     color: var(--color-gray);
-    font-size: var(--font-size-18);
+    font-size: 19px;
 }
 .renewal-card-content a {
     text-decoration: underline;
-    font-size: var(--font-size-18);
+    font-size: 19px;
     margin-bottom: 33px;
     float: left;
     width: 100%;
 }
 .pay-now {
-    font-size: var(--font-size-18);
+    font-size: 21px;
     height: 44px;
     width: 44%;
 }
@@ -601,7 +601,7 @@
 }
 .extra-addons-content {
     margin-top: 6px;
-    font-size: var(--font-size-14);
+    font-size: 16px;
     float: left;
     width: 24%;
     .extra-addons-value {
@@ -1106,7 +1106,7 @@
         }
     }
     .select-plan-head {
-        font-size: var(--font-size-18);
+        font-size: 20px;
         padding: 12px 15px;
     }
     .select-plan-block {

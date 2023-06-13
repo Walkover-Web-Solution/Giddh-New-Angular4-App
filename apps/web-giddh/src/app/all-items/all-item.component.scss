@@ -5,7 +5,7 @@
         margin: 10px auto;
         .input-group {
             i {
-                font-size: var(--font-size-18);
+                font-size: 18px;
             }
             .input-group-text {
                 border: none;
@@ -13,7 +13,7 @@
             }
             input {
                 height: 50px;
-                font-size: var(--font-size-14);
+                font-size: 16px;
                 border: none;
                 border-top-left-radius: 0px !important;
                 border-bottom-left-radius: 0px !important;
@@ -42,7 +42,7 @@
                     word-break: break-word;
                     min-height: 90px;
                     h4 {
-                        font-size: var(--font-size-14);
+                        font-size: 14px;
                         margin-bottom: 5px;
                         display: flex;
                         align-items: center;
@@ -59,7 +59,7 @@
                     }
                     p {
                         color: var(--color-primary-all-items-page-single-menu-items-body);
-                        font-size: var(--font-size-12);
+                        font-size: 12px;
                     }
                     &:hover,
                     &.active {

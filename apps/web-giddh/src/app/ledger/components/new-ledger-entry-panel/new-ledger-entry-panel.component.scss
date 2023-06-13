@@ -14,7 +14,7 @@
                     .label {
                         vertical-align: middle;
                         color: var(--color-abbey);
-                        font-size: var(--font-size-14);
+                        font-size: 13px;
                     }
                 }
             }
@@ -32,7 +32,7 @@
 }
 
 .amount-total {
-    font-size: var(--font-size-12);
+    font-size: 12px;
     color: var(--color-gray);
     padding-left: 5px;
 }
@@ -43,7 +43,7 @@
 }
 
 .table-minus label {
-    font-size: var(--font-size-32);
+    font-size: 40px;
     line-height: 23px;
 }
 .warehouse-field {
@@ -53,6 +53,16 @@
 }
 .checkbox-custom-label strong {
     display: contents;
+}
+span.eligible-ITC {
+    font-size: 11px;
+    cursor: pointer;
+    padding-top: 5px;
+    display: inline-block;
+    span {
+        color: var(--color-blue);
+        font-size: 10px;
+    }
 }
 .rcm-entry {
     padding-left: 4px;
@@ -66,7 +76,7 @@
 }
 .width-115 {
     width: 115px;
-    font-size: var(--font-size-12);
+    font-size: 12px;
 }
 .advance-receipt-edit {
     i {
@@ -114,7 +124,7 @@
     a {
         color: var(--color-dark-gray);
         i {
-            font-size: var(--font-size-14);
+            font-size: 15px;
         }
     }
 }

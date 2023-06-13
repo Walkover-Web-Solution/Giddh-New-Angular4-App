@@ -22,7 +22,7 @@ body {
     color: var(--color-nero);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-size: var(--font-size-14) !important;
+    font-size: 14px;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -125,7 +125,7 @@ button.ui-datepicker-trigger {
 }
 .small,
 small {
-    font-size: var(--font-size-14);
+    font-size: 85%;
 }
 
 a,
@@ -522,7 +522,7 @@ aside-menu-account .container-fluid {
     cursor: pointer;
 }
 .thead {
-    font-size: var(--font-size-14);
+    font-size: 16px;
 }
 .scroll-item {
     overflow: auto;
@@ -531,10 +531,10 @@ aside-menu-account .container-fluid {
 .company-list li h3 {
     padding: 4px 0 2px;
     color: var(--color-nero);
-    font-size: var(--font-size-14);
+    font-size: 14px;
 }
 .date {
-    font-size: var(--font-size-12);
+    font-size: 11px;
 }
 .company-list .ui-icon {
     margin: 4px 4px 20px;
@@ -556,10 +556,10 @@ aside-menu-account .container-fluid {
     padding: 15px;
     width: 100%;
     h5 {
-        font-size: var(--font-size-12);
+        font-size: 12px;
         color: var(--color-total-details-heading);
         .number-total {
-            font-size: var(--font-size-18);
+            font-size: 16px;
             font-weight: 500;
             color: var(--color-total-details-primary-content);
         }
@@ -650,13 +650,20 @@ aside-menu-account .container-fluid {
     height: auto;
 }
 /*typography styles*/
-
-.font-14 {
-    font-size: var(--font-size-14);
+.font-13 {
+    font-size: 13px;
 }
-
+.font-14 {
+    font-size: 14px;
+}
+.font-16 {
+    font-size: 16px;
+}
 .font-18 {
-    font-size: var(--font-size-18);
+    font-size: 18px;
+}
+.font-20 {
+    font-size: 20px;
 }
 /*accounts list style*/
 .search-loading {
@@ -802,7 +809,7 @@ aside-menu-account .container-fluid {
 .ledger-main-head span {
     display: inline-block;
     line-height: 48px;
-    font-size: var(--font-size-18);
+    font-size: 18px;
 }
 .ledger-main-head .text-ellipsis {
     text-transform: capitalize;
@@ -851,7 +858,7 @@ aside-menu-account .container-fluid {
 }
 /* styles for trial-balance */
 .page-title {
-    font-size: var(--font-size-14);
+    font-size: 15px;
     margin: 10px 0 0 10px;
 }
 .table-container tr > td:first-child {
@@ -891,7 +898,7 @@ aside-menu-account .container-fluid {
 }
 .tb-pl-bs-data {
     height: 60vh !important;
-    font-size: var(--font-size-32) !important;
+    font-size: 31px !important;
     color: var(--color-gray) !important;
 }
 .new-icon-img {
@@ -1031,7 +1038,7 @@ aside-menu-account .container-fluid {
     border-right: 1px solid transparent;
     font-weight: 400;
     padding: 8px 8px 8px 0;
-    font-size: var(--font-size-14);
+    font-size: 14px;
     line-height: normal;
     text-transform: capitalize;
 }
@@ -1072,14 +1079,14 @@ aside-menu-account .container-fluid {
 .no-data {
     text-align: center;
     margin-top: 150px;
-    font-size: var(--font-size-32);
+    font-size: 36px;
     color: var(--color-gray);
 }
 .no-data > img {
     max-height: 200px;
 }
 .no-data p {
-    font-size: var(--font-size-14);
+    font-size: 14px;
     color: var(--color-abbey);
     margin-top: 20px;
 }
@@ -1158,7 +1165,7 @@ table:focus {
     box-shadow: 0 5px 5px 0 var(--color-primary-common-box-shadow);
 }
 .account-card > h1 {
-    font-size: var(--font-size-14);
+    font-size: 16px;
     padding-bottom: 5px;
     padding-right: 45px;
     margin-bottom: 5px;
@@ -1174,7 +1181,7 @@ table:focus {
 }
 .account-card > .balance {
     color: var(--color-nero);
-    font-size: var(--font-size-18);
+    font-size: 18px;
     padding-bottom: 10px;
     line-height: normal;
 }
@@ -1185,9 +1192,14 @@ table:focus {
     overflow: hidden;
     color: var(--color-abbey);
 }
+.account-card > .balances ul li {
+    font-size: 10px;
+    list-style-type: disc;
+    margin-left: 15px;
+}
 .account-card .account-number,
 .account-card .account-date {
-    font-size: var(--font-size-14);
+    font-size: 14px;
     margin: 5px 0;
     color: var(--color-account-card-primary-text);
 }
@@ -1218,7 +1230,7 @@ table:focus {
 .linked-accounts > .title {
     margin-bottom: 5px;
     padding-bottom: 1px;
-    font-size: var(--font-size-18);
+    font-size: 18px;
 }
 .linked-accounts .delete-bank {
     position: absolute;
@@ -1232,7 +1244,7 @@ table:focus {
     overflow: hidden;
 }
 .error-msg {
-    font-size: var(--font-size-12);
+    font-size: 12px;
     color: var(--color-danger);
     line-height: 18px;
 }
@@ -1252,7 +1264,7 @@ table:focus {
     transition: all 0.2s ease-in-out;
 }
 .audit-log > h1 {
-    font-size: var(--font-size-14);
+    font-size: 16px;
     text-transform: uppercase;
 }
 .audit-log table.table {
@@ -1434,7 +1446,7 @@ ul.pills {
 
 ul.pills li {
     line-height: 16px;
-    font-size: var(--font-size-12);
+    font-size: 12px;
     background: var(--color-abbey);
     border-radius: 5px;
     overflow: hidden;
@@ -1515,7 +1527,8 @@ ul.pills li {
     -moz-box-shadow: 0px 3px 28px 0 var(--color-primary-common-box-shadow);
     box-shadow: 0px 3px 28px 0 var(--color-primary-common-box-shadow);
     font-family: var(--font-regular);
-    font-size: var(--font-size-14);
+    font-size: 100%;
+    font-size: 14px;
     border: 1px solid var(--color-common-primary-border);
     z-index: 100;
 }
@@ -1625,7 +1638,7 @@ ul.pills li {
     display: none;
     max-width: initial;
     padding: 0px;
-    font-size: var(--font-size-14);
+    font-size: 14px;
     border: none;
     box-shadow: none;
 }
@@ -1693,7 +1706,7 @@ ul.pills li {
     padding: 0 20px;
 }
 .long-code-details figure h1 {
-    font-size: var(--font-size-18);
+    font-size: 18px;
 }
 .y-scroll {
     overflow-y: auto !important;
@@ -1779,7 +1792,7 @@ ul.pills li {
     text-transform: uppercase;
 }
 .rate {
-    font-size: var(--font-size-9);
+    font-size: 10px;
     right: calc(50% + 10px);
     top: 22px;
     color: var(--color-gray);
@@ -1842,7 +1855,7 @@ ul.pills li {
     }
 }
 .advanced label {
-    font-size: var(--font-size-14);
+    font-size: 14px;
 }
 .my-dropdown-menu {
     position: absolute;
@@ -1850,7 +1863,7 @@ ul.pills li {
     min-width: 160px;
     padding: 5px 0;
     margin: 2px 0 0;
-    font-size: var(--font-size-14);
+    font-size: 14px;
     text-align: left;
     list-style: none;
     background-color: var(--color-white);
@@ -1868,7 +1881,7 @@ ul.pills li {
     min-width: 160px;
     padding: 10px 0;
     margin: 0px 0 0;
-    font-size: var(--font-size-14);
+    font-size: 14px;
     text-align: left;
     list-style: none;
     background-color: var(--color-white);
@@ -1946,14 +1959,14 @@ ul.pills li {
 .select2-parent .select2-container--default .select2-selection--single .select2-selection__rendered {
     line-height: 32px;
     color: var(--color-abbey);
-    font-size: var(--font-size-14);
+    font-size: 14px;
     padding-left: 0;
 }
 .select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 32px;
 }
 .select2-parent .select2-container--default .select2-results > .select2-results__options {
-    font-size: var(--font-size-14);
+    font-size: 14px;
 }
 .dropdown-menu > .active > a,
 .dropdown-menu > .active > a:focus,
@@ -2084,7 +2097,7 @@ bs-datepicker-container {
     margin: 0;
     padding: 12px 16px 12px 20px;
     color: var(--color-abbey);
-    font-size: var(--font-size-12);
+    font-size: 12px;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     text-align: right;
@@ -2403,7 +2416,7 @@ form#groupDetailForm {
         transform: translate(-50%, -50%) !important;
     }
     .no-data {
-        font-size: var(--font-size-24);
+        font-size: 26px;
     }
     #setting-tab .nav > li > a:hover {
         color: inherit !important;
@@ -2420,7 +2433,7 @@ form#groupDetailForm {
 .valid-tooltip,
 .tooltip,
 .tooltip-inner {
-    font-size: var(--font-size-12) !important;
+    font-size: 12px !important;
 }
 .tooltip-inner {
     background: var(--color-primary-tooltip-background) !important;
@@ -2698,7 +2711,7 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 }
 .mat-snack-bar-container {
     color: var(--color-toast-primary-text) !important;
-    font-size: var(--font-size-14);
+    font-size: 13px;
 }
 .mat-snack-bar-container.error {
     background-color: var(--color-red-toast) !important;
@@ -2728,7 +2741,7 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 .mat-header-cell {
     color: var(--color-giddh-blue) !important;
     font-family: var(--font-semibold);
-    font-size: var(--font-size-14) !important;
+    font-size: 14px !important;
 }
 .mat-header-cell.text-right {
     .mat-sort-header-container {
@@ -2881,7 +2894,7 @@ td.mat-footer-cell {
 .other-tax {
     .mat-checkbox-layout {
         .mat-checkbox-label {
-            font-size: var(--font-size-14) !important;
+            font-size: 14px !important;
             color: var(--color-common-primary-text) !important;
         }
     }
@@ -2954,7 +2967,7 @@ td.mat-footer-cell {
 .tooltip-black {
     background: var(--color-primary-tooltip-background) !important;
     color: var(--color-primary-tooltip-text);
-    font-size: var(--font-size-12) !important;
+    font-size: 12px !important;
 }
 .mat-button-focus-overlay {
     background: transparent !important;
@@ -3136,7 +3149,7 @@ td.mat-footer-cell {
             height: 36px;
             border-radius: 5px;
             padding-left: 6px;
-            font-size: var(--font-size-14);
+            font-size: 14px;
         }
     }
     .product-detail-content {
@@ -3148,7 +3161,7 @@ td.mat-footer-cell {
         .mat-tab-label {
             .mat-tab-label-content {
                 letter-spacing: 0px;
-                font: normal normal normal var(--font-size-14) / 22px;
+                font: normal normal normal 16px/22px;
                 font-family: var(--font-regular);
                 color: var(--color-tab-primary-inactive) !important;
             }
@@ -3156,7 +3169,7 @@ td.mat-footer-cell {
             :active {
                 .mat-tab-label-content {
                     letter-spacing: 0px;
-                    font: normal normal 600 var(--font-size-14) / 22px;
+                    font: normal normal 600 16px/22px;
                     font-family: var(--font-regular);
                     color: var(--color-tab-primary-active) !important;
                 }
@@ -3202,7 +3215,7 @@ td.mat-footer-cell {
                 padding: 0 !important;
                 white-space: normal;
                 word-break: break-word;
-                font-size: var(--font-size-14);
+                font-size: 14px;
                 &:hover {
                     background: transparent;
                 }
@@ -3222,7 +3235,7 @@ td.mat-footer-cell {
     }
 }
 .mat-option {
-    font-size: var(--font-size-14) !important;
+    font-size: 14px !important;
     color: var(--color-dropdown-list) !important;
     &:hover {
         background-color: var(--color-dropdown-list-hover-background) !important;
@@ -3351,15 +3364,6 @@ input-field {
                         transform: translateY(-1.5em) scale(0.75) !important;
                     }
                 }
-            }
-        }
-    }
-}
-.aside-pane {
-    .help-aside-body {
-        .inventory-items {
-            h5 {
-                font-size: 14px;
             }
         }
     }

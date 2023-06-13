@@ -15,10 +15,18 @@
     font-weight: bold;
 }
 
-.font-12 {
-    font-size: var(--font-size-12) !important;
+.font-11 {
+    font-size: 11px !important;
 }
 
+.font-10 {
+    font-size: 10px !important;
+}
+
+/*
+  .font-12 {
+  font-size: 12px !important;
+  } */
 .pb-1 {
     padding-bottom: 10px;
 }
@@ -32,12 +40,12 @@ p {
 /* heading */
 #default header h1 {
     /* color: #df4927; */
-    font-size: var(--font-size-14);
+    font-size: 14px;
 }
 
 #default header h2 {
     /* color: #df4927; */
-    font-size: var(--font-size-14);
+    font-size: 14px;
     font-weight: bold;
 }
 /* table */
@@ -60,7 +68,7 @@ p {
 
 #default body {
     box-sizing: border-box;
-    font-size: var(--font-size-12);
+    font-size: 12px;
     margin: 0 auto;
     overflow: hidden;
     padding: 0.1in;
@@ -266,6 +274,11 @@ header img {
     border-left: 0px !important;
 }
 
+/* #default table.item tr th,
+  #default table.item tfoot tr th {
+  font-size: 10px;
+  } */
+
 #default table.item td {
     border-radius: 0;
     padding: 7px;
@@ -289,6 +302,7 @@ header img {
     width: 50%;
     text-align: right;
     padding: 0 2px;
+    /* font-size: 11px; */
 }
 
 /* aside */
@@ -467,7 +481,7 @@ strong {
     white-space: pre-line;
     line-height: 1.2em;
     text-align: center;
-    font-size: var(--font-size-12);
+    font-size: 12px;
 }
 
 .inner {

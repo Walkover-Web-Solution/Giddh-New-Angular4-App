@@ -56,15 +56,6 @@
     text-rendering: optimizeLegibility;
 }
 
-body{
-    --font-size-12 : 12px;
-    --font-size-14 : 14px;
-    --font-size-18 : 18px;
-    --font-size-24 : 24px;
-    --font-size-32 : 32px;
-    --font-size-48 : 48px;
-}
-
 html,
 body,
 div,
@@ -152,7 +143,7 @@ body {
     color: #333333;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-size: var(--font-size-14);
+    font-size: 14px;
 }
 .db {
     display: block;
@@ -559,7 +550,7 @@ body {
 }
 
 .thead {
-    font-size: var(--font-size-14);
+    font-size: 16px;
 }
 
 .scroll-item {
@@ -618,7 +609,7 @@ body {
     background: #fff !important;
 }
 #magicLink {
-    font-size: var(--font-size-14);
+    font-size: 14px;
 }
 
 .nav-link > .active {
@@ -627,19 +618,19 @@ body {
 
 #demo {
     padding-top: 25.833px;
-    font-size: var(--font-size-24);
+    font-size: 26px;
     color: #fff;
     font-weight: regular;
 }
 
 .account-name {
     font-weight: 300;
-    font-size: var(--font-size-14);
+    font-size: 14px;
 }
 
 .rec {
     font-weight: 600;
-    font-size: var(--font-size-14);
+    font-size: 14px;
 }
 
 .text-white {
@@ -671,15 +662,15 @@ body {
 }
 
 .font-12 {
-    font-size: var(--font-size-12);
+    font-size: 12px;
 }
 
-.font-14 {
-    font-size: var(--font-size-14);
+.font-16 {
+    font-size: 16px;
 }
 
 .font-18 {
-    font-size: var(--font-size-18);
+    font-size: 18px;
 }
 
 .d-block {
@@ -703,11 +694,11 @@ body {
 }
 
 .head-block .vertical-center {
-    font-size: var(--font-size-24);
+    font-size: 26px;
 }
 
 .ledger-account-name {
-    font-size: var(--font-size-24);
+    font-size: 25px;
     color: #6d6e70;
 }
 
@@ -846,7 +837,7 @@ table th[class*="col-"] {
 }
 
 .header-line {
-    font-size: var(--font-size-32);
+    font-size: 30px;
     /* font-family: 'Arvo', serif; */
     color: white;
 }
@@ -854,12 +845,12 @@ table th[class*="col-"] {
 #contact p {
     margin: 0;
     line-height: 28px;
-    font-size: var(--font-size-18);
+    font-size: 18px;
 }
 
 #contact label {
     color: white;
-    font-size: var(--font-size-18);
+    font-size: 18px;
     font-weight: 400;
 }
 
@@ -929,11 +920,11 @@ strong {
 }
 
 h3 {
-    font-size: var(--font-size-24);
+    font-size: 24px;
 }
 
 h4 {
-    font-size: var(--font-size-18);
+    font-size: 18px;
 }
 
 #web_footer .h1,
@@ -1071,7 +1062,7 @@ body {
 
 .input-group-addon {
     padding: 6px 12px;
-    font-size: var(--font-size-14);
+    font-size: 14px;
     font-weight: 400;
     line-height: 1;
     color: #555;
@@ -1139,11 +1130,11 @@ body {
 }
 footer p {
     color: #1c1c1c;
-    font-size: var(--font-size-14);
+    font-size: 16px;
 }
 .top-footer {
     padding: 3.75rem 0;
-    font-size: var(--font-size-14);
+    font-size: 13px;
 }
 .inner-logos {
     display: flex;
@@ -1182,7 +1173,7 @@ li,
 footer .menu-item a {
     line-height: 35px;
     color: #1c1c1c;
-    font-size: var(--font-size-14);
+    font-size: 16px;
 }
 .contact_form input,
 .contact_form textarea {
@@ -1191,7 +1182,7 @@ footer .menu-item a {
     margin-bottom: 5px;
     border: 1px solid #d9d9d9;
     border-radius: 5px;
-    font-size: var(--font-size-14);
+    font-size: 16px;
     box-shadow: none;
     border-radius: 2px;
     height: 40px;
@@ -1201,7 +1192,7 @@ footer .menu-item a {
 }
 #custom_html-2 ul li,
 #custom_html-2 ul li a {
-    font-size: var(--font-size-14);
+    font-size: 16px;
     color: #1a237e;
     line-height: 30px;
 }
@@ -1210,7 +1201,7 @@ footer .menu-item a {
     margin-top: 3rem !important;
 }
 .top-footer h4 {
-    font-size: var(--font-size-48);
+    font-size: 40px;
     color: #1a237e;
     font-weight: bold;
 }
@@ -1225,7 +1216,7 @@ footer .menu-item a {
     border: 1px solid #1a237e;
     border-radius: 25px;
     margin-top: 15px;
-    font-size: var(--font-size-18);
+    font-size: 18px;
     font-weight: bold;
     color: #1a237e;
     padding: 0px 22px;
@@ -1264,7 +1255,7 @@ footer .menu-item a {
         line-height: 28px;
     }
     :host ::ng-deep .header-line {
-        font-size: var(--font-size-18);
+        font-size: 18px;
     }
     #contact .form-control {
         background-color: transparent !important;
@@ -1304,7 +1295,7 @@ footer .menu-item a {
         display: none;
     }
     #contact .btn-lg {
-        font-size: var(--font-size-18);
+        font-size: 18px;
         letter-spacing: 1px;
         padding-left: 20px;
         padding-right: 20px;
@@ -1333,7 +1324,7 @@ footer .menu-item a {
         margin-left: 20px;
     }
     #contact .btn-lg {
-        font-size: var(--font-size-14) !important;
+        font-size: 14px !important;
         letter-spacing: 1px;
         padding-left: 10px;
         padding-right: 10px;
@@ -1354,8 +1345,11 @@ footer .menu-item a {
 
 @media (max-width: 600px) {
     #contact p {
-        font-size: var(--font-size-14) !important;
+        font-size: 16 !important;
     }
+    /* .header-line {
+        font-size: 22px !important;
+    } */
 }
 
 @media only screen and (max-width: 1300px) {
@@ -1388,7 +1382,7 @@ footer .menu-item a {
 
 .app_download li a {
     border: 1px solid #cc3f1c;
-    font-size: var(--font-size-18);
+    font-size: 17px;
     color: #fff;
     padding: 5px 9px;
     border-radius: 2px;

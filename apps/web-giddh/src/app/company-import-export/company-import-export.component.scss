@@ -10,7 +10,7 @@
     justify-content: center;
     align-items: center;
     h2 {
-        font-size: var(--font-size-32);
+        font-size: 36px;
     }
 }
 .import-card,
@@ -44,7 +44,7 @@
 @media (max-width: 991px) {
     .main-container-import-export {
         h2 {
-            font-size: var(--font-size-24);
+            font-size: 22px;
         }
     }
 }

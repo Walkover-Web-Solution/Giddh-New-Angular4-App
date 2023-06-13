@@ -129,7 +129,7 @@
                     padding: 14px;
 
                     i {
-                        font-size: var(--font-size-18);
+                        font-size: 18px;
                     }
                 }
 
@@ -139,13 +139,13 @@
                     width: 100%;
 
                     h4 {
-                        font-size: var(--font-size-14);
+                        font-size: 16px;
                         font-family: var(--font-semibold);
                         margin-bottom: 5px;
                     }
 
                     p {
-                        font-size: var(--font-size-14);
+                        font-size: 14px;
                     }
                 }
             }
@@ -238,12 +238,12 @@
     .create-group-text-content {
         label {
             font-weight: 600;
-            font-size: var(--font-size-14);
+            font-size: 16px;
             margin-bottom: 5px;
         }
 
         p {
-            font-size: var(--font-size-14);
+            font-size: 14px;
             white-space: normal;
         }
     }

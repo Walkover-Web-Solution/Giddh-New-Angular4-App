@@ -1,29 +1,8 @@
 .custom-field-page {
-    .table-content {
-        max-height: calc(100vh - 200px);
-        overflow-y: auto;
-        height: calc(100vh - 200px);
-    }
     h4 {
         font-size: 16px;
         font-family: var(--font-semibold);
     }
-    .custom-field-list {
-        .table-responsive {
-            max-height: 555px;
-        }
-    }
-}
-.icon-trash,
-.icon-edit {
-    color: var(--color-dark-gray);
-    font-size: 15px;
-}
-.icon-trash {
-    margin-left: 7px;
-}
-.filter-container {
-    width: 160px;
 }
 @media (max-width: 767px) {
     .giddh-table {

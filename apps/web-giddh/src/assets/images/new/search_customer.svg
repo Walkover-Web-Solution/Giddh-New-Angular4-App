@@ -2,7 +2,7 @@
   <defs>
     <style>
       .cls-1 {
-        font-size: var(--font-size-18);
+        font-size: 18px;
         font-family: ComicSansMS, Comic Sans MS;
       }
     </style>

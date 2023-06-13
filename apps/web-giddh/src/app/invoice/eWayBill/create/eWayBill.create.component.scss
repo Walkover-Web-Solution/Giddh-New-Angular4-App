@@ -14,17 +14,17 @@
         background-color: var(--color-white);
         padding: 15px;
         h2 {
-            font-size: var(--font-size-14);
+            font-size: 14px;
             color: var(--color-blue);
         }
         label {
             color: var(--color-abbey);
-            font-size: var(--font-size-12);
+            font-size: 12px;
             width: 20%;
             font-weight: 800;
         }
         span {
-            font-size: var(--font-size-12);
+            font-size: 12px;
             color: var(--color-nero);
         }
     }
@@ -105,7 +105,7 @@
 }
 
 .aside-right {
-    font-size: var(--font-size-14);
+    font-size: 14px;
     background: var(--color-white);
     right: -530px;
     transition: 0.5s all ease;
@@ -161,7 +161,7 @@
     background: none;
     border: 0px;
     color: var(--color-dark-fog);
-    font-size: var(--font-size-14);
+    font-size: 16px;
     padding: 2px;
     margin-right: 3px;
     cursor: pointer;

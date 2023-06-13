@@ -88,7 +88,7 @@
                 </div>
 
                 <div class="box clearfix">
-                    <h3 class="font-18 bold mb-2">{{ localeData?.email?.form_heading }}</h3>
+                    <h3 class="font-20 bold mb-2">{{ localeData?.email?.form_heading }}</h3>
                     <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)">
                         <div class="row">
                             <div class="form-group col-md-5 col-lg-3">
@@ -131,7 +131,7 @@
                 <ng-template> <span class="icon-card"></span> {{ localeData?.collection?.tab_heading }} </ng-template>
 
                 <div class="box clearfix mb-2">
-                    <h3 class="font-18 bold mb-2">{{ localeData?.collection?.razorpay_form_heading }}</h3>
+                    <h3 class="font-20 bold mb-2">{{ localeData?.collection?.razorpay_form_heading }}</h3>
                     <form #razorPayform="ngForm" novalidate class="">
                         <div class="row">
                             <div class="form-group col-lg-4 col-md-6 col-xs-12">
@@ -308,7 +308,7 @@
                                     <div class="col-md-4">
                                         <span class="field-label">{{ localeData?.payment?.account_number_label }}</span
                                         ><br />
-                                        <span class="account-number mt-2 font-14 inline"
+                                        <span class="account-number mt-2 font-16 inline"
                                             ><b>{{ bankAccount?.iciciDetailsResource?.accountNumber }}</b></span
                                         >
                                     </div>
@@ -434,7 +434,7 @@
                                                         class="font-12"
                                                         [innerHTML]="localeData?.payment?.approval_request_sent"
                                                     ></p>
-                                                    <p class="font-9">
+                                                    <p class="font-10">
                                                         {{ localeData?.payment?.approval_request_accepted }}
                                                     </p>
                                                 </div>

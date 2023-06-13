@@ -25,7 +25,7 @@ input.green-checkbox[type="checkbox"]:before {
     left: 0px !important;
 }
 .font-12 {
-    font-size: var(--font-size-12);
+    font-size: 12px;
 }
 input.green-checkbox[type="checkbox"]:checked:after {
     background-color: var(--color-success-enable) !important;
@@ -89,7 +89,7 @@ input.green-checkbox[type="checkbox"]:checked:after {
     .right-bar {
         width: 150px !important;
         .right-head {
-            font-size: var(--font-size-14);
+            font-size: 14px;
         }
     }
 }
@@ -105,7 +105,7 @@ input.green-checkbox[type="checkbox"]:checked:after {
         width: 100px !important;
         padding: 5px;
         .right-head {
-            font-size: var(--font-size-12);
+            font-size: 12px;
         }
     }
 }

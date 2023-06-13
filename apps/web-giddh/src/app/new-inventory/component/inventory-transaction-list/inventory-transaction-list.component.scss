@@ -28,7 +28,7 @@
     border: 1px solid var(--color-secondary-input-bar-border);
     border-radius: 5px !important;
     padding: 8px;
-    font-size: var(--font-size-14);
+    font-size: 13px;
     min-width: 250px;
 }
 
@@ -110,13 +110,13 @@
 
 .select-multiple-chiplist-inventory {
     font-weight: 400 !important;
-    font-size: var(--font-size-14) !important;
+    font-size: 14px !important;
     width: 84%;
     .mat-chip.mat-standard-chip {
         color: var(--color-chips-primary) !important;
         background-color: var(--color-body-background) !important;
         border: 1px solid var(--color-primary-login-box-body-text) !important;
-        font-size: var(--font-size-12) !important;
+        font-size: 12px !important;
     }
 }
 .searching-bar-chiplist {
@@ -127,7 +127,7 @@
     text-align: center;
     margin-top: 100px;
     padding-bottom: 100px;
-    font-size: var(--font-size-32);
+    font-size: 36px;
     color: var(--color-gray);
 }
 

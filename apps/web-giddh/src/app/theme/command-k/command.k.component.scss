@@ -11,7 +11,7 @@
         .search-element {
             outline: none;
             border: none;
-            font-size: var(--font-size-14);
+            font-size: 14px;
             font-weight: normal;
             line-height: initial;
             width: 95%;
@@ -35,7 +35,7 @@
             display: inline-flex;
             box-sizing: border-box;
             text-transform: capitalize;
-            font-size: var(--font-size-14);
+            font-size: 14px;
             .vT {
                 letter-spacing: 0.3px;
                 display: inline-block;
@@ -47,7 +47,7 @@
                 direction: ltr;
             }
             .vM {
-                font-size: var(--font-size-24);
+                font-size: 22px;
                 margin-left: 6px;
             }
         }
@@ -122,7 +122,7 @@
             }
             .item-details {
                 position: relative;
-                font-size: var(--font-size-14);
+                font-size: 14px;
                 color: var(--color-popup-secondary-list-head-text);
                 text-transform: capitalize;
                 margin-left: 25px;
@@ -138,7 +138,7 @@
                     text-overflow: ellipsis;
                 }
                 small {
-                    font-size: var(--font-size-12);
+                    font-size: 12px;
                     color: var(--color-abbey);
                 }
                 .command-hover-text {
@@ -219,7 +219,7 @@
                 .item-details {
                     padding-left: 24px;
                     line-height: 1.4;
-                    font-size: var(--font-size-12);
+                    font-size: 12px;
                 }
             }
         }
