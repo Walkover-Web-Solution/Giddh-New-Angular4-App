@@ -111,7 +111,7 @@ svg.icon.gstr-icon {
 }
 
 .font-xs {
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .return-body b {
@@ -140,7 +140,7 @@ svg.icon.gstr-icon {
 }
 
 .font-xxxlarge {
-    font-size: 24px;
+    font-size: var(--font-size-24);
 }
 
 .bottom-action,
@@ -221,7 +221,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .font-medium {
-    font-size: 15px;
+    font-size: var(--font-size-14);
 }
 
 .label-default {
@@ -232,51 +232,6 @@ hr {
     margin-top: 20px;
     margin-bottom: 20px;
     border-top: 1px solid var(--color-iron);
-}
-
-.filing-due-date {
-    margin: 10px 0 25px;
-}
-
-.filing-due-date .return-details {
-    margin-top: 10px;
-    border: 1px solid var(--color-iron);
-    border-radius: 4px;
-}
-
-.filing-due-date .return-details > table {
-    width: 100%;
-    font-size: 13px;
-}
-
-.filing-due-date .return-details > table > tbody > tr > td:first-child {
-    padding: 10px 15px;
-    vertical-align: top;
-}
-
-.filing-due-date .return-details > table > tbody > tr > td:first-child:before {
-    content: " ";
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 6px;
-    vertical-align: middle;
-    background-color: var(--color-gst-primary-filing-due-date-return-details-table-tbody-tr-td-first-child-before);
-}
-
-.filing-due-date .return-details > table > tbody > tr > td:last-child {
-    padding: 10px 15px;
-    text-align: right;
-}
-
-.filing-due-date {
-    margin: 10px 0 25px;
-}
-
-.return-body .notification .notify-title {
-    font-size: 13px;
-    color: var(--color-gray);
 }
 
 .return-body .notification .activity-graph {
@@ -322,25 +277,6 @@ hr {
 .notify label.font-xs.text-muted strong {
     font-weight: 600;
     color: var(--color-abbey) !important;
-}
-
-.font-normal {
-    font-size: 13px;
-    color: var(--color-abbey);
-}
-
-.return-body .notification .faq-list {
-    padding: 10px 0 10px 20px;
-}
-
-.return-body .notification .faq-list li {
-    padding: 6px 10px;
-    color: var(--color-blue);
-    font-size: 13px;
-}
-
-.return-body .notification .faq-list li a:hover {
-    color: var(--color-gst-primary-return-body-notification-faq-list-li-a-hover);
 }
 
 #c-tab ::ng-deep .nav-tabs > li.active > a,
@@ -515,7 +451,7 @@ hr {
         background-color: var(--color-white);
     }
     .filing-steps .font-large {
-        font-size: 14px;
+        font-size: var(--font-size-14);
     }
     .return-content .content-graph {
         padding: 15px 0;

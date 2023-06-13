@@ -24,11 +24,11 @@
 .import-type h2 {
     margin-bottom: 20px;
     margin-top: 20px;
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .lead {
-    font-size: 36px;
+    font-size: var(--font-size-32);
     margin-bottom: 10px;
 }
 
@@ -85,6 +85,6 @@
         display: block;
     }
     .lead {
-        font-size: 25px;
+        font-size: var(--font-size-24);
     }
 }

@@ -9,7 +9,7 @@
             .warehouse-company-name {
                 .label-wrapper {
                     display: flex;
-                    font-size: 14px;
+                    font-size: var(--font-size-14);
                     label {
                         color: var(--color-abbey);
                         min-width: 200px;
@@ -37,7 +37,7 @@
     }
     .warehouse-form {
         .warehouse-form-field {
-            font-size: 14px;
+            font-size: var(--font-size-14);
             display: flex;
             align-items: center;
             color: var(--color-nero);

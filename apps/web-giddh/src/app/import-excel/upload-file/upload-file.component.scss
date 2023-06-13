@@ -1,6 +1,6 @@
 .upload-and-map-content {
     h2 {
-        font-size: 32px;
+        font-size: var(--font-size-32);
     }
 }
 
@@ -65,7 +65,7 @@
 }
 
 .lead {
-    font-size: 36px;
+    font-size: var(--font-size-32);
     margin-bottom: 10px;
 }
 
@@ -97,7 +97,7 @@
     padding: 6px 12px !important;
     outline: 0;
     color: var(--color-common-primary-text);
-    font-size: 14px;
+    font-size: var(--font-size-14);
     width: calc(100% - 95px);
 }
 .select-file {

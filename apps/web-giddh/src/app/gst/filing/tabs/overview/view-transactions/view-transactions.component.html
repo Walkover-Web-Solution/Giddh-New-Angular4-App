@@ -247,7 +247,7 @@
                             {{ item.voucherNumber ? item.voucherNumber : "-" }}
 
                             <span *ngIf="isMobileScreen" class="d-inline-flex text-decoration-none btn-link"
-                                ><i class="icon-download-circle font-16 ml-2"></i
+                                ><i class="icon-download-circle ml-2"></i
                             ></span>
                         </td>
                         <td *ngIf="item.voucherType === 'purchase'">
@@ -265,7 +265,7 @@
                         <td>{{ item.reverseCharge ? item.reverseCharge : "-" }}</td>
                         <td class="text-right">
                             <span class="d-inline-flex align-items-center">
-                                <i class="icon-rupees font-11"></i>
+                                <i class="icon-rupees icon-font-11"></i>
                                 <amount-field
                                     [amount]="item?.taxableAmount"
                                     [currencySymbol]="false"
@@ -276,7 +276,7 @@
                         </td>
                         <td class="text-right">
                             <span class="d-inline-flex align-items-center">
-                                <i class="icon-rupees font-11"></i>
+                                <i class="icon-rupees icon-font-11"></i>
                                 <amount-field
                                     [amount]="item?.igstAmount"
                                     [currencySymbol]="false"
@@ -287,7 +287,7 @@
                         </td>
                         <td class="text-right">
                             <span class="d-inline-flex align-items-center">
-                                <i class="icon-rupees font-11"></i>
+                                <i class="icon-rupees icon-font-11"></i>
                                 <amount-field
                                     [amount]="item?.cgstAmount"
                                     [currencySymbol]="false"
@@ -298,7 +298,7 @@
                         </td>
                         <td class="text-right">
                             <span class="d-inline-flex align-items-center">
-                                <i class="icon-rupees font-11"></i>
+                                <i class="icon-rupees icon-font-11"></i>
                                 <amount-field
                                     [amount]="item?.sgstAmount"
                                     [currencySymbol]="false"
@@ -309,7 +309,7 @@
                         </td>
                         <td class="text-right">
                             <span class="d-inline-flex align-items-center">
-                                <i class="icon-rupees font-11"></i>
+                                <i class="icon-rupees icon-font-11"></i>
                                 <amount-field
                                     [amount]="item?.cessAmount"
                                     [currencySymbol]="false"
@@ -320,7 +320,7 @@
                         </td>
                         <td class="text-right">
                             <span class="d-inline-flex align-items-center">
-                                <i class="icon-rupees font-11"></i>
+                                <i class="icon-rupees icon-font-11"></i>
                                 <amount-field
                                     [amount]="item?.totalAmount"
                                     [currencySymbol]="false"

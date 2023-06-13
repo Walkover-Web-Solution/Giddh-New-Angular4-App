@@ -47,7 +47,7 @@
     border-bottom: 1px solid;
     margin: 20px 0;
     min-width: 250px;
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .total-box > span {
@@ -59,7 +59,7 @@
 .appearance-none {
     background: var(--color-dark-fog) !important;
     border: 0 !important;
-    font-size: 16px;
+    font-size: var(--font-size-14);
     color: var(--color-nero);
 }
 
@@ -112,7 +112,7 @@ input[name="entryDate"] {
     color: var(--color-nero);
     height: auto;
     width: 100px;
-    font-size: 16px;
+    font-size: var(--font-size-14);
 }
 
 textarea[name="narration"] {

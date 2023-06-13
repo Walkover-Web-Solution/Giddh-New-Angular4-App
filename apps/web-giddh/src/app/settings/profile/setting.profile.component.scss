@@ -41,7 +41,7 @@
 @media (max-width: 768px) {
     .multicurrency-checkbox {
         display: block !important;
-        font-size: 12px;
+        font-size: var(--font-size-12);
     }
 }
 @media (max-width: 767px) {
@@ -119,7 +119,7 @@
 }
 
 #createCompForm p {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     color: var(--color-gray);
     text-align: center;
     margin-left: -28px;
