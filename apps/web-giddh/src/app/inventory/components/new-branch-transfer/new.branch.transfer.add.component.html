@@ -668,7 +668,7 @@
                             <tbody *ngIf="transferType === 'products'">
                                 <tr
                                     *ngFor="let product of branchTransfer.products; let i = index"
-                                    (click)="setActiveRow(); $event.stopPropagation()"
+                                    (click)="setActiveRow(i); $event.stopPropagation()"
                                     (clickOutside)="hideActiveRow()"
                                 >
                                     <td>{{ i + 1 }}.</td>
