@@ -50,7 +50,7 @@
     padding: 6px;
     height: 100%;
     background: var(--color-white);
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .tooltip-box {
@@ -159,7 +159,7 @@
     }
 
     .content-text {
-        font-size: 12px !important;
+        font-size: var(--font-size-12) !important;
         width: 26%;
         text-transform: none;
     }
@@ -269,7 +269,7 @@
         h4 {
             align-self: self-start !important;
             padding-bottom: 10px;
-            font-size: 14px;
+            font-size: var(--font-size-14);
         }
 
         .btn-danger {
@@ -466,23 +466,6 @@
             .input-field {
                 input {
                     width: 250px;
-                }
-            }
-        }
-
-        .main-content {
-            table {
-                .mat-cell {
-                    .small-button {
-                        height: 35px;
-                        font-size: 0.6rem;
-                        padding: 0px;
-                        min-width: 100%;
-                    }
-
-                    .right-side {
-                        width: 95%;
-                    }
                 }
             }
         }

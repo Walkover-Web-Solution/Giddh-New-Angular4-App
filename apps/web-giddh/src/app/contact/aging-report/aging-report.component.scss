@@ -57,7 +57,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 14px;
+    font-size: var(--font-size-14);
     border-radius: 5px;
     margin-right: 0;
     width: 73px;
@@ -89,7 +89,7 @@ span.input-addon {
     padding: 4px 9px;
     background-color: var(--color-blue);
     color: var(--color-white);
-    font-size: 18px;
+    font-size: var(--font-size-18);
     border-radius: 5px;
     top: 0;
 }
@@ -365,7 +365,7 @@ tr.mat-header-row {
 @media (max-width: 575px) {
     .top-aging-table-top {
         padding: 8px 3px !important;
-        font-size: 14px;
+        font-size: var(--font-size-14);
     }
 }
 

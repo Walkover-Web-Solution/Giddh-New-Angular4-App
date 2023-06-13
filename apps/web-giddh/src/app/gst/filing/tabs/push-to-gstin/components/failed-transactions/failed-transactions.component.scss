@@ -40,12 +40,12 @@
     border: 0px !important;
 }
 .error-shit-total .table tr td h4 {
-    font-size: 28px;
+    font-size: var(--font-size-24);
     color: var(--color-nero);
 }
 .error-shit-total .table tr td p {
     color: var(--color-gray);
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 .error-shit-total .table {
     margin: 0px;

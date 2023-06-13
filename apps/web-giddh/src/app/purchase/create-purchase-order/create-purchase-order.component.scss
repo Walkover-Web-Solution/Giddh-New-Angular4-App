@@ -44,7 +44,7 @@ form {
                     display: block;
                     color: var(--color-nero);
                     line-height: 1.2rem;
-                    font-size: 14px;
+                    font-size: var(--font-size-14);
                     font-weight: 500;
                 }
             }
@@ -149,7 +149,7 @@ form {
     }
     .create-purchase-order-table {
         .select-account-label {
-            font-size: 14px;
+            font-size: var(--font-size-14);
             color: var(--color-gray);
             padding-bottom: 3px;
             display: block;
@@ -201,7 +201,7 @@ form {
             justify-content: center;
             span {
                 align-self: center;
-                font-size: 12px;
+                font-size: var(--font-size-12);
             }
         }
     }
@@ -273,17 +273,13 @@ form {
 }
 
 .list-item {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     border-bottom: 1px solid var(--color-common-secondary-border);
     display: flex !important;
 }
 
 .font-12 {
-    font-size: 12px;
-}
-
-.font-11 {
-    font-size: 11px;
+    font-size: var(--font-size-12);
 }
 
 .w-100 {
@@ -399,7 +395,7 @@ a.copy-invoice img {
 }
 
 .entry-date label {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     display: block;
 }
 
@@ -409,7 +405,7 @@ a.copy-invoice img {
     width: 73px;
     background: transparent !important;
     height: 25px !important;
-    font-size: 12px;
+    font-size: var(--font-size-12);
     padding-right: 0 !important;
     padding-left: 0 !important;
     padding-top: 0 !important;
@@ -421,26 +417,26 @@ a.copy-invoice img {
 
 .hsn-code.text-right {
     padding-top: 3px;
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .hsn-code label {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     display: block;
 }
 
 .entry-date {
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .sku-number,
 .sku-number label {
-    font-size: 12px !important;
+    font-size: var(--font-size-12) !important;
     display: none;
 }
 
 .add-bulk-items {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     padding-bottom: 0;
     color: var(--color-blue);
 }
@@ -464,7 +460,7 @@ a.copy-invoice img {
     vertical-align: middle;
     line-height: 0;
     width: 88px !important;
-    font-size: 12px;
+    font-size: var(--font-size-12);
     background-color: transparent !important;
 }
 
@@ -501,7 +497,7 @@ span.edit-icon {
 }
 
 .hsn-code-dropdown label {
-    font-size: 12px !important;
+    font-size: var(--font-size-12) !important;
     margin-bottom: 5px;
     display: block;
 }
@@ -523,7 +519,7 @@ span.edit-icon {
     text-align: center;
     color: var(--color-iron);
     padding: 5px 8px;
-    font-size: 16px;
+    font-size: var(--font-size-14);
 }
 
 .hsn-code-dropdown .btn-group {
@@ -549,7 +545,7 @@ span.edit-icon {
 }
 
 .select-account-label {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     color: var(--color-gray);
     padding-bottom: 3px;
 }
@@ -827,10 +823,10 @@ strong {
 .aqua-color {
     a {
         color: var(--color-blue);
-        font-size: 12px;
+        font-size: var(--font-size-12);
     }
     span {
-        font-size: 14px;
+        font-size: var(--font-size-14);
         color: var(--color-iron);
     }
 }
@@ -843,16 +839,6 @@ label.checkbox-custom-label {
     line-height: initial !important;
 }
 
-span.eligible-ITC {
-    font-size: 11px;
-    cursor: pointer;
-    padding-top: 5px;
-    display: inline-block;
-    span {
-        color: var(--color-blue);
-        font-size: 10px;
-    }
-}
 .deposit-payment-mode {
     display: flex;
     align-items: center;
@@ -913,7 +899,7 @@ span.eligible-ITC {
 }
 
 .single-card-row label.card-label {
-    font-size: 14px !important;
+    font-size: var(--font-size-14) !important;
     font-weight: 500;
     display: block;
     font-family: var(--font-semibold);
@@ -926,7 +912,7 @@ span.eligible-ITC {
 
 .single-card-row p {
     color: var(--color-abbey);
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 .card-invoice-table {
@@ -939,7 +925,7 @@ span.eligible-ITC {
     right: 15px;
     top: 11px;
     color: var(--color-danger);
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 
 .edit-card img {
@@ -1031,7 +1017,7 @@ span.eligible-ITC {
 }
 .applicable-tax {
     margin-top: 5px;
-    font-size: 12px;
+    font-size: var(--font-size-12);
     text-transform: capitalize;
     margin-bottom: 20px;
 }
@@ -1054,7 +1040,7 @@ ul.change-address-dropdown {
     }
 }
 .switch-currency {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     color: var(--color-nero);
     max-width: 1000px;
     text-align: right;
@@ -1077,7 +1063,7 @@ ul.change-address-dropdown {
 }
 .differ-currency {
     color: var(--color-gray);
-    font-size: 14px;
+    font-size: var(--font-size-14);
     text-align: right;
     bottom: 3px;
     right: 8px;
@@ -1282,7 +1268,6 @@ ul.change-address-dropdown {
         background-color: var(--color-dark-fog);
         border: 1px solid var(--color-iron);
         padding: 3px;
-        font-size: 13px;
     }
     .other-taxes div {
         align-items: flex-end !important;

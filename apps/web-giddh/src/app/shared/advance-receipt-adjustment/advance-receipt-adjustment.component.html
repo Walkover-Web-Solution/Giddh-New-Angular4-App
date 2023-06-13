@@ -40,7 +40,7 @@
                                     ? commonLocaleData?.app_voucher_types?.advance_receipt
                                     : (localeData?.voucher_label | replace: "[VOUCHER_TYPE]":currentVoucherLabel)
                             }}
-                            Total: <i class="font-10"></i>
+                            Total: <i class="icon-font-10"></i>
                             <span class="d-inline-flex justify-content-end">
                                 <amount-field
                                     [amount]="adjustPayment?.grandTotal"
@@ -73,7 +73,7 @@
                                     : commonLocaleData?.app_due
                             }}
                             <span class="text-light">{{ localeData?.post_adj }}</span>
-                            <span class="nowrap"><i class="font-10"></i> </span>
+                            <span class="nowrap"><i class="icon-font-10"></i> </span>
                             <span class="d-inline-flex justify-content-end">
                                 <amount-field
                                     [amount]="getBalanceDue()"
@@ -362,7 +362,7 @@
                                 <a
                                     href="javascript:void(0)"
                                     (click)="deleteAdjustVoucherRow(entryIdx)"
-                                    class="font-22 text-light d-inline-block"
+                                    class="icon-font-22 text-light d-inline-block"
                                     ><i class="icon-trash"></i
                                 ></a>
                             </div>
@@ -371,7 +371,7 @@
 
                     <p>
                         <a href="javascript:void(0)" (click)="addNewBlankAdjustVoucherRow()" class="font-14"
-                            ><span class="font-16">+</span> {{ commonLocaleData?.app_add_new_line }}</a
+                            ><span class="font-14">+</span> {{ commonLocaleData?.app_add_new_line }}</a
                         >
                     </p>
 

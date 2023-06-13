@@ -77,7 +77,7 @@
             [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)"
             id="button-focus-proforma"
         >
-            <span class="font-13 mr-l1" *ngIf="isEinvoiceGenerated">{{ commonLocaleData?.app_special_note }}</span>
+            <span class="font-14 mr-l1" *ngIf="isEinvoiceGenerated">{{ commonLocaleData?.app_special_note }}</span>
             <form
                 #invoiceForm="ngForm"
                 novalidate
@@ -109,7 +109,7 @@
                                     "
                                 >
                                     <div class="text-right">
-                                        <p class="font-20 b pb-r1">
+                                        <p class="font-18 b pb-r1">
                                             <span class="balance-due">{{
                                                 isProformaInvoice || isEstimateInvoice
                                                     ? commonLocaleData?.app_total_amount
@@ -868,7 +868,7 @@
                                 "
                             >
                                 <div class="text-right">
-                                    <p class="font-20 pb-r1">
+                                    <p class="font-18 pb-r1">
                                         <span class="balance-due">{{
                                             isProformaInvoice || isEstimateInvoice
                                                 ? commonLocaleData?.app_total_amount
@@ -3015,7 +3015,7 @@
                                                     <label
                                                         for="entry.isOtherTaxApplicable_{{ entryIdx }}"
                                                         *ngIf="!entry.isOtherTaxApplicable"
-                                                        class="other-tax-label font-13 align-middle"
+                                                        class="other-tax-label font-14 align-middle"
                                                         (click)="tcsTdsIndex = entryIdx"
                                                         >{{ localeData?.other_tax }}</label
                                                     >
@@ -4657,7 +4657,7 @@
                                                             <label
                                                                 for="entry.isOtherTaxApplicable_'+entryIdx"
                                                                 *ngIf="!entry.isOtherTaxApplicable"
-                                                                class="other-tax-label font-13 align-middle"
+                                                                class="other-tax-label font-14 align-middle"
                                                                 (click)="tcsTdsIndex = entryIdx"
                                                                 >{{ localeData?.other_tax }}</label
                                                             >

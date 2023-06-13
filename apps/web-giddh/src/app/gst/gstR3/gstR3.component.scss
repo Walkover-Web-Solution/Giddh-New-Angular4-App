@@ -1,5 +1,5 @@
 .font-xlarge {
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 
 a {
@@ -44,7 +44,7 @@ svg.icon.icon-sm {
 }
 
 .font-large {
-    font-size: 16px;
+    font-size: var(--font-size-18);
 }
 
 .text-primary {
@@ -86,7 +86,7 @@ svg.icon.icon-sm {
 
 .btn,
 input.gsc-input {
-    font-size: 14px;
+    font-size: var(--font-size-14);
     line-height: 1.42857143;
     vertical-align: middle;
 }
@@ -210,7 +210,7 @@ svg.icon.icon-xxlg {
 }
 
 .font-xxxlarge {
-    font-size: 24px;
+    font-size: var(--font-size-24);
 }
 
 .tax-engine .summary-content {
@@ -224,7 +224,7 @@ svg.icon.icon-xxlg {
 }
 
 .font-medium {
-    font-size: 15px;
+    font-size: var(--font-size-14);
 }
 
 .table,
@@ -249,7 +249,7 @@ address {
 .tax-engine .summary-content .gstr-3b-report.table > thead > tr > td {
     border: 1px solid var(--color-table-primary-header-bar-border) !important;
     padding: 6px;
-    font-size: 13px;
+    font-size: var(--font-size-14);
 }
 
 .btn-link:focus,
@@ -269,7 +269,7 @@ table {
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
-    font-size: 13px;
+    font-size: var(--font-size-14);
     border: 1px solid var(--color-table-primary-content-bar-border) !important;
     padding: 6px;
 }
@@ -294,7 +294,7 @@ table {
 
 .h4,
 h4 {
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 
 h4,
@@ -337,7 +337,7 @@ h6 {
 }
 
 .modal-header {
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 
 .modal-header {
@@ -474,7 +474,7 @@ dropdown-menu-right {
 .successful-file-detail h3,
 .gst-return-date h3 {
     color: var(--color-nero) !important;
-    font-size: 24px !important;
+    font-size: var(--font-size-24) !important;
     margin: 20px 0 7px !important;
 }
 
@@ -492,11 +492,11 @@ dropdown-menu-right {
 }
 
 .file-your-return {
-    font-size: 18px;
+    font-size: var(--font-size-18);
 }
 
 .authenticate-btn {
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 ul#dropdown-menu {
@@ -606,7 +606,7 @@ ul#dropdown-menu {
             width: 100%;
             padding-bottom: 15px;
             .font-xlarge {
-                font-size: 16px;
+                font-size: var(--font-size-14);
             }
             .dropdown {
                 margin-left: 0;
