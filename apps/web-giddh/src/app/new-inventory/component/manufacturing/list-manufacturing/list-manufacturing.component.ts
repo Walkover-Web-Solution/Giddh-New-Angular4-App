@@ -309,7 +309,7 @@ export class ListManufacturingComponent implements OnInit {
                         stock: item.stockName,
                         variant: item.variant.name,
                         qty_outwards: item.manufacturingQuantity,
-                        qty_outwards_unit: item.manufacturingUnit,
+                        qty_outwards_unit: item.manufacturingUnitCode,
                         linkedStocks: item.linkedStocks,
                         warehouse: item.warehouse?.name,
                         uniqueName: item.uniqueName
@@ -331,7 +331,7 @@ export class ListManufacturingComponent implements OnInit {
      */
     public openAdvanceFilterDialog(): void {
         this.dialog.open(this.advanceFilterComponent, {
-            width: '630px',
+            width: '500px',
         })
     }
 

@@ -3,8 +3,6 @@
     "item_cost": "Cost per Item",
     "finished_stock": "Finished Stock",
     "multiple_of": "Multiple of",
-    "generate_manufacturing": "Generate Manufacturing",
-    "update_manufacturing": "Update Manufacturing",
     "raw_stock": "Raw Stock",
     "add_stock": "+ Add Stock",
     "manufacturing_saved": "Manufacturing created successfully.",

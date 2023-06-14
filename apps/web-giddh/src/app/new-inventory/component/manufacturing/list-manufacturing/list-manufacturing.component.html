@@ -11,10 +11,9 @@
             <div class="form-fileds clearfix">
                 <form class="col-12 pl-0 pr-0 mr-b05 manufacturing-form">
                     <div class="row">
-                        <div class="d-flex flex-wrap gap-between w-100 mb-3">
+                        <div class="d-flex flex-wrap gap-between w-100 mb-2">
                             <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
-                                <label>{{ commonLocaleData?.app_branch }}</label>
-                                <select-field
+                                <dropdown-field
                                     class="max-width-230"
                                     [cssClass]="'form-control'"
                                     [name]="'branch'"
@@ -23,11 +22,13 @@
                                     (selectedOption)="handleBranchChange($event)"
                                     [defaultValue]="selectedBranchName"
                                 >
-                                </select-field>
+                                </dropdown-field>
                             </div>
                             <div>
-                                <label>{{ commonLocaleData?.app_date }}</label>
-                                <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <div
+                                    class="input-group custom-datepicker custom-new-datepicker"
+                                    (click)="showGiddhDatepicker($event)"
+                                >
                                     <i class="icon-calender calendar-addon"></i>
                                     <input
                                         type="text"
@@ -37,9 +38,8 @@
                                     />
                                 </div>
                             </div>
-                            <div>
-                                <label>{{ commonLocaleData?.app_stock }}</label>
-                                <select-field
+                            <div class="list-header">
+                                <dropdown-field
                                     class="max-width-230"
                                     [cssClass]="'form-control'"
                                     [name]="'stock'"
@@ -52,12 +52,11 @@
                                     "
                                     [defaultValue]="selectedStockName"
                                 >
-                                </select-field>
+                                </dropdown-field>
                             </div>
 
-                            <div>
-                                <label>{{ commonLocaleData?.app_variant }}</label>
-                                <select-field
+                            <div class="list-header">
+                                <dropdown-field
                                     class="max-width-230"
                                     [cssClass]="'form-control'"
                                     [name]="'variant'"
@@ -69,12 +68,11 @@
                                     "
                                     [defaultValue]="selectedVariantName"
                                 >
-                                </select-field>
+                                </dropdown-field>
                             </div>
 
-                            <div>
-                                <label>{{ commonLocaleData?.app_warehouse }}</label>
-                                <select-field
+                            <div class="list-header">
+                                <dropdown-field
                                     class="max-width-230"
                                     [cssClass]="'form-control'"
                                     [name]="'warehouse'"
@@ -86,10 +84,10 @@
                                         manufacturingSearchRequest.warehouseUniqueName = $event.value
                                     "
                                 >
-                                </select-field>
+                                </dropdown-field>
                             </div>
 
-                            <div class="mt-auto">
+                            <div>
                                 <button
                                     type="button"
                                     class="mr-0"
@@ -101,7 +99,7 @@
                                 </button>
                             </div>
 
-                            <div class="mt-auto">
+                            <div>
                                 <button
                                     type="button"
                                     class="mr-0"
@@ -113,7 +111,7 @@
                                 </button>
                             </div>
 
-                            <div class="ml-auto mt-auto">
+                            <div class="ml-auto">
                                 <button
                                     [matTooltip]="commonLocaleData?.app_advanced_filter"
                                     matTooltipPosition="left"
@@ -238,11 +236,23 @@
                 <div class="form-fileds clearfix">
                     <form class="col-md-12 pl-0 pr-0 mr-b05">
                         <div class="row mt-2">
-                            <div class="col-md-4 col-sm-12">
-                                <label>{{ localeData?.search_by }}</label>
+                            <div class="col-md-12 col-sm-12">
+                                <dropdown-field
+                                    [cssClass]="'form-control'"
+                                    [name]="'inventoryType'"
+                                    [placeholder]="commonLocaleData?.app_select_inventory_type"
+                                    [options]="inventoryTypeFilters"
+                                    [defaultValue]="selectedInventoryTypeName"
+                                    (selectedOption)="
+                                        inventoryType = $event.value; selectedInventoryTypeName = $event.label
+                                    "
+                                >
+                                </dropdown-field>
                             </div>
-                            <div class="col-md-8 col-sm-12">
-                                <select-field
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <dropdown-field
                                     [cssClass]="'form-control'"
                                     [name]="'searchBy'"
                                     [placeholder]="localeData?.select_search_by"
@@ -253,15 +263,12 @@
                                         selectedOperationName = $event.label
                                     "
                                 >
-                                </select-field>
+                                </dropdown-field>
                             </div>
                         </div>
-                        <div class="row mt-2">
-                            <div class="col-md-4 col-sm-12">
-                                <label>{{ localeData?.operation }}</label>
-                            </div>
-                            <div class="col-md-8 col-sm-12">
-                                <select-field
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <dropdown-field
                                     [cssClass]="'form-control'"
                                     [name]="'searchOperation'"
                                     [placeholder]="localeData?.select_operation"
@@ -272,40 +279,19 @@
                                         selectedFilterByName = $event.label
                                     "
                                 >
-                                </select-field>
+                                </dropdown-field>
                             </div>
                         </div>
-                        <div class="row mt-2">
-                            <div class="col-md-4 col-sm-12">
-                                <label>{{ commonLocaleData?.app_value }}</label>
-                            </div>
-                            <div class="col-md-8 col-sm-12">
-                                <text-field
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <input-field
                                     [type]="'number'"
                                     [name]="'searchValue'"
                                     [placeholder]="localeData?.enter_value"
                                     [cssClass]="'form-control'"
                                     [(ngModel)]="manufacturingSearchRequest.searchValue"
                                     [allowDecimalDigitsOnly]="true"
-                                ></text-field>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-md-4 col-sm-12">
-                                <label>{{ commonLocaleData?.app_inventory_type }}</label>
-                            </div>
-                            <div class="col-md-8 col-sm-12">
-                                <select-field
-                                    [cssClass]="'form-control'"
-                                    [name]="'inventoryType'"
-                                    [placeholder]="commonLocaleData?.app_select_inventory_type"
-                                    [options]="inventoryTypeFilters"
-                                    [defaultValue]="selectedInventoryTypeName"
-                                    (selectedOption)="
-                                        inventoryType = $event.value; selectedInventoryTypeName = $event.label
-                                    "
-                                >
-                                </select-field>
+                                ></input-field>
                             </div>
                         </div>
 
