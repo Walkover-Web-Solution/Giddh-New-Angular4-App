@@ -52,29 +52,46 @@
                                     >
                                     </input-field>
                                 </div>
-                                <div class="mr-b1 mr-t1" *ngIf="transferType === 'Senders'">
-                                    <mat-radio-group
-                                        name="sender_HsnSac"
-                                        class="d-flex font-14"
-                                        [(ngModel)]="senderHsnSacStatus"
+                                <div class="d-flex justify-content-space-between align-items-center">
+                                    <div class="mr-b1" *ngIf="transferType === 'Senders'">
+                                        <mat-radio-group
+                                            name="sender_HsnSac"
+                                            class="d-flex font-14"
+                                            [(ngModel)]="senderHsnSacStatus"
+                                        >
+                                            <mat-radio-button color="primary" value="HSN">HSN Code</mat-radio-button>
+                                            <mat-radio-button color="primary" value="SAC">SAC Code</mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                    <div
+                                        class="w-100 ml-3"
+                                        *ngIf="transferType === 'Senders'"
+                                        [ngStyle]="{ 'visibility': senderHsnSacStatus ? 'visible' : 'hidden' }"
                                     >
-                                        <mat-radio-button color="primary" value="HSN">HSN Code</mat-radio-button>
-                                        <mat-radio-button color="primary" value="SAC">SAC Code</mat-radio-button>
-                                    </mat-radio-group>
-                                </div>
-                                <div *ngIf="transferType === 'Senders' && senderHsnSacStatus">
-                                    <input-field
-                                        [type]="'number'"
-                                        [name]="''"
-                                        [placeholder]="senderHsnSacStatus + ' Code'"
-                                        [appearance]="'outline'"
-                                    >
-                                    </input-field>
+                                        <input-field
+                                            [type]="'number'"
+                                            [name]="''"
+                                            [placeholder]="senderHsnSacStatus + ' Code'"
+                                            [appearance]="'outline'"
+                                        >
+                                        </input-field>
+                                    </div>
                                 </div>
                                 <div *ngIf="transferType === 'Products'">
                                     <dropdown-field
                                         [name]="''"
                                         [placeholder]="'Sender\'s Warehouse'"
+                                        [options]="product"
+                                        [defaultValue]=""
+                                        [required]="true"
+                                        [appearance]="'outline'"
+                                    >
+                                    </dropdown-field>
+                                </div>
+                                <div *ngIf="transferType === 'Products'">
+                                    <dropdown-field
+                                        [name]="''"
+                                        [placeholder]="'Sender\'s GSTIN'"
                                         [options]="product"
                                         [defaultValue]=""
                                         [required]="true"
@@ -114,9 +131,18 @@
                                     </dropdown-field>
                                 </div>
                                 <div>
-                                    <div
-                                        [ngClass]="{ 'height-full': senderHsnSacStatus && transferType === 'Senders' }"
+                                    <dropdown-field
+                                        [name]="''"
+                                        [placeholder]="'Receiver\'s GSTIN'"
+                                        [options]="product"
+                                        [defaultValue]=""
+                                        [required]="true"
+                                        [appearance]="'outline'"
                                     >
+                                    </dropdown-field>
+                                </div>
+                                <div>
+                                    <div>
                                         <mat-form-field appearance="outline" class="w-100">
                                             <mat-label>Receiver's Address</mat-label>
                                             <textarea matInput rows="3"></textarea>
