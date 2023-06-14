@@ -112,7 +112,7 @@
         }
         .billing-details form label {
             color: var(--color-gray);
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             font-weight: 400;
         }
         .billing-details form {
@@ -152,7 +152,7 @@
             }
             .renewal-card-subtitle {
                 color: var(--color-slate);
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
                 font-weight: bold;
                 margin-bottom: 0px !important;
             }
@@ -161,7 +161,7 @@
                 width: 100%;
             }
             .year {
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
                 margin-left: 3px;
                 text-transform: lowercase;
             }
@@ -203,7 +203,7 @@
                 }
             }
             .new-payable {
-                font-size: var(--font-size-14) !important;
+                font-size: var(--font-size-16) !important;
                 padding-left: 5px;
                 margin-bottom: 7px !important;
             }
@@ -257,7 +257,7 @@
         padding-top: 12px;
         padding-bottom: 13px;
         color: var(--color-gray);
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
         padding-left: 5px;
         .renewal-subscription-extra {
             height: 20px;

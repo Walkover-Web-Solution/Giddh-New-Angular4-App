@@ -104,7 +104,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 }
             },
             tooltip: {
-                headerFormat: '<span style="font-size: var(--font-size-14)">{point.key}</span><table>',
+                headerFormat: '<span style="font-size: var(--font-size-16)">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
                     '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
                 footerFormat: '</table>',
@@ -172,7 +172,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 }
             },
             tooltip: {
-                headerFormat: '<span style="font-size: var(--font-size-14)">{point.key}</span><table>',
+                headerFormat: '<span style="font-size: var(--font-size-16)">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
                     '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
                 footerFormat: '</table>',
@@ -240,7 +240,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 }
             },
             tooltip: {
-                headerFormat: '<span style="font-size: var(--font-size-14)">{point.key}</span><table>',
+                headerFormat: '<span style="font-size: var(--font-size-16)">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
                     '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
                 footerFormat: '</table>',
@@ -309,7 +309,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 }
             },
             tooltip: {
-                headerFormat: '<span style="font-size: var(--font-size-14)">{point.key}</span><table>',
+                headerFormat: '<span style="font-size: var(--font-size-16)">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
                     '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
                 footerFormat: '</table>',

@@ -7,7 +7,7 @@
 >
     <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)">
         <div class="aside-help-header relative">
-            <h4 class="font-14" *ngIf="showSettingHeading">{{ localeData?.page_heading }}</h4>
+            <h4 class="font-16" *ngIf="showSettingHeading">{{ localeData?.page_heading }}</h4>
             <div hidden id="close" class="cursor-pointer" (click)="closeAsidePane($event)">
                 <i class="icon-cross"></i>
             </div>

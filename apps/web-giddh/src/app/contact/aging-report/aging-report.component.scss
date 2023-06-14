@@ -57,7 +57,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     border-radius: 5px;
     margin-right: 0;
     width: 73px;
@@ -365,7 +365,7 @@ tr.mat-header-row {
 @media (max-width: 575px) {
     .top-aging-table-top {
         padding: 8px 3px !important;
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
     }
 }
 

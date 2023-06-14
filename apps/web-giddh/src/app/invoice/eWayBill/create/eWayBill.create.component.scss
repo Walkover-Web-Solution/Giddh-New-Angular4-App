@@ -14,7 +14,7 @@
         background-color: var(--color-white);
         padding: 15px;
         h2 {
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             color: var(--color-blue);
         }
         label {
@@ -105,7 +105,7 @@
 }
 
 .aside-right {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     background: var(--color-white);
     right: -530px;
     transition: 0.5s all ease;
@@ -161,7 +161,7 @@
     background: none;
     border: 0px;
     color: var(--color-dark-fog);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     padding: 2px;
     margin-right: 3px;
     cursor: pointer;

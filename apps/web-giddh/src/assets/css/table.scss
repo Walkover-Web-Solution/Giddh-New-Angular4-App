@@ -10,7 +10,7 @@
     thead > tr > td,
     thead > tr > th {
         vertical-align: middle;
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
         border-left: none;
         border-right: none;
         background: var(--color-table-heading-primary-background);
@@ -54,7 +54,7 @@
         text-transform: capitalize;
         border-right: none;
         vertical-align: middle !important;
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
         word-break: break-word;
         border-left: none;
         border-right: none;
@@ -86,7 +86,7 @@
     }
     tfoot > tr > td {
         vertical-align: middle !important;
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
         word-break: break-word;
         white-space: nowrap;
     }
@@ -221,7 +221,7 @@
             word-wrap: inherit !important;
             max-width: 100%;
             white-space: inherit;
-            font-size: var(--font-size-14) !important;
+            font-size: var(--font-size-16) !important;
             margin-bottom: 14px;
             width: 100%;
             &:last-child {
@@ -243,7 +243,7 @@
         }
         tbody td:before {
             color: var(--color-slate);
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             content: attr(data-title);
             display: table-cell;
             font-weight: 500;

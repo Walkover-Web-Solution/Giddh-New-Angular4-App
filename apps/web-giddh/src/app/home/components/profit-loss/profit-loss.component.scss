@@ -38,12 +38,12 @@ span.month-dropdown {
 
 .dashboard-filter .icon-collapse-icon {
     margin-left: 8px;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .due-amount {
     color: var(--color-common-primary-text);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     margin: 0;
     padding: 0;
 }
@@ -103,6 +103,6 @@ span.icon-rupees {
 @media (max-width: 360px) {
     .due-amount,
     .total-amount {
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
     }
 }
