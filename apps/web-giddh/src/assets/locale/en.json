@@ -469,6 +469,7 @@
     "app_voucher_number": "Voucher Number",
     "app_stock_name": "Stock Name",
     "app_select_group": "Select Group",
+    "app_select_parent_group": "Select Parent Group",
     "app_copy": "Copy",
     "app_inclusive_tax": "Inclusive Tax",
     "app_giddh": "Giddh",
