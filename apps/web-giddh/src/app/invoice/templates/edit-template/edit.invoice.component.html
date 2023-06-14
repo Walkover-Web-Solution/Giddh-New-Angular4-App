@@ -1,7 +1,7 @@
 <div validateSectionPermission [hasPermission]="hasInvoiceTemplatePermissions">
     <div class="template-grid-container">
         <div class="clearfix" id="template-grid-wrapper">
-            <label class="mr-b05">Select Design for</label>
+            <label class="mr-b05 font-18">Select Design for</label>
 
             <div class="select-design">
                 <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown">
@@ -36,7 +36,7 @@
                     Click to add a template from our gallery. You can customize the template title, columns,and headers
                     in line item table.
                 </small>
-                <button class="btn pull-left isActive mt-5 add-new-btn" (click)="onOpenTemplateModal()">Add New</button>
+                <button class="btn pull-left isActive mt-4 add-new-btn" (click)="onOpenTemplateModal()">Add New</button>
             </div>
             <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
                 <div class="template-grid" *ngIf="template.type === 'invoice' && voucherType === 'sales'">

@@ -43,7 +43,7 @@
     margin-top: 5px;
     margin-bottom: 5px;
     color: var(--color-company-profile-input-label);
-    font-size: var(--font-size-14) !important;
+    font-size: var(--font-size-16) !important;
 }
 
 .table-content {
@@ -156,7 +156,7 @@
 }
 
 .dropdown-heading {
-    font-size: var(--font-size-14) !important;
+    font-size: var(--font-size-16) !important;
     font-weight: bold;
     color: var(--color-nero) !important;
 }
@@ -191,7 +191,7 @@
             margin-bottom: 10px;
 
             .trigger-input-label {
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
                 float: left;
                 width: 100%;
                 margin-top: 5px;
@@ -209,7 +209,7 @@
                 border: none;
                 background-color: var(--color-common-primary-text);
                 padding-left: 10px;
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
                 border-radius: 5px;
             }
 
@@ -230,12 +230,12 @@
         padding-left: 20px;
 
         .compose {
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             font-weight: 700;
         }
 
         .unit-value {
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             margin-bottom: -18px;
         }
 

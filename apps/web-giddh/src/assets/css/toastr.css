@@ -215,7 +215,7 @@ button.toast-close-button {
 }
 .toast-info .toast-title {
     color: var(--color-white);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     margin-right: 10px;
 }
 .toast-warning {
@@ -223,7 +223,7 @@ button.toast-close-button {
 }
 .toast-warning .toast-title {
     color: var(--color-white);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     margin-right: 10px;
 }
 .toast-progress {
@@ -235,7 +235,7 @@ button.toast-close-button {
     opacity: 0.4;
 }
 .toast-error .toast-title {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     margin-right: 10px;
     color: var(--color-white);
 }
@@ -289,7 +289,7 @@ button.toast-close-button {
         right: -0.2em;
     }
     .toast-title {
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
     }
 }
 @media all and (min-width: 481px) and (max-width: 768px) {

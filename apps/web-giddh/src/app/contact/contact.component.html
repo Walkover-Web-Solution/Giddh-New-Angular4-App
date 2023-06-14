@@ -434,7 +434,7 @@
                 </button>
             </div>
             <div class="modal-body pd-l2 pd-r2 clearfix">
-                <h1 class="mr-b1 font-14" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
+                <h1 class="mr-b1 font-16" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
                 <text-field
                     *ngIf="messageBody.type == 'Email'"
                     [cssClass]="'form-control mr-b1'"
@@ -444,7 +444,7 @@
                     [placeholder]="localeData?.enter_subject_placeholder"
                 >
                 </text-field>
-                <h1 class="mr-b1 font-14">{{ localeData?.type_message_body }}:</h1>
+                <h1 class="mr-b1 font-16">{{ localeData?.type_message_body }}:</h1>
                 <textarea
                     matInput
                     #messageBox
@@ -492,7 +492,7 @@
             </div>
 
             <div class="modal-body pd-l2 pd-r2 clearfix">
-                <h1 class="mr-b1 font-14" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
+                <h1 class="mr-b1 font-16" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
                 <text-field
                     *ngIf="messageBody.type == 'Email'"
                     [cssClass]="'form-control mr-b1'"
@@ -503,7 +503,7 @@
                 >
                 </text-field>
 
-                <h1 class="mr-b1 font-14">{{ localeData?.type_message_body }}:</h1>
+                <h1 class="mr-b1 font-16">{{ localeData?.type_message_body }}:</h1>
                 <textarea
                     matInput
                     #messageBox

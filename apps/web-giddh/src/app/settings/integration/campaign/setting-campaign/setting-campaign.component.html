@@ -12,10 +12,10 @@
             </button>
             <mat-menu #beforeMenu="matMenu" xPosition="before">
                 <button mat-menu-item (click)="editCommunicationPlatform = 'MSG91'">
-                    <span class="font-14 edit-buttons">{{ localeData?.communication?.edit_platform }}</span>
+                    <span class="font-16 edit-buttons">{{ localeData?.communication?.edit_platform }}</span>
                 </button>
                 <button mat-menu-item (click)="deleteCommunicationPlatform(communicationPlatforms?.MSG91?.uniqueName)">
-                    <span class="font-14 edit-buttons">{{ localeData?.communication?.remove_platform }}</span>
+                    <span class="font-16 edit-buttons">{{ localeData?.communication?.remove_platform }}</span>
                 </button>
             </mat-menu>
         </div>
@@ -47,7 +47,7 @@
         "
     >
         <button
-            class="cursor-pointer font-14 d-flex p-0 back-button mat-button"
+            class="cursor-pointer font-16 d-flex p-0 back-button mat-button"
             (click)="backToHomePage($event)"
             *ngIf="communicationPlatforms?.MSG91?.isConnected"
         >
@@ -76,7 +76,7 @@
             <button
                 mat-flat-button
                 color="primary"
-                class="mt-1 verify-button font-14"
+                class="mt-1 verify-button font-16"
                 [disabled]="isCommunicationPlatformVerificationInProcess"
                 (click)="verifyCommunicationPlatform('MSG91')"
             >
@@ -86,7 +86,7 @@
     </div>
     <ng-container *ngIf="!editCommunicationPlatform">
         <button
-            class="new-trigger font-14"
+            class="new-trigger font-16"
             mat-flat-button
             color="primary"
             *ngIf="!showTriggerForm && communicationPlatforms?.MSG91?.isConnected"
@@ -212,7 +212,7 @@
         <div class="trigger-form-left-side">
             <div class="create-trigger-head">
                 <img class="return" src="{{ imgPath }}return.svg" alt="" (click)="backToListPage($event)" />
-                <p class="trigger-heading font-14">
+                <p class="trigger-heading font-16">
                     {{
                         triggerMode === "create" || triggerMode === "copy"
                             ? localeData?.communication?.create_trigger
@@ -275,7 +275,7 @@
                     (onClear)="createTrigger.condition.subConditions[0].action = ''"
                 >
                     <mat-option
-                        class="font-14"
+                        class="font-16"
                         *ngFor="let action of subConditionAction"
                         [selected]="action?.isChecked"
                         [value]="action"

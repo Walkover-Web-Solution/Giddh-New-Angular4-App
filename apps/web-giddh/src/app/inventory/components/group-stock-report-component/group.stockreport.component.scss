@@ -166,7 +166,7 @@ table {
 }
 
 .btn-download {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .btn-group.open.show {
@@ -238,11 +238,11 @@ table {
             line-height: 20px;
         }
         h3 {
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             line-height: 20px;
         }
         h4 {
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             line-height: 20px;
         }
         @media only screen and (max-width: 1024px) {
@@ -321,7 +321,7 @@ td.border-right-none {
 button.btn.btn-filter {
     background: var(--color-dark-fog);
     border: 1px solid var(--color-primary-button-border);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
@@ -368,7 +368,7 @@ button.btn.btn-filter {
 @media (max-width: 991px) {
     .wrap-head-report {
         .head-report {
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             white-space: normal;
             word-break: break-all;
         }
@@ -392,7 +392,7 @@ button.btn.btn-filter {
     }
     .head-report {
         margin-right: 0 !important;
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
     }
     .btn-link {
         margin-right: 0 !important;
@@ -441,7 +441,7 @@ button.btn.btn-filter {
             border: 1px solid var(--color-blue);
             color: var(--color-white);
             border-radius: 5px;
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             padding: 7px 8px;
             width: auto;
         }

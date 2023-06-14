@@ -124,7 +124,7 @@
             width: 97%;
 
             .warehouse-list {
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
                 min-width: 392px;
                 align-items: center;
                 position: relative;
@@ -239,7 +239,7 @@
             line-height: 26px;
             min-width: 140px;
             font-weight: 700;
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             display: flex;
             align-items: center;
             min-height: 56px;
@@ -272,7 +272,7 @@
                 mat-form-field {
                     top: 11px;
                     input::placeholder {
-                        font-size: var(--font-size-14);
+                        font-size: var(--font-size-16);
                         color: var(--color-primary-search-bar-placeholder);
                     }
                 }
@@ -315,7 +315,7 @@
             .stock-table {
                 .grid-title-left {
                     .inner-name {
-                        font-size: var(--font-size-14);
+                        font-size: var(--font-size-16);
                         color: var(--color-common-primary-text);
                     }
                     .stock-details {
@@ -402,7 +402,7 @@
                                 border-radius: 5px;
                                 padding-left: 5px;
                                 left: 20px;
-                                font-size: var(--font-size-14);
+                                font-size: var(--font-size-16);
                                 .dropdown-icon {
                                     position: absolute;
                                     height: 11px;
@@ -519,7 +519,7 @@
     .warehouse-list-head-num {
         color: var(--color-giddh-blue);
         font-weight: 600;
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
     }
 
     .warehouse-list-head-options {
@@ -557,7 +557,7 @@
         }
         .d-flex {
             .flex-fill {
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
             }
         }
     }
