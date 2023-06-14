@@ -294,7 +294,7 @@
                     </div>
 
                     <div class="connected-accounts">
-                        <b class="font-14" *ngIf="!isLoading && connectedBankAccounts?.length > 0">{{
+                        <b class="font-16" *ngIf="!isLoading && connectedBankAccounts?.length > 0">{{
                             localeData?.payment?.connected_accounts
                         }}</b
                         ><br />
@@ -304,11 +304,11 @@
                                 class="account-wrapper"
                                 *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName"
                             >
-                                <div class="account-info-background width-100 font-14 row">
+                                <div class="account-info-background width-100 font-16 row">
                                     <div class="col-md-4">
                                         <span class="field-label">{{ localeData?.payment?.account_number_label }}</span
                                         ><br />
-                                        <span class="account-number mt-2 font-14 inline"
+                                        <span class="account-number mt-2 font-16 inline"
                                             ><b>{{ bankAccount?.iciciDetailsResource?.accountNumber }}</b></span
                                         >
                                     </div>
@@ -349,7 +349,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="font-14">
+                                <div class="font-16">
                                     <ng-container *ngIf="bankAccount?.iciciDetailsResource?.payor?.length > 0">
                                         <div
                                             class="mt-2"
@@ -443,7 +443,7 @@
                                     </ng-container>
                                     <button
                                         type="button"
-                                        class="btn btn-light-blue bold font-14 mt-2 mr-l15"
+                                        class="btn btn-light-blue bold font-16 mt-2 mr-l15"
                                         (click)="openCreateNewAccountUserModal(bankAccount)"
                                     >
                                         {{ localeData?.payment?.add_more_users }}

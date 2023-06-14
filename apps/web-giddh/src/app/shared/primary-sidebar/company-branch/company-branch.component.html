@@ -55,7 +55,7 @@
                 </div>
                 <div class="company-list mt-2">
                     <ul
-                        class="list-style-none font-14"
+                        class="list-style-none font-16"
                         *ngIf="
                             companyListForFilter && companyListForFilter.length && !(isCompanyRefreshInProcess$ | async)
                         "
@@ -121,7 +121,7 @@
                     </button>
                 </div>
                 <div class="company-list branch-list mt-2">
-                    <ul class="list-style-none font-14" *ngIf="!branchRefreshInProcess">
+                    <ul class="list-style-none font-16" *ngIf="!branchRefreshInProcess">
                         <ng-container *ngIf="companyBranches?.unarchivedBranchCount >= 1">
                             <li
                                 *ngIf="

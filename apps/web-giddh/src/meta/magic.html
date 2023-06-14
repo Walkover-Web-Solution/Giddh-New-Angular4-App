@@ -56,7 +56,7 @@
                                 <!-- | number:'1.2-2' -->
                                 <span class="font-18 text-color">{{legderBalanceData.forwardedBalance.amount | currency
                                     }}</span>
-                                <span class="font-14 text-color">{{legderBalanceData.forwardedBalance.type === 'DEBIT' ?
+                                <span class="font-16 text-color">{{legderBalanceData.forwardedBalance.type === 'DEBIT' ?
                                     'Dr' : 'Cr' }}</span>
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                                 Closing
                             </div>
                             <div v-if="legderBalanceData && legderBalanceData.closingBalance">
-                                <span class="font-14 text-color">{{ legderBalanceData.closingBalance.type === 'DEBIT' ?
+                                <span class="font-16 text-color">{{ legderBalanceData.closingBalance.type === 'DEBIT' ?
                                     'Dr' : 'Cr' }}</span>
                                 <!-- | number:'1.2-2' -->
                                 <span class="font-18 text-color">{{legderBalanceData.closingBalance.amount | currency
