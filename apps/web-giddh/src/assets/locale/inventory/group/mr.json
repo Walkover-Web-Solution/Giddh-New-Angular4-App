@@ -2,6 +2,7 @@
     "group_name": "गटाचे नाव",
     "enter_group": "गटाचे नाव प्रविष्ट करा",
     "is_it_subgroup": "हा उपगट आहे का?",
+    "is_it_childgroup": "हा उपगट आहे का?",
     "no_tax_found": "कोणताही कर आढळला नाही",
     "enter_hsn": "HSN कोड प्रविष्ट करा",
     "enter_sac": "SAC कोड प्रविष्ट करा",

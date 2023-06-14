@@ -49,55 +49,50 @@
                                 : ''
                         "
                     >
-                        <div class="row flex-column-reverse flex-md-row">
-                            <div class="col-xl-8 col-lg-12">
-                                <div class="row flex-column-reverse flex-md-row">
-                                    <div class="col-md-8 col-lg-8 col-xl-6 col-12 upper-common-form-label-field">
-                                        <div class="row">
-                                            <div class="col-sm-6 col-lg-6">
-                                                <input-field
-                                                    [name]="'productName'"
-                                                    [placeholder]="localeData?.enter_product"
-                                                    [type]="'text'"
-                                                    [(ngModel)]="stockForm.name"
-                                                    (ngModelChange)="checkSpacingValidation(stockForm.name)"
-                                                    [required]="true"
-                                                    [autocomplete]="'off'"
-                                                >
-                                                </input-field>
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6">
-                                                <dropdown-field
-                                                    [name]="'stockUnitCode'"
-                                                    [placeholder]="localeData?.select_unit"
-                                                    [options]="stockUnits"
-                                                    (selectedOption)="
-                                                        stockForm.stockUnitUniqueName = $event?.value;
-                                                        stockUnitName = $event.label
-                                                    "
-                                                    [defaultValue]="stockUnitName"
-                                                >
-                                                </dropdown-field>
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6">
-                                                <input-field
-                                                    [name]="'uniqueName'"
-                                                    [placeholder]="commonLocaleData?.app_unique_name"
-                                                    [type]="'text'"
-                                                    [(ngModel)]="stockForm.uniqueName"
-                                                    [autocomplete]="'off'"
-                                                >
-                                                </input-field>
-                                            </div>
-                                            <div
-                                                class="
-                                                    col-sm-6 col-lg-6
-                                                    under-group-field-button-wrapper
-                                                    position-relative
-                                                "
+                        <div class="stock-width">
+                            <div class="row flex-column-reverse flex-md-row">
+                                <div class="col-md-8 col-lg-12 col-xl-12 col-12 upper-common-form-label-field">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-6">
+                                            <input-field
+                                                [name]="'productName'"
+                                                [placeholder]="localeData?.enter_product"
+                                                [type]="'text'"
+                                                [(ngModel)]="stockForm.name"
+                                                (ngModelChange)="checkSpacingValidation(stockForm.name)"
+                                                [required]="true"
+                                                [autocomplete]="'off'"
                                             >
-                                                <dropdown-field
-                                                    class="w-100"
+                                            </input-field>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6">
+                                            <dropdown-field
+                                                [name]="'stockUnitCode'"
+                                                [placeholder]="localeData?.select_unit"
+                                                [options]="stockUnits"
+                                                (selectedOption)="
+                                                    stockForm.stockUnitUniqueName = $event?.value;
+                                                    stockUnitName = $event.label
+                                                "
+                                                [defaultValue]="stockUnitName"
+                                            >
+                                            </dropdown-field>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6">
+                                            <input-field
+                                                [name]="'uniqueName'"
+                                                [placeholder]="commonLocaleData?.app_unique_name"
+                                                [type]="'text'"
+                                                [(ngModel)]="stockForm.uniqueName"
+                                                [autocomplete]="'off'"
+                                            >
+                                            </input-field>
+                                        </div>
+                                        <div
+                                            class="col-sm-6 col-lg-6 under-group-field-button-wrapper position-relative"
+                                        >
+                                            <mat-form-field class="w-100" appearance="outline">
+                                                <mat-select
                                                     [placeholder]="commonLocaleData?.app_select_group"
                                                     (selectionChange)="
                                                         stockGroupUniqueName = $event?.value;
@@ -106,58 +101,70 @@
                                                     [value]="stockGroupUniqueName"
                                                     [(ngModel)]="stockGroupUniqueName"
                                                     [name]="'stockGroupName'"
-                                                    [options]="stockGroups"
                                                 >
-                                                </dropdown-field>
-                                                <button
-                                                    *ngIf="queryParams?.stockUniqueName"
-                                                    mat-raised-button
-                                                    class="btn-success min-width-100 move-stock mr-0"
-                                                    (click)="moveStock()"
-                                                    [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
-                                                    [autocomplete]="'off'"
-                                                >
-                                                    {{ localeData?.move }}
-                                                </button>
-                                            </div>
+                                                    <div class="select-quantity-option">
+                                                        <ng-container *ngIf="stockGroups?.length">
+                                                            <mat-option
+                                                                *ngFor="let group of stockGroups"
+                                                                [value]="group?.value"
+                                                            >
+                                                                {{ group.label }}
+                                                            </mat-option>
+                                                        </ng-container>
+                                                        <mat-option *ngIf="!stockGroups?.length">
+                                                            {{ commonLocaleData?.app_no_result_found }}
+                                                        </mat-option>
+                                                    </div>
+                                                </mat-select>
+                                            </mat-form-field>
+                                            <button
+                                                *ngIf="queryParams?.stockUniqueName"
+                                                mat-raised-button
+                                                class="btn-success min-width-100 move-stock mr-0"
+                                                (click)="moveStock()"
+                                                [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
+                                                [autocomplete]="'off'"
+                                            >
+                                                {{ localeData?.move }}
+                                            </button>
                                         </div>
-                                        <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-6">
-                                                <mat-form-field class="w-100" appearance="outline">
-                                                    <mat-label>Tax</mat-label>
-                                                    <mat-select
-                                                        name="taxes"
-                                                        [placeholder]="commonLocaleData?.app_select_tax"
-                                                        multiple
-                                                        [value]="stockForm.taxes"
-                                                        (openedChange)="openedSelectTax($event)"
-                                                    >
-                                                        <mat-option
-                                                            *ngFor="let tax of taxes"
-                                                            [value]="tax?.uniqueName"
-                                                            [disabled]="tax.isDisabled"
-                                                            [selected]="tax.isChecked"
-                                                            (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
-                                                            >{{ tax.name }}</mat-option
-                                                        >
-                                                        <mat-option
-                                                            class="create-update-no-data"
-                                                            [disabled]="true"
-                                                            *ngIf="!taxes?.length"
-                                                            >{{ commonLocaleData?.app_no_result_found }}</mat-option
-                                                        >
-                                                    </mat-select>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <!-- <div class="col-md-4 col-lg-4 col-xl-6 col-12">
-                                            <div class="add-image-button">
-                                                <button mat-button role="button" type="button">
-                                                    <img src="{{ imgPath }}add-image.svg" />
-                                                </button>
-                                            </div>
-                                        </div> -->
                                     </div>
+                                    <div class="row mr-b1">
+                                        <div class="col-sm-6 col-lg-6">
+                                            <mat-form-field class="w-100" appearance="outline">
+                                                <mat-label>Tax</mat-label>
+                                                <mat-select
+                                                    name="taxes"
+                                                    [placeholder]="commonLocaleData?.app_select_tax"
+                                                    multiple
+                                                    [value]="stockForm.taxes"
+                                                    (openedChange)="openedSelectTax($event)"
+                                                >
+                                                    <mat-option
+                                                        *ngFor="let tax of taxes"
+                                                        [value]="tax?.uniqueName"
+                                                        [disabled]="tax.isDisabled"
+                                                        [selected]="tax.isChecked"
+                                                        (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
+                                                        >{{ tax.name }}</mat-option
+                                                    >
+                                                    <mat-option
+                                                        class="create-update-no-data"
+                                                        [disabled]="true"
+                                                        *ngIf="!taxes?.length"
+                                                        >{{ commonLocaleData?.app_no_result_found }}</mat-option
+                                                    >
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-md-4 col-lg-4 col-xl-6 col-12">
+                                        <div class="add-image-button">
+                                            <button mat-button role="button" type="button">
+                                                <img src="{{ imgPath }}add-image.svg" />
+                                            </button>
+                                        </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -1552,160 +1559,154 @@
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.other">
                                     <div class="tab-container-new px-3">
-                                        <div class="row">
-                                            <div class="col-lg-8">
-                                                <div class="row">
-                                                    <div class="col-sm-6 col-lg-12 mb-3">
-                                                        <mat-radio-group
-                                                            color="primary"
-                                                            name="hsn_sac"
-                                                            [(ngModel)]="hsnSac"
-                                                        >
-                                                            <mat-radio-button value="HSN">
-                                                                {{ commonLocaleData?.app_hsn }}
-                                                            </mat-radio-button>
-                                                            <mat-radio-button value="SAC">
-                                                                {{ commonLocaleData?.app_sac }}
-                                                            </mat-radio-button>
-                                                        </mat-radio-group>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-3">
-                                                        <input-field
-                                                            *ngIf="hsnSac === 'HSN'"
-                                                            [name]="'hsnNumber'"
-                                                            [type]="'text'"
-                                                            [placeholder]="localeData?.enter_hsn_code"
-                                                            [(ngModel)]="stockForm.hsnNumber"
-                                                        >
-                                                        </input-field>
-                                                        <input-field
-                                                            *ngIf="hsnSac === 'SAC'"
-                                                            [name]="'sacNumber'"
-                                                            [type]="'text'"
-                                                            [placeholder]="localeData?.enter_sac_code"
-                                                            [(ngModel)]="stockForm.sacNumber"
-                                                        >
-                                                        </input-field>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-3">
-                                                        <input-field
-                                                            [name]="'skuCode'"
-                                                            [type]="'text'"
-                                                            [placeholder]="commonLocaleData?.app_sku_code"
-                                                            [(ngModel)]="stockForm.variants[0].skuCode"
-                                                        >
-                                                        </input-field>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-3 custom-label">
-                                                        <span class="pull-right right-fix-pencil-icon">
-                                                            <i
-                                                                *ngIf="inlineEditCustomField !== 1"
-                                                                class="icon-edit-pencil cursor-pointer"
-                                                                (click)="showCustomFieldLabelInlineEdit(1)"
-                                                            ></i>
-                                                        </span>
-                                                        <span
-                                                            class="pull-right right-fix-save-icon"
-                                                            *ngIf="inlineEditCustomField === 1"
-                                                        >
-                                                            <i
-                                                                class="icon-save cursor-pointer"
-                                                                (click)="showCustomFieldLabelInlineEdit(0)"
-                                                            ></i>
-                                                        </span>
-                                                        <label *ngIf="inlineEditCustomField !== 1"
-                                                            >{{
-                                                                stockForm.customField1Heading ||
-                                                                    localeData?.custom_field
-                                                            }}
-                                                        </label>
-                                                        <input-field
-                                                            *ngIf="inlineEditCustomField === 1"
-                                                            [name]="'customField1Heading'"
-                                                            [placeholder]="localeData?.custom_field"
-                                                            [type]="'text'"
-                                                            [(ngModel)]="stockForm.customField1Heading"
-                                                            [autoFocus]="true"
-                                                            class="common-custom-field-width"
-                                                        >
-                                                        </input-field>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-3">
-                                                        <div>
-                                                            <input-field
-                                                                [name]="'customField1Value'"
-                                                                [placeholder]="localeData?.custom_field"
-                                                                [type]="'text'"
-                                                                [(ngModel)]="stockForm.customField1Value"
-                                                            ></input-field>
-                                                        </div>
-                                                    </div>
+                                        <div class="other-width">
+                                            <div class="row">
+                                                <div class="col-sm-6 col-lg-12 mb-3">
+                                                    <mat-radio-group
+                                                        color="primary"
+                                                        name="hsn_sac"
+                                                        [(ngModel)]="hsnSac"
+                                                    >
+                                                        <mat-radio-button value="HSN">
+                                                            {{ commonLocaleData?.app_hsn }}
+                                                        </mat-radio-button>
+                                                        <mat-radio-button value="SAC">
+                                                            {{ commonLocaleData?.app_sac }}
+                                                        </mat-radio-button>
+                                                    </mat-radio-group>
                                                 </div>
-                                                <div class="row" *ngIf="!isVariantAvailable">
-                                                    <div class="col-sm-6 col-lg-3">
+                                                <div class="col-sm-6 col-lg-3">
+                                                    <input-field
+                                                        *ngIf="hsnSac === 'HSN'"
+                                                        [name]="'hsnNumber'"
+                                                        [type]="'text'"
+                                                        [placeholder]="localeData?.enter_hsn_code"
+                                                        [(ngModel)]="stockForm.hsnNumber"
+                                                    >
+                                                    </input-field>
+                                                    <input-field
+                                                        *ngIf="hsnSac === 'SAC'"
+                                                        [name]="'sacNumber'"
+                                                        [type]="'text'"
+                                                        [placeholder]="localeData?.enter_sac_code"
+                                                        [(ngModel)]="stockForm.sacNumber"
+                                                    >
+                                                    </input-field>
+                                                </div>
+                                                <div class="col-sm-6 col-lg-3">
+                                                    <input-field
+                                                        [name]="'skuCode'"
+                                                        [type]="'text'"
+                                                        [placeholder]="commonLocaleData?.app_sku_code"
+                                                        [(ngModel)]="stockForm.variants[0].skuCode"
+                                                    >
+                                                    </input-field>
+                                                </div>
+                                                <div class="col-sm-6 col-lg-3 custom-label">
+                                                    <span class="pull-right right-fix-pencil-icon">
+                                                        <i
+                                                            *ngIf="inlineEditCustomField !== 1"
+                                                            class="icon-edit-pencil cursor-pointer"
+                                                            (click)="showCustomFieldLabelInlineEdit(1)"
+                                                        ></i>
+                                                    </span>
+                                                    <span
+                                                        class="pull-right right-fix-save-icon"
+                                                        *ngIf="inlineEditCustomField === 1"
+                                                    >
+                                                        <i
+                                                            class="icon-save cursor-pointer"
+                                                            (click)="showCustomFieldLabelInlineEdit(0)"
+                                                        ></i>
+                                                    </span>
+                                                    <label *ngIf="inlineEditCustomField !== 1"
+                                                        >{{ stockForm.customField1Heading || localeData?.custom_field }}
+                                                        :
+                                                    </label>
+                                                    <input-field
+                                                        *ngIf="inlineEditCustomField === 1"
+                                                        [name]="'customField1Heading'"
+                                                        [placeholder]="localeData?.custom_field"
+                                                        [type]="'text'"
+                                                        [(ngModel)]="stockForm.customField1Heading"
+                                                        [autoFocus]="true"
+                                                        class="common-custom-field-width"
+                                                    >
+                                                    </input-field>
+                                                </div>
+                                                <div class="col-sm-6 col-lg-3">
+                                                    <div>
                                                         <input-field
-                                                            [name]="'openingAmount'"
-                                                            [type]="'text'"
-                                                            [placeholder]="localeData?.opening_amount"
-                                                            [(ngModel)]="stockForm.openingAmount"
-                                                        >
-                                                        </input-field>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-3">
-                                                        <input-field
-                                                            [name]="'openingAmount'"
-                                                            [type]="'text'"
-                                                            [placeholder]="localeData?.opening_amount"
-                                                            [(ngModel)]="stockForm.openingAmount"
-                                                        >
-                                                        </input-field>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-3 custom-label">
-                                                        <span class="pull-right right-fix-pencil-icon">
-                                                            <i
-                                                                *ngIf="inlineEditCustomField !== 2"
-                                                                class="icon-edit-pencil cursor-pointer"
-                                                                (click)="showCustomFieldLabelInlineEdit(2)"
-                                                            ></i>
-                                                        </span>
-                                                        <span
-                                                            class="pull-right right-fix-save-icon"
-                                                            *ngIf="inlineEditCustomField === 2"
-                                                        >
-                                                            <i
-                                                                class="icon-save cursor-pointer"
-                                                                (click)="showCustomFieldLabelInlineEdit(0)"
-                                                            ></i>
-                                                        </span>
-                                                        <label *ngIf="inlineEditCustomField !== 2"
-                                                            >{{
-                                                                stockForm.customField2Heading ||
-                                                                    localeData?.custom_field
-                                                            }}
-                                                        </label>
-                                                        <input-field
-                                                            *ngIf="inlineEditCustomField === 2"
-                                                            [name]="'customField2Heading'"
+                                                            [name]="'customField1Value'"
                                                             [placeholder]="localeData?.custom_field"
                                                             [type]="'text'"
-                                                            [(ngModel)]="stockForm.customField2Heading"
-                                                            [autoFocus]="true"
-                                                            class="common-custom-field-width"
-                                                        >
-                                                        </input-field>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-3">
-                                                        <input-field
-                                                            [name]="'customField2Value'"
-                                                            [placeholder]="localeData?.custom_field"
-                                                            [type]="'text'"
-                                                            [(ngModel)]="stockForm.customField2Value"
-                                                        >
-                                                        </input-field>
+                                                            [(ngModel)]="stockForm.customField1Value"
+                                                        ></input-field>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <ng-container *ngIf="stockForm?.customFields?.length > 0">
+                                            <div class="row" *ngIf="!isVariantAvailable">
+                                                <div class="col-sm-6 col-lg-3">
+                                                    <input-field
+                                                        [name]="'openingAmount'"
+                                                        [type]="'text'"
+                                                        [placeholder]="localeData?.opening_amount"
+                                                        [(ngModel)]="stockForm.openingAmount"
+                                                    >
+                                                    </input-field>
+                                                </div>
+                                                <div class="col-sm-6 col-lg-3">
+                                                    <input-field
+                                                        [name]="'openingAmount'"
+                                                        [type]="'text'"
+                                                        [placeholder]="localeData?.opening_amount"
+                                                        [(ngModel)]="stockForm.openingAmount"
+                                                    >
+                                                    </input-field>
+                                                </div>
+                                                <div class="col-sm-6 col-lg-3 custom-label">
+                                                    <span class="pull-right right-fix-pencil-icon">
+                                                        <i
+                                                            *ngIf="inlineEditCustomField !== 2"
+                                                            class="icon-edit-pencil cursor-pointer"
+                                                            (click)="showCustomFieldLabelInlineEdit(2)"
+                                                        ></i>
+                                                    </span>
+                                                    <span
+                                                        class="pull-right right-fix-save-icon"
+                                                        *ngIf="inlineEditCustomField === 2"
+                                                    >
+                                                        <i
+                                                            class="icon-save cursor-pointer"
+                                                            (click)="showCustomFieldLabelInlineEdit(0)"
+                                                        ></i>
+                                                    </span>
+                                                    <label *ngIf="inlineEditCustomField !== 2"
+                                                        >{{ stockForm.customField2Heading || localeData?.custom_field }}
+                                                        :
+                                                    </label>
+                                                    <input-field
+                                                        *ngIf="inlineEditCustomField === 2"
+                                                        [name]="'customField2Heading'"
+                                                        [placeholder]="localeData?.custom_field"
+                                                        [type]="'text'"
+                                                        [(ngModel)]="stockForm.customField2Heading"
+                                                        [autoFocus]="true"
+                                                        class="common-custom-field-width"
+                                                    >
+                                                    </input-field>
+                                                </div>
+                                                <div class="col-sm-6 col-lg-3">
+                                                    <input-field
+                                                        [name]="'customField2Value'"
+                                                        [placeholder]="localeData?.custom_field"
+                                                        [type]="'text'"
+                                                        [(ngModel)]="stockForm.customField2Value"
+                                                    >
+                                                    </input-field>
+                                                </div>
+                                            </div>
+                                            <!-- <ng-container *ngIf="stockForm?.customFields?.length > 0">
                                                 <div
                                                     class="col-xl-6 col-md-12 col-lg-8 col-sm-12"
                                                     *ngFor="let customField of stockForm?.customFields; let i = index"
@@ -1773,7 +1774,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </ng-container>
+                                            </ng-container> -->
                                         </div>
                                     </div>
                                 </mat-tab>
@@ -4732,57 +4733,50 @@
                 </form>
             </div>
         </div>
-        <div class="inventory-footer sticky-footer">
-            <div class="inner-content-footer">
-                <div class="d-flex">
-                    <div class="button-group">
-                        <button
-                            *ngIf="!queryParams?.stockUniqueName"
-                            mat-flat-button
-                            class="clear-btn"
-                            (click)="resetForm(stockCreateEditForm)"
-                        >
-                            {{ commonLocaleData?.app_clear }}
-                        </button>
-                        <button
-                            *ngIf="!queryParams?.stockUniqueName"
-                            mat-flat-button
-                            class="create-inventory-btn"
-                            (click)="createStock(stockCreateEditForm)"
-                            [disabled]="
-                                stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError
-                            "
-                        >
-                            {{ localeData?.create_inventory }}
-                        </button>
-                        <button
-                            *ngIf="queryParams?.stockUniqueName"
-                            mat-raised-button
-                            class="btn-primary min-width-100"
-                            (click)="cancelEdit()"
-                        >
-                            {{ commonLocaleData?.app_close }}
-                        </button>
-                        <button
-                            *ngIf="queryParams?.stockUniqueName"
-                            mat-raised-button
-                            class="btn-danger min-width-100"
-                            (click)="deleteStock()"
-                        >
-                            {{ commonLocaleData?.app_delete }}
-                        </button>
-                        <button
-                            *ngIf="queryParams?.stockUniqueName"
-                            mat-raised-button
-                            class="btn-success min-width-100"
-                            (click)="updateStock(stockCreateEditForm)"
-                            [disabled]="
-                                stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError
-                            "
-                        >
-                            {{ commonLocaleData?.app_update }}
-                        </button>
-                    </div>
+        <div class="inner-content-footer">
+            <div class="d-flex">
+                <div class="button-group">
+                    <button
+                        *ngIf="!queryParams?.stockUniqueName"
+                        mat-stroked-button
+                        class="mr-3"
+                        (click)="resetForm(stockCreateEditForm)"
+                    >
+                        {{ commonLocaleData?.app_clear }}
+                    </button>
+                    <button
+                        *ngIf="!queryParams?.stockUniqueName"
+                        mat-raised-button
+                        color="primary"
+                        (click)="createStock(stockCreateEditForm)"
+                    >
+                        {{ localeData?.create_inventory }}
+                    </button>
+                    <button
+                        *ngIf="queryParams?.stockUniqueName"
+                        mat-stroked-button
+                        class="btn-primary min-width-100"
+                        (click)="cancelEdit()"
+                    >
+                        {{ commonLocaleData?.app_close }}
+                    </button>
+                    <button
+                        *ngIf="queryParams?.stockUniqueName"
+                        mat-stroked-button
+                        class="btn-danger min-width-100"
+                        (click)="deleteStock()"
+                    >
+                        {{ commonLocaleData?.app_delete }}
+                    </button>
+                    <button
+                        *ngIf="queryParams?.stockUniqueName"
+                        mat-stroked-button
+                        class="btn-success min-width-100"
+                        (click)="updateStock(stockCreateEditForm)"
+                        [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError"
+                    >
+                        {{ commonLocaleData?.app_update }}
+                    </button>
                 </div>
             </div>
         </div>
