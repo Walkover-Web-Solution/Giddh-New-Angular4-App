@@ -35,3 +35,9 @@
         color: var(--color-white);
     }
 }
+.manufacturing-table {
+    .content-table {
+        white-space: normal;
+        word-break: inherit !important;
+    }
+}
