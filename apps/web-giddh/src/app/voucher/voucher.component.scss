@@ -324,7 +324,7 @@ a[type="button"] {
 }
 
 .list-item {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     border-bottom: 1px solid var(--color-common-secondary-border);
     display: flex !important;
 }
@@ -428,7 +428,7 @@ textarea:focus {
     display: block;
     color: var(--color-abbey);
     line-height: 1.2rem;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     font-weight: 500;
 }
 
@@ -657,7 +657,7 @@ textarea:focus {
 }
 
 form label {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .billing-address .selected-val {
@@ -690,7 +690,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
 }
 
 .billing-address-full p {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     color: var(--color-abbey);
     margin-bottom: 5px;
 }
@@ -920,7 +920,7 @@ span.edit-icon {
     text-align: center;
     color: var(--color-iron);
     padding: 5px 8px;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .hsn-code-dropdown .btn-group {
@@ -946,7 +946,7 @@ span.edit-icon {
 }
 
 .select-account-label {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     color: var(--color-gray);
     padding-bottom: 3px;
 }
@@ -1117,7 +1117,7 @@ section.new-table {
 }
 
 .single-card-row label.card-label {
-    font-size: var(--font-size-14) !important;
+    font-size: var(--font-size-16) !important;
     font-weight: 500;
     display: block;
     font-family: var(--font-semibold);
@@ -1129,7 +1129,7 @@ section.new-table {
 
 .single-card-row p {
     color: var(--color-abbey);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .card-invoice-table {
@@ -1231,7 +1231,7 @@ section.new-table {
 
 .add-bulk-item-modal .single-product-wrapper h5 {
     color: var(--color-nero);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .add-bulk-item-modal .single-product-wrapper p {
@@ -1250,7 +1250,7 @@ section.new-table {
 }
 
 .add-bulk-item-modal .right-content h4 {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .add-bulk-item-modal .right-content hr {
@@ -1265,7 +1265,7 @@ section.new-table {
 }
 
 .add-bulk-item-modal .single-selected-stock p {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .add-bulk-item-modal .wrap-selected-stocks {
@@ -1332,7 +1332,7 @@ section.new-table {
 }
 
 .gst-treatment-header > span {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .aqua-color a {
@@ -1454,7 +1454,7 @@ table.table.table-custom-invoice.basic,
 
 .differ-currency {
     color: var(--color-gray);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     text-align: right;
     bottom: 3px;
     right: 8px;
@@ -1470,7 +1470,7 @@ table.table.table-custom-invoice.basic,
 }
 
 .switch-currency {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     color: var(--color-nero);
     max-width: 1000px;
     text-align: right;
@@ -1660,7 +1660,7 @@ label.checkbox-custom-label {
     justify-content: center;
     margin-right: 15px;
     height: 33px;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 
     span:first-child {
         font-size: 16px;
@@ -1811,7 +1811,7 @@ label.checkbox-custom-label {
     }
 
     .customer-invoice-table label {
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
     }
 
     .wrapper-customer-table .col-sm-2 {
@@ -1928,7 +1928,7 @@ label.checkbox-custom-label {
         background-color: var(--color-dark-fog);
         border: 1px solid var(--color-iron);
         padding: 3px;
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
     }
 
     .other-taxes div {
@@ -2151,7 +2151,7 @@ label.checkbox-custom-label {
     a {
         color: var(--color-dropdown-list);
         background-color: var(--color-dropdown-primary-background);
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
 
         &:hover {
             color: var(--color-dropdown-list-hover-text) !important;

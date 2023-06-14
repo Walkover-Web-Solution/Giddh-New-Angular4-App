@@ -34,7 +34,7 @@
     float: left;
     display: table-column;
     width: 150px;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .align-end {
@@ -80,7 +80,7 @@
     }
     .div-row {
         .div-cell {
-            font-size: var(--font-size-14) !important;
+            font-size: var(--font-size-16) !important;
         }
     }
 }

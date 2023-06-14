@@ -133,7 +133,7 @@
     margin-top: 200px;
 }
 .btn-download {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 .btn-group.open.show {
     display: inline-flex !important;
@@ -253,11 +253,11 @@ button[aria-expanded="true"] i {
             line-height: 20px;
         }
         h3 {
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             line-height: 20px;
         }
         h4 {
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             line-height: 20px;
         }
     }
@@ -304,7 +304,7 @@ button[aria-expanded="true"] i {
 button.btn.btn-filter {
     background: var(--color-dark-fog);
     border: 1px solid var(--color-iron);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
@@ -378,7 +378,7 @@ button.btn.btn-filter {
     .wrap-head-report {
         width: 55%;
         .head-report {
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             white-space: normal;
             word-break: break-all;
         }
@@ -395,7 +395,7 @@ button.btn.btn-filter {
         display: none;
     }
     .head-report {
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
     }
     .btn-link {
         font-size: var(--font-size-12);

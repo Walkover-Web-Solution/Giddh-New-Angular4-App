@@ -58,7 +58,7 @@
 
 body{
     --font-size-12 : 12px;
-    --font-size-14 : 14px;
+    --font-size-16 : 16px;
     --font-size-18 : 18px;
     --font-size-24 : 24px;
     --font-size-32 : 32px;
@@ -152,7 +152,7 @@ body {
     color: #333333;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 .db {
     display: block;
@@ -559,7 +559,7 @@ body {
 }
 
 .thead {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .scroll-item {
@@ -618,7 +618,7 @@ body {
     background: #fff !important;
 }
 #magicLink {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .nav-link > .active {
@@ -634,12 +634,12 @@ body {
 
 .account-name {
     font-weight: 300;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .rec {
     font-weight: 600;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .text-white {
@@ -675,7 +675,7 @@ body {
 }
 
 .font-14 {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .font-18 {
@@ -1071,7 +1071,7 @@ body {
 
 .input-group-addon {
     padding: 6px 12px;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     font-weight: 400;
     line-height: 1;
     color: #555;
@@ -1139,11 +1139,11 @@ body {
 }
 footer p {
     color: #1c1c1c;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 .top-footer {
     padding: 3.75rem 0;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 .inner-logos {
     display: flex;
@@ -1182,7 +1182,7 @@ li,
 footer .menu-item a {
     line-height: 35px;
     color: #1c1c1c;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 .contact_form input,
 .contact_form textarea {
@@ -1191,7 +1191,7 @@ footer .menu-item a {
     margin-bottom: 5px;
     border: 1px solid #d9d9d9;
     border-radius: 5px;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     box-shadow: none;
     border-radius: 2px;
     height: 40px;
@@ -1201,7 +1201,7 @@ footer .menu-item a {
 }
 #custom_html-2 ul li,
 #custom_html-2 ul li a {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     color: #1a237e;
     line-height: 30px;
 }
@@ -1333,7 +1333,7 @@ footer .menu-item a {
         margin-left: 20px;
     }
     #contact .btn-lg {
-        font-size: var(--font-size-14) !important;
+        font-size: var(--font-size-16) !important;
         letter-spacing: 1px;
         padding-left: 10px;
         padding-right: 10px;
@@ -1354,7 +1354,7 @@ footer .menu-item a {
 
 @media (max-width: 600px) {
     #contact p {
-        font-size: var(--font-size-14) !important;
+        font-size: var(--font-size-16) !important;
     }
 }
 

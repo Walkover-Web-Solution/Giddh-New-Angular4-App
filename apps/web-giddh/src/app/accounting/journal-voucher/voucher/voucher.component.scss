@@ -6,7 +6,7 @@
 }
 
 .current-balance {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     font-style: italic;
     color: var(--color-table-primary-content);
 }
@@ -20,7 +20,7 @@
 }
 .debtor-details-form {
     display: flex;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     background-color: var(--color-gray);
     padding: 10px 9px;
     margin-bottom: 10px;
@@ -50,7 +50,7 @@
                 width: 5%;
             }
             .icon-arrow-down {
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
                 position: absolute;
                 right: 5px;
                 top: 7px;

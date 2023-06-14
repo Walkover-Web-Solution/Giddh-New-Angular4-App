@@ -78,7 +78,7 @@
             margin-left: 0.5rem;
             height: 26px;
             font-weight: 500;
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             padding: 5px 0px 0px 5px;
         }
         .transaction-select {
@@ -98,7 +98,7 @@
     a {
         text-decoration: underline;
         font-weight: bold;
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
         color: var(--color-gray);
         height: inherit;
         display: grid;
@@ -126,7 +126,7 @@
         }
         .side-bar-head {
             color: var(--color-giddh-blue);
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             font-weight: 500;
             img {
                 position: relative;
@@ -157,7 +157,7 @@
             .side-bar-list {
                 display: flex;
                 align-items: center;
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
                 line-height: 1.7rem;
                 img {
                     width: 18px;
@@ -178,7 +178,7 @@
                     margin-right: 5px;
                 }
                 .date {
-                    font-size: var(--font-size-14);
+                    font-size: var(--font-size-16);
                 }
             }
         }
@@ -199,7 +199,7 @@
         }
         .side-bar-head-clone {
             color: var(--color-giddh-blue);
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             font-weight: 600;
             margin-top: 5px;
             margin-bottom: 5px;
@@ -224,7 +224,7 @@
             .side-bar-list-clone-1 {
                 display: flex;
                 align-items: center;
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
                 line-height: 30px;
                 margin-top: 5px;
                 margin-bottom: 5px;
@@ -242,7 +242,7 @@
             .side-bar-list-clone-2 {
                 display: flex;
                 align-items: center;
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
                 line-height: 25px;
                 margin-top: 5px;
                 margin-bottom: 5px;
@@ -260,7 +260,7 @@
             .side-bar-list-clone-3 {
                 display: flex;
                 align-items: center;
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
                 line-height: 20px;
                 margin-top: 5px;
                 margin-bottom: 5px;
@@ -336,7 +336,7 @@
         .mat-header-cell {
             color: var(--color-nero) !important;
             padding: 4px 10px !important;
-            font-size: var(--font-size-14) !important;
+            font-size: var(--font-size-16) !important;
             letter-spacing: -0.4px;
         }
         th.mat-header-cell:last-of-type,
@@ -375,7 +375,7 @@
                 line-height: 19px;
                 color: var(--color-nero);
                 span {
-                    font-size: var(--font-size-14);
+                    font-size: var(--font-size-16);
                     font-weight: 500;
                     color: var(--color-nero);
                 }
@@ -429,7 +429,7 @@
                     p {
                         span {
                             color: var(--color-nero);
-                            font-size: var(--font-size-14);
+                            font-size: var(--font-size-16);
                             margin-left: 3px;
                         }
                         img {
@@ -479,7 +479,7 @@
                 justify-content: flex-end;
                 margin-right: 23px;
                 p {
-                    font-size: var(--font-size-14);
+                    font-size: var(--font-size-16);
                     .tomato {
                         color: var(--color-red);
                         font-weight: 700;
@@ -503,7 +503,7 @@
                 background-color: var(--color-dark-fog);
                 a {
                     display: block;
-                    font-size: var(--font-size-14);
+                    font-size: var(--font-size-16);
                     text-decoration: underline;
                 }
             }
@@ -513,7 +513,7 @@
                 right: 1rem;
                 display: none;
                 color: var(--color-blue);
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
                 top: 11px;
             }
             :hover {
@@ -603,7 +603,7 @@
     mat-expansion-panel-header {
         height: 45px !important;
         mat-panel-title {
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             padding-left: 15px;
             color: var(--color-nero) !important;
         }
@@ -649,7 +649,7 @@
         padding-left: 9px;
         .form-field {
             .search-bar {
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
             }
         }
         img {
@@ -695,7 +695,7 @@
                     top: 5px;
                 }
                 .side-bar-head {
-                    font-size: var(--font-size-14);
+                    font-size: var(--font-size-16);
                     img {
                         height: 2px;
                         width: auto;
@@ -734,7 +734,7 @@
                 p {
                     font-size: var(--font-size-12);
                     span {
-                        font-size: var(--font-size-14);
+                        font-size: var(--font-size-16);
                     }
                 }
             }
@@ -751,11 +751,11 @@
                     .box {
                         .box-heading {
                             span {
-                                font-size: var(--font-size-14);
+                                font-size: var(--font-size-16);
                             }
                         }
                         p {
-                            font-size: var(--font-size-14);
+                            font-size: var(--font-size-16);
                             img {
                                 margin: 0px 3px;
                             }
@@ -776,7 +776,7 @@
             }
             .form-field {
                 .search-bar {
-                    font-size: var(--font-size-14);
+                    font-size: var(--font-size-16);
                     width: 100px;
                     transform: translate(-3px, -2px);
                 }
@@ -966,7 +966,7 @@
                 p {
                     font-size: var(--font-size-12);
                     span {
-                        font-size: var(--font-size-14);
+                        font-size: var(--font-size-16);
                     }
                 }
             }
@@ -989,7 +989,7 @@
                 position: relative;
                 text-decoration: underline;
                 top: -24px;
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
             }
         }
         .companies-container {

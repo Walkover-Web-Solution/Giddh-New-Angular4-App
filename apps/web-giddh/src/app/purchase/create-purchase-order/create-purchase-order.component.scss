@@ -44,7 +44,7 @@ form {
                     display: block;
                     color: var(--color-nero);
                     line-height: 1.2rem;
-                    font-size: var(--font-size-14);
+                    font-size: var(--font-size-16);
                     font-weight: 500;
                 }
             }
@@ -149,7 +149,7 @@ form {
     }
     .create-purchase-order-table {
         .select-account-label {
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             color: var(--color-gray);
             padding-bottom: 3px;
             display: block;
@@ -273,7 +273,7 @@ form {
 }
 
 .list-item {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     border-bottom: 1px solid var(--color-common-secondary-border);
     display: flex !important;
 }
@@ -519,7 +519,7 @@ span.edit-icon {
     text-align: center;
     color: var(--color-iron);
     padding: 5px 8px;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .hsn-code-dropdown .btn-group {
@@ -545,7 +545,7 @@ span.edit-icon {
 }
 
 .select-account-label {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     color: var(--color-gray);
     padding-bottom: 3px;
 }
@@ -830,7 +830,7 @@ strong {
         font-size: var(--font-size-12);
     }
     span {
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
         color: var(--color-iron);
     }
 }
@@ -903,7 +903,7 @@ label.checkbox-custom-label {
 }
 
 .single-card-row label.card-label {
-    font-size: var(--font-size-14) !important;
+    font-size: var(--font-size-16) !important;
     font-weight: 500;
     display: block;
     font-family: var(--font-semibold);
@@ -916,7 +916,7 @@ label.checkbox-custom-label {
 
 .single-card-row p {
     color: var(--color-abbey);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 .card-invoice-table {
@@ -1044,7 +1044,7 @@ ul.change-address-dropdown {
     }
 }
 .switch-currency {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     color: var(--color-nero);
     max-width: 1000px;
     text-align: right;
@@ -1067,7 +1067,7 @@ ul.change-address-dropdown {
 }
 .differ-currency {
     color: var(--color-gray);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     text-align: right;
     bottom: 3px;
     right: 8px;

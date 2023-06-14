@@ -11,7 +11,7 @@
         .search-element {
             outline: none;
             border: none;
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             font-weight: normal;
             line-height: initial;
             width: 95%;
@@ -35,7 +35,7 @@
             display: inline-flex;
             box-sizing: border-box;
             text-transform: capitalize;
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             .vT {
                 letter-spacing: 0.3px;
                 display: inline-block;
@@ -122,7 +122,7 @@
             }
             .item-details {
                 position: relative;
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
                 color: var(--color-popup-secondary-list-head-text);
                 text-transform: capitalize;
                 margin-left: 25px;

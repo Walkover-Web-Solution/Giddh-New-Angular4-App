@@ -68,7 +68,7 @@
 
 .account-detail-custom-title {
     font-family: var(--font-semibold) !important;
-    font-size: var(--font-size-14) !important;
+    font-size: var(--font-size-16) !important;
 }
 
 .account-detail-padding {
@@ -79,7 +79,7 @@
 .custom-detail h4 {
     color: var(--color-abbey);
     margin-top: 7px;
-    font-size: var(--font-size-14) !important;
+    font-size: var(--font-size-16) !important;
     font-family: var(--font-regular) !important;
 }
 
@@ -350,12 +350,12 @@ table th {
         padding-left: 15px !important;
         .nav-report {
             li {
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
             }
         }
         .custom-month-select {
             .btn {
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
             }
         }
     }

@@ -17,7 +17,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: var(--font-size-14);
+            font-size: var(--font-size-16);
             border-radius: 50%;
             margin-top: 15px;
             margin-bottom: 20px;
@@ -34,7 +34,7 @@
             p.company-name {
                 white-space: normal;
                 word-break: break-word;
-                font-size: var(--font-size-14);
+                font-size: var(--font-size-16);
             }
             p {
                 line-height: 18px;
@@ -54,7 +54,7 @@
                     color: var(--color-nero);
                     font-family: var(--font-semibold);
                     display: flex;
-                    font-size: var(--font-size-14);
+                    font-size: var(--font-size-16);
                     &:hover {
                         background-color: var(--color-dark-fog);
                     }

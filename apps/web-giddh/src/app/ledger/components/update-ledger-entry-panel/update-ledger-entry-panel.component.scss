@@ -53,7 +53,7 @@ ng-select > div i.fa.fa-caret-down::before {
 ng-select > div a.ng-star-inserted {
     color: var(--color-white);
     text-transform: uppercase;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
 }
 
 ng-select > div {
@@ -223,7 +223,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
                 .remove-invoice-label {
                     vertical-align: middle;
                     color: var(--color-abbey);
-                    font-size: var(--font-size-14);
+                    font-size: var(--font-size-16);
                 }
             }
         }
@@ -284,7 +284,7 @@ p.edit-message {
     text-align: center;
     padding: 8px 0;
     border-top: 1px solid var(--color-common-secondary-border);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-16);
     font-family: var(--font-semibold);
     margin-top: 15px;
 }
@@ -309,7 +309,7 @@ p.edit-message {
     margin-top: 1px;
     a {
         color: var(--color-dark-gray);
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-16);
     }
 }
 /* responsive */
