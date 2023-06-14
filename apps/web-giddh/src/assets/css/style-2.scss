@@ -2406,6 +2406,10 @@ modal-container.modal {
     width: 14px;
 }
 
+.custom-datepicker i img {
+    width: 14px;
+}
+
 .bs-datepicker-body table td.is-highlighted:not(.disabled):not(.selected) span {
     color: var(--color-datepicker-quaternary-date);
 }
@@ -14030,8 +14034,11 @@ body.hide-scroll-body.master-page {
     color: var(--color-danger) !important;
 }
 
-/*==========  Bootstrap Button Defualt font size Start here=============*/
+.dropdown-position {
+    transform: unset !important;
+}
 
+/*==========  Material Button Default Font Size Start Here =============*/
 .mat-button,
 .mat-raised-button,
 .mat-icon-button,
@@ -14045,5 +14052,4 @@ body.hide-scroll-body.master-page {
 .mat-tab-label {
     font-size: var(--font-size-18);
 }
-
-/*==========  Bootstrap Button Defualt font size close here=============*/
+/*==========  Material Button Default Font Size End Here ===============*/
