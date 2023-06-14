@@ -2653,20 +2653,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let stockUnitUniqueName = '';
 
                 //#region unit rates logic
-                if (txn.selectedAccount && txn.selectedAccount.stock) {
-                    let defaultUnit = {
-                        stockUnitCode: txn.selectedAccount.stock.stockUnitCode,
-                        code: txn.selectedAccount.stock.stockUnitCode,
-                        rate: txn.selectedAccount.stock.rate,
+                if (txn.selectedAccount?.stock?.variant?.unitRates?.length) {
+                    const variantUnitRates = txn.selectedAccount?.stock?.variant?.unitRates;
+                    const defaultUnit = {
+                        stockUnitCode: variantUnitRates[0].stockUnitCode,
+                        code: variantUnitRates[0].stockUnitCode,
+                        rate: variantUnitRates[0].rate,
                         name: txn.selectedAccount.stock.name
                     };
-                    const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : txn.selectedAccount.stock?.variant?.unitRates
+                    const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : variantUnitRates;
                     txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                     stockName = defaultUnit.name;
                     rate = defaultUnit.rate;
                     stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                     unitCode = defaultUnit.code;
-                    stockUnitUniqueName = txn.selectedAccount.stock.stockUnitUniqueName;
+                    stockUnitUniqueName = variantUnitRates[0].stockUnitUniqueName;
                 }
                 if (stockName && stockUniqueName) {
                     txn.inventory = {
