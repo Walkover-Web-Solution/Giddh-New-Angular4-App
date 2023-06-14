@@ -1464,7 +1464,7 @@ input {
     padding: 8px 0px !important;
     margin-right: 35px !important;
     margin-left: 0 !important;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-18);
     color: var(--color-tab-primary-inactive) !important;
     border-width: 0px 0 4px 0 !important;
     height: 41px;
@@ -3195,11 +3195,11 @@ input[type="checkbox"]:checked:after {
 }
 
 .font-16 {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-16) !important;
 }
 
 .font-18 {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-18) !important;
 }
 
 .icon-font-22 {
@@ -3207,7 +3207,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .font-24 {
-    font-size: var(--font-size-24);
+    font-size: var(--font-size-24) !important;
 }
 
 .word-wrap {
@@ -8084,7 +8084,7 @@ ul.dropdown-menu p.lead.pd {
     padding: 2px 0px;
     margin-right: 25px;
     padding-bottom: 7px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-18);
     color: var(--color-tab-primary-inactive) !important;
 }
 
@@ -9528,7 +9528,7 @@ span#HW_badge_cont:nth-child(3) {
         .nav-tabs {
             .nav-item {
                 .nav-link {
-                    font-size: var(--font-size-16) !important;
+                    font-size: var(--font-size-18) !important;
                     color: var(--color-tab-primary-inactive) !important;
                 }
             }
@@ -14029,3 +14029,21 @@ body.hide-scroll-body.master-page {
     border: 1px solid var(--color-danger) !important;
     color: var(--color-danger) !important;
 }
+
+/*==========  Bootstrap Button Defualt font size Start here=============*/
+
+.mat-button,
+.mat-raised-button,
+.mat-icon-button,
+.mat-stroked-button,
+.mat-flat-button,
+.mat-fab,
+.mat-mini-fab {
+    font-size: var(--font-size-16);
+}
+
+.mat-tab-label {
+    font-size: var(--font-size-18);
+}
+
+/*==========  Bootstrap Button Defualt font size close here=============*/
