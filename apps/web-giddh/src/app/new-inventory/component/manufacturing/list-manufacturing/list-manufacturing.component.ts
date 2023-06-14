@@ -106,6 +106,8 @@ export class ListManufacturingComponent implements OnInit {
     public searchByFilters: any[] = [];
     /** List of inventory type filters */
     public inventoryTypeFilters: any[] = [];
+    /** True if need to show clear filter button */
+    public showClearButton: boolean = false;
 
     constructor(
         private dialog: MatDialog,
@@ -119,7 +121,7 @@ export class ListManufacturingComponent implements OnInit {
         private manufacturingService: ManufacturingService,
         private ledgerService: LedgerService
     ) {
-        
+
     }
 
     /**
@@ -296,6 +298,8 @@ export class ListManufacturingComponent implements OnInit {
         this.dataSource = [];
         this.isReportLoading = true;
 
+        this.showHideClearFilterButton();
+
         this.manufacturingService.GetMfReport(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.results?.length) {
                 let reportData = [];
@@ -426,6 +430,12 @@ export class ListManufacturingComponent implements OnInit {
         });
     }
 
+    /**
+     * Callback for translation complete
+     *
+     * @param {*} event
+     * @memberof ListManufacturingComponent
+     */
     public translationComplete(event: any): void {
         if (event) {
             this.operatorFilters = [
@@ -447,5 +457,20 @@ export class ListManufacturingComponent implements OnInit {
                 { label: this.commonLocaleData?.app_inventory_types?.fixed_assets, value: 'FIXED_ASSETS' }
             ];
         }
+    }
+
+    /**
+     * Show/hide clear filter button
+     *
+     * @memberof ListManufacturingComponent
+     */
+    public showHideClearFilterButton(): void {
+        this.showClearButton = false;
+
+        if (this.manufacturingSearchRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.manufacturingSearchRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT) || this.manufacturingSearchRequest.product || this.manufacturingSearchRequest.productVariant || this.manufacturingSearchRequest.warehouseUniqueName || this.manufacturingSearchRequest.inventoryType || this.manufacturingSearchRequest.searchBy || this.manufacturingSearchRequest.searchOperation || this.manufacturingSearchRequest.searchValue) {
+            this.showClearButton = true;
+        }
+
+        this.changeDetectionRef.detectChanges();
     }
 }
