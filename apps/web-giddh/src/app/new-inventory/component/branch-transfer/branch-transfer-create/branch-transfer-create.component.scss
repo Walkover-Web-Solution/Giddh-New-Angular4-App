@@ -1,0 +1,132 @@
+#branch-transfer-create {
+    background-color: var(--color-white);
+    color: var(--color-nero);
+
+    .branch-transfer-header {
+        padding: 10px 15px;
+        border-bottom: 1px solid var(--color-common-secondary-border);
+        font-size: 18px;
+
+        h2 {
+            color: var(--color-giddh-blue);
+            font-weight: 600;
+        }
+    }
+    .branch-transfer-body {
+        &-radio-btns {
+            font-size: 14px;
+            padding: 15px;
+            border-bottom: 1px solid var(--color-common-secondary-border);
+        }
+        &-multiple-wrapper {
+            padding-top: 15px;
+
+            .primary-form-wrapper {
+                .total-amount {
+                    h3 {
+                        font-size: 26px;
+                        font-weight: 600;
+                    }
+                    p {
+                        font-size: 14px;
+                    }
+                }
+            }
+
+            #table-receipt {
+                width: 100%;
+
+                th,
+                td {
+                    padding: 10px 15px;
+                    font-size: 14px;
+                    text-align: right;
+                    border: 1px solid var(--color-iron);
+                    vertical-align: top !important;
+                    &:first-child {
+                        text-align: left;
+                    }
+                    &:nth-child(2) {
+                        text-align: left;
+                    }
+                }
+
+                thead {
+                    border-bottom: 1px solid var(--color-iron);
+                    tr {
+                        th {
+                            color: var(--color-primary-button-text);
+                        }
+                    }
+                }
+                tbody {
+                    tr {
+                        &:hover {
+                            td {
+                                background: var(--color-table-row-hover-primary-background);
+                                transition: 200ms ease;
+                            }
+                        }
+                        td {
+                            .placeholder-color {
+                                color: var(--color-table-primary-content-bar-border);
+                            }
+                            .show-code-position {
+                                position: absolute;
+                                right: 0;
+                                bottom: -12px;
+                            }
+                            .show-sku-code-position {
+                                position: absolute;
+                                left: 0;
+                                bottom: -32px;
+                            }
+                            .delete-btn-position {
+                                position: absolute;
+                                top: -20px;
+                                left: 26px;
+                                .delete-icon {
+                                    color: var(--color-gray);
+                                    border: 1px solid var(--color-common-secondary-border);
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    width: 20px;
+                                    height: 20px;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                }
+                                .icon-info {
+                                    margin-left: 10px;
+                                    font-size: 18px;
+                                }
+                            }
+                        }
+                    }
+                }
+                tfoot {
+                    tr {
+                        td {
+                            border: 0;
+                        }
+                    }
+                }
+            }
+
+            .action-btn-wrapper {
+                background-color: var(--color-common-senary-background-for-all-components);
+                padding: 18px 0;
+            }
+        }
+    }
+    h3 {
+        font-size: 14px;
+    }
+    .row {
+        margin-left: unset !important;
+        margin-right: unset !important;
+    }
+    .position-bottom {
+        margin-bottom: -25px;
+    }
+}

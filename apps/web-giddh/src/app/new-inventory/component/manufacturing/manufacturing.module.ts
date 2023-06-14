@@ -27,7 +27,6 @@ import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-p
         FormFieldsModule,
         MatButtonModule,
         ManufacturingRoutingModule,
-        MatButtonModule,
         MatTableModule,
         MatDialogModule,
         MatTooltipModule,
