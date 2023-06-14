@@ -38,7 +38,7 @@ export class CreateManufacturingComponent implements OnInit {
     /** New Linked stocks object */
     public totals: any = { totalRate: 0, totalAmount: 0, costPerItem: 0 };
     /** Index of active linked item */
-    public activeLinkedStockIndex: number = 0;
+    public activeLinkedStockIndex: number = null;
     /** List of required fields */
     public errorFields: any = { date: false, finishedStockName: false, finishedStockVariant: false, finishedQuantity: false };
     /** True if is loading */
