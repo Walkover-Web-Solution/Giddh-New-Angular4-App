@@ -3,14 +3,13 @@
     "item_cost": "लागत प्रति आइटम",
     "finished_stock": "समाप्त स्टॉक",
     "multiple_of": "के गुणक",
-    "generate_manufacturing": "विनिर्माण उत्पन्न करें",
     "raw_stock": "कच्चा स्टॉक",
     "add_stock": "+ स्टॉक जोड़ें",
-    "manufacturing_saved": "विनिर्माण सफलतापूर्वक बनाया गया है।",
+    "manufacturing_saved": "विनिर्माण सफलतापूर्वक बनाया गया।",
+    "manufacturing_updated": "निर्माण सफलतापूर्वक अपडेट किया गया।",
     "confirm_save_recipe": "क्या आप तैयार स्टॉक के लिए नुस्खा सहेजना चाहते हैं?",
     "confirm_update_recipe": "क्या आप तैयार स्टॉक के लिए नुस्खा अपडेट करना चाहते हैं?",
-    "recipe_saved": "नुस्खा सफलतापूर्वक बनाया गया है।",
-    "recipe_updated": "नुस्खा सफलतापूर्वक अद्यतन किया गया है।",
+    "recipe_saved": "नुस्खा सफलतापूर्वक बनाया गया।",
     "search_by_filters": {
         "quantity_outward": "मात्रा जावक",
         "voucher_no": "रसीद संक्या"
@@ -23,5 +22,6 @@
     "select_search_by": "खोज का चयन करें",
     "operation": "ऑपरेशन",
     "select_operation": "ऑपरेशन चुनें",
-    "enter_value": "मूल्य दर्ज करें"
+    "enter_value": "मूल्य दर्ज करें",
+    "confirm_delete_manufacturing": "क्या आप निर्माण को हटाना चाहते हैं?"
 }

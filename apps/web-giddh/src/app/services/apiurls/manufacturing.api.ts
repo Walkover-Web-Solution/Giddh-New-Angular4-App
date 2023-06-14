@@ -8,5 +8,6 @@ export const MANUFACTURING_API = {
     GET_RECIPE: 'company/:companyUniqueName/stock/:stockUniqueName/recipe/get?withRate=:withRate',
     GET_RATE_FOR_STOCK: 'company/:companyUniqueName/stock/:stockUniqueName/rate-for-stock-v2',
     CREATE_V2: 'v2/' + COMMON_URL,
-    CREATE_RECIPE: 'company/:companyUniqueName/stock/:stockUniqueName/recipe'
+    CREATE_RECIPE: 'company/:companyUniqueName/stock/:stockUniqueName/recipe',
+    GET_MANUFACTURING: 'v2/company/:companyUniqueName/manufacture/:manufactureUniqueName'
 };

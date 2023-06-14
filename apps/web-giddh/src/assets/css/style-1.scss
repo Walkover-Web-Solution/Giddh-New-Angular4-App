@@ -2799,6 +2799,13 @@ td.mat-footer-cell:first-of-type {
     white-space: normal !important;
     word-break: inherit;
 }
+.manufacturing-table {
+    th.mat-header-cell:first-of-type,
+    td.mat-cell:first-of-type,
+    td.mat-footer-cell:first-of-type {
+        white-space: nowrap !important;
+    }
+}
 
 th.mat-header-cell,
 td.mat-cell,
