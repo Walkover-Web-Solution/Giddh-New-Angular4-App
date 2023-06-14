@@ -7,6 +7,12 @@
         }
         .gap-between {
             gap: 1rem;
+            align-items: baseline;
+        }
+        .list-header {
+            dropdown-field {
+                margin-top: -6px;
+            }
         }
     }
     .table-wrapper {
@@ -27,5 +33,11 @@
 .advance-search-dialog {
     .color-white {
         color: var(--color-white);
+    }
+}
+.manufacturing-table {
+    .content-table {
+        white-space: normal;
+        word-break: inherit !important;
     }
 }

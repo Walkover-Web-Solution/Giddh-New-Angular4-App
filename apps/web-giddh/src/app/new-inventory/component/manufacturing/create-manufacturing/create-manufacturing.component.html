@@ -23,9 +23,8 @@
                                 >
                                 </giddh-datepicker>
                             </div>
-                            <div class="col" *ngIf="warehouses?.length > 1">
-                                <label>{{ commonLocaleData?.app_warehouse }}</label>
-                                <select-field
+                            <div class="col warehouse-align" *ngIf="warehouses?.length > 1">
+                                <dropdown-field
                                     [cssClass]="'form-control mat-field-border'"
                                     [name]="'warehouseUniqueName'"
                                     [placeholder]="commonLocaleData?.app_select_warehouse"
@@ -36,7 +35,7 @@
                                     "
                                     [defaultValue]="selectedWarehouseName"
                                 >
-                                </select-field>
+                                </dropdown-field>
                             </div>
                             <div class="col">
                                 <div class="custom-card bg-green">
@@ -51,10 +50,10 @@
                                 </div>
                             </div>
                         </div>
-                        <hr class="my-3 max-width-1300" />
+                        <hr class="my-3 max-width-stock" />
                     </div>
                 </div>
-                <div class="row max-width-1300">
+                <div class="row max-width-stock">
                     <div class="col-3">
                         <div class="row">
                             <div class="form-fileds w-100">
@@ -75,7 +74,8 @@
                                                 getStockVariants(
                                                     manufacturingObject.manufacturingDetails[0],
                                                     $event,
-                                                    true
+                                                    true,
+                                                    0
                                                 )
                                             "
                                             [defaultValue]="manufacturingObject.manufacturingDetails[0].stockName"
@@ -132,18 +132,52 @@
                                         </small>
                                     </div>
 
-                                    <div class="d-flex generate-clear">
+                                    <div class="d-flex generate-clear w-100">
                                         <button
                                             mat-raised-button
                                             color="primary"
-                                            class="mt-2"
+                                            class="mt-2 mr-0"
                                             [disabled]="isLoading"
                                             (click)="createManufacturing()"
+                                            *ngIf="!manufactureUniqueName"
                                         >
-                                            {{ localeData?.generate_manufacturing }}
+                                            {{ commonLocaleData?.app_create }}
                                         </button>
-                                        <button mat-stroked-button class="mt-2" (click)="resetForm()">
+                                        <button
+                                            mat-stroked-button
+                                            class="mt-2"
+                                            (click)="resetForm()"
+                                            *ngIf="!manufactureUniqueName"
+                                        >
                                             {{ commonLocaleData?.app_clear }}
+                                        </button>
+
+                                        <button
+                                            mat-raised-button
+                                            color="primary"
+                                            class="mt-2 mr-0"
+                                            [disabled]="isLoading"
+                                            (click)="updateManufacturing()"
+                                            *ngIf="manufactureUniqueName"
+                                        >
+                                            {{ commonLocaleData?.app_update }}
+                                        </button>
+                                        <button
+                                            mat-flat-button
+                                            class="mt-2"
+                                            color="warn"
+                                            (click)="deleteManufacturing()"
+                                            *ngIf="manufactureUniqueName"
+                                        >
+                                            {{ commonLocaleData?.app_delete }}
+                                        </button>
+                                        <button
+                                            mat-stroked-button
+                                            class="mt-2"
+                                            [routerLink]="['/pages/inventory/v2/manufacturing/list']"
+                                            *ngIf="manufactureUniqueName"
+                                        >
+                                            {{ commonLocaleData?.app_cancel }}
                                         </button>
                                     </div>
                                 </div>
@@ -322,14 +356,9 @@
                                             </ng-container>
                                             <tr>
                                                 <td colspan="7">
-                                                    <button
-                                                        mat-stroked-button
-                                                        color="primary"
-                                                        class="mb-2"
-                                                        (click)="addNewLinkedStock()"
-                                                    >
+                                                    <a class="mb-2" (click)="addNewLinkedStock()" href="javascript:;">
                                                         {{ localeData?.add_stock }}
-                                                    </button>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         </tbody>

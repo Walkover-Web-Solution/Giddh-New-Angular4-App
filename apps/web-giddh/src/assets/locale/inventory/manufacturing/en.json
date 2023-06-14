@@ -3,14 +3,13 @@
     "item_cost": "Cost per Item",
     "finished_stock": "Finished Stock",
     "multiple_of": "Multiple of",
-    "generate_manufacturing": "Generate Manufacturing",
     "raw_stock": "Raw Stock",
     "add_stock": "+ Add Stock",
-    "manufacturing_saved": "Manufacturing has been created successfully.",
+    "manufacturing_saved": "Manufacturing created successfully.",
+    "manufacturing_updated": "Manufacturing updated successfully.",
     "confirm_save_recipe": "Do you want to save the recipe for the finished stock?",
     "confirm_update_recipe": "Do you want to update the recipe for the finished stock?",
-    "recipe_saved": "Recipe has been created successfully.",
-    "recipe_updated": "Recipe has been updated successfully.",
+    "recipe_saved": "Recipe saved successfully.",
     "search_by_filters": {
         "quantity_outward": "Quantity Outward",
         "voucher_no": "Voucher Number"
@@ -23,5 +22,6 @@
     "select_search_by": "Select Search By",
     "operation": "Operation",
     "select_operation": "Select Operation",
-    "enter_value": "Enter Value"
+    "enter_value": "Enter Value",
+    "confirm_delete_manufacturing": "Do you want to delete the manufacturing?"
 }
