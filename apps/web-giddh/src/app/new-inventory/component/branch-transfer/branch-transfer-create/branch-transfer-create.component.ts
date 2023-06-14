@@ -25,8 +25,8 @@ export class BranchTransferCreateComponent implements OnInit {
    public skuNumber:string;
    /** On Sender */
    public senderHsnSacStatus:'HSN' | 'SAC'; 
-   public branchTransferMode: 'receipt-note' | 'delivery-challan' = 'delivery-challan';
-   public SenderProductName:string= 'Product\'s Name';
+   public branchTransferMode: 'receipt-note' | 'delivery-challan' = 'receipt-note';
+   public SenderProductName:string= 'Sender\'s Name';
    public productSenderDescription:string = 'Product Description';
 
   constructor() { }
@@ -48,7 +48,7 @@ export class BranchTransferCreateComponent implements OnInit {
   }
 
   public branchTransferTypeOnchange(): void{
-    this.SenderProductName =  this.transferType === 'Senders' ? 'Sender\'s Name': 'Product\'s Name';
+    this.SenderProductName =  this.transferType === 'Senders' ? 'Product\'s Name' :  'Sender\'s Name';
     this.productSenderDescription = (this.transferType === 'Senders') ? ((this.branchTransferMode === "receipt-note") ? 'Sender\’s Details' : 'Receiver\’s Details'): 'Product Description';
   }
     
