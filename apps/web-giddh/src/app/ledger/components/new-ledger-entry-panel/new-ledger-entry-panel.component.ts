@@ -908,13 +908,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         const unitRates = this.generalService.voucherApiVersion === 1 ? this.currentTxn.selectedAccount.stock?.unitRates : this.currentTxn.selectedAccount.stock?.variant?.unitRates
         let unit = unitRates.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
         this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
-        if (this.currentTxn.inventory.unit) {
+        if (this.currentTxn?.inventory?.unit) {
             const variant = this.currentTxn.selectedAccount?.stock?.variant;
             if (variant) {
                 // If the unit rate of inclusive tax stock is changed then again calculate the amount inclusively
                 this.isInclusiveEntry = variant.purchaseTaxInclusive || variant.salesTaxInclusive || variant.fixedAssetTaxInclusive;
             }
-            this.changePrice(this.currentTxn.inventory.unit.rate?.toString(), true);
+            this.changePrice(this.currentTxn?.inventory?.unit?.rate?.toString(), true);
             this.isInclusiveEntry = false;
         }
     }
