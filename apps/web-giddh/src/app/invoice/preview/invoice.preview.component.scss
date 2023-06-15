@@ -320,10 +320,6 @@ ul.select-action-dropdown {
 .input-group input.form-control {
     padding-left: 35px !important;
     border-color: var(--color-blue);
-    background-image: url("../../../assets/images/calender-icon.svg") !important;
-    background-size: 17px !important;
-    background-position: 9px 8px !important;
-    background-repeat: no-repeat !important;
     padding-left: 45px !important;
     position: relative;
     z-index: 99;
@@ -906,7 +902,7 @@ span.icon-export-icon {
 
     .custom-datepicker input {
         width: 200px !important;
-        max-width: 200px !important;
+        max-width: 222px !important;
     }
 }
 
