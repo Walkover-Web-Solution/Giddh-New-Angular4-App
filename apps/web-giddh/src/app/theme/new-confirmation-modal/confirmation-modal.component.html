@@ -1,11 +1,11 @@
 <div class="custom-confirmation-modal">
     <div class="modal-header flex-row-reverse">
-        <span class="close font-16"><span class="icon-cross" (click)="sendResponse('Close')"></span></span>
+        <span class="close font-15"><span class="icon-cross" (click)="sendResponse('Close')"></span></span>
         <h3 mat-dialog-title [ngClass]="inputData?.configuration?.headerCssClass">
             {{ inputData?.configuration?.headerText }}
         </h3>
     </div>
-    <div class="modal-body font-16">
+    <div class="modal-body font-15">
         <p
             [ngClass]="inputData?.configuration?.messageCssClass"
             [innerHTML]="inputData?.configuration?.messageText"

@@ -10,7 +10,7 @@
     padding-top: 5px;
 }
 
-.font-18 {
+.font-16 {
     font-weight: bold;
 }
 
@@ -50,7 +50,7 @@
     padding: 6px;
     height: 100%;
     background: var(--color-white);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .tooltip-box {
@@ -269,7 +269,7 @@
         h4 {
             align-self: self-start !important;
             padding-bottom: 10px;
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
         }
 
         .btn-danger {

@@ -40,7 +40,7 @@
     .voucher-holder-name {
         p {
             color: #333;
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
             margin-top: 3px;
             white-space: normal;
             word-break: break-all;
@@ -64,12 +64,12 @@
             padding-bottom: 25px;
 
             h3.voucher-number {
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-15);
                 font-weight: 600;
             }
 
             p.account-holder-name {
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-15);
                 margin-top: 3px;
             }
 
@@ -144,7 +144,7 @@
                 padding: 50px 0px 0 0px;
             }
             .preview-not-supported-attachment {
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-15);
                 margin: 16px;
             }
             .pdf-preview {

@@ -21,11 +21,11 @@
 }
 .dashboard-option li.secondary-dark-bg {
     color: var(--color-primary-revenue-chart-secondary-dark-bg);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 .dashboard-option li.secondary-light-bg {
     color: var(--color-primary-revenue-chart-secondary-dark-bg);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .dashboard-option li h3 {
@@ -38,14 +38,14 @@
 span.this-week {
     color: var(--color-abbey);
     padding-left: 5px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 .total-sale-detail {
     text-align: right;
     padding-right: 11px;
 }
 .total-sale-detail p {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     color: var(--color-abbey);
 }
 .total-sale-detail h3 {
@@ -54,7 +54,7 @@ span.this-week {
 }
 
 .total-sale-detail span {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     color: var(--color-common-septenary-text);
 }
 .single-sale-detail {
@@ -72,14 +72,14 @@ span.icon-collapse-icon:hover {
 /* CSS FOR LINE CHART */
 
 p.bankName {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-giddh-blue);
     margin-bottom: 5px;
 }
 
 p.bank-balance {
     color: var(--color-abbey);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     display: flex;
     justify-content: space-between;
 }
@@ -92,7 +92,7 @@ a.connect-bank {
     position: absolute;
     bottom: 10px;
     color: var(--color-nero);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     text-decoration: underline;
 }
 .dashboard-container {
@@ -105,7 +105,7 @@ a.connect-bank {
     padding: 15px 15px 20px;
 }
 .dashboard-container label {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-nero);
     margin-bottom: 3px;
 }
@@ -164,7 +164,7 @@ a.connect-bank {
 
 .about-date {
     display: inline-flex;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
 }
 .active-date {
     color: var(--color-giddh-blue);
@@ -207,7 +207,7 @@ a.connect-bank {
 }
 .single-sale-data p {
     color: var(--color-nero);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 .single-sale-data h3 {
     font-size: var(--font-size-24);
@@ -216,7 +216,7 @@ a.connect-bank {
 }
 span.date-wise-sale {
     color: var(--color-giddh-blue);
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
 }
 
 .single-sale-data {
@@ -257,18 +257,18 @@ input:read-only:focus {
 }
 @media (max-width: 991px) {
     .about-date {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         display: flex;
         flex-direction: column;
     }
     .total-sales-tabs a {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
     .total-income-wrap {
         flex-direction: column-reverse;
         .page-title {
             h1 {
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-15);
                 line-height: 1.3;
             }
         }
@@ -277,7 +277,7 @@ input:read-only:focus {
             width: 20px;
             margin-left: 10px;
             .icon-collapse-icon {
-                font-size: var(--font-size-18);
+                font-size: var(--font-size-16);
             }
         }
     }
@@ -291,11 +291,11 @@ input:read-only:focus {
             padding-bottom: 10px;
         }
         p {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
         }
         h3 {
             padding-top: 3px;
-            font-size: var(--font-size-18);
+            font-size: var(--font-size-16);
         }
     }
     .left-column {
@@ -332,27 +332,27 @@ input:read-only:focus {
         min-height: auto;
         margin-bottom: 15px;
         p {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
         }
         h3 {
-            font-size: var(--font-size-18);
+            font-size: var(--font-size-16);
         }
     }
     .about-date {
         display: flex;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         flex-direction: column;
         align-items: baseline;
     }
     .date-range-block {
         padding-bottom: 10px;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
     .page-title {
         h1 {
             display: flex;
             float: left;
-            font-size: var(--font-size-18);
+            font-size: var(--font-size-16);
         }
         .collapse-close {
             height: 40px;

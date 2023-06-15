@@ -17,7 +17,7 @@ body.unresponsive {
 
 .btn-lg {
     padding: 10px 16px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     line-height: 1.3333333;
 }
 
@@ -31,7 +31,7 @@ body.unresponsive {
 
 .modal-header h3 {
     color: var(--color-white);
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
 }
 
 .login {
@@ -144,7 +144,7 @@ body.unresponsive {
 
 .intro .lead {
     text-align: center;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
 }
 
 .btn-login.btn-default {
@@ -193,7 +193,7 @@ button.close {
 .form-control,
 :host ::ng-deep .form-control {
     height: 41px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-primary-login-signup-input-box) !important;
 }
 
@@ -286,7 +286,7 @@ small {
     line-height: 40px;
     text-align: center;
     position: relative;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .google-ico span {
@@ -345,7 +345,7 @@ small {
 }
 
 .slide-content .btn {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     font-weight: 500;
     margin-top: 55px;
     transition: all 0.5s ease;
@@ -476,7 +476,7 @@ small {
 }
 .accounting-space h4 {
     color: var(--color-primary-login-box-body-text);
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
 }
 .btn-outline-primary {
     background-color: var(--color-blue);
@@ -485,7 +485,7 @@ small {
     border-radius: 5px;
     color: var(--color-white);
     margin-bottom: 10px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
@@ -499,7 +499,7 @@ small {
         text-decoration: none;
     }
     color: var(--color-primary-login-box-body-text);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 .btn-secondary {
     border-radius: 5px;

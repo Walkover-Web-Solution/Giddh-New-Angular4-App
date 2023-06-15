@@ -62,7 +62,7 @@
 
 .invoice-sidebar .invoice-holder-name p {
     color: var(--color-nero);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     margin-top: 3px;
     white-space: normal;
     word-break: break-all;
@@ -105,12 +105,12 @@
 }
 
 .invoice-detail-header h3.invoice-num {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     font-weight: 600;
 }
 
 .invoice-detail-header p.account-holder-name {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     margin-top: 3px;
 }
 
@@ -125,7 +125,7 @@
 .invoice-detail-header .edit-change-status .edit-link {
     color: var(--color-blue);
     padding-right: 10px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .invoice-detail-header .edit-change-status .edit-link img {
@@ -192,7 +192,7 @@
 }
 
 .payment-detail p.payment-content {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     margin-bottom: 5px;
     color: var(--color-nero);
 }
@@ -213,7 +213,7 @@
     .expand-button {
         position: relative;
         right: 15px;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         text-align: right;
         margin-top: 15px;
         span {
@@ -237,7 +237,7 @@
         padding: 50px 0px 0 0px;
     }
     .preview-not-supported-attachment {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         margin: 16px;
     }
     .pdf-preview {
@@ -404,7 +404,7 @@ span.close-modal.cp.pull-right {
         span {
             padding: 10px;
             p {
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-15);
                 font-weight: bold;
             }
         }
@@ -624,12 +624,12 @@ p {
 
 #default header h1 {
     /* color: #df4927; */
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 #default header h2 {
     /* color: #df4927; */
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     font-weight: bold;
 }
 
@@ -648,7 +648,7 @@ p {
     overflow: auto;
     background: var(--color-white);
     padding: 0;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     max-width: 760px;
     margin: 20px auto 120px;
     box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
@@ -881,7 +881,7 @@ p {
 }
 
 .title-template {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     font-family: var(--font-semibold);
 }
 

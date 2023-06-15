@@ -67,7 +67,7 @@
 
 .account-detail-custom-title {
     font-family: var(--font-semibold) !important;
-    font-size: var(--font-size-16) !important;
+    font-size: var(--font-size-15) !important;
 }
 
 .account-detail-padding {
@@ -78,7 +78,7 @@
 .custom-detail h4 {
     color: var(--color-abbey);
     margin-top: 7px;
-    font-size: var(--font-size-16) !important;
+    font-size: var(--font-size-15) !important;
     font-family: var(--font-regular) !important;
 }
 
@@ -226,7 +226,7 @@ table th {
     -webkit-box-align: center;
     align-items: center;
     background-color: var(--color-white);
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     color: var(--color-giddh-blue);
     border: 1px solid var(--color-primary-button-border);
     border-radius: 5px;
@@ -290,7 +290,7 @@ table th {
     .nav-report {
         li {
             font-family: var(--font-semibold);
-            font-size: var(--font-size-18);
+            font-size: var(--font-size-16);
             a {
                 color: var(--color-giddh-blue);
             }
@@ -300,7 +300,7 @@ table th {
         font-family: var(--font-semibold);
         color: var(--color-giddh-blue);
         .btn {
-            font-size: var(--font-size-18);
+            font-size: var(--font-size-16);
             padding: 0;
         }
         li {
@@ -339,12 +339,12 @@ table th {
         padding-top: 0 !important;
         .nav-report {
             li {
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-15);
             }
         }
         .custom-month-select {
             .btn {
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-15);
             }
         }
     }

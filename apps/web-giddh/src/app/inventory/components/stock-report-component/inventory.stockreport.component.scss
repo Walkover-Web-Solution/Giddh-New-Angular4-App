@@ -97,7 +97,7 @@
         padding: 41px;
         h2 {
             color: var(--color-gray);
-            font-size: var(--font-size-18);
+            font-size: var(--font-size-16);
             margin-bottom: 10px;
         }
         h1 {
@@ -133,7 +133,7 @@
     margin-top: 200px;
 }
 .btn-download {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 .btn-group.open.show {
     display: inline-flex !important;
@@ -249,15 +249,15 @@ button[aria-expanded="true"] i {
             color: var(--color-gray);
         }
         h2 {
-            font-size: var(--font-size-18);
+            font-size: var(--font-size-16);
             line-height: 20px;
         }
         h3 {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
             line-height: 20px;
         }
         h4 {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
             line-height: 20px;
         }
     }
@@ -284,7 +284,7 @@ button[aria-expanded="true"] i {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     margin-left: 10px;
     border: 1px solid var(--color-iron);
     border-radius: 5px;
@@ -304,7 +304,7 @@ button[aria-expanded="true"] i {
 button.btn.btn-filter {
     background: var(--color-dark-fog);
     border: 1px solid var(--color-iron);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
@@ -315,7 +315,7 @@ button.btn.btn-filter {
     text-transform: none;
 }
 .head-report {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     font-weight: bold;
     text-transform: capitalize;
 }
@@ -378,7 +378,7 @@ button.btn.btn-filter {
     .wrap-head-report {
         width: 55%;
         .head-report {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
             white-space: normal;
             word-break: break-all;
         }
@@ -395,7 +395,7 @@ button.btn.btn-filter {
         display: none;
     }
     .head-report {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
     .btn-link {
         font-size: var(--font-size-12);

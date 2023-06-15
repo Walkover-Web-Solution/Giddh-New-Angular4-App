@@ -14,10 +14,10 @@
                     <i class="dot-icon dot-warning" *ngIf="filterItem.entryType === 'sales'"></i>
                     <i class="dot-icon dot-success" *ngIf="filterItem.entryType === 'deposit'"></i>
                     <i class="dot-icon dot-primary" *ngIf="filterItem.entryType === 'expense'"></i>
-                    <p class="mb-0 font-16 d-inline-block">{{ filterItem?.baseAccount?.name }}</p>
+                    <p class="mb-0 font-15 d-inline-block">{{ filterItem?.baseAccount?.name }}</p>
                 </div>
                 <div class="right-item">
-                    <p class="font-16">{{ filterItem.currencySymbol }} {{ filterItem.amount | giddhCurrency }}</p>
+                    <p class="font-15">{{ filterItem.currencySymbol }} {{ filterItem.amount | giddhCurrency }}</p>
                     <p class="font-12">
                         <i class="icon-cash" *ngIf="filterItem.baseAccountCategory === 'CASH'"></i>
                         <i class="icon-atm-card" *ngIf="filterItem.baseAccountCategory === 'BANK'"></i>
