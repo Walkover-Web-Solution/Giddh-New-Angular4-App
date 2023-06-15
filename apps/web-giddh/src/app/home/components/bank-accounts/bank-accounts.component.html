@@ -5,11 +5,11 @@
     [requireCommonData]="false"
     (localeData)="localeData = $event"
 >
-    <div class="card">
+    <mat-card>
         <div class="panel-heading clearfix">
             <strong>{{ localeData?.chart_title }}</strong>
         </div>
-        <div class="card-body position-relative">
+        <mat-card-content class="position-relative">
             <div class="bank-details-block">
                 <perfect-scrollbar [scrollIndicators]="true" *ngIf="!isLoading && bankAccounts?.length > 0">
                     <div class="wrap-single-bank-detail">
@@ -45,6 +45,6 @@
                 [routerLink]="['/pages/settings/integration/payment']"
                 >{{ localeData?.connect_bank }}</a
             >
-        </div>
-    </div>
+        </mat-card-content>
+    </mat-card>
 </div>

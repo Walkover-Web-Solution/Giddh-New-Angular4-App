@@ -6,7 +6,7 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="card">
+    <mat-card>
         <div class="panel-heading">
             <strong>{{ localeData?.chart_title }}</strong>
             <div class="pull-right dashboard-filter">
@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <div class="card-body position-relative ratio-analysis-panel-body">
+        <mat-card-content class="position-relative ratio-analysis-panel-body">
             <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
@@ -68,6 +68,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </mat-card-content>
+    </mat-card>
 </div>

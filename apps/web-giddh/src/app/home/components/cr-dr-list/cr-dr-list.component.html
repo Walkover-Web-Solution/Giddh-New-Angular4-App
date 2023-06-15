@@ -5,23 +5,23 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="card last-card">
+    <mat-card class="last-card">
         <div class="panel-heading">
-            <div class="btn-group gst-dropdown cursor-pointer pull-left" dropdown>
-                <span id="button-basic" dropdownToggle class="dropdown-toggle" aria-controls="dropdown-basic">
+            <div class="cursor-pointer">
+                <span [matMenuTriggerFor]="crDrListChartMenu" class="menu-trigger-btn">
                     <span>
                         <strong>{{ localeData?.chart_title }} {{ showRecords }}</strong>
                     </span>
                     <span class="icon-arrow-down mr-l1"></span>
                 </span>
-                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                    <li role="menuitem">
-                        <a class="dropdown-item" (click)="changeShowRecords(5)">{{ localeData?.chart_title }} 5</a>
-                    </li>
-                    <li role="menuitem">
-                        <a class="dropdown-item" (click)="changeShowRecords(10)">{{ localeData?.chart_title }} 10 </a>
-                    </li>
-                </ul>
+                <mat-menu #crDrListChartMenu="matMenu" xPosition="after">
+                    <span mat-menu-item (click)="changeShowRecords(5)">
+                        {{ localeData?.chart_title | titlecase }} 5
+                    </span>
+                    <span mat-menu-item (click)="changeShowRecords(10)">
+                        {{ localeData?.chart_title | titlecase }} 10
+                    </span>
+                </mat-menu>
             </div>
             <div class="this-week pull-right" (click)="showGiddhDatepicker($event)">
                 <input
@@ -33,7 +33,7 @@
                 />
             </div>
         </div>
-        <div class="cr-dr-body card-body position-relative">
+        <mat-card-content class="cr-dr-body position-relative">
             <div class="top-five-cr-dr-table">
                 <div class="table-responsive debtors-table">
                     <table class="table basic giddh-table on-mobile-view">
@@ -112,7 +112,71 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="table-responsive creditors-table">
+                <div>
+                    <table mat-table [dataSource]="drAccounts" *ngIf="!isLoading && drAccounts?.length">
+                        <ng-container *ngIf="isLoading">
+                            <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                        </ng-container>
+
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.debtors }}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="latestInvoiceDate">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.invoiced_on }}</th>
+                            <td mat-cell *matCellDef="let element">
+                                <span>
+                                    {{ element.latestInvoiceDate }}
+                                </span>
+                                <span *ngIf="!element.latestBillAmount"> - </span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="latestBillAmount">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.bill_amount }}</th>
+                            <td mat-cell *matCellDef="let element" class="text-right">
+                                <span class="d-inline-flex" *ngIf="element.latestBillAmount">
+                                    <amount-field
+                                        [amount]="
+                                            giddhRoundOff(element.latestBillAmount.amount, giddhBalanceDecimalPlaces)
+                                        "
+                                        [currencySymbol]="element.latestBillAmount.symbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                                <span *ngIf="!element.latestBillAmount"> - </span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="closingBalance">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ commonLocaleData?.app_due_as_on }} {{ dueDate | date }}
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-right">
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="
+                                            giddhRoundOff(element.closingBalance.amount, giddhBalanceDecimalPlaces)
+                                        "
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    </table>
+                </div>
+                <div class="table-responsive">
                     <table class="table basic giddh-table on-mobile-view">
                         <thead [hidden]="!crAccounts?.length">
                             <th width="30%">{{ localeData?.creditors }}</th>
@@ -190,8 +254,8 @@
                     </table>
                 </div>
             </div>
-        </div>
-    </div>
+        </mat-card-content>
+    </mat-card>
 </div>
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">

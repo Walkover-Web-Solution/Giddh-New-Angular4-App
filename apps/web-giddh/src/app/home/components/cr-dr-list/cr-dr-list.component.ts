@@ -59,6 +59,8 @@ export class CrDrComponent implements OnInit, OnDestroy {
     public giddhRoundOff: any = giddhRoundOff;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** This will use for table heading */
+    public displayedColumns: string[] = ['name', 'latestInvoiceDate', 'latestBillAmount', 'closingBalance'];
 
     constructor(private store: Store<AppState>, private contactService: ContactService, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil((this.initializeDateWithUniversalDate) ? of(this.isDatePickerInitialized) : this.destroyed$));

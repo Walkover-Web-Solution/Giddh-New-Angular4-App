@@ -20,6 +20,10 @@ import { RevenueChartComponent } from './components/revenue/revenue-chart.compon
 import { TotalOverduesChartComponent } from './components/total-overdues/total-overdues-chart.component';
 import { HomeComponent } from './home.component';
 import { HomeRoutingModule } from './home.routing.module';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -61,7 +65,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         TooltipModule.forRoot(),
         Daterangepicker,
         CurrencyModule,
-        SharedModule
+        SharedModule,
+        MatCardModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatTableModule
     ],
 })
 export class HomeModule {

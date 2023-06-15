@@ -4,38 +4,29 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div id="pie-chart" class="card" *ngIf="!graphExpanded">
-        <div class="card-body">
+    <mat-card id="pie-chart" *ngIf="!graphExpanded">
+        <mat-card-content>
             <div class="row">
                 <div class="col-lg-9 col-md-12">
                     <div class="left-column">
                         <div class="panel-heading pl-0 pt-0 clearfix">
                             <div class="panel-heading-inner-content w-100">
-                                <div class="btn-group gst-dropdown cursor-pointer pull-left" dropdown>
-                                    <span
-                                        id="button-basic"
-                                        dropdownToggle
-                                        class="dropdown-toggle"
-                                        aria-controls="dropdown-basic"
-                                    >
+                                <div class="cursor-pointer">
+                                    <span [matMenuTriggerFor]="revenueChartMenu" class="menu-trigger-btn">
                                         <span *ngIf="activeGraphType !== undefined">
-                                            <strong>{{ activeGraphType["uniqueName"] }}</strong>
+                                            <strong>{{ activeGraphType["uniqueName"] | titlecase }}</strong>
                                         </span>
                                         <span class="icon-arrow-down mr-l1"></span>
                                     </span>
-                                    <ul
-                                        id="dropdown-basic"
-                                        *dropdownMenu
-                                        class="dropdown-menu"
-                                        role="menu"
-                                        aria-labelledby="button-basic"
-                                    >
-                                        <li role="menuitem" *ngFor="let gtype of revenueGraphTypes">
-                                            <a class="dropdown-item" (click)="changeGraphType(gtype)">{{
-                                                gtype?.uniqueName
-                                            }}</a>
-                                        </li>
-                                    </ul>
+                                    <mat-menu #revenueChartMenu="matMenu" xPosition="after">
+                                        <span
+                                            mat-menu-item
+                                            (click)="changeGraphType(gtype)"
+                                            *ngFor="let gtype of revenueGraphTypes"
+                                        >
+                                            {{ gtype?.uniqueName | titlecase }}
+                                        </span>
+                                    </mat-menu>
                                 </div>
 
                                 <div class="refresh-btn">
@@ -143,8 +134,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </mat-card-content>
+    </mat-card>
     <div *ngIf="graphExpanded">
         <div class="total-sales-header">
             <div class="row total-income-wrap">
@@ -198,8 +189,8 @@
                 </div>
             </div>
         </div>
-        <div class="card mr-t15">
-            <div class="card-body">
+        <mat-card class="mr-t15">
+            <mat-card-content>
                 <div class="clearfix top-dates">
                     <div class="pull-left about-date">
                         <div class="active-date">
@@ -311,7 +302,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </mat-card-content>
+        </mat-card>
     </div>
 </ng-container>

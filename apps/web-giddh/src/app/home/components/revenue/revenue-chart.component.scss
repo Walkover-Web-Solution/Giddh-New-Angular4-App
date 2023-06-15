@@ -249,6 +249,7 @@ input:read-only:focus {
 .panel-heading-inner-content {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
 }
 .refresh-btn {
     align-items: center;
