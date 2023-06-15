@@ -4225,7 +4225,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     transactionClassMul.account.uniqueName = tr.accountUniqueName;
                     transactionClassMul.account.name = tr.accountName;
                     transactionClassMul.amount.amountForAccount = tr.amount;
-                    transactionClassMul.stock.variant = tr.stock.variant;
                     salesEntryClass.hsnNumber = tr.hsnNumber;
                     salesEntryClass.sacNumber = tr.sacNumber;
                     salesEntryClass.description = tr.description;
@@ -4240,6 +4239,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
                         salesAddBulkStockItems.stockUnitCode = tr.stockUnitCode;
                         salesAddBulkStockItems.stockUnit.uniqueName = tr.stockUnit;
+                        salesAddBulkStockItems.variant = tr.variant;
 
                         transactionClassMul.stock = salesAddBulkStockItems;
                     }
@@ -5243,7 +5243,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.currentTxnRequestObject[voucherClassConversion.entries.length] = {
                         ...this.currentTxnRequestObject[voucherClassConversion.entries.length],
                         params: {
-                            variantUniqueName: t.stock.variant.uniqueName
+                            variantUniqueName: t.stock?.variant?.uniqueName
                         },
                         isLinkedPoItem: t.additional?.maxQuantity > 0,
                         selectedAcc: {
@@ -5282,7 +5282,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     salesTransactionItemClass.stockUnit = t.stock.stockUnit.uniqueName;
                     salesTransactionItemClass.stockUnitCode = t.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName;
-                    salesTransactionItemClass.variant = t.stock.variant;
+                    salesTransactionItemClass.variant = t.stock?.variant;
                 }
 
                 if (this.isPurchaseInvoice && entry.purchaseOrderLinkSummaries && entry.purchaseOrderLinkSummaries.length > 0) {

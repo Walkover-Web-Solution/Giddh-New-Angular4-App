@@ -2555,14 +2555,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 let stockUnitUniqueName = '';
                 const stockDetails = txn.selectedAccount.stock;
                 if (txn.selectedAccount && stockDetails) {
-                    let defaultUnit = {
-                        stockUnitCode: stockDetails.stockUnitCode,
-                        code: stockDetails.stockUnitCode,
-                        rate: stockDetails.rate,
+                    const variantUnitRates = txn.selectedAccount?.stock?.variant?.unitRates;
+                    const defaultUnit = {
+                        stockUnitCode: variantUnitRates[0].stockUnitCode,
+                        code: variantUnitRates[0].stockUnitCode,
+                        rate: variantUnitRates[0].rate,
                         name: stockDetails.name
                     };
                     // For V1 company, the unitRates is obtained in 'stock' and for v2 company, unitRates is obtained in 'stock.variant'
-                    const unitRates = this.generalService.voucherApiVersion === 1 ? stockDetails?.unitRates : stockDetails?.variant?.unitRates
+                    const unitRates = this.generalService.voucherApiVersion === 1 ? stockDetails?.unitRates : variantUnitRates
                     txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                     if (requestObject.variantUniqueName) {
                         // Variant got changed, search the selected variant's unit and assign its rate
@@ -2575,7 +2576,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                     stockName = defaultUnit.name;
                     stockUniqueName = stockDetails?.uniqueName;
-                    stockUnitUniqueName = stockDetails.stockUnitUniqueName;
+                    stockUnitUniqueName = variantUnitRates[0].stockUnitUniqueName;
                 }
 
                 if (stockName && stockUniqueName) {
