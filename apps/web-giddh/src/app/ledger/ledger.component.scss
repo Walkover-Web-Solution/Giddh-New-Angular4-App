@@ -329,10 +329,6 @@ table.ledger-footer-1 td[class*="col-"] {
     background-color: transparent !important;
     text-decoration-line: none;
     text-decoration-style: none;
-    background-image: url(../../assets/images/calender-icon.svg) !important;
-    background-size: 17px !important;
-    background-position: 9px 8px !important;
-    background-repeat: no-repeat !important;
     padding-left: 35px !important;
     position: relative;
     z-index: 99;
@@ -611,11 +607,7 @@ sh-select:focus {
 .date-range-picker {
     text-decoration-line: none;
     text-decoration-style: none;
-    background-image: url(../../assets/images/calender-icon.svg) !important;
-    background-size: 17px !important;
-    background-position: 15px 9px !important;
-    background-repeat: no-repeat !important;
-    padding-left: 42px !important;
+    padding-left: 10px !important;
     position: relative;
     z-index: 99;
     cursor: default;
