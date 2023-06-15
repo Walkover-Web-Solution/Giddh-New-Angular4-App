@@ -10,7 +10,7 @@
     thead > tr > td,
     thead > tr > th {
         vertical-align: middle;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         border-left: none;
         border-right: none;
         background: var(--color-table-heading-primary-background);
@@ -39,7 +39,7 @@
         color: var(--color-nero) !important;
         border-bottom: none !important;
         background: var(--color-table-primary-giddh-table-thead-register-table-th-background);
-        font-size: var(--font-size-18);
+        font-size: var(--font-size-16);
     }
     thead > .register-sales-purchase > th {
         top: 54px !important;
@@ -54,7 +54,7 @@
         text-transform: capitalize;
         border-right: none;
         vertical-align: middle !important;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         word-break: break-word;
         border-left: none;
         border-right: none;
@@ -86,7 +86,7 @@
     }
     tfoot > tr > td {
         vertical-align: middle !important;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         word-break: break-word;
         white-space: nowrap;
     }
@@ -221,7 +221,7 @@
             word-wrap: inherit !important;
             max-width: 100%;
             white-space: inherit;
-            font-size: var(--font-size-16) !important;
+            font-size: var(--font-size-15) !important;
             margin-bottom: 14px;
             width: 100%;
             &:last-child {
@@ -243,7 +243,7 @@
         }
         tbody td:before {
             color: var(--color-slate);
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
             content: attr(data-title);
             display: table-cell;
             font-weight: 500;

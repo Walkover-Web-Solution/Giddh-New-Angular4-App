@@ -88,7 +88,7 @@
                 </div>
 
                 <div class="box clearfix">
-                    <h3 class="font-18 bold mb-2">{{ localeData?.email?.form_heading }}</h3>
+                    <h3 class="font-16 bold mb-2">{{ localeData?.email?.form_heading }}</h3>
                     <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)">
                         <div class="row">
                             <div class="form-group col-md-5 col-lg-3">
@@ -131,7 +131,7 @@
                 <ng-template> <span class="icon-card"></span> {{ localeData?.collection?.tab_heading }} </ng-template>
 
                 <div class="box clearfix mb-2">
-                    <h3 class="font-18 bold mb-2">{{ localeData?.collection?.razorpay_form_heading }}</h3>
+                    <h3 class="font-16 bold mb-2">{{ localeData?.collection?.razorpay_form_heading }}</h3>
                     <form #razorPayform="ngForm" novalidate class="">
                         <div class="row">
                             <div class="form-group col-lg-4 col-md-6 col-xs-12">
@@ -294,7 +294,7 @@
                     </div>
 
                     <div class="connected-accounts">
-                        <b class="font-16" *ngIf="!isLoading && connectedBankAccounts?.length > 0">{{
+                        <b class="font-15" *ngIf="!isLoading && connectedBankAccounts?.length > 0">{{
                             localeData?.payment?.connected_accounts
                         }}</b
                         ><br />
@@ -304,11 +304,11 @@
                                 class="account-wrapper"
                                 *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName"
                             >
-                                <div class="account-info-background width-100 font-16 row">
+                                <div class="account-info-background width-100 font-15 row">
                                     <div class="col-md-4">
                                         <span class="field-label">{{ localeData?.payment?.account_number_label }}</span
                                         ><br />
-                                        <span class="account-number mt-2 font-16 inline"
+                                        <span class="account-number mt-2 font-15 inline"
                                             ><b>{{ bankAccount?.iciciDetailsResource?.accountNumber }}</b></span
                                         >
                                     </div>
@@ -349,7 +349,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="font-16">
+                                <div class="font-15">
                                     <ng-container *ngIf="bankAccount?.iciciDetailsResource?.payor?.length > 0">
                                         <div
                                             class="mt-2"
@@ -443,7 +443,7 @@
                                     </ng-container>
                                     <button
                                         type="button"
-                                        class="btn btn-light-blue bold font-16 mt-2 mr-l15"
+                                        class="btn btn-light-blue bold font-15 mt-2 mr-l15"
                                         (click)="openCreateNewAccountUserModal(bankAccount)"
                                     >
                                         {{ localeData?.payment?.add_more_users }}

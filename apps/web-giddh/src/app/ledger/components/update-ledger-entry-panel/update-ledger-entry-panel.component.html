@@ -65,7 +65,7 @@
 
         <!-- region main body -->
         <div class="modal-body" [hidden]="isChangeAcc">
-            <span class="font-16" *ngIf="isEinvoiceGenerated">{{ commonLocaleData?.app_special_note }}</span>
+            <span class="font-15" *ngIf="isEinvoiceGenerated">{{ commonLocaleData?.app_special_note }}</span>
             <!-- region transactions -->
             <div class="ledg-head entry-popup">
                 <table class="w-100 ledger-head mr-t1 hidden-xs">
@@ -923,7 +923,7 @@
                             </ng-template>
 
                             <div class="icon-box" *ngIf="vm.showNewEntryPanel && vm.stockTrxEntry">
-                                <label class="font-18 mr-t05">=</label>
+                                <label class="font-16 mr-t05">=</label>
                             </div>
 
                             <div
@@ -1062,7 +1062,7 @@
                                     !(vm.companyTaxesList$ | async)?.length
                                 "
                             >
-                                <label class="font-18 mr-t05">=</label>
+                                <label class="font-16 mr-t05">=</label>
                             </div>
 
                             <div
@@ -1134,7 +1134,7 @@
                                             vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
                                 "
                             >
-                                <label class="font-18 mr-t05">=</label>
+                                <label class="font-16 mr-t05">=</label>
                             </div>
 
                             <div
@@ -1231,7 +1231,7 @@
                         </div>
 
                         <div class="clearfix pd-1 text-right bd-rb pr-0">
-                            <span class="in-words font-16">
+                            <span class="in-words font-15">
                                 {{ vm.grandTotal | myNumberToWordsPipe | lowercase }}
                             </span>
                         </div>
@@ -1328,7 +1328,7 @@
                         <!-- Advance receipts adjusted Invoice -->
                         <div class="row mr-0 ml-0">
                             <div
-                                class="clearfix col-md-12 adjust-receipt font-16"
+                                class="clearfix col-md-12 adjust-receipt font-15"
                                 *ngIf="
                                     vm.selectedLedger?.voucherAdjustments?.adjustments?.length &&
                                     (isAdjustVoucherSelected ||
@@ -1936,7 +1936,7 @@
                             </mat-expansion-panel>
                         </mat-accordion>
 
-                        <div class="font-16 pt-1 remove-border-left-onmo">
+                        <div class="font-15 pt-1 remove-border-left-onmo">
                             <table class="width-100" *ngIf="vm.isMultiCurrencyAvailable">
                                 <tbody>
                                     <tr>
@@ -1963,7 +1963,7 @@
                             <div class="row">
                                 <div class="col-12 col-sm-12 clearfix mr-t1">
                                     <div class="mr-r1 form-group pull-left cp">
-                                        <label class="pull-left cp font-16 d-flex align-items-center">
+                                        <label class="pull-left cp font-15 d-flex align-items-center">
                                             <mat-checkbox
                                                 color="primary"
                                                 id="update-ledger-generate-voucher"
@@ -2028,7 +2028,7 @@
                                 </div>
                                 <div class="d-flex w-100 mb-2 justify-content-between">
                                     <div class="w-100 d-flex pd-l15" *ngIf="vm.isMultiCurrencyAvailable">
-                                        <ul class="list-inline d-flex font-16 currency-convertor">
+                                        <ul class="list-inline d-flex font-15 currency-convertor">
                                             <li>
                                                 {{ commonLocaleData?.app_numbers?.one }}
                                                 {{
@@ -2097,7 +2097,7 @@
                                                 [options]="fileUploadOptions"
                                                 (uploadOutput)="onUploadOutputUpdate($event)"
                                             />
-                                            <label for="invoiceFile" class="cp font-16">
+                                            <label for="invoiceFile" class="cp font-15">
                                                 <i
                                                     [ngClass]="
                                                         !isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'
@@ -2173,7 +2173,7 @@
     <!-- endregion -->
     <!-- Tourist scheme template block-->
     <ng-template #touristSchemeTemplate>
-        <div class="font-16 mr-b1 d-flex align-items-center xs-d-block" *ngIf="isTouristSchemeApplicable">
+        <div class="font-15 mr-b1 d-flex align-items-center xs-d-block" *ngIf="isTouristSchemeApplicable">
             <div class="mr-r3 xs-mr-0 mr-b1">
                 <div class="d-flex align-items-center">
                     <span class="pull-left">

@@ -25,7 +25,7 @@
         }
 
         .balance-value {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
             font-weight: 700;
             color: rgb(33, 37, 40);
             transform: translateY(7px);
@@ -47,7 +47,7 @@
         }
 
         .slider-value {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
             font-weight: 600;
             background-color: rgb(231, 233, 235);
             color: rgb(33, 37, 40);
@@ -59,7 +59,7 @@
         }
 
         .total-value {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
             font-weight: 700;
             color: rgb(33, 37, 40);
             transform: translateY(-14px);
@@ -96,7 +96,7 @@
     height: 131px;
 
     .label {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         color: rgb(106, 108, 133);
     }
 
@@ -118,7 +118,7 @@
     }
 
     .cancel {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         text-decoration: underline;
         font-weight: 600;
         color: rgb(122, 124, 126);

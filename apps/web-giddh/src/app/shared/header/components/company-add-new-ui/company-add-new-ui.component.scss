@@ -16,7 +16,7 @@ label .required {
 }
 
 .modal-body p {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-gray);
     text-align: center;
     margin-left: -28px;
@@ -85,7 +85,7 @@ input::placeholder {
         display: block;
     }
     .welcome-header h1 {
-        font-size: var(--font-size-18) !important;
+        font-size: var(--font-size-16) !important;
     }
     .welcome-wrapper {
         padding: 15px 0;

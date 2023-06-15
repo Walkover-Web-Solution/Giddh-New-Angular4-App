@@ -126,6 +126,6 @@
 html,
 body{
     --font-regular: "sfpro-regular", "inter-regular";
-    --font-semibold: "sfpro-semibold", "inter-semibold";
-    --font-bold: "sfpro-bold", "inter-bold";
+    --font-semibold:  "sfpro-regular", "inter-regular";
+    --font-bold:  "sfpro-regular", "inter-regular";
 }

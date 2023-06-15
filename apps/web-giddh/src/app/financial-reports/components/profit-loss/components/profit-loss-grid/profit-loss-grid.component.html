@@ -21,7 +21,7 @@
                             <table class="table basic pl-table-grid">
                                 <thead>
                                     <tr>
-                                        <th class="p-0 font-18" width="60%">
+                                        <th class="p-0 font-16" width="60%">
                                             <div
                                                 #searchContainer
                                                 (clickOutside)="clickedOutside($event, searchContainer)"
@@ -46,7 +46,7 @@
                                                 </div>
                                             </div>
                                         </th>
-                                        <th class="text-right font-18" width="40%">
+                                        <th class="text-right font-16" width="40%">
                                             {{ commonLocaleData?.app_as_of }}
                                             <span
                                                 *ngIf="
@@ -127,10 +127,10 @@
                             </div>
                             <div class="account clearfix row" *ngIf="plData && plData.incomeStatment && !hideData">
                                 <div class="col-8 group pd-1">
-                                    <strong class="font-16">{{ localeData?.gross_profit }}</strong>
+                                    <strong class="font-15">{{ localeData?.gross_profit }}</strong>
                                 </div>
                                 <div class="col-4 group text-right pull-right bd-rl pd-1">
-                                    <strong class="font-16">
+                                    <strong class="font-15">
                                         <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="plData?.incomeStatment.grossProfit.amount"
@@ -226,14 +226,14 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="account clearfix font-16 row"
+                                            class="account clearfix font-15 row"
                                             *ngIf="grp.groupName && grp?.uniqueName === 'operatingcost'"
                                         >
                                             <div class="col-8 group pd-1">
-                                                <strong class="font-16">{{ localeData?.operating_profit_loss }}</strong>
+                                                <strong class="font-15">{{ localeData?.operating_profit_loss }}</strong>
                                             </div>
                                             <div class="col-4 group text-right pull-right bd-rl pd-1">
-                                                <strong class="font-16">
+                                                <strong class="font-15">
                                                     <span class="d-inline-flex">
                                                         <amount-field
                                                             [amount]="plData?.incomeStatment.operatingProfit.amount"
@@ -292,10 +292,10 @@
                     </div>
                     <div class="account clearfix row" *ngIf="plData && plData?.incomeStatment && !hideData">
                         <div class="col-8 group pd-1">
-                            <strong class="font-16">{{ localeData?.income_before_taxes }}</strong>
+                            <strong class="font-15">{{ localeData?.income_before_taxes }}</strong>
                         </div>
                         <div class="col-4 group text-right pull-right bd-rl pd-1">
-                            <strong class="font-16">
+                            <strong class="font-15">
                                 <span
                                     *ngIf="
                                         plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' &&
@@ -321,7 +321,7 @@
                             plData?.incomeStatment.incomeBeforeTaxes.type === 'CREDIT'
                         "
                     >
-                        <div class="group clearfix font-16 row">
+                        <div class="group clearfix font-15 row">
                             <div class="col-8 group pd-l1">
                                 {{ localeData?.taxes_30 }}
                             </div>

@@ -7,7 +7,7 @@
 }
 
 .dropdown-menu li {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .custom-multi-select {
@@ -16,7 +16,7 @@
         color: var(--color-white);
         margin: 4px;
         padding: 2px 10px;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         border-radius: 3px;
         cursor: pointer;
         a {
@@ -25,7 +25,7 @@
     }
 }
 .select-companies {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     margin-bottom: 5px;
 }
 .button-yes-cancel {
@@ -51,12 +51,12 @@
 .content-view {
     display: flex;
     align-items: center;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 .branch-card {
     background-color: var(--color-common-primary-background-for-all-components);
     margin-bottom: 15px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     border: 1px solid var(--color-common-secondary-border);
 }
 .card-basic-details span:nth-child(2) {
@@ -78,7 +78,7 @@
     }
 }
 .card-basic-details h2 {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-common-senary-text);
     font-family: var(--font-bold);
     margin-bottom: 12px;
@@ -125,7 +125,7 @@
 }
 .card-basic-details a#button-basic {
     color: var(--color-abbey);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     width: 32px;
     height: 32px;
     display: inline-block;
@@ -166,7 +166,7 @@
     flex-direction: row;
     .clear-filter-btn {
         color: var(--color-giddh-blue);
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         border: 1px solid var(--color-giddh-blue);
         border-radius: 20px;
         padding: 0 12px;
@@ -188,7 +188,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     border-radius: 5px;
     background: var(--color-white);
     margin-right: 15px;
@@ -250,7 +250,7 @@
 }
 
 .icon-advance-search {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     color: var(--color-abbey);
 }
 

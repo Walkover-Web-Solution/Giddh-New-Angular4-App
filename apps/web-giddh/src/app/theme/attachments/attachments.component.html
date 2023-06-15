@@ -8,7 +8,7 @@
         <div class="header">
             <button
                 aria-hidden="true"
-                class="cursor-pointer font-16 d-flex p-0 attachment-back-button"
+                class="cursor-pointer font-15 d-flex p-0 attachment-back-button"
                 [attr.aria-label]="commonLocaleData?.app_back"
                 #close
                 disableRipple
@@ -23,7 +23,7 @@
             <div class="left-side">
                 <mat-checkbox
                     *ngIf="voucherPdf || attachments?.length > 0"
-                    class="select-all font-16"
+                    class="select-all font-15"
                     color="primary"
                     [(ngModel)]="selectAll"
                     (change)="selectAllAttachments($event)"
@@ -39,7 +39,7 @@
                             >&nbsp;</mat-checkbox
                         >
                         <span
-                            class="cursor-pointer font-16"
+                            class="cursor-pointer font-15"
                             [ngClass]="{
                                 'active-file': !isMobileView && voucherPdf?.uniqueName === previewedFile?.uniqueName
                             }"
@@ -63,7 +63,7 @@
                                     >&nbsp;</mat-checkbox
                                 >
                                 <span
-                                    class="file-name cursor-pointer font-16"
+                                    class="file-name cursor-pointer font-15"
                                     [ngClass]="{
                                         'active-file':
                                             !isMobileView && attachment?.uniqueName === previewedFile?.uniqueName
@@ -85,7 +85,7 @@
                             branches?.length > 1
                         " type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
                         [uploadInput]="uploadInput" [options]="fileUploadOptions" (uploadOutput)="onUploadOutput($event)" />
-                    <label for="invoiceFile" class="cp font-16">
+                    <label for="invoiceFile" class="cp font-15">
                         <i [ngClass]="
                                 !isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'
                             "></i>

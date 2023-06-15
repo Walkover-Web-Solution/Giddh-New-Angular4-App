@@ -101,7 +101,7 @@
                         </td>
 
                         <td class="icon-box" *ngIf="currentTxn?.selectedAccount?.stock">
-                            <label class="font-18 mr-t05">=</label>
+                            <label class="font-16 mr-t05">=</label>
                         </td>
 
                         <td
@@ -220,7 +220,7 @@
                                 !(companyTaxesList$ | async)?.length
                             "
                         >
-                            <label class="font-18 mr-t05">=</label>
+                            <label class="font-16 mr-t05">=</label>
                         </td>
 
                         <td
@@ -299,7 +299,7 @@
                                 (companyTaxesList$ | async)?.length
                             "
                         >
-                            <label class="font-18 mr-t05">=</label>
+                            <label class="font-16 mr-t05">=</label>
                         </td>
 
                         <td
@@ -903,7 +903,7 @@
         <div class="row">
             <div class="col-12 col-md-12 clearfix mr-t1">
                 <div class="mr-r1 form-group pull-left cp">
-                    <label class="pull-left cp font-16">
+                    <label class="pull-left cp font-15">
                         <mat-checkbox
                             color="primary"
                             id="ledger-generate-voucher"
@@ -959,7 +959,7 @@
             <div class="clearfix w-100">
                 <div class="pull-left pd-l15">
                     <ul
-                        class="list-inline font-16 d-flex align-items-center"
+                        class="list-inline font-15 d-flex align-items-center"
                         *ngIf="isLedgerAccountAllowsMultiCurrency"
                     >
                         <li>
@@ -977,7 +977,7 @@
                                 href="javascript:void(0)"
                                 (click)="currencyChange()"
                             >
-                                <i class="icon-switch-icon font-16"></i>
+                                <i class="icon-switch-icon font-15"></i>
                             </a>
                         </li>
                         <li>
@@ -1016,7 +1016,7 @@
                         class="upload-div pd-r15"
                         [ngClass]="{ hide: blankLedger?.generateInvoice || blankLedger?.attachedFile }"
                     >
-                        <label for="invoiceFile" class="cp font-16">
+                        <label for="invoiceFile" class="cp font-15">
                             <i [ngClass]="!isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'"></i>
                             {{ localeData?.attach_file }}</label
                         >
@@ -1122,7 +1122,7 @@
     </div>
 </ng-template>
 <ng-template #touristSchemeTemplate>
-    <div class="row font-16 mr-b1" *ngIf="isTouristSchemeApplicable">
+    <div class="row font-15 mr-b1" *ngIf="isTouristSchemeApplicable">
         <div class="col-md-6">
             <div class="d-flex align-items-center">
                 <span class="pull-left">
