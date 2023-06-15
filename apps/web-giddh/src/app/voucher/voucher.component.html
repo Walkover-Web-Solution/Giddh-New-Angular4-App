@@ -2645,7 +2645,7 @@
                                                             <label>{{ localeData?.entry_date }}: </label>
                                                             <span *ngIf="!isUpdateMode" class="custom-date-entries">
                                                                 <giddh-datepicker
-                                                                    [showToggleIcon]="true"
+                                                                    [showToggleIcon]="false"
                                                                     #dp="ngModel"
                                                                     (keydown.enter)="$event.preventDefault()"
                                                                     (dateSelected)="onBlurEntryDate(entryIdx, true)"
@@ -4198,7 +4198,7 @@
                                                                             class="custom-date-entries"
                                                                         >
                                                                             <giddh-datepicker
-                                                                                [showToggleIcon]="true"
+                                                                                [showToggleIcon]="false"
                                                                                 (keydown.enter)="
                                                                                     $event.preventDefault()
                                                                                 "
