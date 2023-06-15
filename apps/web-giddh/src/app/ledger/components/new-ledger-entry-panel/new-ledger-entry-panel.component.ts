@@ -730,6 +730,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.isInclusiveEntry = true;
         this.currentTxn.amount = this.calculateInclusiveAmount(this.currentTxn.total);
         if (this.currentTxn.inventory) {
+            this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
+            this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
+            this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
             this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
         } else {
             this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
@@ -905,8 +908,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         const unitRates = this.generalService.voucherApiVersion === 1 ? this.currentTxn?.selectedAccount?.stock?.unitRates : this.currentTxn?.selectedAccount?.stock?.variant?.unitRates
         let unit = unitRates?.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
         this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
-        if (this.currentTxn?.inventory?.unit) {
+        if (this.currentTxn.inventory.unit) {
+            const variant = this.currentTxn.selectedAccount?.stock?.variant;
+            if (variant) {
+                // If the unit rate of inclusive tax stock is changed then again calculate the amount inclusively
+                this.isInclusiveEntry = variant.purchaseTaxInclusive || variant.salesTaxInclusive || variant.fixedAssetTaxInclusive;
+            }
             this.changePrice(this.currentTxn?.inventory?.unit?.rate?.toString(), true);
+            this.isInclusiveEntry = false;
         }
     }
 
