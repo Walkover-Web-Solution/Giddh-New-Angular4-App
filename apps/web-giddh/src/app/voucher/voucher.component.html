@@ -2798,8 +2798,7 @@
                                                 [disabled]="!transaction.isStockTxn || isEinvoiceGenerated"
                                                 (selectionChange)="
                                                     onChangeUnit(transaction, $event);
-                                                    transaction.setAmount(entry);
-                                                    calculateWhenTrxAltered(entry, transaction)
+                                                    handlePriceCalculationOnUnitChange(entry, transaction)
                                                 "
                                                 [value]="transaction.stockUnit"
                                                 [(ngModel)]="transaction.stockUnit"
@@ -4398,8 +4397,10 @@
                                                                 "
                                                                 (selectionChange)="
                                                                     onChangeUnit(transaction, $event);
-                                                                    transaction.setAmount(entry);
-                                                                    calculateWhenTrxAltered(entry, transaction)
+                                                                    handlePriceCalculationOnUnitChange(
+                                                                        entry,
+                                                                        transaction
+                                                                    )
                                                                 "
                                                                 [value]="transaction.stockUnit"
                                                                 [(ngModel)]="transaction.stockUnit"
