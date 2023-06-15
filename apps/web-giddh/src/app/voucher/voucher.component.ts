@@ -3141,6 +3141,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
         transaction.highPrecisionAmount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
             (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.highPrecisionRate);
+        transaction.convertedAmount = giddhRoundOff(transaction.amount * this.exchangeRate, this.giddhBalanceDecimalPlaces);
         let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), this.highPrecisionRate);
         entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, this.highPrecisionRate);
         if (isNaN(entry.discountSum)) {
@@ -8627,5 +8628,27 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.focusOnDescription();
             return txn;
         });
+    }
+
+    /**
+     * Handle price calculation on unit change
+     *
+     * @param {SalesEntryClass} entry Entry details
+     * @param {SalesTransactionItemClass} transaction Transaction details
+     * @memberof VoucherComponent
+     */
+    public handlePriceCalculationOnUnitChange(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        if (transaction?.stockDetails?.variant) {
+            const isInclusiveTax = transaction.stockDetails.variant.salesTaxInclusive ||
+                transaction.stockDetails.variant.purchaseTaxInclusive ||
+                transaction.stockDetails.variant.fixedAssetTaxInclusive;
+            if (isInclusiveTax) {
+                transaction.total = transaction.quantity * transaction.rate;
+                this.calculateTransactionValueInclusively(entry, transaction);
+            } else {
+                transaction.setAmount(entry);
+                this.calculateWhenTrxAltered(entry, transaction);
+            }
+        }
     }
 }

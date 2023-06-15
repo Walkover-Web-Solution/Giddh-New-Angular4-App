@@ -597,7 +597,12 @@ export class UpdateLedgerVm {
         const unitRate = giddhRoundOff(unit.rate / (this.selectedLedger?.exchangeRate ?? 1), this.ratePrecision);
         this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unitRate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
         this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
-        this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
+        if (this.isInclusiveTax) {
+            this.grandTotal = this.stockTrxEntry.inventory.quantity * this.stockTrxEntry.inventory.rate;
+            this.inventoryTotalChanged();
+        } else {
+            this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
+        }
     }
 
     public taxTrxUpdated(taxes: UpdateLedgerTaxData[]) {
