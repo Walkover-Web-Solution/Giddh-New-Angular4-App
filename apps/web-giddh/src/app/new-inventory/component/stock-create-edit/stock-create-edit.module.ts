@@ -23,6 +23,7 @@ import { InventorySidebarModule } from "../inventory-sidebar/inventory-sidebar.m
 import { TranslateDirectiveModule } from "../../../theme/translate/translate.directive.module";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { RecipeModule } from "../recipe/recipe.module";
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 @NgModule({
     declarations: [
@@ -52,7 +53,8 @@ import { RecipeModule } from "../recipe/recipe.module";
         InventorySidebarModule,
         TranslateDirectiveModule,
         MatTooltipModule,
-        RecipeModule
+        RecipeModule,
+        DragDropModule
     ],
     exports: [
         StockCreateEditComponent
