@@ -17,7 +17,7 @@
     "add_new":"+ नया जोड़ें",
     "sales_information": "बिक्री की जानकारी",
     "variant_this": "संस्करण? यह",
-    "has_multiples": "आकार या रंग आदि जैसे कई विकल्प हैं।",
+    "has_multiples": "एकाधिक आकार या रंग आदि जैसे विकल्प जोड़ें...",
     "option": "विकल्प",
     "ex_size_color": "उदा: आकार, रंग",
     "category": "वर्ग",
@@ -78,5 +78,7 @@
     "stock_delete_succesfully":"स्टॉक सफलतापूर्वक हटा दिया गया।",
     "stock_create_succesfully":"स्टॉक सफलतापूर्वक बनाया गया।",
     "stock_update_succesfully":"स्टॉक सफलतापूर्वक अपडेट किया गया।",
-    "remove_variant":"कार्रवाई करने से सभी विविधताएं हट जाएंगी, क्या आप वाकई इसे अचयनित करना चाहते हैं?"
+    "remove_variant":"कार्रवाई करने से सभी विविधताएं हट जाएंगी, क्या आप वाकई इसे अचयनित करना चाहते हैं?",
+    "inclusive": "MRP (Inclusive)",
+    "exclusive": "Exclusive"
 }
