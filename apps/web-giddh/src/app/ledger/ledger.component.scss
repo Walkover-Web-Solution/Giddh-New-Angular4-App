@@ -86,7 +86,7 @@ input {
     padding: 8px 10px;
     border-bottom: 1px solid var(--color-ledger-grid-border-color) !important;
     border-right: 1px solid var(--color-ledger-grid-border-color);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     text-overflow: ellipsis;
     white-space: nowrap;
     display: flex;
@@ -116,7 +116,7 @@ table.ledger-footer-1 td[class*="col-"] {
     padding-bottom: 1px !important;
     border-bottom: 1px solid var(--color-iron);
     border-right: 1px solid var(--color-iron);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -203,7 +203,7 @@ table.ledger-footer-1 td[class*="col-"] {
     padding: 10px 15px 0;
     background: var(--color-common-primary-background-for-all-components);
     color: var(--color-abbey);
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     box-shadow: 0px 2px 6px var(--color-primary-ledger-box-shadow);
     position: relative;
     z-index: -1;
@@ -300,7 +300,7 @@ table.ledger-footer-1 td[class*="col-"] {
     font-weight: 400;
     border-bottom: 1px solid var(--color-iron);
     font-family: var(--font-semibold);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     border-top: 1px solid var(--color-iron);
 }
 .ledger-main .form-control,
@@ -482,7 +482,7 @@ sh-select:focus {
 }
 .ledger-stat h1 {
     color: var(--color-common-primary-text);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     margin-bottom: 10px;
 }
 .digit-blue {
@@ -490,11 +490,11 @@ sh-select:focus {
 }
 .grey-text-color {
     color: var(--color-common-secondary-text) !important;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .ledger-stat h3 {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 .stat-block {
     border-right: 1px solid var(--color-common-secondary-border);
@@ -557,7 +557,7 @@ sh-select:focus {
     border-radius: 5px;
     border: 1px solid var(--color-primary-button-border);
     color: var(--color-abbey);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     background-color: var(--color-white);
     width: 36px;
     height: 36px;
@@ -567,13 +567,13 @@ sh-select:focus {
     padding: 3px;
 }
 .clear-filter-btn i {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
 }
 .search-ledger-field {
     .btn-danger,
     .btn-success,
     .btn-warning {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         width: 36px !important;
         padding: 0px !important;
         height: 36px !important;
@@ -603,7 +603,7 @@ sh-select:focus {
     z-index: 99;
     cursor: default;
     top: 0;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     padding-right: 10px !important;
     height: 32px;
     min-width: 180px !important;
@@ -649,14 +649,14 @@ sh-select:focus {
         tbody {
             background-color: var(--color-white);
             .transaction-date {
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-15);
                 font-family: var(--font-semibold);
             }
             td {
                 padding-top: 8px;
                 padding-bottom: 8px;
                 border-bottom: 1px solid var(--color-iron);
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-15);
             }
             .second-row {
                 td {
@@ -703,7 +703,7 @@ sh-select:focus {
     padding-left: 0;
 }
 .transaction-mapped-table {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     .transaction-mapped {
         padding: 0 !important;
         position: static;
@@ -780,7 +780,7 @@ sh-select:focus {
 .account-placeholder {
     color: var(--color-gray);
     padding-left: 12px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     min-height: 49px;
     display: flex;
     padding-top: 14px;
@@ -790,7 +790,7 @@ sh-select:focus {
     color: var(--color-nero) !important;
 }
 a#reload-bank-transaction i.icon-refresh {
-    font-size: var(--font-size-18) !important;
+    font-size: var(--font-size-16) !important;
 }
 input#ledger-search {
     padding-left: 27px !important;
@@ -1113,7 +1113,7 @@ input#ledger-search {
         .btn {
             background-color: transparent;
             color: var(--color-nero);
-            font-size: var(--font-size-18);
+            font-size: var(--font-size-16);
         }
         ul {
             left: auto !important;
@@ -1192,7 +1192,7 @@ input#ledger-search {
         .btn {
             background-color: transparent;
             color: var(--color-white);
-            font-size: var(--font-size-18);
+            font-size: var(--font-size-16);
         }
     }
     .search-ledger-field {

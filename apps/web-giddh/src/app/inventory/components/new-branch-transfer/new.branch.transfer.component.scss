@@ -3,7 +3,7 @@
     justify-content: space-between;
     background-color: var(--color-white);
     border-bottom: 1px solid var(--color-common-secondary-border);
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     font-family: var(--font-bold);
     padding-top: 10px;
     padding-bottom: 10px;
@@ -20,7 +20,7 @@ section.receipt-note {
     border-bottom: 1px solid var(--color-common-secondary-border);
 }
 .receipt-note-content {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     max-height: calc(100vh - 142px);
     overflow-y: auto;
     overflow-x: hidden;
@@ -48,7 +48,7 @@ section.receipt-note {
 button.btn.btn-filter {
     background: var(--color-dark-fog);
     border: 1px solid var(--color-dark-fog);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-giddh-blue);
     display: -webkit-inline-box;
     display: inline-flex;
@@ -162,7 +162,7 @@ tfoot td .table-sec.form-group {
     text-align: center;
     color: var(--color-secondary-input-bar-border);
     padding: 5px 8px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .hsn-code-dropdown .btn-group {
@@ -269,7 +269,7 @@ tfoot td .table-sec.form-group {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     border-radius: 5px;
 }
 #table-receipt {
@@ -330,7 +330,7 @@ tfoot td .table-sec.form-group {
 }
 
 .aside-right {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     background: var(--color-white);
     right: -530px;
     transition: 0.5s all ease;
@@ -415,7 +415,7 @@ tfoot td .table-sec.form-group {
         right: -35px;
         top: 1px;
         transform: translateY(16px);
-        font-size: var(--font-size-18);
+        font-size: var(--font-size-16);
         color: var(--color-abbey);
         &.change-position {
             right: -55px;

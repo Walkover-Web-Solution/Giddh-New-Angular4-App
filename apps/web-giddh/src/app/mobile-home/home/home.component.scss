@@ -34,7 +34,7 @@
             padding: 5px 20px;
             border-radius: 30px;
             height: 36px;
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
         }
     }
     .mobile-item-wrapper {
@@ -198,7 +198,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         color: var(--color-white);
         letter-spacing: -1px;
         p {
@@ -271,7 +271,7 @@
                 padding: 0 0 !important;
                 border-radius: 0;
                 height: auto !important;
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-15);
                 background-color: transparent !important;
                 display: inline-block;
                 &:focus {
@@ -285,7 +285,7 @@
         flex-wrap: wrap;
         width: 90%;
         .item-search-wrapper {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
             padding-left: 0;
             white-space: nowrap;
         }

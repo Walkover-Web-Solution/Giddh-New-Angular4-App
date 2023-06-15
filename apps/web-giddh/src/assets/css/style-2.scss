@@ -31,7 +31,7 @@ textarea {
 .basic > thead > tr > td,
 .basic > thead > tr > th {
     vertical-align: middle !important;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     word-break: break-word;
     white-space: nowrap;
 }
@@ -54,7 +54,7 @@ textarea {
     font-weight: 400;
     border-bottom: 1px solid var(--color-table-primary-content-bar-border);
     font-family: var(--font-semibold);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .basic {
@@ -117,37 +117,37 @@ textarea {
 
     #init-contact-proforma-valid-msg {
         color: var(--color-success-enable) !important;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 
     #init-contact-proforma-error-msg {
         color: var(--color-danger);
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 
     #init-contact-update-valid-msg {
         color: var(--color-success-enable) !important;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 
     #init-contact-update-error-msg {
         color: var(--color-danger);
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 
     #init-contact-add-valid-msg {
         color: var(--color-success-enable) !important;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 
     #init-contact-add-error-msg {
         color: var(--color-danger);
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 
     .display-mobile {
         color: var(--color-gray);
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 
     .mobile-number {
@@ -382,7 +382,7 @@ textarea {
     }
 }
 .trigger-dropdown {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .compose-trigger-dropdowns {
@@ -394,7 +394,7 @@ textarea {
             padding-bottom: 1em !important;
         }
         .mat-form-field-label {
-            font-size: var(--font-size-16) !important;
+            font-size: var(--font-size-15) !important;
             color: var(--color-common-senary-background-for-all-components) !important;
             padding-top: 10px;
         }
@@ -428,11 +428,11 @@ textarea {
 }
 .trigger-form {
     .form-control {
-        font-size: var(--font-size-16) !important;
+        font-size: var(--font-size-15) !important;
     }
 }
 .button-trigger-form {
-    font-size: var(--font-size-16) !important;
+    font-size: var(--font-size-15) !important;
 }
 .trigger-form-right-side {
     .border-left {
@@ -457,7 +457,7 @@ textarea {
             color: var(--color-chips-primary) !important;
             background-color: var(--color-body-background) !important;
             border: 1px solid var(--color-primary-login-box-body-text) !important;
-            font-size: var(--font-size-16) !important;
+            font-size: var(--font-size-15) !important;
 
             &:hover {
                 background-color: var(--color-sidebar-company-background) !important;
@@ -487,7 +487,7 @@ textarea {
             }
 
             .mat-form-field-label {
-                font-size: var(--font-size-16) !important;
+                font-size: var(--font-size-15) !important;
                 color: var(--color-common-senary-background-for-all-components) !important;
                 padding-top: 10px;
                 font-weight: normal !important;
@@ -522,7 +522,7 @@ textarea {
         border: 1px solid var(--color-secondary-input-bar-border);
         border-radius: 5px !important;
         padding: 8px;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         min-width: 202px;
     }
 
@@ -580,7 +580,7 @@ textarea {
 .autopaid {
     .mat-dialog-container {
         .modal-body {
-            font-size: var(--font-size-16) !important;
+            font-size: var(--font-size-15) !important;
         }
     }
 }
@@ -682,7 +682,7 @@ textarea {
     border: 1px solid var(--color-secondary-input-bar-border);
     background-color: var(--color-white);
     color: var(--color-primary-input-bar-text);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     padding: 0;
     display: flex;
     justify-content: center;
@@ -1074,7 +1074,7 @@ aside-create-group {
 
     .on-mobile-view tbody td:before {
         color: var(--color-gray);
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         content: attr(data-title);
         display: table-cell;
         font-weight: 500;
@@ -1462,7 +1462,7 @@ input {
             float: left !important;
             width: 100% !important;
             color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
         }
 
         .mat-option-text {
@@ -1516,7 +1516,7 @@ input {
     padding: 8px 0px !important;
     margin-right: 35px !important;
     margin-left: 0 !important;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     color: var(--color-tab-primary-inactive) !important;
     border-width: 0px 0 4px 0 !important;
     height: 41px;
@@ -1572,7 +1572,7 @@ input {
 }
 
 .company-list button.btn-link {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-blue) !important;
     display: block;
     padding: 7px 10px;
@@ -1615,7 +1615,7 @@ ul.sub-list {
 }
 
 .sub-list li a {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     text-overflow: ellipsis;
     display: block;
     padding-right: 40px;
@@ -1635,7 +1635,7 @@ ul.sub-list {
     background: no-repeat;
     border-radius: 0px;
     border: 0px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-nero);
     border-left: 1px solid var(--color-primary-button-border) !important;
     cursor: pointer;
@@ -1675,7 +1675,7 @@ ul.sub-list {
 }
 
 .top-heading > h4 {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     font-family: var(--font-semibold);
     line-height: 28px;
     text-transform: capitalize;
@@ -1696,7 +1696,7 @@ ul.sub-list {
     vertical-align: middle;
     justify-content: center;
     align-items: center;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     border: 1px solid var(--color-gray) !important;
 }
 
@@ -1733,7 +1733,7 @@ ul.sub-list {
 }
 
 .customer-footer-box h5 {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     margin-bottom: 0;
 }
 
@@ -1753,11 +1753,11 @@ ul.sub-list {
 }
 
 .customer-right table tr td h3 {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
 }
 
 .customer-right table tr td p {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     margin-bottom: 7px;
 }
 
@@ -1768,7 +1768,7 @@ ul.sub-list {
 .custom-tabs .nav.nav-tabs > li a {
     background: none;
     border: 0;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-tab-primary-inactive) !important;
     position: relative;
     padding-bottom: 7px;
@@ -1934,7 +1934,7 @@ ul.sub-list {
     width: auto !important;
     margin-left: 10px;
     text-decoration: underline;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .basic > thead > tr > th .fa-sort {
@@ -2062,7 +2062,7 @@ ul.sub-list {
     border: 1px solid var(--color-iron);
     border-radius: 2px;
     background: var(--color-white);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     cursor: pointer;
 }
 
@@ -2260,7 +2260,7 @@ modal-container.modal {
     padding: 6px 0 !important;
     border: 0px !important;
     font-weight: normal;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-table-quinary-content);
 }
 
@@ -2270,7 +2270,7 @@ modal-container.modal {
 
 .price-input {
     border: 1px solid var(--color-iron) !important;
-    font-size: var(--font-size-16) !important;
+    font-size: var(--font-size-15) !important;
     background: var(--color-white) !important;
     padding: 1px 2px !important;
     display: inline-block;
@@ -2299,7 +2299,7 @@ modal-container.modal {
 .btn-filter {
     background: var(--color-white);
     border: 1px solid var(--color-iron);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     padding: 4px 8px;
     line-height: initial !important;
     color: var(--color-gray);
@@ -2510,7 +2510,7 @@ modal-container.modal {
     outline: 0;
     color: var(--color-nero) !important;
     box-shadow: none;
-    font-size: var(--font-size-16) !important;
+    font-size: var(--font-size-15) !important;
 }
 
 .form-control.mat-select-disabled {
@@ -2536,7 +2536,7 @@ input:-ms-input-placeholder,
 .form-control:-moz-placeholder,
 input:-moz-placeholder {
     color: var(--color-gray) !important;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     font-weight: 400 !important;
 }
 
@@ -2567,11 +2567,11 @@ input:-moz-placeholder {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .company-name .company-text .company-name {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     text-transform: capitalize;
     display: inline-flex;
     width: 28px;
@@ -2674,7 +2674,7 @@ fieldset[disabled] .btn-primary:hover {
 .btn {
     padding: 7px 10px;
     border-radius: 5px !important;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     margin-right: 15px;
     color: var(--color-secondary-button-text);
 }
@@ -2682,7 +2682,7 @@ fieldset[disabled] .btn-primary:hover {
 .btn-group-lg > .btn,
 .btn.btn-lg {
     padding: 10px 16px;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     line-height: 1.3333333;
 }
 
@@ -2707,7 +2707,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .success-btn {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     background-color: var(--color-success-enable);
     color: var(--color-secondary-button-text);
 
@@ -2857,7 +2857,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .company-name .icon-dots-three-vertical {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     position: absolute;
     top: 60%;
     bottom: 0;
@@ -3221,7 +3221,7 @@ input[type="checkbox"]:checked:after {
 
 .filterForm label {
     display: block;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     font-weight: 400;
 }
 
@@ -3259,12 +3259,12 @@ input[type="checkbox"]:checked:after {
     font-size: var(--font-size-12) !important;
 }
 
-.font-16 {
-    font-size: var(--font-size-16) !important;
+.font-15 {
+    font-size: var(--font-size-15) !important;
 }
 
-.font-18 {
-    font-size: var(--font-size-18) !important;
+.font-16 {
+    font-size: var(--font-size-16) !important;
 }
 
 .icon-font-22 {
@@ -3322,7 +3322,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .mandatory-asterisk {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     top: 0;
     color: var(--color-danger);
 }
@@ -3415,7 +3415,7 @@ input[type="checkbox"]:checked:after {
 .download-invoice-ledger {
     padding-left: 15px;
     align-items: center;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .popover.bottom > .arrow:after {
@@ -3549,7 +3549,7 @@ footer {
     padding: 10px 20px;
     text-align: center;
     color: var(--color-abbey);
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     margin-top: 20px;
     width: 100%;
     float: left;
@@ -3563,7 +3563,7 @@ footer > div > a {
     margin: 0 22px;
     color: var(--color-abbey);
     padding: 0;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 footer > div > a:hover {
@@ -3905,7 +3905,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .shared-list li {
     list-style: none !important;
     color: var(--color-abbey);
-    font-size: var(--font-size-16) !important;
+    font-size: var(--font-size-15) !important;
     padding: 5px 0 2px 0 !important;
     border-bottom: 1px solid var(--color-iron) !important;
 }
@@ -3969,7 +3969,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .size-xs {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .modal-title.bg {
@@ -3977,7 +3977,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .modal-title {
-    font-size: var(--font-size-18) !important;
+    font-size: var(--font-size-16) !important;
     color: var(--color-popup-list-head-text);
 }
 
@@ -4020,7 +4020,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 #inventory-sidebar,
 #inventory-sidebar input {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 #inventory-sidebar {
@@ -4066,7 +4066,7 @@ select.form-control {
 
 .link-stock-table > tbody > tr > td {
     padding: 10px 15px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .link-stock-table > tbody > tr > td:first-child {
@@ -4096,7 +4096,7 @@ select.form-control {
 }
 
 .icon-arrow-down {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .icon-arrow-down.open {
@@ -4108,7 +4108,7 @@ select.form-control {
 }
 
 .modal-header > h3 {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     color: var(--color-popup-list-head-text);
 }
 
@@ -4118,7 +4118,7 @@ select.form-control {
     cursor: pointer;
     padding: 5px 10px;
     min-width: 160px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     text-align: left;
     background-color: var(--color-white);
     background-clip: padding-box;
@@ -4147,7 +4147,7 @@ select.form-control {
 .new-btn-ul li a {
     padding: 4px 15px !important;
     display: block;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     font-weight: 500;
     color: var(--color-master-page-sidebar-primary-group);
     text-overflow: ellipsis;
@@ -4173,7 +4173,7 @@ select.form-control {
 #getGroupModal .modal-body {
     min-height: calc(100% - 56px);
     height: calc(100% - 56px);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 #getGroupModal.get-group-modal .modal-body {
@@ -4197,7 +4197,7 @@ form label {
     color: var(--color-master-page-input-label);
     font-weight: normal;
     padding-bottom: 0;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     line-height: 2.3;
     margin-bottom: 0 !important;
 }
@@ -4216,7 +4216,7 @@ label {
 }
 
 #getGroupModal .detailed label {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-abbey);
 }
 
@@ -4343,7 +4343,7 @@ label {
 }
 
 .breadcrumbs {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     overflow: hidden;
 }
 
@@ -4390,7 +4390,7 @@ label {
 }
 
 #getGroupModal .detailed label {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-abbey);
 }
 
@@ -4449,7 +4449,7 @@ label {
 
 .new-form .btn {
     padding: 16px !important;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     min-width: 170px;
 }
 
@@ -4581,7 +4581,7 @@ label {
 }
 
 .section-title {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
 }
 
 .top-bar h1.section-title.inline {
@@ -4656,7 +4656,7 @@ label {
 #manufacture .source .link-stock-table > tbody > tr > td:first-child,
 #manufacture .source table tfoot th {
     padding: 10px 15px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 #manufacture .source .link-stock-table {
@@ -4847,7 +4847,7 @@ label {
 
 #manufacture .section-title {
     color: var(--color-abbey);
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     line-height: 34px;
     vertical-align: middle;
 }
@@ -4857,7 +4857,7 @@ label {
     padding: 6px !important;
     outline: 0;
     color: var(--color-abbey);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     box-shadow: none;
 }
 
@@ -4874,11 +4874,11 @@ label {
 }
 
 .select2-results__option[aria-selected] {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 #manufacture .form-theme {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .ico-btn {
@@ -4948,7 +4948,7 @@ label {
 }
 
 #single-role .panel-body label {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     text-transform: capitalize;
     color: var(--color-abbey);
 }
@@ -5171,7 +5171,7 @@ label {
 }
 
 #customInvoice h2 {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     margin-bottom: 20px;
 }
 
@@ -5190,7 +5190,7 @@ label {
 
 #customInvoice .template-editor h3 {
     margin: 15px 0;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
 }
 
 .custom-field .form-control {
@@ -5415,7 +5415,7 @@ input[type="checkbox"][disabled] {
 .section-head {
     padding-bottom: 10px;
     font-family: var(--font-semibold);
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     color: var(--color-common-quaternary-text);
 }
 
@@ -5434,7 +5434,7 @@ input[type="checkbox"][disabled] {
 }
 
 .empty-table h1 {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     color: var(--color-gray);
     padding: 8px;
 }
@@ -5458,7 +5458,7 @@ input[type="checkbox"][disabled] {
 }
 
 .subHead {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     color: var(--color-common-quinary-text);
     padding-bottom: 10px;
 }
@@ -5522,7 +5522,7 @@ datepicker-inner .well {
 datepicker-inner .well table button.btn.btn-default.btn-sm {
     line-height: 1;
     background-color: transparent !important;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     color: var(--color-nero) !important;
     box-shadow: none !important;
 }
@@ -5607,7 +5607,7 @@ input[type="checkbox"][disabled]:after {
 
 .toggle-btn label {
     color: var(--color-blue);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .table-container {
@@ -5696,7 +5696,7 @@ input[type="checkbox"][disabled]:after {
     right: 7px;
     z-index: 9;
     top: 7px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .phoneNum .input-group-addon {
@@ -5717,7 +5717,7 @@ input[type="checkbox"][disabled]:after {
     line-height: 46px !important;
     text-align: right;
     outline: 0;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
 }
 
 #verifyMobile .phoneNum ng-select > div > div.single > div.toggle {
@@ -5744,7 +5744,7 @@ input[type="checkbox"][disabled]:after {
 }
 
 ng-select > div > div.single > div.clear {
-    font-size: var(--font-size-16) !important;
+    font-size: var(--font-size-15) !important;
     padding: 0 !important;
     width: auto !important;
 }
@@ -5825,7 +5825,7 @@ virtual-scroll .scrollable-content .item > a .item-stock {
 virtual-scroll .scrollable-content .item.selected > a,
 virtual-scroll .scrollable-content .item.hilighted > a,
 virtual-scroll .scrollable-content .item > a {
-    font-size: var(--font-size-16) !important;
+    font-size: var(--font-size-15) !important;
 }
 
 virtual-scroll .scrollable-content .item.selected > a,
@@ -5961,7 +5961,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .form-group sup {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     top: 0;
     color: var(--color-danger);
 }
@@ -6031,7 +6031,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .form-group {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .user-list {
@@ -6068,7 +6068,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     padding: 8px !important;
     border-bottom: 1px solid var(--color-iron);
     border-right: 1px solid var(--color-iron);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-common-secondary-text);
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -6085,7 +6085,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .ledg-head.entry-popup table td[class*="col-"] {
     border-bottom: 1px solid var(--color-common-primary-border);
     border-right: 1px solid var(--color-common-primary-border);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-abbey);
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -6116,7 +6116,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     padding: 50px 0;
     background: var(--color-white);
     color: var(--color-abbey);
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     margin: 100px 0;
 }
 
@@ -6240,7 +6240,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .form-header h3 {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     font-family: var(--font-semibold);
 }
 
@@ -6302,7 +6302,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .user-dropdown-header > li > a {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     padding: 6px 15px !important;
     color: var(--color-nero);
 }
@@ -6317,7 +6317,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     text-align: center;
     line-height: 30px;
     color: var(--color-white);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     border: 1px solid var(--dark-blue);
     text-transform: uppercase;
 }
@@ -6353,7 +6353,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .user-name-wrap {
     width: calc(100% - 40px);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     line-height: initial;
 }
 
@@ -6384,7 +6384,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 /* ==================================================Branch
 ================================================== */
 .branch .box h1 {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     padding-right: 85px;
     display: inline-block;
 }
@@ -6556,7 +6556,7 @@ GST filing
 }
 
 .tax-engine .transactions-list .list-filter {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     font-weight: 600;
 }
 
@@ -6677,7 +6677,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .hamburger-menu h4 {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     text-transform: capitalize;
     width: auto;
     color: var(--color-giddh-blue);
@@ -6755,7 +6755,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .nav-tabs > li a {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-abbey);
     margin-right: 0;
     height: 100%;
@@ -6796,7 +6796,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .transactions-overview .gstr-transactions-summary .title {
     padding: 10px 0 20px;
     font-weight: 600;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .tax-engine .text-uppercase {
@@ -6823,7 +6823,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     font-weight: 500;
     border-bottom: 1px solid var(--color-dark-fog);
 }
@@ -6834,7 +6834,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .gstr-transactions-summary .table > thead > tr > th {
     padding: 10px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     font-weight: 600;
 }
 
@@ -6858,7 +6858,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .table.transactions-table tbody > tr > td {
     max-width: 160px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     padding: 16px 12px;
     vertical-align: middle;
 }
@@ -6892,13 +6892,13 @@ perfect-scrollbar > .ps > .ps-overlay {
     border: none;
     background-color: var(--color-white);
     border-right: 1px solid var(--color-table-primary-content-bar-border);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     padding: 13px;
 }
 
 .tax-engine .table.transactions-table tbody > tr > td {
     max-width: 160px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     padding: 16px 12px;
     vertical-align: middle;
 }
@@ -6928,7 +6928,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     cursor: pointer;
     font-style: italic;
     padding: 14px 25px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     background: none !important;
 }
 
@@ -6944,7 +6944,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .gstr-transactions-summary p {
     margin-bottom: 10px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .tax-engine .filings-empty-state {
@@ -6962,7 +6962,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .filings-empty-state .empty-msg {
     font-weight: 300;
     padding-top: 15px;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     margin: 0 auto 20px;
     padding-bottom: 30px;
 }
@@ -7013,7 +7013,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .transactions-list .filter-row .name {
     display: inline-block;
     vertical-align: middle;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     text-transform: capitalize;
 }
 
@@ -7073,7 +7073,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .transactions-overview .gstr-reconciliations-summary .title {
     padding: 10px 15px 20px;
     font-weight: 600;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .tax-engine .transactions-overview .transaction-info:hover {
@@ -7119,7 +7119,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     cursor: pointer;
     font-style: italic;
     padding: 14px 25px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-blue);
 }
 
@@ -7179,7 +7179,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .table.reconciliations-table tbody > tr > td,
 .tax-engine .table.reconciliations-table thead > tr > th {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     padding: 13px;
 }
 
@@ -7242,7 +7242,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     color: var(--color-primary-zi-table-table-thead-tr-th);
     background: var(--color-white);
     font-weight: 700;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     text-transform: capitalize;
     -webkit-font-smoothing: antialiased;
     border-top: 1px solid var(--color-iron);
@@ -7429,12 +7429,12 @@ app-header {
 }
 
 .sticky-footer-sale-amount .total-due h3 {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     padding-right: 13px;
 }
 
 .sticky-footer-sale-amount .totalSale h3 {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     color: var(--color-abbey);
     padding-right: 13px;
 }
@@ -7882,7 +7882,7 @@ span.red-text {
     word-break: break-word !important;
     white-space: pre-line !important;
     min-width: 200px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .select-customer-name .scrollable-content > .item {
@@ -7904,7 +7904,7 @@ span.red-text {
 }
 
 .page-count span {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .total-sales-tabs .nav.nav-tabs {
@@ -7919,7 +7919,7 @@ span.red-text {
 
 .total-sales-tabs .nav-tabs li a {
     color: var(--color-nero);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     padding: 0 5px;
     position: relative;
 }
@@ -8050,12 +8050,12 @@ span.red-text {
 }
 
 ul.dropdown-menu p.lead.pd {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .form-control {
     height: 36px;
-    font-size: var(--font-size-16) !important;
+    font-size: var(--font-size-15) !important;
 
     &::placeholder {
         color: var(--color-common-primary-input-placeholder);
@@ -8151,7 +8151,7 @@ ul.dropdown-menu p.lead.pd {
 
 .aside-panel-ledger button.btn.btn-lg.btn-primary {
     min-width: 150px;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .setting-page ul.nav.nav-tabs {
@@ -8184,7 +8184,7 @@ ul.dropdown-menu p.lead.pd {
     padding: 2px 0px;
     margin-right: 25px;
     padding-bottom: 7px;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     color: var(--color-tab-primary-inactive) !important;
 }
 
@@ -8211,7 +8211,7 @@ ul.dropdown-menu p.lead.pd {
 
 #tab-integration .nav-tabs > li a {
     border-bottom: 1px solid var(--color-gray) !important;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     border-radius: 4px;
     background-color: var(--color-rectangular-tab-primary-background);
     border-color: var(--color-common-secondary-border) !important;
@@ -8344,7 +8344,7 @@ button.btn.btn-filter {
 }
 
 .form-group sup {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     top: 0;
     color: var(--color-danger);
 }
@@ -8583,7 +8583,7 @@ highcharts-chart {
             float: left !important;
             width: 100% !important;
             color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
         }
 
         .option-value-stock {
@@ -8674,7 +8674,7 @@ highcharts-chart {
 
     .purchase-link {
         .mat-select-placeholder {
-            font-size: var(--font-size-16) !important;
+            font-size: var(--font-size-15) !important;
         }
     }
     .common-uniquename {
@@ -8683,17 +8683,17 @@ highcharts-chart {
     }
 
     .create-new {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 
     .create-new-command {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 
     .warehouse-wrapper {
         .select-field-input {
             padding-left: 5px;
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
         }
     }
 
@@ -8838,7 +8838,7 @@ button {
 }
 
 .aside-pane-form label {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-common-primary-text);
 }
 
@@ -8956,7 +8956,7 @@ input.checkbox-custom[type="checkbox"] {
 
 .select2-parent.select2-ledger .update-ledger-account sh-select .header input {
     padding-left: 3px !important;
-    font-size: var(--font-size-16) !important;
+    font-size: var(--font-size-15) !important;
     padding-right: 27px !important;
 }
 
@@ -8974,7 +8974,7 @@ input.checkbox-custom[type="checkbox"] {
 
 .select2-parent.select2-ledger .ledger-account-label sh-select .header input {
     padding-left: 3px !important;
-    font-size: var(--font-size-16) !important;
+    font-size: var(--font-size-15) !important;
 
     &::placeholder {
         color: var(--color-common-secondary-input-placeholder);
@@ -8991,7 +8991,7 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 .aside-body .btn-lg.btn-primary {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     min-width: 150px;
 }
 
@@ -9035,7 +9035,7 @@ input.checkbox-custom[type="checkbox"] {
         }
 
         p {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
             margin-bottom: 40px;
         }
     }
@@ -9071,7 +9071,7 @@ ngx-daterangepicker-material {
     .edit-date-modal {
         h5 {
             color: var(--color-abbey);
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
         }
 
         .modal-date-range {
@@ -9117,14 +9117,14 @@ ngx-daterangepicker-material {
                     border: 1px solid var(--color-iron);
                     border-radius: 3px;
                     padding: 0 15px;
-                    font-size: var(--font-size-16);
+                    font-size: var(--font-size-15);
                 }
             }
         }
 
         .button-wrapper {
             text-align: right;
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
             margin-top: 10px;
 
             a {
@@ -9427,7 +9427,7 @@ span#HW_badge_cont:nth-child(3) {
 .daterangepicker td,
 .daterangepicker th {
     font-weight: 400;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     padding: 4px;
 }
 
@@ -9474,7 +9474,7 @@ span#HW_badge_cont:nth-child(3) {
         .select-dropdown-wrapper {
             .select-field {
                 input {
-                    font-size: var(--font-size-16);
+                    font-size: var(--font-size-15);
                     width: 220px;
                     padding: 3px 10px;
                     border: 1px solid var(--color-common-secondary-border);
@@ -9555,7 +9555,7 @@ span#HW_badge_cont:nth-child(3) {
         .popover-header {
             padding: 15px 15px 0 15px;
             margin-bottom: 0;
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
             border-bottom: none;
             font-family: var(--font-semibold);
             background-color: var(--color-popup-background);
@@ -9624,7 +9624,7 @@ span#HW_badge_cont:nth-child(3) {
         .nav-tabs {
             .nav-item {
                 .nav-link {
-                    font-size: var(--font-size-18) !important;
+                    font-size: var(--font-size-16) !important;
                     color: var(--color-tab-primary-inactive) !important;
                 }
             }
@@ -9850,7 +9850,7 @@ giddh-datepicker {
     input.mat-input-element {
         margin-top: 0;
         padding: 9px 6px;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
 
         &::placeholder {
             color: var(--color-common-primary-input-placeholder) !important;
@@ -10303,7 +10303,7 @@ giddh-datepicker {
                                 #purchase-info-check,
                                 #sales-info-check {
                                     .mat-checkbox-label {
-                                        font: normal normal 600 var(--font-size-16) / 17px;
+                                        font: normal normal 600 var(--font-size-15) / 17px;
                                         font-family: var(--font-regular);
                                         letter-spacing: 0px;
                                         position: relative;
@@ -10857,7 +10857,7 @@ inventory-master {
 /* responsive  starts here*/
 @media (max-width: 1440px) {
     .font-xxlarge {
-        font-size: var(--font-size-18);
+        font-size: var(--font-size-16);
     }
 
     .date-column {
@@ -11029,7 +11029,7 @@ inventory-master {
     #setting-tab .tab-integration .nav-tabs > li > a {
         width: 90px;
         height: 90px !important;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 
     .groups-buttons {
@@ -11049,7 +11049,7 @@ inventory-master {
     #setting-tab-wrapper .tab-integration .nav-tabs > li > a {
         width: 90px;
         height: 90px !important;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 
     .right-bar {
@@ -11530,7 +11530,7 @@ inventory-master {
 
         h3,
         h4 {
-            font-size: var(--font-size-16) !important;
+            font-size: var(--font-size-15) !important;
         }
 
         .close {
@@ -11590,7 +11590,7 @@ inventory-master {
     }
 
     #dashboard .panel-default > .panel-heading {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 
     #dashboard .panel-heading i {
@@ -11945,7 +11945,7 @@ inventory-master {
 
     header .hamburger-menu h4 {
         color: var(--color-white);
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         white-space: normal;
         word-break: break-word;
         width: 100%;
@@ -12541,7 +12541,7 @@ inventory-master {
     }
 
     .branch .box h1 {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         padding-right: 0;
         display: block;
     }
@@ -12568,7 +12568,7 @@ inventory-master {
 
 @media only screen and (max-width: 1400px) {
     .font-xxlarge {
-        font-size: var(--font-size-18);
+        font-size: var(--font-size-16);
     }
 }
 
@@ -12895,7 +12895,7 @@ inventory-master {
                     margin-right: 15px;
 
                     p {
-                        font-size: var(--font-size-18);
+                        font-size: var(--font-size-16);
                         margin-top: 15px;
                         width: 110px;
                         margin-bottom: 20px;
@@ -12969,7 +12969,7 @@ inventory-master {
     input[type="number"],
     input[type="email"],
     input[type="url"] {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 }
 
@@ -12988,7 +12988,7 @@ inventory-master {
     input[type="number"],
     input[type="email"],
     input[type="url"] {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 }
 
@@ -13007,7 +13007,7 @@ inventory-master {
     input[type="number"],
     input[type="email"],
     input[type="url"] {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 }
 
@@ -13026,7 +13026,7 @@ inventory-master {
     input[type="number"],
     input[type="email"],
     input[type="url"] {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 }
 
@@ -13798,7 +13798,7 @@ hamburger-menu {
     }
 
     span.dots-select {
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
         padding-left: 17px;
         position: relative;
     }
@@ -13860,7 +13860,7 @@ hamburger-menu {
     display: block;
     width: 100%;
     padding: 0.375rem 0.75rem;
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     font-weight: 400;
     line-height: 1.5;
     color: var(--color-nero);
@@ -13900,7 +13900,7 @@ hamburger-menu {
             margin-top: -16px;
             padding: 16px 0px;
             padding-top: 17px;
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-15);
 
             .mat-select-placeholder,
             mat-select-trigger {
@@ -13975,7 +13975,7 @@ hamburger-menu {
                 height: 34px;
                 color: var(--color-white);
                 padding-top: 22px;
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-15);
             }
         }
 
@@ -13991,7 +13991,7 @@ hamburger-menu {
                     width: 167px;
                     padding-left: 32px !important;
                     background-color: var(--color-sidebar-primary-search-bar-background) !important;
-                    font-size: var(--font-size-16) !important;
+                    font-size: var(--font-size-15) !important;
                     padding-top: 7px !important;
                     border-radius: 5px;
                     &::placeholder {
@@ -14076,7 +14076,7 @@ hamburger-menu {
 
         .mat-select {
             .mat-select-placeholder {
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-15);
                 color: var(--color-common-primary-input-placeholder);
             }
         }
@@ -14219,10 +14219,10 @@ body.hide-scroll-body.master-page {
 .mat-flat-button,
 .mat-fab,
 .mat-mini-fab {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 .mat-tab-label {
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
 }
 /*==========  Material Button Default Font Size End Here ===============*/

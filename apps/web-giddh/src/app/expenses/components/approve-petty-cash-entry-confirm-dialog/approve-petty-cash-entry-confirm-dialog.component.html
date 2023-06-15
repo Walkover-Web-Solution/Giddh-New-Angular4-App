@@ -19,20 +19,20 @@
         </p>
         <div class="row mr-b1">
             <div class="col-xs-4 col-sm-4">
-                <p class="font-16">{{ localeData?.expenses }}:</p>
+                <p class="font-15">{{ localeData?.expenses }}:</p>
             </div>
             <div class="col-xs-8 col-sm-8">
-                <p class="font-16">{{ selectedEntryForApprove?.particularAccount?.name }}</p>
+                <p class="font-15">{{ selectedEntryForApprove?.particularAccount?.name }}</p>
             </div>
         </div>
         <div class="row mr-b1">
             <div class="col-xs-4 col-sm-4">
-                <p class="font-16">
+                <p class="font-15">
                     {{ entryAgainstObject ? entryAgainstObject?.base : commonLocaleData?.app_payment_mode }}:
                 </p>
             </div>
             <div class="col-xs-8 col-sm-8">
-                <p class="font-16" *ngIf="!showCategoryOption">
+                <p class="font-15" *ngIf="!showCategoryOption">
                     {{
                         entryAgainstObject && pettyCashEntry
                             ? pettyCashEntry?.particular?.name
@@ -73,10 +73,10 @@
         </div>
         <div class="row mr-b1">
             <div class="col-xs-4 col-sm-4">
-                <p class="font-16">{{ commonLocaleData?.app_amount }}:</p>
+                <p class="font-15">{{ commonLocaleData?.app_amount }}:</p>
             </div>
             <div class="col-xs-8 col-sm-8">
-                <p class="font-16">
+                <p class="font-15">
                     <i>{{ selectedEntryForApprove?.currencySymbol }} {{ selectedEntryForApprove?.amount }}</i>
                 </p>
             </div>

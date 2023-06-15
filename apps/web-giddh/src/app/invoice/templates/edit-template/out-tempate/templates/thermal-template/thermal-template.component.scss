@@ -35,7 +35,7 @@
     border-bottom: 1px dashed;
     padding-bottom: 15px;
     margin-top: 11px;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     font-weight: bold;
 }
 * {
@@ -67,11 +67,11 @@ p {
 }
 /* heading */
 #thermal_template header h1 {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
 }
 
 #thermal_template header h2 {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     font-weight: bold;
 }
 .invdate {
@@ -349,7 +349,7 @@ header img {
 }
 
 #thermal_template .subfooter h4 {
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     margin: 0;
 }
 

@@ -104,7 +104,7 @@ table {
     background: transparent !important;
     box-shadow: none !important;
     border-radius: 0 !important;
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-16);
     padding: 0;
     color: var(--color-common-primary-text);
 }
@@ -174,7 +174,7 @@ table {
 button.btn.btn-filter {
     background: var(--color-dark-fog);
     border: 1px solid var(--color-dark-fog);
-    font-size: var(--font-size-16);
+    font-size: var(--font-size-15);
     color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
@@ -209,7 +209,7 @@ button.btn.btn-filter span.icon-cross {
         span {
             padding: 10px;
             p {
-                font-size: var(--font-size-16);
+                font-size: var(--font-size-15);
                 font-weight: bold;
             }
         }
@@ -459,7 +459,7 @@ span.close-modal.cp.pull-right {
         width: 100%;
         justify-content: center;
         margin-bottom: 5px;
-        font-size: var(--font-size-16);
+        font-size: var(--font-size-15);
     }
 }
 
