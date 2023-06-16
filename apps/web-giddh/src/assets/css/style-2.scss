@@ -14046,3 +14046,24 @@ body.hide-scroll-body.master-page {
     border: 1px solid var(--color-danger) !important;
     color: var(--color-danger) !important;
 }
+
+/*-- mat-stepper --*/
+.mat-step-header {
+    background-color: transparent !important;
+    &.cdk-keyboard-focused,
+    .cdk-program-focused {
+        background-color: transparent !important;
+    }
+    &:hover {
+        &:not([aria-disabled]) {
+            background-color: transparent !important;
+        }
+    }
+    &:hover [aria-disabled="false"] {
+        background-color: transparent !important;
+    }
+}
+.mat-horizontal-content-container {
+    padding: 20px !important;
+    overflow: visible !important;
+}

@@ -1,0 +1,21 @@
+.add-company-wrapper {
+    padding: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+    form {
+        p {
+            color: var(--color-abbey);
+        }
+        .setup-pera {
+            color: var(--color-gray);
+        }
+        .mobile-number {
+            input {
+                height: 46px;
+                width: 100%;
+                border-radius: 8px !important;
+                border: 1px solid var(--color-iron);
+            }
+        }
+    }
+}
