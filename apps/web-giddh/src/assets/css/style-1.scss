@@ -2955,9 +2955,6 @@ td.mat-footer-cell {
     color: var(--color-primary-tooltip-text);
     font-size: var(--font-size-12) !important;
 }
-.mat-button-focus-overlay {
-    background: transparent !important;
-}
 
 .receipt-card {
     text-field {
@@ -3310,6 +3307,7 @@ td.mat-footer-cell {
 /*-- input-new-form-field --*/
 create-update-group,
 giddh-datepicker,
+add-company,
 stock-create-edit,
 dropdown-field,
 input-field {

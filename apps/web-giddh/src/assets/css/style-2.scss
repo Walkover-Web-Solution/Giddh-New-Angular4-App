@@ -14226,3 +14226,46 @@ body.hide-scroll-body.master-page {
     font-size: var(--font-size-16);
 }
 /*==========  Material Button Default Font Size End Here ===============*/
+/*-- mat-stepper --*/
+.mat-step-header {
+    background-color: transparent !important;
+    &.cdk-keyboard-focused,
+    .cdk-program-focused {
+        background-color: transparent !important;
+    }
+    &:hover {
+        &:not([aria-disabled]) {
+            background-color: transparent !important;
+        }
+    }
+    &:hover [aria-disabled="false"] {
+        background-color: transparent !important;
+    }
+    .mat-step-icon-selected,
+    .mat-step-icon-state-done,
+    .mat-step-icon-state-edit {
+        background-color: var(--color-primary-header-background);
+    }
+}
+.mat-horizontal-content-container {
+    padding: 10px 20px 20px 20px !important;
+    overflow: visible !important;
+}
+.mat-step-text-label {
+    font-size: 16px;
+}
+.mat-step-icon-content {
+    span {
+        font-size: 14px;
+    }
+}
+
+/*--- common-btn ---*/
+.mat-button.mat-primary,
+.mat-icon-button.mat-primary,
+.mat-stroked-button.mat-primary {
+    color: var(--color-primary-header-background);
+    .mat-button-focus-overlay {
+        background-color: var(--color-primary-header-background) !important;
+    }
+}
