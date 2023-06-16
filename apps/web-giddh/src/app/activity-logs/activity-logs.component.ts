@@ -63,8 +63,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         toDate: "",
         entityId: "",
         isChecked: false,
-        entityFromDate: "",
-        entityToDate: ""
+        entryFromDate: "",
+        entryToDate: "",
+        voucherFromDate: "",
+        voucherToDate: ""
     }
     /** This will use for activity fields object */
     public activityFieldsObj = {
@@ -78,8 +80,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         toDate: undefined,
         entityId: undefined,
         isChecked: false,
-        entityFromDate: undefined,
-        entityToDate: undefined
+        entryFromDate: undefined,
+        entryToDate: undefined,
+        voucherFromDate: undefined,
+        voucherToDate: undefined
     }
     /** Activity log form's company entity type list */
     public entities: IOption[] = [];
@@ -97,6 +101,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /** Directive to get reference of element */
     @ViewChild('datepickerEntryTemplate') public datepickerEntryTemplate: ElementRef;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerVoucherTemplate') public datepickerVoucherTemplate: ElementRef;
     /** Universal date observer */
     public universalDate$: Observable<any>;
     /** This will store selected date range to use in api */
@@ -107,14 +113,22 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public selectedEntryDateRange: any;
     /** This will store selected entry date range to show on UI */
     public selectedEntryDateRangeUi: any;
+    /** This will store selected date range to use in api */
+    public selectedVoucherDateRange: any;
+    /** This will store selected entry date range to show on UI */
+    public selectedVoucherDateRangeUi: any;
     /** This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** This will store available date ranges */
     public entryDatePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** This will store available date ranges */
+    public voucherDatePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
     /** Selected entry range label */
     public selectedEntryRangeLabel: any = "";
+    /** Selected entry range label */
+    public selectedVoucherRangeLabel: any = "";
     /** This will store modal reference */
     public modalRef: BsModalRef;
     /** This will store the x/y position of the field to show datepicker under it */
@@ -125,6 +139,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public showDateReport: boolean = false;
     /** To show entry datepicker clear filter */
     public entryShowDateReport: boolean = false;
+    /** To show voucher datepicker clear filter */
+    public voucherShowDateReport: boolean = false;
     /** Holds label of selected values */
     public activityObjLabels: any = {
         entity: "",
@@ -197,15 +213,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             }
         });
 
-        // this.searchService.searchAccountV2(this.defaultAccountPaginationData).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-        //     if (data?.status === 'success') {
-        //         let accounts: IOption[] = [];
-        //         data.body?.results?.map((item) => {
-        //             accounts.push({ label: item.name, value: item.uniqueName, additional: item });
-        //         });
-        //         this.accounts = accounts;
-        //     }
-        // });
         this.loadDefaultAccountsSuggestions();
 
         /** Universal date observer */
@@ -218,8 +225,12 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.activityObj.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.selectedEntryDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedEntryDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.activityObj.entityFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.activityObj.entityToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.activityObj.entryFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.activityObj.entryToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedVoucherDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedVoucherDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.activityObj.voucherFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.activityObj.voucherToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getActivityLogs();
             }
         });
@@ -376,8 +387,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.activityFieldsObj.toDate = undefined;
         this.activityFieldsObj.entityId = undefined;
         this.activityFieldsObj.isChecked = undefined;
-        this.activityFieldsObj.entityFromDate = undefined;
-        this.activityFieldsObj.entityToDate = undefined;
+        this.activityFieldsObj.entryFromDate = undefined;
+        this.activityFieldsObj.entryToDate = undefined;
+        this.activityFieldsObj.voucherFromDate = undefined;
+        this.activityFieldsObj.voucherToDate = undefined;
 
         this.selectedFields.forEach(field => {
             if (field?.value === "LOG_DATE") {
@@ -389,9 +402,12 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.activityFieldsObj.operation = this.activityObj.operation;
             } else if (field?.value === "USERS") {
                 this.activityFieldsObj.userUniqueNames = this.activityObj.userUniqueNames;
-            } else if (field?.value === "ENTITY_DATE") {
-                this.activityFieldsObj.entityFromDate = this.activityObj.entityFromDate;
-                this.activityFieldsObj.entityToDate = this.activityObj.entityToDate;
+            } else if (field?.value === "ENTRY_DATE") {
+                this.activityFieldsObj.entryFromDate = this.activityObj.entryFromDate;
+                this.activityFieldsObj.entryToDate = this.activityObj.entryToDate;
+            } else if (field?.value === "VOUCHER_DATE") {
+                this.activityFieldsObj.voucherFromDate = this.activityObj.voucherFromDate;
+                this.activityFieldsObj.voucherToDate = this.activityObj.voucherToDate;
             } else if (field?.value === "ACCOUNTS") {
                 this.activityFieldsObj.accountUniqueNames = this.activityObj.accountUniqueNames;
             }
@@ -538,8 +554,34 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             this.entryShowDateReport = true;
             this.selectedEntryDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedEntryDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.activityObj.entityFromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.activityObj.entityToDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.activityObj.entryFromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.activityObj.entryToDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+        }
+    }
+
+    /**
+     * Call back function for date/range selection in voucher datepicker
+     *
+     * @param {*} value
+     * @memberof ActivityLogsComponent
+     */
+    public voucherDateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedVoucherRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedVoucherRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.voucherShowDateReport = true;
+            this.selectedVoucherDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedVoucherDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.activityObj.voucherFromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.activityObj.voucherToDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 
@@ -584,6 +626,21 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         );
     }
 
+    /**
+     *To show the voucher datepicker
+     *
+     * @param {*} element
+     * @memberof ActivityLogsComponent
+     */
+     public showVoucherGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerVoucherTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
 
     /**
      * To check is entry expanded
@@ -862,8 +919,12 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                     value: "USERS"
                 },
                 {
-                    label: this.localeData?.entity_date,
-                    value: "ENTITY_DATE"
+                    label: this.localeData?.entry_date,
+                    value: "ENTRY_DATE"
+                },
+                {
+                    label: this.localeData?.voucher_date,
+                    value: "VOUCHER_DATE"
                 },
                 {
                     label: this.commonLocaleData?.app_import_type?.base_accounts,
