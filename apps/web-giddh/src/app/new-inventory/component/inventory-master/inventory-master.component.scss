@@ -75,7 +75,7 @@
             }
             .create-head {
                 color: var(--color-master-page-text-secondary-hover);
-                font-size: 14px;
+                font-size: var(--font-size-15);
                 background-color: var(--color-master-page-main-content-primary-background);
                 width: 100%;
                 padding: 4px 10px;
@@ -90,7 +90,7 @@
             //     font-size: 16px;
             // }
             .items {
-                font-size: 14px;
+                font-size: var(--font-size-15);
                 height: auto;
                 &.map-item {
                     .mat-list-item-content {

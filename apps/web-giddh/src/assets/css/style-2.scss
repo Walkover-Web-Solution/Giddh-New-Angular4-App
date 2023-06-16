@@ -2470,10 +2470,6 @@ modal-container.modal {
     width: 14px;
 }
 
-.custom-datepicker i img {
-    width: 14px;
-}
-
 .bs-datepicker-body table td.is-highlighted:not(.disabled):not(.selected) span {
     color: var(--color-datepicker-quaternary-date);
 }
@@ -5258,7 +5254,6 @@ label {
     line-height: 50px;
     margin-bottom: 0 !important;
     padding: 0 10px;
-    font-size: 14px;
 }
 
 .design-tool li [class^="ico-"],
@@ -14260,7 +14255,7 @@ body.hide-scroll-body.master-page {
 }
 .mat-step-icon-content {
     span {
-        font-size: 14px;
+        font-size: var(--font-size-15);
     }
 }
 

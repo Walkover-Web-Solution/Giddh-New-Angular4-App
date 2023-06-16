@@ -3120,7 +3120,7 @@ td.mat-footer-cell {
             height: 36px;
             border-radius: 5px;
             padding-left: 6px;
-            font-size: 14px;
+            font-size: var(--font-size-15);
         }
     }
     .product-detail-content {
@@ -3374,7 +3374,7 @@ input-field {
         }
         .mat-form-field-label {
             margin-top: 4px;
-            font-size: 14px;
+            font-size: var(--font-size-15);
         }
         .mat-form-field-wrapper {
             margin: 0;
@@ -3429,7 +3429,7 @@ input-field {
     .help-aside-body {
         .inventory-items {
             h5 {
-                font-size: 14px;
+                font-size: var(--font-size-15);
             }
         }
     }
