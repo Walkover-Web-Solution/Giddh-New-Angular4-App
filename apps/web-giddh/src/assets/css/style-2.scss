@@ -2470,6 +2470,10 @@ modal-container.modal {
     width: 14px;
 }
 
+.custom-datepicker i img {
+    width: 14px;
+}
+
 .bs-datepicker-body table td.is-highlighted:not(.disabled):not(.selected) span {
     color: var(--color-datepicker-quaternary-date);
 }
