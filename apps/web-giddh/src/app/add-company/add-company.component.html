@@ -9,7 +9,8 @@
                     <ng-template matStepLabel>Company Name</ng-template>
                     <div class="row">
                         <div class="col-lg-12">
-                            <input-field [placeholder]="'Company Name'" required> </input-field>
+                            <input-field [placeholder]="'Company Name'" formControlName="firstCtrl" required>
+                            </input-field>
                         </div>
                         <div class="col-lg-6 country-space">
                             <dropdown-field [placeholder]="'Country'" [name]="''" required> </dropdown-field>
