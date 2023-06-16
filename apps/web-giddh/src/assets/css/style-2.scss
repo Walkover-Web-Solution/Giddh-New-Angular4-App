@@ -14251,7 +14251,7 @@ body.hide-scroll-body.master-page {
     overflow: visible !important;
 }
 .mat-step-text-label {
-    font-size: 16px;
+    font-size: var(--font-size-15);
 }
 .mat-step-icon-content {
     span {
