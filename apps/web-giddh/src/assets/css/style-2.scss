@@ -14046,3 +14046,7 @@ body.hide-scroll-body.master-page {
     border: 1px solid var(--color-danger) !important;
     color: var(--color-danger) !important;
 }
+
+.dropdown-position {
+    transform: unset !important;
+}
