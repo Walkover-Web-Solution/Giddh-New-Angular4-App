@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@ang
 import { ReplaySubject } from "rxjs";
 import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { MatChipInputEvent } from "@angular/material/chips";
 import { InventoryService } from "../../../services/inventory.service";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
@@ -198,6 +197,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public isTaxSelectionOpen: boolean = false;
     /** Holds list of taxes processed while tax selection box was closed */
     public processedTaxes: any[] = [];
+    public optionEditing: any;
 
     constructor(
         private inventoryService: InventoryService,
@@ -257,28 +257,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Adds new option value
-     *
-     * @param {MatChipInputEvent} event
-     * @param {number} index
-     * @memberof StockCreateEditComponent
-     */
-    public addOption(event: MatChipInputEvent, index: number): void {
-        const value = (event?.value || "").trim();
-        const valueIndex = this.stockForm.options[index]['values']?.indexOf(value);
-        if (valueIndex === -1) {
-            if (value) {
-                this.stockForm.options[index]['values'].push(value);
-            }
-            // tslint:disable-next-line:no-non-null-assertion
-            event.chipInput!.clear();
-            this.generateVariants();
-        } else {
-            this.toaster.showSnackBar("warning", "You've already used the option value " + value);
-        }
-    }
-
-    /**
      * Add option value
      *
      * @param {*} value
@@ -287,24 +265,15 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public addNewOptionValue(value: any, optionIndex: number, optionValueIndex: number): void {
-        if (!this.stockForm.options[optionIndex].values[optionValueIndex + 1] && value?.trim()) {
-            this.stockForm.options[optionIndex].values[optionValueIndex + 1] = "";
-        }
-    }
+        // const valueIndex = this.stockForm.options[optionIndex].values?.filter((optionValue, index) => { optionValue === value && optionValueIndex !== index });
+        // if (valueIndex?.length) {
+        //     this.stockForm.options[optionIndex].values[optionValueIndex] = "";
+        //     this.toaster.showSnackBar("warning", "You've already used the option value " + value);
+        // }
 
-    /**
-     * Removes option value
-     *
-     * @param {*} value
-     * @param {number} index
-     * @memberof StockCreateEditComponent
-     */
-    public removeOption(value: any, index: number): void {
-        const valueIndex = this.stockForm.options[index]['values']?.indexOf(value);
-        if (valueIndex > -1) {
-            this.stockForm.options[index]['values'].splice(valueIndex, 1);
+        if (!this.stockForm.options[optionIndex].values[optionValueIndex + 1] && value?.trim()) {
+            this.stockForm.options[optionIndex].values[optionValueIndex + 1] = { index: optionValueIndex + 1, value: "" };
         }
-        this.generateVariants();
     }
 
     /**
@@ -445,7 +414,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (this.checkOptionValidity()) {
             this.checkOptionValidation = false;
             const optionIndex = this.stockForm.options?.length + 1;
-            this.stockForm.options.push({ name: "", values: [""], order: optionIndex, isEdit: true });
+            this.stockForm.options.push({ name: "", values: [{ index: 0, value: "" }], order: optionIndex, isEdit: true });
         } else {
             this.checkOptionValidation = true;
         }
@@ -495,7 +464,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public deleteOptionValue(optionIndex: number, optionValueIndex: number): void {
         let optionValues = this.stockForm.options[optionIndex].values?.filter((data, index) => optionValueIndex !== index);
         this.stockForm.options[optionIndex].values = optionValues;
-        this.generateVariants();
     }
 
     /**
@@ -517,8 +485,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 attributes[index] = [];
                 let optionName = option?.name;
                 option?.values?.forEach(value => {
-                    if (value?.trim()) {
-                        attributes[index].push({ [optionName]: value })
+                    if (value?.value?.trim()) {
+                        attributes[index].push({ [optionName]: value?.value })
                     }
                 });
             }
@@ -535,7 +503,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 variantValues.push(attribute[key]);
             });
 
-            variants.push(variantValues.join(" / "));
+            variants.push({ forward: variantValues.join(" / "), backward: variantValues.reverse().join(" / ") });
         });
 
         let defaultWarehouse = null;
@@ -545,10 +513,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         const existingVariants = cloneDeep(this.stockForm.variants);
         let stockVariants = [];
         variants?.forEach(variant => {
-            let variantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant);
-
-            let variantObj = (variantExists?.length > 0) ? variantExists[0] : {
-                name: variant,
+            let forwardVariantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant.forward);
+            let backwardVariantExists = (forwardVariantExists?.length <= 0) ? existingVariants?.filter(existingVariant => existingVariant?.name === variant.backward) : [];
+            let variantObj = (forwardVariantExists?.length > 0) ? forwardVariantExists[0] : (backwardVariantExists?.length > 0) ? backwardVariantExists[0] : {
+                name: variant.forward,
                 archive: false,
                 uniqueName: undefined,
                 skuCode: undefined,
@@ -1708,37 +1676,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will open modal to confirm if user wants to remove variants
-     *
-     * @memberof StockCreateEditComponent
-     */
-    public confirmVariantsRemove(): void {
-        if (!this.isVariantAvailable && this.stockForm.options?.length && this.stockForm.options[0]?.values?.length) {
-            let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                width: '40%',
-                data: {
-                    title: this.commonLocaleData?.app_confirmation,
-                    body: this.localeData?.remove_variant,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
-            });
-
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-                if (response) {
-                    this.stockForm.options = [];
-                    this.stockForm.variants = this.stockForm.variants.slice(0, 1);
-                    this.checkUnitRateValidation = this.checkUnitRateValidation.slice(0, 1);
-                } else {
-                    this.isVariantAvailable = true;
-                    this.changeDetection.detectChanges()
-                    return;
-                }
-            });
-        }
-    }
-
-    /**
      * Track by function for option values
      *
      * @param {string} value
@@ -1757,6 +1694,31 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public dropOptions(event: CdkDragDrop<string[]>): void {
         moveItemInArray(this.stockForm.options, event.previousIndex, event.currentIndex);
+        this.generateVariants();
+    }
+
+    public editOptionValues(option: any): void {
+        this.optionEditing = cloneDeep(option);
+    }
+
+    public updateOptionValues(optionIndex: number): void {
+        if (this.optionEditing) {
+            this.stockForm.options[optionIndex]?.values?.forEach((value, index) => {
+                const currentValue = value?.value?.trim();
+                const previousValue = this.optionEditing?.values[value?.index]?.value?.trim();
+                if (currentValue) {
+                    this.stockForm.variants?.forEach(variant => {
+                        let variantNames = variant?.name?.split("/");
+                        variantNames?.forEach(name => {
+                            if (name?.trim() === previousValue) {
+                                variant.name = variant.name.replace(previousValue, currentValue);
+                            }
+                        });
+                    });
+                }
+            });
+        }
+
         this.generateVariants();
     }
 }
