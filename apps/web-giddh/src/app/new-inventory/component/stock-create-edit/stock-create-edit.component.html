@@ -292,7 +292,8 @@
                                                                                         ?.length > 1
                                                                                 "
                                                                                 [disabled]="
-                                                                                    !isFixedAssetsInformationEnabled
+                                                                                    !stockForm?.fixedAssetAccountDetails
+                                                                                        .accountUniqueName
                                                                                 "
                                                                             >
                                                                                 <i class="icon-trash"></i>
@@ -316,12 +317,16 @@
                                                                                             1
                                                                                     "
                                                                                     [disabled]="
-                                                                                        !isFixedAssetsInformationEnabled
+                                                                                        !stockForm
+                                                                                            ?.fixedAssetAccountDetails
+                                                                                            .accountUniqueName
                                                                                     "
                                                                                 >
                                                                                     <span
                                                                                         *ngIf="
-                                                                                            isFixedAssetsInformationEnabled
+                                                                                            stockForm
+                                                                                                ?.fixedAssetAccountDetails
+                                                                                                .accountUniqueName
                                                                                         "
                                                                                         class="
                                                                                             add-new-text-container
@@ -491,7 +496,9 @@
                                                                                             ?.length > 1
                                                                                     "
                                                                                     [disabled]="
-                                                                                        !isPurchaseInformationEnabled
+                                                                                        !stockForm
+                                                                                            ?.purchaseAccountDetails
+                                                                                            .accountUniqueName
                                                                                     "
                                                                                 >
                                                                                     <i class="icon-trash"></i>
@@ -515,12 +522,16 @@
                                                                                                 1
                                                                                         "
                                                                                         [disabled]="
-                                                                                            !isPurchaseInformationEnabled
+                                                                                            !stockForm
+                                                                                                ?.purchaseAccountDetails
+                                                                                                .accountUniqueName
                                                                                         "
                                                                                     >
                                                                                         <span
                                                                                             *ngIf="
-                                                                                                isPurchaseInformationEnabled
+                                                                                                stockForm
+                                                                                                    ?.purchaseAccountDetails
+                                                                                                    .accountUniqueName
                                                                                             "
                                                                                             class="
                                                                                                 add-new-text-container
@@ -681,7 +692,9 @@
                                                                                         1
                                                                                     "
                                                                                     [disabled]="
-                                                                                        !isSalesInformationEnabled
+                                                                                        !stockForm
+                                                                                            ?.purchaseAccountDetails
+                                                                                            .accountUniqueName
                                                                                     "
                                                                                 >
                                                                                     <i class="icon-trash"></i>
@@ -706,12 +719,16 @@
                                                                                                 1
                                                                                         "
                                                                                         [disabled]="
-                                                                                            !isSalesInformationEnabled
+                                                                                            !stockForm
+                                                                                                ?.salesAccountDetails
+                                                                                                .accountUniqueName
                                                                                         "
                                                                                     >
                                                                                         <span
                                                                                             *ngIf="
-                                                                                                isSalesInformationEnabled
+                                                                                                stockForm
+                                                                                                    ?.salesAccountDetails
+                                                                                                    .accountUniqueName
                                                                                             "
                                                                                             class="
                                                                                                 add-new-text-container
@@ -790,7 +807,7 @@
                                                                         <div>
                                                                             <input-field
                                                                                 [name]="'option-value-' + i + '-' + j"
-                                                                                [(ngModel)]="option.values[j]"
+                                                                                [(ngModel)]="optionValue.value"
                                                                                 (ngModelChange)="
                                                                                     addNewOptionValue($event, i, j)
                                                                                 "
@@ -818,7 +835,7 @@
                                                                     <button
                                                                         mat-stroked-button
                                                                         (click)="
-                                                                            option.isEdit = false; generateVariants()
+                                                                            option.isEdit = false; updateOptionValues(i)
                                                                         "
                                                                     >
                                                                         Done
@@ -857,9 +874,11 @@
                                                                                             "
                                                                                         >
                                                                                             <mat-chip
-                                                                                                *ngIf="optionValue"
+                                                                                                *ngIf="
+                                                                                                    optionValue?.value
+                                                                                                "
                                                                                                 >{{
-                                                                                                    optionValue
+                                                                                                    optionValue?.value
                                                                                                 }}</mat-chip
                                                                                             >
                                                                                         </ng-container>
@@ -871,7 +890,10 @@
                                                                             <div class="edit-btn mt-1">
                                                                                 <button
                                                                                     mat-stroked-button
-                                                                                    (click)="option.isEdit = true"
+                                                                                    (click)="
+                                                                                        option.isEdit = true;
+                                                                                        editOptionValues(option)
+                                                                                    "
                                                                                 >
                                                                                     Edit
                                                                                 </button>
@@ -921,28 +943,35 @@
                                                             </th>
                                                             <th
                                                                 class="sales-purchase-info table-heading-color"
-                                                                *ngIf="isPurchaseInformationEnabled"
+                                                                *ngIf="
+                                                                    stockForm?.purchaseAccountDetails.accountUniqueName
+                                                                "
                                                             >
                                                                 {{ localeData?.purchase_unit }}
                                                             </th>
                                                             <th
                                                                 class="sales-purchase-info table-heading-color"
-                                                                *ngIf="isSalesInformationEnabled"
+                                                                *ngIf="stockForm?.salesAccountDetails.accountUniqueName"
                                                             >
                                                                 {{ localeData?.sales_unit }}
                                                             </th>
                                                             <th
                                                                 class="sales-purchase-info table-heading-color"
-                                                                *ngIf="isFixedAssetsInformationEnabled"
+                                                                *ngIf="
+                                                                    stockForm?.fixedAssetAccountDetails
+                                                                        .accountUniqueName
+                                                                "
                                                             >
                                                                 {{ localeData?.fixed_assets_unit }}
                                                             </th>
                                                             <th
                                                                 class="is-rate-inclusive table-heading-color"
                                                                 *ngIf="
-                                                                    isFixedAssetsInformationEnabled ||
-                                                                    isPurchaseInformationEnabled ||
-                                                                    isSalesInformationEnabled
+                                                                    stockForm?.fixedAssetAccountDetails
+                                                                        .accountUniqueName ||
+                                                                    stockForm?.purchaseAccountDetails
+                                                                        .accountUniqueName ||
+                                                                    stockForm?.salesAccountDetails.accountUniqueName
                                                                 "
                                                             >
                                                                 {{ localeData?.is_rate_inclusive }}
@@ -1011,7 +1040,10 @@
                                                                         inventory-tab
                                                                         purchase-information-enable
                                                                     "
-                                                                    *ngIf="isPurchaseInformationEnabled"
+                                                                    *ngIf="
+                                                                        stockForm?.purchaseAccountDetails
+                                                                            .accountUniqueName
+                                                                    "
                                                                 >
                                                                     <ng-container
                                                                         *ngFor="
@@ -1115,7 +1147,9 @@
                                                                         inventory-tab
                                                                         sales-information-enable
                                                                     "
-                                                                    *ngIf="isSalesInformationEnabled"
+                                                                    *ngIf="
+                                                                        stockForm?.salesAccountDetails.accountUniqueName
+                                                                    "
                                                                 >
                                                                     <ng-container
                                                                         *ngFor="
@@ -1210,7 +1244,10 @@
                                                                         fixed-assets-unit-rates
                                                                         inventory-tab
                                                                     "
-                                                                    *ngIf="isFixedAssetsInformationEnabled"
+                                                                    *ngIf="
+                                                                        stockForm?.fixedAssetAccountDetails
+                                                                            .accountUniqueName
+                                                                    "
                                                                 >
                                                                     <ng-container
                                                                         *ngFor="
@@ -1312,13 +1349,19 @@
                                                                 <td
                                                                     class="text-center is-rate-inclusive"
                                                                     *ngIf="
-                                                                        isSalesInformationEnabled ||
-                                                                        isPurchaseInformationEnabled ||
-                                                                        isFixedAssetsInformationEnabled
+                                                                        stockForm?.salesAccountDetails
+                                                                            .accountUniqueName ||
+                                                                        stockForm?.purchaseAccountDetails
+                                                                            .accountUniqueName ||
+                                                                        stockForm?.fixedAssetAccountDetails
+                                                                            .accountUniqueName
                                                                     "
                                                                 >
                                                                     <mat-checkbox
-                                                                        *ngIf="isSalesInformationEnabled"
+                                                                        *ngIf="
+                                                                            stockForm?.salesAccountDetails
+                                                                                .accountUniqueName
+                                                                        "
                                                                         color="primary"
                                                                         name="variantSalesTaxInclusive{{ i }}"
                                                                         [(ngModel)]="variant.salesTaxInclusive"
@@ -1326,7 +1369,10 @@
                                                                         matTooltipPosition="above"
                                                                     ></mat-checkbox>
                                                                     <mat-checkbox
-                                                                        *ngIf="isPurchaseInformationEnabled"
+                                                                        *ngIf="
+                                                                            stockForm?.purchaseAccountDetails
+                                                                                .accountUniqueName
+                                                                        "
                                                                         class="mr-l2"
                                                                         color="primary"
                                                                         name="variantPurchaseTaxInclusive{{ i }}"
@@ -1337,11 +1383,15 @@
                                                                     <ng-container
                                                                         *ngIf="
                                                                             stockForm.type === 'FIXED_ASSETS' &&
-                                                                            isFixedAssetsInformationEnabled
+                                                                            stockForm?.fixedAssetAccountDetails
+                                                                                .accountUniqueName
                                                                         "
                                                                     >
                                                                         <mat-checkbox
-                                                                            *ngIf="isSalesInformationEnabled"
+                                                                            *ngIf="
+                                                                                stockForm?.salesAccountDetails
+                                                                                    .accountUniqueName
+                                                                            "
                                                                             color="primary"
                                                                             name="variantSalesTaxInclusive{{ i }}"
                                                                             [(ngModel)]="variant.salesTaxInclusive"
@@ -1351,7 +1401,10 @@
                                                                             matTooltipPosition="above"
                                                                         ></mat-checkbox>
                                                                         <mat-checkbox
-                                                                            *ngIf="isPurchaseInformationEnabled"
+                                                                            *ngIf="
+                                                                                stockForm?.purchaseAccountDetails
+                                                                                    .accountUniqueName
+                                                                            "
                                                                             class="mr-l2"
                                                                             color="primary"
                                                                             name="variantPurchaseTaxInclusive{{ i }}"
@@ -1365,7 +1418,8 @@
                                                                     <ng-container
                                                                         *ngIf="
                                                                             stockForm.type === 'FIXED_ASSETS' &&
-                                                                            isFixedAssetsInformationEnabled
+                                                                            stockForm?.fixedAssetAccountDetails
+                                                                                .accountUniqueName
                                                                         "
                                                                     >
                                                                         <mat-checkbox
