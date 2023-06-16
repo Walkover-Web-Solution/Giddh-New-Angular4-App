@@ -2969,9 +2969,6 @@ td.mat-footer-cell {
     color: var(--color-primary-tooltip-text);
     font-size: 12px !important;
 }
-.mat-button-focus-overlay {
-    background: transparent !important;
-}
 
 .receipt-card {
     text-field {
@@ -3264,6 +3261,7 @@ td.mat-footer-cell {
 }
 
 /*-- input-new-form-field --*/
+add-company,
 stock-create-edit,
 dropdown-field,
 input-field {

@@ -6,19 +6,18 @@
         <mat-stepper linear #stepper>
             <mat-step [stepControl]="firstFormGroup">
                 <form [formGroup]="firstFormGroup">
-                    <ng-template matStepLabel>Fill out your name</ng-template>
+                    <ng-template matStepLabel>Company Name</ng-template>
                     <div class="row">
                         <div class="col-lg-12">
-                            <input-field [placeholder]="'Company Name'" formControlName="firstCtrl" required>
-                            </input-field>
+                            <input-field [placeholder]="'Company Name'" required> </input-field>
                         </div>
-                        <div class="col-lg-6 pr-2">
+                        <div class="col-lg-6 country-space">
                             <dropdown-field [placeholder]="'Country'" [name]="''" required> </dropdown-field>
                         </div>
-                        <div class="col-lg-6 pl-2">
+                        <div class="col-lg-6 currency-space">
                             <dropdown-field [placeholder]="'Currency'" [name]="''" required> </dropdown-field>
                         </div>
-                        <div class="col-lg-12 mobile-number pb-3">
+                        <div class="col-lg-12 mobile-number pb-3 pt-1">
                             <input
                                 name="accountDetails.mobileNumber"
                                 type="tel"
@@ -37,16 +36,16 @@
             </mat-step>
             <mat-step [stepControl]="secondFormGroup">
                 <form [formGroup]="secondFormGroup">
-                    <ng-template matStepLabel>Fill out your address</ng-template>
+                    <ng-template matStepLabel>Company Address</ng-template>
                     <div class="row">
                         <div class="col-lg-12">
                             <input-field [placeholder]="'Company Name'" formControlName="secondCtrl" disabled>
                             </input-field>
                         </div>
-                        <div class="col-lg-6 pr-2">
+                        <div class="col-lg-6 country-space">
                             <dropdown-field [placeholder]="'Country'" [name]="''" disabled> </dropdown-field>
                         </div>
-                        <div class="col-lg-6 pl-2">
+                        <div class="col-lg-6 currency-space">
                             <dropdown-field [placeholder]="'Currency'" [name]="''" disabled> </dropdown-field>
                         </div>
                         <div class="col-lg-12 mobile-number">
@@ -82,7 +81,7 @@
                         <div class="col-lg-12">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Company Address</mat-label>
-                                <textarea matInput></textarea>
+                                <textarea matInput rows="3"></textarea>
                             </mat-form-field>
                         </div>
                         <div class="col-lg-12">
