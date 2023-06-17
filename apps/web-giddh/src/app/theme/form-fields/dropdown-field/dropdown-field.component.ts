@@ -40,7 +40,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /** True if field is required */
     @Input() public required: boolean = false;
     /** This will open the dropdown if true */
-    @Input() public openDropdown: boolean;
+    @Input() public openDropdown: boolean = false;
     /** Holds text to show to create new data */
     @Input() public createNewText: any = "";
     /** True when pagination should be enabled */
@@ -82,8 +82,8 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /** Holds appearance of dropdown field */
     @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
     /** Holds Mat Input Label */
-    @Input() public label:string;
-    
+    @Input() public label: string;
+
     constructor(private cdr: ChangeDetectorRef
     ) {
     }
@@ -301,7 +301,9 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
      */
     public addClassForDropdown(): void {
         setTimeout(() => {
-            document.querySelectorAll(".cdk-overlay-pane")[0].classList.add("dropdown-position");
+            if (document.querySelectorAll(".cdk-overlay-pane")?.length) {
+                document.querySelectorAll(".cdk-overlay-pane")[0].classList.add("dropdown-position");
+            }
         }, 10);
     }
 }

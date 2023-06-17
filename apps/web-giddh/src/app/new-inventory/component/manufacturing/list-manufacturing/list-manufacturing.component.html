@@ -12,18 +12,6 @@
                 <form class="col-12 pl-0 pr-0 mr-b05 manufacturing-form">
                     <div class="row">
                         <div class="d-flex flex-wrap gap-between w-100 mb-2">
-                            <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
-                                <dropdown-field
-                                    class="max-width-230"
-                                    [cssClass]="'form-control'"
-                                    [name]="'branch'"
-                                    [placeholder]="commonLocaleData?.app_select_branch"
-                                    [options]="currentCompanyBranches"
-                                    (selectedOption)="handleBranchChange($event)"
-                                    [defaultValue]="selectedBranchName"
-                                >
-                                </dropdown-field>
-                            </div>
                             <div>
                                 <div
                                     class="input-group custom-datepicker custom-new-datepicker"
@@ -36,6 +24,21 @@
                                         class="giddh-datepicker date-range-picker border-radius-2"
                                     />
                                 </div>
+                            </div>
+                            <div
+                                class="list-header"
+                                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                            >
+                                <dropdown-field
+                                    class="max-width-230"
+                                    [cssClass]="'form-control'"
+                                    [name]="'branch'"
+                                    [placeholder]="commonLocaleData?.app_select_branch"
+                                    [options]="currentCompanyBranches"
+                                    (selectedOption)="handleBranchChange($event)"
+                                    [defaultValue]="selectedBranchName"
+                                >
+                                </dropdown-field>
                             </div>
                             <div class="list-header">
                                 <dropdown-field
