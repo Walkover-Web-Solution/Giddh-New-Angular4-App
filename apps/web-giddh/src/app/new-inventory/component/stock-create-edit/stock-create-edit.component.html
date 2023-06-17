@@ -1498,7 +1498,7 @@
                                                     >
                                                     </input-field>
                                                 </div>
-                                                <div class="col-sm-6 col-lg-3">
+                                                <div class="col-sm-6 col-lg-3" *ngIf="!isVariantAvailable">
                                                     <input-field
                                                         [name]="'skuCode'"
                                                         [type]="'text'"
@@ -1571,6 +1571,15 @@
                                                         </input-field>
                                                     </div>
                                                 </ng-container>
+                                                <div class="col-sm-6 col-lg-3" *ngIf="isVariantAvailable">
+                                                    <input-field
+                                                        [name]="'skuCode'"
+                                                        [type]="'text'"
+                                                        [placeholder]="commonLocaleData?.app_sku_code"
+                                                        [(ngModel)]="stockForm.variants[0].skuCode"
+                                                    >
+                                                    </input-field>
+                                                </div>
                                                 <div class="col-sm-6 col-lg-3 custom-label">
                                                     <span class="pull-right right-fix-pencil-icon">
                                                         <i
