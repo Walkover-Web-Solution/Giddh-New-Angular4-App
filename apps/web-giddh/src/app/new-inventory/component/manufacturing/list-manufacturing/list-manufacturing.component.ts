@@ -204,6 +204,9 @@ export class ListManufacturingComponent implements OnInit {
                                     alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                                     uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                                 };
+
+                                this.selectedBranchName = this.currentBranch.alias;
+                                this.handleBranchChange({ label: this.currentBranch.alias, value: this.currentBranch.uniqueName });
                             }
                         }
 
