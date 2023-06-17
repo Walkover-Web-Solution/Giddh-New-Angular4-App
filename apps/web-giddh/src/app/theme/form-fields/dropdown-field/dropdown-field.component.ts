@@ -81,7 +81,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'legacy';
+    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
     /** Holds Mat Input Label */
     @Input() public label:string;
     
@@ -295,4 +295,14 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
         document?.removeEventListener(event, fun.bind(this), options || {});
     }
 
+    /**
+     * Adds dropdown-position class on cdk-overlay for position issue
+     *
+     * @memberof SelectFieldComponent
+     */
+    public addClassForDropdown(): void {
+        setTimeout(() => {
+            document.querySelectorAll(".cdk-overlay-pane")[0].classList.add("dropdown-position");
+        }, 10);
+    }
 }
