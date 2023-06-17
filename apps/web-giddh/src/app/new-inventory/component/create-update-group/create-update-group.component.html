@@ -22,7 +22,7 @@
             <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">
                 <div class="container-fluid">
                     <div class="create-group-page">
-                        <div class="row">
+                        <div class="row row-gap">
                             <div class="col-sm-6 col-lg-6 ml-lg-2">
                                 <input-field
                                     class="input-width"
@@ -113,7 +113,7 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mr-t15">
                             <div class="col-sm-6 col-lg-4 ml-lg-2">
                                 <div class="d-flex toggle-childgroup">
                                     <mat-slide-toggle
@@ -145,7 +145,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="footer-wrapper">
+                <div class="footer-wrapper mr-t15">
                     <div class="button-group">
                         <button *ngIf="!groupUniqueName" mat-stroked-button class="mr-3" (click)="resetGroupForm()">
                             {{ commonLocaleData?.app_clear }}

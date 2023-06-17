@@ -63,9 +63,6 @@
                 font-size: var(--font-size-15);
                 font-weight: 400;
             }
-            .multiple {
-                margin-top: -6px;
-            }
         }
         .consumption-details-wrapper {
             #table-raw-stock {
@@ -94,7 +91,7 @@
                             .mat-stroked-button {
                                 padding: 4px 6px !important;
                                 line-height: unset !important;
-                                font-size: 12px !important;
+                                font-size: var(--font-size-12) !important;
                             }
                         }
                     }
@@ -166,7 +163,7 @@
                 color: var(--color-total-details-secondary-content);
             }
             .card-head-text {
-                font-size: 12px;
+                font-size: var(--font-size-12);
                 color: var(--color-total-details-heading);
             }
             .card-text {
