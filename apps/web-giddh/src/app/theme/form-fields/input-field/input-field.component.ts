@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional, Self, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Optional, Output, Self, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NgControl } from "@angular/forms";
 import { MatFormFieldControl } from "@angular/material/form-field";
 import { Subject } from "rxjs";
@@ -19,7 +19,7 @@ const noop = () => {
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
+export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAccessor {
     @ViewChild('textField', { static: false }) public textField: ElementRef;
     @Input() public pattern: any = null;
     @Input() public required: boolean = false;
@@ -61,7 +61,9 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
     @Input() public autocomplete: string;
     @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
     /** Holds Mat Input Label */
-    @Input() public label:string;
+    @Input() public label: string;
+    /** Emits on change event */
+    @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
@@ -74,20 +76,11 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
     }
 
     /**
-     * On Component Init
-     *
-     * @memberof InputFieldComponent
-     */
-    public ngOnInit(): void {
-
-    }
-
-    /**
      * On Change of input properties
      *
      * @memberof InputFieldComponent
      */
-    public ngOnChanges(changes: SimpleChanges): void {
+    public ngOnChanges(): void {
         if (this.autoFocus) {
             setTimeout(() => {
                 this.textField?.nativeElement?.focus();
@@ -180,7 +173,7 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
     }
 
     /**
-     * Callback for handing input data
+     * Callback for handling input data
      *
      * @memberof InputFieldComponent
      */
@@ -188,7 +181,21 @@ export class InputFieldComponent implements OnInit, OnChanges, OnDestroy, Contro
         this.onChangeCallback(this.value);
     }
 
+    /**
+     * Callback for handling changed data
+     *
+     * @memberof InputFieldComponent
+     */
     public handleChange(): void {
         this.onChangeCallback(this.value);
+    }
+
+    /**
+     * Emits blur event
+     *
+     * @memberof InputFieldComponent
+     */
+    public emitBlurEvent(): void {
+        this.onChange.emit(this.value);
     }
 }

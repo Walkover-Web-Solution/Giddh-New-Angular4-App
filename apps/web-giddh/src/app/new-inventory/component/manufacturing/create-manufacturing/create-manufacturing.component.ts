@@ -61,6 +61,8 @@ export class CreateManufacturingComponent implements OnInit {
     public manufactureUniqueName: string = '';
     /** True if we need to redirect to report page after update manufacturing */
     private readyToRedirect: boolean = false;
+    /** Holds list of linked stocks fetched initially in edit */
+    public initialLinkedStocks: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -190,6 +192,8 @@ export class CreateManufacturingComponent implements OnInit {
     public getStockVariants(object: any, event: any, loadRecipe: boolean = false, index: number, isEdit: boolean = false): void {
         object.stockUniqueName = event?.value;
         object.stockName = event?.label;
+        object.stockUnitCode = event?.additional?.stockUnitCode;
+        object.stockUnitUniqueName = event?.additional?.stockUnitUniqueName;
 
         if (!object.stockUniqueName) {
             return;
@@ -372,7 +376,10 @@ export class CreateManufacturingComponent implements OnInit {
                 linkedStocks.push({
                     stockUniqueName: linkedStock.stockUniqueName,
                     stockUnitUniqueName: linkedStock.stockUnitUniqueName,
-                    quantity: Number(linkedStock.quantity)
+                    quantity: Number(linkedStock.quantity),
+                    variant: {
+                        uniqueName: linkedStock.variant?.uniqueName
+                    }
                 });
             });
 
@@ -552,6 +559,7 @@ export class CreateManufacturingComponent implements OnInit {
         this.manufacturingObject = new CreateManufacturing();
         this.manufacturingObject.manufacturingDetails[0].date = cloneDeep(this.universalDate);
 
+        this.initialLinkedStocks = [];
         this.selectedWarehouseName = (this.warehouses?.length) ? this.warehouses[0].label : "";
         this.selectedInventoryType = "";
         this.preventStocksApiCall = false;
@@ -723,13 +731,13 @@ export class CreateManufacturingComponent implements OnInit {
                 this.manufacturingObject.manufacturingDetails[0].date = dayjs(response.body.date, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 this.manufacturingObject.manufacturingDetails[0].warehouseUniqueName = response.body.warehouse.uniqueName;
                 this.selectedWarehouseName = response.body.warehouse.name;
-                this.manufacturingObject.manufacturingDetails[0].manufacturingUnitCode = response.body.manufacturingUnit;
+                this.manufacturingObject.manufacturingDetails[0].manufacturingUnitCode = response.body.manufacturingUnitCode;
                 this.manufacturingObject.manufacturingDetails[0].stockName = response.body.stockName;
                 this.manufacturingObject.manufacturingDetails[0].stockUniqueName = response.body.stockUniqueName;
                 this.manufacturingObject.manufacturingDetails[0].variant.name = response.body.variant.name;
                 this.manufacturingObject.manufacturingDetails[0].variant.uniqueName = response.body.variant.uniqueName;
-                this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = response.body.manufacturingMultipleOf;
-                this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = response.body.manufacturingQuantity;
+                this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = Number(response.body.manufacturingQuantity) / Number(response.body.manufacturingMultipleOf);
+                this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = response.body.manufacturingMultipleOf;
 
                 this.selectedInventoryType = response.body.inventoryType;
 
@@ -755,8 +763,9 @@ export class CreateManufacturingComponent implements OnInit {
                     });
                 });
                 this.manufacturingObject.manufacturingDetails[0].linkedStocks = linkedStocks;
+                this.initialLinkedStocks = cloneDeep(linkedStocks);
 
-                this.getStockVariants(this.manufacturingObject.manufacturingDetails[0], { label: response.body.stockName, value: response.body.stockUniqueName }, true, 0, true);
+                this.getStockVariants(this.manufacturingObject.manufacturingDetails[0], { label: response.body.stockName, value: response.body.stockUniqueName, additional: { stockUnitCode: response.body.manufacturingUnitCode, stockUnitUniqueName: response.body.manufacturingUnitUniqueName } }, true, 0, true);
 
                 this.preventStocksApiCall = false;
                 this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0], 1, '', this.selectedInventoryType, (response: any) => {
@@ -780,11 +789,23 @@ export class CreateManufacturingComponent implements OnInit {
                     }
 
                     this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
-                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value }, false, 0, true);
+                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
                     });
                 });
 
                 this.calculateTotals();
+
+                this.manufacturingService.getVariantRecipe(this.manufacturingObject.manufacturingDetails[0].stockUniqueName, [this.manufacturingObject.manufacturingDetails[0].variant.uniqueName], true).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === "success" && response?.body?.manufacturingDetails?.length) {
+                        this.recipeExists = true;
+                        this.existingRecipe = this.formatRecipeRequest();
+                    } else {
+                        this.recipeExists = false;
+                    }
+                });
+
+                console.log(this.manufacturingObject.manufacturingDetails[0].linkedStocks);
+
                 this.changeDetectionRef.detectChanges();
             } else {
                 this.toasterService.showSnackBar("error", response.message);
@@ -843,6 +864,7 @@ export class CreateManufacturingComponent implements OnInit {
         if (this.recipeExists) {
             if (!isEqual(this.existingRecipe, recipeObject)) {
                 let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                    width: '585px',
                     data: {
                         title: this.commonLocaleData?.app_confirmation,
                         body: this.localeData?.confirm_update_recipe,
@@ -858,9 +880,12 @@ export class CreateManufacturingComponent implements OnInit {
                         this.redirectToReport();
                     }
                 });
+            } else {
+                this.redirectToReport();
             }
         } else {
             let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                width: '585px',
                 data: {
                     title: this.commonLocaleData?.app_confirmation,
                     body: this.localeData?.confirm_save_recipe,
@@ -902,5 +927,23 @@ export class CreateManufacturingComponent implements OnInit {
         } else {
             this.readyToRedirect = true;
         }
+    }
+
+    /**
+     * Updates raw stock quantity if finished stock quantity changes
+     *
+     * @memberof CreateManufacturingComponent
+     */
+    public updateRawStocksQuantity(): void {
+        const finishedStockQuantity = !isNaN(this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity) ? Number(this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity) : 1;
+
+        this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
+            let selectedStock = this.initialLinkedStocks?.find(stock => stock.stockUniqueName === linkedStock.stockUniqueName);
+
+            if (selectedStock) {
+                linkedStock.quantity = selectedStock.quantity * finishedStockQuantity;
+                linkedStock.amount = linkedStock.quantity * linkedStock.rate;
+            }
+        });
     }
 }

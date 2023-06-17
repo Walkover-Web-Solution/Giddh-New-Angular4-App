@@ -4,7 +4,6 @@ import { FormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
-import { cloneDeep } from "../../../lodash-optimized";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
 
 @Component({
@@ -35,13 +34,13 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /** True if field is readonly */
     @Input() public readonly: boolean;
     /** True if field is autocomplete */
-    @Input() public autocomplete: string = 'off';
+    @Input() public autocomplete: boolean;
     /** Default value to prefill */
     @Input() public defaultValue: any = "";
     /** True if field is required */
     @Input() public required: boolean = false;
     /** This will open the dropdown if true */
-    @Input() public openDropdown: boolean;
+    @Input() public openDropdown: boolean = false;
     /** Holds text to show to create new data */
     @Input() public createNewText: any = "";
     /** True when pagination should be enabled */
@@ -78,13 +77,13 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     public selectedValue: any = '';
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
-
+    /** Holds appearance of dropdown field */
     @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
     /** Holds Mat Input Label */
-    @Input() public label:string;
-    
+    @Input() public label: string;
+
     constructor(private cdr: ChangeDetectorRef
     ) {
     }
@@ -139,11 +138,11 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
-            this.fieldFilteredOptions = cloneDeep(changes.options.currentValue);
+            this.fieldFilteredOptions = changes.options.currentValue;
         }
         if (changes?.defaultValue) {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
-            if(!this.options || this.options?.length === 0) {
+            if (!this.options || this.options?.length === 0) {
                 if (this.enableDynamicSearch) {
                     this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
                 } else {
@@ -182,7 +181,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
         let filteredOptions: IOption[] = [];
         this.options?.forEach(option => {
             if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
-                filteredOptions.push({ label: option.label, value: option?.value, additional: option });
+                filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
             }
         });
 
@@ -302,7 +301,9 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
      */
     public addClassForDropdown(): void {
         setTimeout(() => {
-            document.querySelectorAll(".cdk-overlay-pane")[0].classList.add("dropdown-position");
+            if (document.querySelectorAll(".cdk-overlay-pane")?.length) {
+                document.querySelectorAll(".cdk-overlay-pane")[0].classList.add("dropdown-position");
+            }
         }, 10);
     }
 }
