@@ -2572,6 +2572,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         rate = defaultUnit.rate;
                         unitCode = defaultUnit.code;
                     }
+                    rate = Number((rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                     stockName = defaultUnit.name;
                     stockUniqueName = stockDetails?.uniqueName;
                     stockUnitUniqueName = variantUnitRates[0].stockUnitUniqueName;
