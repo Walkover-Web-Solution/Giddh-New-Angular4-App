@@ -308,7 +308,7 @@ export class ListManufacturingComponent implements OnInit {
 
                 response.body.results.forEach(item => {
                     reportData.push({
-                        date: dayjs(item.date, GIDDH_DATE_FORMAT).format("d MMM YYYY"),
+                        date: dayjs(item.date, GIDDH_DATE_FORMAT).format("DD MMM YY"),
                         voucher_no: item.voucherNumber,
                         stock: item.stockName,
                         variant: item.variant.name,

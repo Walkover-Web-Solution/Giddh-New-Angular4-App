@@ -121,7 +121,11 @@
                                             [(ngModel)]="
                                                 manufacturingObject.manufacturingDetails[0].manufacturingQuantity
                                             "
-                                            (change)="errorFields.finishedQuantity = false; calculateTotals()"
+                                            (change)="
+                                                errorFields.finishedQuantity = false;
+                                                updateRawStocksQuantity();
+                                                calculateTotals()
+                                            "
                                         >
                                         </input-field>
                                         <small class="float-right"
