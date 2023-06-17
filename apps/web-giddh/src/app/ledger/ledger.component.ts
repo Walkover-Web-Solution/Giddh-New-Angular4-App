@@ -2663,7 +2663,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : variantUnitRates;
                     txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                     stockName = defaultUnit.name;
-                    rate = defaultUnit.rate;
+                    rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                     stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                     unitCode = defaultUnit.code;
                     stockUnitUniqueName = variantUnitRates[0].stockUnitUniqueName;
