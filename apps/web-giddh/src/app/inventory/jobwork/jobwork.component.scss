@@ -136,7 +136,7 @@
     li {
         color: var(--color-nero);
         padding: 3px 7px !important;
-        font-size: 12px;
+        font-size: var(--font-size-12);
     }
     li:last-child {
         border: none;
@@ -184,7 +184,7 @@ button[aria-expanded="true"] i {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
+    font-size: var(--font-size-16);
     margin-left: 10px;
     border: 1px solid var(--color-blue);
     border-radius: 5px;
@@ -201,7 +201,7 @@ button[aria-expanded="true"] i {
 button.btn.btn-filter {
     background: var(--color-dark-fog);
     border: 1px solid var(--color-iron);
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;

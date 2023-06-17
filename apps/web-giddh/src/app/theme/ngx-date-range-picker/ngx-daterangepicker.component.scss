@@ -61,7 +61,7 @@
     width: 278px;
     display: flex;
     margin-top: 0;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     background-color: var(--color-datepicker-background);
     box-shadow: 0 2px 4px 0 var(--color-primary-common-box-shadow), 0 2px 8px 0 var(--color-primary-common-box-shadow);
     &.double {
@@ -177,9 +177,9 @@
 
         th,
         .th-div {
-            font-size: 100%;
+            font-size: var(--font-size-15);
             font-family: var(--font-regular) !important;
-            font: 400 14px system-ui;
+            font: 400 var(--font-size-15) system-ui;
             margin-bottom: 0 !important;
         }
         th,
@@ -204,7 +204,7 @@
 
             span {
                 pointer-events: none;
-                font-size: 16px;
+                font-size: var(--font-size-15);
             }
         }
         /* new calendar */
@@ -229,7 +229,7 @@
     }
     th.month.drp-animate,
     .month.drp-animate {
-        font-size: 12px;
+        font-size: var(--font-size-12);
         text-align: left;
         color: var(--color-nero);
         font-weight: 600;
@@ -294,7 +294,7 @@
         }
 
         &.week {
-            font-size: 80%;
+            font-size: var(--font-size-12);
             color: var(--color-iron);
         }
     }
@@ -358,7 +358,7 @@
         }
 
         &.week {
-            font-size: 80%;
+            font-size: var(--font-size-12);
             color: var(--color-iron);
         }
     }
@@ -539,7 +539,7 @@
         height: 3rem;
         &.monthselect,
         &.yearselect {
-            font-size: 12px;
+            font-size: var(--font-size-12);
             padding: 1px;
             height: auto;
             margin: 0;
@@ -555,7 +555,7 @@
             border: 1px solid var(--color-dark-fog);
             padding: 2px;
             outline: 0;
-            font-size: 12px;
+            font-size: var(--font-size-12);
         }
         &.monthselect,
         &.yearselect {
@@ -660,7 +660,7 @@
                         border: none;
                         text-align: left;
                         cursor: pointer;
-                        font-size: 14px;
+                        font-size: var(--font-size-15);
                         color: var(--color-datepicker-rightside-list-text);
                         background-color: var(--color-dropdown-primary-background);
                         border-left: 3px solid transparent !important;
@@ -798,7 +798,7 @@
         text-transform: capitalize;
         line-height: 36px;
         border: none;
-        font-size: 14px;
+        font-size: var(--font-size-15);
     }
     .btn.btn-danger {
         background: var(--color-dark-fog);
@@ -892,7 +892,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
 /* new calendar */
 
 .invalid-date.error-msg {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     position: absolute;
     top: 34px;
     left: 0;
@@ -1166,24 +1166,6 @@ td span {
     opacity: 0;
 }
 
-.d-container {
-    width: 100%;
-    background-color: var(--color-white);
-    z-index: 100;
-    // overflow-x: hidden;
-    // overflow-y: auto;
-    // transition: 30ms all;
-    h2 {
-        position: relative;
-        padding-left: 10px;
-        font-size: 13px;
-        color: var(--color-abbey);
-        margin: 9px 0 0;
-        font-style: normal;
-        text-align: left;
-    }
-}
-
 .dropdown-containt {
     display: flex;
     flex-wrap: wrap;
@@ -1194,7 +1176,7 @@ td span {
         padding: 6px 4px;
         text-align: center;
         text-transform: uppercase;
-        font-size: 12px;
+        font-size: var(--font-size-12);
         font-style: normal;
         &:hover {
             border-radius: 50px;
@@ -1438,7 +1420,7 @@ td span {
                         input {
                             width: 98px;
                             height: auto;
-                            font-size: 14px;
+                            font-size: var(--font-size-15);
                             padding: 0;
                             border: none;
                             border-bottom: none;
@@ -1497,7 +1479,7 @@ td span {
         width: 240px;
         justify-content: center;
         align-items: center;
-        font-size: 16px;
+        font-size: var(--font-size-15);
         .prev.available {
             display: inline-flex;
             transform: rotate(270deg);
@@ -1533,7 +1515,7 @@ td span {
                 border: none;
                 text-align: left;
                 cursor: pointer;
-                font-size: 12px;
+                font-size: var(--font-size-12);
                 color: var(--color-datepicker-rightside-list-text);
                 font-family: var(--font-regular);
                 .drop-down {
@@ -1575,7 +1557,7 @@ td span {
                 width: 28px;
                 height: 17px;
                 margin-right: 3px;
-                font-size: 12px;
+                font-size: var(--font-size-12);
                 margin-bottom: 0;
                 border: none;
                 border-bottom: 1px solid var(--color-secondary-input-bar-border);
@@ -1702,7 +1684,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                         button {
                             padding: 12px 10px;
                             border-bottom: 1px solid var(--color-iron);
-                            font-size: 14px;
+                            font-size: var(--font-size-15);
                         }
                     }
                 }
@@ -1828,7 +1810,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                     a {
                         color: var(--color-blue);
                         padding-right: 15px;
-                        font-size: 14px;
+                        font-size: var(--font-size-15);
                     }
                 }
                 img.close-custom-btn {
@@ -1846,7 +1828,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                 flex-direction: column;
                 width: 100%;
                 span.custom-label {
-                    font-size: 12px;
+                    font-size: var(--font-size-12);
                     display: block;
                     padding-bottom: 2px;
                     color: var(--color-abbey);
@@ -1857,7 +1839,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                     justify-content: space-between;
                     align-items: center;
                     .custom-date-range {
-                        font-size: 18px;
+                        font-size: var(--font-size-16);
                         color: var(--color-nero);
                         padding-left: 50px;
                     }

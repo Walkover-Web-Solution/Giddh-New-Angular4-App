@@ -68,7 +68,7 @@
     ul {
         padding: 0;
         list-style: none;
-        font-size: 14px;
+        font-size: var(--font-size-15);
         font-family: var(--font-semibold);
         color: var(--color-primary-tax-sidebar-gst-menu-items-ul);
         li {

@@ -31,7 +31,7 @@
                     [exclude]="'.company-name'"
                 >
                     <h3
-                        class="font-16 d-flex flex-column cursor-pointer"
+                        class="font-15 d-flex flex-column cursor-pointer"
                         [checkPermission]="['MENU', 'MANAGE']"
                         dropdownToggle
                     >
@@ -99,7 +99,7 @@
                             {{ localeData?.accounts }}
                             <i class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i>
                         </p>
-                        <ul class="left-fixed-header list-style-none font-14 lh33 mr-t05">
+                        <ul class="left-fixed-header list-style-none font-15 lh33 mr-t05">
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     href="javascript:void(0);"
@@ -134,7 +134,7 @@
                             class="dropdown-toggle"
                         >
                             <span [tooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
-                            <i class="icon-right mr-l1 font-14"></i>
+                            <i class="icon-right mr-l1 font-15"></i>
                         </a>
                         <ul
                             id="dropdown-basic-01"
@@ -160,7 +160,7 @@
                     </div>
                 </div>
                 <div class="menu-block">
-                    <div class="menu-item-wrapper font-14">
+                    <div class="menu-item-wrapper font-15">
                         <div class="menu-item pd-l2 pd-r2">
                             <p class="font-12">
                                 <span
@@ -171,7 +171,7 @@
                                     <i class="icon-down-new mr-l05"></i>
                                 </span>
                                 <span class="text-gray cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
-                                    <i class="icon-go font-18"></i>
+                                    <i class="icon-go font-16"></i>
                                 </span>
                             </p>
                         </div>
@@ -197,7 +197,7 @@
                                         ><i [ngClass]="menu?.icon"></i>
                                         <span class="item-name">{{ menu?.label }}</span>
                                     </span>
-                                    <i class="icon-right mr-l1 font-14"></i>
+                                    <i class="icon-right mr-l1 font-15"></i>
                                 </a>
                                 <a
                                     href="javascript:void(0);"

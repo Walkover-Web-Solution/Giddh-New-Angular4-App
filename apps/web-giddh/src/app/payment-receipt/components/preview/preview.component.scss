@@ -40,14 +40,14 @@
     .voucher-holder-name {
         p {
             color: #333;
-            font-size: 14px;
+            font-size: var(--font-size-15);
             margin-top: 3px;
             white-space: normal;
             word-break: break-all;
         }
     }
     .voucher-amount {
-        font-size: 12px;
+        font-size: var(--font-size-12);
         line-height: 3.4;
     }
 }
@@ -64,12 +64,12 @@
             padding-bottom: 25px;
 
             h3.voucher-number {
-                font-size: 16px;
+                font-size: var(--font-size-15);
                 font-weight: 600;
             }
 
             p.account-holder-name {
-                font-size: 14px;
+                font-size: var(--font-size-15);
                 margin-top: 3px;
             }
 
@@ -133,7 +133,7 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                font-size: 36px;
+                font-size: var(--font-size-32);
                 margin: 0 auto;
                 color: var(--color-red);
             }
@@ -144,7 +144,7 @@
                 padding: 50px 0px 0 0px;
             }
             .preview-not-supported-attachment {
-                font-size: 15px;
+                font-size: var(--font-size-15);
                 margin: 16px;
             }
             .pdf-preview {

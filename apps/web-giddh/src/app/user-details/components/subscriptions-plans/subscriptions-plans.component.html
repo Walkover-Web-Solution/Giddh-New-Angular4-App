@@ -26,7 +26,7 @@
                         {{ localeData?.subscription?.benefits }}
                     </span>
                 </div>
-                <div class="grid-title-list font-14" *ngFor="let plan of inputData">
+                <div class="grid-title-list font-15" *ngFor="let plan of inputData">
                     <span class="sub-plan-name">{{ plan["name"] }}</span> <br />
                     <span class="sub-plan-amount"
                         >{{ activeCompany?.countryV2.currency?.symbol }}{{ plan["amount"] }}/<span
@@ -209,7 +209,7 @@
                 ></div>
             </div>
         </div>
-        <p [ngClass]="{ 'skeleton-common-class': showLoader }" class="extra-addons-content font-16">
+        <p [ngClass]="{ 'skeleton-common-class': showLoader }" class="extra-addons-content font-15">
             {{ localeData?.subscription?.extra_addons }}:<span *ngIf="!showLoader" class="extra-addons-value">
                 {{ localeData?.subscription?.per_transaction }}</span
             >
@@ -263,14 +263,14 @@
                         <div class="activation-key mr-b1">
                             <h2
                                 [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-plan': showLoader }"
-                                class="font-26 text-gray bold mb-3 redeem-plan"
+                                class="font-24 text-gray bold mb-3 redeem-plan"
                             >
                                 {{ localeData?.subscription?.redeem }}
                                 {{ localeData?.subscription?.activation_key }}
                             </h2>
                             <p
                                 [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-details': showLoader }"
-                                class="font-14"
+                                class="font-15"
                             >
                                 {{ localeData?.subscription?.activation_key_note }}
                             </p>
@@ -309,7 +309,7 @@
                 </div>
             </div>
         </div>
-        <!-- <a class="font-14 explore-other">Explore Other Plans</a> -->
+        <!-- <a class="font-15 explore-other">Explore Other Plans</a> -->
     </ng-container>
     <div *ngIf="isSwitchPlanInProcess">
         <giddh-page-loader></giddh-page-loader>
