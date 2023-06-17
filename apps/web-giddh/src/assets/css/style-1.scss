@@ -3127,7 +3127,6 @@ td.mat-footer-cell {
         input {
             width: 100%;
             display: inline-block;
-            border: 1px solid var(--color-secondary-input-bar-border);
         }
         input[placeholder="Search"][type="text"] {
             border: none;
@@ -3149,7 +3148,7 @@ td.mat-footer-cell {
                 color: var(--color-common-primary-input-placeholder);
             }
             .mat-select-min-line {
-                font-size: 14px;
+                font-size: var(--font-size-15);
             }
         }
         .mat-tab-label {
@@ -3170,11 +3169,11 @@ td.mat-footer-cell {
             }
         }
     }
-    &.input-border-wrapper {
-        input {
-            border: 0 !important;
-        }
-    }
+    // &.input-border-wrapper {
+    //     input {
+    //         border: 0 !important;
+    //     }
+    // }
 }
 
 .mat-chip-list-wrapper {
@@ -3316,8 +3315,8 @@ input-field {
             padding: 0 !important;
             .mat-input-element {
                 margin: 0;
-                font-size: 0.875rem;
                 line-height: 1.25rem;
+                padding: 14px 0;
             }
             textarea {
                 &.mat-input-element {
@@ -3331,13 +3330,13 @@ input-field {
             padding-top: 0.75rem;
         }
         .mat-form-field-label {
-            margin-top: 4px;
-            font-size: 14px;
+            margin-top: 1px;
+            font-size: var(--font-size-15);
         }
         .mat-form-field-wrapper {
             margin: 0;
-            padding-top: 0.375rem;
-            padding-bottom: 1.125rem;
+            padding-top: 0;
+            padding-bottom: 0;
         }
         .mat-form-field-hint-spacer {
             display: none;
@@ -3412,7 +3411,7 @@ input-field {
                 min-width: 25px;
                 justify-content: center;
                 background-color: var(--color-primary-subscription-plans-top-bar-background);
-                font-size: 12px;
+                font-size: var(--font-size-12);
             }
         }
         .mat-edit-wrap {
@@ -3432,4 +3431,7 @@ input-field {
             }
         }
     }
+}
+.row-gap {
+    row-gap: 15px;
 }
