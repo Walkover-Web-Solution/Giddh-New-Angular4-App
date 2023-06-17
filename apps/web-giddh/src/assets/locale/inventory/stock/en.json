@@ -20,7 +20,7 @@
     "add_new":"+ Add New",
     "sales_information": "Sales Information",
     "variant_this": "Variant? This",
-    "has_multiples": "has multiple options like size or colours etc..",
+    "has_multiples": "Add options like multiple size or colours etc...",
     "option": "Option",
     "ex_size_color": "Ex: Size , Color",
     "category": "Category",
@@ -81,5 +81,7 @@
     "stock_delete_succesfully":"Stock deleted successfully.",
     "stock_create_succesfully":"Stock created successfully.",
     "stock_update_succesfully":"Stock updated successfully.",
-    "remove_variant":"Doing the action will remove all the variants, Are you sure you want to unselect it?"
+    "remove_variant":"Doing the action will remove all the variants, Are you sure you want to unselect it?",
+    "inclusive": "MRP (Inclusive)",
+    "exclusive": "Exclusive"
 }

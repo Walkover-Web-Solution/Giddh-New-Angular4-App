@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@ang
 import { ReplaySubject } from "rxjs";
 import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { MatChipInputEvent } from "@angular/material/chips";
 import { InventoryService } from "../../../services/inventory.service";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
@@ -21,6 +20,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
 import { FieldTypes } from "../../../custom-fields/custom-fields.constant";
 import { Location } from '@angular/common';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
     selector: "stock-create-edit",
@@ -84,6 +84,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 archive: false,
                 uniqueName: undefined,
                 skuCode: undefined,
+                salesTaxInclusive: false,
+                purchaseTaxInclusive: false,
+                fixedAssetTaxInclusive: false,
                 salesInformation: [
                     {
                         rate: undefined,
@@ -134,12 +137,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public stockGroupUniqueName: string = "";
     /** Holds stock group unique name */
     public defaultStockGroupUniqueName: string = "";
-    /** True if purchase information is enabled */
-    public isPurchaseInformationEnabled: boolean = false;
-    /** True if sales information is enabled */
-    public isSalesInformationEnabled: boolean = false;
-    /** True if purchase information is enabled */
-    public isFixedAssetsInformationEnabled: boolean = false;
     /** True if variant is available */
     public isVariantAvailable: boolean = false;
     /** Holds index of currently editing custom field */
@@ -200,6 +197,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public isTaxSelectionOpen: boolean = false;
     /** Holds list of taxes processed while tax selection box was closed */
     public processedTaxes: any[] = [];
+    public optionEditing: any;
 
     constructor(
         private inventoryService: InventoryService,
@@ -231,7 +229,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.getTaxes();
         this.getStockUnits();
         this.getWarehouses();
-        this.getCustomFields();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
@@ -260,40 +257,23 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Adds new option value
-     *
-     * @param {MatChipInputEvent} event
-     * @param {number} index
-     * @memberof StockCreateEditComponent
-     */
-    public addOption(event: MatChipInputEvent, index: number): void {
-        const value = (event?.value || "").trim();
-        const valueIndex = this.stockForm.options[index]['values']?.indexOf(value);
-        if (valueIndex === -1) {
-            if (value) {
-                this.stockForm.options[index]['values'].push(value);
-            }
-            // tslint:disable-next-line:no-non-null-assertion
-            event.chipInput!.clear();
-            this.generateVariants();
-        } else {
-            this.toaster.showSnackBar("warning", "You've already used the option value " + value);
-        }
-    }
-
-    /**
-     * Removes option value
+     * Add option value
      *
      * @param {*} value
-     * @param {number} index
+     * @param {number} optionIndex
+     * @param {number} optionValueIndex
      * @memberof StockCreateEditComponent
      */
-    public removeOption(value: any, index: number): void {
-        const valueIndex = this.stockForm.options[index]['values']?.indexOf(value);
-        if (valueIndex > -1) {
-            this.stockForm.options[index]['values'].splice(valueIndex, 1);
+    public addNewOptionValue(value: any, optionIndex: number, optionValueIndex: number): void {
+        // const valueIndex = this.stockForm.options[optionIndex].values?.filter((optionValue, index) => { optionValue === value && optionValueIndex !== index });
+        // if (valueIndex?.length) {
+        //     this.stockForm.options[optionIndex].values[optionValueIndex] = "";
+        //     this.toaster.showSnackBar("warning", "You've already used the option value " + value);
+        // }
+
+        if (!this.stockForm.options[optionIndex].values[optionValueIndex + 1] && value?.trim()) {
+            this.stockForm.options[optionIndex].values[optionValueIndex + 1] = { index: optionValueIndex + 1, value: "" };
         }
-        this.generateVariants();
     }
 
     /**
@@ -434,7 +414,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (this.checkOptionValidity()) {
             this.checkOptionValidation = false;
             const optionIndex = this.stockForm.options?.length + 1;
-            this.stockForm.options.push({ name: "", values: [], order: optionIndex });
+            this.stockForm.options.push({ name: "", values: [{ index: 0, value: "" }], order: optionIndex, isEdit: true });
         } else {
             this.checkOptionValidation = true;
         }
@@ -475,6 +455,18 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Delete option value
+     *
+     * @param {number} optionIndex
+     * @param {number} optionValueIndex
+     * @memberof StockCreateEditComponent
+     */
+    public deleteOptionValue(optionIndex: number, optionValueIndex: number): void {
+        let optionValues = this.stockForm.options[optionIndex].values?.filter((data, index) => optionValueIndex !== index);
+        this.stockForm.options[optionIndex].values = optionValues;
+    }
+
+    /**
      * Generate variants
      *
      * @memberof StockCreateEditComponent
@@ -493,7 +485,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 attributes[index] = [];
                 let optionName = option?.name;
                 option?.values?.forEach(value => {
-                    attributes[index].push({ [optionName]: value })
+                    if (value?.value?.trim()) {
+                        attributes[index].push({ [optionName]: value?.value })
+                    }
                 });
             }
         });
@@ -509,7 +503,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 variantValues.push(attribute[key]);
             });
 
-            variants.push(variantValues.join(" / "));
+            variants.push({ forward: variantValues.join(" / "), backward: variantValues.reverse().join(" / ") });
         });
 
         let defaultWarehouse = null;
@@ -519,14 +513,16 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         const existingVariants = cloneDeep(this.stockForm.variants);
         let stockVariants = [];
         variants?.forEach(variant => {
-            let variantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant);
-
-            let variantObj = (variantExists?.length > 0) ? variantExists[0] : {
-                name: variant,
+            let forwardVariantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant.forward);
+            let backwardVariantExists = (forwardVariantExists?.length <= 0) ? existingVariants?.filter(existingVariant => existingVariant?.name === variant.backward) : [];
+            let variantObj = (forwardVariantExists?.length > 0) ? forwardVariantExists[0] : (backwardVariantExists?.length > 0) ? backwardVariantExists[0] : {
+                name: variant.forward,
                 archive: false,
                 uniqueName: undefined,
                 skuCode: undefined,
-
+                salesTaxInclusive: false,
+                purchaseTaxInclusive: false,
+                fixedAssetTaxInclusive: false,
                 salesInformation: [
                     {
                         rate: undefined,
@@ -579,6 +575,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 archive: false,
                 uniqueName: undefined,
                 skuCode: undefined,
+                salesTaxInclusive: false,
+                purchaseTaxInclusive: false,
+                fixedAssetTaxInclusive: false,
                 salesInformation: [
                     {
                         rate: undefined,
@@ -785,35 +784,29 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (stockCreateEditForm.invalid) {
             return;
         }
-        if (this.isPurchaseInformationEnabled) {
-            if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
-                this.stockForm.purchaseAccountDetails.unitRates = this.stockForm.purchaseAccountDetails.unitRates.filter((unitRate) => {
-                    return unitRate.stockUnitUniqueName || unitRate.rate;
-                });
-            } else {
-                this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
-                return;
-            }
+        if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
+            this.stockForm.purchaseAccountDetails.unitRates = this.stockForm.purchaseAccountDetails.unitRates.filter((unitRate) => {
+                return unitRate.stockUnitUniqueName || unitRate.rate;
+            });
+        } else {
+            this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
+            return;
         }
-        if (this.isSalesInformationEnabled) {
-            if (this.validateStock(this.stockForm.salesAccountDetails?.unitRates)) {
-                this.stockForm.salesAccountDetails.unitRates = this.stockForm.salesAccountDetails.unitRates?.filter((unitRate) => {
-                    return unitRate.stockUnitUniqueName || unitRate.rate;
-                });
-            } else {
-                this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
-                return;
-            }
+        if (this.validateStock(this.stockForm.salesAccountDetails?.unitRates)) {
+            this.stockForm.salesAccountDetails.unitRates = this.stockForm.salesAccountDetails.unitRates?.filter((unitRate) => {
+                return unitRate.stockUnitUniqueName || unitRate.rate;
+            });
+        } else {
+            this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
+            return;
         }
-        if (this.isFixedAssetsInformationEnabled) {
-            if (this.validateStock(this.stockForm.fixedAssetAccountDetails?.unitRates)) {
-                this.stockForm.fixedAssetAccountDetails.unitRates = this.stockForm.fixedAssetAccountDetails.unitRates.filter((unitRate) => {
-                    return unitRate.stockUnitUniqueName || unitRate.rate;
-                });
-            } else {
-                this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
-                return;
-            }
+        if (this.validateStock(this.stockForm.fixedAssetAccountDetails?.unitRates)) {
+            this.stockForm.fixedAssetAccountDetails.unitRates = this.stockForm.fixedAssetAccountDetails.unitRates.filter((unitRate) => {
+                return unitRate.stockUnitUniqueName || unitRate.rate;
+            });
+        } else {
+            this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
+            return;
         }
         if (!this.stockGroupUniqueName) {
             let mainGroupExists = this.stockGroups?.filter(group => {
@@ -876,16 +869,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         let stockForm = cloneDeep(this.stockForm);
         stockForm.taxes = this.taxTempArray.map(tax => tax?.uniqueName);
 
-        if (!this.isPurchaseInformationEnabled) {
-            stockForm.purchaseAccountDetails = null;
-        }
-        if (!this.isSalesInformationEnabled) {
-            stockForm.salesAccountDetails = null;
-        }
-
-        if (!this.isFixedAssetsInformationEnabled) {
-            stockForm.fixedAssetAccountDetails = null;
-        }
         stockForm.customFields = stockForm.customFields?.map(customField => {
             return {
                 uniqueName: customField?.uniqueName,
@@ -1006,9 +989,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.isVariantAvailable = (this.stockForm?.variants?.length > 0) ? true : false;
                 this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
                 this.defaultStockGroupUniqueName = response.body.stockGroup?.uniqueName;
-                this.isPurchaseInformationEnabled = response?.body?.purchaseAccountUniqueNames ? true : false;
-                this.isSalesInformationEnabled = response?.body?.salesAccountUniqueNames ? true : false;
-                this.isFixedAssetsInformationEnabled = response?.body?.fixedAssetsAccountUniqueNames ? true : false;
                 if (response.body.purchaseAccountDetails) {
                     this.stockForm.purchaseAccountDetails = response.body.purchaseAccountDetails;
                 }
@@ -1365,6 +1345,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     archive: false,
                     uniqueName: undefined,
                     skuCode: undefined,
+                    salesTaxInclusive: false,
+                    purchaseTaxInclusive: false,
+                    fixedAssetTaxInclusive: false,
                     salesInformation: [
                         {
                             rate: undefined,
@@ -1413,9 +1396,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         };
 
         this.stockGroupUniqueName = this.stockGroups[0]?.value;
-        this.isPurchaseInformationEnabled = false;
-        this.isSalesInformationEnabled = false;
-        this.isFixedAssetsInformationEnabled = false;
         this.isVariantAvailable = false;
         this.stockUnitName = "";
         this.stockGroupName = "";
@@ -1438,117 +1418,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public cancelEdit(): void {
         this.backClicked();
-    }
-
-    /**
-     * Resets the purchase information
-     *
-     * @memberof StockCreateEditComponent
-     */
-    public togglePurchaseInformation(): void {
-        if (!this.isPurchaseInformationEnabled) {
-            this.purchaseAccountName = "";
-            this.stockForm.variants?.forEach(variant => {
-                if (variant.purchaseAccountDetails) {
-                    variant.purchaseAccountDetails.accountUniqueName = null;
-                }
-                variant.purchaseInformation = [];
-                this.addNewVariantPurchaseUnitPrice(variant);
-                delete variant.purchaseTaxInclusive;
-            });
-            this.stockForm.purchaseAccountDetails = {
-                accountUniqueName: null,
-                unitRates: [
-                    {
-                        rate: null,
-                        stockUnitCode: null,
-                        stockUnitName: null,
-                        stockUnitUniqueName: null
-                    }
-                ]
-            };
-            this.changeDetection.detectChanges();
-        } else {
-            this.stockForm.variants?.forEach(variant => {
-                if (!variant?.purchaseInformation?.length) {
-                    this.addNewVariantPurchaseUnitPrice(variant);
-                }
-            });
-        }
-    }
-
-    /**
-     * Resets the fixed assets information
-     *
-     * @memberof StockCreateEditComponent
-     */
-    public toggleFixedAssetsInformation(): void {
-        if (!this.isFixedAssetsInformationEnabled) {
-            this.fixedAssetsAccountName = "";
-            this.stockForm.variants?.forEach(variant => {
-                if (variant.fixedAssetAccountDetails) {
-                    variant.fixedAssetAccountDetails.accountUniqueName = null;
-                }
-                variant.fixedAssetsInformation = [];
-                this.addNewVariantFixedAssetsUnitPrice(variant);
-                delete variant.salesTaxInclusive;
-            });
-            this.stockForm.fixedAssetAccountDetails = {
-                accountUniqueName: null,
-                unitRates: [
-                    {
-                        rate: null,
-                        stockUnitCode: null,
-                        stockUnitName: null,
-                        stockUnitUniqueName: null
-                    }
-                ]
-            };
-            this.changeDetection.detectChanges();
-        } else {
-            this.stockForm.variants?.forEach(variant => {
-                if (!variant?.fixedAssetsInformation?.length) {
-                    this.addNewVariantFixedAssetsUnitPrice(variant);
-                }
-            });
-        }
-    }
-
-    /**
-     * Resets the sales information
-     *
-     * @memberof StockCreateEditComponent
-     */
-    public toggleSalesInformation(): void {
-        if (!this.isSalesInformationEnabled) {
-            this.salesAccountName = "";
-            this.stockForm.variants?.forEach(variant => {
-                if (variant.salesAccountDetails) {
-                    variant.salesAccountDetails.accountUniqueName = null;
-                }
-                variant.salesInformation = [];
-                this.addNewVariantSalesUnitPrice(variant);
-                delete variant.fixedAssetTaxInclusive;
-            });
-            this.stockForm.salesAccountDetails = {
-                accountUniqueName: null,
-                unitRates: [
-                    {
-                        rate: null,
-                        stockUnitCode: null,
-                        stockUnitName: null,
-                        stockUnitUniqueName: null
-                    }
-                ]
-            };
-            this.changeDetection.detectChanges();
-        } else {
-            this.stockForm.variants?.forEach(variant => {
-                if (!variant?.salesInformation?.length) {
-                    this.addNewVariantSalesUnitPrice(variant);
-                }
-            });
-        }
     }
 
     /**
@@ -1807,33 +1676,49 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will open modal to confirm if user wants to remove variants
+     * Track by function for option values
      *
+     * @param {string} value
+     * @returns {string}
      * @memberof StockCreateEditComponent
      */
-    public confirmVariantsRemove(): void {
-        if (!this.isVariantAvailable && this.stockForm.options?.length && this.stockForm.options[0]?.values?.length) {
-            let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                width: '40%',
-                data: {
-                    title: this.commonLocaleData?.app_confirmation,
-                    body: this.localeData?.remove_variant,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
-            });
+    public trackByFn(value: string): string {
+        return value;
+    }
 
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-                if (response) {
-                    this.stockForm.options = [];
-                    this.stockForm.variants = this.stockForm.variants.slice(0, 1);
-                    this.checkUnitRateValidation = this.checkUnitRateValidation.slice(0, 1);
-                } else {
-                    this.isVariantAvailable = true;
-                    this.changeDetection.detectChanges()
-                    return;
+    /**
+     * Callback for variant options sort change event
+     *
+     * @param {CdkDragDrop<string[]>} event
+     * @memberof StockCreateEditComponent
+     */
+    public dropOptions(event: CdkDragDrop<string[]>): void {
+        moveItemInArray(this.stockForm.options, event.previousIndex, event.currentIndex);
+        this.generateVariants();
+    }
+
+    public editOptionValues(option: any): void {
+        this.optionEditing = cloneDeep(option);
+    }
+
+    public updateOptionValues(optionIndex: number): void {
+        if (this.optionEditing) {
+            this.stockForm.options[optionIndex]?.values?.forEach((value, index) => {
+                const currentValue = value?.value?.trim();
+                const previousValue = this.optionEditing?.values[value?.index]?.value?.trim();
+                if (currentValue) {
+                    this.stockForm.variants?.forEach(variant => {
+                        let variantNames = variant?.name?.split("/");
+                        variantNames?.forEach(name => {
+                            if (name?.trim() === previousValue) {
+                                variant.name = variant.name.replace(previousValue, currentValue);
+                            }
+                        });
+                    });
                 }
             });
         }
+
+        this.generateVariants();
     }
 }
