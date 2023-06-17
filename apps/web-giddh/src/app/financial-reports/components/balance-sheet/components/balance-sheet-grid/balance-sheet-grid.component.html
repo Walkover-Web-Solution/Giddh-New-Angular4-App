@@ -21,7 +21,7 @@
                             <table class="mr-b05 table basic bs-table-grid">
                                 <thead>
                                     <tr>
-                                        <th class="p-0" width="33.33%">
+                                        <th class="p-0 font-16" width="33.33%">
                                             <div
                                                 #searchContainer
                                                 (clickOutside)="clickedOutside($event, searchContainer)"
@@ -46,7 +46,7 @@
                                                 </div>
                                             </div>
                                         </th>
-                                        <th class="text-right" width="33.33%">
+                                        <th class="text-right font-16" width="33.33%">
                                             {{ commonLocaleData?.app_as_of }}
                                             <span
                                                 *ngIf="
@@ -62,7 +62,7 @@
                                                 }}</span
                                             >
                                         </th>
-                                        <th class="text-right" width="33.33%">
+                                        <th class="text-right font-16" width="33.33%">
                                             {{ commonLocaleData?.app_as_of }}
                                             <span
                                                 *ngIf="
@@ -85,7 +85,7 @@
                             <!--Grid-->
                             <div class="m-10">
                                 <div class="">
-                                    <strong class="font-16">{{ localeData?.equity_liabilities }}</strong>
+                                    <strong class="font-15">{{ localeData?.equity_liabilities }}</strong>
                                 </div>
                             </div>
                             <ng-template #groupDetails let-list let-padding="padding">
@@ -123,10 +123,10 @@
                             <!--/Grid-->
                             <div class="top-bar row clearfix">
                                 <div class="col-4 group">
-                                    <strong>{{ localeData?.total_liabilities }}</strong>
+                                    <strong class="font-15">{{ localeData?.total_liabilities }}</strong>
                                 </div>
                                 <div class="col-4 group text-right">
-                                    <strong>
+                                    <strong class="font-15">
                                         <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="bsData?.liabTotal"
@@ -138,7 +138,7 @@
                                     </strong>
                                 </div>
                                 <div class="col-4 group text-right">
-                                    <strong>
+                                    <strong class="font-15">
                                         <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="bsData?.liabTotalEnd"
@@ -158,7 +158,7 @@
                             <!--Grid-->
                             <div class="m-10">
                                 <div class="">
-                                    <strong class="font-16">{{ localeData?.ii_assets }}</strong>
+                                    <strong class="font-15">{{ localeData?.ii_assets }}</strong>
                                 </div>
                             </div>
                             <ng-template #groupDetails let-list let-padding="padding">
@@ -197,10 +197,10 @@
 
                     <div class="top-bar row clearfix">
                         <div class="col-4 group">
-                            <strong>{{ localeData?.total_assets }}</strong>
+                            <strong class="font-15">{{ localeData?.total_assets }}</strong>
                         </div>
                         <div class="col-4 group text-right">
-                            <strong>
+                            <strong class="font-15">
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="bsData?.assetTotal"
@@ -212,7 +212,7 @@
                             </strong>
                         </div>
                         <div class="col-4 group text-right">
-                            <strong>
+                            <strong class="font-15">
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="bsData?.assetTotalEnd"

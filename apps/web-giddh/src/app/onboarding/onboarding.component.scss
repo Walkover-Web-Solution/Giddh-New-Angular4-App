@@ -17,7 +17,7 @@
 }
 
 .border-btm {
-    font-size: 16px;
+    font-size: var(--font-size-16);
     font-family: var(--font-semibold);
     border-bottom: 1px solid var(--color-common-secondary-border);
     padding: 7px 0;
@@ -50,7 +50,7 @@
     box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
     padding: 9px 15px;
     color: var(--color-blue);
-    font-size: 16px;
+    font-size: var(--font-size-15);
     margin-top: 15px;
     display: block;
     max-width: 356px;
@@ -75,7 +75,7 @@
     margin-top: 12px;
     background: var(--color-primary-onboarding-btn-sync-background);
     box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
-    font-size: 16px;
+    font-size: var(--font-size-15);
     font-family: var(--font-regular);
 }
 
@@ -84,7 +84,7 @@ p {
 }
 
 .right-section span {
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-gray);
     display: block;
 }
@@ -96,7 +96,7 @@ p {
 }
 
 .text-dark {
-    font-size: 20px;
+    font-size: var(--font-size-16);
     color: var(--color-onboard-contact-info-text) !important;
     &:hover {
         color: var(--color-onboard-contact-info-text) !important;
@@ -109,14 +109,14 @@ a.text-dark {
 
 .your-account span {
     display: block;
-    font-size: 16px;
+    font-size: var(--font-size-15);
     color: var(--color-gray);
     margin-bottom: 10px;
 }
 
 .your-account p {
     color: var(--color-nero);
-    font-size: 16px;
+    font-size: var(--font-size-15);
 }
 
 .your-account p.success-text {
@@ -183,7 +183,7 @@ a.text-dark {
 
 .custom-dialog .modal-header h3 {
     font-family: var(--font-bold);
-    font-size: 20px;
+    font-size: var(--font-size-16);
     color: var(--color-nero) !important;
     margin-bottom: 15px;
 }
@@ -243,7 +243,7 @@ a.text-dark {
     font-family: var(--font-bold);
     padding-left: 28px !important;
     line-height: 35px;
-    font-size: 16px;
+    font-size: var(--font-size-15);
 }
 
 #talk_sales > li > a:hover,
@@ -296,11 +296,6 @@ a.text-dark {
     padding: 20px !important;
     margin-bottom: 0 !important;
     margin-top: 0 !important;
-}
-
-.talktosale-superform .help-block {
-    margin-top: 0 !important;
-    font-size: 13px !important;
 }
 
 #sFform-V6Lc input {
@@ -362,7 +357,7 @@ a.text-dark {
 }
 
 .talktosale-superform .sFSection .sFformfield label {
-    font-size: 15px !important;
+    font-size: var(--font-size-15) !important;
     color: var(--color-nero) !important;
     line-height: 26px !important;
 }
@@ -382,7 +377,7 @@ a.text-dark {
     height: 40px !important;
     border-radius: 2px !important;
     box-shadow: none !important;
-    font-size: 16px !important;
+    font-size: var(--font-size-15) !important;
 }
 
 .custom-dialog .tab-pane {
@@ -415,7 +410,7 @@ a.text-dark {
 
 #sFSection-Jkvq .sFsubmit.btn-primary {
     background: var(--color-primary-onboarding-sfsection-jkvq-sfsubmit-btn-primary) !important;
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 
 .sFSection .valid-msg,
@@ -431,7 +426,7 @@ a.text-dark {
 }
 
 .vertical-center p {
-    font-size: 16px;
+    font-size: var(--font-size-15);
 }
 
 .overlay-cal {

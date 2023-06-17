@@ -302,7 +302,7 @@
                                             [attr.data-title]="commonLocaleData?.app_total"
                                             class="nowrap text-right pr-1"
                                         >
-                                            <i class="icon-rupees font-11"></i>
+                                            <i class="icon-rupees icon-font-11"></i>
                                             <span class="d-inline-flex">
                                                 <amount-field
                                                     [amount]="item?.totalValue"
@@ -716,7 +716,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <h4 class="font-22 mb-2">
+            <h4 class="font-24 mb-2">
                 {{ commonLocaleData?.app_numbers?.one }}. {{ localeData?.consolidated_ewaybill_details }}
             </h4>
             <div class="table-responsive">
@@ -752,7 +752,7 @@
                 </table>
             </div>
 
-            <h4 class="font-22 mb-2">{{ commonLocaleData?.app_numbers?.two }}. {{ localeData?.item_details }}</h4>
+            <h4 class="font-24 mb-2">{{ commonLocaleData?.app_numbers?.two }}. {{ localeData?.item_details }}</h4>
             <div class="table-responsive">
                 <table class="table basic table-bordered">
                     <thead class="thead-background1">
@@ -780,7 +780,7 @@
                                 }}</small>
                             </td>
                             <td>{{ item?.ewayBillDate }}</td>
-                            <td><i class="icon-rupees font-11"></i> {{ item?.totalValue }}</td>
+                            <td><i class="icon-rupees icon-font-11"></i> {{ item?.totalValue }}</td>
                             <td>
                                 <a href="../../../../../../../src/app/invoice/eWayBill" class="btn-link">{{
                                     commonLocaleData?.app_action

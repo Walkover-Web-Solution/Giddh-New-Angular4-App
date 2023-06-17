@@ -39,7 +39,7 @@
     justify-content: center;
     -webkit-box-align: center;
     align-items: center;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     margin-left: 15px;
     border: 1px solid var(--color-primary-button-border);
     border-radius: 5px;
@@ -84,7 +84,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
+    font-size: var(--font-size-16);
     color: var(--color-giddh-blue);
     &:hover {
         background: var(--color-blue);
@@ -99,7 +99,7 @@
 button.btn.btn-filter {
     background: var(--color-dark-fog);
     border: 1px solid var(--color-dark-fog);
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-giddh-blue);
     align-items: center;
 }

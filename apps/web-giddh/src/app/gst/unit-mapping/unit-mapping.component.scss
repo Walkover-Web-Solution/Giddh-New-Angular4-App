@@ -1,7 +1,7 @@
 .unit-mapping-grid-list {
     border-bottom: 1px solid var(--color-common-primary-border);
     .grid-box {
-        font-size: 14px;
+        font-size: var(--font-size-15);
     }
 
     .grid-box-head,
@@ -20,6 +20,7 @@
         .map-unit-box {
             font-family: var(--font-semibold);
             color: var(--color-table-secondary-heading);
+            font-size: var(--font-size-16);
         }
     }
 }

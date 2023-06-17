@@ -17,7 +17,7 @@ body.unresponsive {
 
 .btn-lg {
     padding: 10px 16px;
-    font-size: 16px;
+    font-size: var(--font-size-15);
     line-height: 1.3333333;
 }
 
@@ -31,7 +31,7 @@ body.unresponsive {
 
 .modal-header h3 {
     color: var(--color-white);
-    font-size: 1.3rem;
+    font-size: var(--font-size-16);
 }
 
 .login {
@@ -40,7 +40,7 @@ body.unresponsive {
 
 .login .brand-heading {
     color: var(--color-white);
-    font-size: 40px;
+    font-size: var(--font-size-32);
     margin-bottom: 80px;
 }
 
@@ -168,7 +168,7 @@ body.unresponsive {
 
 .intro .lead {
     text-align: center;
-    font-size: 18px;
+    font-size: var(--font-size-16);
 }
 
 .btn-login.btn-default {
@@ -217,13 +217,13 @@ button.close {
 .form-control,
 :host ::ng-deep .form-control {
     height: 41px;
-    font-size: 16px;
+    font-size: var(--font-size-15);
     color: var(--color-primary-login-signup-input-box) !important;
 }
 
 :host ::ng-deep .clear {
     top: 50% !important;
-    font-size: 22px !important;
+    font-size: var(--font-size-24) !important;
     right: 6px !important;
 }
 
@@ -240,7 +240,7 @@ strong {
 }
 
 h1 {
-    font-size: 24px;
+    font-size: var(--font-size-24);
 }
 
 .slide-content {
@@ -290,7 +290,7 @@ small {
     line-height: 40px;
     text-align: center;
     position: relative;
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 
 .google-ico span {
@@ -338,7 +338,7 @@ small {
 }
 
 .slide-content h1 {
-    font-size: 24px;
+    font-size: var(--font-size-24);
     text-align: left;
     font-weight: 500;
     line-height: 34px;
@@ -370,7 +370,7 @@ small {
 }
 
 .feature-list li > p {
-    font-size: 20px;
+    font-size: var(--font-size-16);
     text-align: left;
 }
 
@@ -392,13 +392,13 @@ small {
 }
 
 .client-testimonial p {
-    font-size: 20px;
+    font-size: var(--font-size-16);
     margin-bottom: 10px;
     text-align: left;
 }
 
 .client-testimonial h4 {
-    font-size: 20px;
+    font-size: var(--font-size-16);
 }
 
 .hash-tag {
@@ -413,38 +413,6 @@ small {
     right: 0;
     top: 30px;
     bottom: 0;
-}
-
-.hint ul {
-    font-size: 13px;
-    padding: 7px;
-    padding-left: 18px;
-}
-
-.hint {
-    position: absolute;
-    left: 0;
-    z-index: 1;
-    background: var(--color-white);
-    bottom: -38px;
-    border-radius: 0;
-    padding: 4px;
-    border: 1px solid var(--color-iron);
-}
-
-.hint:before {
-    content: "";
-    display: block;
-    width: 0;
-    height: 0;
-    position: absolute;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-    border-left: 8px solid var(--color-iron);
-    left: 6px;
-    top: -12px;
-    transform: rotate(-90deg);
-    right: inherit;
 }
 
 /* new theme login page css start */
@@ -500,7 +468,7 @@ small {
 }
 .accounting-space h4 {
     color: var(--color-primary-login-box-body-text);
-    font-size: 20px;
+    font-size: var(--font-size-16);
 }
 .btn-outline-primary {
     background-color: var(--color-blue);
@@ -509,7 +477,7 @@ small {
     border-radius: 5px;
     color: var(--color-white);
     margin-bottom: 10px;
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
@@ -519,7 +487,7 @@ small {
 }
 .login-with {
     color: var(--color-primary-login-box-body-text);
-    font-size: 14px;
+    font-size: var(--font-size-15);
     margin-top: 10px;
     a {
         color: var(--color-primary-login-box-body-text);

@@ -45,7 +45,7 @@
         border-bottom: 1px solid var(--color-iron);
     }
     .new-custom-btn {
-        font-size: 12px;
+        font-size: var(--font-size-12);
         color: var(--color-blue);
         padding-top: 30px;
         cursor: pointer;
@@ -67,7 +67,7 @@ tr.fsstock td {
 .table-label strong {
     color: var(--color-nero);
     font-weight: normal !important;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     font-family: var(--font-regular);
 }
 .input-label-stock {
