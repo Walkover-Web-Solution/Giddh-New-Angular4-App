@@ -3183,6 +3183,11 @@ td.mat-footer-cell {
             }
         }
     }
+    &.input-border-wrapper {
+        input {
+            border: 0 !important;
+        }
+    }
 }
 
 .mat-chip-list-wrapper {
@@ -3324,7 +3329,6 @@ input-field {
                 margin: 0;
                 font-size: 0.875rem;
                 line-height: 1.25rem;
-                max-width: 198px;
             }
             textarea {
                 &.mat-input-element {
