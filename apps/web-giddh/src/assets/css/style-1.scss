@@ -3195,7 +3195,7 @@ td.mat-footer-cell {
                 color: var(--color-common-primary-input-placeholder);
             }
             .mat-select-min-line {
-                font-size: 14px;
+                font-size: var(--font-size-15);
             }
         }
         .mat-tab-label {
