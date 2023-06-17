@@ -398,13 +398,12 @@
                                                                         <div
                                                                             class="
                                                                                 col-xl-12 col-lg-12 col-sm-6
-                                                                                mr-b15
                                                                                 which-tab-3
                                                                             "
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
-                                                                                class="row mr-b15"
+                                                                                class="row unit-rate-align"
                                                                                 *ngFor="
                                                                                     let variantPurchaseUnitRate of (stockForm
                                                                                         ?.variants)[0]
@@ -482,7 +481,7 @@
                                                                                 <button
                                                                                     mat-icon-button
                                                                                     role="button"
-                                                                                    class="icon-button-remove"
+                                                                                    class="icon-remove"
                                                                                     type="button"
                                                                                     (click)="
                                                                                         deleteVariantPurchaseUnitPrice(
@@ -504,7 +503,8 @@
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
                                                                                 <div class="col-sm-10 col-10">
-                                                                                    <a
+                                                                                    <button
+                                                                                        mat-flat-button
                                                                                         class="bg-transparent px-0 pt-2"
                                                                                         role="button"
                                                                                         type="button"
@@ -541,7 +541,7 @@
                                                                                         >
                                                                                             {{ localeData?.add_new }}
                                                                                         </span>
-                                                                                    </a>
+                                                                                    </button>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -602,11 +602,11 @@
                                                                             </dropdown-field>
                                                                         </div>
                                                                         <div
-                                                                            class="col-xl-12 col-lg-12 col-sm-6 mr-b15"
+                                                                            class="col-xl-12 col-lg-12 col-sm-6"
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
-                                                                                class="row mr-b15"
+                                                                                class="row unit-rate-align"
                                                                                 *ngFor="
                                                                                     let variantSalesUnitRate of (stockForm
                                                                                         ?.variants)[0]
@@ -678,7 +678,7 @@
                                                                                 <button
                                                                                     mat-icon-button
                                                                                     role="button"
-                                                                                    class="icon-button-remove"
+                                                                                    class="icon-remove"
                                                                                     type="button"
                                                                                     (click)="
                                                                                         deleteVariantSalesUnitPrice(
@@ -762,8 +762,8 @@
                                             <span class="add-option">+</span> {{ localeData?.has_multiples }}
                                         </a>
                                         <div class="product-option" *ngIf="isVariantAvailable">
-                                            <div class="product-option-wrapper">
-                                                <div class="variant-field-wrap">
+                                            <div class="product-option-wrapper pt-0">
+                                                <div class="variant-field-wrap stock-option-fields mb-2">
                                                     <div
                                                         class="w-100"
                                                         cdkDropList
@@ -773,38 +773,47 @@
                                                             *ngFor="let option of stockForm.options; let i = index"
                                                         >
                                                             <ng-container *ngIf="option.isEdit">
-                                                                <div class="row color-field">
-                                                                    <div class="col-lg-4">
-                                                                        <input-field
-                                                                            [placeholder]="'Option name'"
-                                                                            [name]="'option-' + i"
-                                                                            [(ngModel)]="option.name"
-                                                                            [type]="'text'"
-                                                                            [required]="true"
-                                                                            [showError]="stockCreateEditForm.form.controls?.['option-'+i]?.invalid && checkOptionValidation"
-                                                                        >
-                                                                        </input-field>
+                                                                <div class="row color-field pt-3 pb-2">
+                                                                    <div class="col-lg-4 option-delete pr-0">
+                                                                        <div class="w-100">
+                                                                            <input-field
+                                                                                [placeholder]="'Option name'"
+                                                                                [name]="'option-' + i"
+                                                                                [(ngModel)]="option.name"
+                                                                                [type]="'text'"
+                                                                                [required]="true"
+                                                                                [showError]="stockCreateEditForm.form.controls?.['option-'+i]?.invalid && checkOptionValidation"
+                                                                            >
+                                                                            </input-field>
+                                                                        </div>
                                                                     </div>
                                                                     <div class="col-lg-2">
-                                                                        <button
-                                                                            mat-icon-button
-                                                                            class="delete-btn mb-1"
-                                                                            (click)="deleteVariantOption(i)"
-                                                                        >
-                                                                            <i class="icon-trash"></i>
-                                                                        </button>
+                                                                        <div class="delete-btn-wrapper">
+                                                                            <button
+                                                                                mat-icon-button
+                                                                                class="chip-close-btn"
+                                                                                (click)="deleteVariantOption(i)"
+                                                                            >
+                                                                                <i class="icon-trash"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-12">
+                                                                        <label>Option values</label>
                                                                     </div>
                                                                 </div>
                                                                 <div
-                                                                    class="row"
+                                                                    class="row align-items-center"
                                                                     *ngFor="
                                                                         let optionValue of option.values;
                                                                         trackBy: trackByFn;
                                                                         let j = index
                                                                     "
                                                                 >
-                                                                    <div class="col-lg-4">
-                                                                        <div>
+                                                                    <div class="col-lg-4 option-delete pr-0">
+                                                                        <div class="w-100">
                                                                             <input-field
                                                                                 [name]="'option-value-' + i + '-' + j"
                                                                                 [(ngModel)]="optionValue.value"
@@ -812,11 +821,12 @@
                                                                                     addNewOptionValue($event, i, j)
                                                                                 "
                                                                                 class="inventory-category-field-input"
-                                                                                [placeholder]="'Option values'"
                                                                                 [type]="'text'"
                                                                             >
                                                                             </input-field>
                                                                         </div>
+                                                                    </div>
+                                                                    <div class="col-lg-2">
                                                                         <div
                                                                             class="delete-btn-wrapper"
                                                                             *ngIf="option.values?.length > 1"
@@ -831,7 +841,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="done-btn mb-3">
+                                                                <div class="done-btn my-3">
                                                                     <button
                                                                         mat-stroked-button
                                                                         (click)="
@@ -848,18 +858,11 @@
                                                                         <div class="chip-svg-wrap">
                                                                             <div class="data-wrap">
                                                                                 <div class="dot-img">
-                                                                                    <svg
-                                                                                        viewBox="0 0 20 20"
-                                                                                        class="Polaris-Icon__Svg_375hu"
-                                                                                        focusable="false"
-                                                                                        aria-hidden="true"
-                                                                                    >
-                                                                                        <path
-                                                                                            d="M7 2a2 2 0 1 0 .001 4.001 2 2 0 0 0-.001-4.001zm0 6a2 2 0 1 0 .001 4.001 2 2 0 0 0-.001-4.001zm0 
-                                                                                        6a2 2 0 1 0 .001 4.001 2 2 0 0 0-.001-4.001zm6-8a2 2 0 1 0-.001-4.001 2 2 0 0 0 .001 4.001zm0 2a2 2 0 1 0 .001 
-                                                                                        4.001 2 2 0 0 0-.001-4.001zm0 6a2 2 0 1 0 .001 4.001 2 2 0 0 0-.001-4.001z"
-                                                                                        ></path>
-                                                                                    </svg>
+                                                                                    <img
+                                                                                        style="width: '20px'"
+                                                                                        src="../../../../assets/images/drag-dots-com.svg"
+                                                                                        alt=""
+                                                                                    />
                                                                                 </div>
                                                                                 <div>
                                                                                     <strong class="d-block mb-2">{{
@@ -905,17 +908,27 @@
                                                         </ng-container>
                                                     </div>
                                                 </div>
-                                                <button
-                                                    mat-button
-                                                    class="text-primary mr-b15 d-block cp another-option-btn"
-                                                    disableRipple
-                                                    *ngIf="stockForm.options?.length < 3"
-                                                    (click)="addVariantOption()"
-                                                >
-                                                    {{ localeData?.another_option }}
-                                                </button>
+                                                <div class="row px-3">
+                                                    <div class="col-lg-12 pl-0">
+                                                        <a
+                                                            class="
+                                                                text-primary
+                                                                mr-b15
+                                                                d-block
+                                                                cp
+                                                                another-option-btn
+                                                                mt-2
+                                                            "
+                                                            disableRipple
+                                                            *ngIf="stockForm.options?.length < 3"
+                                                            (click)="addVariantOption()"
+                                                        >
+                                                            {{ localeData?.another_option }}
+                                                        </a>
+                                                    </div>
+                                                </div>
                                                 <div
-                                                    class="table-responsive"
+                                                    class="table-responsive mt-2"
                                                     *ngIf="
                                                         stockForm.variants?.length > 0 &&
                                                         (stockForm.options?.length > 1 ||
@@ -1488,7 +1501,7 @@
                                                     >
                                                     </input-field>
                                                 </div>
-                                                <div class="col-sm-6 col-lg-3">
+                                                <div class="col-sm-6 col-lg-3" *ngIf="!isVariantAvailable">
                                                     <input-field
                                                         [name]="'skuCode'"
                                                         [type]="'text'"
@@ -1557,6 +1570,15 @@
                                                             [type]="'text'"
                                                             [placeholder]="localeData?.opening_amount"
                                                             [(ngModel)]="stockForm.openingAmount"
+                                                        >
+                                                        </input-field>
+                                                    </div>
+                                                    <div class="col-sm-6 col-lg-3">
+                                                        <input-field
+                                                            [name]="'skuCode'"
+                                                            [type]="'text'"
+                                                            [placeholder]="commonLocaleData?.app_sku_code"
+                                                            [(ngModel)]="stockForm.variants[0].skuCode"
                                                         >
                                                         </input-field>
                                                     </div>
