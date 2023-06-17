@@ -762,7 +762,7 @@
                                             <span class="add-option">+</span> {{ localeData?.has_multiples }}
                                         </a>
                                         <div class="product-option" *ngIf="isVariantAvailable">
-                                            <div class="product-option-wrapper">
+                                            <div class="product-option-wrapper pt-0">
                                                 <div class="variant-field-wrap stock-option-fields">
                                                     <div
                                                         class="w-100"
@@ -786,6 +786,8 @@
                                                                             >
                                                                             </input-field>
                                                                         </div>
+                                                                    </div>
+                                                                    <div class="col-lg-2">
                                                                         <div class="delete-btn-wrapper">
                                                                             <button
                                                                                 mat-icon-button
@@ -811,7 +813,7 @@
                                                                     "
                                                                 >
                                                                     <div class="col-lg-4 option-delete">
-                                                                        <div class="w-100 value-field">
+                                                                        <div class="w-100">
                                                                             <input-field
                                                                                 [name]="'option-value-' + i + '-' + j"
                                                                                 [(ngModel)]="optionValue.value"
@@ -823,6 +825,8 @@
                                                                             >
                                                                             </input-field>
                                                                         </div>
+                                                                    </div>
+                                                                    <div class="col-lg-2">
                                                                         <div
                                                                             class="delete-btn-wrapper"
                                                                             *ngIf="option.values?.length > 1"
@@ -905,9 +909,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="row px-3">
-                                                    <div class="col-lg-12">
-                                                        <button
-                                                            mat-button
+                                                    <div class="col-lg-12 pl-0">
+                                                        <a
                                                             class="
                                                                 text-primary
                                                                 mr-b15
@@ -921,7 +924,7 @@
                                                             (click)="addVariantOption()"
                                                         >
                                                             {{ localeData?.another_option }}
-                                                        </button>
+                                                        </a>
                                                     </div>
                                                 </div>
                                                 <div

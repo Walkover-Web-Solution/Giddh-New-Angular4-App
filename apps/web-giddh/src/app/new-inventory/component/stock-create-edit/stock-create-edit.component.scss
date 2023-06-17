@@ -201,8 +201,6 @@
         }
 
         .another-option-btn {
-            position: relative;
-            right: 15px;
             color: var(--color-ledger-heading) !important;
         }
 
@@ -261,9 +259,6 @@
                 display: flex;
                 column-gap: 15px;
                 align-items: baseline;
-                .value-field {
-                    max-width: 455px;
-                }
             }
         }
         .mat-edit-wrap {
@@ -675,13 +670,6 @@ table.stock-table {
         .product-option-wrapper {
             .mat-edit-wrap {
                 flex-wrap: unset;
-            }
-            .variant-field-wrap {
-                .option-delete {
-                    .value-field {
-                        max-width: 310px;
-                    }
-                }
             }
         }
     }
