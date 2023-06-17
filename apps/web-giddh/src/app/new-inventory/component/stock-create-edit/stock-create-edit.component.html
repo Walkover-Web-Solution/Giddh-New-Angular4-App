@@ -763,7 +763,7 @@
                                         </a>
                                         <div class="product-option" *ngIf="isVariantAvailable">
                                             <div class="product-option-wrapper pt-0">
-                                                <div class="variant-field-wrap stock-option-fields">
+                                                <div class="variant-field-wrap stock-option-fields mb-2">
                                                     <div
                                                         class="w-100"
                                                         cdkDropList
@@ -774,7 +774,7 @@
                                                         >
                                                             <ng-container *ngIf="option.isEdit">
                                                                 <div class="row color-field pt-3 pb-2">
-                                                                    <div class="col-lg-4 option-delete">
+                                                                    <div class="col-lg-4 option-delete pr-0">
                                                                         <div class="w-100">
                                                                             <input-field
                                                                                 [placeholder]="'Option name'"
@@ -805,14 +805,14 @@
                                                                     </div>
                                                                 </div>
                                                                 <div
-                                                                    class="row"
+                                                                    class="row align-items-center"
                                                                     *ngFor="
                                                                         let optionValue of option.values;
                                                                         trackBy: trackByFn;
                                                                         let j = index
                                                                     "
                                                                 >
-                                                                    <div class="col-lg-4 option-delete">
+                                                                    <div class="col-lg-4 option-delete pr-0">
                                                                         <div class="w-100">
                                                                             <input-field
                                                                                 [name]="'option-value-' + i + '-' + j"
