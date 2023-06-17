@@ -9,26 +9,8 @@
     <ng-container *ngIf="!showLoader">
         <div class="relative create-new-inventory-page static-tabs-on-page">
             <hamburger-menu></hamburger-menu>
-            <div class="select-physical-product">
+            <div class="select-physical-product input-border-wrapper">
                 <form class="form-body" #stockCreateEditForm="ngForm" novalidate autocomplete="off">
-                    <<<<<<< HEAD
-                    <!-- <div class="px-3 mt-2">
-                        <p class="text-gray font-15">Select if its a physical good or a service.</p>
-                        <div class="select-product-type mt-1">
-                            <div class="radio-btn-wrapper mr-t15">
-                                <mat-radio-group color="primary" [(ngModel)]="stockForm.type" name="productType">
-                                    <mat-radio-button value="PRODUCT" [checked]="true">Product</mat-radio-button>
-                                    <mat-radio-button value="SERVICE">Service</mat-radio-button>
-                                    <mat-radio-button value="COMBO">Combo</mat-radio-button>
-                                        <mat-radio-button value="BULK">Bulk Creation</mat-radio-button>
-                                </mat-radio-group>
-                            </div>
-                            <div class="right-img-div">
-                                <img src="{{ imgPath }}create-group-vector.svg" />
-                            </div>
-                        </div>
-                    </div> -->
-                    ======= >>>>>>> dc067fa01e... working on create stock
                     <span *ngIf="!showLoader">
                         <button
                             *ngIf="queryParams?.stockUniqueName"

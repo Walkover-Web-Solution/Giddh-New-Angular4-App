@@ -3120,7 +3120,7 @@ td.mat-footer-cell {
             height: 36px;
             border-radius: 5px;
             padding-left: 6px;
-            font-size: 14px;
+            font-size: var(--font-size-15);
         }
     }
     .product-detail-content {
@@ -3211,6 +3211,11 @@ td.mat-footer-cell {
                     color: var(--color-tab-primary-active) !important;
                 }
             }
+        }
+    }
+    &.input-border-wrapper {
+        input {
+            border: 0 !important;
         }
     }
 }
@@ -3359,7 +3364,6 @@ input-field {
                 margin: 0;
                 font-size: 0.875rem;
                 line-height: 1.25rem;
-                max-width: 198px;
             }
             textarea {
                 &.mat-input-element {
@@ -3374,7 +3378,7 @@ input-field {
         }
         .mat-form-field-label {
             margin-top: 4px;
-            font-size: 14px;
+            font-size: var(--font-size-15);
         }
         .mat-form-field-wrapper {
             margin: 0;
@@ -3429,7 +3433,7 @@ input-field {
     .help-aside-body {
         .inventory-items {
             h5 {
-                font-size: 14px;
+                font-size: var(--font-size-15);
             }
         }
     }

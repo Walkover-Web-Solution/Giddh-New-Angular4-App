@@ -5,7 +5,7 @@
     .branch-transfer-header {
         padding: 10px 15px;
         border-bottom: 1px solid var(--color-common-secondary-border);
-        font-size: 18px;
+        font-size: var(--font-size-16);
 
         h2 {
             color: var(--color-giddh-blue);
@@ -14,7 +14,7 @@
     }
     .branch-transfer-body {
         &-radio-btns {
-            font-size: 14px;
+            font-size: var(--font-size-15);
             padding: 15px;
             border-bottom: 1px solid var(--color-common-secondary-border);
         }
@@ -28,7 +28,7 @@
                         font-weight: 600;
                     }
                     p {
-                        font-size: 14px;
+                        font-size: var(--font-size-15);
                     }
                 }
             }
@@ -39,7 +39,7 @@
                 th,
                 td {
                     padding: 10px 15px;
-                    font-size: 14px;
+                    font-size: var(--font-size-15);
                     text-align: right;
                     border: 1px solid var(--color-iron);
                     vertical-align: top !important;
@@ -120,7 +120,7 @@
         }
     }
     h3 {
-        font-size: 14px;
+        font-size: var(--font-size-15);
     }
     .row {
         margin-left: unset !important;

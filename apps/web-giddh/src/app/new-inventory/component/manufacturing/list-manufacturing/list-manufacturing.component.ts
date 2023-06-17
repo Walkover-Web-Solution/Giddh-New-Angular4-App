@@ -204,6 +204,9 @@ export class ListManufacturingComponent implements OnInit {
                                     alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                                     uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                                 };
+
+                                this.selectedBranchName = this.currentBranch.alias;
+                                this.handleBranchChange({ label: this.currentBranch.alias, value: this.currentBranch.uniqueName });
                             }
                         }
 
@@ -308,7 +311,7 @@ export class ListManufacturingComponent implements OnInit {
 
                 response.body.results.forEach(item => {
                     reportData.push({
-                        date: dayjs(item.date, GIDDH_DATE_FORMAT).format("d MMM YYYY"),
+                        date: dayjs(item.date, GIDDH_DATE_FORMAT).format("DD MMM YY"),
                         voucher_no: item.voucherNumber,
                         stock: item.stockName,
                         variant: item.variant.name,
@@ -336,6 +339,7 @@ export class ListManufacturingComponent implements OnInit {
     public openAdvanceFilterDialog(): void {
         this.dialog.open(this.advanceFilterComponent, {
             width: '500px',
+            autoFocus: false
         })
     }
 
