@@ -290,4 +290,14 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         document?.removeEventListener(event, fun.bind(this), options || {});
     }
 
+    /**
+     * Adds dropdown-position class on cdk-overlay for position issue
+     *
+     * @memberof SelectFieldComponent
+     */
+    public addClassForDropdown(): void {
+        setTimeout(() => {
+            document.querySelectorAll(".cdk-overlay-pane")[0].classList.add("dropdown-position");
+        }, 10);
+    }
 }

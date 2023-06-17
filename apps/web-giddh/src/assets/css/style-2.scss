@@ -14126,3 +14126,7 @@ body.hide-scroll-body.master-page {
 .cdk-drag {
     cursor: grab;
 }
+
+.dropdown-position {
+    transform: unset !important;
+}
