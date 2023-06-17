@@ -882,6 +882,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         const variantfixedAssetAccountUniqueName = stockForm?.fixedAssetAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.fixedAssetAccountDetails?.accountUniqueName;
         const variantPurchaseAccountUniqueName = stockForm?.purchaseAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.purchaseAccountDetails?.accountUniqueName;
         const variantSalesAccountUniqueName = stockForm?.salesAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.salesAccountDetails?.accountUniqueName;
+
+        stockForm.options = stockForm.options?.map(option => {
+            option.values = option?.values?.map(optionValue => {
+                return optionValue.value;
+            });
+            return option;
+        });
+
         stockForm.variants = stockForm.variants?.map(variant => {
             const salesUnitRate = variant?.salesInformation?.map(unitRate => {
                 unitRate.accountUniqueName = variantSalesAccountUniqueName;
@@ -985,18 +993,24 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.lowStockAlertCount = response.body.lowStockAlertCount;
                 this.stockForm.outOfStockSelling = response.body.outOfStockSelling;
                 this.stockForm.variants = response.body.variants;
-                this.stockForm.options = response.body.options;
+                this.stockForm.options = response.body.options?.map(option => {
+                    option.values = option.values?.map((optionValue, optionIndex) => {
+                        return { index: optionIndex, value: optionValue };
+                    });
+                    return option;
+                });
+
                 this.isVariantAvailable = (this.stockForm?.variants?.length > 0) ? true : false;
                 this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
                 this.defaultStockGroupUniqueName = response.body.stockGroup?.uniqueName;
-                if (response.body.purchaseAccountDetails) {
-                    this.stockForm.purchaseAccountDetails = response.body.purchaseAccountDetails;
+                if (response.body.purchaseAccountUniqueNames?.length) {
+                    this.stockForm.purchaseAccountDetails = { accountUniqueName: response.body.purchaseAccountUniqueNames[0] };
                 }
-                if (response.body.salesAccountDetails) {
-                    this.stockForm.salesAccountDetails = response.body.salesAccountDetails;
+                if (response.body.salesAccountUniqueNames?.length) {
+                    this.stockForm.salesAccountDetails = { accountUniqueName: response.body.salesAccountUniqueNames[0] };
                 }
-                if (response.body.fixedAssetAccountDetails) {
-                    this.stockForm.fixedAssetAccountDetails = response.body.fixedAssetAccountDetails;
+                if (response.body.fixedAssetAccountUniqueNames?.length) {
+                    this.stockForm.fixedAssetAccountDetails = { accountUniqueName: response.body.fixedAssetAccountUniqueNames[0] };
                 }
                 const unitRateObj = {
                     rate: null,

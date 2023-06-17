@@ -3164,6 +3164,9 @@ td.mat-footer-cell {
             .mat-select-placeholder {
                 color: var(--color-common-primary-input-placeholder);
             }
+            .mat-select-min-line {
+                font-size: 14px;
+            }
         }
         .mat-tab-label {
             .mat-tab-label-content {
@@ -3191,6 +3194,7 @@ td.mat-footer-cell {
 }
 
 .mat-chip-list-wrapper {
+    flex-wrap: unset !important;
     input.mat-input-element {
         border: none;
     }
@@ -3384,12 +3388,54 @@ input-field {
     }
 }
 
+.stock-option-fields {
+    .mat-form-field-appearance-outline {
+        .mat-form-field-wrapper {
+            padding-bottom: 0;
+        }
+    }
+}
+
 /*--- recipe ---*/
 .create-recipe {
     .add-receipt {
         button {
             .mat-button-wrapper {
                 display: flex !important;
+            }
+        }
+    }
+}
+.cdk-drag-preview {
+    background-color: var(--color-white);
+    // box-sizing: border-box;
+    border-radius: 4px;
+    width: fit-content !important;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12);
+
+    .product-option-wrapper {
+        background-color: var(--color-white);
+        padding: 20px 15px 20px 15px;
+        border-radius: 8px;
+        .data-wrap {
+            display: flex;
+            column-gap: 40px;
+            align-items: center;
+            .mat-standard-chip {
+                padding: 5px;
+                min-height: 25px;
+                min-width: 25px;
+                justify-content: center;
+                background-color: var(--color-primary-subscription-plans-top-bar-background);
+                font-size: 12px;
+            }
+        }
+        .mat-edit-wrap {
+            display: flex !important;
+            column-gap: 20px;
+            .chip-svg-wrap {
+                min-width: 440px;
             }
         }
     }
