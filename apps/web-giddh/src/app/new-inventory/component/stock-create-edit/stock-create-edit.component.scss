@@ -249,25 +249,26 @@
             }
         }
         .dot-img {
-            svg {
+            img {
                 width: 20px;
-                fill: var(--color-primary-company-branch-dropdown-total-company-count);
-            }
-            &.default-svg {
-                svg {
-                    fill: var(--color-primary-company-branch-input-group-append);
-                }
             }
         }
         .variant-field-wrap {
             display: flex;
             width: 100%;
             column-gap: 40px;
+            .option-delete {
+                display: flex;
+                column-gap: 15px;
+                align-items: baseline;
+                .value-field {
+                    max-width: 455px;
+                }
+            }
         }
         .mat-edit-wrap {
-            display: flex;
+            display: flex !important;
             column-gap: 20px;
-            flex-wrap: wrap;
             .chip-svg-wrap {
                 min-width: 440px;
             }
@@ -675,6 +676,13 @@ table.stock-table {
             .mat-edit-wrap {
                 flex-wrap: unset;
             }
+            .variant-field-wrap {
+                .option-delete {
+                    .value-field {
+                        max-width: 310px;
+                    }
+                }
+            }
         }
     }
 }
@@ -999,4 +1007,18 @@ table.stock-table {
             display: block;
         }
     }
+}
+.unit-rate-align {
+    align-items: baseline;
+}
+.icon-remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    border-radius: 5px;
+    color: var(--color-tertiary-button-text);
+    border: 1px solid var(--color-common-secondary-border);
+    background-color: var(--color-tertiary-button-background);
+    margin-left: 15px;
 }
