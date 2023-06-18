@@ -1320,23 +1320,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     }
 
     /**
-     * Loads the stock variants
-     *
-     * @private
-     * @param {string} stockUniqueName Uniquename of the stock
-     * @memberof CreatePurchaseOrderComponent
-     */
-    private loadStockVariants(stockUniqueName: string, index?: number): void {
-        this.ledgerService.loadStockVariants(stockUniqueName).pipe(
-            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
-                const allStockVariants = this.stockVariants.getValue();
-                this.currentlyLoadedStockVariantIndex = index;
-                allStockVariants[this.currentlyLoadedStockVariantIndex ?? this.activeIndex] = observableOf(res);
-                this.stockVariants.next(allStockVariants);
-            });
-    }
-
-    /**
      * Variant change handler
      *
      * @param {IOption} event Change event
@@ -4032,5 +4015,22 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             transaction.setAmount(entry);
             this.calculateWhenTrxAltered(entry, transaction);
         }
+    }
+
+    /**
+     * Loads the stock variants
+     *
+     * @private
+     * @param {string} stockUniqueName Uniquename of the stock
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private loadStockVariants(stockUniqueName: string, index?: number): void {
+        this.ledgerService.loadStockVariants(stockUniqueName).pipe(
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
+                const allStockVariants = this.stockVariants.getValue();
+                this.currentlyLoadedStockVariantIndex = index;
+                allStockVariants[this.currentlyLoadedStockVariantIndex ?? this.activeIndex] = observableOf(res);
+                this.stockVariants.next(allStockVariants);
+            });
     }
 }
