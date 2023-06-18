@@ -70,5 +70,7 @@
     "currency_conversion": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />(रूपांतरण दर: [CONVERSION_RATE])",
     "delayed_by_days": "[DAYS] दिवसांनी विलंब",
     "delivery_in_day": "[DAYS] दिवसांत वितरण",
-    "delivery_in_days": "[DAYS] दिवसांत वितरण"
+    "delivery_in_days": "[DAYS] दिवसांत वितरण",
+    "select_variant": "प्रकार निवडा",
+    "variant": "प्रकार"
 }

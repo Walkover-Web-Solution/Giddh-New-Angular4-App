@@ -70,5 +70,7 @@
     "currency_conversion": "In [BASE_CURRENCY]: [AMOUNT]<br />(Conversion Rate: [CONVERSION_RATE])",
     "delayed_by_days": "Delayed by [DAYS] days",
     "delivery_in_day": "Delivery in [DAYS] day",
-    "delivery_in_days": "Delivery in [DAYS] days"
+    "delivery_in_days": "Delivery in [DAYS] days",
+    "select_variant": "Select Variant",
+    "variant": "Variant"
 }

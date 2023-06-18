@@ -251,6 +251,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
     /** Stores the selected stock variant */
     public variant: IVariant;
+    public taxInclusive: boolean;
 
     constructor() {
         super();
@@ -619,6 +620,7 @@ export class SalesAddBulkStockItems {
     stockUnit?: CodeStockMulticurrency;
     additional?: any;
     variant?: IVariant;
+    taxInclusive: boolean;
 }
 
 export class CodeStockMulticurrency {

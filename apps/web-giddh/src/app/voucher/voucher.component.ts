@@ -1732,19 +1732,20 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.length) {
-                const currentEntryStockVariantUniqueName = this.currentTxnRequestObject[this.currentlyLoadedStockVariantIndex ?? this.activeIndx].params.variantUniqueName;
+                const currentlyLoadedVariantRequest = this.currentTxnRequestObject[this.currentlyLoadedStockVariantIndex ?? this.activeIndx];
+                const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params.variantUniqueName;
                 let stockAllVariants;
                 res[this.currentlyLoadedStockVariantIndex ?? this.activeIndx].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
                 if (stockAllVariants.findIndex(variant => variant.value === currentEntryStockVariantUniqueName) === -1) {
                     // Only reset the stock variant when the stock is changed
-                    if (this.currentTxnRequestObject[this.activeIndx].txn) {
+                    if (currentlyLoadedVariantRequest.txn) {
                         /* If transaction is present then it means the user has changed the stock of any entry
                             otherwise the user has opened the invoice for edit flow
                         */
-                        this.currentTxnRequestObject[this.activeIndx].txn.variant = { name: stockAllVariants[0].label, uniqueName: stockAllVariants[0].value };
+                        currentlyLoadedVariantRequest.txn.variant = { name: stockAllVariants[0].label, uniqueName: stockAllVariants[0].value };
                         // include the variant unique name for the API call
-                        this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName = stockAllVariants[0].value;
-                        this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
+                        currentlyLoadedVariantRequest.params.variantUniqueName = stockAllVariants[0].value;
+                        this.loadDetails(currentlyLoadedVariantRequest);
                     }
                 }
             }
@@ -3453,6 +3454,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let o = cloneDeep(selectedAcc.additional);
         const variant = o.stock?.variant;
         const isInclusiveEntry = variant?.purchaseTaxInclusive || variant?.salesTaxInclusive || variant?.fixedAssetTaxInclusive;
+        transaction.taxInclusive = isInclusiveEntry;
         // check if we have quantity in additional object. it's for only bulk add mode
         transaction.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
         transaction.applicableTaxes = [];
@@ -3641,7 +3643,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (calculateTransaction) {
             if (isInclusiveEntry) {
                 setTimeout(() => {
-                    // Settimeout is used as tax component is not rendered at the tiem control is reached here
+                    // Set timeout is used as tax component is not rendered at the time control is reached here
                     transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                     transaction.total = transaction.quantity * transaction.rate;
                     this.calculateTransactionValueInclusively(entry, transaction);
@@ -4236,6 +4238,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         salesAddBulkStockItems.stockUnitCode = tr.stockUnitCode;
                         salesAddBulkStockItems.stockUnit.uniqueName = tr.stockUnit;
                         salesAddBulkStockItems.variant = tr.variant;
+                        salesAddBulkStockItems.taxInclusive = tr.taxInclusive;
 
                         transactionClassMul.stock = salesAddBulkStockItems;
                     }
@@ -5133,6 +5136,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     salesAddBulkStockItems.stockUnit.uniqueName = tr.stockUnit;
                     salesAddBulkStockItems.stockUnit.code = tr.stockUnitCode;
                     salesAddBulkStockItems.variant = tr.variant;
+                    salesAddBulkStockItems.taxInclusive = tr.taxInclusive;
 
                     transactionClassMul.stock = salesAddBulkStockItems;
                 }
@@ -8638,17 +8642,22 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public handlePriceCalculationOnUnitChange(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        let isInclusiveTax;
         if (transaction?.stockDetails?.variant) {
-            const isInclusiveTax = transaction.stockDetails.variant.salesTaxInclusive ||
+            // Unit is changed in create flow by changing the stock
+            isInclusiveTax = transaction.stockDetails.variant.salesTaxInclusive ||
                 transaction.stockDetails.variant.purchaseTaxInclusive ||
                 transaction.stockDetails.variant.fixedAssetTaxInclusive;
-            if (isInclusiveTax) {
-                transaction.total = transaction.quantity * transaction.rate;
-                this.calculateTransactionValueInclusively(entry, transaction);
-            } else {
-                transaction.setAmount(entry);
-                this.calculateWhenTrxAltered(entry, transaction);
-            }
+        } else {
+            // Unit is changed in update flow without changing the stock
+            isInclusiveTax = transaction?.taxInclusive;
+        }
+        if (isInclusiveTax) {
+            transaction.total = transaction.quantity * transaction.rate;
+            this.calculateTransactionValueInclusively(entry, transaction);
+        } else {
+            transaction.setAmount(entry);
+            this.calculateWhenTrxAltered(entry, transaction);
         }
     }
 }
