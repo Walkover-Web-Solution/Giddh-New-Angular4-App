@@ -62,18 +62,43 @@
 
                             <div class="right-side-wrapper">
                                 <perfect-scrollbar>
-                                    <div class="wrap-selected-stocks" *ngFor="let item of selectedItems">
+                                    <div
+                                        class="wrap-selected-stocks"
+                                        *ngFor="let item of selectedItems; let entryIdx = index"
+                                    >
                                         <div class="single-selected-stock clearfix d-flex">
                                             <div class="flex-fill">
                                                 <div class="stock-name">
-                                                    <p>{{ item?.name }}</p>
+                                                    <p class="mb-2">{{ item?.name }}</p>
                                                     <p>
-                                                        <span *ngIf="item?.additional?.skuCode" class="stockSku"
+                                                        <span *ngIf="item?.additional?.skuCode" class="stockSku mb-1"
                                                             ><label>{{ commonLocaleData?.app_sku }}: </label
                                                             >{{ item?.additional?.skuCode }}</span
                                                         >
+                                                        <!-- <select-field
+                                                            [cssClass]="'form-control mat-field-border'"
+                                                            [placeholder]="localeData?.select_variant"
+                                                            (selectedOption)="variantChanged(item)"
+                                                            [options]="variants"
+                                                            [required]="true"
+                                                            [name]="'variant' + entryIdx"
+                                                            [(ngModel)]="item.variant.uniqueName"
+                                                        >
+                                                        </select-field> -->
+                                                        <sh-select
+                                                            class="mb-1"
+                                                            *ngIf="item.variants?.length > 1"
+                                                            [placeholder]="localeData?.select_variant"
+                                                            [options]="item.variants"
+                                                            (selected)="variantChanged(item, $event)"
+                                                            [isRequired]="true"
+                                                            name="{{ 'variant' + entryIdx }}"
+                                                            [(ngModel)]="item.variant.uniqueName"
+                                                        ></sh-select>
                                                         <span [class.rate-stock]="item?.additional?.skuCode"
-                                                            ><label>{{ commonLocaleData?.app_rate }}:</label> </span
+                                                            ><label
+                                                                >{{ commonLocaleData?.app_rate }}:&nbsp;</label
+                                                            > </span
                                                         >{{ item?.rate }}
                                                     </p>
                                                 </div>

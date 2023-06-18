@@ -3,11 +3,12 @@ import { LedgerDiscountClass } from './SettingsDiscount';
 import { IVariant, LedgerResponseDiscountClass } from './Ledger';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { INameUniqueName } from '../interfaces/name-unique-name.interface';
-import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 import * as dayjs from 'dayjs';
 import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
 import { ReferenceVoucher } from '../../ledger/ledger.vm';
 import { HIGH_RATE_FIELD_PRECISION } from '../../app.constant';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+import { ITaxControlData } from '../interfaces/tax.interface';
 
 export enum VoucherTypeEnum {
     'sales' = 'sales',
@@ -251,6 +252,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
     /** Stores the selected stock variant */
     public variant: IVariant;
+    public taxInclusive: boolean;
 
     constructor() {
         super();
@@ -274,10 +276,10 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         this.total = this.getTransactionTotal(tax, entry);
     }
 
-    public getTotalTaxOfEntry(taxArr: TaxControlData[]): number {
+    public getTotalTaxOfEntry(taxArr: ITaxControlData[]): number {
         let count: number = 0;
         if (taxArr?.length > 0) {
-            forEach(taxArr, (item: TaxControlData) => {
+            forEach(taxArr, (item: ITaxControlData) => {
                 count += item.amount;
             });
             return this.checkForInfinity(count);
@@ -325,7 +327,7 @@ export class SalesEntryClass {
     public uniqueName: string;
     public discounts: LedgerDiscountClass[];
     public tradeDiscounts?: LedgerResponseDiscountClass[];
-    public taxes: TaxControlData[] = [];
+    public taxes: ITaxControlData[] = [];
     public transactions: SalesTransactionItemClass[];
     public description: string;
     public taxableValue: number;
@@ -619,6 +621,8 @@ export class SalesAddBulkStockItems {
     stockUnit?: CodeStockMulticurrency;
     additional?: any;
     variant?: IVariant;
+    taxInclusive: boolean;
+    variants?: Array<IOption>;
 }
 
 export class CodeStockMulticurrency {
@@ -641,7 +645,7 @@ export class SalesEntryClassMulticurrency {
     public description: string;
     public hsnNumber: string;
     public sacNumber: string;
-    public taxes: TaxControlData[];
+    public taxes: ITaxControlData[];
     public transactions: TransactionClassMulticurrency[];
     public uniqueName: string;
     public voucherNumber: string;
@@ -738,7 +742,7 @@ export class PaymentReceiptEntry {
     date: any;
     chequeNumber: string;
     chequeClearanceDate: any;
-    taxes: TaxControlData[] = [];
+    taxes: ITaxControlData[] = [];
 
     constructor() {
         this.transactions = [new PaymentReceiptTransaction()];

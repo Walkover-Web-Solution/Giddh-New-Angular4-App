@@ -18,7 +18,7 @@ import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TaxResponse } from '../../models/api-models/Company';
-import { ITaxDetail } from '../../models/interfaces/tax.interface';
+import { ITaxControlData, ITaxDetail } from '../../models/interfaces/tax.interface';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { AppState } from '../../store';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
@@ -32,16 +32,6 @@ export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     useExisting: forwardRef(() => TaxControlComponent),
     multi: true
 };
-
-export class TaxControlData {
-    public name?: string;
-    public uniqueName: string;
-    public amount?: number;
-    public isChecked?: boolean;
-    public isDisabled?: boolean;
-    public type?: string;
-    public calculationMethod?: string;
-}
 
 @Component({
     selector: 'tax-control',
@@ -58,7 +48,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public date: string;
     @Input() public taxes: TaxResponse[];
     @Input() public applicableTaxes: string[] = [];
-    @Input() public taxRenderData: TaxControlData[];
+    @Input() public taxRenderData: ITaxControlData[];
     @Input() public showHeading: boolean = true;
     /** Custom heading to be applied to tax control header */
     @Input() public customHeading: string = '';
@@ -176,7 +166,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 }
             } else {
 
-                let taxObj = new TaxControlData();
+                let taxObj = new ITaxControlData();
                 taxObj.name = tax.name;
                 taxObj.uniqueName = tax?.uniqueName;
                 taxObj.type = tax.taxType;

@@ -4,6 +4,9 @@ import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operato
 import { SalesAddBulkStockItems, VoucherTypeEnum } from '../../models/api-models/Sales';
 import { SearchService } from '../../services/search.service';
 import { ToasterService } from '../../services/toaster.service';
+import { LedgerService } from '../../services/ledger.service';
+import { IVariant } from '../../models/api-models/Ledger';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
     selector: 'voucher-add-bulk-items-component',
@@ -39,7 +42,8 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private toaster: ToasterService,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private ledgerService: LedgerService
     ) {
     }
 
@@ -128,37 +132,13 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
             return;
         }
         let requestObject = {
-            stockUniqueName: item.additional && item.additional.stock ? item.additional.stock?.uniqueName : ''
+            stockUniqueName: item.additional?.stock?.uniqueName ?? ''
         };
-        this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data && data.body) {
-                // Take taxes of parent group and stock's own taxes
-                const taxes = data.body.taxes || [];
-                if (data.body.stock) {
-                    taxes.push(...data.body.stock.taxes);
-                }
-                // directly assign additional property
-                item.additional = {
-                    ...item.additional,
-                    label: item.name,
-                    value: item?.uniqueName,
-                    applicableTaxes: taxes,
-                    currency: data.body.currency,
-                    currencySymbol: data.body.currencySymbol,
-                    email: data.body.emails,
-                    isFixed: data.body.isFixed,
-                    mergedAccounts: data.body.mergedAccounts,
-                    mobileNo: data.body.mobileNo,
-                    nameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent.name).join(', ') : '',
-                    stock: data.body.stock,
-                    uNameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
-                };
-                item.rate = data.body.stock ? data.body.stock.rate || 0 : 0;
-                item.quantity = 1;
-                this.selectedItems.push({ ...item });
-                this.changeDetectorRef.detectChanges();
-            }
-        }, () => { });
+        if (item.additional.stock) {
+            this.loadStockVariants(item);
+        } else {
+            this.loadDetails(item, requestObject);
+        }
     }
 
     public removeSelectedItem(uniqueName: string) {
@@ -215,5 +195,87 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                 });
             }, 100);
         }
+    }
+
+    /**
+     * Loads the details of selected entry
+     *
+     * @private
+     * @param {SalesAddBulkStockItems} item Item details
+     * @param {*} requestObject Request object for the API
+     * @param {boolean} isVariantChanged True, if variant details are fetched, required to avoid same item being pushed twice
+     * @memberof VoucherAddBulkItemsComponent
+     */
+    private loadDetails(item: SalesAddBulkStockItems, requestObject: any, isVariantChanged?: boolean): void {
+        this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data && data.body) {
+                // Take taxes of parent group and stock's own taxes
+                const taxes = data.body.taxes || [];
+                if (data.body.stock) {
+                    taxes.push(...data.body.stock.taxes);
+                }
+                // directly assign additional property
+                item.additional = {
+                    ...item.additional,
+                    label: item.name,
+                    value: item?.uniqueName,
+                    applicableTaxes: taxes,
+                    currency: data.body.currency,
+                    currencySymbol: data.body.currencySymbol,
+                    email: data.body.emails,
+                    isFixed: data.body.isFixed,
+                    mergedAccounts: data.body.mergedAccounts,
+                    mobileNo: data.body.mobileNo,
+                    nameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent.name).join(', ') : '',
+                    stock: data.body.stock,
+                    uNameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
+                };
+                const unitRates = data.body?.stock?.variant?.unitRates ?? [];
+                item.rate = unitRates[0]?.rate ?? 0;
+                item.quantity = 1;
+                if (!isVariantChanged) {
+                    this.selectedItems.push({ ...item });
+                }
+                this.changeDetectorRef.detectChanges();
+            }
+        }, () => { });
+    }
+
+    /**
+     * Loads the stock variants
+     *
+     * @private
+     * @param {SalesAddBulkStockItems} item Item details
+     * @memberof VoucherAddBulkItemsComponent
+     */
+    private loadStockVariants(item: SalesAddBulkStockItems): void {
+        this.ledgerService.loadStockVariants(item.additional?.stock?.uniqueName).pipe(
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
+                item.variants = res;
+                const defaultVariant: IVariant = {name: res[0].label, uniqueName: res[0].value};
+                item.variant = defaultVariant;
+                const requestObj = {
+                    stockUniqueName: item.additional?.stock?.uniqueName ?? '',
+                    variantUniqueName: defaultVariant.uniqueName
+                };
+                this.loadDetails(item, requestObj);
+                this.changeDetectorRef.detectChanges();
+            });
+    }
+
+    /**
+     * Variant change handler
+     *
+     * @param {SalesAddBulkStockItems} item Item details
+     * @param {IOption} event Variant changed event
+     * @memberof VoucherAddBulkItemsComponent
+     */
+    public variantChanged(item: SalesAddBulkStockItems, event: IOption): void {
+        item.variant = {name: event.label, uniqueName: event.value};
+        const requestObj = {
+            stockUniqueName: item.additional?.stock?.uniqueName ?? '',
+            variantUniqueName: event.value
+        };
+        this.loadDetails(item, requestObj, true);
     }
 }

@@ -73,5 +73,7 @@
     "delivery_in_days": "Delivery in [DAYS] days",
     "convert_bill_popup_heading": "Convert to Bill",
     "purchase_bill_number": "Purchase Bill Number",
-    "po_selection_vendor_error": "Please select purchase orders of only 1 vendor."
+    "po_selection_vendor_error": "Please select purchase orders of only 1 vendor.",
+    "select_variant": "Select Variant",
+    "variant": "Variant"
 }
