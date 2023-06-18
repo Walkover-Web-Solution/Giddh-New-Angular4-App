@@ -5,7 +5,6 @@ import { clone, cloneDeep, filter, find, sumBy } from '../../../lodash-optimized
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { UpdateLedgerTaxData } from '../update-ledger-tax-control/update-ledger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
-import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { AccountResponse } from '../../../models/api-models/Account';
@@ -16,6 +15,7 @@ import { HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION } from '../../../app.co
 import { take } from 'rxjs/operators';
 import { GeneralService } from '../../../services/general.service';
 import { LedgerUtilityService } from '../../services/ledger-utility.service';
+import { ITaxControlData } from '../../../models/interfaces/tax.interface';
 
 export class UpdateLedgerVm {
     public otherAccountList: IFlattenAccountsResultItem[] = [];
@@ -44,7 +44,7 @@ export class UpdateLedgerVm {
     public isInvoiceGeneratedAlready: boolean = false;
     public showNewEntryPanel: boolean = true;
     public selectedTaxes: UpdateLedgerTaxData[] = [];
-    public taxRenderData: TaxControlData[] = [];
+    public taxRenderData: ITaxControlData[] = [];
     public discountComponent: UpdateLedgerDiscountComponent;
     public ledgerUnderStandingObj = {
         accountType: '',

@@ -756,6 +756,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Stores the stock variants */
     public stockVariants: BehaviorSubject<Array<Observable<Array<IOption>>>> = new BehaviorSubject([]);
 
+    /** True, if bulk items are added to the voucher list, required to prevent repetitive stock variants processing
+     * when bulk entries are added
+     */
+    private isBulkEntryInProgress: boolean;
     /** Stores the current transaction request obj for the API */
     private currentTxnRequestObject: Array<any> = [];
     /** Stores the index of current stock variants being loaded */
@@ -1731,20 +1735,21 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         });
 
         this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res?.length) {
-                const currentEntryStockVariantUniqueName = this.currentTxnRequestObject[this.currentlyLoadedStockVariantIndex ?? this.activeIndx].params.variantUniqueName;
+            if (res?.length && !this.isBulkEntryInProgress) {
+                const currentlyLoadedVariantRequest = this.currentTxnRequestObject[this.currentlyLoadedStockVariantIndex ?? this.activeIndx];
+                const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params.variantUniqueName;
                 let stockAllVariants;
                 res[this.currentlyLoadedStockVariantIndex ?? this.activeIndx].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
                 if (stockAllVariants.findIndex(variant => variant.value === currentEntryStockVariantUniqueName) === -1) {
                     // Only reset the stock variant when the stock is changed
-                    if (this.currentTxnRequestObject[this.activeIndx].txn) {
+                    if (currentlyLoadedVariantRequest.txn) {
                         /* If transaction is present then it means the user has changed the stock of any entry
                             otherwise the user has opened the invoice for edit flow
                         */
-                        this.currentTxnRequestObject[this.activeIndx].txn.variant = { name: stockAllVariants[0].label, uniqueName: stockAllVariants[0].value };
+                        currentlyLoadedVariantRequest.txn.variant = { name: stockAllVariants[0].label, uniqueName: stockAllVariants[0].value };
                         // include the variant unique name for the API call
-                        this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName = stockAllVariants[0].value;
-                        this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
+                        currentlyLoadedVariantRequest.params.variantUniqueName = stockAllVariants[0].value;
+                        this.loadDetails(currentlyLoadedVariantRequest);
                     }
                 }
             }
@@ -3111,6 +3116,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         // Calculate discount
+        entry.discounts = entry.discounts?.length ? entry.discounts : this.generalService.getDiscountValues({
+            discountAccountsDetails: entry.discounts ?? [],
+            discountsList: this.discountsList
+        });
         let percentageDiscountTotal = entry.discounts?.filter(discount => discount.isActive)
             ?.filter(activeDiscount => activeDiscount.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
@@ -3127,6 +3136,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let taxPercentage: number = 0;
         let cessPercentage: number = 0;
         let taxTotal: number = 0;
+        entry.taxes = entry.taxes?.length ? entry.taxes : this.generalService.getTaxValues({
+            taxRenderData: entry.taxes ?? [],
+            date: entry.entryDate,
+            applicableTaxes: transaction.applicableTaxes,
+            taxes: this.companyTaxesList,
+            exceptTaxTypes: this.exceptTaxTypes,
+        });
         entry.taxes?.filter(tax => tax.isChecked).forEach(selectedTax => {
             if (selectedTax.type === 'gstcess') {
                 cessPercentage += selectedTax.amount;
@@ -3402,6 +3418,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 };
             }
             if (isBulkItem) {
+                const allStockVariants = this.stockVariants.getValue();
+                allStockVariants.push(observableOf(selectedAcc.variants));
+                this.stockVariants.next(allStockVariants);
                 txn = this.calculateItemValues(selectedAcc, txn, entry, true, true);
             } else {
                 this.currentTxnRequestObject[this.activeIndx] = {
@@ -3453,6 +3472,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let o = cloneDeep(selectedAcc.additional);
         const variant = o.stock?.variant;
         const isInclusiveEntry = variant?.purchaseTaxInclusive || variant?.salesTaxInclusive || variant?.fixedAssetTaxInclusive;
+        transaction.taxInclusive = isInclusiveEntry;
         // check if we have quantity in additional object. it's for only bulk add mode
         transaction.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
         transaction.applicableTaxes = [];
@@ -3546,6 +3566,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             transaction.stockDetails = omit(o.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
+            if (isBulkItem) {
+                transaction.variant = selectedAcc.variant;
+            }
             // Stock item, show the warehouse drop down if it is hidden
             if ((this.isMultiCurrencyModule()) && !this.shouldShowWarehouse) {
                 this.shouldShowWarehouse = true;
@@ -3641,7 +3664,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (calculateTransaction) {
             if (isInclusiveEntry) {
                 setTimeout(() => {
-                    // Settimeout is used as tax component is not rendered at the tiem control is reached here
+                    // Set timeout is used as tax component is not rendered at the time control is reached here
                     transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                     transaction.total = transaction.quantity * transaction.rate;
                     this.calculateTransactionValueInclusively(entry, transaction);
@@ -4113,6 +4136,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public addBulkStockItems(items: SalesAddBulkStockItems[]) {
         const startIndex = this.invFormData.entries?.length;
         let isBlankItemPresent;
+        this.isBulkEntryInProgress = true;
         this.ngZone.runOutsideAngular(() => {
             for (const item of items) {
                 // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
@@ -4149,6 +4173,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
                 this.onSelectSalesAccount(item, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[lastIndex], true, false, lastIndex);
             }
+            this.isBulkEntryInProgress = false;
         });
         this.buildBulkData(this.invFormData.entries?.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
     }
@@ -4241,6 +4266,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         salesAddBulkStockItems.stockUnitCode = tr.stockUnitCode;
                         salesAddBulkStockItems.stockUnit.uniqueName = tr.stockUnit;
                         salesAddBulkStockItems.variant = tr.variant;
+                        salesAddBulkStockItems.taxInclusive = tr.taxInclusive;
 
                         transactionClassMul.stock = salesAddBulkStockItems;
                     }
@@ -5138,6 +5164,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     salesAddBulkStockItems.stockUnit.uniqueName = tr.stockUnit;
                     salesAddBulkStockItems.stockUnit.code = tr.stockUnitCode;
                     salesAddBulkStockItems.variant = tr.variant;
+                    salesAddBulkStockItems.taxInclusive = tr.taxInclusive;
 
                     transactionClassMul.stock = salesAddBulkStockItems;
                 }
@@ -8643,17 +8670,22 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public handlePriceCalculationOnUnitChange(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        let isInclusiveTax;
         if (transaction?.stockDetails?.variant) {
-            const isInclusiveTax = transaction.stockDetails.variant.salesTaxInclusive ||
+            // Unit is changed in create flow by changing the stock
+            isInclusiveTax = transaction.stockDetails.variant.salesTaxInclusive ||
                 transaction.stockDetails.variant.purchaseTaxInclusive ||
                 transaction.stockDetails.variant.fixedAssetTaxInclusive;
-            if (isInclusiveTax) {
-                transaction.total = transaction.quantity * transaction.rate;
-                this.calculateTransactionValueInclusively(entry, transaction);
-            } else {
-                transaction.setAmount(entry);
-                this.calculateWhenTrxAltered(entry, transaction);
-            }
+        } else {
+            // Unit is changed in update flow without changing the stock
+            isInclusiveTax = transaction?.taxInclusive;
+        }
+        if (isInclusiveTax) {
+            transaction.total = transaction.quantity * transaction.rate;
+            this.calculateTransactionValueInclusively(entry, transaction);
+        } else {
+            transaction.setAmount(entry);
+            this.calculateWhenTrxAltered(entry, transaction);
         }
     }
 }

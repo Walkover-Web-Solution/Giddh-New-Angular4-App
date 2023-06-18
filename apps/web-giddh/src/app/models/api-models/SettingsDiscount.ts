@@ -30,3 +30,8 @@ export class CreateDiscountRequest {
     public accountUniqueName: string;
     public discountUniqueName?: string;
 }
+
+export interface IDiscountUtilRequest {
+    discountsList: Array<any>;
+    discountAccountsDetails: Array<LedgerDiscountClass>;
+}

@@ -2173,7 +2173,7 @@
                                         </div>
                                         <p
                                             *ngIf="
-                                                transaction.variant &&
+                                                transaction.variant?.name &&
                                                 ((stockVariants | async)[entryIdx] | async)?.length > 1
                                             "
                                             class="variant"
@@ -2587,7 +2587,6 @@
                                         >
                                             <div *ngIf="variants?.length > 1" class="variant-name">
                                                 <!-- <select-field
-                                                    [disabled]="isReadOnly"
                                                     [cssClass]="'form-control mat-field-border'"
                                                     [placeholder]="localeData?.select_variant"
                                                     (selectedOption)="variantChanged($event, transaction, entry)"
@@ -2598,8 +2597,6 @@
                                                 >
                                                 </select-field> -->
                                                 <sh-select
-                                                    [disabled]="isReadOnly"
-                                                    [class.disabled-ledger]="isReadOnly"
                                                     [placeholder]="localeData?.select_variant"
                                                     [options]="variants"
                                                     (selected)="variantChanged($event, transaction, entry)"
@@ -3813,7 +3810,7 @@
                                                 </div>
                                                 <p
                                                     *ngIf="
-                                                        transaction.variant &&
+                                                        transaction.variant?.name &&
                                                         ((stockVariants | async)[entryIdx] | async)?.length > 1
                                                     "
                                                     class="variant"
