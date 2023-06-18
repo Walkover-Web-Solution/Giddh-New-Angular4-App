@@ -380,6 +380,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     /** Stores the stock variants */
     public stockVariants: BehaviorSubject<Array<Observable<Array<IOption>>>> = new BehaviorSubject([]);
 
+    /** True, if bulk items are added to the voucher list, required to prevent repetitive stock variants processing
+     * when bulk entries are added
+     */
+    private isBulkEntryInProgress: boolean;
     /** Stores the current transaction request obj for the API */
     private currentTxnRequestObject: Array<any> = [];
     /** Stores the index of current stock variants being loaded */
@@ -644,7 +648,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         });
 
         this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res?.length) {
+            if (res?.length && !this.isBulkEntryInProgress) {
                 const currentlyLoadedVariantRequest = this.currentTxnRequestObject[this.currentlyLoadedStockVariantIndex ?? this.activeIndex];
                 const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params.variantUniqueName;
                 let stockAllVariants;
@@ -1372,6 +1376,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 };
             }
             if (isBulkItem) {
+                const allStockVariants = this.stockVariants.getValue();
+                allStockVariants.push(observableOf(selectedAcc.variants));
+                this.stockVariants.next(allStockVariants);
                 txn = this.calculateItemValues(selectedAcc, txn, entry, false, true);
             } else {
                 this.currentTxnRequestObject[this.activeIndex] = {
@@ -1659,6 +1666,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         // Calculate discount
+        entry.discounts = entry.discounts?.length ? entry.discounts : this.generalService.getDiscountValues({
+            discountAccountsDetails: entry.discounts ?? [],
+            discountsList: this.discountsList
+        });
         let percentageDiscountTotal = entry.discounts?.filter(discount => discount.isActive)
             ?.filter(activeDiscount => activeDiscount.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
@@ -1675,6 +1686,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         let taxPercentage: number = 0;
         let cessPercentage: number = 0;
         let taxTotal: number = 0;
+        entry.taxes = entry.taxes?.length ? entry.taxes : this.generalService.getTaxValues({
+            taxRenderData: entry.taxes ?? [],
+            date: this.purchaseOrder.voucherDetails.voucherDate,
+            applicableTaxes: transaction.applicableTaxes,
+            taxes: this.companyTaxesList,
+            exceptTaxTypes: this.exceptTaxTypes,
+        });
         entry.taxes?.filter(tax => tax.isChecked).forEach(selectedTax => {
             if (selectedTax.type === 'gstcess') {
                 cessPercentage += selectedTax.amount;
@@ -2371,6 +2389,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public addBulkStockItems(items: SalesAddBulkStockItems[]): void {
         const startIndex = this.purchaseOrder.entries?.length;
         let isBlankItemPresent;
+        this.isBulkEntryInProgress = true;
         this.ngZone.runOutsideAngular(() => {
             for (const item of items) {
                 // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
@@ -2402,6 +2421,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
                 this.onSelectSalesAccount(item, this.purchaseOrder.entries[lastIndex].transactions[0], this.purchaseOrder.entries[lastIndex], true, lastIndex);
             }
+            this.isBulkEntryInProgress = false;
         });
         this.buildBulkData(this.purchaseOrder.entries?.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
     }
@@ -3440,6 +3460,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
             transaction.stockDetails = _.omit(additional.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
+            if (isBulkItem) {
+                transaction.variant = selectedAcc.variant;
+            }
         } else {
             transaction.isStockTxn = false;
             transaction.stockUnit = null;

@@ -1187,7 +1187,9 @@
                                 >
                             </div>
                             <p
-                                *ngIf="transaction.variant && ((stockVariants | async)[entryIdx] | async)?.length > 1"
+                                *ngIf="
+                                    transaction.variant?.name && ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                "
                                 class="variant"
                             >
                                 {{ localeData?.variant + ": " + transaction.variant?.name }}
@@ -2295,7 +2297,7 @@
                                     </div>
                                     <p
                                         *ngIf="
-                                            transaction.variant &&
+                                            transaction.variant?.name &&
                                             ((stockVariants | async)[entryIdx] | async)?.length > 1
                                         "
                                         class="variant"

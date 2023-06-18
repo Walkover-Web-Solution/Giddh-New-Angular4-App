@@ -5,12 +5,16 @@ import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../them
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
-import { cloneDeep, find } from '../lodash-optimized';
+import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
 import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
+import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
+import * as dayjs from 'dayjs';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 
 @Injectable()
 export class GeneralService {
@@ -1262,5 +1266,117 @@ export class GeneralService {
         url = url.replace("https://", "");
         url = url.replace("http://", "");
         return url;
+    }
+
+    /**
+     * Returns the formatted tax list based on the taxes applied
+     * on any account, it is required when tax component is not rendered
+     * in the UI. Currently, the tax component calculates the formatted tax
+     * list and then provides the same to the parent component. With this
+     * implementation, we no longer need to rely on tax component.
+     *
+     * @param {ITaxUtilRequest} requestObj Request object for formatting
+     * @return {Array<ITaxControlData>} Formatted list of taxes
+     * @memberof GeneralService
+     */
+    public getTaxValues(requestObj: ITaxUtilRequest): Array<ITaxControlData> {
+        let {
+            customTaxTypesForTaxFilter,
+            taxes,
+            exceptTaxTypes,
+            taxRenderData,
+            applicableTaxes,
+            date
+        } = requestObj;
+        if (customTaxTypesForTaxFilter && customTaxTypesForTaxFilter.length) {
+            taxes = taxes?.filter(f => customTaxTypesForTaxFilter.includes(f.taxType));
+        }
+        if (exceptTaxTypes && exceptTaxTypes.length) {
+            taxes = taxes?.filter(f => !exceptTaxTypes.includes(f.taxType));
+        }
+        taxes.map(tax => {
+            let index = taxRenderData?.findIndex(f => f?.uniqueName === tax?.uniqueName);
+            // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
+            if (index > -1) {
+                taxRenderData[index].isChecked =
+                    applicableTaxes && applicableTaxes.length ? applicableTaxes.some(item => item === tax?.uniqueName) :
+                        taxRenderData[index].isChecked ? taxRenderData[index].isChecked : false;
+                if (date && tax.taxDetail && tax.taxDetail.length) {
+                    taxRenderData[index].amount =
+                        (dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(dayjs(date, GIDDH_DATE_FORMAT)) || dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < dayjs(date, GIDDH_DATE_FORMAT)) ?
+                            tax.taxDetail[0].taxValue : 0;
+                }
+            } else {
+                let taxObj = new ITaxControlData();
+                taxObj.name = tax.name;
+                taxObj.uniqueName = tax?.uniqueName;
+                taxObj.type = tax.taxType;
+
+                if (date) {
+                    date = (typeof date === "object") ? dayjs(date).format(GIDDH_DATE_FORMAT) : date;
+                    let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
+                        return dayjs(p.date, GIDDH_DATE_FORMAT);
+                    }, 'desc');
+                    let exactDate = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT).isSame(dayjs(date, GIDDH_DATE_FORMAT)));
+                    if (exactDate?.length > 0) {
+                        taxObj.amount = exactDate[0].taxValue;
+                    } else {
+                        let filteredTaxObject = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT) < dayjs(date, GIDDH_DATE_FORMAT));
+                        if (filteredTaxObject?.length > 0) {
+                            taxObj.amount = filteredTaxObject[0].taxValue;
+                        } else {
+                            taxObj.amount = 0;
+                        }
+                    }
+                } else {
+                    taxObj.amount = tax.taxDetail[0].taxValue;
+                }
+                taxObj.isChecked = applicableTaxes && applicableTaxes.length ? applicableTaxes.some(s => s === tax?.uniqueName) : false;
+
+                taxObj.isDisabled = false;
+                taxRenderData.push(taxObj);
+            }
+        });
+        if (taxRenderData?.length) {
+            taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
+        }
+        return taxRenderData;
+    }
+
+    /**
+     * Returns the formatted discount list based on the discountes applied
+     * on any account, it is required when discount component is not rendered
+     * in the UI. Currently, the discount component calculates the formatted discount
+     * list and then provides the same to the parent component. With this
+     * implementation, we no longer need to rely on discount component.
+     *
+     * @param {IDiscountUtilRequest} requestObj Request object for formatting
+     * @return {Array<LedgerDiscountClass>} Formatted list of discounts
+     * @memberof GeneralService
+     */
+    public getDiscountValues(requestObj: IDiscountUtilRequest): Array<LedgerDiscountClass> {
+        let {
+            discountsList,
+            discountAccountsDetails
+        } = requestObj;
+        discountsList.forEach(acc => {
+            if (discountAccountsDetails) {
+                let hasItem = discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
+                if (!hasItem) {
+                    let obj: LedgerDiscountClass = new LedgerDiscountClass();
+                    obj.amount = acc.discountValue;
+                    obj.discountValue = acc.discountValue;
+                    obj.discountType = acc.discountType;
+                    obj.isActive = false;
+                    obj.particular = acc.linkAccount?.uniqueName;
+                    obj.discountUniqueName = acc?.uniqueName;
+                    obj.name = acc.name;
+                    discountAccountsDetails.push(obj);
+                }
+            } else {
+                discountAccountsDetails = [];
+            }
+        });
+        return discountAccountsDetails;
     }
 }
