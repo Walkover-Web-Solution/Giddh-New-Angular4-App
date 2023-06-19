@@ -44,39 +44,6 @@
                                 <dropdown-field
                                     class="max-width-230"
                                     [cssClass]="'form-control'"
-                                    [name]="'stock'"
-                                    [placeholder]="commonLocaleData?.app_select_stock"
-                                    [options]="stockList"
-                                    (selectedOption)="
-                                        selectedStockName = $event.label;
-                                        manufacturingSearchRequest.product = $event.value;
-                                        getVariants()
-                                    "
-                                    [defaultValue]="selectedStockName"
-                                >
-                                </dropdown-field>
-                            </div>
-
-                            <div class="list-header">
-                                <dropdown-field
-                                    class="max-width-230"
-                                    [cssClass]="'form-control'"
-                                    [name]="'variant'"
-                                    [placeholder]="commonLocaleData?.app_select_variant"
-                                    [options]="variantList"
-                                    (selectedOption)="
-                                        selectedVariantName = $event.label;
-                                        manufacturingSearchRequest.productVariant = $event.value
-                                    "
-                                    [defaultValue]="selectedVariantName"
-                                >
-                                </dropdown-field>
-                            </div>
-
-                            <div class="list-header">
-                                <dropdown-field
-                                    class="max-width-230"
-                                    [cssClass]="'form-control'"
                                     [name]="'warehouse'"
                                     [placeholder]="commonLocaleData?.app_select_warehouse"
                                     [options]="warehouses"
@@ -265,6 +232,45 @@
                                     "
                                 >
                                 </dropdown-field>
+                            </div>
+                        </div>
+                        <div class="row mr-b15">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="list-header">
+                                    <dropdown-field
+                                        class="max-width-230"
+                                        [cssClass]="'form-control'"
+                                        [name]="'stock'"
+                                        [placeholder]="commonLocaleData?.app_select_stock"
+                                        [options]="stockList"
+                                        (selectedOption)="
+                                            selectedStockName = $event.label;
+                                            manufacturingSearchRequest.product = $event.value;
+                                            getVariants()
+                                        "
+                                        [defaultValue]="selectedStockName"
+                                    >
+                                    </dropdown-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mr-b15">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="list-header">
+                                    <dropdown-field
+                                        class="max-width-230"
+                                        [cssClass]="'form-control'"
+                                        [name]="'variant'"
+                                        [placeholder]="commonLocaleData?.app_select_variant"
+                                        [options]="variantList"
+                                        (selectedOption)="
+                                            selectedVariantName = $event.label;
+                                            manufacturingSearchRequest.productVariant = $event.value
+                                        "
+                                        [defaultValue]="selectedVariantName"
+                                    >
+                                    </dropdown-field>
+                                </div>
                             </div>
                         </div>
                         <div class="row mr-b15">

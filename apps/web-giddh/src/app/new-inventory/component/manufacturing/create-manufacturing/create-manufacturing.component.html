@@ -117,14 +117,15 @@
                                     </div>
 
                                     <div>
-                                        <small class="float-right pt-1">{{
-                                            manufacturingObject.manufacturingDetails[0].manufacturingUnitCode
-                                        }}</small>
                                         <input-field
-                                            [cssClass]="errorFields.finishedQuantity ? ' required-field-error' : ''"
-                                            [type]="'number'"
+                                            [cssClass]="
+                                                errorFields.finishedQuantity
+                                                    ? ' required-field-error'
+                                                    : '' + 'text-right'
+                                            "
+                                            [type]="'text'"
                                             [name]="'manufacturingQuantity'"
-                                            [placeholder]="commonLocaleData?.app_quantity"
+                                            [placeholder]="commonLocaleData?.app_output_quantity"
                                             [(ngModel)]="
                                                 manufacturingObject.manufacturingDetails[0].manufacturingQuantity
                                             "
@@ -134,9 +135,14 @@
                                                 calculateTotals()
                                             "
                                             [readonly]="isCompany"
+                                            [suffix]="
+                                                ' ' + manufacturingObject.manufacturingDetails[0].manufacturingUnitCode
+                                            "
+                                            [useMask]="true"
+                                            [mask]="'ind_comma_separated'"
                                         >
                                         </input-field>
-                                        <small class="float-right"
+                                        <small
                                             >{{ localeData?.multiple_of }}
                                             <span>{{
                                                 manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf
