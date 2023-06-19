@@ -36,6 +36,7 @@ export class MaskService extends MaskApplierService {
         cb: Function = () => {
         }
     ): string {
+        console.log(maskExpression);
         if (!maskExpression) {
             return inputValue;
         }

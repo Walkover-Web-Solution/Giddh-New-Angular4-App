@@ -282,6 +282,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     public addEventListenerWrapper(fun: Function, event: string, options?: any) {
         document?.addEventListener(event, fun.bind(this), options || {});
     }
+    
     /**
      *This will use for remove listner for wrapper
      *
@@ -297,12 +298,14 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /**
      * Adds dropdown-position class on cdk-overlay for position issue
      *
-     * @memberof SelectFieldComponent
+     * @memberof DropdownFieldComponent
      */
     public addClassForDropdown(): void {
         setTimeout(() => {
             if (document.querySelectorAll(".cdk-overlay-pane")?.length) {
-                document.querySelectorAll(".cdk-overlay-pane")[0].classList.add("dropdown-position");
+                document.querySelectorAll(".cdk-overlay-pane")?.forEach(element => {
+                    element.classList.add("dropdown-position");
+                });
             }
         }, 10);
     }
