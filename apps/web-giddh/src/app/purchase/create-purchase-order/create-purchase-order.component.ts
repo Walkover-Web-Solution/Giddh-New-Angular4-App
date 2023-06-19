@@ -635,7 +635,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         });
 
         // listen for newly added stock and assign value
-        combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+        combineLatest([this.newlyCreatedStockAc$, this.salesAccounts$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             let stock = resp[0];
             let acData = resp[1];
             if (stock && acData) {
@@ -650,6 +650,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.length && !this.isBulkEntryInProgress) {
                 const currentlyLoadedVariantRequest = this.currentTxnRequestObject[this.currentlyLoadedStockVariantIndex ?? this.activeIndex];
+                if (!currentlyLoadedVariantRequest) {
+                    // Deletion case, item was deleted and no current entry is active
+                    return;
+                }
                 const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params.variantUniqueName;
                 let stockAllVariants;
                 res[this.currentlyLoadedStockVariantIndex ?? this.activeIndex].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
@@ -3358,7 +3362,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     private calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true, isBulkItem?: boolean): SalesTransactionItemClass {
         let additional = _.cloneDeep(selectedAcc.additional);
         const variant = additional.stock?.variant;
-        const isInclusiveEntry = variant?.purchaseTaxInclusive || variant?.salesTaxInclusive || variant?.fixedAssetTaxInclusive;
+        const isInclusiveEntry = variant?.purchaseTaxInclusive && additional.category === 'expenses' ||
+            variant?.salesTaxInclusive && additional.category === 'income' ||
+            variant?.fixedAssetTaxInclusive && additional.category === 'fixedassets';
         transaction.taxInclusive = isInclusiveEntry;
         transaction.quantity = additional.quantity ? additional.quantity : (additional.stock) ? 1 : null;
         transaction.applicableTaxes = [];
@@ -3973,6 +3979,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     hsnNumber: (data.body.stock) ? data.body.stock.hsnNumber : "",
                     sacNumber: (data.body.stock) ? data.body.sacNumber : "",
                     uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
+                    category: data.body.category
                 };
                 txn = this.calculateItemValues(selectedAcc, txn, entry);
                 this.focusOnDescription();

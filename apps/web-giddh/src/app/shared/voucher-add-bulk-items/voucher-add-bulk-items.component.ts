@@ -229,6 +229,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                     nameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent.name).join(', ') : '',
                     stock: data.body.stock,
                     uNameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
+                    category: data.body.category
                 };
                 const unitRates = data.body?.stock?.variant?.unitRates ?? [];
                 item.rate = unitRates[0]?.rate ?? 0;
