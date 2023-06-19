@@ -2542,7 +2542,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     nameStr: data.body.parentGroups.join(', '),
                     stock: data.body.stock,
                     uNameStr: data.body.parentGroups.join(', '),
-                    categroy: data.body.category
+                    category: data.body.category
                 };
                 if (txn.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
