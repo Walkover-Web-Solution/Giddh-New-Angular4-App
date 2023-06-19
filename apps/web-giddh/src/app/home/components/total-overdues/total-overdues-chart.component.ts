@@ -365,6 +365,18 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
                     legend: {
                       display: false
                     },
+                    tooltip: {
+                        
+                        backgroundColor: 'rgba(255, 255, 255,0.8)',
+                        borderColor: 'rgb(37, 202, 200)',
+                        bodyColor: 'rgb(0, 0, 0)',
+                        titleColor: 'rgb(0, 0, 0)',
+                        borderWidth: 0.5,
+                        titleFont: {
+                            weight: 'normal'
+                        },
+                        displayColors: false
+                    }
                 },
                 
                 responsive: true,

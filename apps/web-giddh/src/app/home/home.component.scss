@@ -94,6 +94,9 @@ a.dropdown-item:hover {
 .dashboard-line-chart-container {
     height: 300px;
 }
+.hide-chart {
+    display: none !important;
+}
 @media (max-width: 1500px) {
     .dashboard-container {
         margin-bottom: 40px;

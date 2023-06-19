@@ -14,12 +14,14 @@ import { DashboardService } from '../../../services/dashboard.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { Chart, registerables } from 'chart.js';
+import { TitleCasePipe } from '@angular/common';
 Chart.register(...registerables);
 
 @Component({
     selector: 'revenue-chart',
     templateUrl: 'revenue-chart.component.html',
     styleUrls: ['revenue-chart.component.scss', '../../home.component.scss'],
+    providers: [TitleCasePipe],
     encapsulation: ViewEncapsulation.None
 })
 export class RevenueChartComponent implements OnInit, OnDestroy {
@@ -61,8 +63,16 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public giddhBalanceDecimalPlaces: number = 2;
     /** Hold Chart and used when destroy required */
     public chart:any;
+    /* Store Current Dates for bar chart*/
+    public currentDateLabel:any[] = [];
+    /* Store Current closingbalance amount for bar chart*/
+    public currentAmountLabel:any[] = [];
+    /* Store Previous Dates for bar chart*/
+    public previousDateLabel:any[] = [];
+    /* Store Previous closingbalance amount for bar chart*/
+    public previousAmountLabel:any[] = [];
 
-    constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService) {
+    constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService,private titlecasePipe:TitleCasePipe) {
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
         this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(dayjs(this.getCurrentWeekStartEndDate[0]).subtract(1, 'day'));
 
@@ -125,6 +135,10 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.dashboardService.GetRevenueGraphData(revenueGraphDataRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.currentData = [];
             this.previousData = [];
+            this.currentDateLabel = [];
+            this.currentAmountLabel= [];
+            this.previousDateLabel = [];
+            this.previousAmountLabel = [];
             this.summaryData.totalCurrent = 0;
             this.summaryData.totalLast = 0;
             this.summaryData.highest = 0;
@@ -137,18 +151,28 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                     Object.keys(res.balances).forEach(key => {
                         if (res.balances[key].current) {
                             this.currentData.push({
-                                x: x,
-                                y: giddhRoundOff(res.balances[key].current.closingBalance.amount, this.giddhBalanceDecimalPlaces),
-                                tooltip: res.balances[key].current.dateLabel + "<br />" + this.graphParams?.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].current.closingBalance.amount)
+                                dateLabel: res.balances[key].current.dateLabel,
+                                AmountLabel: giddhRoundOff(res.balances[key].current.closingBalance.amount, this.giddhBalanceDecimalPlaces),
+                                uniqueName: this.graphParams?.uniqueName,                                
+                                // x: x,
+                                // y: giddhRoundOff(res.balances[key].current.closingBalance.amount, this.giddhBalanceDecimalPlaces),
+                                // tooltip: res.balances[key].current.dateLabel + "<br />" + this.graphParams?.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].current.closingBalance.amount)
                             });
+                            this.currentDateLabel.push(res.balances[key].current.dateLabel);
+                            this.currentAmountLabel.push(giddhRoundOff(res.balances[key].current.closingBalance.amount, this.giddhBalanceDecimalPlaces));                            
                         }
 
                         if (res.balances[key].previous) {
                             this.previousData.push({
-                                x: x,
-                                y: giddhRoundOff(res.balances[key].previous.closingBalance.amount, this.giddhBalanceDecimalPlaces),
-                                tooltip: res.balances[key].previous.dateLabel + "<br />" + this.graphParams?.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].previous.closingBalance.amount)
+                                dateLabel: res.balances[key].previous.dateLabel,
+                                AmountLabel: giddhRoundOff(res.balances[key].previous.closingBalance.amount, this.giddhBalanceDecimalPlaces),
+                                uniqueName: this.graphParams?.uniqueName,
+                                // x: x,
+                                // y: giddhRoundOff(res.balances[key].previous.closingBalance.amount, this.giddhBalanceDecimalPlaces),
+                                // tooltip: res.balances[key].previous.dateLabel + "<br />" + this.graphParams?.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].previous.closingBalance.amount)
                             });
+                            this.previousDateLabel.push(res.balances[key].previous.dateLabel);
+                            this.previousAmountLabel.push(giddhRoundOff(res.balances[key].previous.closingBalance.amount, this.giddhBalanceDecimalPlaces));
                         }
 
                         x++;
@@ -358,7 +382,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     //     }
     // }
     public setCurrentDate() {        
-        if( (this.currentDateRangePickerValue[0] !== null) && (this.currentDateRangePickerValue[1] !== null) ){
+        if( (this.currentDateRangePickerValue[0] !== null) && (this.currentDateRangePickerValue[1] !== null) ){            
             this.graphParams.currentFrom = dayjs(this.currentDateRangePickerValue[0]).format(GIDDH_DATE_FORMAT);
             this.graphParams.currentTo = dayjs(this.currentDateRangePickerValue[1]).format(GIDDH_DATE_FORMAT);
             this.getCurrentWeekStartEndDate = [this.currentDateRangePickerValue[0], this.currentDateRangePickerValue[1]];
@@ -389,22 +413,34 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
     createChart() {
 
-        const chartType = this.chartType;
+        const chartType = this.chartType;   
+        let chart = this.titlecasePipe.transform(this.graphParams?.uniqueName);    
+        let currentLabel = this.currentDateLabel.sort();
+        let currentData = this.currentAmountLabel; 
+        let previousLabel = this.previousDateLabel.sort();
+        let previousData = this.previousAmountLabel;
 
        /* For Chart Type Line  */
         if(this.chartType === 'line'){
             this.chart = new Chart( "revenueChartLargeCanvas", {
                 type: chartType,          
                 data: {
-                    labels: ['Jun', 'Jul', 'Aug'],
+                    labels: currentLabel,
                     datasets: [
                         {
                             label: '',
-                            data: [65, 59, 80],
+                            data: previousData,
                             fill: false,
-                            borderColor: 'rgb(75, 192, 192)',
+                            borderColor: 'rgb(12, 177, 175)',
                             tension: 0.1
-                    }
+                        },
+                        {
+                            label: '',
+                            data: currentData,
+                            fill: false,
+                            borderColor: 'rgb(8, 126, 125)',
+                            tension: 0.1
+                        }
                     ], 
                             
                    },
@@ -414,25 +450,72 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                         legend: {
                             display: false
                         },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = chart + ' ' +context.dataset.label || '';
+            
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            },
+                            backgroundColor: 'rgba(255,255,255,0.8)',
+                            borderColor: 'rgb(12, 177, 175)',
+                            bodyColor: 'rgb(0, 0, 0)',
+                            titleColor: 'rgb(0, 0, 0)',
+                            borderWidth: 0.5,
+                            titleFont: {
+                                weight: 'normal'
+                            },
+                            displayColors: false
+                        }
                     },
                     scales: {
                         x: {
                             border: {
                                 display: false
                             },
+                            display: false,
                             grid: {
                                 display: true,
                                 drawOnChartArea: false,
-                                drawTicks: true,                                 
-                            },
-                            beginAtZero: true
-                            },
-                            y: {
-                            border: {
-                                display: false
+                                drawTicks: true,
                             },
                             beginAtZero: true,
-                        }
+                            },
+                        y: {
+                            border: {
+                            display: true
+                            },
+                            ticks: {
+                                stepSize: 100000,
+                                callback: function(value) {
+                                   var ranges = [
+                                      { divider: 1e6, suffix: 'M' },
+                                      { divider: 1e3, suffix: 'k' }
+                                   ];
+                                   function formatNumber(n) {
+                                        n = Math.floor(n);
+                                        console.log("n ",n);
+                                    
+                                        for (let i = 0; i < ranges.length; i++) {
+                                           if (n >= ranges[i].divider) {
+                                              return (n / ranges[i].divider).toString() + ranges[i].suffix;
+                                           }
+                                        }
+                                        return n;
+                                    
+                                   }
+                                   return formatNumber(value);
+                                }
+                            },
+                        beginAtZero: true
+                    }
                     },
                     responsive: true,
                     maintainAspectRatio: false,
@@ -451,11 +534,11 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
             this.chart = new Chart( "revenueChartCanvas", {
                 type: chartType,          
                 data: {
-                    labels: ['Jun', 'Jul', 'Aug'],
+                    labels: currentLabel,
                     datasets: [
                     {
                         label: '',
-                        data: [65, 59, 80, 81, 56, 55, 40],
+                        data: currentData,
                         backgroundColor: "rgb(12, 177, 175)",
                         borderColor: 'rgb(12, 177, 175)',
                         indexAxis:'x',
@@ -470,33 +553,72 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                         legend: {
                             display: false
                         },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = chart+ ' ' +context.dataset.label || '';
+            
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            },
+                            backgroundColor: 'rgba(255,255,255,0.8)',
+                            borderColor: 'rgb(12, 177, 175)',
+                            bodyColor: 'rgb(0, 0, 0)',
+                            titleColor: 'rgb(0, 0, 0)',
+                            borderWidth: 0.5,
+                            titleFont: {
+                                weight: 'normal'
+                            },
+                            displayColors: false
+                        }
                     },
                     scales: {
                         x: {
                             border: {
                                 display: false
                             },
+                            display: false,
                             grid: {
                                 display: true,
                                 drawOnChartArea: false,
                                 drawTicks: true,
                             },
-                            },
-                            y: {
-                            border: {
-                                display: false
-                            },
                             beginAtZero: true
-                        }
+                            },
+                        y: {
+                            border: {
+                            display: true
+                        },
+                        ticks: {
+                            stepSize: 100000,
+                            callback: function(value) {
+                               var ranges = [
+                                  { divider: 1e6, suffix: 'M' },
+                                  { divider: 1e3, suffix: 'k' }
+                               ];
+                               function formatNumber(n) {
+                                  for (var i = 0; i < ranges.length; i++) {
+                                     if (n >= ranges[i].divider) {
+                                        return (n / ranges[i].divider).toString() + ranges[i].suffix;
+                                     }
+                                  }
+                                  return n;
+                               }
+                               return formatNumber(value);
+                            }
+                        },  
+                        beginAtZero: false
+                    }
                     },
                     responsive: true,
                     maintainAspectRatio: false,
-                    elements: {
-                        bar:{
-                            backgroundColor: "blue",
-                            borderColor: 'blue'
-                        }
-                    }
+                  
                 } 
                 });
         }
