@@ -11,7 +11,7 @@
                 <div class="row">
                     <div class="form-fields w-100">
                         <div class="d-inline-flex flex-wrap align-items-end">
-                            <div class="col date-alignment">
+                            <div class="col">
                                 <giddh-datepicker
                                     name="date"
                                     [cssClass]="'w-100' + (errorFields.date ? ' required-field-error' : '')"
@@ -23,7 +23,7 @@
                                 >
                                 </giddh-datepicker>
                             </div>
-                            <div class="col warehouse-align" *ngIf="warehouses?.length > 1">
+                            <div class="col" *ngIf="warehouses?.length > 1">
                                 <dropdown-field
                                     [name]="'warehouseUniqueName'"
                                     [placeholder]="commonLocaleData?.app_select_warehouse"
