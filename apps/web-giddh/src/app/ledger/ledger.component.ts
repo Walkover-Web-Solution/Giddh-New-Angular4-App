@@ -2637,8 +2637,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     stock: data.body.stock,
                     uNameStr: event.additional.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName).join(', '),
                     accountApplicableDiscounts: data.body.applicableDiscounts,
-                    parentGroups: event.additional.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups
-                    // added due to parentGroups is getting null in search API
+                    parentGroups: event.additional.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
                 };
                 if (txn.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));

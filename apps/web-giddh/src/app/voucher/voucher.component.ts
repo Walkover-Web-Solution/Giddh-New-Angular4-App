@@ -1737,6 +1737,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.length && !this.isBulkEntryInProgress) {
                 const currentlyLoadedVariantRequest = this.currentTxnRequestObject[this.currentlyLoadedStockVariantIndex ?? this.activeIndx];
+                if (!currentlyLoadedVariantRequest) {
+                    // Deletion case, item was deleted and no current entry is active
+                    return;
+                }
                 const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params.variantUniqueName;
                 let stockAllVariants;
                 res[this.currentlyLoadedStockVariantIndex ?? this.activeIndx].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
@@ -3471,7 +3475,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true, isBulkItem?: boolean): SalesTransactionItemClass {
         let o = cloneDeep(selectedAcc.additional);
         const variant = o.stock?.variant;
-        const isInclusiveEntry = variant?.purchaseTaxInclusive || variant?.salesTaxInclusive || variant?.fixedAssetTaxInclusive;
+        const isInclusiveEntry = (variant?.purchaseTaxInclusive && o.category === 'expenses') ||
+            (variant?.salesTaxInclusive && o.category === 'income') ||
+            (variant?.fixedAssetTaxInclusive && o.category === 'fixedassets');
         transaction.taxInclusive = isInclusiveEntry;
         // check if we have quantity in additional object. it's for only bulk add mode
         transaction.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
@@ -3834,6 +3840,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
+        const stockVariants = this.stockVariants.getValue();
+        stockVariants.splice(entryIdx, 1);
+        this.stockVariants.next(stockVariants);
     }
 
     public taxAmountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
@@ -4935,6 +4944,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 newTrxObj.isStockTxn = trx.isStockTxn;
                 newTrxObj.applicableTaxes = entry.taxList;
                 newTrxObj.variant = trx.variant;
+                newTrxObj.taxInclusive = trx.taxInclusive;
 
                 // check if stock details is available then assign uniquename as we have done while creating option
                 if (trx.isStockTxn) {
@@ -5306,6 +5316,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     salesTransactionItemClass.stockUnitCode = t.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName;
                     salesTransactionItemClass.variant = t.stock?.variant;
+                    salesTransactionItemClass.taxInclusive = t?.stock.taxInclusive;
                 }
 
                 if (this.isPurchaseInvoice && entry.purchaseOrderLinkSummaries && entry.purchaseOrderLinkSummaries.length > 0) {
@@ -8599,6 +8610,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     hsnNumber: selectedAcc.stock?.hsnNumber ? selectedAcc.stock.hsnNumber : data.body.hsnNumber,
                     sacNumber: selectedAcc.stock?.sacNumber ? selectedAcc.stock.sacNumber : data.body.sacNumber,
                     uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : data.body.parentGroups.join(', '),
+                    category: data.body.category
                 };
                 txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem);
 

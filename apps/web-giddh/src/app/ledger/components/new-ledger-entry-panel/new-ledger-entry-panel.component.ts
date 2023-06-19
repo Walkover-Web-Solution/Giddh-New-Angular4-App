@@ -427,9 +427,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.generateInvoice = cloneDeep(this.manualGenerateVoucherChecked);
         this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.length) {
-                this.selectedStockVariant = Object.assign({}, res[0]);
+                /* Check if the currently selected variant is already present in the variants loaded, done
+                    as the variant was reseting to the default variant when the user clicks outside and again
+                    opens the new ledger.
+                */
+                const currentSelectedVariant = res.find(variant => variant.value === this.currentTxn?.inventory?.variant?.uniqueName);
+                this.selectedStockVariant = Object.assign({}, currentSelectedVariant ?? res[0]);
                 this.cdRef.detectChanges();
-                this.stockVariantSelected.emit(res[0].value);
+                this.stockVariantSelected.emit(currentSelectedVariant?.value ?? res[0].value);
             }
         });
     }
@@ -677,13 +682,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /**
      * Price field change handler
      *
-     * @param {string} val Changed value
+     * @param {string} stockRate Stock rate
      * @param {boolean} [isUnitChanged] True, if this handler is triggerred through change of unit field
      * @memberof NewLedgerEntryPanelComponent
      */
-    public changePrice(val?: string, isUnitChanged?: boolean) {
+    public changePrice(stockRate?: string, isUnitChanged?: boolean) {
         if (!this.isExchangeRateSwapped && !this.isInclusiveEntry) {
-            this.currentTxn.inventory.unit.rate = giddhRoundOff((val ? Number(val) : this.currentTxn.inventory.unit.rate) / this.blankLedger?.exchangeRate, this.ratePrecision);
+            this.currentTxn.inventory.unit.rate = giddhRoundOff((stockRate ? (Number(stockRate) / this.blankLedger?.exchangeRate) : this.currentTxn.inventory.unit.rate), this.ratePrecision);
             this.currentTxn.inventory.unit.highPrecisionRate = this.currentTxn.inventory.unit.rate;
             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
             this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
@@ -702,7 +707,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.calculateTotal();
         } else if (this.isInclusiveEntry && isUnitChanged) {
             // In case of inclusive entry, calculate the total and other fields only when unit has changed
-            this.currentTxn.total = giddhRoundOff((this.currentTxn.inventory.quantity * this.currentTxn.inventory.unit.rate), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.total = giddhRoundOff((this.currentTxn.inventory.quantity * (Number(stockRate) ?? this.currentTxn.inventory.unit.rate)), this.giddhBalanceDecimalPlaces);
             this.calculateAmount();
         }
     }
@@ -914,7 +919,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 // If the unit rate of inclusive tax stock is changed then again calculate the amount inclusively
                 this.isInclusiveEntry = variant.purchaseTaxInclusive || variant.salesTaxInclusive || variant.fixedAssetTaxInclusive;
             }
-            this.changePrice(this.currentTxn?.inventory?.unit?.rate?.toString(), true);
+            this.changePrice((this.currentTxn?.inventory?.unit?.rate / this.blankLedger?.exchangeRate)?.toString(), true);
             this.isInclusiveEntry = false;
         }
     }
@@ -1340,7 +1345,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (this.currentTxn.inventory && this.currentTxn.inventory.unit && this.currentTxn.unitRate) {
             const stock = this.currentTxn.unitRate.find(rate => {
-                return rate.stockUnitUniqueName === this.currentTxn.inventory.unit.stockUnitUniqueName;
+                const unitUniqueName = this.currentTxn.inventory.unit.stockUnitUniqueName ||
+                    this.currentTxn?.inventory?.unit?.uniqueName;
+                return rate.stockUnitUniqueName === unitUniqueName;
             });
             const stockRate = stock ? stock.rate : 0;
             // this.currentTxn.inventory.rate = Number((stockRate / this.blankLedger?.exchangeRate).toFixed(this.ratePrecision));
@@ -1950,17 +1957,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             switch (category) {
                 case 'income':
                     this.salesTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.salesTaxInclusive;
-                    this.purchaseTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.purchaseTaxInclusive;
-                    this.fixedAssetTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.fixedAssetTaxInclusive;
+                    this.purchaseTaxInclusive = false;
+                    this.fixedAssetTaxInclusive = false;
                     break;
                 case 'expenses':
-                    this.salesTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.salesTaxInclusive;
+                    this.salesTaxInclusive = false;
                     this.purchaseTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.purchaseTaxInclusive;
-                    this.fixedAssetTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.fixedAssetTaxInclusive;
+                    this.fixedAssetTaxInclusive = false;
                     break;
-                case 'assets':
-                    this.salesTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.salesTaxInclusive;
-                    this.purchaseTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.purchaseTaxInclusive;
+                case 'fixedassets':
+                    this.salesTaxInclusive = false;
+                    this.purchaseTaxInclusive = false;
                     this.fixedAssetTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.fixedAssetTaxInclusive;
                     break;
                 default:
