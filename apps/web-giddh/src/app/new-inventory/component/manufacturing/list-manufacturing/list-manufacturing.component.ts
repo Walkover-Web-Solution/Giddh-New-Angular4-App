@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
+import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
@@ -37,7 +39,7 @@ export class ListManufacturingComponent implements OnInit {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Table columns */
-    public displayedColumns: string[] = ['date', 'voucher_no', 'stock', 'finished_variant', 'qty_outwards', 'qty_outwards_unit', 'material_used', 'qty_inwards', 'qty_inwards_unit', 'warehouse'];
+    public displayedColumns: string[] = ['date', 'voucher_no', 'stock', 'finished_variant', 'qty_outwards', 'qty_outwards_unit', 'raw_stock', 'raw_variant', 'qty_inwards', 'qty_inwards_unit', 'warehouse'];
     /** Holds list of data */
     public dataSource: any = [];
     /* This will store selected date range to use in api */
@@ -108,6 +110,12 @@ export class ListManufacturingComponent implements OnInit {
     public inventoryTypeFilters: any[] = [];
     /** True if need to show clear filter button */
     public showClearButton: boolean = false;
+    /** Holds filters in store */
+    private storeFilters: any;
+    /** Hold current url */
+    private currentUrl: string = "";
+    /** True if initial load of store filters */
+    private initialLoad: boolean = false;
 
     constructor(
         private dialog: MatDialog,
@@ -119,7 +127,9 @@ export class ListManufacturingComponent implements OnInit {
         private inventoryAction: InventoryAction,
         private settingsBranchAction: SettingsBranchActions,
         private manufacturingService: ManufacturingService,
-        private ledgerService: LedgerService
+        private ledgerService: LedgerService,
+        private router: Router,
+        private commonAction: CommonActions
     ) {
 
     }
@@ -130,6 +140,7 @@ export class ListManufacturingComponent implements OnInit {
      * @memberof ListManufacturingComponent
      */
     public ngOnInit(): void {
+        this.currentUrl = this.router.url;
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.getWarehouses();
 
@@ -157,16 +168,45 @@ export class ListManufacturingComponent implements OnInit {
             }
         });
 
+        this.store.pipe(select(state => state.session?.filters), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && !this.storeFilters?.length) {
+                this.storeFilters = response;
+                if (this.storeFilters[this.currentUrl]) {
+                    this.initialLoad = true;
+                    this.manufacturingSearchRequest = this.storeFilters[this.currentUrl].manufacturingSearchRequest;
+
+                    this.selectedDateRange = { startDate: dayjs(this.manufacturingSearchRequest.from, GIDDH_DATE_FORMAT), endDate: dayjs(this.manufacturingSearchRequest.to, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = dayjs(this.manufacturingSearchRequest.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.manufacturingSearchRequest.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+
+                    this.selectedStockName = this.storeFilters[this.currentUrl].selectedStockName;
+                    this.selectedVariantName = this.storeFilters[this.currentUrl].selectedVariantName;
+                    this.selectedBranchName = this.storeFilters[this.currentUrl].selectedBranchName;
+                    this.selectedWarehouseName = this.storeFilters[this.currentUrl].selectedWarehouseName;
+                    this.selectedOperationName = this.storeFilters[this.currentUrl].selectedOperationName;
+                    this.selectedFilterByName = this.storeFilters[this.currentUrl].selectedFilterByName;
+                    this.selectedInventoryTypeName = this.storeFilters[this.currentUrl].selectedInventoryTypeName;
+
+                    this.getReport();
+                }
+            }
+        });
+
         // Refresh report data according to universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
-                this.manufacturingSearchRequest.dateRange = this.universalDate;
-                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
-                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.manufacturingSearchRequest.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.manufacturingSearchRequest.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.getReport();
+                setTimeout(() => {
+                    if (!this.initialLoad) {
+                        this.manufacturingSearchRequest.dateRange = this.universalDate;
+                        this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                        this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.manufacturingSearchRequest.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                        this.manufacturingSearchRequest.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                        this.getReport();
+                    }
+
+                    this.initialLoad = false;
+                }, 1000);
             }
         });
 
@@ -254,6 +294,14 @@ export class ListManufacturingComponent implements OnInit {
                 variants?.forEach(variant => {
                     this.variantList.push({ label: variant?.name, value: variant?.uniqueName });
                 });
+
+                if (variants?.length === 1) {
+                    this.selectedVariantName = variants[0].name;
+                    this.manufacturingSearchRequest.productVariant = variants[0].uniqueName;
+                } else {
+                    this.selectedVariantName = "";
+                    this.manufacturingSearchRequest.productVariant = "";
+                }
             }
 
             this.changeDetectionRef.detectChanges();
@@ -282,12 +330,13 @@ export class ListManufacturingComponent implements OnInit {
         this.manufacturingSearchRequest.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         this.selectedStockName = "";
         this.selectedVariantName = "";
-        this.selectedBranchName = "";
+        this.selectedBranchName = this.currentBranch.alias;
         this.selectedWarehouseName = "";
         this.selectedOperationName = "";
         this.selectedFilterByName = "";
         this.selectedInventoryTypeName = "";
         this.totalItems = 0;
+        this.handleBranchChange({ label: this.currentBranch.alias, value: this.currentBranch.uniqueName });
         this.getReport();
     }
 
@@ -300,8 +349,8 @@ export class ListManufacturingComponent implements OnInit {
         let data = cloneDeep(this.manufacturingSearchRequest);
         this.dataSource = [];
         this.isReportLoading = true;
-
         this.showHideClearFilterButton();
+        this.setFiltersInStore();
 
         this.manufacturingService.GetMfReport(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.results?.length) {
@@ -446,7 +495,7 @@ export class ListManufacturingComponent implements OnInit {
                 { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
                 { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
                 { label: this.commonLocaleData?.app_comparision_filters?.greater_than_equals, value: 'greaterThanOrEquals' },
-                { label: this.commonLocaleData?.app_comparision_filters?.greater_than_equals, value: 'lessThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.less_than_equals, value: 'lessThanOrEquals' },
                 { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' }
             ];
 
@@ -471,10 +520,25 @@ export class ListManufacturingComponent implements OnInit {
     public showHideClearFilterButton(): void {
         this.showClearButton = false;
 
-        if (this.manufacturingSearchRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.manufacturingSearchRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT) || this.manufacturingSearchRequest.product || this.manufacturingSearchRequest.productVariant || this.manufacturingSearchRequest.warehouseUniqueName || this.manufacturingSearchRequest.inventoryType || this.manufacturingSearchRequest.searchBy || this.manufacturingSearchRequest.searchOperation || this.manufacturingSearchRequest.searchValue) {
+        if ((this.universalDate && (this.manufacturingSearchRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.manufacturingSearchRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))) || this.manufacturingSearchRequest.product || this.manufacturingSearchRequest.productVariant || this.manufacturingSearchRequest.warehouseUniqueName || this.manufacturingSearchRequest.inventoryType || this.manufacturingSearchRequest.searchBy || this.manufacturingSearchRequest.searchOperation || this.manufacturingSearchRequest.searchValue) {
             this.showClearButton = true;
         }
 
         this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Sets filters in store
+     *
+     * @private
+     * @memberof ListManufacturingComponent
+     */
+    private setFiltersInStore(): void {
+        if (!this.storeFilters) {
+            this.storeFilters = [];
+        }
+
+        this.storeFilters[this.currentUrl] = { manufacturingSearchRequest: this.manufacturingSearchRequest, selectedStockName: this.selectedStockName, selectedVariantName: this.selectedVariantName, selectedBranchName: this.selectedBranchName, selectedWarehouseName: this.selectedWarehouseName, selectedOperationName: this.selectedOperationName, selectedFilterByName: this.selectedFilterByName, selectedInventoryTypeName: this.selectedInventoryTypeName };
+        this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
     }
 }

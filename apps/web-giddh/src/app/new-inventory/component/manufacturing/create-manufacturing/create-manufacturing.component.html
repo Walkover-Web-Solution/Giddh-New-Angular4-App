@@ -7,19 +7,24 @@
     <section id="create-manufacturing" class="clearfix">
         <hamburger-menu></hamburger-menu>
         <div class="manufacturing-wrapper">
-            <form autocomplete="off" novalidate #manufacturingForm="ngForm">
+            <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoadingManufacturing"></giddh-page-loader>
+            <form autocomplete="off" novalidate #manufacturingForm="ngForm" *ngIf="!isLoadingManufacturing">
                 <div class="row">
+                    <div class="col-lg-12">
+                        <div *ngIf="isCompany" class="font-16 pb-2 branch-msg">{{ localeData?.info_message }}</div>
+                    </div>
                     <div class="form-fields w-100">
                         <div class="d-inline-flex flex-wrap align-items-end">
                             <div class="col">
                                 <giddh-datepicker
                                     name="date"
-                                    [cssClass]="'w-100' + (errorFields.date ? ' required-field-error' : '')"
+                                    [cssClass]="'w-100 disable-bg' + (errorFields.date ? ' required-field-error' : '')"
                                     [showToggleIcon]="false"
                                     [(ngModel)]="manufacturingObject.manufacturingDetails[0].date"
                                     (dateSelected)="errorFields.date = false"
                                     [placeholder]="commonLocaleData?.app_date"
                                     [appearance]="'outline'"
+                                    [disabled]="isCompany"
                                 >
                                 </giddh-datepicker>
                             </div>
@@ -33,6 +38,7 @@
                                         selectedWarehouseName = $event.label
                                     "
                                     [defaultValue]="selectedWarehouseName"
+                                    [readonly]="isCompany"
                                 >
                                 </dropdown-field>
                             </div>
@@ -86,6 +92,7 @@
                                             (scrollEnd)="stockScrollEnd(manufacturingObject.manufacturingDetails[0])"
                                             [allowValueReset]="true"
                                             (onClear)="resetStocks(manufacturingObject.manufacturingDetails[0])"
+                                            [readonly]="isCompany"
                                         >
                                         </dropdown-field>
                                     </div>
@@ -104,19 +111,21 @@
                                                 getVariantRecipe()
                                             "
                                             [defaultValue]="manufacturingObject.manufacturingDetails[0].variant.name"
+                                            [readonly]="isCompany"
                                         >
                                         </dropdown-field>
                                     </div>
 
                                     <div>
-                                        <small class="float-right pt-1">{{
-                                            manufacturingObject.manufacturingDetails[0].manufacturingUnitCode
-                                        }}</small>
                                         <input-field
-                                            [cssClass]="errorFields.finishedQuantity ? ' required-field-error' : ''"
-                                            [type]="'number'"
+                                            [cssClass]="
+                                                errorFields.finishedQuantity
+                                                    ? ' text-right required-field-error'
+                                                    : ' text-right'
+                                            "
+                                            [type]="'text'"
                                             [name]="'manufacturingQuantity'"
-                                            [placeholder]="commonLocaleData?.app_quantity"
+                                            [placeholder]="commonLocaleData?.app_output_quantity"
                                             [(ngModel)]="
                                                 manufacturingObject.manufacturingDetails[0].manufacturingQuantity
                                             "
@@ -125,9 +134,17 @@
                                                 updateRawStocksQuantity();
                                                 calculateTotals()
                                             "
+                                            [readonly]="isCompany"
+                                            [suffix]="
+                                                ' ' +
+                                                (manufacturingObject.manufacturingDetails[0].manufacturingUnitCode ??
+                                                    '')
+                                            "
+                                            [useMask]="true"
+                                            [mask]="'not_separated'"
                                         >
                                         </input-field>
-                                        <small class="float-right"
+                                        <small
                                             >{{ localeData?.multiple_of }}
                                             <span>{{
                                                 manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf
@@ -135,7 +152,7 @@
                                         </small>
                                     </div>
 
-                                    <div class="d-flex generate-clear w-100">
+                                    <div class="d-flex generate-clear w-100" *ngIf="!isCompany">
                                         <button
                                             mat-raised-button
                                             color="primary"
@@ -180,7 +197,7 @@
                                             [routerLink]="['/pages/inventory/v2/manufacturing/list']"
                                             *ngIf="manufactureUniqueName"
                                         >
-                                            {{ commonLocaleData?.app_cancel }}
+                                            {{ commonLocaleData?.app_back }}
                                         </button>
                                     </div>
                                 </div>
@@ -228,6 +245,7 @@
                                                         <div>
                                                             <select-field
                                                                 [cssClass]="
+                                                                    'disable-bg ' +
                                                                     linkedStock.cssClass +
                                                                     (linkedStock.stockNameError
                                                                         ? ' required-field-error'
@@ -258,6 +276,7 @@
                                                                 (onClear)="
                                                                     resetStocks(linkedStock, selectedInventoryType)
                                                                 "
+                                                                [readonly]="isCompany"
                                                             >
                                                             </select-field>
                                                         </div>
@@ -266,6 +285,7 @@
                                                         <div>
                                                             <select-field
                                                                 [cssClass]="
+                                                                    'disable-bg ' +
                                                                     linkedStock.cssClass +
                                                                     (linkedStock.variantNameError
                                                                         ? ' required-field-error'
@@ -282,6 +302,7 @@
                                                                     getRateForStock(linkedStock, i)
                                                                 "
                                                                 [defaultValue]="linkedStock.variant.name"
+                                                                [readonly]="isCompany"
                                                             >
                                                             </select-field>
                                                         </div>
@@ -290,6 +311,7 @@
                                                         <div>
                                                             <text-field
                                                                 [cssClass]="
+                                                                    'disable-bg ' +
                                                                     linkedStock.cssClass +
                                                                     (linkedStock.quantityError
                                                                         ? ' required-field-error'
@@ -302,6 +324,7 @@
                                                                 (change)="
                                                                     validateQuantity(i); calculateRowTotal(linkedStock)
                                                                 "
+                                                                [readonly]="isCompany"
                                                             >
                                                             </text-field>
                                                         </div>
@@ -310,7 +333,7 @@
                                                         <div>
                                                             <div>
                                                                 <select-field
-                                                                    [cssClass]="linkedStock.cssClass"
+                                                                    [cssClass]="'disable-bg ' + linkedStock.cssClass"
                                                                     [name]="'variantUnit' + i"
                                                                     [scrollableElementId]="'variantUnit' + i"
                                                                     [placeholder]="commonLocaleData?.app_unit"
@@ -323,6 +346,7 @@
                                                                         getRateForStock(linkedStock, i)
                                                                     "
                                                                     [defaultValue]="linkedStock.stockUnitCode"
+                                                                    [readonly]="isCompany"
                                                                 >
                                                                 </select-field>
                                                             </div>
@@ -331,12 +355,13 @@
                                                     <td>
                                                         <div>
                                                             <text-field
-                                                                [cssClass]="linkedStock.cssClass"
+                                                                [cssClass]="'disable-bg ' + linkedStock.cssClass"
                                                                 [type]="'number'"
                                                                 [name]="'rate' + i"
                                                                 [(ngModel)]="linkedStock.rate"
                                                                 [placeholder]="commonLocaleData?.app_rate"
                                                                 (change)="calculateRowTotal(linkedStock)"
+                                                                [readonly]="isCompany"
                                                             >
                                                             </text-field>
                                                         </div>
@@ -353,11 +378,12 @@
                                                             class="icon-trash cursor-pointer"
                                                             aria-hidden="true"
                                                             (click)="removeLinkedStock(i)"
+                                                            *ngIf="!isCompany"
                                                         ></i>
                                                     </td>
                                                 </tr>
                                             </ng-container>
-                                            <tr>
+                                            <tr *ngIf="!isCompany">
                                                 <td colspan="7">
                                                     <a class="mb-2" (click)="addNewLinkedStock()" href="javascript:;">
                                                         {{ localeData?.add_stock }}

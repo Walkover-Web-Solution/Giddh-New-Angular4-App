@@ -15,13 +15,14 @@
         "voucher_no": "पावती क्रमांक"
     },
     "finished_variant": "पूर्ण व्हेरियंट",
+    "raw_variant": "कच्चा व्हेरियंट",
     "qty_outwards": "प्रमाण बाहेरील",
     "qty_inwards": "प्रमाण आवक",
-    "material_used": "साहित्य वापरले",
     "search_by": "शोधा",
     "select_search_by": "शोधा निवडा",
     "operation": "ऑपरेशन",
     "select_operation": "ऑपरेशन निवडा",
     "enter_value": "मूल्य प्रविष्ट करा",
-    "confirm_delete_manufacturing": "तुम्हाला उत्पादन हटवायचे आहे का?"
+    "confirm_delete_manufacturing": "तुम्हाला उत्पादन हटवायचे आहे का?",
+    "info_message": "डेटा संपादित करण्यासाठी, शाखा मोडवर जा."
 }

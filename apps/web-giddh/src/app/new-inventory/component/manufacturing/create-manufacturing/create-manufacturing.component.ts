@@ -2,9 +2,12 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
+import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CreateManufacturing, ManufacturingLinkedStock } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
+import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ManufacturingService } from 'apps/web-giddh/src/app/services/manufacturing.service';
@@ -63,6 +66,10 @@ export class CreateManufacturingComponent implements OnInit {
     private readyToRedirect: boolean = false;
     /** Holds list of linked stocks fetched initially in edit */
     public initialLinkedStocks: any[] = [];
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** True if get manufacturing in progress */
+    public isLoadingManufacturing: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -74,7 +81,9 @@ export class CreateManufacturingComponent implements OnInit {
         private inventoryService: InventoryService,
         private dialog: MatDialog,
         private route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private generalService: GeneralService,
+        private settingsBranchAction: SettingsBranchActions
     ) {
 
     }
@@ -106,6 +115,17 @@ export class CreateManufacturingComponent implements OnInit {
         this.getProfile();
         this.getWarehouses();
         this.getStocks(this.manufacturingObject.manufacturingDetails[0], 1, "");
+
+        this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.length) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 2;
+                this.changeDetectionRef.detectChanges();
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                }
+            }
+        });
     }
 
     /**
@@ -253,9 +273,15 @@ export class CreateManufacturingComponent implements OnInit {
                 response.body.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
                     let amount = linkedStock.rate * linkedStock.quantity;
 
+                    let unitsList = [];
+
+                    linkedStock?.stockUnits?.forEach(unit => {
+                        unitsList.push({ label: unit.code, value: unit.uniqueName });
+                    });
+
                     this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(
                         {
-                            selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName, unitsList: linkedStock.unitsList } },
+                            selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName, unitsList: unitsList } },
                             stockUniqueName: linkedStock.stockUniqueName,
                             quantity: linkedStock.quantity,
                             stockUnitUniqueName: linkedStock.stockUnitUniqueName,
@@ -283,6 +309,10 @@ export class CreateManufacturingComponent implements OnInit {
                 );
 
                 this.showBorder(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0]);
+            }
+
+            if (!this.manufactureUniqueName) {
+                this.initialLinkedStocks = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks);
             }
 
             this.preventStocksApiCall = false;
@@ -415,6 +445,7 @@ export class CreateManufacturingComponent implements OnInit {
         if (this.recipeExists) {
             if (!isEqual(this.existingRecipe, recipeObject)) {
                 let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                    width: '585px',
                     data: {
                         title: this.commonLocaleData?.app_confirmation,
                         body: this.localeData?.confirm_update_recipe,
@@ -431,6 +462,7 @@ export class CreateManufacturingComponent implements OnInit {
             }
         } else {
             let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                width: '585px',
                 data: {
                     title: this.commonLocaleData?.app_confirmation,
                     body: this.localeData?.confirm_save_recipe,
@@ -576,7 +608,9 @@ export class CreateManufacturingComponent implements OnInit {
      * @memberof CreateManufacturingComponent
      */
     public showBorder(linkedStock: any): void {
-        linkedStock.cssClass = 'form-control mat-field-border';
+        if (!this.isCompany) {
+            linkedStock.cssClass = 'form-control mat-field-border';
+        }
     }
 
     /**
@@ -586,7 +620,7 @@ export class CreateManufacturingComponent implements OnInit {
      * @memberof CreateManufacturingComponent
      */
     public hideBorder(linkedStock: any): void {
-        if (!linkedStock?.variant?.uniqueName) {
+        if (!linkedStock?.variant?.uniqueName && !this.isCompany) {
             linkedStock.cssClass = 'form-control mat-field-border';
         } else {
             linkedStock.cssClass = 'form-control';
@@ -720,6 +754,9 @@ export class CreateManufacturingComponent implements OnInit {
     }
 
     public getManufacturingDetails(uniqueName: string): void {
+        this.isLoadingManufacturing = true;
+        this.changeDetectionRef.detectChanges();
+
         this.manufacturingService.getManufacturingDetails(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response.body) {
                 this.manufacturingObject.manufacturingDetails[0].date = dayjs(response.body.date, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -798,10 +835,10 @@ export class CreateManufacturingComponent implements OnInit {
                     }
                 });
 
-                console.log(this.manufacturingObject.manufacturingDetails[0].linkedStocks);
-
+                this.isLoadingManufacturing = false;
                 this.changeDetectionRef.detectChanges();
             } else {
+                this.isLoadingManufacturing = false;
                 this.toasterService.showSnackBar("error", response.message);
                 this.router.navigate(['/pages/inventory/v2/manufacturing/list']);
             }
