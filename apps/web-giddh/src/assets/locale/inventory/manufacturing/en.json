@@ -15,9 +15,9 @@
         "voucher_no": "Voucher Number"
     },
     "finished_variant": "Finished Variant",
+    "raw_variant": "Raw Variant",
     "qty_outwards": "Qty Outwards",
     "qty_inwards": "Qty Inwards",
-    "material_used": "Material Used",
     "search_by": "Search By",
     "select_search_by": "Select Search By",
     "operation": "Operation",

@@ -15,9 +15,9 @@
         "voucher_no": "रसीद संक्या"
     },
     "finished_variant": "समाप्त संस्करण",
+    "raw_variant": "कच्चा संस्करण",
     "qty_outwards": "मात्रा बाहर",
     "qty_inwards": "मात्रा अंदर",
-    "material_used": "उपयोग की गई सामग्री",
     "search_by": "खोजें",
     "select_search_by": "खोज का चयन करें",
     "operation": "ऑपरेशन",

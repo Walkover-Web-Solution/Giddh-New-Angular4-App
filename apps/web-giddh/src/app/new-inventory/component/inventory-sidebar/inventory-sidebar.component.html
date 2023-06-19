@@ -23,7 +23,10 @@
                         class="sub-option"
                         [routerLink]="node?.link"
                         routerLinkActive="active"
-                        [ngClass]="{ 'hide-node': node.onlyBranchMode && isCompany }"
+                        [ngClass]="{
+                            'hide-node': node.onlyBranchMode && isCompany,
+                            'active': !node?.link && currentUrl === node.hiddenLink
+                        }"
                     >
                         <span
                             class="w-100 d-inline-flex"

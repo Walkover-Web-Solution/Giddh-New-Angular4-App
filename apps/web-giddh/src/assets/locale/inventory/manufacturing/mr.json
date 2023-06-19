@@ -15,9 +15,9 @@
         "voucher_no": "पावती क्रमांक"
     },
     "finished_variant": "पूर्ण व्हेरियंट",
+    "raw_variant": "कच्चा व्हेरियंट",
     "qty_outwards": "प्रमाण बाहेरील",
     "qty_inwards": "प्रमाण आवक",
-    "material_used": "साहित्य वापरले",
     "search_by": "शोधा",
     "select_search_by": "शोधा निवडा",
     "operation": "ऑपरेशन",
