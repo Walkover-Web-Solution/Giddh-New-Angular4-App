@@ -8798,7 +8798,6 @@ button {
 
 .aside-pane-form label {
     font-size: var(--font-size-15);
-    color: var(--color-common-primary-text);
 }
 
 .tax-engine .header-info .dropdown-menu > li > a:hover {
@@ -14175,4 +14174,9 @@ body.hide-scroll-body.master-page {
     .mat-button-focus-overlay {
         background-color: var(--color-primary-header-background) !important;
     }
+}
+
+/*--- tooltip --*/
+.mat-tooltip {
+    letter-spacing: 0.8px;
 }
