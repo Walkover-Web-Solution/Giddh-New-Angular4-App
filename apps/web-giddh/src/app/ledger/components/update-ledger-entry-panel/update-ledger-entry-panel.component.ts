@@ -2542,6 +2542,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     nameStr: data.body.parentGroups.join(', '),
                     stock: data.body.stock,
                     uNameStr: data.body.parentGroups.join(', '),
+                    categroy: data.body.category
                 };
                 if (txn.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
@@ -2590,7 +2591,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             code: unitCode,
                             rate: rate,
                             stockUnitUniqueName: stockUnitUniqueName,
-                            uniqueName: txn.inventory.unit.uniqueName,
+                            uniqueName: txn.inventory?.unit?.uniqueName,
                         },
                         amount: 0,
                         rate
@@ -2617,7 +2618,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
                     this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
                 }
-                if (stockDetails && (stockDetails.variant?.salesTaxInclusive || stockDetails.variant?.purchaseTaxInclusive || stockDetails.variant?.fixedAssetTaxInclusive)) {
+                const category = txn.selectedAccount.category;
+                if (stockDetails && ((stockDetails.variant?.salesTaxInclusive && category === 'income') ||
+                    (stockDetails.variant?.purchaseTaxInclusive && category === 'expenses') ||
+                    (stockDetails.variant?.fixedAssetTaxInclusive && category === 'fixedassets'))) {
                     // Calculate inclusively
                     this.vm.isInclusiveTax = true;
                     this.vm.inventoryTotalChanged();
