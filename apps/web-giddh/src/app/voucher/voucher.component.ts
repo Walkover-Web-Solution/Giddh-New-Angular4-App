@@ -3839,6 +3839,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
+        const stockVariants = this.stockVariants.getValue();
+        stockVariants.splice(entryIdx, 1);
+        this.stockVariants.next(stockVariants);
     }
 
     public taxAmountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
@@ -4940,6 +4943,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 newTrxObj.isStockTxn = trx.isStockTxn;
                 newTrxObj.applicableTaxes = entry.taxList;
                 newTrxObj.variant = trx.variant;
+                newTrxObj.taxInclusive = trx.taxInclusive;
 
                 // check if stock details is available then assign uniquename as we have done while creating option
                 if (trx.isStockTxn) {
@@ -5311,6 +5315,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     salesTransactionItemClass.stockUnitCode = t.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName;
                     salesTransactionItemClass.variant = t.stock?.variant;
+                    salesTransactionItemClass.taxInclusive = t?.stock.taxInclusive;
                 }
 
                 if (this.isPurchaseInvoice && entry.purchaseOrderLinkSummaries && entry.purchaseOrderLinkSummaries.length > 0) {
