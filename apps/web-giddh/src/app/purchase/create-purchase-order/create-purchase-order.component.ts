@@ -1711,6 +1711,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (transaction.isStockTxn) {
             transaction.rate = giddhRoundOff((transaction.amount / transaction.quantity), this.ratePrecision);
         }
+        transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.giddhBalanceDecimalPlaces);
         this.calculateSubTotal();
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
@@ -1981,6 +1982,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
+        const stockVariants = this.stockVariants.getValue();
+        stockVariants.splice(entryIdx, 1);
+        this.stockVariants.next(stockVariants);
     }
 
     /**
