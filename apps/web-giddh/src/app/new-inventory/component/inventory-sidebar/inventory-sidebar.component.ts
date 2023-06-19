@@ -6,6 +6,11 @@ import { takeUntil } from 'rxjs/operators';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Store, select } from '@ngrx/store';
+import { OrganizationType } from '../../../models/user-login-state';
+import { GeneralService } from '../../../services/general.service';
+import { AppState } from '../../../store';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 
 /**
  * Food data with nested structure.
@@ -18,6 +23,7 @@ interface SidebarNode {
     moduleType?: string;
     openActiveMenu?: boolean;
     children?: SidebarNode[];
+    onlyBranchMode?: boolean;
 }
 const TREE_DATA: SidebarNode[] = [];
 /** Flat node with expandable and level information */
@@ -71,6 +77,7 @@ export class InventorySidebarComponent implements OnDestroy {
             link: node.link,
             openActiveMenu: node?.openActiveMenu,
             moduleType: node?.moduleType,
+            onlyBranchMode: node?.onlyBranchMode
         };
     };
     /** Holds treeControl data */
@@ -93,11 +100,16 @@ export class InventorySidebarComponent implements OnDestroy {
     public asideMenuState: string = 'out';
     /** Holds inventory type module  */
     public moduleType: string = '';
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
 
     constructor(
         private router: Router,
         private breakPointObserver: BreakpointObserver,
         private changeDetection: ChangeDetectorRef,
+        private generalService: GeneralService,
+        private store: Store<AppState>,
+        private settingsBranchAction: SettingsBranchActions
     ) {
         this.breakPointObserver.observe([
             '(max-width: 767px)'
@@ -117,6 +129,17 @@ export class InventorySidebarComponent implements OnDestroy {
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd) {
                 this.openActiveMenu(event.url);
+            }
+        });
+
+        this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.length) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 2;
+                this.changeDetection.detectChanges();
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                }
             }
         });
     }
@@ -222,15 +245,15 @@ export class InventorySidebarComponent implements OnDestroy {
                 {
                     name: this.localeData?.sidebar?.branch_transfer,
                     icons: 'branch-transfer.svg',
-                     children: [
-                        { name: this.localeData?.sidebar?.create_branch_transfer, icons: 'create-new.svg',openActiveMenu: true, moduleType: 'branchtransfer' },
+                    children: [
+                        { name: this.localeData?.sidebar?.create_branch_transfer, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'branchtransfer' },
                         { name: this.localeData?.sidebar?.report, icons: 'group-wise.svg', link: '/pages/inventory/v2/branch-transfer/list' }],
                 },
                 {
                     name: this.localeData?.sidebar?.manufacturing,
                     icons: 'manufacturing.svg',
                     children: [
-                        { name: this.localeData?.sidebar?.create_manufacturing, icons: 'create-new.svg', link: '/pages/inventory/v2/manufacturing/create' },
+                        { name: this.localeData?.sidebar?.create_manufacturing, icons: 'create-new.svg', link: '/pages/inventory/v2/manufacturing/create', onlyBranchMode: true },
                         { name: this.localeData?.sidebar?.recipe, icons: 'create-new.svg', link: '/pages/inventory/v2/recipe/create' },
                         { name: this.localeData?.sidebar?.report, icons: 'group-wise.svg', link: '/pages/inventory/v2/manufacturing/list' }
                     ],

@@ -23,5 +23,6 @@
     "operation": "ऑपरेशन",
     "select_operation": "ऑपरेशन निवडा",
     "enter_value": "मूल्य प्रविष्ट करा",
-    "confirm_delete_manufacturing": "तुम्हाला उत्पादन हटवायचे आहे का?"
+    "confirm_delete_manufacturing": "तुम्हाला उत्पादन हटवायचे आहे का?",
+    "info_message": "डेटा संपादित करण्यासाठी, शाखा मोडवर जा."
 }

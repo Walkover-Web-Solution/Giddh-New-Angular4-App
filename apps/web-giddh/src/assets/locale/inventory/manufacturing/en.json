@@ -23,5 +23,6 @@
     "operation": "Operation",
     "select_operation": "Select Operation",
     "enter_value": "Enter Value",
-    "confirm_delete_manufacturing": "Do you want to delete the manufacturing?"
+    "confirm_delete_manufacturing": "Do you want to delete the manufacturing?",
+    "info_message": "To edit data, go to branch mode."
 }

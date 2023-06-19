@@ -254,6 +254,14 @@ export class ListManufacturingComponent implements OnInit {
                 variants?.forEach(variant => {
                     this.variantList.push({ label: variant?.name, value: variant?.uniqueName });
                 });
+
+                if (variants?.length === 1) {
+                    this.selectedVariantName = variants[0].name;
+                    this.manufacturingSearchRequest.productVariant = variants[0].uniqueName;
+                } else {
+                    this.selectedVariantName = "";
+                    this.manufacturingSearchRequest.productVariant = "";
+                }
             }
 
             this.changeDetectionRef.detectChanges();

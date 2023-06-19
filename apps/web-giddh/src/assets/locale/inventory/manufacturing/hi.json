@@ -23,5 +23,6 @@
     "operation": "ऑपरेशन",
     "select_operation": "ऑपरेशन चुनें",
     "enter_value": "मूल्य दर्ज करें",
-    "confirm_delete_manufacturing": "क्या आप निर्माण को हटाना चाहते हैं?"
+    "confirm_delete_manufacturing": "क्या आप निर्माण को हटाना चाहते हैं?",
+    "info_message": "डेटा संपादित करने के लिए, शाखा मोड पर जाएँ।"
 }

@@ -9,6 +9,7 @@
         <div class="manufacturing-wrapper">
             <form autocomplete="off" novalidate #manufacturingForm="ngForm">
                 <div class="row">
+                    <div *ngIf="isCompany">{{ localeData?.info_message }}</div>
                     <div class="form-fields w-100">
                         <div class="d-inline-flex flex-wrap align-items-end">
                             <div class="col date-alignment">
@@ -20,6 +21,7 @@
                                     (dateSelected)="errorFields.date = false"
                                     [placeholder]="commonLocaleData?.app_date"
                                     [appearance]="'outline'"
+                                    [disabled]="isCompany"
                                 >
                                 </giddh-datepicker>
                             </div>
@@ -33,6 +35,7 @@
                                         selectedWarehouseName = $event.label
                                     "
                                     [defaultValue]="selectedWarehouseName"
+                                    [readonly]="isCompany"
                                 >
                                 </dropdown-field>
                             </div>
@@ -86,6 +89,7 @@
                                             (scrollEnd)="stockScrollEnd(manufacturingObject.manufacturingDetails[0])"
                                             [allowValueReset]="true"
                                             (onClear)="resetStocks(manufacturingObject.manufacturingDetails[0])"
+                                            [readonly]="isCompany"
                                         >
                                         </dropdown-field>
                                     </div>
@@ -104,6 +108,7 @@
                                                 getVariantRecipe()
                                             "
                                             [defaultValue]="manufacturingObject.manufacturingDetails[0].variant.name"
+                                            [readonly]="isCompany"
                                         >
                                         </dropdown-field>
                                     </div>
@@ -125,6 +130,7 @@
                                                 updateRawStocksQuantity();
                                                 calculateTotals()
                                             "
+                                            [readonly]="isCompany"
                                         >
                                         </input-field>
                                         <small class="float-right"
@@ -135,7 +141,7 @@
                                         </small>
                                     </div>
 
-                                    <div class="d-flex generate-clear w-100">
+                                    <div class="d-flex generate-clear w-100" *ngIf="!isCompany">
                                         <button
                                             mat-raised-button
                                             color="primary"
@@ -180,7 +186,7 @@
                                             [routerLink]="['/pages/inventory/v2/manufacturing/list']"
                                             *ngIf="manufactureUniqueName"
                                         >
-                                            {{ commonLocaleData?.app_cancel }}
+                                            {{ commonLocaleData?.app_back }}
                                         </button>
                                     </div>
                                 </div>
@@ -258,6 +264,7 @@
                                                                 (onClear)="
                                                                     resetStocks(linkedStock, selectedInventoryType)
                                                                 "
+                                                                [readonly]="isCompany"
                                                             >
                                                             </select-field>
                                                         </div>
@@ -282,6 +289,7 @@
                                                                     getRateForStock(linkedStock, i)
                                                                 "
                                                                 [defaultValue]="linkedStock.variant.name"
+                                                                [readonly]="isCompany"
                                                             >
                                                             </select-field>
                                                         </div>
@@ -302,6 +310,7 @@
                                                                 (change)="
                                                                     validateQuantity(i); calculateRowTotal(linkedStock)
                                                                 "
+                                                                [readonly]="isCompany"
                                                             >
                                                             </text-field>
                                                         </div>
@@ -323,6 +332,7 @@
                                                                         getRateForStock(linkedStock, i)
                                                                     "
                                                                     [defaultValue]="linkedStock.stockUnitCode"
+                                                                    [readonly]="isCompany"
                                                                 >
                                                                 </select-field>
                                                             </div>
@@ -337,6 +347,7 @@
                                                                 [(ngModel)]="linkedStock.rate"
                                                                 [placeholder]="commonLocaleData?.app_rate"
                                                                 (change)="calculateRowTotal(linkedStock)"
+                                                                [readonly]="isCompany"
                                                             >
                                                             </text-field>
                                                         </div>
@@ -353,11 +364,12 @@
                                                             class="icon-trash cursor-pointer"
                                                             aria-hidden="true"
                                                             (click)="removeLinkedStock(i)"
+                                                            *ngIf="!isCompany"
                                                         ></i>
                                                     </td>
                                                 </tr>
                                             </ng-container>
-                                            <tr>
+                                            <tr *ngIf="!isCompany">
                                                 <td colspan="7">
                                                     <a class="mb-2" (click)="addNewLinkedStock()" href="javascript:;">
                                                         {{ localeData?.add_stock }}
