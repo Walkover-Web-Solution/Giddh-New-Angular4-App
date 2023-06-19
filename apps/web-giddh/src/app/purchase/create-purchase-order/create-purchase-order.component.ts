@@ -3362,9 +3362,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     private calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true, isBulkItem?: boolean): SalesTransactionItemClass {
         let additional = _.cloneDeep(selectedAcc.additional);
         const variant = additional.stock?.variant;
-        const isInclusiveEntry = variant?.purchaseTaxInclusive && additional.category === 'expenses' ||
-            variant?.salesTaxInclusive && additional.category === 'income' ||
-            variant?.fixedAssetTaxInclusive && additional.category === 'fixedassets';
+        const isInclusiveEntry = (variant?.purchaseTaxInclusive && additional.category === 'expenses') ||
+            (variant?.salesTaxInclusive && additional.category === 'income') ||
+            (variant?.fixedAssetTaxInclusive && additional.category === 'fixedassets');
         transaction.taxInclusive = isInclusiveEntry;
         transaction.quantity = additional.quantity ? additional.quantity : (additional.stock) ? 1 : null;
         transaction.applicableTaxes = [];
