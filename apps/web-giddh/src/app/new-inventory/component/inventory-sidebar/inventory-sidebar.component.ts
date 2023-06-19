@@ -6,20 +6,27 @@ import { takeUntil } from 'rxjs/operators';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Store, select } from '@ngrx/store';
+import { OrganizationType } from '../../../models/user-login-state';
+import { GeneralService } from '../../../services/general.service';
+import { AppState } from '../../../store';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 
 /**
- * Food data with nested structure.
+ * Data with nested structure.
  * Each node has a name and an optional list of children.
  */
 interface SidebarNode {
     icons?: string;
     name: string;
     link?: string;
+    hiddenLink?: string; // this will hold link of the page which is not available to go through directly
     moduleType?: string;
     openActiveMenu?: boolean;
     children?: SidebarNode[];
+    onlyBranchMode?: boolean;
 }
-const TREE_DATA: SidebarNode[] = [];
+
 /** Flat node with expandable and level information */
 interface SidebarFlatNode {
     expandable: boolean;
@@ -71,6 +78,8 @@ export class InventorySidebarComponent implements OnDestroy {
             link: node.link,
             openActiveMenu: node?.openActiveMenu,
             moduleType: node?.moduleType,
+            onlyBranchMode: node?.onlyBranchMode,
+            hiddenLink: node?.hiddenLink
         };
     };
     /** Holds treeControl data */
@@ -93,11 +102,18 @@ export class InventorySidebarComponent implements OnDestroy {
     public asideMenuState: string = 'out';
     /** Holds inventory type module  */
     public moduleType: string = '';
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Holds current page url */
+    private currentUrl: string = "";
 
     constructor(
         private router: Router,
         private breakPointObserver: BreakpointObserver,
         private changeDetection: ChangeDetectorRef,
+        private generalService: GeneralService,
+        private store: Store<AppState>,
+        private settingsBranchAction: SettingsBranchActions
     ) {
         this.breakPointObserver.observe([
             '(max-width: 767px)'
@@ -113,10 +129,22 @@ export class InventorySidebarComponent implements OnDestroy {
     */
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        this.openActiveMenu(this.router.url);
+        this.currentUrl = this.router.url;
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd) {
-                this.openActiveMenu(event.url);
+                this.currentUrl = event.url;
+                this.openActiveMenu(this.currentUrl);
+            }
+        });
+
+        this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.length) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 2;
+                this.changeDetection.detectChanges();
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                }
             }
         });
     }
@@ -129,16 +157,17 @@ export class InventorySidebarComponent implements OnDestroy {
      */
     public openActiveMenu(url: string): void {
         let activeNodeIndex = null;
-        TREE_DATA?.forEach((tree, index) => {
+        this.dataSource.data?.forEach((tree, index) => {
             if (activeNodeIndex === null) {
-                let activeNode = tree?.children?.filter(node => node?.link === url);
+                let activeNode = tree?.children?.filter(node => node?.link === url || node?.hiddenLink === url);
                 if (activeNode?.length) {
                     activeNodeIndex = index;
                 }
             }
         });
+        let rootLevelNodes = this.treeControl.dataNodes?.filter(node => node.level === 0);
         if (activeNodeIndex !== null) {
-            this.treeControl.expand(this.treeControl.dataNodes[activeNodeIndex]);
+            this.treeControl.expand(rootLevelNodes[activeNodeIndex]);
         }
     }
 
@@ -187,7 +216,7 @@ export class InventorySidebarComponent implements OnDestroy {
                     name: this.localeData?.sidebar?.stock,
                     icons: 'stock.svg',
                     children: [
-                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'product' },
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'product', hiddenLink: '/pages/inventory/v2/stock/product/create' },
                         { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/inventory/v2/reports/product/stock' },
                         { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/inventory/v2/reports/product/group' },
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/product/variant' },
@@ -199,7 +228,7 @@ export class InventorySidebarComponent implements OnDestroy {
                     name: this.localeData?.sidebar?.services,
                     icons: 'service.svg',
                     children: [
-                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'service' },
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'service', hiddenLink: '/pages/inventory/v2/stock/service/create' },
                         { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/inventory/v2/reports/service/stock' },
                         { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/inventory/v2/reports/service/group' },
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/service/variant' },
@@ -211,7 +240,7 @@ export class InventorySidebarComponent implements OnDestroy {
                     name: this.localeData?.sidebar?.fixed_assets,
                     icons: 'fixed-assets.svg',
                     children: [
-                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'fixedassets' },
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'fixedassets', hiddenLink: '/pages/inventory/v2/stock/fixedassets/create' },
                         { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/inventory/v2/reports/fixedassets/stock' },
                         { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/inventory/v2/reports/fixedassets/group' },
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/fixedassets/variant' },
@@ -222,15 +251,15 @@ export class InventorySidebarComponent implements OnDestroy {
                 {
                     name: this.localeData?.sidebar?.branch_transfer,
                     icons: 'branch-transfer.svg',
-                     children: [
-                        { name: this.localeData?.sidebar?.create_branch_transfer, icons: 'create-new.svg',openActiveMenu: true, moduleType: 'branchtransfer' },
+                    children: [
+                        { name: this.localeData?.sidebar?.create_branch_transfer, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'branchtransfer' },
                         { name: this.localeData?.sidebar?.report, icons: 'group-wise.svg', link: '/pages/inventory/v2/branch-transfer/list' }],
                 },
                 {
                     name: this.localeData?.sidebar?.manufacturing,
                     icons: 'manufacturing.svg',
                     children: [
-                        { name: this.localeData?.sidebar?.create_manufacturing, icons: 'create-new.svg', link: '/pages/inventory/v2/manufacturing/create' },
+                        { name: this.localeData?.sidebar?.create_manufacturing, icons: 'create-new.svg', link: '/pages/inventory/v2/manufacturing/create', onlyBranchMode: true },
                         { name: this.localeData?.sidebar?.recipe, icons: 'create-new.svg', link: '/pages/inventory/v2/recipe/create' },
                         { name: this.localeData?.sidebar?.report, icons: 'group-wise.svg', link: '/pages/inventory/v2/manufacturing/list' }
                     ],
@@ -247,6 +276,9 @@ export class InventorySidebarComponent implements OnDestroy {
                 },
             ];
             this.dataSource.data = this.dataList;
+
+            this.openActiveMenu(this.currentUrl);
+
             this.changeDetection.detectChanges();
         }
     }

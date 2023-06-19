@@ -15,13 +15,14 @@
         "voucher_no": "रसीद संक्या"
     },
     "finished_variant": "समाप्त संस्करण",
+    "raw_variant": "कच्चा संस्करण",
     "qty_outwards": "मात्रा बाहर",
     "qty_inwards": "मात्रा अंदर",
-    "material_used": "उपयोग की गई सामग्री",
     "search_by": "खोजें",
     "select_search_by": "खोज का चयन करें",
     "operation": "ऑपरेशन",
     "select_operation": "ऑपरेशन चुनें",
     "enter_value": "मूल्य दर्ज करें",
-    "confirm_delete_manufacturing": "क्या आप निर्माण को हटाना चाहते हैं?"
+    "confirm_delete_manufacturing": "क्या आप निर्माण को हटाना चाहते हैं?",
+    "info_message": "डेटा संपादित करने के लिए, शाखा मोड पर जाएँ।"
 }

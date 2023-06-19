@@ -79,6 +79,7 @@
     "app_custom_range": "Custom Range",
     "app_select_range": "Select Range",
     "app_quantity": "Quantity",
+    "app_output_quantity": "Output Quantity",
     "app_voucher_types": {
         "sales": "Sales",
         "purchase": "Purchase",

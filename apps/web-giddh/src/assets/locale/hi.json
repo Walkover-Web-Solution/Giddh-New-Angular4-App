@@ -79,6 +79,7 @@
     "app_custom_range": "कस्टम रेंज",
     "app_select_range": "सीमा का चयन करें",
     "app_quantity": "मात्रा",
+    "app_output_quantity": "आउटपुट मात्रा",
     "app_voucher_types": {
         "sales": "बिक्री",
         "purchase": "खरीद",

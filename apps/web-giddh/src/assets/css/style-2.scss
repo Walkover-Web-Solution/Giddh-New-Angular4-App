@@ -5399,6 +5399,18 @@ fieldset[disabled] .form-control {
     color: var(--color-primary-input-bar-text) !important;
     background-color: var(--color-primary-input-bar-background) !important;
 }
+.disable-bg[disabled],
+.disable-bg[readonly],
+fieldset[disabled] .disable-bg {
+    background-color: transparent !important;
+}
+.disable-bg {
+    &.mat-datepicker-input {
+        &:disabled {
+            background-color: transparent !important;
+        }
+    }
+}
 
 input[type="checkbox"][disabled] {
     opacity: 2.2;
@@ -14278,4 +14290,17 @@ body.hide-scroll-body.master-page {
 /*--- tooltip --*/
 .mat-tooltip {
     letter-spacing: 0.8px;
+}
+/*--- manufacturing-list-table ---*/
+.list-table-wrapper {
+    th.mat-header-cell {
+        padding: 0 6px !important;
+        border-bottom: 0 !important;
+    }
+    td.mat-cell {
+        border-bottom: 0 !important;
+    }
+    .table th {
+        border-top: 0 !important;
+    }
 }

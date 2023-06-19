@@ -79,6 +79,7 @@
     "app_custom_range": "सानुकूल श्रेणी",
     "app_select_range": "श्रेणी निवडा",
     "app_quantity": "प्रमाण",
+    "app_output_quantity": "आउटपुट प्रमाण",
     "app_voucher_types": {
         "sales": "विक्री",
         "purchase": "खरेदी",
