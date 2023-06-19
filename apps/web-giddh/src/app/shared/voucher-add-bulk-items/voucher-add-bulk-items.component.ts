@@ -126,7 +126,10 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     }
 
     public addItemToSelectedArr(item: SalesAddBulkStockItems) {
-        let index = this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
+        let index;
+        if (!item.additional.stock) {
+            this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
+        }
         if (index > -1) {
             this.toaster.warningToast(this.localeData?.item_selected);
             return;
@@ -189,9 +192,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                     map((e: any) => e.target?.value),
                     takeUntil(this.destroyed$)
                 ).subscribe((res: string) => {
-                    if (res) {
-                        this.onSearchQueryChanged(res, 1);
-                    }
+                    this.onSearchQueryChanged(res, 1);
                 });
             }, 100);
         }
@@ -203,10 +204,9 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
      * @private
      * @param {SalesAddBulkStockItems} item Item details
      * @param {*} requestObject Request object for the API
-     * @param {boolean} isVariantChanged True, if variant details are fetched, required to avoid same item being pushed twice
      * @memberof VoucherAddBulkItemsComponent
      */
-    private loadDetails(item: SalesAddBulkStockItems, requestObject: any, isVariantChanged?: boolean): void {
+    private loadDetails(item: SalesAddBulkStockItems, requestObject: any): void {
         this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
                 // Take taxes of parent group and stock's own taxes
@@ -229,12 +229,13 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                     nameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent.name).join(', ') : '',
                     stock: data.body.stock,
                     uNameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
-                    category: data.body.category
+                    category: data.body.category,
+                    combinedUniqueName: data.body.stock?.variant ? `${item.uniqueName}#${data.body.stock.variant?.uniqueName}` : '',
                 };
                 const unitRates = data.body?.stock?.variant?.unitRates ?? [];
                 item.rate = unitRates[0]?.rate ?? 0;
                 item.quantity = 1;
-                if (!isVariantChanged) {
+                if (!data.body.stock || item.variants?.length === 1 || item.variant?.uniqueName) {
                     this.selectedItems.push({ ...item });
                 }
                 this.changeDetectorRef.detectChanges();
@@ -253,13 +254,16 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
         this.ledgerService.loadStockVariants(item.additional?.stock?.uniqueName).pipe(
             map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
                 item.variants = res;
-                const defaultVariant: IVariant = {name: res[0].label, uniqueName: res[0].value};
-                item.variant = defaultVariant;
-                const requestObj = {
-                    stockUniqueName: item.additional?.stock?.uniqueName ?? '',
-                    variantUniqueName: defaultVariant.uniqueName
-                };
-                this.loadDetails(item, requestObj);
+                if (res.length === 1) {
+                    // Single variant stock, add to list after loading details
+                    const defaultVariant: IVariant = {name: res[0].label, uniqueName: res[0].value};
+                    item.variant = defaultVariant;
+                    const requestObj = {
+                        stockUniqueName: item.additional?.stock?.uniqueName ?? '',
+                        variantUniqueName: defaultVariant.uniqueName
+                    };
+                    this.loadDetails(item, requestObj);
+                }
                 this.changeDetectorRef.detectChanges();
             });
     }
@@ -273,10 +277,15 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
      */
     public variantChanged(item: SalesAddBulkStockItems, event: IOption): void {
         item.variant = {name: event.label, uniqueName: event.value};
+        const index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${item.uniqueName}#${event.value}`);
+        if (index > -1) {
+            this.toaster.warningToast(this.localeData?.item_selected);
+            return;
+        }
         const requestObj = {
             stockUniqueName: item.additional?.stock?.uniqueName ?? '',
             variantUniqueName: event.value
         };
-        this.loadDetails(item, requestObj, true);
+        this.loadDetails(item, requestObj);
     }
 }
