@@ -972,7 +972,7 @@ export class CreateManufacturingComponent implements OnInit {
      * @memberof CreateManufacturingComponent
      */
     public updateRawStocksQuantity(): void {
-        const finishedStockQuantity = !isNaN(this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity) ? Number(this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity) : 1;
+        const finishedStockQuantity = (!isNaN(this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity) ? Number(this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity) : 1) / this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf;
 
         this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
             let selectedStock = this.initialLinkedStocks?.find(stock => stock.stockUniqueName === linkedStock.stockUniqueName);
