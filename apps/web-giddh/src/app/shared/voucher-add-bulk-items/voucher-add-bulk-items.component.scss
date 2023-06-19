@@ -1,3 +1,7 @@
+@mixin hover-state {
+    background-color: var(--color-dark-fog);
+    color: var(--color-blue);
+}
 /* ADD BULK ITEM */
 .add-bulk-item-modal {
     &.modal-dialog {
@@ -8,14 +12,13 @@
         margin-left: 10px;
     }
     .single-product-wrapper {
-        margin-bottom: 20px;
         padding: 12px;
         text-align: left;
-
+        &.mb-20 {
+            margin-bottom: 20px;
+        }
         &:hover {
-            background-color: var(--color-dark-fog);
-            color: var(--color-blue);
-
+            @include hover-state;
             h5 {
                 color: var(--color-blue);
             }
@@ -28,6 +31,11 @@
         p {
             font-size: 12px;
             padding-top: 4px;
+        }
+    }
+    .product-variant {
+        &:hover {
+            @include hover-state;
         }
     }
     .stock-name {
