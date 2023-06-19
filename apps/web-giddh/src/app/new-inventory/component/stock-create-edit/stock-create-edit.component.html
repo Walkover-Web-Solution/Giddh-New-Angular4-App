@@ -163,7 +163,7 @@
                                                             *ngIf="stockForm.type === 'FIXED_ASSETS'"
                                                         >
                                                             <div class="purchase-information fixed-assets-information">
-                                                                <div class="row">
+                                                                <div class="row row-gap">
                                                                     <div
                                                                         class="
                                                                             col-lg-12
@@ -195,7 +195,7 @@
                                                                             </mat-radio-group>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-sm-6 col-lg-12 pt-3">
+                                                                    <div class="col-sm-6 col-lg-12 pt-3 mr-b15">
                                                                         <dropdown-field
                                                                             [name]="'fixedAssetsAccounts'"
                                                                             [placeholder]="localeData?.linked_accounts"
@@ -216,7 +216,7 @@
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
                                                                         <div
-                                                                            class="row mr-b15"
+                                                                            class="row unit-rate-align mr-b15"
                                                                             *ngFor="
                                                                                 let variantFixedAssetsUnitRate of (stockForm
                                                                                     ?.variants)[0]
@@ -224,7 +224,15 @@
                                                                                 let j = index
                                                                             "
                                                                         >
-                                                                            <div class="col-sm-6 col-6">
+                                                                            <div
+                                                                                class="col-6"
+                                                                                [ngClass]="{
+                                                                                    'col-sm-5 col-xs-5 pr-0':
+                                                                                        stockForm.variants[0]
+                                                                                            ?.fixedAssetsInformation
+                                                                                            ?.length > 1
+                                                                                }"
+                                                                            >
                                                                                 <dropdown-field
                                                                                     [cssClass]="
                                                                                         (!variantFixedAssetsUnitRate?.stockUnitName &&
@@ -254,7 +262,15 @@
                                                                                     "
                                                                                 ></dropdown-field>
                                                                             </div>
-                                                                            <div class="col-sm-6 col-6">
+                                                                            <div
+                                                                                class="col-6"
+                                                                                [ngClass]="{
+                                                                                    'col-sm-5 col-xs-5 pr-0':
+                                                                                        stockForm.variants[0]
+                                                                                            ?.fixedAssetsInformation
+                                                                                            ?.length > 1
+                                                                                }"
+                                                                            >
                                                                                 <input-field
                                                                                     [cssClass]="
                                                                                         'text-right unit-amount'
@@ -278,7 +294,7 @@
                                                                             <button
                                                                                 mat-icon-button
                                                                                 role="button"
-                                                                                class="icon-button-remove"
+                                                                                class="icon-remove"
                                                                                 type="button"
                                                                                 (click)="
                                                                                     deleteVariantFixedAssetsUnitPrice(
@@ -298,11 +314,9 @@
                                                                             >
                                                                                 <i class="icon-trash"></i>
                                                                             </button>
-                                                                            <div class="col-sm-10 col-10">
-                                                                                <button
-                                                                                    mat-icon-button
-                                                                                    role="button"
-                                                                                    type="button"
+                                                                            <div class="col-sm-10 col-10 mr-t15">
+                                                                                <a
+                                                                                    href="javascript:;"
                                                                                     disableRipple
                                                                                     (click)="
                                                                                         addNewVariantFixedAssetsUnitPrice(
@@ -328,14 +342,11 @@
                                                                                                 ?.fixedAssetAccountDetails
                                                                                                 .accountUniqueName
                                                                                         "
-                                                                                        class="
-                                                                                            add-new-text-container
-                                                                                            text-primary
-                                                                                        "
+                                                                                        class="add-new-text-container"
                                                                                     >
                                                                                         {{ localeData?.add_new }}
                                                                                     </span>
-                                                                                </button>
+                                                                                </a>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -377,7 +388,14 @@
                                                                                 </mat-radio-group>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-lg-12 pt-3 which-tab">
+                                                                        <div
+                                                                            class="
+                                                                                col-sm-6 col-lg-12
+                                                                                pt-3
+                                                                                which-tab
+                                                                                mr-b15
+                                                                            "
+                                                                        >
                                                                             <dropdown-field
                                                                                 [name]="'purchaseAccount'"
                                                                                 [placeholder]="
@@ -403,7 +421,7 @@
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
-                                                                                class="row unit-rate-align"
+                                                                                class="row unit-rate-align mr-b15"
                                                                                 *ngFor="
                                                                                     let variantPurchaseUnitRate of (stockForm
                                                                                         ?.variants)[0]
@@ -502,12 +520,10 @@
                                                                                 >
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
-                                                                                <div class="col-sm-10 col-10">
-                                                                                    <button
-                                                                                        mat-flat-button
+                                                                                <div class="col-sm-10 col-10 mr-t15">
+                                                                                    <a
+                                                                                        href="javascript:void(0);"
                                                                                         class="bg-transparent px-0 pt-2"
-                                                                                        role="button"
-                                                                                        type="button"
                                                                                         disableRipple
                                                                                         (click)="
                                                                                             addNewVariantPurchaseUnitPrice(
@@ -535,13 +551,12 @@
                                                                                             "
                                                                                             class="
                                                                                                 add-new-text-container
-                                                                                                text-primary
                                                                                                 font-15
                                                                                             "
                                                                                         >
                                                                                             {{ localeData?.add_new }}
                                                                                         </span>
-                                                                                    </button>
+                                                                                    </a>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -583,7 +598,7 @@
                                                                                 </mat-radio-group>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-lg-12 pt-3">
+                                                                        <div class="col-sm-6 col-lg-12 pt-3 mr-b15">
                                                                             <dropdown-field
                                                                                 [name]="'salesAccount'"
                                                                                 [placeholder]="
@@ -606,7 +621,7 @@
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
-                                                                                class="row unit-rate-align"
+                                                                                class="row unit-rate-align mr-b15"
                                                                                 *ngFor="
                                                                                     let variantSalesUnitRate of (stockForm
                                                                                         ?.variants)[0]
@@ -699,12 +714,10 @@
                                                                                 >
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
-                                                                                <div class="col-sm-10 col-10">
-                                                                                    <button
-                                                                                        mat-flat-button
+                                                                                <div class="col-sm-10 col-10 mr-t15">
+                                                                                    <a
+                                                                                        href="javascript:void(0);"
                                                                                         class="bg-transparent px-0 pt-2"
-                                                                                        role="button"
-                                                                                        type="button"
                                                                                         disableRipple
                                                                                         (click)="
                                                                                             addNewVariantSalesUnitPrice(
@@ -732,12 +745,11 @@
                                                                                             "
                                                                                             class="
                                                                                                 add-new-text-container
-                                                                                                text-primary
                                                                                             "
                                                                                         >
                                                                                             {{ localeData?.add_new }}
                                                                                         </span>
-                                                                                    </button>
+                                                                                    </a>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -1112,7 +1124,7 @@
                                                                             <button
                                                                                 mat-icon-button
                                                                                 role="button"
-                                                                                class="icon-button-remove-sales"
+                                                                                class="icon-remove-sales"
                                                                                 type="button"
                                                                                 (click)="
                                                                                     deleteVariantPurchaseUnitPrice(
@@ -1212,7 +1224,7 @@
                                                                             <button
                                                                                 mat-icon-button
                                                                                 role="button"
-                                                                                class="icon-button-remove-sales"
+                                                                                class="icon-remove-sales"
                                                                                 type="button"
                                                                                 (click)="
                                                                                     deleteVariantSalesUnitPrice(
@@ -1317,7 +1329,7 @@
                                                                             <button
                                                                                 mat-icon-button
                                                                                 role="button"
-                                                                                class="icon-button-remove-sales"
+                                                                                class="icon-remove-sales"
                                                                                 type="button"
                                                                                 (click)="
                                                                                     deleteVariantFixedAssetsUnitPrice(
@@ -2356,7 +2368,7 @@
                                                                 </div>
                                                                 <button
                                                                     mat-icon-button
-                                                                    class="icon-button-remove"
+                                                                    class="icon-remove"
                                                                     role="button"
                                                                     type="button"
                                                                 >
@@ -2461,7 +2473,7 @@
                                                                 </div>
                                                                 <button
                                                                     mat-icon-button
-                                                                    class="icon-button-remove"
+                                                                    class="icon-remove"
                                                                     role="button"
                                                                     type="button"
                                                                 >
@@ -2782,7 +2794,7 @@
                                                                     </div>
                                                                     <button
                                                                         mat-icon-button
-                                                                        class="icon-button-remove"
+                                                                        class="icon-remove"
                                                                         role="button"
                                                                         type="button"
                                                                     >
