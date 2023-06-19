@@ -68,6 +68,8 @@ export class CreateManufacturingComponent implements OnInit {
     public initialLinkedStocks: any[] = [];
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if get manufacturing in progress */
+    public isLoadingManufacturing: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -271,9 +273,15 @@ export class CreateManufacturingComponent implements OnInit {
                 response.body.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
                     let amount = linkedStock.rate * linkedStock.quantity;
 
+                    let unitsList = [];
+
+                    linkedStock?.stockUnits?.forEach(unit => {
+                        unitsList.push({ label: unit.code, value: unit.uniqueName });
+                    });
+
                     this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(
                         {
-                            selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName, unitsList: linkedStock.unitsList } },
+                            selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName, unitsList: unitsList } },
                             stockUniqueName: linkedStock.stockUniqueName,
                             quantity: linkedStock.quantity,
                             stockUnitUniqueName: linkedStock.stockUnitUniqueName,
@@ -746,6 +754,9 @@ export class CreateManufacturingComponent implements OnInit {
     }
 
     public getManufacturingDetails(uniqueName: string): void {
+        this.isLoadingManufacturing = true;
+        this.changeDetectionRef.detectChanges();
+
         this.manufacturingService.getManufacturingDetails(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response.body) {
                 this.manufacturingObject.manufacturingDetails[0].date = dayjs(response.body.date, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -824,8 +835,10 @@ export class CreateManufacturingComponent implements OnInit {
                     }
                 });
 
+                this.isLoadingManufacturing = false;
                 this.changeDetectionRef.detectChanges();
             } else {
+                this.isLoadingManufacturing = false;
                 this.toasterService.showSnackBar("error", response.message);
                 this.router.navigate(['/pages/inventory/v2/manufacturing/list']);
             }

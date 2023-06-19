@@ -7,7 +7,8 @@
     <section id="create-manufacturing" class="clearfix">
         <hamburger-menu></hamburger-menu>
         <div class="manufacturing-wrapper">
-            <form autocomplete="off" novalidate #manufacturingForm="ngForm">
+            <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoadingManufacturing"></giddh-page-loader>
+            <form autocomplete="off" novalidate #manufacturingForm="ngForm" *ngIf="!isLoadingManufacturing">
                 <div class="row">
                     <div class="col-lg-12">
                         <div *ngIf="isCompany" class="font-16 pb-2 branch-msg">{{ localeData?.info_message }}</div>
