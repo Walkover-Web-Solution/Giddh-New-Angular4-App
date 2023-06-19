@@ -36,7 +36,7 @@
                         <div class="stock-width">
                             <div class="row flex-column-reverse flex-md-row">
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-12 upper-common-form-label-field">
-                                    <div class="row">
+                                    <div class="row row-gap">
                                         <div class="col-sm-6 col-lg-6">
                                             <input-field
                                                 [name]="'productName'"
@@ -113,7 +113,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="row mr-b1">
+                                    <div class="row mr-b1 mr-t15">
                                         <div class="col-sm-6 col-lg-6">
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-label>{{ commonLocaleData?.app_tax }}</mat-label>
@@ -163,7 +163,7 @@
                                                             *ngIf="stockForm.type === 'FIXED_ASSETS'"
                                                         >
                                                             <div class="purchase-information fixed-assets-information">
-                                                                <div class="row">
+                                                                <div class="row row-gap">
                                                                     <div
                                                                         class="
                                                                             col-lg-12
@@ -195,7 +195,7 @@
                                                                             </mat-radio-group>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-sm-6 col-lg-12 pt-3">
+                                                                    <div class="col-sm-6 col-lg-12 pt-3 mr-b15">
                                                                         <dropdown-field
                                                                             [name]="'fixedAssetsAccounts'"
                                                                             [placeholder]="localeData?.linked_accounts"
@@ -216,7 +216,7 @@
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
                                                                         <div
-                                                                            class="row mr-b15"
+                                                                            class="row unit-rate-align mr-b15"
                                                                             *ngFor="
                                                                                 let variantFixedAssetsUnitRate of (stockForm
                                                                                     ?.variants)[0]
@@ -224,7 +224,15 @@
                                                                                 let j = index
                                                                             "
                                                                         >
-                                                                            <div class="col-sm-6 col-6">
+                                                                            <div
+                                                                                class="col-6"
+                                                                                [ngClass]="{
+                                                                                    'col-sm-5 col-xs-5 pr-0':
+                                                                                        stockForm.variants[0]
+                                                                                            ?.fixedAssetsInformation
+                                                                                            ?.length > 1
+                                                                                }"
+                                                                            >
                                                                                 <dropdown-field
                                                                                     [cssClass]="
                                                                                         (!variantFixedAssetsUnitRate?.stockUnitName &&
@@ -254,7 +262,15 @@
                                                                                     "
                                                                                 ></dropdown-field>
                                                                             </div>
-                                                                            <div class="col-sm-6 col-6">
+                                                                            <div
+                                                                                class="col-6"
+                                                                                [ngClass]="{
+                                                                                    'col-sm-5 col-xs-5 pr-0':
+                                                                                        stockForm.variants[0]
+                                                                                            ?.fixedAssetsInformation
+                                                                                            ?.length > 1
+                                                                                }"
+                                                                            >
                                                                                 <input-field
                                                                                     [cssClass]="
                                                                                         'text-right unit-amount'
@@ -278,7 +294,7 @@
                                                                             <button
                                                                                 mat-icon-button
                                                                                 role="button"
-                                                                                class="icon-button-remove"
+                                                                                class="icon-remove"
                                                                                 type="button"
                                                                                 (click)="
                                                                                     deleteVariantFixedAssetsUnitPrice(
@@ -298,11 +314,9 @@
                                                                             >
                                                                                 <i class="icon-trash"></i>
                                                                             </button>
-                                                                            <div class="col-sm-10 col-10">
-                                                                                <button
-                                                                                    mat-icon-button
-                                                                                    role="button"
-                                                                                    type="button"
+                                                                            <div class="col-sm-10 col-10 mr-t15">
+                                                                                <a
+                                                                                    href="javascript:;"
                                                                                     disableRipple
                                                                                     (click)="
                                                                                         addNewVariantFixedAssetsUnitPrice(
@@ -328,14 +342,11 @@
                                                                                                 ?.fixedAssetAccountDetails
                                                                                                 .accountUniqueName
                                                                                         "
-                                                                                        class="
-                                                                                            add-new-text-container
-                                                                                            text-primary
-                                                                                        "
+                                                                                        class="add-new-text-container"
                                                                                     >
                                                                                         {{ localeData?.add_new }}
                                                                                     </span>
-                                                                                </button>
+                                                                                </a>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -345,7 +356,7 @@
                                                         <ng-container *ngIf="stockForm.type !== 'FIXED_ASSETS'">
                                                             <div class="col-xl-6 col-12">
                                                                 <div class="purchase-information account-tab-3">
-                                                                    <div class="row align-items-center">
+                                                                    <div class="row align-items-center row-gap">
                                                                         <div
                                                                             class="
                                                                                 col-lg-12
@@ -377,7 +388,14 @@
                                                                                 </mat-radio-group>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-lg-12 pt-3 which-tab">
+                                                                        <div
+                                                                            class="
+                                                                                col-sm-6 col-lg-12
+                                                                                pt-3
+                                                                                which-tab
+                                                                                mr-b15
+                                                                            "
+                                                                        >
                                                                             <dropdown-field
                                                                                 [name]="'purchaseAccount'"
                                                                                 [placeholder]="
@@ -403,7 +421,7 @@
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
-                                                                                class="row unit-rate-align"
+                                                                                class="row unit-rate-align mr-b15"
                                                                                 *ngFor="
                                                                                     let variantPurchaseUnitRate of (stockForm
                                                                                         ?.variants)[0]
@@ -502,12 +520,10 @@
                                                                                 >
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
-                                                                                <div class="col-sm-10 col-10">
-                                                                                    <button
-                                                                                        mat-flat-button
+                                                                                <div class="col-sm-10 col-10 mr-t15">
+                                                                                    <a
+                                                                                        href="javascript:void(0);"
                                                                                         class="bg-transparent px-0 pt-2"
-                                                                                        role="button"
-                                                                                        type="button"
                                                                                         disableRipple
                                                                                         (click)="
                                                                                             addNewVariantPurchaseUnitPrice(
@@ -535,13 +551,12 @@
                                                                                             "
                                                                                             class="
                                                                                                 add-new-text-container
-                                                                                                text-primary
                                                                                                 font-15
                                                                                             "
                                                                                         >
                                                                                             {{ localeData?.add_new }}
                                                                                         </span>
-                                                                                    </button>
+                                                                                    </a>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -551,7 +566,7 @@
                                                             <div class="col-xl-6 col-12 pl-4">
                                                                 <div class="sales-information which-tab-4">
                                                                     <!-- input field will disabled if sales info unchecked -->
-                                                                    <div class="row">
+                                                                    <div class="row row-gap">
                                                                         <div
                                                                             class="
                                                                                 col-lg-12
@@ -583,7 +598,7 @@
                                                                                 </mat-radio-group>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-lg-12 pt-3">
+                                                                        <div class="col-sm-6 col-lg-12 pt-3 mr-b15">
                                                                             <dropdown-field
                                                                                 [name]="'salesAccount'"
                                                                                 [placeholder]="
@@ -606,7 +621,7 @@
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
-                                                                                class="row unit-rate-align"
+                                                                                class="row unit-rate-align mr-b15"
                                                                                 *ngFor="
                                                                                     let variantSalesUnitRate of (stockForm
                                                                                         ?.variants)[0]
@@ -699,12 +714,10 @@
                                                                                 >
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
-                                                                                <div class="col-sm-10 col-10">
-                                                                                    <button
-                                                                                        mat-flat-button
+                                                                                <div class="col-sm-10 col-10 mr-t15">
+                                                                                    <a
+                                                                                        href="javascript:void(0);"
                                                                                         class="bg-transparent px-0 pt-2"
-                                                                                        role="button"
-                                                                                        type="button"
                                                                                         disableRipple
                                                                                         (click)="
                                                                                             addNewVariantSalesUnitPrice(
@@ -732,12 +745,11 @@
                                                                                             "
                                                                                             class="
                                                                                                 add-new-text-container
-                                                                                                text-primary
                                                                                             "
                                                                                         >
                                                                                             {{ localeData?.add_new }}
                                                                                         </span>
-                                                                                    </button>
+                                                                                    </a>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -774,7 +786,7 @@
                                                         >
                                                             <ng-container *ngIf="option.isEdit">
                                                                 <div class="row color-field pt-3 pb-2">
-                                                                    <div class="col-lg-4 option-delete pr-0">
+                                                                    <div class="col-lg-4 option-delete pr-0 mt-2">
                                                                         <div class="w-100">
                                                                             <input-field
                                                                                 [placeholder]="'Option name'"
@@ -812,7 +824,7 @@
                                                                         let j = index
                                                                     "
                                                                 >
-                                                                    <div class="col-lg-4 option-delete pr-0">
+                                                                    <div class="col-lg-4 option-delete pr-0 mt-2">
                                                                         <div class="w-100">
                                                                             <input-field
                                                                                 [name]="'option-value-' + i + '-' + j"
@@ -1112,7 +1124,7 @@
                                                                             <button
                                                                                 mat-icon-button
                                                                                 role="button"
-                                                                                class="icon-button-remove-sales"
+                                                                                class="icon-remove-sales"
                                                                                 type="button"
                                                                                 (click)="
                                                                                     deleteVariantPurchaseUnitPrice(
@@ -1212,7 +1224,7 @@
                                                                             <button
                                                                                 mat-icon-button
                                                                                 role="button"
-                                                                                class="icon-button-remove-sales"
+                                                                                class="icon-remove-sales"
                                                                                 type="button"
                                                                                 (click)="
                                                                                     deleteVariantSalesUnitPrice(
@@ -1317,7 +1329,7 @@
                                                                             <button
                                                                                 mat-icon-button
                                                                                 role="button"
-                                                                                class="icon-button-remove-sales"
+                                                                                class="icon-remove-sales"
                                                                                 type="button"
                                                                                 (click)="
                                                                                     deleteVariantFixedAssetsUnitPrice(
@@ -1468,7 +1480,7 @@
                                 <mat-tab [label]="localeData?.other">
                                     <div class="tab-container-new px-3">
                                         <div class="other-width">
-                                            <div class="row">
+                                            <div class="row row-gap">
                                                 <div class="col-sm-6 col-lg-12 mb-3">
                                                     <mat-radio-group
                                                         color="primary"
@@ -1553,7 +1565,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                            <div class="row mr-t15">
                                                 <ng-container *ngIf="!isVariantAvailable">
                                                     <div class="col-sm-6 col-lg-3">
                                                         <input-field
@@ -1573,16 +1585,16 @@
                                                         >
                                                         </input-field>
                                                     </div>
-                                                    <div class="col-sm-6 col-lg-3">
-                                                        <input-field
-                                                            [name]="'skuCode'"
-                                                            [type]="'text'"
-                                                            [placeholder]="commonLocaleData?.app_sku_code"
-                                                            [(ngModel)]="stockForm.variants[0].skuCode"
-                                                        >
-                                                        </input-field>
-                                                    </div>
                                                 </ng-container>
+                                                <div class="col-sm-6 col-lg-3" *ngIf="isVariantAvailable">
+                                                    <input-field
+                                                        [name]="'skuCode'"
+                                                        [type]="'text'"
+                                                        [placeholder]="commonLocaleData?.app_sku_code"
+                                                        [(ngModel)]="stockForm.variants[0].skuCode"
+                                                    >
+                                                    </input-field>
+                                                </div>
                                                 <div class="col-sm-6 col-lg-3 custom-label">
                                                     <span class="pull-right right-fix-pencil-icon">
                                                         <i
@@ -2356,7 +2368,7 @@
                                                                 </div>
                                                                 <button
                                                                     mat-icon-button
-                                                                    class="icon-button-remove"
+                                                                    class="icon-remove"
                                                                     role="button"
                                                                     type="button"
                                                                 >
@@ -2461,7 +2473,7 @@
                                                                 </div>
                                                                 <button
                                                                     mat-icon-button
-                                                                    class="icon-button-remove"
+                                                                    class="icon-remove"
                                                                     role="button"
                                                                     type="button"
                                                                 >
@@ -2782,7 +2794,7 @@
                                                                     </div>
                                                                     <button
                                                                         mat-icon-button
-                                                                        class="icon-button-remove"
+                                                                        class="icon-remove"
                                                                         role="button"
                                                                         type="button"
                                                                     >

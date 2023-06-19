@@ -2432,13 +2432,13 @@ modal-container.modal {
 .custom-datepicker {
     input {
         background: var(--color-sidebar-secondary-search-bar-background) !important;
-        font-size: 14px;
+        font-size: var(--font-size-15);
         position: relative;
         width: 230px !important;
         max-width: 222px;
         display: block;
         border: 1px solid var(--color-secondary-input-bar-border);
-        height: 36px;
+        height: 40px;
         border-radius: 5px;
         text-align: left;
         padding-left: 10px !important;
@@ -8798,7 +8798,6 @@ button {
 
 .aside-pane-form label {
     font-size: var(--font-size-15);
-    color: var(--color-common-primary-text);
 }
 
 .tax-engine .header-info .dropdown-menu > li > a:hover {
@@ -14175,4 +14174,9 @@ body.hide-scroll-body.master-page {
     .mat-button-focus-overlay {
         background-color: var(--color-primary-header-background) !important;
     }
+}
+
+/*--- tooltip --*/
+.mat-tooltip {
+    letter-spacing: 0.8px;
 }

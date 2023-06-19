@@ -222,17 +222,6 @@
                 }
             }
         }
-        .delete-btn {
-            width: 30px !important;
-            height: 30px !important;
-            line-height: 0px !important;
-            font-size: 20px;
-            button {
-                &:focus {
-                    box-shadow: none !important;
-                }
-            }
-        }
         .data-wrap {
             display: flex;
             column-gap: 40px;
@@ -243,7 +232,7 @@
                 min-width: 25px;
                 justify-content: center;
                 background-color: var(--color-primary-subscription-plans-top-bar-background);
-                font-size: 12px;
+                font-size: var(--font-size-12);
             }
         }
         .dot-img {
@@ -713,7 +702,7 @@ table.stock-table {
         flex-wrap: wrap;
     }
     .section-head {
-        font-size: 16px;
+        font-size: var(--font-size-16);
     }
 }
 .option-color {
@@ -1009,4 +998,7 @@ table.stock-table {
     border: 1px solid var(--color-common-secondary-border);
     background-color: var(--color-tertiary-button-background);
     margin-left: 15px;
+}
+.add-new-text-container {
+    color: var(--color-primary-button-text);
 }

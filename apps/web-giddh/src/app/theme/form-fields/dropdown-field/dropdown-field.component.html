@@ -40,6 +40,7 @@
                     *ngFor="let option of fieldFilteredOptions"
                     [value]="option"
                     [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
+                    [matTooltip]="option?.label"
                 >
                     <ng-template
                         [ngTemplateOutletContext]="{ option: option }"
@@ -55,6 +56,7 @@
                     value=""
                     *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew"
                     (click)="createNewRecord()"
+                    [matTooltip]="option?.label"
                 >
                     <a href="javascript:;" class="options-class-create">
                         {{ commonLocaleData?.app_create_new }}
@@ -88,6 +90,7 @@
                             *ngFor="let option of fieldFilteredOptions"
                             [value]="option"
                             [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
+                            [matTooltip]="option?.label"
                         >
                             <ng-template
                                 [ngTemplateOutletContext]="{ option: option }"
