@@ -18,14 +18,18 @@
             <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
-            <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
+            <div class="chart-div" google-chart chart="chartData" [hidden]="requestInFlight">
                 <div class="row">
                     <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
-                        <highcharts-chart
+                        <!-- <highcharts-chart
                             *ngIf="currentRatioChartOptions"
                             [Highcharts]="currentRatioChart"
                             [options]="currentRatioChartOptions"
-                        ></highcharts-chart>
+                        ></highcharts-chart> -->
+                        <div class="d-flex justify-content-center dashboard-doughnut-chart-container">
+                            <canvas id="currentRatioChartCanvas" width="100%" height="140px"></canvas>
+                        </div>
+
                         <h1 class="mr-b1">{{ localeData?.current_ratio }}</h1>
                         <small
                             >{{ localeData?.current_assets }} /<br />
@@ -33,8 +37,11 @@
                         >
                     </div>
                     <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
-                        <highcharts-chart *ngIf="debtOptions" [Highcharts]="debtChart" [options]="debtOptions">
-                        </highcharts-chart>
+                        <!-- <highcharts-chart *ngIf="debtOptions" [Highcharts]="debtChart" [options]="debtOptions">
+                        </highcharts-chart> -->
+                        <div class="d-flex justify-content-center dashboard-doughnut-chart-container">
+                            <canvas id="debitOptionsChartCanvas" width="100%" height="140px"></canvas>
+                        </div>
                         <h1 class="mr-b1">{{ localeData?.debt_equity_ratio }}</h1>
                         <small
                             >{{ localeData?.current_liability }} +<br />
@@ -43,11 +50,14 @@
                         >
                     </div>
                     <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
-                        <highcharts-chart
+                        <!-- <highcharts-chart
                             *ngIf="proprietaryOption"
                             [Highcharts]="proprietaryChart"
                             [options]="proprietaryOption"
-                        ></highcharts-chart>
+                        ></highcharts-chart> -->
+                        <div class="d-flex justify-content-center dashboard-doughnut-chart-container">
+                            <canvas id="proprietaryOptionsChartCanvas" width="100%" height="140px"></canvas>
+                        </div>
                         <h1 class="mr-b1">{{ localeData?.proprietary_ratio }}</h1>
                         <small
                             >{{ localeData?.shareholders_fund }} /<br />
@@ -55,11 +65,14 @@
                         >
                     </div>
                     <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
-                        <highcharts-chart
+                        <!-- <highcharts-chart
                             *ngIf="fixedAssetOption"
                             [Highcharts]="fixedAssetChart"
                             [options]="fixedAssetOption"
-                        ></highcharts-chart>
+                        ></highcharts-chart> -->
+                        <div class="d-flex justify-content-center dashboard-doughnut-chart-container">
+                            <canvas id="fixedAssetOptionsChartCanvas" width="100%" height="140px"></canvas>
+                        </div>
                         <h1 class="mr-b1">{{ localeData?.fixed_assets_ratio }}</h1>
                         <small
                             >{{ localeData?.fixed_assets }}/<br />{{ localeData?.noncurrent_liability }} + <br />

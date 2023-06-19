@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
@@ -13,11 +13,14 @@ import { GeneralService } from "../../../services/general.service";
 import { DashboardService } from '../../../services/dashboard.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 @Component({
     selector: 'revenue-chart',
     templateUrl: 'revenue-chart.component.html',
-    styleUrls: ['revenue-chart.component.scss', '../../home.component.scss']
+    styleUrls: ['revenue-chart.component.scss', '../../home.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class RevenueChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
@@ -44,7 +47,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public getCurrentWeekStartEndDate: any = '';
     public getPreviousWeekStartEndDate: any = '';
-    public chartType: string = 'column';
+    public chartType:'bar' | 'line' = 'bar';
     public graphExpanded: boolean = false;
     public currentDateRangePickerValue: Date[] = [];
     public previousDateRangePickerValue: Date[] = [];
@@ -56,6 +59,8 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public chartChanged: boolean = false;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Hold Chart and used when destroy required */
+    public chart:any;
 
     constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService) {
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
@@ -195,7 +200,11 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                     this.summaryData.lowestLabel = res.previousLowestClosingBalance.dateLabel;
                 }
 
-                this.generateChart();
+                this.generateChart();    
+                if (this.chart) {
+                    this.chart.destroy();
+                }            
+                this.createChart();
             } else {
                 if (response?.status === "error" && response?.message) {
                     this.toasterService.errorToast(response.message);
@@ -277,7 +286,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                 }
             }
         };
-
         this.requestInFlight = false;
     }
 
@@ -301,7 +309,8 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.graphParams.interval = "daily";
         this.chartType = "line";
         this.graphExpanded = true;
-        this.generateChart();
+        this.generateChart();     
+        this.createChart();
     }
 
     public updateChartFrequency(interval) {
@@ -315,35 +324,53 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.summaryData.lowest = 0;
 
         this.generateChart();
+        this.createChart();
 
         setTimeout(() => {
             this.getRevenueGraphData();
         }, 200);
     }
 
-    public setPreviousDate(data) {
-        if (data && !this.chartChanged) {
-            this.graphParams.previousFrom = dayjs(data[0]).format(GIDDH_DATE_FORMAT);
-            this.graphParams.previousTo = dayjs(data[1]).format(GIDDH_DATE_FORMAT);
-            this.getPreviousWeekStartEndDate = [data[0], data[1]];
+    // public setPreviousDate(data) {
+    //     if (data && !this.chartChanged) {
+    //         this.graphParams.previousFrom = dayjs(data[0]).format(GIDDH_DATE_FORMAT);
+    //         this.graphParams.previousTo = dayjs(data[1]).format(GIDDH_DATE_FORMAT);
+    //         this.getPreviousWeekStartEndDate = [data[0], data[1]];
+    //         this.getRevenueGraphData();
+    //     }
+    // }
+    public setPreviousDate() {
+        if ( (this.previousDateRangePickerValue[0] !== null) && (this.previousDateRangePickerValue[1] !== null) ) {
+            this.graphParams.previousFrom = dayjs(this.previousDateRangePickerValue[0]).format(GIDDH_DATE_FORMAT);
+            this.graphParams.previousTo = dayjs(this.previousDateRangePickerValue[1]).format(GIDDH_DATE_FORMAT);
+            this.getPreviousWeekStartEndDate = [this.previousDateRangePickerValue[0], this.previousDateRangePickerValue[1]];
             this.getRevenueGraphData();
         }
     }
 
-    public setCurrentDate(data) {
-        if (data) {
-            this.graphParams.currentFrom = dayjs(data[0]).format(GIDDH_DATE_FORMAT);
-            this.graphParams.currentTo = dayjs(data[1]).format(GIDDH_DATE_FORMAT);
-            this.getCurrentWeekStartEndDate = [data[0], data[1]];
+    // public setCurrentDate(data) {
+    //     if (data) {
+    //         this.graphParams.currentFrom = dayjs(data[0]).format(GIDDH_DATE_FORMAT);
+    //         this.graphParams.currentTo = dayjs(data[1]).format(GIDDH_DATE_FORMAT);
+    //         this.getCurrentWeekStartEndDate = [data[0], data[1]];
+    //         this.getRevenueGraphData();
+    //         this.chartChanged = false;
+    //     }
+    // }
+    public setCurrentDate() {        
+        if( (this.currentDateRangePickerValue[0] !== null) && (this.currentDateRangePickerValue[1] !== null) ){
+            this.graphParams.currentFrom = dayjs(this.currentDateRangePickerValue[0]).format(GIDDH_DATE_FORMAT);
+            this.graphParams.currentTo = dayjs(this.currentDateRangePickerValue[1]).format(GIDDH_DATE_FORMAT);
+            this.getCurrentWeekStartEndDate = [this.currentDateRangePickerValue[0], this.currentDateRangePickerValue[1]];
             this.getRevenueGraphData();
-            this.chartChanged = false;
+            this.chartChanged = false;        
         }
     }
 
     public showColumnChart() {
         this.generalService.invokeEvent.next("showallcharts");
         this.graphParams.interval = "daily";
-        this.chartType = "column";
+        this.chartType = "bar";
         this.graphExpanded = false;
 
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
@@ -358,5 +385,120 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.graphParams.previousTo = dayjs(this.getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
 
         this.getRevenueGraphData();
-    }
+    }   
+
+    createChart() {
+
+        const chartType = this.chartType;
+
+       /* For Chart Type Line  */
+        if(this.chartType === 'line'){
+            this.chart = new Chart( "revenueChartLargeCanvas", {
+                type: chartType,          
+                data: {
+                    labels: ['Jun', 'Jul', 'Aug'],
+                    datasets: [
+                        {
+                            label: '',
+                            data: [65, 59, 80],
+                            fill: false,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                    }
+                    ], 
+                            
+                   },
+    
+                options:{
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                    },
+                    scales: {
+                        x: {
+                            border: {
+                                display: false
+                            },
+                            grid: {
+                                display: true,
+                                drawOnChartArea: false,
+                                drawTicks: true,                                 
+                            },
+                            beginAtZero: true
+                            },
+                            y: {
+                            border: {
+                                display: false
+                            },
+                            beginAtZero: true,
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        bar:{
+                            backgroundColor: "blue",
+                            borderColor: 'blue'
+                        }
+                    }
+                } 
+                });
+        }
+
+        /* For Chart Type Bar  */
+        if(this.chartType === 'bar'){
+            this.chart = new Chart( "revenueChartCanvas", {
+                type: chartType,          
+                data: {
+                    labels: ['Jun', 'Jul', 'Aug'],
+                    datasets: [
+                    {
+                        label: '',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        backgroundColor: "rgb(12, 177, 175)",
+                        borderColor: 'rgb(12, 177, 175)',
+                        indexAxis:'x',
+                        barThickness: 20
+                    }
+            ], 
+                            
+                },
+    
+                options:{
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                    },
+                    scales: {
+                        x: {
+                            border: {
+                                display: false
+                            },
+                            grid: {
+                                display: true,
+                                drawOnChartArea: false,
+                                drawTicks: true,
+                            },
+                            },
+                            y: {
+                            border: {
+                                display: false
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        bar:{
+                            backgroundColor: "blue",
+                            borderColor: 'blue'
+                        }
+                    }
+                } 
+                });
+        }
+    }       
 }

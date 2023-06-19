@@ -21,6 +21,8 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { TlPlService } from '../../../services/tl-pl.service';
 import { cloneDeep } from '../../../lodash-optimized';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 @Component({
     selector: 'profit-loss',
@@ -121,72 +123,72 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges();
     }
 
-    public generateCharts() {
-        let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
-        let cPipe = this.currencyPipe;
+    // public generateCharts() {
+    //     let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
+    //     let cPipe = this.currencyPipe;
 
-        this.chartOptions = {
-            colors: ['#FED46A', '#4693F1'],
-            chart: {
-                type: 'pie',
-                polar: false,
-                className: 'profit-loss-chart',
-                width: 260,
-                height: '180px'
-            },
-            title: {
-                text: '',
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                },
-                gridLineWidth: 0,
-                minorGridLineWidth: 0,
-            },
-            xAxis: {
-                categories: []
-            },
-            legend: {
-                enabled: false
-            },
-            credits: {
-                enabled: false
-            },
-            plotOptions: {
-                pie: {
-                    showInLegend: true,
-                    innerSize: '70%',
-                    allowPointSelect: true,
-                    dataLabels: {
-                        enabled: false,
-                        crop: true,
-                        defer: true
-                    },
-                    shadow: false
-                },
-                series: {
-                    animation: false,
-                    dataLabels: {}
-                }
-            },
-            tooltip: {
-                shared: true,
-                useHTML: true,
-                formatter: function () {
-                    return (this.point) ? baseCurrencySymbol + " " + cPipe.transform(this.point.y) + '/-' : '';
-                }
-            },
-            series: [{
-                name: 'Profit & Loss',
-                type: 'pie',
-                data: [['Total Income', this.totalIncome], ['Total Expenses', this.totalExpense]],
-            }],
-        };
+    //     this.chartOptions = {
+    //         colors: ['#FED46A', '#4693F1'],
+    //         chart: {
+    //             type: 'pie',
+    //             polar: false,
+    //             className: 'profit-loss-chart',
+    //             width: 260,
+    //             height: '180px'
+    //         },
+    //         title: {
+    //             text: '',
+    //         },
+    //         yAxis: {
+    //             title: {
+    //                 text: ''
+    //             },
+    //             gridLineWidth: 0,
+    //             minorGridLineWidth: 0,
+    //         },
+    //         xAxis: {
+    //             categories: []
+    //         },
+    //         legend: {
+    //             enabled: false
+    //         },
+    //         credits: {
+    //             enabled: false
+    //         },
+    //         plotOptions: {
+    //             pie: {
+    //                 showInLegend: true,
+    //                 innerSize: '70%',
+    //                 allowPointSelect: true,
+    //                 dataLabels: {
+    //                     enabled: false,
+    //                     crop: true,
+    //                     defer: true
+    //                 },
+    //                 shadow: false
+    //             },
+    //             series: {
+    //                 animation: false,
+    //                 dataLabels: {}
+    //             }
+    //         },
+    //         tooltip: {
+    //             shared: true,
+    //             useHTML: true,
+    //             formatter: function () {
+    //                 return (this.point) ? baseCurrencySymbol + " " + cPipe.transform(this.point.y) + '/-' : '';
+    //             }
+    //         },
+    //         series: [{
+    //             name: 'Profit & Loss',
+    //             type: 'pie',
+    //             data: [['Total Income', this.totalIncome], ['Total Expenses', this.totalExpense]],
+    //         }],
+    //     };
 
-        this.requestInFlight = false;
-        this.cdRef.detectChanges();
-    }
+    //     this.requestInFlight = false;
+    //     this.cdRef.detectChanges();
+    // }
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
@@ -313,10 +315,68 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 if (this.totalIncome === 0 && this.totalExpense === 0) {
                     this.resetChartData();
                 } else {
-                    this.generateCharts();
+                    // this.generateCharts();
+                    this.createChart()
                 }
             }
             this.requestInFlight = false;
         });
     }
+
+    createChart(){
+        let totalIncome = this.amountSettings.baseCurrencySymbol + " " + this.totalIncome + "/-";
+        let totalExpense = this.amountSettings.baseCurrencySymbol + " " + this.totalExpense + "/-";
+        let label = [totalIncome,totalExpense];
+
+        let data = [this.totalIncome, this.totalExpense]
+
+        const dataChart = new Chart("profitLossChartCanvas", {
+            type: 'doughnut',            
+            data: {
+                labels: label,
+                datasets: [{
+                    label: 'Profit & Loss',
+                    data: data,
+                    backgroundColor: ['#FED46A', '#4693F1'],
+                    hoverOffset: 18,
+                    hoverBorderColor: '#fff',
+                    borderWidth: 1,		 
+                    offset: 6      
+              }],
+            },
+
+            options:{
+                plugins: {
+                    legend: {
+                      display: false
+                    },
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                spacing:1,
+                cutout:50,  
+                radius: '95%'        
+            } 
+            });
+
+            this.requestInFlight = false;
+            this.cdRef.detectChanges();
+
+
+            const doughnutLabel = {
+                id: 'profitLossChartCanvas',
+                beforeDatasetsDraw(chart, args ,pluginOptions) {
+                  const { ctx, dataChart } = chart;
+                  ctx.save(); 
+                  const xCoor = chart.getDatasetMeta(0).dataChart[0].x;
+                  const yCoor = chart.getDatasetMeta(0).dataChart[0].y;
+                  ctx.font = 'bold 30px sans-serif';
+                  ctx.fillStyle = 'rgba(54, 162, 235, 1)';
+                  ctx.textAlign = 'center';
+                  ctx.textBaseline = 'middle';
+                  ctx.fillText(`jskd`, xCoor, yCoor);
+                }
+              }
+     }
+     
 }

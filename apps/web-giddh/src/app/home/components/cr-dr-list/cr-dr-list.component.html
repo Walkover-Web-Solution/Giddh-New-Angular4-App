@@ -35,8 +35,8 @@
         </div>
         <mat-card-content class="cr-dr-body position-relative">
             <div class="top-five-cr-dr-table">
-                <div class="table-responsive debtors-table">
-                    <table class="table basic giddh-table on-mobile-view">
+                <div class="debtors-table">
+                    <!-- <table class="table basic giddh-table on-mobile-view">
                         <thead [hidden]="!drAccounts?.length">
                             <th width="30%">{{ localeData?.debtors }}</th>
                             <th width="10%">{{ localeData?.invoiced_on }}</th>
@@ -110,35 +110,61 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
-                </div>
-                <div>
-                    <table mat-table [dataSource]="drAccounts" *ngIf="!isLoading && drAccounts?.length">
-                        <ng-container *ngIf="isLoading">
-                            <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-                        </ng-container>
+                    </table> -->
+                    <ng-container>
+                        <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
+                        <div class="no-entries" *ngIf="!isLoading && !drAccounts?.length">
+                            <a
+                                class="do-sale-link min-width-130"
+                                href="javascript:;"
+                                [routerLink]="['/pages/proforma-invoice/invoice/sales']"
+                            >
+                                {{ localeData?.do_sales }}
+                            </a>
+                        </div>
+                    </ng-container>
 
-                        <!-- Position Column -->
-                        <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.debtors }}</th>
-                            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-                        </ng-container>
-
+                    <table
+                        mat-table
+                        [dataSource]="drAccounts"
+                        *ngIf="!isLoading && drAccounts?.length"
+                        class="basic w-100"
+                    >
                         <!-- Name Column -->
-                        <ng-container matColumnDef="latestInvoiceDate">
-                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.invoiced_on }}</th>
-                            <td mat-cell *matCellDef="let element">
-                                <span>
-                                    {{ element.latestInvoiceDate }}
-                                </span>
-                                <span *ngIf="!element.latestBillAmount"> - </span>
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell width="30%" *matHeaderCellDef>{{ localeData?.debtors }}</th>
+                            <td mat-cell *matCellDef="let element" [attr.data-title]="localeData?.debtors">
+                                {{ element.name }}
                             </td>
                         </ng-container>
 
-                        <!-- Weight Column -->
+                        <!-- Invoiced On Column-->
+                        <ng-container matColumnDef="latestInvoiceDate">
+                            <th mat-header-cell width="10%" *matHeaderCellDef class="text-center">
+                                {{ localeData?.invoiced_on }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let element"
+                                [attr.data-title]="localeData?.invoiced_on"
+                                class="text-center"
+                            >
+                                <span *ngIf="element.latestInvoiceDate"> {{ element.latestInvoiceDate }} </span>
+                                <span *ngIf="!element.latestInvoiceDate"> - </span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Bill Amount Column -->
                         <ng-container matColumnDef="latestBillAmount">
-                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.bill_amount }}</th>
-                            <td mat-cell *matCellDef="let element" class="text-right">
+                            <th mat-header-cell width="20%" *matHeaderCellDef class="text-right">
+                                {{ localeData?.bill_amount }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let element"
+                                [attr.data-title]="localeData?.bill_amount"
+                                class="text-right"
+                            >
                                 <span class="d-inline-flex" *ngIf="element.latestBillAmount">
                                     <amount-field
                                         [amount]="
@@ -149,16 +175,21 @@
                                     >
                                     </amount-field>
                                 </span>
-                                <span *ngIf="!element.latestBillAmount"> - </span>
+                                <span class="pr-4 mr-3" *ngIf="!element.latestBillAmount"> - </span>
                             </td>
                         </ng-container>
 
-                        <!-- Symbol Column -->
+                        <!-- Due Date Column -->
                         <ng-container matColumnDef="closingBalance">
-                            <th mat-header-cell *matHeaderCellDef>
+                            <th mat-header-cell width="40%" *matHeaderCellDef class="text-right">
                                 {{ commonLocaleData?.app_due_as_on }} {{ dueDate | date }}
                             </th>
-                            <td mat-cell *matCellDef="let element" class="text-right">
+                            <td
+                                mat-cell
+                                *matCellDef="let element"
+                                [attr.data-title]="commonLocaleData?.app_due_as_on"
+                                class="text-right"
+                            >
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="
@@ -176,81 +207,103 @@
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                 </div>
-                <div class="table-responsive">
-                    <table class="table basic giddh-table on-mobile-view">
-                        <thead [hidden]="!crAccounts?.length">
-                            <th width="30%">{{ localeData?.creditors }}</th>
-                            <th width="10%">{{ localeData?.invoiced_on }}</th>
-                            <th width="20%" class="text-right">{{ localeData?.bill_amount }}</th>
-                            <th width="40%" class="text-right">
+                <div>
+                    <ng-container>
+                        <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
+                        <div class="no-entries" *ngIf="!isLoading && !crAccounts?.length">
+                            <a
+                                class="do-sale-link min-width-130"
+                                href="javascript:;"
+                                [routerLink]="['/pages/proforma-invoice/invoice/purchase']"
+                            >
+                                {{ localeData?.do_purchase }}
+                            </a>
+                        </div>
+                    </ng-container>
+
+                    <table
+                        mat-table
+                        [dataSource]="crAccounts"
+                        *ngIf="!isLoading && crAccounts?.length"
+                        class="basic w-100"
+                    >
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell width="30%" *matHeaderCellDef>{{ localeData?.creditors }}</th>
+                            <td mat-cell *matCellDef="let element" [attr.data-title]="localeData?.creditors">
+                                {{ element.name }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Invoiced On Column-->
+                        <ng-container matColumnDef="latestInvoiceDate">
+                            <th mat-header-cell width="10%" *matHeaderCellDef class="text-center">
+                                {{ localeData?.invoiced_on }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let element"
+                                [attr.data-title]="localeData?.invoiced_on"
+                                class="text-center"
+                            >
+                                <span>
+                                    {{ element.latestInvoiceDate }}
+                                </span>
+                                <span *ngIf="!element.latestBillAmount"> - </span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Bill Amount Column -->
+                        <ng-container matColumnDef="latestBillAmount">
+                            <th mat-header-cell width="20%" *matHeaderCellDef class="text-right">
+                                {{ localeData?.bill_amount }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let element"
+                                [attr.data-title]="localeData?.bill_amount"
+                                class="text-right"
+                            >
+                                <span class="d-inline-flex" *ngIf="element.latestBillAmount">
+                                    <amount-field
+                                        [amount]="
+                                            giddhRoundOff(element.latestBillAmount.amount, giddhBalanceDecimalPlaces)
+                                        "
+                                        [currencySymbol]="element.latestBillAmount.symbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                                <span class="pr-4 mr-3" *ngIf="!element.latestBillAmount"> - </span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Due Date Column -->
+                        <ng-container matColumnDef="closingBalance">
+                            <th mat-header-cell width="40%" *matHeaderCellDef class="text-right">
                                 {{ commonLocaleData?.app_due_as_on }} {{ dueDate | date }}
                             </th>
-                        </thead>
-                        <tbody *ngIf="!isLoading">
-                            <tr *ngFor="let account of crAccounts">
-                                <td [attr.data-title]="localeData?.creditors">{{ account.name }}</td>
-                                <td [attr.data-title]="localeData?.invoiced_on">
-                                    <span *ngIf="account.latestInvoiceDate">{{ account.latestInvoiceDate }}</span
-                                    ><span *ngIf="!account.latestInvoiceDate">-</span>
-                                </td>
-                                <td
-                                    [attr.data-title]="localeData?.bill_amount"
-                                    class="text-right"
-                                    *ngIf="account.latestBillAmount"
-                                >
-                                    <span class="d-inline-flex">
-                                        <amount-field
-                                            [amount]="
-                                                giddhRoundOff(
-                                                    account.latestBillAmount.amount,
-                                                    giddhBalanceDecimalPlaces
-                                                )
-                                            "
-                                            [currencySymbol]="account.latestBillAmount.symbol"
-                                            [currencyCode]="activeCompany?.baseCurrency"
-                                        >
-                                        </amount-field>
-                                    </span>
-                                </td>
-                                <td
-                                    [attr.data-title]="commonLocaleData?.app_due_as_on"
-                                    class="text-right"
-                                    *ngIf="!account.latestBillAmount"
-                                >
-                                    -
-                                </td>
-                                <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right">
-                                    <span class="d-inline-flex">
-                                        <amount-field
-                                            [amount]="
-                                                giddhRoundOff(account.closingBalance.amount, giddhBalanceDecimalPlaces)
-                                            "
-                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                            [currencyCode]="activeCompany?.baseCurrency"
-                                        >
-                                        </amount-field>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr *ngIf="crAccounts?.length === 0">
-                                <td colspan="4" class="no-entries">
-                                    <a
-                                        href="javascript:;"
-                                        class="btn btn-primary min-width-130"
-                                        [routerLink]="['/pages/proforma-invoice/invoice/purchase']"
+                            <td
+                                mat-cell
+                                *matCellDef="let element"
+                                [attr.data-title]="commonLocaleData?.app_due_as_on"
+                                class="text-right"
+                            >
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="
+                                            giddhRoundOff(element.closingBalance.amount, giddhBalanceDecimalPlaces)
+                                        "
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
-                                        {{ localeData?.do_purchase }}
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tbody *ngIf="isLoading">
-                            <tr>
-                                <td colspan="4">
-                                    <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-                                </td>
-                            </tr>
-                        </tbody>
+                                    </amount-field>
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                 </div>
             </div>

@@ -26,15 +26,22 @@
             <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
-            <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
-                <highcharts-chart
+
+            <div class="d-flex justify-content-center dashboard-doughnut-chart-container">
+                <canvas id="totaloverDueChartCanvas" width="220px" height="140px" [hidden]="!dataFound"></canvas>
+            </div>
+
+            <div class="no-data-available" *ngIf="!dataFound">
+                <img src="{{ imgPath }}noDataChart.svg" [alt]="commonLocaleData?.app_no_data_found" />
+            </div>
+
+            <div class="chart-div mt-auto" *ngIf="!requestInFlight">
+                <!-- <highcharts-chart
                     *ngIf="chartOptions && dataFound"
                     [Highcharts]="totaloverDueChart"
                     [options]="chartOptions"
-                ></highcharts-chart>
-                <div class="no-data-available" *ngIf="!dataFound">
-                    <img src="{{ imgPath }}noDataChart.svg" [alt]="commonLocaleData?.app_no_data_found" />
-                </div>
+                ></highcharts-chart> -->
+
                 <div class="clearfix mr-b2">
                     <div class="due">
                         <span class="mr-b1 due-amount">{{ localeData?.invoice_due }}</span>
@@ -58,7 +65,7 @@
                         </small>
                     </div>
                 </div>
-                <div class="clearfix mr-b2">
+                <div class="clearfix">
                     <div class="due">
                         <span class="mr-b1 due-amount">{{ localeData?.bill_due }}</span>
                         <span class="total-amount pull-right customer-due-text">

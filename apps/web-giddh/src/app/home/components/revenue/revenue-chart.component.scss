@@ -256,6 +256,25 @@ input:read-only:focus {
     display: flex;
     flex-direction: row-reverse;
 }
+/*============Mat Range Date Picker Default CSS Overide =====Start===================*/
+.mat-datepicker-toggle {
+    color: var(--color-nero) !important;
+}
+.mat-form-field-flex {
+    align-items: center !important;
+}
+.mat-calendar-header {
+    background-color: var(--color-primary-header-background) !important;
+}
+.mat-form-field-type-mat-date-range-input {
+    .mat-form-field-infix {
+        width: 206px !important;
+    }
+}
+.mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+}
+/*============Mat Range Date Picker Default CSS Overide =====End=====================*/
 @media (max-width: 991px) {
     .about-date {
         font-size: 16px;

@@ -8918,8 +8918,8 @@ input.checkbox-custom[type="checkbox"] {
     display: block;
 }
 
-.panel-block .card-body {
-    min-height: 350px;
+.panel-block .mat-card-content {
+    min-height: 361px;
 }
 
 .payment-modal {
@@ -9337,6 +9337,8 @@ span#HW_badge_cont:nth-child(3) {
         padding: 0 !important;
     }
     mat-card-content {
+        display: flex;
+        flex-direction: column;
         padding: 20px;
     }
 }
@@ -12097,7 +12099,7 @@ body.update-scroll-hidden {
         overflow-y: auto !important;
     }
 
-    .panel-block .card-body {
+    .panel-block .mat-card-content {
         min-height: auto;
     }
 
