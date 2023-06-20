@@ -1711,10 +1711,22 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.generateVariants();
     }
 
+    /**
+     * This will hold option values before edit
+     *
+     * @param {*} option
+     * @memberof StockCreateEditComponent
+     */
     public editOptionValues(option: any): void {
         this.optionEditing = cloneDeep(option);
     }
 
+    /**
+     * Callback for option value update
+     *
+     * @param {number} optionIndex
+     * @memberof StockCreateEditComponent
+     */
     public updateOptionValues(optionIndex: number): void {
         if (this.optionEditing) {
             this.stockForm.options[optionIndex]?.values?.forEach((value, index) => {
@@ -1734,5 +1746,24 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         }
 
         this.generateVariants();
+    }
+
+    /**
+     * This will update tax inclusive settings in all variants
+     *
+     * @param {string} moduleType
+     * @param {boolean} status
+     * @memberof StockCreateEditComponent
+     */
+    public updateTaxInclusiveStatus(moduleType: string, status: boolean): void {
+        this.stockForm.variants?.forEach(variant => {
+            if (moduleType === "fixedassets") {
+                variant.fixedAssetTaxInclusive = status;
+            } else if (moduleType === "sales") {
+                variant.salesTaxInclusive = status;
+            } else if (moduleType === "purchase") {
+                variant.purchaseTaxInclusive = status;
+            }
+        });
     }
 }

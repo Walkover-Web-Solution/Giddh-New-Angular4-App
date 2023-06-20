@@ -185,6 +185,13 @@
                                                                                     stockForm.variants[0]
                                                                                         .fixedAssetTaxInclusive
                                                                                 "
+                                                                                (ngModelChange)="
+                                                                                    updateTaxInclusiveStatus(
+                                                                                        'fixedassets',
+                                                                                        stockForm.variants[0]
+                                                                                            .fixedAssetTaxInclusive
+                                                                                    )
+                                                                                "
                                                                             >
                                                                                 <mat-radio-button [value]="true">
                                                                                     {{ localeData?.inclusive }}
@@ -377,6 +384,13 @@
                                                                                     [(ngModel)]="
                                                                                         stockForm.variants[0]
                                                                                             .purchaseTaxInclusive
+                                                                                    "
+                                                                                    (ngModelChange)="
+                                                                                        updateTaxInclusiveStatus(
+                                                                                            'purchase',
+                                                                                            stockForm.variants[0]
+                                                                                                .purchaseTaxInclusive
+                                                                                        )
                                                                                     "
                                                                                 >
                                                                                     <mat-radio-button [value]="true">
@@ -587,6 +601,13 @@
                                                                                     [(ngModel)]="
                                                                                         stockForm.variants[0]
                                                                                             .salesTaxInclusive
+                                                                                    "
+                                                                                    (ngModelChange)="
+                                                                                        updateTaxInclusiveStatus(
+                                                                                            'sales',
+                                                                                            stockForm.variants[0]
+                                                                                                .salesTaxInclusive
+                                                                                        )
                                                                                     "
                                                                                 >
                                                                                     <mat-radio-button [value]="true">
@@ -1493,7 +1514,7 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.manufacturing">
-                                    <create-recipe></create-recipe>
+                                    <create-recipe [variants]="stockForm.variants"></create-recipe>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.other">
                                     <div class="tab-container-new px-3">

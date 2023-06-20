@@ -122,5 +122,6 @@
             [autocomplete]="autocomplete"
             (blur)="emitBlurEvent()"
         />
+        <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
     </mat-form-field>
 </div>
