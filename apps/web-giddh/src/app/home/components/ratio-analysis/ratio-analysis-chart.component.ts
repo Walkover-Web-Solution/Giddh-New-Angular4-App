@@ -1,6 +1,5 @@
 import { skipWhile, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import * as Highcharts from 'highcharts';
 import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { Store, select } from '@ngrx/store';
@@ -17,15 +16,7 @@ Chart.register(...registerables);
 })
 export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
-    public requestInFlight = true;
-    public currentRatioChart: typeof Highcharts = Highcharts;
-    public currentRatioChartOptions: Highcharts.Options;
-    public debtChart: typeof Highcharts = Highcharts;
-    public debtOptions: Highcharts.Options;
-    public proprietaryChart: typeof Highcharts = Highcharts;
-    public proprietaryOption: Highcharts.Options;
-    public fixedAssetChart: typeof Highcharts = Highcharts;
-    public fixedAssetOption: Highcharts.Options;
+    public requestInFlight = true;     
     public rationResponse$: Observable<any>;
     public ratioObj: any = {};
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

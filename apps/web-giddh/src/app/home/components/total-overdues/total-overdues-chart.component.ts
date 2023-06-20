@@ -1,6 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
-import * as Highcharts from 'highcharts';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -46,8 +45,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
     public imgPath: string = '';
     public requestInFlight: boolean = true;
-    public totaloverDueChart: typeof Highcharts = Highcharts;
-    public chartOptions: Highcharts.Options;
     /** Holds due invoices */
     public invoiceDue: number = 0;
     /** Holds pending invoices */
@@ -81,7 +78,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     
 
 
-    constructor(private store: Store<AppState>, private dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private receiptService: ReceiptService, private elementRef: ElementRef) {
+    constructor(private store: Store<AppState>, private dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private receiptService: ReceiptService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -91,7 +88,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnInit() {       
+    public ngOnInit(){
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         // img path
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';

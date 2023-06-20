@@ -9,7 +9,7 @@
         <div class="panel-heading clearfix">
             <strong>{{ localeData?.chart_title }}</strong>
         </div>
-        <mat-card-content class="position-relative">
+        <mat-card-content class="position-relative" *ngIf="localeData">
             <div class="bank-details-block">
                 <cdk-virtual-scroll-viewport
                     *ngIf="!isLoading && bankAccounts?.length > 0"

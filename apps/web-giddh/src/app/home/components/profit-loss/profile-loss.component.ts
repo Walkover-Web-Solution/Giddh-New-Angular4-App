@@ -1,6 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
-import * as Highcharts from 'highcharts';
 import { Observable, ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -54,8 +53,6 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public toDate: string;
     public imgPath: string = '';
     public requestInFlight: boolean = true;
-    public profitLossChart: typeof Highcharts = Highcharts;
-    public chartOptions: Highcharts.Options;
     public totalIncome: number = 0;
     public totalIncomeType: string = '';
     public totalExpense: number = 0;
