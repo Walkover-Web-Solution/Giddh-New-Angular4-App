@@ -2651,21 +2651,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let stockUnitUniqueName = '';
 
                 //#region unit rates logic
-                if (txn.selectedAccount?.stock?.variant?.unitRates?.length) {
-                    const variantUnitRates = txn.selectedAccount?.stock?.variant?.unitRates;
+                if (txn.selectedAccount?.stock) {
+                    const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
                     const defaultUnit = {
-                        stockUnitCode: variantUnitRates[0].stockUnitCode,
-                        code: variantUnitRates[0].stockUnitCode,
-                        rate: variantUnitRates[0].rate,
+                        stockUnitCode: defaultUnitRates[0].stockUnitCode,
+                        code: defaultUnitRates[0].stockUnitCode,
+                        rate: defaultUnitRates[0].rate,
                         name: txn.selectedAccount.stock.name
                     };
-                    const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : variantUnitRates;
+                    const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : defaultUnitRates;
                     txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                     stockName = defaultUnit.name;
                     rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                     stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                     unitCode = defaultUnit.code;
-                    stockUnitUniqueName = variantUnitRates[0].stockUnitUniqueName;
+                    stockUnitUniqueName = defaultUnitRates[0].stockUnitUniqueName;
                 }
                 if (stockName && stockUniqueName) {
                     txn.inventory = {
