@@ -9,14 +9,14 @@
     .modal-header {
         padding: 10px 15px;
         .close {
-            font-size: 18px;
+            font-size: var(--font-size-16);
             right: 15px;
             top: 0px;
         }
     }
 
     p {
-        font-size: 14px;
+        font-size: var(--font-size-15);
         color: var(--color-nero);
     }
 }

@@ -3,8 +3,8 @@
         <div class="col-md-12 mr-t4 border-bottom pd-b15">
             <div class="row pd-b1">
                 <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
-                    <label *ngIf="organizationType === 'COMPANY'" class="font-14">{{ localeData?.company_name }}</label>
-                    <label *ngIf="organizationType === 'BRANCH'" class="font-14">{{ localeData?.branch_name }}</label>
+                    <label *ngIf="organizationType === 'COMPANY'" class="font-15">{{ localeData?.company_name }}</label>
+                    <label *ngIf="organizationType === 'BRANCH'" class="font-15">{{ localeData?.branch_name }}</label>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
                     <div class="form-group mb-0">
@@ -31,26 +31,26 @@
             </div>
             <div class="row pd-b1 unique-name">
                 <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2">
-                    <label class="font-14">{{ commonLocaleData?.app_unique_name }}:</label>
+                    <label class="font-15">{{ commonLocaleData?.app_unique_name }}:</label>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
-                    <div class="font-14">{{ profileData?.uniqueName }}</div>
+                    <div class="font-15">{{ profileData?.uniqueName }}</div>
                 </div>
             </div>
             <div *ngIf="organizationType === 'BRANCH'" class="row pb-1 parent-name">
                 <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2">
-                    <label class="font-14">{{ localeData?.parent }}:</label>
+                    <label class="font-15">{{ localeData?.parent }}:</label>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
-                    <div *ngIf="profileData?.parent?.name" class="font-14">
+                    <div *ngIf="profileData?.parent?.name" class="font-15">
                         {{ profileData?.parent?.name }} ({{ profileData?.parent?.businessType }})
                     </div>
-                    <div *ngIf="!profileData?.parent?.name" class="font-14">{{ profileData?.companyName }}</div>
+                    <div *ngIf="!profileData?.parent?.name" class="font-15">{{ profileData?.companyName }}</div>
                 </div>
             </div>
             <div class="row country-name">
                 <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2">
-                    <label class="font-14">{{ localeData?.country_currency }}:</label>
+                    <label class="font-15">{{ localeData?.country_currency }}:</label>
                 </div>
                 <div class="country-info col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
                     <img
@@ -60,7 +60,7 @@
                             profileData?.country?.countryCode
                         }}.svg"
                     />
-                    <div class="font-14">
+                    <div class="font-15">
                         {{ profileData?.country?.countryName }} - {{ profileData?.country?.currencyCode }}
                         {{ profileData?.country?.currencyName }}
                     </div>

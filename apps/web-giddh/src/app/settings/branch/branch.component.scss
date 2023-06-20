@@ -7,7 +7,7 @@
 }
 
 .dropdown-menu li {
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 
 .custom-multi-select {
@@ -16,7 +16,7 @@
         color: var(--color-white);
         margin: 4px;
         padding: 2px 10px;
-        font-size: 14px;
+        font-size: var(--font-size-15);
         border-radius: 3px;
         cursor: pointer;
         a {
@@ -25,7 +25,7 @@
     }
 }
 .select-companies {
-    font-size: 14px;
+    font-size: var(--font-size-15);
     margin-bottom: 5px;
 }
 .button-yes-cancel {
@@ -51,12 +51,12 @@
 .content-view {
     display: flex;
     align-items: center;
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 .branch-card {
     background-color: var(--color-common-primary-background-for-all-components);
     margin-bottom: 15px;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     border: 1px solid var(--color-common-secondary-border);
 }
 .card-basic-details span:nth-child(2) {
@@ -74,11 +74,11 @@
     .icon-company-HO {
         padding: 4px 5px 0 0;
         color: var(--color-common-senary-text);
-        font-size: 12px;
+        font-size: var(--font-size-12);
     }
 }
 .card-basic-details h2 {
-    font-size: 16px;
+    font-size: var(--font-size-15);
     color: var(--color-common-senary-text);
     font-family: var(--font-bold);
     margin-bottom: 12px;
@@ -125,7 +125,7 @@
 }
 .card-basic-details a#button-basic {
     color: var(--color-abbey);
-    font-size: 16px;
+    font-size: var(--font-size-15);
     width: 32px;
     height: 32px;
     display: inline-block;
@@ -166,7 +166,7 @@
     flex-direction: row;
     .clear-filter-btn {
         color: var(--color-giddh-blue);
-        font-size: 14px;
+        font-size: var(--font-size-15);
         border: 1px solid var(--color-giddh-blue);
         border-radius: 20px;
         padding: 0 12px;
@@ -176,7 +176,7 @@
         justify-content: center;
         background-color: var(--color-white);
         i {
-            font-size: 12px;
+            font-size: var(--font-size-12);
             padding-right: 8px;
             top: 0;
             color: var(--color-giddh-blue);
@@ -188,7 +188,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
+    font-size: var(--font-size-16);
     border-radius: 5px;
     background: var(--color-white);
     margin-right: 15px;
@@ -223,7 +223,7 @@
 
 .star-radio {
     visibility: hidden;
-    font-size: 30px;
+    font-size: var(--font-size-32);
     cursor: pointer;
     top: -3px;
     position: relative;
@@ -250,7 +250,7 @@
 }
 
 .icon-advance-search {
-    font-size: 18px;
+    font-size: var(--font-size-16);
     color: var(--color-abbey);
 }
 
@@ -467,7 +467,7 @@
     .search-field {
         .clear-filter-btn {
             padding: 0px 8px;
-            font-size: 12px;
+            font-size: var(--font-size-12);
             height: 36px;
         }
     }
