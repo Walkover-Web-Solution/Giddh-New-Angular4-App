@@ -641,6 +641,12 @@ textarea {
         max-width: 120px !important;
         min-width: 120px !important;
     }
+    .form-control {
+        border: 1px solid transparent !important;
+        &:hover {
+            border: 1px solid var(--color-secondary-input-bar-border) !important;
+        }
+    }
 }
 .report-th-column {
     max-width: 170px;
@@ -14204,4 +14210,8 @@ body.hide-scroll-body.master-page {
     .table th {
         border-top: 0 !important;
     }
+}
+/*--- slide-toggle ---*/
+.mat-slide-toggle-persistent-ripple {
+    opacity: 0 !important;
 }
