@@ -17,6 +17,9 @@
     align-items: center;
     flex-direction: column;
 }
+.full-height {
+    height: 374px;
+}
 @media (max-width: 767px) {
     .ratio-chart-block {
         position: relative;

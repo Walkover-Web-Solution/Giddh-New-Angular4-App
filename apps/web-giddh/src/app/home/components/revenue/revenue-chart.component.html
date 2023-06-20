@@ -53,22 +53,15 @@
                             <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
                                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                             </div>
-                            <div class="chart-div" google-chart chart="myChartObject">
+                            <div class="chart-div">
                                 <cdk-virtual-scroll-viewport class="virtual-group-list overflow-x-hidden">
-                                    <div id="leftIncomeChart">
-                                        <!-- <highcharts-chart
-                                            *ngIf="chartOptions"
-                                            [Highcharts]="revenueChart"
-                                            [options]="chartOptions"
-                                        ></highcharts-chart> -->
-                                        <div class="d-flex justify-content-center dashboard-line-chart-container">
-                                            <canvas
-                                                id="revenueChartCanvas"
-                                                width="100%"
-                                                height="300px"
-                                                [hidden]="!chartOptions"
-                                            ></canvas>
-                                        </div>
+                                    <div class="d-flex justify-content-center dashboard-line-chart-container">
+                                        <canvas
+                                            id="revenueChartCanvas"
+                                            width="100%"
+                                            height="300px"
+                                            [hidden]="!chartOptions"
+                                        ></canvas>
                                     </div>
                                 </cdk-virtual-scroll-viewport>
                             </div>
@@ -283,27 +276,20 @@
                         </div>
                     </div>
                 </div>
-                <div id="incomeChart">
-                    <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="requestInFlight"></giddh-page-loader>
-                    <!-- <highcharts-chart
-                        *ngIf="!requestInFlight && chartOptions"
-                        [Highcharts]="revenueChart"
-                        [options]="chartOptions"
-                    ></highcharts-chart> -->
-                    <div class="d-flex justify-content-center dashboard-line-chart-container">
-                        <canvas
-                            id="revenueChartLargeCanvas"
-                            width="100%"
-                            height="300px"
-                            [hidden]="requestInFlight && !chartOptions"
-                        ></canvas>
-                    </div>
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="requestInFlight"></giddh-page-loader>
+                <div class="d-flex justify-content-center dashboard-line-chart-container">
+                    <canvas
+                        id="revenueChartLargeCanvas"
+                        width="100%"
+                        height="300px"
+                        [hidden]="requestInFlight && !chartOptions"
+                    ></canvas>
                 </div>
                 <div class="total-sale-data clearfix">
                     <div class="row">
                         <div class="col-sm-3 single-sale-data">
                             <div>
-                                <p>
+                                <p class="small-heading">
                                     {{ commonLocaleData?.app_total }} {{ activeGraphType["displayName"] }} ({{
                                         getCurrentWeekStartEndDate[1] | date
                                     }})
@@ -322,7 +308,7 @@
                         </div>
                         <div class="col-sm-3 single-sale-data">
                             <div>
-                                <p>
+                                <p class="small-heading">
                                     {{ commonLocaleData?.app_total }} {{ activeGraphType["displayName"] }} ({{
                                         getPreviousWeekStartEndDate[1] | date
                                     }})
@@ -341,7 +327,9 @@
                         </div>
                         <div class="col-sm-3 single-sale-data">
                             <div>
-                                <p>{{ localeData?.highest }} {{ activeGraphType["displayName"] }}</p>
+                                <p class="small-heading">
+                                    {{ localeData?.highest }} {{ activeGraphType["displayName"] }}
+                                </p>
                                 <h3>
                                     <span class="d-inline-flex">
                                         <amount-field
@@ -357,7 +345,9 @@
                         </div>
                         <div class="col-sm-3 single-sale-data">
                             <div>
-                                <p>{{ localeData?.lowest }} {{ activeGraphType["displayName"] }}</p>
+                                <p class="small-heading">
+                                    {{ localeData?.lowest }} {{ activeGraphType["displayName"] }}
+                                </p>
                                 <h3>
                                     <span class="d-inline-flex">
                                         <amount-field

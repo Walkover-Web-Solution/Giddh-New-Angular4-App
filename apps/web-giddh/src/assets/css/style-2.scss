@@ -8334,30 +8334,6 @@ button.ladda-button .ladda-label {
     padding-top: 0;
 }
 
-#incomeChart chart,
-#leftIncomeChart chart,
-highcharts-chart .highcharts-container {
-    width: 100% !important;
-    display: flex;
-    flex: 1 1 0 !important;
-    flex-shrink: 1 !important;
-}
-
-highcharts-chart {
-    .highcharts-container {
-        .highcharts-title {
-            width: 62px !important;
-            white-space: normal !important;
-            text-align: center;
-        }
-    }
-}
-
-#incomeChart #highcharts-ufrwew1-29 {
-    display: block;
-    width: 100%;
-}
-
 .panel {
     border-radius: 2px;
 }

@@ -31,6 +31,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold local JSON data */
     public localeData: any = {};
+    public chart:any;
 
     constructor(private store: Store<AppState>, private homeActions: HomeActions) {
         this.rationResponse$ = this.store.pipe(select(p => p.home.RatioAnalysis), takeUntil(this.destroyed$));
@@ -51,281 +52,6 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         this.refresh = false;
     }
 
-    // public generateCharts() {
-    //     this.currentRatioChartOptions = {
-    //         colors: ['#2C6EBD', '#4693F1'],
-    //         chart: {
-    //             type: 'pie',
-    //             polar: false,
-    //             width: 170,
-    //             height: '180px'
-    //         },
-    //         title: {
-    //             verticalAlign: 'middle',
-    //             align: 'center',
-    //             text: '<span class="pie-text_center">' +     + '</span>',
-    //             style: { color: '#005b77', fontSize: '21px' },
-    //             useHTML: true,
-    //             y: 8
-    //         },
-    //         yAxis: {
-    //             title: {
-    //                 text: ''
-    //             },
-    //             gridLineWidth: 0,
-    //             minorGridLineWidth: 0,
-    //         },
-    //         xAxis: {
-    //             categories: []
-    //         },
-    //         legend: {
-    //             enabled: false
-    //         },
-    //         credits: {
-    //             enabled: false
-    //         },
-    //         plotOptions: {
-    //             pie: {
-    //                 showInLegend: true,
-    //                 innerSize: '70%',
-    //                 allowPointSelect: true,
-    //                 dataLabels: {
-    //                     enabled: false,
-    //                     crop: true,
-    //                     defer: true
-    //                 },
-    //                 shadow: false,
-    //                 center: [
-    //                     '50%',
-    //                     '50%'
-    //                 ],
-    //             },
-    //             series: {
-    //                 animation: false,
-    //                 dataLabels: {}
-    //             }
-    //         },
-    //         tooltip: {
-    //             headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
-    //             pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
-    //                 '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
-    //             footerFormat: '</table>',
-    //             shared: true,
-    //             useHTML: true
-    //         },
-    //         series: [{
-    //             name: this.localeData?.current_ratio,
-    //             type: undefined,
-    //             data: [[this.localeData?.current_assets, this.ratioObj?.currentRatio * 100], [this.localeData?.current_liabilities, 100]],
-    //         }],
-    //     };
-
-    //     this.debtOptions = {
-    //         colors: ['#EFBB35', '#FED46A'],
-    //         chart: {
-    //             type: 'pie',
-    //             polar: false,
-    //             width: 170,
-    //             height: '180px'
-    //         },
-    //         title: {
-    //             verticalAlign: 'middle',
-    //             align: 'center',
-    //             text: '<span class="pie-text_center">' + this.ratioObj?.debtEquityRatio + '</span>',
-    //             style: { color: '#005b77', fontSize: '21px' },
-    //             useHTML: true,
-    //             y: 8
-    //         },
-    //         yAxis: {
-    //             title: {
-    //                 text: ''
-    //             },
-    //             gridLineWidth: 0,
-    //             minorGridLineWidth: 0,
-    //         },
-    //         xAxis: {
-    //             categories: []
-    //         },
-    //         legend: {
-    //             enabled: false
-    //         },
-    //         credits: {
-    //             enabled: false
-    //         },
-    //         plotOptions: {
-    //             pie: {
-    //                 showInLegend: true,
-    //                 innerSize: '70%',
-    //                 allowPointSelect: true,
-    //                 dataLabels: {
-    //                     enabled: false,
-    //                     crop: true,
-    //                     defer: true
-    //                 },
-    //                 shadow: false,
-    //                 center: [
-    //                     '50%',
-    //                     '50%'
-    //                 ],
-    //             },
-    //             series: {
-    //                 animation: false,
-    //                 dataLabels: {}
-    //             }
-    //         },
-    //         tooltip: {
-    //             headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
-    //             pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
-    //                 '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
-    //             footerFormat: '</table>',
-    //             shared: true,
-    //             useHTML: true
-    //         },
-    //         series: [{
-    //             type: 'pie',
-    //             data: [[this.localeData?.current_liability + ' + ' + this.localeData?.noncurrent_liability, this.ratioObj?.debtEquityRatio * 100], [this.localeData?.shareholders_fund, 100]],
-
-    //         }]
-    //     };
-
-    //     this.proprietaryOption = {
-    //         colors: ['#D93664', '#F85C88'],
-    //         chart: {
-    //             type: 'pie',
-    //             polar: false,
-    //             width: 170,
-    //             height: '180px'
-    //         },
-    //         title: {
-    //             verticalAlign: 'middle',
-    //             align: 'center',
-    //             text: '<span class="pie-text_center">' + this.ratioObj?.proprietaryRatio + '</span>',
-    //             style: { color: '#005b77', fontSize: '21px' },
-    //             useHTML: true,
-    //             y: 8
-    //         },
-    //         yAxis: {
-    //             title: {
-    //                 text: ''
-    //             },
-    //             gridLineWidth: 0,
-    //             minorGridLineWidth: 0,
-    //         },
-    //         xAxis: {
-    //             categories: []
-    //         },
-    //         legend: {
-    //             enabled: false
-    //         },
-    //         credits: {
-    //             enabled: false
-    //         },
-    //         plotOptions: {
-    //             pie: {
-    //                 showInLegend: true,
-    //                 innerSize: '70%',
-    //                 allowPointSelect: true,
-    //                 dataLabels: {
-    //                     enabled: false,
-    //                     crop: true,
-    //                     defer: true
-    //                 },
-    //                 shadow: false,
-    //                 center: [
-    //                     '50%',
-    //                     '50%'
-    //                 ],
-    //             },
-    //             series: {
-    //                 animation: false,
-    //                 dataLabels: {}
-    //             }
-    //         },
-    //         tooltip: {
-    //             headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
-    //             pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
-    //                 '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
-    //             footerFormat: '</table>',
-    //             shared: true,
-    //             useHTML: true
-    //         },
-    //         series: [{
-    //             name: this.localeData?.proprietary_ratio,
-    //             type: 'pie',
-    //             data: [[this.localeData?.shareholders_fund, this.ratioObj?.proprietaryRatio * 100], [this.localeData?.total_assets, 100]],
-
-    //         }]
-    //     };
-
-    //     this.fixedAssetOption = {
-    //         colors: ['#087E7D', '#0CB1AF'],
-    //         chart: {
-    //             type: 'pie',
-    //             polar: false,
-    //             width: 170,
-    //             height: '180px'
-    //         },
-    //         title: {
-    //             verticalAlign: 'middle',
-    //             align: 'center',
-    //             text: '<span class="pie-text_center">' + this.ratioObj?.fixedAssetRatio + '</span>',
-    //             style: { color: '#005b77', fontSize: '21px' },
-    //             useHTML: true,
-    //             y: 8
-    //         },
-    //         yAxis: {
-    //             title: {
-    //                 text: ''
-    //             },
-    //             gridLineWidth: 0,
-    //             minorGridLineWidth: 0,
-    //         },
-    //         xAxis: {
-    //             categories: []
-    //         },
-    //         legend: {
-    //             enabled: false
-    //         },
-    //         credits: {
-    //             enabled: false
-    //         },
-    //         plotOptions: {
-    //             pie: {
-    //                 showInLegend: true,
-    //                 innerSize: '70%',
-    //                 allowPointSelect: true,
-    //                 dataLabels: {
-    //                     enabled: false,
-    //                     crop: true,
-    //                     defer: true
-    //                 },
-    //                 shadow: false,
-    //                 center: [
-    //                     '50%',
-    //                     '50%'
-    //                 ],
-    //             },
-    //             series: {
-    //                 animation: false,
-    //                 dataLabels: {}
-    //             }
-    //         },
-    //         tooltip: {
-    //             headerFormat: '<span style="font-size:14px">{point.key}</span><table>',
-    //             pointFormat: '<tr><td style="color:{series.color};padding:0">{point.key} </td>' +
-    //                 '<td style="color:{series.color};padding:0">{point.percentage:.1f} %</td></tr>',
-    //             footerFormat: '</table>',
-    //             shared: true,
-    //             useHTML: true
-    //         },
-    //         series: [{
-    //             name: this.localeData?.fixed_assets_ratio,
-    //             type: 'pie',
-    //             data: [[this.localeData?.fixed_assets + ' / ' + this.localeData?.noncurrent_liability, this.ratioObj?.fixedAssetRatio * 100], [this.localeData?.shareholders_fund, 100]],
-    //         }]
-    //     };
-    // }
-
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -341,18 +67,20 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         if (event) {
             this.rationResponse$.pipe(skipWhile(response => (response === null || response === undefined))).subscribe(response => {
                 this.ratioObj = response;
-                // this.generateCharts();
+                if (this.chart) {
+                  this.chart.destroy();
+              } 
                 this.createChart();
                 this.requestInFlight = false;
             });
         }
     }
 
-    createChart(){
-
+    public createChart():void{
+     
         /* ==================================CURRENT RATIO CHART CONFIG============================== */
         let currentRatioLabels = [this.localeData?.current_assets, this.localeData?.current_liabilities];
-        let currentRatioData = [this.ratioObj?.currentRatio, 14];
+        let currentRatioData = [this.ratioObj?.currentRatio, 100];
         let currentRatioVal = this.ratioObj?.currentRatio;
        
         const currentRatioCenterLabel = {
@@ -370,7 +98,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             }
           }
 
-        new Chart("currentRatioChartCanvas", {
+          this.chart = new Chart("currentRatioChartCanvas", {
             type: 'doughnut',     
             plugins: [ currentRatioCenterLabel ],      
             data: {
@@ -391,6 +119,18 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                     legend: {
                       display: false
                     },
+                    tooltip: { 
+                      padding: 10, 
+                      backgroundColor: 'rgba(255, 255, 255,0.8)',
+                      borderColor: 'rgb(69, 135, 214)',
+                      bodyColor: 'rgb(0, 0, 0)', 
+                      titleColor: 'rgb(0, 0, 0)',
+                      borderWidth: 0.5,
+                      titleFont: {
+                          weight: 'normal'
+                      },
+                      displayColors: false,
+                  }
                 },
                 
                 responsive: true,
@@ -422,7 +162,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             }
           }
 
-        new Chart("debitOptionsChartCanvas", {
+          this.chart = new Chart("debitOptionsChartCanvas", {
             type: 'doughnut',     
             plugins: [ debitOptionsCenterLabel ],      
             data: {
@@ -443,6 +183,18 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                     legend: {
                       display: false
                     },
+                    tooltip: {  
+                      padding: 10,
+                      backgroundColor: 'rgba(255, 255, 255,0.8)',
+                      borderColor: 'rgb(239, 187, 53)',
+                      bodyColor: 'rgb(0, 0, 0)', 
+                      titleColor: 'rgb(0, 0, 0)',
+                      borderWidth: 0.5,
+                      titleFont: {
+                          weight: 'normal'
+                      },
+                      displayColors: false,
+                  }
                 },
                 
                 responsive: true,
@@ -473,7 +225,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             }
           }
 
-        new Chart("proprietaryOptionsChartCanvas", {
+          this.chart = new Chart("proprietaryOptionsChartCanvas", {
             type: 'doughnut',     
             plugins: [ proprietaryOptionsCenterLabel ],      
             data: {
@@ -494,6 +246,18 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                     legend: {
                       display: false
                     },
+                    tooltip: {  
+                      padding: 10,
+                      backgroundColor: 'rgba(255, 255, 255,0.8)',
+                      borderColor: 'rgb(217, 54, 100)',
+                      bodyColor: 'rgb(0, 0, 0)', 
+                      titleColor: 'rgb(0, 0, 0)',
+                      borderWidth: 0.5,
+                      titleFont: {
+                          weight: 'normal'
+                      },
+                      displayColors: false,
+                  }
                 },
                 
                 responsive: true,
@@ -524,7 +288,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             }
           }
 
-        new Chart("fixedAssetOptionsChartCanvas", {
+          this.chart = new Chart("fixedAssetOptionsChartCanvas", {
             type: 'doughnut',     
             plugins: [ fixedAssetOptionsCenterLabel ],      
             data: {
@@ -545,6 +309,18 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                     legend: {
                       display: false
                     },
+                    tooltip: {  
+                      padding: 10,
+                      backgroundColor: 'rgba(255, 255, 255,0.8)',
+                      borderColor: 'rgb(8, 126, 125)',
+                      bodyColor: 'rgb(0, 0, 0)', 
+                      titleColor: 'rgb(0, 0, 0)',
+                      borderWidth: 0.5,
+                      titleFont: {
+                          weight: 'normal'
+                      },
+                      displayColors: false,
+                  }
                 },
                 
                 responsive: true,
