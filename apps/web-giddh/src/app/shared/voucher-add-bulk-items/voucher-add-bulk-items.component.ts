@@ -128,7 +128,12 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     public addItemToSelectedArr(item: SalesAddBulkStockItems) {
         let index;
         if (!item.additional.stock) {
-            this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
+            index = this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
+        } else {
+            if (item.variants?.length === 1) {
+                const variant = item.variants[0];
+                index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${item.uniqueName}#${variant.value}`);
+            }
         }
         if (index > -1) {
             this.toaster.warningToast(this.localeData?.item_selected);
@@ -145,7 +150,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     }
 
     public removeSelectedItem(uniqueName: string) {
-        this.selectedItems = this.selectedItems?.filter(f => f?.uniqueName !== uniqueName);
+        this.selectedItems = this.selectedItems?.filter(f => f?.uniqueName !== uniqueName && f?.additional.combinedUniqueName !== uniqueName);
     }
 
     public alterQuantity(item: SalesAddBulkStockItems, mode: 'plus' | 'minus' = 'plus') {
@@ -231,6 +236,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                     uNameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
                     category: data.body.category,
                     combinedUniqueName: data.body.stock?.variant ? `${item.uniqueName}#${data.body.stock.variant?.uniqueName}` : '',
+                    skuCode: data.body.stock?.skuCode,
                 };
                 const unitRates = data.body?.stock?.variant?.unitRates ?? [];
                 item.rate = unitRates[0]?.rate ?? 0;
@@ -262,6 +268,14 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                         stockUniqueName: item.additional?.stock?.uniqueName ?? '',
                         variantUniqueName: defaultVariant.uniqueName
                     };
+                    if (item.variants?.length === 1) {
+                        const variant = item.variants[0];
+                        const index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${item.uniqueName}#${variant.value}`);
+                        if (index > -1) {
+                            this.toaster.warningToast(this.localeData?.item_selected);
+                            return;
+                        }
+                    }
                     this.loadDetails(item, requestObj);
                 }
                 this.changeDetectorRef.detectChanges();
