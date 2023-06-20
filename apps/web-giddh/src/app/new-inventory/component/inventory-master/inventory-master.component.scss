@@ -53,6 +53,26 @@
                 width: 100%;
                 // overflow: auto;
             }
+            .pd-l15 {
+                padding-left: 15px !important;
+            }
+            .breadcrumb {
+                li {
+                    a {
+                        color: var(--color-abbey);
+                    }
+                    &:last-child {
+                        a {
+                            color: var(--color-common-senary-text);
+                        }
+                    }
+                    & + li {
+                        &::before {
+                            padding-right: 4px;
+                        }
+                    }
+                }
+            }
         }
         .item-list {
             width: 205px;
