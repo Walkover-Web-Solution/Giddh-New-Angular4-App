@@ -280,13 +280,8 @@ textarea {
     .mat-form-field-wrapper
         .mat-form-field-infix
         .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
-        height: 30px !important;
-        margin-top: 5px !important;
+        height: 100% !important;
         font-size: var(--font-size-12);
-    }
-
-    .mat-datepicker-input:disabled {
-        margin-top: 5px !important;
     }
 }
 
