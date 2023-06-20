@@ -135,21 +135,19 @@
                                                 calculateTotals()
                                             "
                                             [readonly]="isCompany"
-                                            [suffix]="
+                                            [matSuffix]="
                                                 ' ' +
                                                 (manufacturingObject.manufacturingDetails[0].manufacturingUnitCode ??
                                                     '')
                                             "
-                                            [useMask]="true"
-                                            [mask]="'not_separated'"
                                         >
                                         </input-field>
-                                        <small
+                                        <!-- <small
                                             >{{ localeData?.multiple_of }}
                                             <span>{{
                                                 manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf
                                             }}</span>
-                                        </small>
+                                        </small> -->
                                     </div>
 
                                     <div class="d-flex generate-clear w-100" *ngIf="!isCompany">
