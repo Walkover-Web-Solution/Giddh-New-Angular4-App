@@ -4,10 +4,10 @@
     justify-content: center;
     margin: 0 -15px;
     flex-direction: row;
-}
 
-.dashboard-option li {
-    list-style: none;
+    li {
+        list-style: none;
+    }
 }
 
 :host ::ng-deep perfect-scrollbar {
@@ -25,7 +25,7 @@
     color: var(--color-blue);
 }
 .dashboard-container {
-    max-width: 1170px;
+    max-width: 1200px;
     width: 100%;
 }
 span.icon-traingle-info {
@@ -78,7 +78,26 @@ a.dropdown-item:hover {
     justify-content: center;
     align-items: center;
 }
+.menu-trigger-btn {
+    display: flex;
+    align-items: flex-start;
+    height: 40px;
 
+    .icon-arrow-down {
+        line-height: 22px !important;
+    }
+}
+.dashboard-doughnut-chart-container {
+    height: 150px;
+    min-width: 220px;
+}
+.dashboard-line-chart-container {
+    height: 300px;
+    max-width: 660px;
+}
+.hide-chart {
+    display: none !important;
+}
 @media (max-width: 1500px) {
     .dashboard-container {
         margin-bottom: 40px;

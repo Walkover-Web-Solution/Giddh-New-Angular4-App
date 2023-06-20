@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
@@ -13,11 +13,16 @@ import { GeneralService } from "../../../services/general.service";
 import { DashboardService } from '../../../services/dashboard.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { Chart, registerables } from 'chart.js';
+import { TitleCasePipe } from '@angular/common';
+Chart.register(...registerables);
 
 @Component({
     selector: 'revenue-chart',
     templateUrl: 'revenue-chart.component.html',
-    styleUrls: ['revenue-chart.component.scss', '../../home.component.scss']
+    styleUrls: ['revenue-chart.component.scss', '../../home.component.scss'],
+    providers: [TitleCasePipe],
+    encapsulation: ViewEncapsulation.None
 })
 export class RevenueChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
@@ -44,7 +49,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public getCurrentWeekStartEndDate: any = '';
     public getPreviousWeekStartEndDate: any = '';
-    public chartType: string = 'column';
+    public chartType:'bar' | 'line' = 'bar';
     public graphExpanded: boolean = false;
     public currentDateRangePickerValue: Date[] = [];
     public previousDateRangePickerValue: Date[] = [];
@@ -56,8 +61,18 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Hold Chart and used when destroy required */
+    public chart:any;
+    /* Store Current Dates for bar chart*/
+    public currentDateLabel:any[] = [];
+    /* Store Current closingbalance amount for bar chart*/
+    public currentAmountLabel:any[] = [];
+    /* Store Previous Dates for bar chart*/
+    public previousDateLabel:any[] = [];
+    /* Store Previous closingbalance amount for bar chart*/
+    public previousAmountLabel:any[] = [];
 
-    constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService) {
+    constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService,private titlecasePipe:TitleCasePipe) {
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
         this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(dayjs(this.getCurrentWeekStartEndDate[0]).subtract(1, 'day'));
 
@@ -120,6 +135,10 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.dashboardService.GetRevenueGraphData(revenueGraphDataRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.currentData = [];
             this.previousData = [];
+            this.currentDateLabel = [];
+            this.currentAmountLabel= [];
+            this.previousDateLabel = [];
+            this.previousAmountLabel = [];
             this.summaryData.totalCurrent = 0;
             this.summaryData.totalLast = 0;
             this.summaryData.highest = 0;
@@ -132,18 +151,22 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                     Object.keys(res.balances).forEach(key => {
                         if (res.balances[key].current) {
                             this.currentData.push({
-                                x: x,
-                                y: giddhRoundOff(res.balances[key].current.closingBalance.amount, this.giddhBalanceDecimalPlaces),
-                                tooltip: res.balances[key].current.dateLabel + "<br />" + this.graphParams?.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].current.closingBalance.amount)
+                                dateLabel: res.balances[key].current.dateLabel,
+                                AmountLabel: giddhRoundOff(res.balances[key].current.closingBalance.amount, this.giddhBalanceDecimalPlaces),
+                                uniqueName: this.graphParams?.uniqueName,                                
                             });
+                            this.currentDateLabel.push(res.balances[key].current.dateLabel);
+                            this.currentAmountLabel.push(giddhRoundOff(res.balances[key].current.closingBalance.amount, this.giddhBalanceDecimalPlaces));                            
                         }
 
                         if (res.balances[key].previous) {
                             this.previousData.push({
-                                x: x,
-                                y: giddhRoundOff(res.balances[key].previous.closingBalance.amount, this.giddhBalanceDecimalPlaces),
-                                tooltip: res.balances[key].previous.dateLabel + "<br />" + this.graphParams?.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].previous.closingBalance.amount)
+                                dateLabel: res.balances[key].previous.dateLabel,
+                                AmountLabel: giddhRoundOff(res.balances[key].previous.closingBalance.amount, this.giddhBalanceDecimalPlaces),
+                                uniqueName: this.graphParams?.uniqueName,
                             });
+                            this.previousDateLabel.push(res.balances[key].previous.dateLabel);
+                            this.previousAmountLabel.push(giddhRoundOff(res.balances[key].previous.closingBalance.amount, this.giddhBalanceDecimalPlaces));
                         }
 
                         x++;
@@ -195,7 +218,11 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                     this.summaryData.lowestLabel = res.previousLowestClosingBalance.dateLabel;
                 }
 
-                this.generateChart();
+                this.generateChart();    
+                if (this.chart) {
+                    this.chart.destroy();
+                }            
+                this.createChart();
             } else {
                 if (response?.status === "error" && response?.message) {
                     this.toasterService.errorToast(response.message);
@@ -277,7 +304,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                 }
             }
         };
-
         this.requestInFlight = false;
     }
 
@@ -294,6 +320,10 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.generalService.invokeEvent.next("hideallcharts");
         this.currentData = [];
         this.previousData = [];
+        this.currentDateLabel = [];
+        this.currentAmountLabel= [];
+        this.previousDateLabel = [];
+        this.previousAmountLabel = [];
         this.summaryData.totalCurrent = 0;
         this.summaryData.totalLast = 0;
         this.summaryData.highest = 0;
@@ -301,7 +331,12 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.graphParams.interval = "daily";
         this.chartType = "line";
         this.graphExpanded = true;
-        this.generateChart();
+        this.setPreviousDate();
+        this.setCurrentDate();  
+        if (this.chart) {
+            this.chart.destroy();
+        }   
+        this.createChart();
     }
 
     public updateChartFrequency(interval) {
@@ -314,36 +349,38 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.summaryData.highest = 0;
         this.summaryData.lowest = 0;
 
-        this.generateChart();
+        // this.generateChart();
+        this.createChart();
 
         setTimeout(() => {
             this.getRevenueGraphData();
         }, 200);
     }
 
-    public setPreviousDate(data) {
-        if (data && !this.chartChanged) {
-            this.graphParams.previousFrom = dayjs(data[0]).format(GIDDH_DATE_FORMAT);
-            this.graphParams.previousTo = dayjs(data[1]).format(GIDDH_DATE_FORMAT);
-            this.getPreviousWeekStartEndDate = [data[0], data[1]];
+    public setPreviousDate() {
+        if ( (this.previousDateRangePickerValue[0] !== null) && (this.previousDateRangePickerValue[1] !== null) ) {
+            this.graphParams.previousFrom = dayjs(this.previousDateRangePickerValue[0]).format(GIDDH_DATE_FORMAT);
+            this.graphParams.previousTo = dayjs(this.previousDateRangePickerValue[1]).format(GIDDH_DATE_FORMAT);
+            this.getPreviousWeekStartEndDate = [this.previousDateRangePickerValue[0], this.previousDateRangePickerValue[1]];
             this.getRevenueGraphData();
         }
     }
 
-    public setCurrentDate(data) {
-        if (data) {
-            this.graphParams.currentFrom = dayjs(data[0]).format(GIDDH_DATE_FORMAT);
-            this.graphParams.currentTo = dayjs(data[1]).format(GIDDH_DATE_FORMAT);
-            this.getCurrentWeekStartEndDate = [data[0], data[1]];
+ 
+    public setCurrentDate() {        
+        if( (this.currentDateRangePickerValue[0] !== null) && (this.currentDateRangePickerValue[1] !== null) ){            
+            this.graphParams.currentFrom = dayjs(this.currentDateRangePickerValue[0]).format(GIDDH_DATE_FORMAT);
+            this.graphParams.currentTo = dayjs(this.currentDateRangePickerValue[1]).format(GIDDH_DATE_FORMAT);
+            this.getCurrentWeekStartEndDate = [this.currentDateRangePickerValue[0], this.currentDateRangePickerValue[1]];
             this.getRevenueGraphData();
-            this.chartChanged = false;
+            this.chartChanged = false;        
         }
     }
 
     public showColumnChart() {
         this.generalService.invokeEvent.next("showallcharts");
         this.graphParams.interval = "daily";
-        this.chartType = "column";
+        this.chartType = "bar";
         this.graphExpanded = false;
 
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
@@ -358,5 +395,224 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.graphParams.previousTo = dayjs(this.getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
 
         this.getRevenueGraphData();
-    }
+    }   
+
+    public createChart():void {
+
+        const chartType = this.chartType;   
+        let chart = this.titlecasePipe.transform(this.graphParams?.uniqueName);    
+        let currentLabel = this.currentDateLabel;
+        let currentData = this.currentAmountLabel; 
+        let previousLabel = this.previousDateLabel;
+        let previousData = this.previousAmountLabel;
+        let x = [...previousLabel, ...currentLabel];
+        let y = [...previousData, ...currentData];
+
+       /* For Chart Type Line  */
+        if(this.chartType === 'line'){
+            this.chart = new Chart( "revenueChartLargeCanvas", {
+                type: chartType,          
+                data: {
+                    labels: x,
+                    datasets: [
+                        {
+                            label: 'Previous',
+                            type: chartType,
+                            data: previousData,
+                            fill: false,
+                            borderColor: 'rgb(8, 126, 125)',
+                            tension: 0.1,
+                        },
+                        {
+                            label: 'Current',
+                            type: chartType,
+                            data: y,
+                            fill: false,
+                            borderColor: 'rgb(12, 177, 175)',
+                            tension: 0.1,
+                        }
+                    ], 
+                            
+                   },
+    
+                options:{
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                      },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {                           
+                            callbacks: {
+                                label: function(context) {
+                                    let label = chart + ' ' +context.dataset.label || '';
+            
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            },
+                            backgroundColor: 'rgba(255,255,255,0.8)',
+                            borderColor: 'rgb(12, 177, 175)',
+                            bodyColor: 'rgb(0, 0, 0)',
+                            titleColor: 'rgb(0, 0, 0)',
+                            borderWidth: 0.5,
+                            titleFont: {
+                                weight: 'normal'
+                            },
+                            displayColors: false,                           
+                        },
+                    },
+                    scales: {
+                        x: {
+                            border: {
+                                display: true
+                            },
+                            display: false,
+                            grid: {
+                                display: true,
+                                drawOnChartArea: true,
+                                drawTicks: true,
+                            },
+                            beginAtZero: true,
+                            },
+                        y: {
+                            border: {
+                            display: true
+                            },
+                            ticks: {                                
+                                callback: function(value) {
+                                   var ranges = [
+                                      { divider: 1e6, suffix: 'M' },
+                                      { divider: 1e3, suffix: 'k' }
+                                   ];
+                                   function formatNumber(n) {
+                                        n = Math.round(n);                                    
+                                        for (let i = 0; i < ranges.length; i++) {
+                                           if (n >= ranges[i].divider) {
+                                              return (n / ranges[i].divider).toString() + ranges[i].suffix;
+                                           }
+                                        }
+                                        return n;
+                                    
+                                   }
+                                   return formatNumber(value);
+                                }
+                            },
+                        beginAtZero: false
+                    }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,     
+                } 
+                });
+        }
+
+        /* For Chart Type Bar  */
+        if(this.chartType === 'bar'){
+            this.chart = new Chart( "revenueChartCanvas", {
+                type: chartType,          
+                data: {
+                    labels: currentLabel,
+                    datasets: [
+                    {
+                        label: '',
+                        data: currentData,
+                        backgroundColor: "rgb(12, 177, 175)",
+                        borderColor: 'rgb(12, 177, 175)',
+                        indexAxis:'x',
+                        barThickness: 20
+                    }
+            ], 
+                            
+                },
+    
+                options:{
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                      },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = chart+ ' ' +context.dataset.label || '';
+            
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            },
+                            backgroundColor: 'rgba(255,255,255,0.8)',
+                            borderColor: 'rgb(12, 177, 175)',
+                            bodyColor: 'rgb(0, 0, 0)',
+                            titleColor: 'rgb(0, 0, 0)',
+                            borderWidth: 0.5,
+                            titleFont: {
+                                weight: 'normal'
+                            },
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            border: {
+                                display: false
+                            },
+                            display: false,
+                            grid: {
+                                display: true,
+                                drawOnChartArea: true,
+                                drawTicks: true,
+                            },
+                            beginAtZero: true
+                            },
+                        y: {
+                            border: {
+                            display: true
+                        },
+                        ticks: {                                
+                            callback: function(value) {
+                               var ranges = [
+                                  { divider: 1e6, suffix: 'M' },
+                                  { divider: 1e3, suffix: 'k' }
+                               ];
+                               function formatNumber(n) {
+                                    n = Math.round(n);                                    
+                                    for (let i = 0; i < ranges.length; i++) {
+                                       if (n >= ranges[i].divider) {
+                                          return (n / ranges[i].divider).toString() + ranges[i].suffix;
+                                       }
+                                    }
+                                    return n;
+                                
+                               }
+                               return formatNumber(value);
+                            }
+                        },  
+                        beginAtZero: false
+                    }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                  
+                } 
+                });
+        }
+
+         this.requestInFlight = false;
+    }       
 }

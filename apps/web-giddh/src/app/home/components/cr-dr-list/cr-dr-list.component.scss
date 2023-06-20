@@ -20,7 +20,7 @@ a.connect-bank {
     color: var(--color-nero);
     text-decoration: underline;
 }
-table.basic td {
+.mat-table.basic td {
     padding-right: 0;
     padding-left: 0;
     border-top: none;
@@ -64,11 +64,28 @@ thead th {
 }
 .no-entries {
     border-top: 1px solid var(--color-iron) !important;
+    border-bottom: 1px solid var(--color-iron) !important;
     margin-top: 10px;
-    padding-bottom: 20px !important;
+    padding: 20px 0 !important;
     text-align: center;
     color: var(--color-common-primary-text) !important;
     font-size: var(--font-size-15);
+    &:hover {
+        background-color: var(--color-table-row-hover-primary-background);
+    }
+
+    .do-sale-link {
+        color: var(--color-primary-basic-button-text);
+        border: 1px solid var(--color-primary-basic-button-text);
+        background-color: var(--color-white);
+        padding: 7px 10px;
+        border-radius: 5px;
+        display: inline-block;
+        &:hover {
+            background-color: var(--color-tab-primary-active);
+            color: var(--color-white);
+        }
+    }
 }
 .dashboard-datepicker {
     max-width: 190px;

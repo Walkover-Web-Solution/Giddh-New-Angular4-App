@@ -2,7 +2,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { RevenueChartComponent } from './components/revenue/revenue-chart.component';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../actions/home/home.actions';
 import { Router } from '@angular/router';
@@ -15,7 +15,7 @@ import { GeneralService } from "../services/general.service";
 @Component({
     selector: 'home',
     styleUrls: ['./home.component.scss'],
-    templateUrl: './home.component.html'
+    templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit, OnDestroy {
     public needsToRedirectToLedger$: Observable<boolean>;

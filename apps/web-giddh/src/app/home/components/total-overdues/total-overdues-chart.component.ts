@@ -14,6 +14,9 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
 import { ReceiptService } from '../../../services/receipt.service';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
+
 
 @Component({
     selector: 'total-overdues-chart',
@@ -74,8 +77,11 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    public chart:any;
+    
 
-    constructor(private store: Store<AppState>, private dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private receiptService: ReceiptService) {
+
+    constructor(private store: Store<AppState>, private dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private receiptService: ReceiptService, private elementRef: ElementRef) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -85,7 +91,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnInit() {
+    public ngOnInit() {       
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         // img path
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
@@ -129,72 +135,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges();
     }
 
-    public generateCharts() {
-        let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
-        let cPipe = this.currencyPipe;
-
-        this.chartOptions = {
-            colors: ['#F85C88', '#0CB1AF'],
-            chart: {
-                type: 'pie',
-                polar: false,
-                className: 'overdue-chart',
-                width: 260,
-                height: '180px'
-            },
-            title: {
-                text: '',
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                },
-                gridLineWidth: 0,
-                minorGridLineWidth: 0,
-            },
-            xAxis: {
-                categories: []
-            },
-            legend: {
-                enabled: false
-            },
-            credits: {
-                enabled: false
-            },
-            plotOptions: {
-                pie: {
-                    showInLegend: true,
-                    innerSize: '70%',
-                    allowPointSelect: true,
-                    dataLabels: {
-                        enabled: false,
-                        crop: true,
-                        defer: true
-                    },
-                    shadow: false
-                },
-                series: {
-                    animation: false,
-                    dataLabels: {}
-                }
-            },
-            tooltip: {
-                shared: true,
-                useHTML: true,
-                formatter: function () {
-                    return (this.point) ? baseCurrencySymbol + " " + cPipe.transform(this.point.y) + '/-' : '';
-                }
-            },
-            series: [{
-                name: 'Total Overdues',
-                type: 'pie',
-                data: [['Customer Due', this.invoiceDue], ['Vendor Due', this.billDue]],
-            }],
-        };
-
-        this.requestInFlight = false;
-        this.cdRef.detectChanges();
-    }
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
@@ -240,7 +180,10 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         if (this.invoiceDue === 0 && this.billDue === 0) {
             this.resetChartData();
         } else {
-            this.generateCharts();
+            if (this.chart) {
+                this.chart.destroy();
+            } 
+             this.createChart();
         }
     }
 
@@ -330,4 +273,58 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             this.getTotalOverdues();
         }
     }
+
+    public createChart():void{
+        let invoiceDue = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.invoiceDue) + "/-";
+        let billDue = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.billDue) + "/-";
+        let label = [invoiceDue,billDue];
+
+        let data = [this.invoiceDue, this.billDue];
+
+        this.chart = new Chart("totaloverDueChartCanvas", {
+            type: 'doughnut',           
+            data: {
+                labels: label,
+                datasets: [{
+                    label: '',
+                    data: data,
+                    backgroundColor: ['#F85C88', '#0CB1AF'],
+                    hoverOffset: 18,
+                    hoverBorderColor: '#fff',
+                    borderWidth: 1,		 
+                    offset: 6,   
+              }],
+            },
+
+            options:{
+                plugins: {
+                    legend: {
+                      display: false
+                    },
+                    tooltip: {  
+                        backgroundColor: 'rgba(255, 255, 255,0.8)',
+                        borderColor: 'rgb(37, 202, 200)',
+                        bodyFont: {
+                            size: 0,
+                        }, 
+                        titleColor: 'rgb(0, 0, 0)',
+                        borderWidth: 0.5,
+                        titleFont: {
+                            weight: 'normal'
+                        },
+                        displayColors: false,
+                    }
+                },
+                
+                responsive: true,
+                maintainAspectRatio: false,
+                spacing:1,
+                cutout:50,  
+                radius: '95%',    
+            } 
+            });
+
+            this.requestInFlight = false;
+            this.cdRef.detectChanges();
+     }
 }

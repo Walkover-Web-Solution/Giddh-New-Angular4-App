@@ -5,13 +5,16 @@
     [requireCommonData]="false"
     (localeData)="localeData = $event"
 >
-    <div class="card">
+    <mat-card>
         <div class="panel-heading clearfix">
             <strong>{{ localeData?.chart_title }}</strong>
         </div>
-        <div class="card-body position-relative" *ngIf="localeData">
+        <mat-card-content class="position-relative">
             <div class="bank-details-block">
-                <perfect-scrollbar [scrollIndicators]="true" *ngIf="!isLoading && bankAccounts?.length > 0">
+                <cdk-virtual-scroll-viewport
+                    *ngIf="!isLoading && bankAccounts?.length > 0"
+                    class="virtual-group-list overflow-x-hidden"
+                >
                     <div class="wrap-single-bank-detail">
                         <div class="single-bank-detail" *ngFor="let bankaccount of bankAccounts">
                             <p class="bank-name">{{ bankaccount.name }}</p>
@@ -30,7 +33,8 @@
                             </p>
                         </div>
                     </div>
-                </perfect-scrollbar>
+                </cdk-virtual-scroll-viewport>
+
                 <div class="add-bank-details" *ngIf="!isLoading && bankAccounts?.length === 0">
                     <p>{{ localeData?.no_banks_found }}</p>
                     <a class="connect-bank" [routerLink]="['/pages/settings/integration/payment']">{{
@@ -45,6 +49,6 @@
                 [routerLink]="['/pages/settings/integration/payment']"
                 >{{ localeData?.connect_bank }}</a
             >
-        </div>
-    </div>
+        </mat-card-content>
+    </mat-card>
 </div>
