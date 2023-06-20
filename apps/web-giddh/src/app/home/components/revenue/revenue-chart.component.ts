@@ -1,6 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import * as Highcharts from 'highcharts';
 import { ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { select, Store } from '@ngrx/store';
@@ -27,8 +26,6 @@ Chart.register(...registerables);
 export class RevenueChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
     public requestInFlight: boolean = false;
-    public revenueChart: typeof Highcharts = Highcharts;
-    public chartOptions: Highcharts.Options;
     public revenueGraphTypes: any[] = [];
     public activeGraphType: any;
     public graphParams: any = {
@@ -133,8 +130,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         revenueGraphDataRequest = this.graphParams;
 
         this.dashboardService.GetRevenueGraphData(revenueGraphDataRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.currentData = [];
-            this.previousData = [];
             this.currentDateLabel = [];
             this.currentAmountLabel= [];
             this.previousDateLabel = [];
@@ -150,21 +145,11 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                     let x = 0;
                     Object.keys(res.balances).forEach(key => {
                         if (res.balances[key].current) {
-                            this.currentData.push({
-                                dateLabel: res.balances[key].current.dateLabel,
-                                AmountLabel: giddhRoundOff(res.balances[key].current.closingBalance.amount, this.giddhBalanceDecimalPlaces),
-                                uniqueName: this.graphParams?.uniqueName,                                
-                            });
                             this.currentDateLabel.push(res.balances[key].current.dateLabel);
                             this.currentAmountLabel.push(giddhRoundOff(res.balances[key].current.closingBalance.amount, this.giddhBalanceDecimalPlaces));                            
                         }
 
                         if (res.balances[key].previous) {
-                            this.previousData.push({
-                                dateLabel: res.balances[key].previous.dateLabel,
-                                AmountLabel: giddhRoundOff(res.balances[key].previous.closingBalance.amount, this.giddhBalanceDecimalPlaces),
-                                uniqueName: this.graphParams?.uniqueName,
-                            });
                             this.previousDateLabel.push(res.balances[key].previous.dateLabel);
                             this.previousAmountLabel.push(giddhRoundOff(res.balances[key].previous.closingBalance.amount, this.giddhBalanceDecimalPlaces));
                         }
@@ -218,7 +203,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                     this.summaryData.lowestLabel = res.previousLowestClosingBalance.dateLabel;
                 }
 
-                this.generateChart();    
                 if (this.chart) {
                     this.chart.destroy();
                 }            
@@ -256,56 +240,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         return [sunday, saturday];
     }
 
-    public generateChart() {
-        let chartType: any = this.chartType;
-
-        this.chartOptions = {
-            chart: {
-                type: chartType,
-                height: '300px'
-            },
-            colors: ['#0CB1AF', '#087E7D'],
-            title: {
-                text: ''
-            },
-            credits: {
-                enabled: false
-            },
-            series: [{
-                name: '',
-                data: this.currentData,
-                type: chartType
-            }, {
-                name: '',
-                data: this.previousData,
-                type: chartType
-            }
-            ],
-            legend: {
-                enabled: false
-            },
-            tooltip: {
-                useHTML: true,
-                formatter: function () {
-                    return (this.point as any).tooltip;
-                }
-            },
-            xAxis: {
-                labels: {
-                    enabled: false
-                },
-                title: {
-                    text: ''
-                }
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                }
-            }
-        };
-        this.requestInFlight = false;
-    }
 
     public changeGraphType(gtype) {
         this.activeGraphType = gtype;
@@ -318,8 +252,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public showLineChart() {
         this.chartChanged = true;
         this.generalService.invokeEvent.next("hideallcharts");
-        this.currentData = [];
-        this.previousData = [];
         this.currentDateLabel = [];
         this.currentAmountLabel= [];
         this.previousDateLabel = [];
@@ -342,14 +274,11 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public updateChartFrequency(interval) {
         this.graphParams.interval = interval;
 
-        this.currentData = [];
-        this.previousData = [];
         this.summaryData.totalCurrent = 0;
         this.summaryData.totalLast = 0;
         this.summaryData.highest = 0;
         this.summaryData.lowest = 0;
 
-        // this.generateChart();
         this.createChart();
 
         setTimeout(() => {
