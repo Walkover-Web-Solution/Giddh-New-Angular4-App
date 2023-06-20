@@ -149,7 +149,13 @@
                                                 <span
                                                     disableRipple
                                                     class="remove-stock-list"
-                                                    (click)="removeSelectedItem(item?.uniqueName)"
+                                                    (click)="
+                                                        removeSelectedItem(
+                                                            item?.variants?.length > 1
+                                                                ? item.additional?.combinedUniqueName
+                                                                : item?.uniqueName
+                                                        )
+                                                    "
                                                 >
                                                     <i class="icon-cross"></i>
                                                 </span>
