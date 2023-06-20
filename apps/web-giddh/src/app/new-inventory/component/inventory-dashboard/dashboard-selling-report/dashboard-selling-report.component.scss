@@ -15,15 +15,15 @@
             }
         }
         button {
-            font-family: "opensans-semibold";
-            font-size: 24px !important;
+            font-family: var(--font-semibold);
+            font-size: var(--font-size-24) !important;
         }
     }
     .filter-top-selling {
         .total-sales-tabs {
             .active-graph {
                 color: var(--color-nero);
-                font-family: "opensans-semibold";
+                font-family: var(--font-semibold);
             }
         }
     }
@@ -39,7 +39,7 @@
                 }
             }
             h3 {
-                font-size: 24px;
+                font-size: var(--font-size-24);
             }
         }
     }
@@ -51,7 +51,7 @@
             flex-direction: column;
             align-items: flex-start;
             button {
-                font-size: 16px !important;
+                font-size: var(--font-size-15) !important;
                 margin-top: 10px;
             }
             .close-selling-report {

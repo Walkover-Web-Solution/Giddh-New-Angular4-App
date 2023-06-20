@@ -72,5 +72,8 @@
     "delivery_in_day": "[DAYS] दिवसांत वितरण",
     "delivery_in_days": "[DAYS] दिवसांत वितरण",
     "select_variant": "प्रकार निवडा",
-    "variant": "प्रकार"
+    "variant": "प्रकार",
+    "convert_bill_popup_heading": "Convert to Bill",
+    "purchase_bill_number": "Purchase Bill Number",
+    "po_selection_vendor_error": "Please select purchase orders of only 1 vendor."
 }

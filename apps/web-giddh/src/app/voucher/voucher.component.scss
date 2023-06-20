@@ -3,6 +3,7 @@
 /**
 # margin mixin pass direction and number
 */
+
 @mixin marg($d, $num) {
     @if $d== "B" {
         margin-bottom: $num;
@@ -94,13 +95,12 @@
 
     .flex-row-child {
         align-self: center;
-        // flex-grow: 1;
         flex-grow: 0;
     }
 }
 
 .item-unique {
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 // select box
@@ -179,6 +179,9 @@
         font-weight: 400;
         @include marg(B, 0px);
     }
+    .amount-label {
+        margin-right: -15px;
+    }
 
     &.size-175 {
         input:not([type="checkbox"]),
@@ -224,7 +227,6 @@
 
 .form-inline {
     .form-group {
-        // @include marg(R, 20px);
         vertical-align: top;
     }
 
@@ -235,8 +237,6 @@
 
 #actionPane {
     width: 100%;
-    // height: 80px;
-    // left: -5px;
     position: relative;
     float: left;
     @include padBth(20px, 0);
@@ -324,17 +324,13 @@ a[type="button"] {
 }
 
 .list-item {
-    font-size: 14px;
+    font-size: var(--font-size-15);
     border-bottom: 1px solid var(--color-common-secondary-border);
     display: flex !important;
 }
 
 .font-12 {
-    font-size: 12px;
-}
-
-.font-11 {
-    font-size: 11px;
+    font-size: var(--font-size-12);
 }
 
 .table-sec {
@@ -346,7 +342,6 @@ a[type="button"] {
         vertical-align: top;
 
         .table-cell {
-            // line-height: 40px;
             vertical-align: middle;
             text-align: right;
             padding-bottom: 7px;
@@ -405,7 +400,7 @@ ng-select.splSales {
     background: var(--color-common-primary-background-for-all-components);
     border: 1px solid var(--color-common-secondary-border);
     padding: 5px;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
 
     &.disabled {
         background: var(--color-dark-fog);
@@ -433,19 +428,15 @@ textarea:focus {
     display: block;
     color: var(--color-abbey);
     line-height: 1.2rem;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     font-weight: 500;
 }
 
 .sp-rupees {
     display: block;
-    font-size: 26px;
+    font-size: var(--font-size-24);
     line-height: 1.2;
-    font-family: "opensans-semibold";
-}
-
-.sp-rupees span.icon-rupees {
-    font-size: 20px;
+    font-family: var(--font-semibold);
 }
 
 .table-custom-invoice {
@@ -458,7 +449,6 @@ textarea:focus {
                 text-align: right;
 
                 &:first-child {
-                    // border-left: none !important;
                     text-align: left;
                 }
 
@@ -475,7 +465,6 @@ textarea:focus {
                 }
 
                 &:last-child {
-                    //border-right: none !important;
                     vertical-align: middle !important;
                     display: none;
                 }
@@ -522,7 +511,7 @@ textarea:focus {
     background: transparent !important;
     box-shadow: none !important;
     border-radius: 0 !important;
-    font-size: 24px;
+    font-size: var(--font-size-24);
     padding: 3px 0 0 0 !important;
 }
 
@@ -621,7 +610,7 @@ textarea:focus {
 
 .modal-invoice-footer .btn {
     background: var(--color-gray);
-    font-size: 12px;
+    font-size: var(--font-size-12);
     border-radius: 90px;
     padding: 1px 6px;
     vertical-align: middle;
@@ -660,24 +649,17 @@ textarea:focus {
 
 .other-options a {
     color: var(--color-blue);
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .form-control {
     height: 34px !important;
 }
 
-textarea.form-control {
-    height: auto !important;
-}
-
 form label {
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 
-// .billing-address input, .billing-address textarea{
-//     background-color: transparent !important;
-// }
 .billing-address .selected-val {
     border: none !important;
     padding-right: 2px !important;
@@ -708,7 +690,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
 }
 
 .billing-address-full p {
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-abbey);
     margin-bottom: 5px;
 }
@@ -765,7 +747,6 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
     cursor: default;
     background-color: var(--color-dark-fog) !important;
     border: 1px solid var(--color-secondary-input-bar-border);
-    // max-width: 150px;
 }
 
 .sales-invoice-table table.basic td {
@@ -787,9 +768,14 @@ a.copy-invoice img {
     margin-right: 6px;
 }
 
-.invoice-date-due-date .form-group,
-.invoice-date-due-date label {
-    display: inline-block !important;
+.invoice-date-due-date {
+    .form-group,
+    label {
+        display: inline-block !important;
+    }
+    .form-inline {
+        column-gap: 8px;
+    }
 }
 
 .p-0 {
@@ -805,7 +791,7 @@ a.copy-invoice img {
 }
 
 .entry-date label {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     display: block;
 }
 
@@ -815,7 +801,7 @@ a.copy-invoice img {
     width: 66px;
     background: transparent !important;
     height: 25px !important;
-    font-size: 12px !important;
+    font-size: var(--font-size-12) !important;
     padding-right: 0 !important;
     padding-left: 0 !important;
     padding-top: 0 !important;
@@ -827,26 +813,26 @@ a.copy-invoice img {
 
 .hsn-code.text-right {
     padding-top: 3px;
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .hsn-code label {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     display: block;
 }
 
 .entry-date {
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .sku-number,
 .sku-number label {
-    font-size: 12px !important;
+    font-size: var(--font-size-12) !important;
     display: none;
 }
 
 .add-bulk-items {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     padding-bottom: 0;
     color: var(--color-blue);
 }
@@ -870,7 +856,7 @@ a.copy-invoice img {
     vertical-align: middle;
     line-height: 0;
     width: 88px !important;
-    font-size: 12px;
+    font-size: var(--font-size-12);
     background-color: transparent !important;
 }
 
@@ -915,7 +901,7 @@ span.edit-icon {
 }
 
 .hsn-code-dropdown label {
-    font-size: 12px !important;
+    font-size: var(--font-size-12) !important;
     margin-bottom: 5px;
     display: block;
 }
@@ -938,7 +924,7 @@ span.edit-icon {
     text-align: center;
     color: var(--color-iron);
     padding: 5px 8px;
-    font-size: 16px;
+    font-size: var(--font-size-15);
 }
 
 .hsn-code-dropdown .btn-group {
@@ -964,7 +950,7 @@ span.edit-icon {
 }
 
 .select-account-label {
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-gray);
     padding-bottom: 3px;
 }
@@ -1015,7 +1001,7 @@ section.static-invoice-table {
     position: absolute;
     width: 100%;
     left: 0;
-    top: 0;
+    top: 2px;
     margin-left: 48%;
     min-width: 485px;
     max-width: 485px;
@@ -1025,11 +1011,6 @@ section.static-invoice-table {
     margin-left: 10px;
 }
 
-// redesign in DIV formate css
-// .customer-invoice-table:nth-child(2) {
-//   padding-top: 10px;
-//   padding-bottom: 10px;
-// }
 .mt-1 {
     margin-top: 10px;
 }
@@ -1048,15 +1029,12 @@ section.static-invoice-table {
 }
 
 .customer-invoice-table.bg-white {
-    margin-top: 10px;
+    margin-top: 0px;
     border-bottom: 1px solid var(--color-common-secondary-border);
     margin-bottom: 20px;
     background-color: var(--color-common-primary-background-for-all-components) !important;
 }
 
-// .customer-invoice-table section.form-inline {
-//   padding-top: 60px;
-// }
 .customer-invoice-table section.billing-address-wrap {
     padding-top: 65px;
 }
@@ -1087,7 +1065,7 @@ section.new-table {
 }
 
 .customer-invoice-table label {
-    line-height: 2.3;
+    line-height: 2.5;
 }
 
 .customer-invoice-table label.sales-country-label {
@@ -1143,10 +1121,10 @@ section.new-table {
 }
 
 .single-card-row label.card-label {
-    font-size: 14px !important;
+    font-size: var(--font-size-15) !important;
     font-weight: 500;
     display: block;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 
 .single-card-row {
@@ -1155,7 +1133,7 @@ section.new-table {
 
 .single-card-row p {
     color: var(--color-abbey);
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 
 .card-invoice-table {
@@ -1168,7 +1146,7 @@ section.new-table {
     right: 15px;
     top: 11px;
     color: var(--color-danger);
-    font-size: 18px;
+    font-size: var(--font-size-16);
 }
 
 .edit-card img {
@@ -1257,11 +1235,11 @@ section.new-table {
 
 .add-bulk-item-modal .single-product-wrapper h5 {
     color: var(--color-nero);
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 
 .add-bulk-item-modal .single-product-wrapper p {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     padding-top: 4px;
 }
 
@@ -1272,11 +1250,11 @@ section.new-table {
 }
 
 .add-bulk-item-modal .right-content span.selected-stock-number {
-    font-size: 20px;
+    font-size: var(--font-size-16);
 }
 
 .add-bulk-item-modal .right-content h4 {
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 
 .add-bulk-item-modal .right-content hr {
@@ -1291,7 +1269,7 @@ section.new-table {
 }
 
 .add-bulk-item-modal .single-selected-stock p {
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 
 .add-bulk-item-modal .wrap-selected-stocks {
@@ -1334,7 +1312,7 @@ section.new-table {
 }
 
 .add-bulk-item-modal .modal-title {
-    font-size: 22px !important;
+    font-size: var(--font-size-24) !important;
     color: var(--color-white);
 }
 
@@ -1358,12 +1336,12 @@ section.new-table {
 }
 
 .gst-treatment-header > span {
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 
 .aqua-color a {
     color: var(--color-blue);
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .aqua-color i {
@@ -1440,24 +1418,47 @@ table.table.table-custom-invoice.basic,
     list-style: none;
 }
 
-.amount-field,
-.balance-due-text {
-    min-width: 129px !important;
-    margin-left: 20px;
+.amount-field {
+    min-width: 150px !important;
+    margin-left: 15px;
 }
 
-#deposit-dropdown p {
+.balance-due-text {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    .blnc-label {
+        width: 45%;
+        text-align: left;
+    }
+    .adjust-amount {
+        display: flex;
+        align-items: center;
+        column-gap: 30px;
+        justify-content: flex-start;
+        width: 50%;
+    }
+}
+
+.balance-due-text {
+    min-width: 150px !important;
+    margin-left: 23px;
+}
+
+#deposit-dropdown > strong {
     text-align: left;
+    font-weight: 600;
+    display: block;
 }
 
 .sku-and-custom-fields {
     white-space: normal;
-    font-size: 12px !important;
+    font-size: var(--font-size-12) !important;
 }
 
 .differ-currency {
     color: var(--color-gray);
-    font-size: 14px;
+    font-size: var(--font-size-15);
     text-align: right;
     bottom: 3px;
     right: 8px;
@@ -1467,17 +1468,13 @@ table.table.table-custom-invoice.basic,
     justify-self: flex-end;
 }
 
-.differ-currency span.icon-rupees {
-    font-size: 11px;
-}
-
 .date-hsn-code {
     position: relative;
     top: 7px;
 }
 
 .switch-currency {
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-nero);
     max-width: 1000px;
     text-align: right;
@@ -1516,22 +1513,8 @@ label.sales-country-label {
     padding-bottom: 0;
 }
 
-.bigger-dollar .icon-rupees {
-    font-size: 12px;
-}
-
-.table-cell.figure-cell span.icon-rupees {
-    font-size: 11px;
-    margin-right: 2px;
-}
-
 .table-cell.figure-cell span.icon-dollar {
     margin-right: 2px;
-}
-
-.tax-in-currency span.icon-rupees {
-    font-size: 11px;
-    color: var(--color-gray);
 }
 
 .thead-sales-invoice {
@@ -1589,8 +1572,8 @@ label.sales-country-label {
     position: absolute;
     right: -30px;
     transform: translateY(-40px);
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     border: 1px solid var(--color-primary-button-border);
     border-radius: 50%;
     text-align: center;
@@ -1602,13 +1585,9 @@ label.sales-country-label {
     -moz-transform: translateY(-40px);
 }
 
-.wrap-td-data .icon-rupees {
-    font-size: 11px;
-}
-
 b,
 strong {
-    font-family: "opensans-bold";
+    font-family: var(--font-bold);
     font-weight: 500;
 }
 
@@ -1643,18 +1622,6 @@ label.checkbox-custom-label {
     line-height: initial !important;
 }
 
-span.eligible-ITC {
-    font-size: 11px;
-    cursor: pointer;
-    padding-top: 5px;
-    display: inline-block;
-
-    span {
-        color: var(--color-blue);
-        font-size: 10px;
-    }
-}
-
 .deposit-payment-mode {
     display: flex;
     align-items: flex-start;
@@ -1666,11 +1633,22 @@ span.eligible-ITC {
 }
 
 .payment-mode {
-    select-field {
-        float: right;
-        width: 50%;
-        margin-left: 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    .payment-label {
         text-align: left;
+        width: 50%;
+        display: flex;
+        justify-content: flex-start;
+    }
+    select-field {
+        text-align: left;
+    }
+    text-field {
+        input {
+            width: 100%;
+        }
     }
 }
 
@@ -1686,18 +1664,12 @@ span.eligible-ITC {
     justify-content: center;
     margin-right: 15px;
     height: 33px;
-    font-size: 14px;
+    font-size: var(--font-size-15);
 
     span:first-child {
         font-size: 16px;
         vertical-align: middle;
         color: var(--color-abbey);
-    }
-
-    .label {
-        vertical-align: middle;
-        color: var(--color-abbey);
-        font-size: 13px;
     }
 }
 
@@ -1785,11 +1757,21 @@ span.eligible-ITC {
 .text-indent {
     text-indent: -3px;
 }
+.row-gap {
+    row-gap: 10px;
+}
 /* resposnvie */
 @media (max-width: 1199px) {
     .invoice-date-due-date {
         min-width: 430px;
         max-width: 430px;
+    }
+    .inner-container {
+        max-width: 970px;
+    }
+    table.table.table-custom-invoice.basic,
+    .other-details-section {
+        max-width: 940px;
     }
 }
 
@@ -1833,11 +1815,7 @@ span.eligible-ITC {
     }
 
     .customer-invoice-table label {
-        font-size: 13px;
-    }
-
-    .invoice-date-due-date {
-        display: none;
+        font-size: var(--font-size-15);
     }
 
     .wrapper-customer-table .col-sm-2 {
@@ -1872,12 +1850,17 @@ span.eligible-ITC {
             top: 28px;
         }
 
-        .voucher-preview-edit .custom-date-entries giddh-datepicker .mat-datepicker-toggle {
-            position: absolute;
-            right: 35%;
-            top: -3px;
-            opacity: 0;
-            z-index: 99;
+        .voucher-preview-edit {
+            .custom-date-entries giddh-datepicker .mat-datepicker-toggle {
+                position: absolute;
+                right: 35%;
+                top: -3px;
+                opacity: 0;
+                z-index: 99;
+            }
+            .multicurrency-grandtotal {
+                width: 100% !important;
+            }
         }
     }
 
@@ -1949,7 +1932,7 @@ span.eligible-ITC {
         background-color: var(--color-dark-fog);
         border: 1px solid var(--color-iron);
         padding: 3px;
-        font-size: 13px;
+        font-size: var(--font-size-15);
     }
 
     .other-taxes div {
@@ -1991,6 +1974,14 @@ span.eligible-ITC {
     }
 }
 
+.blnc-due {
+    display: flex;
+    justify-content: space-between;
+    .blnc-due-num {
+        width: 50%;
+        text-align: left;
+    }
+}
 @media (max-width: 767px) {
     .mobile-view-padding {
         padding: 0 15px;
@@ -2034,7 +2025,7 @@ span.eligible-ITC {
     }
 
     .sp-rupees {
-        font-size: 20px;
+        font-size: var(--font-size-16);
     }
 
     .wrap-other-tax {
@@ -2140,10 +2131,6 @@ span.eligible-ITC {
         text-align: right;
     }
 
-    .balance-due-text {
-        text-align: right;
-    }
-
     #actionPane .update-mode {
         justify-content: center;
         align-items: center;
@@ -2168,7 +2155,7 @@ span.eligible-ITC {
     a {
         color: var(--color-dropdown-list);
         background-color: var(--color-dropdown-primary-background);
-        font-size: 16px;
+        font-size: var(--font-size-15);
 
         &:hover {
             color: var(--color-dropdown-list-hover-text) !important;

@@ -762,7 +762,7 @@
                                 <th
                                     [attr.data-title]="localeData?.po_number"
                                     width="12%"
-                                    *ngIf="voucherApiVersion !== 2 && selectedVoucher === 'purchase'"
+                                    *ngIf="selectedVoucher === 'purchase'"
                                     class="td-search-box"
                                     #searchPurchaseOrderContainer
                                     (clickOutside)="
@@ -1068,7 +1068,7 @@
 
                                 <td
                                     [attr.data-title]="localeData?.linked_voucher"
-                                    *ngIf="voucherApiVersion !== 2 && selectedVoucher === 'purchase'"
+                                    *ngIf="selectedVoucher === 'purchase'"
                                 >
                                     {{ item.purchaseOrderNumbers }}
                                 </td>
@@ -1127,7 +1127,7 @@
                                     [attr.data-title]="localeData?.e_invoice_status"
                                     width="10%"
                                 >
-                                    <div class="e-invoice-status font-14">
+                                    <div class="e-invoice-status font-15">
                                         <strong class="d-flex" [tooltip]="item.eInvoiceStatusTooltip">{{
                                             item?.status || "-"
                                         }}</strong>
@@ -1247,7 +1247,7 @@
                                                         '/copy'
                                                 ]"
                                             >
-                                                <span class="icon-copy-small font-14"></span>
+                                                <span class="icon-copy-small font-15"></span>
                                             </a>
                                             <a
                                                 *ngIf="!isCompany"
@@ -1411,7 +1411,7 @@
                                     [attr.data-title]="localeData?.e_invoice_status"
                                     width="10%"
                                 >
-                                    <div class="e-invoice-status font-14">
+                                    <div class="e-invoice-status font-15">
                                         <strong class="d-flex" [tooltip]="item.eInvoiceStatusTooltip">{{
                                             item?.status || "-"
                                         }}</strong>
@@ -1771,7 +1771,8 @@
                                 [selectedInvoiceForPayment]="selectedInvoice"
                                 [localeData]="localeData"
                                 [commonLocaleData]="commonLocaleData"
-                                (closeModelEvent)="closePerformActionPopup($event)"
+                                (performActionPopup)="performActionPopup($event)"
+                                (closeModelEvent)="closePerformActionPopup()"
                             >
                             </invoice-payment-model>
                         </div>
@@ -1878,7 +1879,7 @@
                         (closeEvent)="invoicePreviewClosed()"
                         (onOpenAdvanceReceiptModal)="openAdvanceReceiptModal($event)"
                         [isCompany]="isCompany"
-                        (processPaymentEvent)="closePerformActionPopup($event)"
+                        (processPaymentEvent)="performActionPopup($event)"
                         [voucherType]="selectedVoucher"
                         (updateVoucherAction)="onPerformAction(null, $event)"
                         [appSideMenubarIsOpen]="appSideMenubarIsOpen"

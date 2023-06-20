@@ -54,7 +54,7 @@ i.close.icon.clear:hover::after {
     padding-right: 2px;
     top: 15px;
     cursor: pointer;
-    font-size: 25px;
+    font-size: var(--font-size-24);
     font-weight: 500;
     line-height: 100%;
     opacity: 0.5;
@@ -73,7 +73,7 @@ i.close.icon.clear:hover::after {
     display: inline-block;
     padding: 0 7px;
     height: 30px;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     line-height: 30px;
     border-radius: 4px;
     background-color: var(--color-chips-primary-background);

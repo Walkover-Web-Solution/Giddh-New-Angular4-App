@@ -36,7 +36,7 @@ table.width-100 {
 }
 
 .modal-header ng-select div a.ng-star-inserted {
-    font-size: 18px;
+    font-size: var(--font-size-16);
     color: var(--color-white);
 }
 
@@ -53,7 +53,7 @@ ng-select > div i.fa.fa-caret-down::before {
 ng-select > div a.ng-star-inserted {
     color: var(--color-white);
     text-transform: uppercase;
-    font-size: 16px;
+    font-size: var(--font-size-15);
 }
 
 ng-select > div {
@@ -84,7 +84,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .amount-total {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     color: var(--color-gray);
 }
 
@@ -166,17 +166,6 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     display: contents;
 }
 
-span.eligible-ITC {
-    font-size: 11px;
-    cursor: pointer;
-    padding-top: 5px;
-    display: inline-block;
-    span {
-        color: var(--color-blue);
-        font-size: 10px;
-    }
-}
-
 .taxable-amount-section {
     display: inline-block;
     margin-bottom: 12px;
@@ -234,7 +223,7 @@ span.eligible-ITC {
                 .remove-invoice-label {
                     vertical-align: middle;
                     color: var(--color-abbey);
-                    font-size: 13px;
+                    font-size: var(--font-size-15);
                 }
             }
         }
@@ -245,6 +234,7 @@ span.eligible-ITC {
 }
 .edit-adjustment {
     padding: 0 5px 0;
+    font-size: 10px;
 }
 .icon-info {
     color: var(--color-abbey);
@@ -259,7 +249,7 @@ span.eligible-ITC {
     box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
     color: var(--color-abbey);
     .info-text {
-        font-family: "opensans-regular";
+        font-family: var(--font-regular);
     }
 }
 .left-col-new .row,
@@ -295,8 +285,8 @@ p.edit-message {
     text-align: center;
     padding: 8px 0;
     border-top: 1px solid var(--color-common-secondary-border);
-    font-size: 16px;
-    font-family: "opensans-semibold";
+    font-size: var(--font-size-15);
+    font-family: var(--font-semibold);
     margin-top: 15px;
 }
 
@@ -320,7 +310,7 @@ p.edit-message {
     margin-top: 1px;
     a {
         color: var(--color-dark-gray);
-        font-size: 15px;
+        font-size: var(--font-size-15);
     }
 }
 /* responsive */

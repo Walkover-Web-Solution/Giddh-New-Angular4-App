@@ -14,7 +14,6 @@
         overflow-y: auto;
         z-index: unset;
         padding-bottom: 60px;
-        box-shadow: 3px 3px 6px var(--color-primary-common-box-shadow);
 
         .back-to-main-slider {
             display: block;
@@ -25,8 +24,8 @@
                 bottom: 25px;
                 z-index: 1;
                 text-align: center;
-                font-size: 20px;
-                font-family: "opensans-regular";
+                font-size: var(--font-size-16);
+                font-family: var(--font-regular);
             }
             .icon-back-arrow {
                 position: relative;
@@ -49,7 +48,7 @@
                                 i {
                                     color: var(--color-lavender);
                                     margin-right: 10px;
-                                    font-size: 14px;
+                                    font-size: var(--font-size-15);
                                 }
                             }
                         }
@@ -87,7 +86,7 @@
                         letter-spacing: 0.14px;
                         height: 27px;
                         align-items: center;
-                        font: normal normal 600 14px/30px "opensans-regular";
+                        font: normal normal 600 var(--font-size-15) / 30px var(--font-regular);
                         &:hover {
                             color: var(--color-white-tertiary);
                             background-color: var(--color-sidebar-anchor-text-hover);
@@ -98,15 +97,11 @@
                         }
                         &.sub-option[aria-level="1"] {
                             position: relative;
-                            left: 20px;
+                            // left: 20px;
+                            padding-left: 20px !important;
                             height: 27px;
-                            width: 210px;
+                            width: 100%;
                             line-height: 15px;
-                            &:last-child {
-                                align-items: flex-start;
-                                position: relative;
-                                top: 8px;
-                            }
                             &:hover {
                                 color: var(--color-sidebar-anchor-text-hover);
                                 background-color: var(--color-white);
@@ -124,7 +119,8 @@
                         cursor: pointer;
                         letter-spacing: 0.14px;
                         height: 27px;
-                        font: normal normal 600 14px/30px Open Sans;
+                        font: normal normal 600 var(--font-size-15) / 30px;
+                        font-family: var(--font-regular);
                         color: var(--color-sidebar-content-text);
                         &:last-child {
                             min-height: 37px;
@@ -156,8 +152,8 @@
     ul {
         padding: 0;
         list-style: none;
-        font-size: 14px;
-        font-family: "opensans-semibold";
+        font-size: var(--font-size-15);
+        font-family: var(--font-semibold);
 
         li {
             padding: 6px 20px;
@@ -201,7 +197,7 @@
 }
 
 .inventory-sub-bar {
-    font-family: "opensans-regular" !important;
+    font-family: var(--font-regular) !important;
 
     li {
         a {

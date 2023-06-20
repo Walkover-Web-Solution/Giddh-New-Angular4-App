@@ -1,0 +1,132 @@
+<div class="create-recipe mt-2">
+    <div class="create-recipe-wrapper">
+        <div class="row px-3">
+            <div class="mb-3">
+                <div>
+                    <label>Stock</label>
+                    <select-field
+                        class="width-280"
+                        [cssClass]="'form-control'"
+                        [name]="''"
+                        [placeholder]="'Select Stock'"
+                        [options]="stock"
+                        [defaultValue]=""
+                    >
+                    </select-field>
+                </div>
+            </div>
+        </div>
+        <hr class="my-2" />
+        <div class="row mt-3 ml-0">
+            <div class="repeatable-container py-3 col-md-11 col-sm-11">
+                <div class="d-flex flex-wrap mb-3">
+                    <div class="mr-3 mb-3">
+                        <label>Output Variant</label>
+                        <select-field
+                            class="width-280"
+                            [cssClass]="'form-control'"
+                            [name]="''"
+                            [placeholder]="'Select Output Variant'"
+                            [options]="stock"
+                            [defaultValue]=""
+                        >
+                        </select-field>
+                    </div>
+
+                    <div class="mr-3 mb-3">
+                        <label>Output Quantity</label>
+                        <text-field
+                            class="width-280"
+                            type="text"
+                            name="''"
+                            [placeholder]="'Enter Output Quantity'"
+                            [cssClass]="'form-control'"
+                        ></text-field>
+                    </div>
+
+                    <div class="mr-3 mb-3">
+                        <label>Output Stock Unit</label>
+                        <select-field
+                            class="width-280"
+                            [cssClass]="'form-control'"
+                            [name]="''"
+                            [placeholder]="'Select Output Stock Unit'"
+                            [options]="stock"
+                            [defaultValue]=""
+                        >
+                        </select-field>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap mb-3">
+                    <div class="mr-3 mb-3">
+                        <label>Stock</label>
+                        <select-field
+                            class="width-280"
+                            [cssClass]="'form-control'"
+                            [name]="''"
+                            [placeholder]="'Select Stock'"
+                            [options]="stock"
+                            [defaultValue]=""
+                        >
+                        </select-field>
+                    </div>
+                    <div class="mr-3 mb-3">
+                        <label>Variant</label>
+                        <select-field
+                            class="width-280"
+                            [cssClass]="'form-control'"
+                            [name]="''"
+                            [placeholder]="'Select Variant'"
+                            [options]="stock"
+                            [defaultValue]=""
+                        >
+                        </select-field>
+                    </div>
+
+                    <div class="mr-3 mb-3">
+                        <label>Quantity</label>
+                        <text-field
+                            class="width-280"
+                            type="text"
+                            name="''"
+                            [placeholder]="'Enter Quantity'"
+                            [cssClass]="'form-control'"
+                        ></text-field>
+                    </div>
+
+                    <div class="mr-3 mb-3">
+                        <label>Stock Unit</label>
+                        <select-field
+                            class="width-280"
+                            [cssClass]="'form-control'"
+                            [name]="''"
+                            [placeholder]="'Select Stock Unit'"
+                            [options]="stock"
+                            [defaultValue]=""
+                        >
+                        </select-field>
+                    </div>
+
+                    <div class="d-flex justify-content-center align-items-end mr-3 mb-3">
+                        <button mat-icon-button class="edit-btn mb-1">
+                            <i class="icon-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <a href="javascript:void(0);" class="text-primary font-15 text-right">+ Add New</a>
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-1 d-flex justify-content-start align-items-center">
+                <div>
+                    <button mat-icon-button class="edit-btn">
+                        <i class="icon-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="my-3">
+            <a href="javascript:void(0);" class="text-primary font-15 text-right">+ Add New</a>
+        </div>
+    </div>
+</div>

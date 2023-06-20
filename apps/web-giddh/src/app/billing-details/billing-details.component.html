@@ -10,16 +10,15 @@
             <div class="row display-line">
                 <div class="col-sm-1" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <div class="back-btnn">
-                        <button class="btn btn-default back-button" (click)="backToSubscriptions()" *ngIf="!showLoader">
+                        <button
+                            class="btn btn-default back-button d-inline-flex"
+                            (click)="backToSubscriptions()"
+                            *ngIf="!showLoader"
+                        >
                             <i class="icon-left back-left"></i>
                             {{ commonLocaleData?.app_back }}
                         </button>
                     </div>
-                </div>
-                <div class="col-sm-11">
-                    <h2 class="giddh-heading" [ngClass]="{ 'skeleton-common-class': showLoader }">
-                        {{ localeData?.welcome_to_giddh }}
-                    </h2>
                 </div>
             </div>
         </div>
@@ -116,28 +115,6 @@
                                     />
                                 </mat-form-field>
                             </div>
-                            <!-- <div class="form-group">
-                                <mat-form-field appearance="fill"
-                                    class="mat-field-select width-100 only-bottom-border mat-input">
-                                    <label
-                                        [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }">{{ commonLocaleData?.app_country }}
-                                        <span [ngClass]="{ 'red-text-content': showLoader }"
-                                            class="red-text">*</span></label>
-                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
-                                    <input type="text" name="country" required [formControl]="searchCountry"
-                                        [placeholder]="commonLocaleData?.app_country"
-                                        [ngClass]="{ 'form-field': showLoader }" class="no-border pd-l1 mat-input-field"
-                                        matInput [matAutocomplete]="billingCountryAuto" autocomplete="off"
-                                        (optionSelected)="selectCountry(searchCountry.value)"
-                                        (blur)="resetValueIfOptionNotSelected('billingCountry')" />
-                                    <mat-autocomplete #billingCountryAuto="matAutocomplete"
-                                        [displayWith]="displayLabel">
-                                        <mat-option (onSelectionChange)="onSelectChangeCountry($event)"
-                                            *ngFor="let country of countrySource" [value]="country">{{ country?.label }}
-                                        </mat-option>
-                                    </mat-autocomplete>
-                                </mat-form-field>
-                            </div> -->
                             <div class="form-group" *ngIf="formFields['taxName'] !== undefined">
                                 <mat-form-field appearance="fill" class="mat-input">
                                     <label
@@ -156,9 +133,13 @@
                                         maxlength="15"
                                         [(ngModel)]="billingDetailsObj.gstin"
                                         #gstinNumberField
+                                        [placeholder]="
+                                            showGstinNo
+                                                ? commonLocaleData?.app_enter_gstin
+                                                : commonLocaleData?.app_enter_trn
+                                        "
                                         (keyup)="
-                                            getStateCode(gstinNumberField, states);
-                                            checkGstNumValidation(gstinNumberField)
+                                            getStateCode(gstinNumberField); checkGstNumValidation(gstinNumberField)
                                         "
                                         matInput
                                     />
@@ -182,45 +163,11 @@
                                         (selectedOption)="onStateChange($event)"
                                         [defaultValue]="searchBillingStates"
                                         [required]="true"
+                                        [readonly]="isStateDisabled"
                                     >
                                     </select-field>
-                                    <!-- <input
-                                        type="text"
-                                        [placeholder]="commonLocaleData?.app_state"
-                                        [ngClass]="{ 'form-field': showLoader }"
-                                        class="no-border pd-l1 mat-input-field"
-                                        matInput
-                                        name="stateCode"
-                                        [formControl]="searchBillingStates"
-                                        [matAutocomplete]="billingStateAuto"
-                                        autocomplete="off"
-                                        (blur)="resetValueIfOptionNotSelected('billingState')"
-                                        required
-                                    />
-                                    <mat-autocomplete
-                                        #billingStateAuto="matAutocomplete"
-                                        [displayWith]="displayLabel"
-                                        (optionSelected)="onStateChange($event)"
-                                    >
-                                        <mat-option *ngFor="let state of companyStatesSource" [value]="state">
-                                            {{ state.label }}
-                                        </mat-option>
-                                    </mat-autocomplete> -->
                                 </div>
                             </div>
-                            <!-- static pincode start -->
-                            <!-- <div class="form-group">
-                                <mat-form-field appearance="fill" class="mat-input">
-                                    <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
-                                        for="pinCodeNum">{{ localeData?.pincode }}
-                                        <span class="red-text"
-                                            [ngClass]="{ 'red-text-content': showLoader }">*</span></label>
-                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
-                                    <input type="text" [ngClass]="{ 'form-field': showLoader }" class="form-control"
-                                        name="pinCodeNum" matInput />
-                                </mat-form-field>
-                            </div> -->
-                            <!-- static pincode end -->
                             <div class="form-group">
                                 <mat-form-field appearance="fill" class="mat-input">
                                     <label
@@ -269,7 +216,6 @@
                                     [ngClass]="{ 'skeleton-common-class': showLoader }"
                                 >
                                     {{ selectedPlans?.planDetails?.name }}
-                                    <!-- <span class="current-plan-details"> {{ localeData?.current_plan }} </span> -->
                                 </mat-card-subtitle>
                                 <mat-card-title
                                     class="renewal-card-title"
@@ -288,7 +234,6 @@
                                         {{ selectedPlans?.planDetails?.durationUnit }}(s)</span
                                     >
                                 </mat-card-title>
-                                <!-- <p class="renewal-off">₹15000 <span class="discount-off">20% off</span></p> -->
                                 <mat-card-content class="renewal-card-content">
                                     <ul class="renewal-list" [ngClass]="{ 'renewal-list-content': showLoader }">
                                         <li class="features" [ngClass]="{ 'skeleton-common-class': showLoader }">
@@ -299,7 +244,6 @@
                                             {{ selectedPlans?.planDetails?.companiesLimit | number }}
                                             {{ localeData?.companies }}
                                         </li>
-                                        <!-- <li class="features">10 hrs<span class="hrs-underline"> Muneem Consultant</span></li> -->
                                         <li class="features" [ngClass]="{ 'skeleton-common-class': showLoader }">
                                             {{ localeData?.unlimited_users }}
                                         </li>

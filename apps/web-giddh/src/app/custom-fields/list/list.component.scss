@@ -5,8 +5,8 @@
         height: calc(100vh - 200px);
     }
     h4 {
-        font-size: 16px;
-        font-family: "opensans-semibold";
+        font-size: var(--font-size-15);
+        font-family: var(--font-semibold);
     }
     .custom-field-list {
         .table-responsive {

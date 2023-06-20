@@ -12,7 +12,7 @@
                 border: 1px solid var(--color-primary-button-border);
                 a {
                     width: 34px;
-                    font-size: 18px;
+                    font-size: var(--font-size-16);
                     color: var(--color-octonary-button-text);
                     border-right: 1px solid var(--color-primary-button-border);
                     display: flex;
@@ -52,7 +52,7 @@
         align-items: center;
         .clear-filter-btn {
             color: var(--color-giddh-blue);
-            font-size: 14px;
+            font-size: var(--font-size-15);
             border: 1px solid var(--color-giddh-blue);
             border-radius: 20px;
             padding: 0 15px;
@@ -63,7 +63,7 @@
             justify-content: center;
             background-color: var(--color-white);
             i {
-                font-size: 12px;
+                font-size: var(--font-size-12);
                 padding-right: 8px;
                 top: 0;
                 color: var(--color-giddh-blue);
@@ -174,10 +174,10 @@
     padding: 15px;
     margin-bottom: 15px;
     .single-branch-detail {
-        font-size: 14px;
+        font-size: var(--font-size-15);
         h4 {
-            font-size: 16px;
-            font-family: "opensans-bold";
+            font-size: var(--font-size-15);
+            font-family: var(--font-bold);
             margin-bottom: 10px;
             color: var(--color-giddh-blue);
             i {

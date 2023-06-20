@@ -10,8 +10,8 @@
         }
         .group-name {
             h4 {
-                font-family: "opensans-semibold";
-                font-size: 16px;
+                font-family: var(--font-semibold);
+                font-size: var(--font-size-15);
             }
         }
     }

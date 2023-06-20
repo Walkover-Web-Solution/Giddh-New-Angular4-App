@@ -36,7 +36,7 @@
                     </div>
                     <div class="cursor-pointer mx-2">
                         <strong
-                            [routerLink]="['/pages/new-inventory/about-group-detail']"
+                            [routerLink]="['/pages/inventory/v2/about-group-detail']"
                             tooltip="Group Unique Name"
                             class="text-black"
                         >
@@ -54,7 +54,7 @@
             <td data-title="Opening Value" mat-cell *matCellDef="let element">
                 <button
                     mat-stroked-button
-                    class="bdr-radius-50 font-14"
+                    class="bdr-radius-50 font-15"
                     (click)="showValue()"
                     *ngIf="!showValueCondition"
                     color="primary"
@@ -71,7 +71,7 @@
             <td data-title="Inward Value" mat-cell *matCellDef="let element">
                 <button
                     mat-stroked-button
-                    class="bdr-radius-50 font-14"
+                    class="bdr-radius-50 font-15"
                     (click)="showValue()"
                     *ngIf="!showValueCondition"
                     color="primary"
@@ -88,7 +88,7 @@
             <td data-title="Outward Value" mat-cell *matCellDef="let element">
                 <button
                     mat-stroked-button
-                    class="bdr-radius-50 font-14"
+                    class="bdr-radius-50 font-15"
                     (click)="showValue()"
                     *ngIf="!showValueCondition"
                     color="primary"
@@ -103,7 +103,7 @@
             <td data-title="Closing Value" mat-cell *matCellDef="let element">
                 <button
                     mat-stroked-button
-                    class="bdr-radius-50 font-14"
+                    class="bdr-radius-50 font-15"
                     (click)="showValue()"
                     *ngIf="!showValueCondition"
                     color="primary"
@@ -116,7 +116,7 @@
         <!--        <ng-container matColumnDef="lessStock">-->
         <!--            <th mat-header-cell *matHeaderCellDef>Less Stock</th>-->
         <!--            <td data-title=" Less Stock" mat-cell *matCellDef="let element">-->
-        <!--                <a href="javascript:void(0)" [routerLink]="['/pages/new-inventory/about-group-detail']">-->
+        <!--                <a href="javascript:void(0)" [routerLink]="['/pages/inventory/v2/about-group-detail']">-->
         <!--                    {{ element.lessStock }}-->
         <!--                </a>-->
         <!--            </td>-->

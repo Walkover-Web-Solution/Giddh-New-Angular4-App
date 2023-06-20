@@ -100,8 +100,8 @@ ul#dropdown-nested li .caret {
     border-bottom: 1px solid var(--color-iron);
     .nav-report {
         li {
-            font-family: "opensans-semibold";
-            font-size: 20px;
+            font-family: var(--font-semibold);
+            font-size: var(--font-size-16);
             a {
                 color: var(--color-giddh-blue);
             }
@@ -136,12 +136,12 @@ ul#dropdown-nested li .caret {
         padding-top: 0 !important;
         .nav-report {
             li {
-                font-size: 16px;
+                font-size: var(--font-size-15);
             }
         }
         .custom-month-select {
             .btn {
-                font-size: 16px;
+                font-size: var(--font-size-15);
             }
         }
     }

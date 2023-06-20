@@ -15,7 +15,7 @@
 
 .aside-pane-container {
     padding: 15px;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-nero);
 }
 
@@ -98,8 +98,13 @@ form.gstin-form {
         margin-right: 10px;
     }
 }
+/*--- custom ---*/
+.add-new-btn {
+    width: 100%;
+    max-width: 185px;
+}
 .add-address-default h3 {
-    font-size: 16px;
+    font-size: var(--font-size-15);
     color: var(--color-nero);
 }
 

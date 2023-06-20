@@ -5,13 +5,18 @@
         "create_new":"नया निर्माण",
         "item_wise":"आइटम के लिहाज से",
         "group_wise":"गटवार",
-        "variant_wise":"'भिन्न-भिन्न",
+        "variant_wise":"भिन्न-भिन्न",
         "transactions":"लेनदेन",
         "services":"सेवाएं",
         "fixed_assets":"अचल संपत्तियां",
         "branch_transfer":"शाखा स्थानांतरण",
         "manufacturing":"उत्पादन",
-        "warehouse_balance":"वेयरहाउस ओपनिंग बैलेंस"
+        "warehouse_balance":"वेयरहाउस ओपनिंग बैलेंस",
+        "custom_units":"कस्टम इकाई",
+        "recipe":"व्यंजन विधि",
+        "create_manufacturing":"मैन्युफैक्चरिंग बनाएं",
+        "report":"प्रतिवेदन",
+        "master":"मास्टर"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",
@@ -81,5 +86,14 @@
         "greater_than":"से अधिक",
         "less_than":"से कम",
         "excluded":"छोड़ा गया"
+    },
+     "warehouse_opening_balance":{
+        "unique_name":"अनूठा नाम",
+        "stock_group":"स्टॉक समूह",
+        "new_stock":"+ नया स्टॉक",
+        "select_warehouse":"गोदाम का चयन करें",
+        "opening_bal":"ओपनिंग बाल",
+        "variant":"प्रकार",
+        "variants":"वेरिएंट"
     }
 }

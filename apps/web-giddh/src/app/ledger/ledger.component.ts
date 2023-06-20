@@ -1379,7 +1379,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         // check selected account category
-        if (txn.selectedAccount) {
+        if (txn?.selectedAccount) {
             const category = txn.selectedAccount ? txn.selectedAccount.category : "";
             if (category === 'income' || category === 'expenses' || category === 'assets') {
                 if (category === 'assets') {
@@ -1408,7 +1408,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         }
 
-        if (this.generalService.isReceiptPaymentEntry(activeAccount, txn.selectedAccount)) {
+        if (this.generalService.isReceiptPaymentEntry(activeAccount, txn?.selectedAccount)) {
             showOtherTaxOption = true;
         }
 
@@ -1418,7 +1418,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         // check selected account category
-        if (txn.selectedAccount) {
+        if (txn?.selectedAccount) {
             const category = txn.selectedAccount ? txn.selectedAccount.category : "";
             if (category === 'income' || category === 'expenses' || category === 'assets') {
                 if (category === 'assets') {

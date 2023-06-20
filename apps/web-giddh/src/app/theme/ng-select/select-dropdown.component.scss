@@ -1,5 +1,5 @@
 select-dropdown {
-    font-size: 14px;
+    font-size: var(--font-size-15);
     > div {
         background-color: var(--color-dropdown-primary-background);
         border: 1px solid var(--color-common-secondary-border);

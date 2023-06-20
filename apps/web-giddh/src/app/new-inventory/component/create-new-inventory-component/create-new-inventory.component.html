@@ -4,7 +4,7 @@
         <label class="page-title-inventory"> Create Inventory </label>
 
         <div class="inventory-header-right">
-            <button mat-icon-button class="ml-3" style="font-size: 25px" [routerLink]="['/pages/new-inventory']">
+            <button mat-icon-button class="ml-3" style="font-size: 25px" [routerLink]="['/pages/inventory/v2']">
                 ×
             </button>
         </div>
@@ -12,7 +12,7 @@
 
     <div class="select-physical-product">
         <div class="px-3 mt-2">
-            <p class="text-gray font-14">
+            <p class="text-gray font-15">
                 Select if its a physical good or a service or a combo of more than 1 product.
             </p>
             <div class="select-product-type mt-1">
@@ -294,7 +294,7 @@
                             </form> -->
                             <div class="sales-purchase-details">
                                 <!-- <div class="mb-3">
-                                    <mat-checkbox color="primary" class="font-14"
+                                    <mat-checkbox color="primary" class="font-15"
                                         >Is the Product/Service eligible for Sale or Purchase?
                                     </mat-checkbox>
                                 </div> -->
@@ -331,7 +331,7 @@
                                                             <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                                 <sh-select id="applicable-tax" placeholder="Select Tax">
                                                                 </sh-select>
-                                                                <p class="mt-2 font-14">
+                                                                <p class="mt-2 font-15">
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         id="purchase-price-tax"
@@ -432,7 +432,7 @@
                                                                     placeholder="Select Tax"
                                                                     disabled
                                                                 ></sh-select>
-                                                                <p class="mt-2 font-14">
+                                                                <p class="mt-2 font-15">
                                                                     <mat-checkbox color="primary" id="sales-price-tax">
                                                                         Price Inclusive of Tax ?
                                                                     </mat-checkbox>
@@ -510,7 +510,7 @@
                     </mat-tab>
                     <mat-tab label="Inventory">
                         <div class="tab-container-new">
-                            <p class="mr-b15 font-14">
+                            <p class="mr-b15 font-15">
                                 <span>
                                     <mat-checkbox
                                         color="primary"
@@ -604,21 +604,21 @@
                                 </div>
                             </form> -->
 
-                            <p class="mr-b15 font-14">
+                            <p class="mr-b15 font-15">
                                 <span>
                                     <mat-checkbox color="primary" id="stock">
                                         Continue selling when out of stock?
                                     </mat-checkbox>
                                 </span>
                             </p>
-                            <p class="mr-b15 font-14">
+                            <p class="mr-b15 font-15">
                                 <span>
                                     <mat-checkbox color="primary" name="return-policy" id="return-policy">
                                         Is this stock eligible for return policy?
                                     </mat-checkbox>
                                 </span>
                             </p>
-                            <p class="mr-b15 font-14">
+                            <p class="mr-b15 font-15">
                                 <span>
                                     <mat-checkbox color="primary" [checked]="true" id="variant">
                                         Variant? This product has multiple options like size or colours etc..
@@ -700,7 +700,7 @@
                                         </button>
                                     </div>
                                     <div class="table-responsive">
-                                        <table class="stock-table font-14" style="margin-left: 2px">
+                                        <table class="stock-table font-15" style="margin-left: 2px">
                                             <tr>
                                                 <th>Stock Name<span class="red-text">*</span></th>
                                                 <th>Unique Name</th>
@@ -719,7 +719,7 @@
                                                     ></text-field>
                                                 </td>
                                                 <td>
-                                                    <mat-select class="font-14">
+                                                    <mat-select class="font-15">
                                                         <mat-option value="unit1"> Unit 1 </mat-option>
                                                         <mat-option value="unit2"> Unit 2 </mat-option>
                                                         <mat-option value="unit3"> Unit 3 </mat-option>
@@ -924,7 +924,7 @@
                                         <div>
                                             <a
                                                 href="javascript:void(0);"
-                                                class="font-14 mr-t1 d-flex"
+                                                class="font-15 mr-t1 d-flex"
                                                 id="add-more-variant"
                                             >
                                                 + Add More</a
@@ -995,7 +995,7 @@
                                         <div>
                                             <a
                                                 href="javascript:void(0);"
-                                                class="font-14 mr-t1 d-flex"
+                                                class="font-15 mr-t1 d-flex"
                                                 id="add-more-addon"
                                             >
                                                 + Add More</a
@@ -1032,7 +1032,7 @@
                                                     </div>
                                                     <div>
                                                         <label class="d-block hide-label-on-mobile"> &nbsp; </label>
-                                                        <span class="text-primary font-14">Variant Name (linked)</span>
+                                                        <span class="text-primary font-15">Variant Name (linked)</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1083,7 +1083,7 @@
                                                             <button
                                                                 mat-icon-button
                                                                 role="button"
-                                                                class="font-22 text-primary"
+                                                                class="icon-font-22 text-primary"
                                                                 type="button"
                                                             >
                                                                 +
@@ -1137,7 +1137,7 @@
                                                         <button
                                                             mat-icon-button
                                                             role="button"
-                                                            class="font-22 text-primary"
+                                                            class="icon-font-22 text-primary"
                                                             type="button"
                                                         >
                                                             +
@@ -1156,20 +1156,20 @@
                                                 d-flex
                                                 justify-content-between
                                                 mr-b1
-                                                font-14
+                                                font-15
                                             "
                                             (click)="toggleExpense()"
                                         >
                                             <a
                                                 href="javascript:void(0);"
-                                                class="text-primary font-14"
+                                                class="text-primary font-15"
                                                 id="add-expense-btn"
                                             >
                                                 + Add Expense
                                             </a>
                                             <a
                                                 href="javascript:void(0);"
-                                                class="text-primary font-14 text-right add-new-final-product"
+                                                class="text-primary font-15 text-right add-new-final-product"
                                                 id="add-new-product-btn"
                                                 >+ Add New Row</a
                                             >
@@ -1219,13 +1219,13 @@
                                                 "
                                             >
                                                 <button mat-icon-button role="button" type="button">
-                                                    <span class="font-22 text-primary pd-l05 pd-r05">+</span>
+                                                    <span class="icon-font-22 text-primary pd-l05 pd-r05">+</span>
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <a class="text-primary font-14" id="add-more-recipe-btn" href="javascript:void(0);"
+                                <a class="text-primary font-15" id="add-more-recipe-btn" href="javascript:void(0);"
                                     >+ Add more recipe</a
                                 >
                             </form>
@@ -1445,7 +1445,7 @@
                             <!-- hidden for service content -->
                             <div class="sales-purchase-details">
                                 <div class="mb-3">
-                                    <mat-checkbox color="primary" class="font-14"
+                                    <mat-checkbox color="primary" class="font-15"
                                         >Is the Product/Service eligible for Sale or Purchase?
                                     </mat-checkbox>
                                 </div>
@@ -1668,7 +1668,7 @@
                     <mat-tab label="Inventory">
                         <div class="tab-container-new">
                             <!-- hidden for service content -->
-                            <p class="mr-b15 font-14" hidden>
+                            <p class="mr-b15 font-15" hidden>
                                 <span>
                                     <mat-checkbox
                                         color="primary"
@@ -1768,7 +1768,7 @@
                                 </div>
                             </form>
                             <!-- hidden for service content -->
-                            <p hidden class="mr-b15 font-14">
+                            <p hidden class="mr-b15 font-15">
                                 <span>
                                     <mat-checkbox color="primary" type="checkbox" name="stock" id="stock">
                                         Continue selling when out of stock?
@@ -1776,7 +1776,7 @@
                                 </span>
                             </p>
                             <!-- hidden for service content -->
-                            <p hidden class="mr-b15 font-14">
+                            <p hidden class="mr-b15 font-15">
                                 <span>
                                     <mat-checkbox
                                         color="primary"
@@ -1788,7 +1788,7 @@
                                     </mat-checkbox>
                                 </span>
                             </p>
-                            <p class="mr-b15 font-14">
+                            <p class="mr-b15 font-15">
                                 <span>
                                     <mat-checkbox
                                         color="primary"
@@ -1886,7 +1886,7 @@
                                         </button>
                                     </div>
                                     <div class="table-responsive">
-                                        <table class="stock-table font-14" style="margin-left: 2px">
+                                        <table class="stock-table font-15" style="margin-left: 2px">
                                             <tr>
                                                 <th>Stock Name<span class="red-text">*</span></th>
                                                 <th>Unique Name</th>
@@ -1905,7 +1905,7 @@
                                                     ></text-field>
                                                 </td>
                                                 <td>
-                                                    <mat-select class="font-14">
+                                                    <mat-select class="font-15">
                                                         <mat-option value="unit1"> Unit 1 </mat-option>
                                                         <mat-option value="unit2"> Unit 2 </mat-option>
                                                         <mat-option value="unit3"> Unit 3 </mat-option>
@@ -2110,7 +2110,7 @@
                                         <div>
                                             <a
                                                 href="javascript:void(0);"
-                                                class="font-14 mr-t1 d-flex"
+                                                class="font-15 mr-t1 d-flex"
                                                 id="service-add-more-variant"
                                             >
                                                 + Add More</a
@@ -2181,7 +2181,7 @@
                                         <div>
                                             <a
                                                 href="javascript:void(0);"
-                                                class="font-14 mr-t1 d-flex"
+                                                class="font-15 mr-t1 d-flex"
                                                 id="add-more-addon"
                                             >
                                                 + Add More</a
@@ -2218,7 +2218,7 @@
                                                     </div>
                                                     <div>
                                                         <label class="d-block hide-label-on-mobile"> &nbsp; </label>
-                                                        <span class="text-primary font-14">Variant Name (linked)</span>
+                                                        <span class="text-primary font-15">Variant Name (linked)</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2266,14 +2266,14 @@
                                                     <div class="d-none-mobile pl-0 pr-0">
                                                         <label class="d-block"> &nbsp; </label>
                                                         <span
-                                                            ><button mat-icon-button class="font-22 text-primary">
+                                                            ><button mat-icon-button class="icon-font-22 text-primary">
                                                                 +
                                                             </button></span
                                                         >
                                                     </div>
                                                     <div class="d-none-mobile px-3">
                                                         <label class="d-block"> &nbsp; </label>
-                                                        <span class="font-22 d-flex"> = </span>
+                                                        <span class="icon-font-22 d-flex"> = </span>
                                                     </div>
                                                 </div>
                                                 <div
@@ -2315,7 +2315,9 @@
                                                     </div>
                                                     <div class="d-none-mobile">
                                                         <label class="d-block"> &nbsp; </label>
-                                                        <button mat-icon-button class="font-22 text-primary">+</button>
+                                                        <button mat-icon-button class="icon-font-22 text-primary">
+                                                            +
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2330,20 +2332,20 @@
                                                 d-flex
                                                 justify-content-between
                                                 mr-b1
-                                                font-14
+                                                font-15
                                             "
                                             (click)="toggleExpense()"
                                         >
                                             <a
                                                 href="javascript:void(0);"
-                                                class="text-primary font-14"
+                                                class="text-primary font-15"
                                                 id="service-add-expense-btn"
                                             >
                                                 + Add Expense
                                             </a>
                                             <a
                                                 href="javascript:void(0);"
-                                                class="text-primary font-14 text-right add-new-final-product"
+                                                class="text-primary font-15 text-right add-new-final-product"
                                                 id="service-add-new-product-btn"
                                                 >+ Add New Row</a
                                             >
@@ -2392,13 +2394,13 @@
                                                     align-items-center
                                                 "
                                             >
-                                                <span class="font-22 text-primary pd-l05 pd-r05">+</span>
+                                                <span class="icon-font-22 text-primary pd-l05 pd-r05">+</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <a
-                                    class="text-primary font-14"
+                                    class="text-primary font-15"
                                     id="service-add-more-recipe-btn"
                                     href="javascript:void(0);"
                                     >+ Add more recipe</a
@@ -2500,7 +2502,7 @@
             </div>
             <div class="bg-white px-3 py-3">
                 <div class="table-responsive">
-                    <table class="table combo-table font-14">
+                    <table class="table combo-table font-15">
                         <thead>
                             <th width="3%">&nbsp;</th>
                             <th width="20%">Stock Name <span class="red-text">*</span></th>
@@ -2601,13 +2603,13 @@
                         </tbody>
                     </table>
                 </div>
-                <p class="add-new-line font-14 my-3">
+                <p class="add-new-line font-15 my-3">
                     <button mat-button class="text-primary">+ Add New Line</button>
                 </p>
 
                 <div class="sales-purchase-details bg-light">
                     <div class="mb-3">
-                        <mat-checkbox color="primary" class="font-14"
+                        <mat-checkbox color="primary" class="font-15"
                             >Is the Product/Service eligible for Sale or Purchase?
                         </mat-checkbox>
                     </div>
@@ -2644,7 +2646,7 @@
                                                 <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                     <sh-select id="applicable-tax" placeholder="Select Tax">
                                                     </sh-select>
-                                                    <p class="mt-1 font-14">
+                                                    <p class="mt-1 font-15">
                                                         <mat-checkbox
                                                             color="primary"
                                                             id="purchase-price-tax"
@@ -2746,7 +2748,7 @@
                                                         disabled
                                                     >
                                                     </sh-select>
-                                                    <p class="mt-1 font-14">
+                                                    <p class="mt-1 font-15">
                                                         <mat-checkbox
                                                             color="primary"
                                                             id="sales-price-tax"
@@ -3042,7 +3044,7 @@
                                                             <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                                 <sh-select id="applicable-tax" placeholder="Select Tax">
                                                                 </sh-select>
-                                                                <p class="mt-1 font-14">
+                                                                <p class="mt-1 font-15">
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         id="purchase-price-tax"
@@ -3148,7 +3150,7 @@
                                                                     disabled
                                                                 >
                                                                 </sh-select>
-                                                                <p class="mt-1 font-14">
+                                                                <p class="mt-1 font-15">
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         id="sales-price-tax"
@@ -3215,7 +3217,7 @@
 
                     <mat-tab label="Inventory">
                         <div class="tab-container-new">
-                            <p class="mr-b15 font-14" hidden>
+                            <p class="mr-b15 font-15" hidden>
                                 <span>
                                     <mat-checkbox
                                         color="primary"
@@ -3301,21 +3303,21 @@
                                     </div>
                                 </div>
                             </form>
-                            <p class="mr-b15 font-14">
+                            <p class="mr-b15 font-15">
                                 <span>
                                     <mat-checkbox color="primary" type="checkbox" name="stock" id="stock">
                                         Continue selling when out of Combo?</mat-checkbox
                                     >>
                                 </span>
                             </p>
-                            <p class="mr-b15 font-14">
+                            <p class="mr-b15 font-15">
                                 <span>
                                     <mat-checkbox color="primary" name="return-policy" id="return-policy">
                                         Is this Combo eligible for return policy?</mat-checkbox
                                     >
                                 </span>
                             </p>
-                            <p class="mr-b15 font-14">
+                            <p class="mr-b15 font-15">
                                 <span>
                                     <mat-checkbox color="primary" checked="true" name="variant" id="variant"
                                         >Variant? This product has multiple options like size or colours
@@ -3545,7 +3547,7 @@
                                         <div>
                                             <a
                                                 href="javascript:void(0);"
-                                                class="font-14 mr-t1 d-flex"
+                                                class="font-15 mr-t1 d-flex"
                                                 id="combo-add-more-variant"
                                             >
                                                 + Add More</a
@@ -3617,7 +3619,7 @@
                                         <div>
                                             <a
                                                 href="javascript:void(0);"
-                                                class="font-14 mr-t1 d-flex"
+                                                class="font-15 mr-t1 d-flex"
                                                 id="add-more-addon"
                                             >
                                                 + Add More
@@ -3653,7 +3655,7 @@
                                                     </div>
                                                     <div>
                                                         <label class="d-block hide-label-on-mobile"> &nbsp; </label>
-                                                        <span class="text-primary font-14">Variant Name (linked)</span>
+                                                        <span class="text-primary font-15">Variant Name (linked)</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3701,14 +3703,14 @@
                                                     <div class="d-none-mobile pl-0 pr-0">
                                                         <label class="d-block"> &nbsp; </label>
                                                         <span>
-                                                            <button mat-icon-button class="font-22 text-primary">
+                                                            <button mat-icon-button class="icon-font-22 text-primary">
                                                                 +
                                                             </button>
                                                         </span>
                                                     </div>
                                                     <div class="d-none-mobile px-3">
                                                         <label class="d-block"> &nbsp; </label>
-                                                        <span class="font-22 d-flex"> = </span>
+                                                        <span class="icon-font-22 d-flex"> = </span>
                                                     </div>
                                                 </div>
                                                 <div
@@ -3750,7 +3752,9 @@
                                                     </div>
                                                     <div class="d-none-mobile">
                                                         <label class="d-block"> &nbsp; </label>
-                                                        <button mat-icon-button class="font-22 text-primary">+</button>
+                                                        <button mat-icon-button class="icon-font-22 text-primary">
+                                                            +
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3765,20 +3769,20 @@
                                                 d-flex
                                                 justify-content-between
                                                 mr-b1
-                                                font-14
+                                                font-15
                                             "
                                             (click)="toggleExpense()"
                                         >
                                             <a
                                                 href="javascript:void(0);"
-                                                class="text-primary font-14"
+                                                class="text-primary font-15"
                                                 id="combo-add-expense-btn"
                                             >
                                                 + Add Expense
                                             </a>
                                             <a
                                                 href="javascript:void(0);"
-                                                class="text-primary font-14 text-right add-new-final-product"
+                                                class="text-primary font-15 text-right add-new-final-product"
                                                 id="combo-add-new-product-btn"
                                                 >+ Add New Row</a
                                             >
@@ -3827,13 +3831,13 @@
                                                     align-items-center
                                                 "
                                             >
-                                                <button mat-icon-button class="font-22 text-primary">+</button>
+                                                <button mat-icon-button class="icon-font-22 text-primary">+</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <a
-                                    class="text-primary font-14"
+                                    class="text-primary font-15"
                                     id="combo-add-more-recipe-btn"
                                     href="javascript:void(0);"
                                     >+ Add more recipe</a
@@ -4034,7 +4038,7 @@
                 <!--                                                        <div class="col-sm-6 col-lg-6 pl-0 mr-b15">-->
                 <!--                                                            <sh-select id="applicable-tax" placeholder="Select Tax">-->
                 <!--                                                            </sh-select>-->
-                <!--                                                            <p class="mt-1 font-14">-->
+                <!--                                                            <p class="mt-1 font-15">-->
                 <!--                                                                <input id="purchase-price-tax" type="checkbox" />Price-->
                 <!--                                                                Inclusive of Tax ?-->
                 <!--                                                            </p>-->
@@ -4117,7 +4121,7 @@
                 <!--                                                                disabled-->
                 <!--                                                            >-->
                 <!--                                                            </sh-select>-->
-                <!--                                                            <p class="mt-1 font-14">-->
+                <!--                                                            <p class="mt-1 font-15">-->
                 <!--                                                                <input id="sales-price-tax" type="checkbox" />Price-->
                 <!--                                                                Inclusive of Tax ?-->
                 <!--                                                            </p>-->
@@ -4177,7 +4181,7 @@
                 <!--                        </div>-->
                 <!--                    </tab>-->
                 <!--                    <tab heading="Inventory">-->
-                <!--                        <p class="mr-b15 font-14" hidden>-->
+                <!--                        <p class="mr-b15 font-15" hidden>-->
                 <!--                            <span>-->
                 <!--                                <input-->
                 <!--                                    type="checkbox"-->
@@ -4264,7 +4268,7 @@
                 <!--                                </div>-->
                 <!--                            </div>-->
                 <!--                        </form>-->
-                <!--                        <p class="mr-b15 font-14">-->
+                <!--                        <p class="mr-b15 font-15">-->
                 <!--                            <span>-->
                 <!--                                <input type="checkbox" class="checkbox-custom" name="stock" id="stock" />-->
                 <!--                                <label for="stock" class="checkbox-custom-label"-->
@@ -4272,7 +4276,7 @@
                 <!--                                >-->
                 <!--                            </span>-->
                 <!--                        </p>-->
-                <!--                        <p class="mr-b15 font-14">-->
+                <!--                        <p class="mr-b15 font-15">-->
                 <!--                            <span>-->
                 <!--                                <input-->
                 <!--                                    type="checkbox"-->
@@ -4285,7 +4289,7 @@
                 <!--                                >-->
                 <!--                            </span>-->
                 <!--                        </p>-->
-                <!--                        <p class="mr-b15 font-14">-->
+                <!--                        <p class="mr-b15 font-15">-->
                 <!--                            <span>-->
                 <!--                                <input type="checkbox" checked class="checkbox-custom" name="variant" id="variant" />-->
                 <!--                                <label for="variant" class="checkbox-custom-label"-->
@@ -4482,7 +4486,7 @@
                 <!--                                    <div>-->
                 <!--                                        <a-->
                 <!--                                            href="javascript:void(0);"-->
-                <!--                                            class="font-14 mr-t1 d-flex"-->
+                <!--                                            class="font-15 mr-t1 d-flex"-->
                 <!--                                            id="combo-add-more-variant"-->
                 <!--                                        >-->
                 <!--                                            + Add More</a-->
@@ -4549,7 +4553,7 @@
                 <!--                                        </div>-->
                 <!--                                    </div>-->
                 <!--                                    <div>-->
-                <!--                                        <a href="javascript:void(0);" class="font-14 mr-t1 d-flex" id="add-more-addon">-->
+                <!--                                        <a href="javascript:void(0);" class="font-15 mr-t1 d-flex" id="add-more-addon">-->
                 <!--                                            + Add More</a-->
                 <!--                                        >-->
                 <!--                                    </div>-->
@@ -4581,7 +4585,7 @@
                 <!--                                                </div>-->
                 <!--                                                <div>-->
                 <!--                                                    <label class="d-block hide-label-on-mobile"> &nbsp; </label>-->
-                <!--                                                    <span class="text-primary font-14">Variant Name (linked)</span>-->
+                <!--                                                    <span class="text-primary font-15">Variant Name (linked)</span>-->
                 <!--                                                </div>-->
                 <!--                                            </div>-->
                 <!--                                        </div>-->
@@ -4693,20 +4697,20 @@
                 <!--                                            d-flex-->
                 <!--                                            justify-content-between-->
                 <!--                                            mr-b1-->
-                <!--                                            font-14-->
+                <!--                                            font-15-->
                 <!--                                        "-->
                 <!--                                        (click)="toggleExpense()"-->
                 <!--                                    >-->
                 <!--                                        <a-->
                 <!--                                            href="javascript:void(0);"-->
-                <!--                                            class="text-primary font-14"-->
+                <!--                                            class="text-primary font-15"-->
                 <!--                                            id="combo-add-expense-btn"-->
                 <!--                                        >-->
                 <!--                                            + Add Expense-->
                 <!--                                        </a>-->
                 <!--                                        <a-->
                 <!--                                            href="javascript:void(0);"-->
-                <!--                                            class="text-primary font-14 text-right add-new-final-product"-->
+                <!--                                            class="text-primary font-15 text-right add-new-final-product"-->
                 <!--                                            id="combo-add-new-product-btn"-->
                 <!--                                        >+ Add New Row</a-->
                 <!--                                        >-->
@@ -4754,7 +4758,7 @@
                 <!--                                    </div>-->
                 <!--                                </div>-->
                 <!--                            </div>-->
-                <!--                            <a class="text-primary font-14" id="combo-add-more-recipe-btn" href="javascript:void(0);"-->
+                <!--                            <a class="text-primary font-15" id="combo-add-more-recipe-btn" href="javascript:void(0);"-->
                 <!--                            >+ Add more recipe</a-->
                 <!--                            >-->
                 <!--                        </form>-->
@@ -4955,7 +4959,7 @@
                             id="fill-number"
                             placeholder="0"
                         ></text-field>
-                        <span class="font-14">More rows at bottom</span>
+                        <span class="font-15">More rows at bottom</span>
                     </span>
                 </div>
             </div>

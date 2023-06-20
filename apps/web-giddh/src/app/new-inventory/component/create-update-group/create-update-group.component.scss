@@ -7,7 +7,7 @@
         .group-vector {
             position: absolute;
             right: 15px;
-            top: 15px;
+            top: 60px;
         }
     }
 }
@@ -67,9 +67,15 @@
 .page-title-inventory {
     font-weight: bold;
     color: var(--color-giddh-blue);
-    font-size: 16px;
+    font-size: var(--font-size-15);
 }
 
+.btn-position-left {
+    position: absolute;
+    top: -1px;
+    right: 15px;
+    z-index: 1;
+}
 @media (max-width: 1440px) {
     .hsnsac-field {
         margin-top: 20px;

@@ -421,12 +421,12 @@ export class UpdateLedgerVm {
     }
 
     public getUniqueName(txn: ILedgerTransactionItem) {
-        if ((txn.selectedAccount && txn.selectedAccount.stock)) {
+        if (txn?.selectedAccount?.stock) {
             return txn.particular?.uniqueName.split('#')[0];
-        } else if (txn.inventory && txn.inventory.stock) {
+        } else if (txn?.inventory?.stock) {
             return txn.particular?.uniqueName.split('#')[0];
         }
-        return txn.particular?.uniqueName;
+        return txn?.particular?.uniqueName;
     }
 
     public inventoryQuantityChanged(val: any) {

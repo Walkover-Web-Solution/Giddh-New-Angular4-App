@@ -26,10 +26,10 @@
 
         h5 {
             color: var(--color-nero);
-            font-size: 14px;
+            font-size: var(--font-size-15);
         }
         p {
-            font-size: 12px;
+            font-size: var(--font-size-12);
             padding-top: 4px;
         }
     }
@@ -51,11 +51,11 @@
     .right-content {
         span {
             &.selected-stock-number {
-                font-size: 20px;
+                font-size: var(--font-size-16);
             }
         }
         h4 {
-            font-size: 14px;
+            font-size: var(--font-size-15);
         }
         hr {
             color: var(--color-nero);
@@ -67,7 +67,7 @@
     .single-selected-stock {
         margin-bottom: 20px;
         p {
-            font-size: 14px;
+            font-size: var(--font-size-15);
         }
     }
     .wrap-selected-stocks {
@@ -113,7 +113,7 @@
         border-right: 1px solid var(--color-common-secondary-border);
     }
     .modal-title {
-        font-size: 22px !important;
+        font-size: var(--font-size-24) !important;
         color: var(--color-popup-list-head-text);
     }
     .table-custom-invoice {

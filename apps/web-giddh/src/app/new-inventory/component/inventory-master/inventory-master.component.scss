@@ -1,0 +1,83 @@
+.mat-grid-wrapper {
+    justify-content: space-between;
+    padding: 15px 0;
+    flex-wrap: wrap;
+    background-color: var(--color-white);
+    height: 100%;
+    .mat-list-wrap {
+        overflow-x: auto;
+        display: flex;
+        .inventory-sideabar {
+            max-width: 58.33%;
+            float: left;
+            .inventory-sub-sideabar {
+                display: inline-flex;
+                float: left;
+            }
+        }
+        .inventory-btnside {
+            position: relative;
+            overflow-x: hidden;
+            width: 100%;
+            padding-left: 15px;
+            .create-btn-grp {
+                display: flex;
+                flex-direction: column;
+                row-gap: 10px;
+                margin: 0 auto;
+                display: flex;
+                justify-content: flex-end;
+                margin: 0 auto;
+                top: 50%;
+                transform: translateY(-50%);
+                &.create-btn-inventory {
+                    position: relative;
+                    justify-content: center;
+                    align-items: center;
+                    display: flex;
+                    flex-direction: column;
+                    row-gap: 10px;
+                    button {
+                        min-width: 120px;
+                    }
+                }
+            }
+        }
+        .item-list {
+            width: 205px;
+            margin: 0 15px;
+            padding-right: 15px;
+            height: calc(100vh - 125px);
+            float: left;
+            position: relative;
+            overflow-y: auto;
+            strong {
+                color: var(--color-table-secondary-heading);
+                font-size: 14px;
+                display: inline-block;
+                &.list-font {
+                    font-size: 16px;
+                }
+            }
+            .items {
+                font-size: var(--font-size-15);
+                &.map-item {
+                    .mat-list-item-content {
+                        float: right !important;
+                    }
+                }
+            }
+            .list-head {
+                display: flex;
+                justify-content: space-between;
+                padding-top: 0px;
+            }
+            &:last-child {
+                border: 0px !important;
+            }
+        }
+        .border-grid {
+            border-right: 1px solid var(--color-iron);
+        }
+    }
+}

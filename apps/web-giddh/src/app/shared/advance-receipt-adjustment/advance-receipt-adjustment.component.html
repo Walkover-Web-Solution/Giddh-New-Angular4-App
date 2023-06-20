@@ -6,19 +6,19 @@
     (translationComplete)="translationComplete()"
 >
     <!-- Adjust Payment modal start -->
-    <div class="modal-header">
+    <div class="modal-header" *ngIf="isModal">
         <h4 class="modal-title bg pull-left">{{ localeData?.page_heading }}</h4>
         <button mat-button class="close pull-right" aria-label="Close" (click)="onCancel()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="modal-body font-14 adjustments-list">
+    <div class="modal-body font-15 adjustments-list">
         <div class="row">
             <div class="col-md-12">
                 <span class="text-light" *ngIf="isUpdateMode && isVoucherModule">
                     {{ localeData?.adjusted_amount_error }}
                 </span>
-                <div class="row mb-2">
+                <div class="row mb-2" *ngIf="isModal">
                     <div class="col-md-8 mr-t05">
                         <div class="form-group">
                             <label>{{ localeData?.customer_name }} </label>
@@ -31,7 +31,7 @@
                             ></text-field>
                         </div>
                     </div>
-                    <div class="col-md-4 text-right font-14 pt-2">
+                    <div class="col-md-4 text-right font-15 pt-2">
                         <p>
                             {{
                                 adjustedVoucherType === "rcpt"
@@ -40,7 +40,7 @@
                                     ? commonLocaleData?.app_voucher_types?.advance_receipt
                                     : (localeData?.voucher_label | replace: "[VOUCHER_TYPE]":currentVoucherLabel)
                             }}
-                            Total: <i class="font-10"></i>
+                            Total: <i class="icon-font-10"></i>
                             <span class="d-inline-flex justify-content-end">
                                 <amount-field
                                     [amount]="adjustPayment?.grandTotal"
@@ -73,7 +73,7 @@
                                     : commonLocaleData?.app_due
                             }}
                             <span class="text-light">{{ localeData?.post_adj }}</span>
-                            <span class="nowrap"><i class="font-10"></i> </span>
+                            <span class="nowrap"><i class="icon-font-10"></i> </span>
                             <span class="d-inline-flex justify-content-end">
                                 <amount-field
                                     [amount]="getBalanceDue()"
@@ -123,14 +123,18 @@
                     <div class="row voucher-form">
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label for="name"
-                                    >{{ localeData?.adjustment_voucher }}<span class="text-danger">*</span></label
-                                >
+                                <strong>
+                                    <label for="name"
+                                        >{{ localeData?.adjustment_voucher }}<span class="text-danger">*</span></label
+                                    >
+                                </strong>
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label>{{ commonLocaleData?.app_amount }}<span class="text-danger">* </span></label>
+                                <strong>
+                                    <label>{{ commonLocaleData?.app_amount }}<span class="text-danger">* </span></label>
+                                </strong>
                             </div>
                         </div>
                         <div class="col-sm-2" *ngIf="voucherApiVersion !== 2">
@@ -259,7 +263,7 @@
                                         "
                                         [placeholder]="localeData?.enter_amount"
                                         [type]="'text'"
-                                        [cssClass]="'form-control mat-field-border'"
+                                        [cssClass]="'form-control mat-field-border text-right'"
                                         [name]="'amount' + entry?.uniqueName"
                                         [prefix]="currencySymbol"
                                         [mask]="inputMaskFormat"
@@ -358,7 +362,7 @@
                                 <a
                                     href="javascript:void(0)"
                                     (click)="deleteAdjustVoucherRow(entryIdx)"
-                                    class="font-22 text-light d-inline-block"
+                                    class="icon-font-22 text-light d-inline-block"
                                     ><i class="icon-trash"></i
                                 ></a>
                             </div>
@@ -366,15 +370,15 @@
                     </ng-container>
 
                     <p>
-                        <a href="javascript:void(0)" (click)="addNewBlankAdjustVoucherRow()" class="font-14"
-                            ><span class="font-16">+</span> {{ commonLocaleData?.app_add_new_line }}</a
+                        <a href="javascript:void(0)" (click)="addNewBlankAdjustVoucherRow()" class="font-15"
+                            ><span class="font-15">+</span> {{ commonLocaleData?.app_add_new_line }}</a
                         >
                     </p>
 
                     <div class="clearfix">
                         <div *ngIf="isVoucherModule && voucherApiVersion !== 2" class="clearfix mr-b1 mt-2 row">
                             <div class="col-md-2 col-sm-3 col-xs-5">
-                                <span class="d-inline-block font-14">{{ localeData?.tax_deducted }}</span>
+                                <span class="d-inline-block font-15">{{ localeData?.tax_deducted }}</span>
                             </div>
                             <mat-radio-group
                                 aria-label="Select an option"
@@ -383,17 +387,12 @@
                                 [(ngModel)]="isTaxDeducted"
                                 (change)="isTdsSelected($event)"
                             >
-                                <mat-radio-button
-                                    color="primary"
-                                    id="deductedNo"
-                                    [value]="false"
-                                    class="font-size-14 mr-3"
-                                >
+                                <mat-radio-button color="primary" id="deductedNo" [value]="false" class="font-15 mr-3">
                                     <label for="deductedNo" class="radio-custom-label">{{
                                         commonLocaleData?.app_no
                                     }}</label>
                                 </mat-radio-button>
-                                <mat-radio-button color="primary" id="deductedYes" [value]="true" class="font-size-14">
+                                <mat-radio-button color="primary" id="deductedYes" [value]="true" class="font-15">
                                     <label for="deductedYes" class="radio-custom-label">{{
                                         commonLocaleData?.app_yes
                                     }}</label>
@@ -490,11 +489,11 @@
 
                             <i class="icon-info pointer" [tooltip]="localeData?.adjustment_amount_error"></i>
                         </span>
-                        <div class="note-message mt-3" *ngIf="isVoucherModule">
+                        <div class="note-message mt-3" *ngIf="isVoucherModule && isModal">
                             <p>{{ commonLocaleData?.app_note }}:</p>
                             <p>{{ localeData?.adjustment_note }}</p>
                         </div>
-                        <div class="mt-2">
+                        <div class="mt-2" *ngIf="isModal">
                             <button
                                 mat-button
                                 *ngIf="!isUpdateMode"
