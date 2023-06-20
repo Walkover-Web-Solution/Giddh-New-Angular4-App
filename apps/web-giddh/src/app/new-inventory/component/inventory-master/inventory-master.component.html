@@ -96,18 +96,33 @@
             </perfect-scrollbar>
         </div>
         <div class="inventory-btnside">
-            <div class="searchbar d-flex justify-content-end pt-3">
-                <input
-                    type="text"
-                    name="grpSrch"
-                    #grpSrch
-                    id="grpSrch"
-                    class="form-control"
-                    [placeholder]="'Search accounts'"
-                    financial-accordion="search"
-                    [style.width.px]="260"
-                    autocomplete="off"
-                />
+            <div class="searchbar d-flex justify-content-between align-items-center pt-2">
+                <div>
+                    <ol class="breadcrumb row pd-l15">
+                        <li>
+                            <a href="javascript:void(0)">Stock</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">Group</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">Stock</a>
+                        </li>
+                    </ol>
+                </div>
+                <div>
+                    <input
+                        type="text"
+                        name="grpSrch"
+                        #grpSrch
+                        id="grpSrch"
+                        class="form-control"
+                        [placeholder]="'Search accounts'"
+                        financial-accordion="search"
+                        [style.width.px]="260"
+                        autocomplete="off"
+                    />
+                </div>
             </div>
             <div
                 class="create-btn-grp create-btn-inventory"

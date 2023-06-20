@@ -1,6 +1,6 @@
 <section class="create-recipe">
     <div class="recipe-wrapper">
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-3 mt-2">
                 <div>
                     <dropdown-field
@@ -13,8 +13,11 @@
                     </dropdown-field>
                 </div>
             </div>
-        </div>
-        <div class="row py-4 manufacturing-border">
+        </div> -->
+        <div
+            class="row py-4 manufacturing-border"
+            *ngFor="let recipe of receiptObject.manufacturingDetails; let i = index"
+        >
             <div class="col-3">
                 <div class="row">
                     <div class="form-fields w-100">
@@ -23,28 +26,35 @@
                             <div>
                                 <dropdown-field
                                     class="width-280"
-                                    [name]="''"
+                                    [name]="'variant_' + i"
                                     [placeholder]="'Select Output Variant'"
-                                    [options]="stock"
-                                    [defaultValue]=""
+                                    [options]="variants"
+                                    [defaultValue]="recipe.variant.name"
+                                    (selectedOption)="
+                                        recipe.variant.name = $event.label; recipe.variant.uniqueName = $event.value
+                                    "
                                 >
                                 </dropdown-field>
                             </div>
                             <div>
                                 <input-field
                                     class="width-280"
-                                    type="text"
-                                    name="''"
+                                    [type]="'text'"
+                                    [name]="'quantity_' + i"
                                     [placeholder]="'Enter Output Quantity'"
+                                    [(ngModel)]="recipe.manufacturingQuantity"
                                 ></input-field>
-                                <small class="d-block text-right multiple">Multiple of <span>200</span> </small>
                             </div>
                             <div>
                                 <dropdown-field
-                                    [name]="''"
+                                    [name]="'unit' + i"
                                     [placeholder]="'Select Output Stock Unit'"
                                     [options]="stock"
-                                    [defaultValue]=""
+                                    [defaultValue]="recipe.manufacturingUnitCode"
+                                    (selectedOption)="
+                                        recipe.manufacturingUnitCode = $event.label;
+                                        recipe.manufacturingUnitUniqueName = $event.value
+                                    "
                                 >
                                 </dropdown-field>
                             </div>
@@ -71,15 +81,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <tr *ngFor="let linkedStock of recipe.linkedStocks; let j = index">
                                         <td>
                                             <div>
                                                 <select-field
                                                     [cssClass]="'form-control mat-field-border'"
-                                                    [name]="''"
+                                                    [name]="'stock_' + i + '_' + j"
                                                     [placeholder]="'Select Stock'"
                                                     [options]="stock"
-                                                    [defaultValue]=""
+                                                    [defaultValue]="linkedStock.stockName"
+                                                    (selectedOption)="
+                                                        linkedStock.stockName = $event.label;
+                                                        linkedStock.stockUniqueName = $event.value
+                                                    "
                                                 >
                                                 </select-field>
                                             </div>
@@ -88,10 +102,14 @@
                                             <div>
                                                 <select-field
                                                     [cssClass]="'form-control mat-field-border'"
-                                                    [name]="''"
+                                                    [name]="'variant_' + i + '_' + j"
                                                     [placeholder]="'Select Variant'"
                                                     [options]="stock"
-                                                    [defaultValue]=""
+                                                    [defaultValue]="linkedStock.variant.name"
+                                                    (selectedOption)="
+                                                        linkedStock.variant.name = $event.label;
+                                                        linkedStock.variant.uniqueName = $event.value
+                                                    "
                                                 >
                                                 </select-field>
                                             </div>
@@ -101,9 +119,10 @@
                                                 <text-field
                                                     [cssClass]="'form-control mat-field-border'"
                                                     class="text-right"
-                                                    type="number"
-                                                    name="''"
+                                                    [type]="'number'"
+                                                    [name]="'quantity_' + i + '_' + j"
                                                     [placeholder]="'Enter Quantity'"
+                                                    [(ngModel)]="linkedStock.quantity"
                                                 ></text-field>
                                             </div>
                                         </td>
@@ -111,15 +130,25 @@
                                             <div>
                                                 <select-field
                                                     [cssClass]="'form-control mat-field-border'"
-                                                    [name]="''"
+                                                    [name]="'unit_' + i + '_' + j"
                                                     [placeholder]="'Select Stock Unit'"
                                                     [options]="stock"
-                                                    [defaultValue]=""
+                                                    [defaultValue]="linkedStock.stockUnitCode"
+                                                    (selectedOption)="
+                                                        linkedStock.stockUnitCode = $event.label;
+                                                        linkedStock.stockUnitUniqueName = $event.value
+                                                    "
                                                 >
                                                 </select-field>
                                             </div>
                                         </td>
-                                        <td><i class="icon-add" aria-hidden="true"></i></td>
+                                        <td>
+                                            <i
+                                                class="icon-add"
+                                                aria-hidden="true"
+                                                (click)="addNewLinkedStockInRecipe(recipe)"
+                                            ></i>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -129,7 +158,7 @@
             </div>
         </div>
         <div class="row mt-2 add-recipe">
-            <button mat-button class="mb-2"><span>+</span> Add Recipe</button>
+            <button mat-button class="mb-2" (click)="addNewRecipe()"><span>+</span> Add Recipe</button>
         </div>
     </div>
 </section>

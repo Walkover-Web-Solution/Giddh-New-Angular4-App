@@ -934,7 +934,6 @@ table.stock-table {
     }
     .right-fix-pencil-icon {
         margin-right: 10px;
-        margin-top: -5px;
         display: none;
         i {
             font-size: 9px;
@@ -981,9 +980,6 @@ table.stock-table {
     align-items: center;
     flex-direction: row;
     justify-content: flex-end;
-    label {
-        margin-bottom: 10px !important;
-    }
     &:hover {
         .right-fix-pencil-icon {
             display: block;

@@ -185,6 +185,13 @@
                                                                                     stockForm.variants[0]
                                                                                         .fixedAssetTaxInclusive
                                                                                 "
+                                                                                (ngModelChange)="
+                                                                                    updateTaxInclusiveStatus(
+                                                                                        'fixedassets',
+                                                                                        stockForm.variants[0]
+                                                                                            .fixedAssetTaxInclusive
+                                                                                    )
+                                                                                "
                                                                             >
                                                                                 <mat-radio-button [value]="true">
                                                                                     {{ localeData?.inclusive }}
@@ -377,6 +384,13 @@
                                                                                     [(ngModel)]="
                                                                                         stockForm.variants[0]
                                                                                             .purchaseTaxInclusive
+                                                                                    "
+                                                                                    (ngModelChange)="
+                                                                                        updateTaxInclusiveStatus(
+                                                                                            'purchase',
+                                                                                            stockForm.variants[0]
+                                                                                                .purchaseTaxInclusive
+                                                                                        )
                                                                                     "
                                                                                 >
                                                                                     <mat-radio-button [value]="true">
@@ -587,6 +601,13 @@
                                                                                     [(ngModel)]="
                                                                                         stockForm.variants[0]
                                                                                             .salesTaxInclusive
+                                                                                    "
+                                                                                    (ngModelChange)="
+                                                                                        updateTaxInclusiveStatus(
+                                                                                            'sales',
+                                                                                            stockForm.variants[0]
+                                                                                                .salesTaxInclusive
+                                                                                        )
                                                                                     "
                                                                                 >
                                                                                     <mat-radio-button [value]="true">
@@ -921,16 +942,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="row px-3">
-                                                    <div class="col-lg-12 pl-0">
+                                                    <div class="col-lg-12 pl-0 mr-b15">
                                                         <a
-                                                            class="
-                                                                text-primary
-                                                                mr-b15
-                                                                d-block
-                                                                cp
-                                                                another-option-btn
-                                                                mt-2
-                                                            "
+                                                            class="text-primary cp another-option-btn mt-2"
                                                             disableRipple
                                                             *ngIf="stockForm.options?.length < 3"
                                                             (click)="addVariantOption()"
@@ -989,7 +1003,7 @@
                                                             >
                                                                 {{ localeData?.fixed_assets_unit }}
                                                             </th>
-                                                            <th
+                                                            <!-- <th
                                                                 class="is-rate-inclusive table-heading-color"
                                                                 *ngIf="
                                                                     stockForm?.fixedAssetAccountDetails
@@ -1000,7 +1014,7 @@
                                                                 "
                                                             >
                                                                 {{ localeData?.is_rate_inclusive }}
-                                                            </th>
+                                                            </th> -->
                                                             <th class="archive table-heading-color">
                                                                 {{ commonLocaleData?.app_archive }}
                                                             </th>
@@ -1076,7 +1090,31 @@
                                                                             let j = index
                                                                         "
                                                                     >
-                                                                        <div class="sales-purchase-wrapper d-flex">
+                                                                        <div
+                                                                            class="
+                                                                                sales-purchase-wrapper
+                                                                                d-flex
+                                                                                justify-content-between
+                                                                            "
+                                                                        >
+                                                                            <text-field
+                                                                                [cssClass]="
+                                                                                    'text-right unit-amount form-control'
+                                                                                "
+                                                                                [placeholder]="'0.00'"
+                                                                                [name]="
+                                                                                    'variantPurchaseUnitRate' +
+                                                                                    i +
+                                                                                    '_' +
+                                                                                    j
+                                                                                "
+                                                                                [(ngModel)]="
+                                                                                    variantPurchaseUnitRate.rate
+                                                                                "
+                                                                                [type]="'number'"
+                                                                                [showError]="stockCreateEditForm.form.controls?.[ 'variantPurchaseUnitRate' + i + '_' + j]?.invalid && checkUnitRateValidation[i]?.purchase"
+                                                                            >
+                                                                            </text-field>
                                                                             <select-field
                                                                                 [name]="
                                                                                     'variantPurchaseUnit' + i + '_' + j
@@ -1103,25 +1141,7 @@
                                                                                 "
                                                                             >
                                                                             </select-field>
-                                                                            <text-field
-                                                                                [cssClass]="
-                                                                                    'text-right unit-amount form-control'
-                                                                                "
-                                                                                [placeholder]="'0.00'"
-                                                                                [name]="
-                                                                                    'variantPurchaseUnitRate' +
-                                                                                    i +
-                                                                                    '_' +
-                                                                                    j
-                                                                                "
-                                                                                [(ngModel)]="
-                                                                                    variantPurchaseUnitRate.rate
-                                                                                "
-                                                                                [type]="'number'"
-                                                                                [showError]="stockCreateEditForm.form.controls?.[ 'variantPurchaseUnitRate' + i + '_' + j]?.invalid && checkUnitRateValidation[i]?.purchase"
-                                                                            >
-                                                                            </text-field>
-                                                                            <button
+                                                                            <!-- <button
                                                                                 mat-icon-button
                                                                                 role="button"
                                                                                 class="icon-remove-sales"
@@ -1162,7 +1182,7 @@
                                                                                 <span class="add-new-text-container">
                                                                                     <i class="icon-plus"></i>
                                                                                 </span>
-                                                                            </button>
+                                                                            </button> -->
                                                                         </div>
                                                                     </ng-container>
                                                                 </td>
@@ -1182,7 +1202,26 @@
                                                                             let j = index
                                                                         "
                                                                     >
-                                                                        <div class="sales-purchase-wrapper d-flex">
+                                                                        <div
+                                                                            class="
+                                                                                sales-purchase-wrapper
+                                                                                d-flex
+                                                                                justify-content-between
+                                                                            "
+                                                                        >
+                                                                            <text-field
+                                                                                [cssClass]="
+                                                                                    'text-right unit-amount form-control'
+                                                                                "
+                                                                                [placeholder]="'0.00'"
+                                                                                [name]="
+                                                                                    'variantSalesUnitRate' + i + '_' + j
+                                                                                "
+                                                                                [(ngModel)]="variantSalesUnitRate.rate"
+                                                                                [type]="'number'"
+                                                                                [showError]="stockCreateEditForm.form.controls?.[ 'variantSalesUnitRate' + i + '_' + j]?.invalid && checkUnitRateValidation[i]?.sales"
+                                                                            >
+                                                                            </text-field>
                                                                             <select-field
                                                                                 [name]="
                                                                                     'variantSalesUnit' + i + '_' + j
@@ -1208,20 +1247,7 @@
                                                                                     'unit-rates form-control'
                                                                                 "
                                                                             ></select-field>
-                                                                            <text-field
-                                                                                [cssClass]="
-                                                                                    'text-right unit-amount form-control'
-                                                                                "
-                                                                                [placeholder]="'0.00'"
-                                                                                [name]="
-                                                                                    'variantSalesUnitRate' + i + '_' + j
-                                                                                "
-                                                                                [(ngModel)]="variantSalesUnitRate.rate"
-                                                                                [type]="'number'"
-                                                                                [showError]="stockCreateEditForm.form.controls?.[ 'variantSalesUnitRate' + i + '_' + j]?.invalid && checkUnitRateValidation[i]?.sales"
-                                                                            >
-                                                                            </text-field>
-                                                                            <button
+                                                                            <!-- <button
                                                                                 mat-icon-button
                                                                                 role="button"
                                                                                 class="icon-remove-sales"
@@ -1259,7 +1285,7 @@
                                                                                 <span class="add-new-text-container">
                                                                                     <i class="icon-plus"></i>
                                                                                 </span>
-                                                                            </button>
+                                                                            </button> -->
                                                                         </div>
                                                                     </ng-container>
                                                                 </td>
@@ -1280,7 +1306,30 @@
                                                                             let j = index
                                                                         "
                                                                     >
-                                                                        <div class="sales-purchase-wrapper d-flex">
+                                                                        <div
+                                                                            class="
+                                                                                sales-purchase-wrapper
+                                                                                d-flex
+                                                                                justify-content-between
+                                                                            "
+                                                                        >
+                                                                            <input-field
+                                                                                [cssClass]="'text-right unit-amount'"
+                                                                                [
+                                                                                placeholder]="'0.00'"
+                                                                                [name]="
+                                                                                    'variantFixedAssetsUnitRate' +
+                                                                                    j +
+                                                                                    '_' +
+                                                                                    i
+                                                                                "
+                                                                                [(ngModel)]="
+                                                                                    variantFixedAssetsUnitRate.rate
+                                                                                "
+                                                                                [type]="'number'"
+                                                                                [showError]="stockCreateEditForm.form.controls?.[ 'variantFixedAssetsUnitRate' + j + '_' + i]?.invalid && checkUnitRateValidation[i]?.fixedAssets"
+                                                                            >
+                                                                            </input-field>
                                                                             <select-field
                                                                                 [name]="
                                                                                     'variantFixedAssetsUnit' +
@@ -1309,24 +1358,7 @@
                                                                                         : '') + 'unit-rates'
                                                                                 "
                                                                             ></select-field>
-                                                                            <input-field
-                                                                                [cssClass]="'text-right unit-amount'"
-                                                                                [
-                                                                                placeholder]="'0.00'"
-                                                                                [name]="
-                                                                                    'variantFixedAssetsUnitRate' +
-                                                                                    j +
-                                                                                    '_' +
-                                                                                    i
-                                                                                "
-                                                                                [(ngModel)]="
-                                                                                    variantFixedAssetsUnitRate.rate
-                                                                                "
-                                                                                [type]="'number'"
-                                                                                [showError]="stockCreateEditForm.form.controls?.[ 'variantFixedAssetsUnitRate' + j + '_' + i]?.invalid && checkUnitRateValidation[i]?.fixedAssets"
-                                                                            >
-                                                                            </input-field>
-                                                                            <button
+                                                                            <!-- <button
                                                                                 mat-icon-button
                                                                                 role="button"
                                                                                 class="icon-remove-sales"
@@ -1367,11 +1399,11 @@
                                                                                 <span class="add-new-text-container">
                                                                                     <i class="icon-plus"></i>
                                                                                 </span>
-                                                                            </button>
+                                                                            </button> -->
                                                                         </div>
                                                                     </ng-container>
                                                                 </td>
-                                                                <td
+                                                                <!-- <td
                                                                     class="text-center is-rate-inclusive"
                                                                     *ngIf="
                                                                         stockForm?.salesAccountDetails
@@ -1458,13 +1490,20 @@
                                                                             matTooltipPosition="above"
                                                                         ></mat-checkbox>
                                                                     </ng-container>
-                                                                </td>
+                                                                </td> -->
                                                                 <td class="text-center archive">
-                                                                    <mat-checkbox
+                                                                    <!-- <mat-checkbox
                                                                         color="primary"
                                                                         name="variantArchive{{ i }}"
                                                                         [(ngModel)]="variant.archive"
-                                                                    ></mat-checkbox>
+                                                                    ></mat-checkbox> -->
+                                                                    <mat-slide-toggle
+                                                                        class="mt-1"
+                                                                        color="primary"
+                                                                        name="variantArchive{{ i }}"
+                                                                        [(ngModel)]="variant.archive"
+                                                                    >
+                                                                    </mat-slide-toggle>
                                                                 </td>
                                                             </tr>
                                                         </ng-container>
@@ -1475,12 +1514,12 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.manufacturing">
-                                    <create-recipe></create-recipe>
+                                    <create-recipe [variants]="stockForm.variants"></create-recipe>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.other">
                                     <div class="tab-container-new px-3">
                                         <div class="other-width">
-                                            <div class="row row-gap">
+                                            <div class="row row-gap align-items-center">
                                                 <div class="col-sm-6 col-lg-12 mb-3">
                                                     <mat-radio-group
                                                         color="primary"
@@ -1565,7 +1604,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row mr-t15">
+                                            <div class="row mr-t15 align-items-center">
                                                 <ng-container *ngIf="!isVariantAvailable">
                                                     <div class="col-sm-6 col-lg-3">
                                                         <input-field

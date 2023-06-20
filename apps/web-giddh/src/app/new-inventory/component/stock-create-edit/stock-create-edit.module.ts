@@ -24,6 +24,7 @@ import { TranslateDirectiveModule } from "../../../theme/translate/translate.dir
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { RecipeModule } from "../recipe/recipe.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 
 @NgModule({
     declarations: [
@@ -54,7 +55,8 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
         TranslateDirectiveModule,
         MatTooltipModule,
         RecipeModule,
-        DragDropModule
+        DragDropModule,
+        MatSlideToggleModule
     ],
     exports: [
         StockCreateEditComponent
