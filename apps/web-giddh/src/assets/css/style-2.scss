@@ -14314,3 +14314,10 @@ body.hide-scroll-body.master-page {
         height: 34px !important;
     }
 }
+/*=========== Code to handle Resolution at 1366 X 768 ======Start=======*/
+@media only screen and (max-width: 1366px) {
+    body {
+        zoom: 80%;
+    }
+}
+/*=========== Code to handle Resolution at 1366 X 768 =======End========*/
