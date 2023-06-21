@@ -118,7 +118,7 @@ export class CreateManufacturingComponent implements OnInit {
 
         this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.length) {
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 2;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length >= 2;
                 this.changeDetectionRef.detectChanges();
             } else {
                 if (this.generalService.companyUniqueName) {
@@ -767,7 +767,7 @@ export class CreateManufacturingComponent implements OnInit {
                 this.manufacturingObject.manufacturingDetails[0].stockUniqueName = response.body.stockUniqueName;
                 this.manufacturingObject.manufacturingDetails[0].variant.name = response.body.variant.name;
                 this.manufacturingObject.manufacturingDetails[0].variant.uniqueName = response.body.variant.uniqueName;
-                this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = Number(response.body.manufacturingQuantity) / Number(response.body.manufacturingMultipleOf);
+                this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = Number(response.body.manufacturingQuantity);
                 this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = response.body.manufacturingMultipleOf;
 
                 this.selectedInventoryType = response.body.inventoryType;

@@ -50,6 +50,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     /** It will show suffix in the text field */
     @Input() public suffix: any;
     @Input() public customDecimalPlaces: any;
+    /** Holds mat suffic */
+    @Input() public matSuffix: any;
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */
