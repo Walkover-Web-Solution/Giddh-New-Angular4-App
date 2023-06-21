@@ -2200,39 +2200,3 @@ label.checkbox-custom-label {
         transform: rotate(360deg);
     }
 }
-
-@media screen and (max-width: 1366px) {
-    .table-sec {
-        .table-row {
-            .figure-cell {
-                width: 120px;
-                input {
-                    max-width: 110px;
-                }
-            }
-        }
-    }
-    .max-width-600 {
-        max-width: 470px;
-    }
-    .custom-file-label {
-        max-width: 280px;
-    }
-
-    table.table.table-custom-invoice.basic {
-        max-width: 960px;
-    }
-    .other-details-section {
-        max-width: 960px;
-    }
-    .switch-currency {
-        max-width: 960px;
-    }
-    #deposit-dropdown {
-        position: relative;
-        right: 20px;
-    }
-    .inner-container {
-        max-width: 1010px;
-    }
-}
