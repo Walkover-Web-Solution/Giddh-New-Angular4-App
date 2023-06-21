@@ -11,11 +11,12 @@
         [formControl]="searchFormControl"
         [readonly]="readonly"
         (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
+        (flow)="trigger?.openPanel()"
         [autocomplete]="autocomplete"
         #trigger="matAutocompleteTrigger"
         #selectField
         (keydown.enter)="$event.preventDefault()"
-        (clickOutside)="closeDropdownPanel()"
+        (clickOutside)="closeDropdownPanel($event)"
         matAutocompletePosition="auto"
     />
     <mat-autocomplete

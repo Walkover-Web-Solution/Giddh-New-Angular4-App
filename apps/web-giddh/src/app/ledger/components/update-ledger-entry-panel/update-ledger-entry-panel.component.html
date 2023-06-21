@@ -808,6 +808,53 @@
                 <!--  tourist scheme template start      -->
                 <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
                 <!--        tourist scheme template end-->
+                <div class="row mr-b1">
+                    <div class="d-flex justify-content-between w-100">
+                        <ng-container *ngIf="isStockPresent && stockVariants | async as stockVariants">
+                            <div class="col-sm-3 pd-r1" *ngIf="stockVariants.length > 1">
+                                <label class="font-12">{{ localeData?.select_variant }}</label>
+                                <sh-select
+                                    id="update-ledger-select-variant"
+                                    [disabled]="currentOrganizationType === 'COMPANY' && branches?.length > 1"
+                                    [class.disabled-ledger]="
+                                        currentOrganizationType === 'COMPANY' && branches?.length > 1
+                                    "
+                                    (selected)="variantChanged($event)"
+                                    [placeholder]="localeData?.select_variant"
+                                    [(ngModel)]="selectedStockVariant.uniqueName"
+                                    [options]="stockVariants"
+                                    [isRequired]="true"
+                                    [cssClass]="!selectedStockVariant.uniqueName ? 'error-box' : ''"
+                                ></sh-select>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="isStockPresent && warehouses?.length > 1">
+                            <div class="col-sm-3 pd-r1">
+                                <div class="select-warehouse">
+                                    <label class="font-12">{{ localeData?.select_warehouse }}</label>
+                                    <sh-select
+                                        id="update-ledger-select-warehouse"
+                                        [(ngModel)]="selectedWarehouse"
+                                        [placeholder]="localeData?.select_warehouse"
+                                        [options]="warehouses"
+                                        [disabled]="
+                                            !isPettyCash &&
+                                            currentOrganizationType === 'COMPANY' &&
+                                            branches?.length > 1
+                                        "
+                                        [class.disabled-ledger]="
+                                            !isPettyCash &&
+                                            currentOrganizationType === 'COMPANY' &&
+                                            branches?.length > 1
+                                        "
+                                        [doNotResetSelectedValues]="true"
+                                    >
+                                    </sh-select>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
                 <!-- region amount and discount container -->
                 <div class="clearfix">
                     <ng-container
@@ -1100,6 +1147,7 @@
                                         [maskInput]="vm.inputMaskFormat"
                                         [suffixInput]="vm.selectedSuffixForCurrency"
                                         [exceptTaxTypes]="['tdsrc', 'tdspay', 'tcspay', 'tcsrc']"
+                                        [calculateTaxInclusively]="vm.isAdvanceReceiptWithTds"
                                         [isAdvanceReceipt]="vm.isAdvanceReceiptWithTds"
                                         [allowedSelectionOfAType]="allowedSelectionOfAType"
                                         [applicableTaxes]="vm.selectedLedger.taxes"
@@ -1243,32 +1291,6 @@
 
                 <div class="row ledger-bottom">
                     <div class="col-md-6 pd-t1 accordion-expansion">
-                        <!-- make it functional (Developer end) -->
-                        <div *ngIf="shouldShowWarehouse && warehouses?.length > 1" class="row mr-b1">
-                            <div class="col-sm-6 pd-r1">
-                                <div class="select-warehouse">
-                                    <label class="font-12">{{ localeData?.select_warehouse }}</label>
-                                    <sh-select
-                                        id="update-ledger-select-warehouse"
-                                        [(ngModel)]="selectedWarehouse"
-                                        [placeholder]="localeData?.select_warehouse"
-                                        [options]="warehouses"
-                                        [disabled]="
-                                            !isPettyCash &&
-                                            currentOrganizationType === 'COMPANY' &&
-                                            branches?.length > 1
-                                        "
-                                        [class.disabled-ledger]="
-                                            !isPettyCash &&
-                                            currentOrganizationType === 'COMPANY' &&
-                                            branches?.length > 1
-                                        "
-                                    >
-                                    </sh-select>
-                                </div>
-                            </div>
-                        </div>
-
                         <ng-container *ngIf="shouldShowRcmTaxableAmount">
                             <div class="taxable-amount-section">
                                 <label class="primary-color">{{ localeData?.taxable_amount }}</label>

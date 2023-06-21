@@ -271,7 +271,8 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 #update-ledger-select-warehouse.disabled-ledger::ng-deep input,
 #update-ledger-price-input.disabled-ledger,
 #update-ledger-invoice-voucher-number.disabled-ledger::ng-deep input,
-#update-ledger-invoice-number.disabled-ledger::ng-deep input {
+#update-ledger-invoice-number.disabled-ledger::ng-deep input,
+#update-ledger-select-variant.disabled-ledger::ng-deep input {
     background-color: var(--color-dark-fog) !important;
 }
 .tourist-scheme-wrapper {
