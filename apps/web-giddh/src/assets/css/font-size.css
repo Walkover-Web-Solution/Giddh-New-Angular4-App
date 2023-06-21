@@ -7,3 +7,14 @@ body{
     --font-size-32 : 32px;
     --font-size-48 : 48px;
 }
+@media screen and (max-width: 1366px) {
+    body{
+        --font-size-9 : 9px;
+        --font-size-12 : 11px;
+        --font-size-15 : 13px;
+        --font-size-16 : 14px;
+        --font-size-24 : 20px;
+        --font-size-32 : 28px;
+        --font-size-48 : 42px;
+    }
+}
