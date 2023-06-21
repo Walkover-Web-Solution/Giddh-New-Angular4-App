@@ -10,7 +10,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
+    font-size: var(--font-size-16);
     border: 1px solid var(--color-iron);
     border-radius: 5px;
     color: var(--color-abbey);

@@ -25,7 +25,7 @@
                         *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
                     >
                         <div class="link-entity-dropdown">
-                            <label class="d-block pb-1 font-14">Entity</label>
+                            <label class="d-block pb-1 font-15">Entity</label>
                             <sh-select
                                 [options]="currentCompanyBranches"
                                 [(ngModel)]="currentBranch.uniqueName"
@@ -76,7 +76,7 @@
                                 : 'col-xl-3 col-lg-4'
                         "
                     >
-                        <label class="d-block font-14 pb-1">From - To</label>
+                        <label class="d-block font-15 pb-1">From - To</label>
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                             <i class="icon-calender calendar-addon"></i>
                             <input

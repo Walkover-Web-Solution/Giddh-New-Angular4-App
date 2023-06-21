@@ -206,7 +206,8 @@
     "confirm_proceed": "Are you sure you want to proceed?",
     "remove_advance_receipt": "If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed.",
     "autopaid_title": "Autopaid",
-    "autopaid_confirmation":"Autopaid will run for Sales and Purchase voucher only and will be adjusted as per FIFO method. Are you sure you want to continue?",
+    "autopaid_confirmation": "Autopaid will run for Sales and Purchase voucher only and will be adjusted as per FIFO method. Are you sure you want to continue?",
     "download_sample_xls": "Download a sample Excel file",
-    "download_sample_csv": "Download a sample CSV file"
+    "download_sample_csv": "Download a sample CSV file",
+    "select_variant": "Select Variant"
 }

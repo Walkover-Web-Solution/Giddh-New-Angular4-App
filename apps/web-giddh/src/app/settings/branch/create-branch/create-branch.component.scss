@@ -3,7 +3,7 @@
         border-bottom: 1px solid var(--color-common-secondary-border);
         .branch-under-company {
             .heading {
-                font-size: 14px;
+                font-size: var(--font-size-15);
             }
             p {
                 color: var(--color-nero);
@@ -11,7 +11,7 @@
             .branch-company-name {
                 .label-wrapper {
                     display: flex;
-                    font-size: 14px;
+                    font-size: var(--font-size-15);
                     img {
                         margin-right: 4px;
                         width: 24px;
@@ -40,7 +40,7 @@
     }
     .branch-form {
         .branch-form-field {
-            font-size: 14px;
+            font-size: var(--font-size-15);
             display: flex;
             align-items: center;
             color: var(--color-nero);

@@ -16,7 +16,7 @@ footer#footer.sticky-footer {
     background-color: #fff;
     color: #666;
     line-height: 3.5;
-    font-size: 16px;
+    font-size: var(--font-size-15);
     border-top: 1px solid #ddd;
 }
 .footer-content {

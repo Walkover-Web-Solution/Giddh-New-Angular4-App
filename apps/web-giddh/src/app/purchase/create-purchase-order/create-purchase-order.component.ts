@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef, ViewContainerRef, NgZone, AfterViewInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { Observable, ReplaySubject, of as observableOf, combineLatest } from 'rxjs';
+import { Observable, ReplaySubject, of as observableOf, combineLatest, BehaviorSubject } from 'rxjs';
 import { IOption } from '../../theme/ng-select/ng-select';
-import { takeUntil, filter, take, delay, distinctUntilChanged } from 'rxjs/operators';
+import { takeUntil, filter, take, delay, distinctUntilChanged, map } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
@@ -40,7 +40,7 @@ import { LoaderService } from '../../loader/loader.service';
 import { CurrentCompanyState } from '../../store/company/company.reducer';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
-import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
+import { IVariant, LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
 import { InvoiceService } from '../../services/invoice.service';
 import { PURCHASE_ORDER_STATUS } from '../../shared/helpers/purchaseOrderStatus';
 import { INameUniqueName } from '../../models/api-models/Inventory';
@@ -377,6 +377,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     private isCreatingNewAccount: boolean = false;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Stores the stock variants */
+    public stockVariants: BehaviorSubject<Array<Observable<Array<IOption>>>> = new BehaviorSubject([]);
+
+    /** True, if bulk items are added to the voucher list, required to prevent repetitive stock variants processing
+     * when bulk entries are added
+     */
+    private isBulkEntryInProgress: boolean;
+    /** Stores the current transaction request obj for the API */
+    private currentTxnRequestObject: Array<any> = [];
+    /** Stores the index of current stock variants being loaded */
+    private currentlyLoadedStockVariantIndex: number;
 
     constructor(
         private store: Store<AppState>,
@@ -624,7 +635,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         });
 
         // listen for newly added stock and assign value
-        combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+        combineLatest([this.newlyCreatedStockAc$, this.salesAccounts$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             let stock = resp[0];
             let acData = resp[1];
             if (stock && acData) {
@@ -634,6 +645,32 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.onSelectSalesAccount(result, this.purchaseOrder.entries[this.innerEntryIndex].transactions[0], this.purchaseOrder.entries[this.innerEntryIndex], false, this.innerEntryIndex);
                 }
             }
+        });
+
+        this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res?.length && !this.isBulkEntryInProgress) {
+                const currentlyLoadedVariantRequest = this.currentTxnRequestObject[this.currentlyLoadedStockVariantIndex ?? this.activeIndex];
+                if (!currentlyLoadedVariantRequest) {
+                    // Deletion case, item was deleted and no current entry is active
+                    return;
+                }
+                const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params.variantUniqueName;
+                let stockAllVariants;
+                res[this.currentlyLoadedStockVariantIndex ?? this.activeIndex].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
+                if (stockAllVariants.findIndex(variant => variant.value === currentEntryStockVariantUniqueName) === -1) {
+                    // Only reset the stock variant when the stock is changed
+                    if (currentlyLoadedVariantRequest.txn) {
+                        /* If transaction is present then it means the user has changed the stock of any entry
+                            otherwise the user has opened the invoice for edit flow
+                        */
+                        currentlyLoadedVariantRequest.txn.variant = { name: stockAllVariants[0].label, uniqueName: stockAllVariants[0].value };
+                        // include the variant unique name for the API call
+                        currentlyLoadedVariantRequest.params.variantUniqueName = stockAllVariants[0].value;
+                        this.loadDetails(currentlyLoadedVariantRequest);
+                    }
+                }
+            }
+            this.currentlyLoadedStockVariantIndex = null;
         });
     }
 
@@ -1287,6 +1324,24 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     }
 
     /**
+     * Variant change handler
+     *
+     * @param {IOption} event Change event
+     * @param {SalesTransactionItemClass} transaction Current transaction
+     * @param {SalesEntryClass} entry Current entry
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public variantChanged(event: IOption, transaction: SalesTransactionItemClass, entry: SalesEntryClass): void {
+        transaction.variant.name = event.label;
+        this.currentTxnRequestObject[this.activeIndex].txn = transaction;
+        this.currentTxnRequestObject[this.activeIndex].entry = entry;
+        if (this.currentTxnRequestObject[this.activeIndex]?.params) {
+            this.currentTxnRequestObject[this.activeIndex].params.variantUniqueName = event.value;
+            this.loadDetails(this.currentTxnRequestObject[this.activeIndex]);
+        }
+    }
+
+    /**
      * Callback for account selection
      *
      * @param {*} selectedAcc
@@ -1301,59 +1356,31 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.purchaseOrder.entries[entryIndex] = entry;
         this.purchaseOrder.entries[entryIndex].transactions[0] = txn;
         if ((selectedAcc?.value || isBulkItem) && selectedAcc.additional?.uniqueName) {
-            let requestObject;
+            let params;
             if (selectedAcc.additional.stock) {
-                requestObject = {
+                params = {
                     stockUniqueName: selectedAcc.additional.stock.uniqueName
                 };
             }
             if (isBulkItem) {
+                const allStockVariants = this.stockVariants.getValue();
+                allStockVariants.push(observableOf(selectedAcc.variants));
+                this.stockVariants.next(allStockVariants);
                 txn = this.calculateItemValues(selectedAcc, txn, entry, false, true);
             } else {
-                this.searchService.loadDetails(selectedAcc.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data && data.body) {
-                        // Take taxes of parent group and stock's own taxes
-                        const taxes = this.generalService.fetchTaxesOnPriority(
-                            data.body.stock?.taxes ?? [],
-                            data.body.stock?.groupTaxes ?? [],
-                            data.body.taxes ?? [],
-                            data.body.groupTaxes ?? []);
-                        // directly assign additional property
-                        selectedAcc.additional = {
-                            ...selectedAcc.additional,
-                            label: selectedAcc.label,
-                            value: selectedAcc?.value,
-                            applicableTaxes: taxes,
-                            currency: data.body.currency,
-                            currencySymbol: data.body.currencySymbol,
-                            email: data.body.emails,
-                            isFixed: data.body.isFixed,
-                            mergedAccounts: data.body.mergedAccounts,
-                            mobileNo: data.body.mobileNo,
-                            nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.name).join(', ') : '',
-                            stock: (data.body.stock) ? data.body.stock : '',
-                            hsnNumber: (data.body.stock) ? data.body.stock.hsnNumber : "",
-                            sacNumber: (data.body.stock) ? data.body.sacNumber : "",
-                            uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
-                        };
-                        txn = this.calculateItemValues(selectedAcc, txn, entry);
-                        this.focusOnDescription();
-                    }
-                }, () => {
-                    txn.isStockTxn = false;
-                    txn.amount = 0;
-                    txn.accountName = null;
-                    txn.accountUniqueName = null;
-                    txn.hsnOrSac = 'sac';
-                    txn.total = null;
-                    txn.rate = null;
-                    txn.sacNumber = null;
-                    txn.sacNumberExists = false;
-                    txn.taxableValue = 0;
-                    txn.applicableTaxes = [];
-                    this.focusOnDescription();
-                    return txn;
-                });
+                this.currentTxnRequestObject[this.activeIndex] = {
+                    selectedAcc,
+                    txn,
+                    entry,
+                    params,
+                    entryIndex
+                };
+                if (selectedAcc.additional.stock) {
+                    txn.isStockTxn = true;
+                    this.loadStockVariants(selectedAcc.additional.stock.uniqueName);
+                } else {
+                    this.loadDetails(this.currentTxnRequestObject[this.activeIndex]);
+                }
             }
         }
     }
@@ -1626,6 +1653,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         // Calculate discount
+        entry.discounts = entry.discounts?.length ? entry.discounts : this.generalService.getDiscountValues({
+            discountAccountsDetails: entry.discounts ?? [],
+            discountsList: this.discountsList
+        });
         let percentageDiscountTotal = entry.discounts?.filter(discount => discount.isActive)
             ?.filter(activeDiscount => activeDiscount.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
@@ -1642,6 +1673,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         let taxPercentage: number = 0;
         let cessPercentage: number = 0;
         let taxTotal: number = 0;
+        entry.taxes = entry.taxes?.length ? entry.taxes : this.generalService.getTaxValues({
+            taxRenderData: entry.taxes ?? [],
+            date: this.purchaseOrder.voucherDetails.voucherDate,
+            applicableTaxes: transaction.applicableTaxes,
+            taxes: this.companyTaxesList,
+            exceptTaxTypes: this.exceptTaxTypes,
+        });
         entry.taxes?.filter(tax => tax.isChecked).forEach(selectedTax => {
             if (selectedTax.type === 'gstcess') {
                 cessPercentage += selectedTax.amount;
@@ -1653,7 +1691,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         // Calculate amount with inclusive tax
         transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
-            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.highPrecisionRate);
+            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
+        transaction.convertedAmount = giddhRoundOff(transaction.amount * this.exchangeRate, this.giddhBalanceDecimalPlaces);
         let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), this.highPrecisionRate);
         entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, this.highPrecisionRate);
         if (isNaN(entry.discountSum)) {
@@ -1676,6 +1715,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (transaction.isStockTxn) {
             transaction.rate = giddhRoundOff((transaction.amount / transaction.quantity), this.ratePrecision);
         }
+        transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.giddhBalanceDecimalPlaces);
         this.calculateSubTotal();
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
@@ -1946,6 +1986,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
+        const stockVariants = this.stockVariants.getValue();
+        stockVariants.splice(entryIdx, 1);
+        this.stockVariants.next(stockVariants);
     }
 
     /**
@@ -2266,7 +2309,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
                     salesAddBulkStockItems.stockUnit.uniqueName = transaction.stockUnit;
                     salesAddBulkStockItems.stockUnit.code = transaction.stockUnitCode;
-
+                    salesAddBulkStockItems.variant = transaction.variant;
+                    salesAddBulkStockItems.taxInclusive = transaction.taxInclusive;
                     transactionClassMul.stock = salesAddBulkStockItems;
                 }
                 salesEntryClass.transactions.push(transactionClassMul);
@@ -2336,6 +2380,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public addBulkStockItems(items: SalesAddBulkStockItems[]): void {
         const startIndex = this.purchaseOrder.entries?.length;
         let isBlankItemPresent;
+        this.isBulkEntryInProgress = true;
         this.ngZone.runOutsideAngular(() => {
             for (const item of items) {
                 // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
@@ -2367,6 +2412,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
                 this.onSelectSalesAccount(item, this.purchaseOrder.entries[lastIndex].transactions[0], this.purchaseOrder.entries[lastIndex], true, lastIndex);
             }
+            this.isBulkEntryInProgress = false;
         });
         this.buildBulkData(this.purchaseOrder.entries?.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
     }
@@ -2383,7 +2429,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         find(transaction.stockList, (txn) => {
             if (txn.id === selectedUnit) {
                 transaction.stockUnitCode = txn.text;
-                return transaction.rate = txn.rate;
+                return transaction.rate = giddhRoundOff(txn.rate  / this.exchangeRate, this.highPrecisionRate);
             }
         });
     }
@@ -2674,8 +2720,26 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 });
 
                 if (transaction.stock) {
+                    this.currentTxnRequestObject[convertedEntries.length] = {
+                        ...this.currentTxnRequestObject[convertedEntries.length],
+                        params: {
+                            variantUniqueName: transaction.stock?.variant?.uniqueName
+                        },
+                        selectedAcc: {
+                            stock: {
+                                name: transaction.stock.name,
+                                uniqueName: transaction.stock.uniqueName,
+                            },
+                            additional: {
+                                name: transaction.account.name,
+                                uniqueName: transaction.account.uniqueName,
+                            }
+                        }
+                    };
+                    this.loadStockVariants(transaction.stock.uniqueName, convertedEntries.length);
+                    const unitRates = transaction.stock?.unitRates ?? [];
                     if (!transaction.stock.stockUnit?.uniqueName && transaction.stock.stockUnit?.code) {
-                        const unitFound = transaction.stock?.unitRates?.filter(unit => unit?.stockUnitCode === transaction.stock.stockUnit?.code);
+                        const unitFound = unitRates?.filter(unit => unit?.stockUnitCode === transaction.stock.stockUnit?.code);
                         if (unitFound?.length) {
                             transaction.stock.stockUnit.uniqueName = unitFound[0]?.stockUnitUniqueName;
                         }
@@ -2688,7 +2752,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     salesTransactionItemClass.stockDetails.customField1 = transaction.stock.customField1;
                     salesTransactionItemClass.stockDetails.customField2 = transaction.stock.customField2;
                     salesTransactionItemClass.stockDetails.stockUnit = transaction.stock.stockUnit;
-                    salesTransactionItemClass.stockDetails.unitRates = transaction.stock.unitRates;
+                    salesTransactionItemClass.stockDetails.unitRates = unitRates;
                     salesTransactionItemClass.stockDetails.uniqueName = transaction.stock.uniqueName;
                     salesTransactionItemClass.stockDetails.skuCodeHeading = transaction.stock.skuCodeHeading;
                     salesTransactionItemClass.quantity = transaction.stock.quantity;
@@ -2697,6 +2761,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     salesTransactionItemClass.stockUnit = transaction.stock.stockUnit.uniqueName;
                     salesTransactionItemClass.stockUnitCode = transaction.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = transaction.account?.uniqueName + '#' + transaction.stock.uniqueName;
+                    salesTransactionItemClass.variant = transaction.stock.variant;
+                    salesTransactionItemClass.taxInclusive = transaction.stock.taxInclusive;
 
                     let stock = salesTransactionItemClass.stockDetails;
 
@@ -2722,7 +2788,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
                         salesTransactionItemClass.sku_and_customfields = description.join(', ');
                     }
-                    stock.unitRates = stock.unitRates || [];
+                    stock.unitRates = unitRates || [];
                     const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
                     let stockUnit: IStockUnit = {
                         id: stock.stockUnit.uniqueName,
@@ -3295,6 +3361,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true, isBulkItem?: boolean): SalesTransactionItemClass {
         let additional = _.cloneDeep(selectedAcc.additional);
+        const variant = additional.stock?.variant;
+        const isInclusiveEntry = (variant?.purchaseTaxInclusive && additional.category === 'expenses') ||
+            (variant?.salesTaxInclusive && additional.category === 'income') ||
+            (variant?.fixedAssetTaxInclusive && additional.category === 'fixedassets');
+        transaction.taxInclusive = isInclusiveEntry;
         transaction.quantity = additional.quantity ? additional.quantity : (additional.stock) ? 1 : null;
         transaction.applicableTaxes = [];
         transaction.sku_and_customfields = null;
@@ -3358,11 +3429,23 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 text: additional.stock.stockUnitCode
             };
             transaction.stockList = [];
-            if (additional.stock && additional.stock.unitRates && additional.stock.unitRates.length) {
-                transaction.stockList = this.prepareUnitArr(additional.stock.unitRates);
+            /*
+                From API, in get voucher API, unit rates are received within stock key.
+                And in particular API, the unit rates are received within stock.variant key.
+                This method is common for both the flows therefore we are searching the unitRates
+                in both the keys
+            */
+            const unitRates = additional.stock?.unitRates ?? additional.stock?.variant?.unitRates ?? [];
+            if (additional.stock && unitRates.length) {
+                transaction.stockList = this.prepareUnitArr(unitRates);
                 transaction.stockUnit = transaction.stockList[0].id;
                 transaction.stockUnitCode = transaction.stockList[0].text;
-                transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                if (!isInclusiveEntry) {
+                    /* For inclusive entry we calculate the rate at the time of amount calculation,
+                        this is done to avoid the fluctuation of rate from exclusive to inclusive
+                    */
+                    transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                }
             } else {
                 transaction.stockList.push(obj);
                 transaction.stockUnit = additional.stock.stockUnit.uniqueName;
@@ -3370,6 +3453,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
             transaction.stockDetails = _.omit(additional.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
+            if (isBulkItem) {
+                transaction.variant = selectedAcc.variant;
+            }
         } else {
             transaction.isStockTxn = false;
             transaction.stockUnit = null;
@@ -3453,8 +3539,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
         }
         this.focusOnDescription();
+        if (isInclusiveEntry) {
+            setTimeout(() => {
+                // Set timeout is used as tax component is not rendered at the time control is reached here
+                transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                transaction.total = transaction.quantity * transaction.rate;
+                this.calculateTransactionValueInclusively(entry, transaction);
+            });
+        } else {
         this.calculateStockEntryAmount(transaction);
         this.calculateWhenTrxAltered(entry, transaction);
+        }
         return transaction;
     }
 
@@ -3842,5 +3937,111 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71)) {
             this.isCreatingNewAccount = false;
         }
+    }
+
+    /**
+     * Loads the details of selected entry
+     *
+     * @private
+     * @param {*} requestObject Request object for the API
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private loadDetails(requestObject: any): void {
+        let {
+            selectedAcc,
+            txn,
+            entry,
+            params,
+            entryIndex
+        } = requestObject;
+        this.searchService.loadDetails(selectedAcc.additional?.uniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data && data.body) {
+                // Take taxes of parent group and stock's own taxes
+                const taxes = this.generalService.fetchTaxesOnPriority(
+                    data.body.stock?.taxes ?? [],
+                    data.body.stock?.groupTaxes ?? [],
+                    data.body.taxes ?? [],
+                    data.body.groupTaxes ?? []);
+                // directly assign additional property
+                selectedAcc.additional = {
+                    ...selectedAcc.additional,
+                    label: selectedAcc.label,
+                    value: selectedAcc?.value,
+                    applicableTaxes: taxes,
+                    currency: data.body.currency,
+                    currencySymbol: data.body.currencySymbol,
+                    email: data.body.emails,
+                    isFixed: data.body.isFixed,
+                    mergedAccounts: data.body.mergedAccounts,
+                    mobileNo: data.body.mobileNo,
+                    nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.name).join(', ') : '',
+                    stock: (data.body.stock) ? data.body.stock : '',
+                    hsnNumber: (data.body.stock) ? data.body.stock.hsnNumber : "",
+                    sacNumber: (data.body.stock) ? data.body.sacNumber : "",
+                    uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
+                    category: data.body.category
+                };
+                txn = this.calculateItemValues(selectedAcc, txn, entry);
+                this.focusOnDescription();
+            }
+        }, () => {
+            txn.isStockTxn = false;
+            txn.amount = 0;
+            txn.accountName = null;
+            txn.accountUniqueName = null;
+            txn.hsnOrSac = 'sac';
+            txn.total = null;
+            txn.rate = null;
+            txn.sacNumber = null;
+            txn.sacNumberExists = false;
+            txn.taxableValue = 0;
+            txn.applicableTaxes = [];
+            this.focusOnDescription();
+            return txn;
+        });
+    }
+
+    /**
+     * Handle price calculation on unit change
+     *
+     * @param {SalesEntryClass} entry Entry details
+     * @param {SalesTransactionItemClass} transaction Transaction details
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public handlePriceCalculationOnUnitChange(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        let isInclusiveTax;
+        if (transaction?.stockDetails?.variant) {
+            // Unit is changed in create flow by changing the stock
+            isInclusiveTax = transaction.stockDetails.variant.salesTaxInclusive ||
+                transaction.stockDetails.variant.purchaseTaxInclusive ||
+                transaction.stockDetails.variant.fixedAssetTaxInclusive;
+        } else {
+            // Unit is changed in update flow without changing the stock
+            isInclusiveTax = transaction?.taxInclusive;
+        }
+        if (isInclusiveTax) {
+            transaction.total = transaction.quantity * transaction.rate;
+            this.calculateTransactionValueInclusively(entry, transaction);
+        } else {
+            transaction.setAmount(entry);
+            this.calculateWhenTrxAltered(entry, transaction);
+        }
+    }
+
+    /**
+     * Loads the stock variants
+     *
+     * @private
+     * @param {string} stockUniqueName Uniquename of the stock
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private loadStockVariants(stockUniqueName: string, index?: number): void {
+        this.ledgerService.loadStockVariants(stockUniqueName).pipe(
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
+                const allStockVariants = this.stockVariants.getValue();
+                this.currentlyLoadedStockVariantIndex = index;
+                allStockVariants[this.currentlyLoadedStockVariantIndex ?? this.activeIndex] = observableOf(res);
+                this.stockVariants.next(allStockVariants);
+            });
     }
 }

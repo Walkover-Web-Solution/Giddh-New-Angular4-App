@@ -139,7 +139,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         }
         if (changes?.defaultValue) {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
-            if(!this.options || this.options?.length === 0) {
+            if (!this.options || this.options?.length === 0) {
                 if (this.enableDynamicSearch) {
                     this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
                 } else {
@@ -262,9 +262,17 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     /**
     * This will use for close dropdown panel
     *
+    * @param {*} event Pointer event
     * @memberof SelectFieldComponent
     */
-    public closeDropdownPanel(): void {
+    public closeDropdownPanel(event?: any): void {
+        if (event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") > -1) {
+            /*
+                Don't close the panel if the user clicks at the corner of the input field,
+                handles the edge case when user clicks the corner and the suggestions get hidden
+            */
+            return;
+        }
         this.trigger?.closePanel();
     }
 
@@ -291,4 +299,14 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         document?.removeEventListener(event, fun.bind(this), options || {});
     }
 
+    /**
+     * Adds dropdown-position class on cdk-overlay for position issue
+     *
+     * @memberof SelectFieldComponent
+     */
+    public addClassForDropdown(): void {
+        setTimeout(() => {
+            document.querySelectorAll(".cdk-overlay-pane")[0].classList.add("dropdown-position");
+        }, 10);
+    }
 }
