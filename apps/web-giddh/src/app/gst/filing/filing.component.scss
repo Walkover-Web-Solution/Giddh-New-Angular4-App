@@ -6,13 +6,13 @@
 .successful-file-detail h3,
 .gst-return-date h3 {
     color: var(--color-nero);
-    font-size: 24px;
+    font-size: var(--font-size-24);
     margin: 20px 0 7px;
 }
 .gstr-transactions-summary .successful-file-detail p,
 .gstr-transactions-summary .gst-return-date p {
     margin-bottom: 20px;
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 .file-your-return {
     border: 1px solid var(--color-blue);

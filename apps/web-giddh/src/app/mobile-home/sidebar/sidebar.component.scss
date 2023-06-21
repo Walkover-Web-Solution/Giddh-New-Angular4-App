@@ -17,7 +17,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: var(--font-size-15);
             border-radius: 50%;
             margin-top: 15px;
             margin-bottom: 20px;
@@ -27,20 +27,20 @@
             top: 4px;
             right: 5px;
             padding: 8px 10px;
-            font-size: 18px;
+            font-size: var(--font-size-16);
             background-color: transparent;
         }
         .company-details {
             p.company-name {
                 white-space: normal;
                 word-break: break-word;
-                font-size: 14px;
+                font-size: var(--font-size-15);
             }
             p {
                 line-height: 18px;
             }
             small {
-                font-size: 12px;
+                font-size: var(--font-size-12);
             }
         }
     }
@@ -54,7 +54,7 @@
                     color: var(--color-nero);
                     font-family: var(--font-semibold);
                     display: flex;
-                    font-size: 14px;
+                    font-size: var(--font-size-15);
                     &:hover {
                         background-color: var(--color-dark-fog);
                     }

@@ -7,7 +7,7 @@
     li {
         list-style-type: none;
         color: var(--color-popup-list-all-features-text);
-        font-size: 12px;
+        font-size: var(--font-size-12);
         padding: 3px 0;
         line-height: 20px;
         display: flex;
@@ -31,7 +31,7 @@
     }
 }
 .money-back-guarantee {
-    font-size: 12px;
+    font-size: var(--font-size-12);
     background-color: var(--color-popup-secondary-background);
     color: var(--color-all-features-money-back-guarantee);
     padding-left: 20px;

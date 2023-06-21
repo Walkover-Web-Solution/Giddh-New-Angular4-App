@@ -60,7 +60,7 @@
                 }
             }
             .items {
-                font-size: 14px;
+                font-size: var(--font-size-15);
                 &.map-item {
                     .mat-list-item-content {
                         float: right !important;

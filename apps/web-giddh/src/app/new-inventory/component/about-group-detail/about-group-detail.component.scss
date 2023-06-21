@@ -14,7 +14,7 @@
             .group-name {
                 h4 {
                     font-family: var(--font-semibold);
-                    font-size: 16px;
+                    font-size: var(--font-size-15);
                 }
             }
         }
@@ -102,7 +102,7 @@
                 }
                 .group-name {
                     h4 {
-                        font-size: 14px;
+                        font-size: var(--font-size-15);
                     }
                 }
             }

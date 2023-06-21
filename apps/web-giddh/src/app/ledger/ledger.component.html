@@ -100,7 +100,7 @@
                                             [matTooltipPosition]="'above'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-trash font-16"></i>
+                                            <i class="icon-trash font-15"></i>
                                         </button>
 
                                         <button
@@ -116,7 +116,7 @@
                                             [matTooltipPosition]="'above'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-generate-invoice font-16"></i>
+                                            <i class="icon-generate-invoice font-15"></i>
                                         </button>
                                     </div>
                                     <button
@@ -124,7 +124,7 @@
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
-                                        class="btn btn-success mr-0 font-16"
+                                        class="btn btn-success mr-0 font-15"
                                         id="attach-file-mobile-view"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
@@ -249,7 +249,7 @@
                                         [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
-                                        <i class="icon-trash font-16"></i>
+                                        <i class="icon-trash font-15"></i>
                                     </button>
 
                                     <button
@@ -264,7 +264,7 @@
                                         [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
-                                        <i class="icon-generate-invoice font-16"></i>
+                                        <i class="icon-generate-invoice font-15"></i>
                                     </button>
 
                                     <button
@@ -279,7 +279,7 @@
                                         [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
-                                        <i class="icon-file-path font-16"></i>
+                                        <i class="icon-file-path font-15"></i>
                                     </button>
                                     <input
                                         type="file"
@@ -430,7 +430,7 @@
                                     </div>
                                 </div>
                                 <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advance-search-block">
-                                    <span class="mr-r15 d-inline-block font-14">{{ baseCurrencyDetails?.code }}</span>
+                                    <span class="mr-r15 d-inline-block font-15">{{ baseCurrencyDetails?.code }}</span>
                                     <div class="toggle d-inline-block currency-toggler" data-key="disabled">
                                         <mat-slide-toggle
                                             color="primary"
@@ -438,7 +438,7 @@
                                             (change)="toggleCurrency($event)"
                                         ></mat-slide-toggle>
                                     </div>
-                                    <span class="mr-l15 d-inline-block font-14">{{
+                                    <span class="mr-l15 d-inline-block font-15">{{
                                         foreignCurrencyDetails?.code
                                     }}</span>
                                 </div>
@@ -507,7 +507,7 @@
                                         matTooltipClass="tooltip-black"
                                         (click)="getBankTransactions()"
                                     >
-                                        <i class="icon-refresh lh-0 font-18"></i>
+                                        <i class="icon-refresh lh-0 font-16"></i>
                                     </a>
 
                                     <a
@@ -531,7 +531,7 @@
                         *ngIf="isLedgerAccountAllowsMultiCurrency && isMobileScreen"
                         class="advance-search-block mr-t05"
                     >
-                        <span class="mr-r15 d-inline-block font-14">{{ baseCurrencyDetails?.code }}</span>
+                        <span class="mr-r15 d-inline-block font-15">{{ baseCurrencyDetails?.code }}</span>
                         <div class="toggle d-inline-block currency-toggler" data-key="disabled">
                             <mat-slide-toggle
                                 color="primary"
@@ -539,7 +539,7 @@
                                 (change)="toggleCurrency($event)"
                             ></mat-slide-toggle>
                         </div>
-                        <span class="mr-l15 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
+                        <span class="mr-l15 d-inline-block font-15">{{ foreignCurrencyDetails?.code }}</span>
                     </div>
                     <!-- endregion -->
                     <div class="custom-tabs mt-2 mb-2">
@@ -891,6 +891,11 @@
                                                                     [localeData]="localeData"
                                                                     [commonLocaleData]="commonLocaleData"
                                                                     [entrySide]="'dr'"
+                                                                    (stockVariantSelected)="
+                                                                        loadDetails(selectedAccountDetails, txn, $event)
+                                                                    "
+                                                                    [selectedAccountDetails]="selectedAccountDetails"
+                                                                    [(isTotalChanged)]="isTotalChanged"
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1178,6 +1183,11 @@
                                                                     [localeData]="localeData"
                                                                     [commonLocaleData]="commonLocaleData"
                                                                     [entrySide]="'cr'"
+                                                                    (stockVariantSelected)="
+                                                                        loadDetails(selectedAccountDetails, txn, $event)
+                                                                    "
+                                                                    [selectedAccountDetails]="selectedAccountDetails"
+                                                                    [(isTotalChanged)]="isTotalChanged"
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1216,7 +1226,7 @@
                                 </div>
                                 <table class="w-100">
                                     <tr>
-                                        <td colspan="12" class="py-2 px-3 font-14">
+                                        <td colspan="12" class="py-2 px-3 font-15">
                                             <div class="pull-right" *ngIf="eLedgType == 'CREDIT'">
                                                 {{ localeData?.cf_balance }}
                                                 <span
@@ -1232,7 +1242,7 @@
                                                 </span>
                                             </div>
                                         </td>
-                                        <td colspan="12" class="bd-rl py-2 px-3 font-14" *ngIf="eLedgType == 'DEBIT'">
+                                        <td colspan="12" class="bd-rl py-2 px-3 font-15" *ngIf="eLedgType == 'DEBIT'">
                                             <div class="pull-right">
                                                 {{ localeData?.cf_balance }}
                                                 <span
@@ -1271,8 +1281,8 @@
                             "
                             class="hidden-xs sticky-header pr-0 no-right-border"
                         >
-                            <b class="blue-heading font-16"> {{ lc.ledgerUnderStandingObj.text.dr }}</b>
-                            <span class="dr-cr-category font-16 pull-right text-gray">{{ localeData?.dr }}</span>
+                            <b class="blue-heading font-15"> {{ lc.ledgerUnderStandingObj.text.dr }}</b>
+                            <span class="dr-cr-category font-15 pull-right text-gray">{{ localeData?.dr }}</span>
                         </mat-grid-tile>
                         <mat-grid-tile
                             [ngClass]="
@@ -1283,8 +1293,8 @@
                             "
                             class="hidden-xs sticky-header pl-0 no-right-border"
                         >
-                            <b class="blue-heading font-16"> {{ lc.ledgerUnderStandingObj.text.cr }}</b>
-                            <span class="dr-cr-category font-16 pull-right text-gray">{{ localeData?.cr }}</span>
+                            <b class="blue-heading font-15"> {{ lc.ledgerUnderStandingObj.text.cr }}</b>
+                            <span class="dr-cr-category font-15 pull-right text-gray">{{ localeData?.cr }}</span>
                         </mat-grid-tile>
                     </mat-grid-list>
                     <!-- endregion -->
@@ -1825,7 +1835,30 @@
                                                         [prefix]="selectedPrefixForCurrency"
                                                         [suffix]="selectedSuffixForCurrency"
                                                         [mask]="inputMaskFormat"
+                                                        [(ngModel)]="txn.total"
+                                                        *ngIf="
+                                                            txn.selectedAccount?.stock?.variant?.salesTaxInclusive ||
+                                                            txn.selectedAccount?.stock?.variant?.purchaseTaxInclusive ||
+                                                            txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
+                                                        "
+                                                        (input)="isTotalChanged = true; handleAmountInput(txn, true)"
+                                                        (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
+                                                    />
+                                                    <input
+                                                        matInput
+                                                        class="text-right form-control"
+                                                        type="text"
+                                                        [id]="'enter-bank-amount-dr-' + i"
+                                                        [prefix]="selectedPrefixForCurrency"
+                                                        [suffix]="selectedSuffixForCurrency"
+                                                        [mask]="inputMaskFormat"
                                                         [(ngModel)]="txn.amount"
+                                                        *ngIf="
+                                                            !txn.selectedAccount?.stock?.variant?.salesTaxInclusive &&
+                                                            !txn.selectedAccount?.stock?.variant
+                                                                ?.purchaseTaxInclusive &&
+                                                            !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
+                                                        "
                                                         (input)="handleAmountInput(txn)"
                                                         (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
                                                     />
@@ -1875,6 +1908,11 @@
                                                 [localeData]="localeData"
                                                 [commonLocaleData]="commonLocaleData"
                                                 [entrySide]="'dr'"
+                                                (stockVariantSelected)="
+                                                    loadDetails(selectedAccountDetails, txn, $event)
+                                                "
+                                                [selectedAccountDetails]="selectedAccountDetails"
+                                                [(isTotalChanged)]="isTotalChanged"
                                             >
                                             </new-ledger-entry-panel>
                                         </div>
@@ -2249,7 +2287,30 @@
                                                         [prefix]="selectedPrefixForCurrency"
                                                         [suffix]="selectedSuffixForCurrency"
                                                         [mask]="inputMaskFormat"
+                                                        [(ngModel)]="txn.total"
+                                                        *ngIf="
+                                                            txn.selectedAccount?.stock?.variant?.salesTaxInclusive ||
+                                                            txn.selectedAccount?.stock?.variant?.purchaseTaxInclusive ||
+                                                            txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
+                                                        "
+                                                        (input)="isTotalChanged = true; handleAmountInput(txn, true)"
+                                                        (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
+                                                    />
+                                                    <input
+                                                        matInput
+                                                        class="text-right form-control"
+                                                        type="text"
+                                                        id="enter-bank-amount-cr"
+                                                        [prefix]="selectedPrefixForCurrency"
+                                                        [suffix]="selectedSuffixForCurrency"
+                                                        [mask]="inputMaskFormat"
                                                         [(ngModel)]="txn.amount"
+                                                        *ngIf="
+                                                            !txn.selectedAccount?.stock?.variant?.salesTaxInclusive &&
+                                                            !txn.selectedAccount?.stock?.variant
+                                                                ?.purchaseTaxInclusive &&
+                                                            !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
+                                                        "
                                                         (input)="handleAmountInput(txn)"
                                                         (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
                                                     />
@@ -2300,6 +2361,11 @@
                                                 [localeData]="localeData"
                                                 [commonLocaleData]="commonLocaleData"
                                                 [entrySide]="'cr'"
+                                                (stockVariantSelected)="
+                                                    loadDetails(selectedAccountDetails, txn, $event)
+                                                "
+                                                [selectedAccountDetails]="selectedAccountDetails"
+                                                [(isTotalChanged)]="isTotalChanged"
                                             >
                                             </new-ledger-entry-panel>
                                         </div>
@@ -2465,7 +2531,7 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6 col-12 text-right">
                                     {{ localeData?.balance_bank }}
-                                    <h3 class="font-20 primary-color">
+                                    <h3 class="font-16 primary-color">
                                         <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="reconcileClosingBalanceForBank?.amount"
@@ -2479,7 +2545,7 @@
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-12 text-left">
                                     {{ localeData?.pending_cheque }}
-                                    <h3 class="font-20 primary-color">
+                                    <h3 class="font-16 primary-color">
                                         <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="closingBalanceBeforeReconcile?.amount"

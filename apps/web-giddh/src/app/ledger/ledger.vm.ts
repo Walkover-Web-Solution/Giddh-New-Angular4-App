@@ -1,4 +1,4 @@
-import { IELedgerResponse, IELedgerTransaction, TransactionsResponse } from '../models/api-models/Ledger';
+import { IELedgerResponse, IELedgerTransaction, IVariant, TransactionsResponse } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
@@ -9,11 +9,11 @@ import { cloneDeep, forEach, remove } from '../lodash-optimized';
 import { INameUniqueName } from '../models/api-models/Inventory';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { TaxControlData } from '../theme/tax-control/tax-control.component';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { ICurrencyResponse } from '../models/api-models/Company';
 import { VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { ITaxControlData } from '../models/interfaces/tax.interface';
 
 export class LedgerVM {
     public activeAccount$: Observable<AccountResponse | AccountResponseV2>;
@@ -441,7 +441,7 @@ export class TransactionVM {
     public isInclusiveTax: boolean;
     public type: string;
     public taxes: string[] = [];
-    public taxesVm?: TaxControlData[] = [];
+    public taxesVm?: ITaxControlData[] = [];
     public tax?: number = 0;
     public convertedTax?: number = 0;
     public total: number = 0;
@@ -461,12 +461,14 @@ export class TransactionVM {
     public itcAvailable?: string = '';
     public reverseChargeTaxableAmount?: number;
     public shouldShowRcmEntry?: boolean;
-    public advanceReceiptAmount?: number = 0;
+    public taxInclusiveAmount?: number = 0;
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
     public voucherAdjustments?: VoucherAdjustments;
     public showDropdown?: boolean = false;
     public referenceVoucher?: ReferenceVoucher;
     public showOtherTax: boolean = false;
+    public stockUniqueName?: string;
+    public oppositeAccountUniqueName?: string;
 }
 
 export interface IInventory {
@@ -474,6 +476,8 @@ export interface IInventory {
     quantity: number;
     stock: INameUniqueName;
     warehouse: WarehouseDetails;
+    variant: IVariant;
+    taxInclusive?: boolean;
 }
 
 export interface IInventoryUnit {
