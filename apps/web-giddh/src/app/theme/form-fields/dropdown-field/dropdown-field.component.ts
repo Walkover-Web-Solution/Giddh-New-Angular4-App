@@ -83,6 +83,8 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
     /** Holds Mat Input Label */
     @Input() public label: string;
+    /** Adds red border around field if true */
+    @Input() public showError: boolean = false;
 
     constructor(private cdr: ChangeDetectorRef
     ) {

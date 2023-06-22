@@ -14301,9 +14301,6 @@ body.hide-scroll-body.master-page {
 .mat-slide-toggle-persistent-ripple {
     opacity: 0 !important;
 }
-.mat-form-field-suffix {
-    margin-left: 3px;
-}
 
 .customer-invoice-table {
     .mat-form-field-wrapper
@@ -14314,6 +14311,10 @@ body.hide-scroll-body.master-page {
         height: 34px !important;
     }
 }
+.mat-form-field-suffix {
+    margin-left: 3px;
+}
+
 .cdk-virtual-scroll-content-wrapper {
     width: 100%;
 }
