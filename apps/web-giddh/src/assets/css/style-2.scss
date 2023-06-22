@@ -14318,7 +14318,62 @@ body.hide-scroll-body.master-page {
 /*=========== Code to handle Screen Resolution ======Start=======*/
 @media only screen and (max-width: 1440px) {
     body {
+        zoom: 90%;
+    }
+}
+@media only screen and (max-width: 1366px) {
+    body {
         zoom: 85%;
+    }
+
+    /* Height of Primary Side Bar*/
+    .primary-sidebar {
+        .wrap-menus {
+            min-height: calc(100vh - 130px) !important;
+            max-height: calc(100vh - 130px) !important;
+        }
+    }
+    /* Height of Table */
+    .mobile-card-wrapper {
+        max-height: calc(100vh - 185px) !important;
+    }
+
+    /* Master Modal Size*/
+    .manage-account-popup {
+        height: 100% !important;
+        width: 100% !important;
+        .modal-content {
+            height: 100%;
+        }
+        .height-in-vh {
+            height: calc(100vh + 70px) !important;
+        }
+        div#getGroupModal {
+            height: 100% !important;
+        }
+    }
+    invoice-template-modal {
+        #customInvoice {
+            height: calc(100vh + 60px) !important;
+        }
+    }
+
+    .branch-transfer {
+        min-height: 110vh !important;
+    }
+    .receipt-note-content {
+        max-height: 100vh !important;
+    }
+    .aside-pane {
+        height: 100% !important;
+    }
+    .aside-pane-form {
+        height: calc(100vh + 46px) !important;
+    }
+    /* Master Modal Overlay Size*/
+    .modal-backdrop {
+        width: 100% !important;
+        height: 100% !important;
     }
 }
 /*=========== Code to handle Screen Resolution =======End========*/
