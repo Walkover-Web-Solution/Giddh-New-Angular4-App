@@ -304,7 +304,6 @@ textarea {
         .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
         position: absolute;
         padding-top: 12px !important;
-        padding-left: 45px !important;
     }
 }
 
@@ -2451,13 +2450,13 @@ modal-container.modal {
         font-size: var(--font-size-15);
         position: relative;
         width: 230px !important;
-        max-width: 222px;
+        max-width: 204px;
         display: block;
         border: 1px solid var(--color-secondary-input-bar-border);
         height: 40px;
         border-radius: 5px;
-        text-align: left;
-        padding-left: 10px !important;
+        text-align: center;
+        padding: 0 10px !important;
     }
     &.custom-new-datepicker {
         input {
@@ -12485,7 +12484,6 @@ inventory-master {
             .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
             position: absolute;
             padding-top: 11px !important;
-            padding-left: 45px !important;
         }
     }
 
@@ -12803,7 +12801,6 @@ inventory-master {
             .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
             position: absolute;
             padding-top: 11px !important;
-            padding-left: 45px !important;
         }
     }
 
@@ -12866,7 +12863,6 @@ inventory-master {
             .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
             position: absolute;
             padding-top: 11px !important;
-            padding-left: 45px !important;
         }
     }
 
@@ -13065,13 +13061,6 @@ body.prevent-body-scroll {
         giddh-datepicker {
             .mat-form-field {
                 min-width: 95px !important;
-            }
-        }
-    }
-    .mat-form-field-wrapper {
-        .mat-form-field-infix {
-            .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
-                padding-left: 32px !important;
             }
         }
     }
@@ -14295,6 +14284,28 @@ body.hide-scroll-body.master-page {
 .mat-slide-toggle-persistent-ripple {
     opacity: 0 !important;
 }
+
+.customer-invoice-table {
+    .mat-form-field-wrapper
+        .mat-form-field-infix
+        .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+        font-size: var(--font-size-14);
+        border-radius: 5px;
+        height: 34px !important;
+    }
+}
 .mat-form-field-suffix {
     margin-left: 3px;
 }
+
+.cdk-virtual-scroll-content-wrapper {
+    width: 100%;
+}
+
+/*=========== Code to handle Screen Resolution ======Start=======*/
+@media only screen and (max-width: 1440px) {
+    body {
+        zoom: 85%;
+    }
+}
+/*=========== Code to handle Screen Resolution =======End========*/

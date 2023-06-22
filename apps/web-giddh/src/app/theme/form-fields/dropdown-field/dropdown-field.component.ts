@@ -83,6 +83,8 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
     /** Holds Mat Input Label */
     @Input() public label: string;
+    /** Adds red border around field if true */
+    @Input() public showError: boolean = false;
 
     constructor(private cdr: ChangeDetectorRef
     ) {
@@ -305,9 +307,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     public addClassForDropdown(): void {
         setTimeout(() => {
             if (document.querySelectorAll(".cdk-overlay-pane")?.length) {
-                document.querySelectorAll(".cdk-overlay-pane")?.forEach(element => {
-                    element.classList.add("dropdown-position");
-                });
+                document.querySelectorAll(".cdk-overlay-pane")[document.querySelectorAll(".cdk-overlay-pane")?.length - 1].classList.add("dropdown-position");
             }
         }, 10);
     }

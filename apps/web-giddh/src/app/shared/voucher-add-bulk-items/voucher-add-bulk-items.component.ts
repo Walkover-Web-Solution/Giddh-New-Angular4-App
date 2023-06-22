@@ -7,6 +7,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { LedgerService } from '../../services/ledger.service';
 import { IVariant } from '../../models/api-models/Ledger';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'voucher-add-bulk-items-component',
@@ -43,7 +44,8 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
         private changeDetectorRef: ChangeDetectorRef,
         private toaster: ToasterService,
         private searchService: SearchService,
-        private ledgerService: LedgerService
+        private ledgerService: LedgerService,
+        private generalService: GeneralService
     ) {
     }
 
@@ -127,10 +129,10 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
 
     public addItemToSelectedArr(item: SalesAddBulkStockItems) {
         let index;
-        if (!item.additional.stock) {
+        if (!item.additional.stock || this.generalService.voucherApiVersion === 1) {
             index = this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
         } else {
-            if (item.variants?.length === 1) {
+            if (this.generalService.voucherApiVersion === 2 && item.variants?.length === 1) {
                 const variant = item.variants[0];
                 index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${item.uniqueName}#${variant.value}`);
             }

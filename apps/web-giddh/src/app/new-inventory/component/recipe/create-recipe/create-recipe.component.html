@@ -1,229 +1,250 @@
-<section class="create-recipe">
-    <div class="recipe-wrapper">
-        <!-- <div class="row">
-            <div class="col-3 mt-2">
-                <div>
-                    <dropdown-field
-                        class="width-280"
-                        [name]="''"
-                        [placeholder]="'Select Stock'"
-                        [options]="stock"
-                        [defaultValue]=""
-                    >
-                    </dropdown-field>
+<ng-container
+    appTranslate
+    [file]="'inventory/manufacturing'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <section class="create-recipe">
+        <div class="recipe-wrapper">
+            <!-- <div class="row">
+                <div class="col-3 mt-2">
+                    <div>
+                        <dropdown-field
+                            class="width-280"
+                            [name]="''"
+                            [placeholder]="'Select Stock'"
+                            [options]="stock"
+                            [defaultValue]=""
+                        >
+                        </dropdown-field>
+                    </div>
                 </div>
-            </div>
-        </div> -->
-        <div
-            class="row py-4 manufacturing-border"
-            *ngFor="let recipe of receiptObject.manufacturingDetails; let i = index"
-        >
-            <div class="col-3">
-                <div class="row">
-                    <div class="form-fields w-100">
-                        <div class="d-flex flex-column flex-wrap w-100 row-gap">
-                            <h1 class="section-head pb-2">Finished Stock</h1>
-                            <div>
-                                <dropdown-field
-                                    class="width-280"
-                                    [name]="'variant_' + i"
-                                    [placeholder]="'Select Output Variant'"
-                                    [options]="variants"
-                                    [defaultValue]="recipe.variant.name"
-                                    (selectedOption)="
-                                        recipe.variant.name = $event.label; recipe.variant.uniqueName = $event.value
-                                    "
-                                >
-                                </dropdown-field>
+            </div> -->
+            <div
+                class="row py-4 manufacturing-border"
+                *ngFor="let recipe of receiptObject.manufacturingDetails; let i = index"
+            >
+                <div class="col-3">
+                    <div class="row">
+                        <div class="form-fields w-100">
+                            <div class="d-flex flex-column flex-wrap w-100 row-gap">
+                                <h1 class="section-head pb-2">Finished Stock</h1>
+                                <div>
+                                    <dropdown-field
+                                        class="width-280"
+                                        [name]="'variant_' + i"
+                                        [placeholder]="'Select Output Variant'"
+                                        [options]="variantsList"
+                                        [defaultValue]="recipe.variant.name"
+                                        (selectedOption)="
+                                            recipe.variant.name = $event.label;
+                                            recipe.variant.uniqueName = $event.value;
+                                            checkIfVariantIsAlreadyUsed(recipe, $event, i)
+                                        "
+                                    >
+                                    </dropdown-field>
+                                </div>
+                                <div>
+                                    <input-field
+                                        class="width-280"
+                                        [type]="'text'"
+                                        [name]="'quantity_' + i"
+                                        [placeholder]="'Enter Output Quantity'"
+                                        [(ngModel)]="recipe.manufacturingQuantity"
+                                    ></input-field>
+                                </div>
+                                <div>
+                                    <dropdown-field
+                                        [name]="'unit' + i"
+                                        [placeholder]="'Select Output Stock Unit'"
+                                        [options]="recipe.units"
+                                        [defaultValue]="recipe.manufacturingUnitCode"
+                                        (selectedOption)="
+                                            recipe.manufacturingUnitCode = $event.label;
+                                            recipe.manufacturingUnitUniqueName = $event.value
+                                        "
+                                    >
+                                    </dropdown-field>
+                                </div>
                             </div>
-                            <div>
-                                <input-field
-                                    class="width-280"
-                                    [type]="'text'"
-                                    [name]="'quantity_' + i"
-                                    [placeholder]="'Enter Output Quantity'"
-                                    [(ngModel)]="recipe.manufacturingQuantity"
-                                ></input-field>
-                            </div>
-                            <div>
-                                <dropdown-field
-                                    [name]="'unit' + i"
-                                    [placeholder]="'Select Output Stock Unit'"
-                                    [options]="stock"
-                                    [defaultValue]="recipe.manufacturingUnitCode"
-                                    (selectedOption)="
-                                        recipe.manufacturingUnitCode = $event.label;
-                                        recipe.manufacturingUnitUniqueName = $event.value
-                                    "
-                                >
-                                </dropdown-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1 d-flex justify-content-center align-items-center">
+                    <span class="less-than-text"> <i class="icon-left"></i></span>
+                </div>
+                <div class="col-8 pr-0">
+                    <div class="row">
+                        <div class="consumption-details-wrapper w-100">
+                            <h1 class="section-head">Raw Stock</h1>
+                            <div class="mt-2">
+                                <table id="table-raw-stock">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ commonLocaleData?.app_name }}</th>
+                                            <th>{{ commonLocaleData?.app_variant }}</th>
+                                            <th>{{ commonLocaleData?.app_quantity }}</th>
+                                            <th>{{ commonLocaleData?.app_unit }}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let linkedStock of recipe.linkedStocks; let j = index">
+                                            <td>
+                                                <div>
+                                                    <select-field
+                                                        [cssClass]="'form-control mat-field-border'"
+                                                        [name]="'stock_' + i + '_' + j"
+                                                        [scrollableElementId]="'stock_' + i + '_' + j"
+                                                        [placeholder]="commonLocaleData?.app_select_stock"
+                                                        [options]="linkedStock.stocks"
+                                                        (selectedOption)="
+                                                            linkedStock.stockName = $event.label;
+                                                            linkedStock.stockUniqueName = $event.value;
+                                                            getStockVariants(linkedStock, $event);
+                                                            getStockUnits(linkedStock, $event.value, false)
+                                                        "
+                                                        [defaultValue]="linkedStock.stockName"
+                                                        [enableDynamicSearch]="true"
+                                                        [isPaginationEnabled]="true"
+                                                        (dynamicSearchedQuery)="getStocks(1, $event)"
+                                                        (scrollEnd)="stockScrollEnd(linkedStock)"
+                                                        [allowValueReset]="true"
+                                                        (onClear)="resetStocks(linkedStock)"
+                                                    >
+                                                    </select-field>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <select-field
+                                                        [cssClass]="'form-control mat-field-border'"
+                                                        [name]="'variant_' + i + '_' + j"
+                                                        [scrollableElementId]="'variant' + i + '_' + j"
+                                                        [placeholder]="commonLocaleData?.app_select_variant"
+                                                        [options]="linkedStock.variants"
+                                                        [defaultValue]="linkedStock.variant.name"
+                                                        (selectedOption)="
+                                                            linkedStock.variant.name = $event.label;
+                                                            linkedStock.variant.uniqueName = $event.value
+                                                        "
+                                                    >
+                                                    </select-field>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <text-field
+                                                        [cssClass]="'form-control mat-field-border'"
+                                                        class="text-right"
+                                                        [type]="'number'"
+                                                        [name]="'quantity_' + i + '_' + j"
+                                                        [placeholder]="'Enter Quantity'"
+                                                        [(ngModel)]="linkedStock.quantity"
+                                                    ></text-field>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <select-field
+                                                        [cssClass]="'form-control mat-field-border'"
+                                                        [name]="'unit_' + i + '_' + j"
+                                                        [placeholder]="'Select Stock Unit'"
+                                                        [options]="linkedStock.units"
+                                                        [defaultValue]="linkedStock.stockUnitCode"
+                                                        (selectedOption)="
+                                                            linkedStock.stockUnitCode = $event.label;
+                                                            linkedStock.stockUnitUniqueName = $event.value
+                                                        "
+                                                    >
+                                                    </select-field>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <i
+                                                    class="icon-add"
+                                                    aria-hidden="true"
+                                                    (click)="addNewLinkedStockInRecipe(recipe)"
+                                                ></i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-1 d-flex justify-content-center align-items-center">
-                <span class="less-than-text"> <i class="icon-left"></i></span>
-            </div>
-            <div class="col-8 pr-0">
-                <div class="row">
-                    <div class="consumption-details-wrapper w-100">
-                        <h1 class="section-head">Raw Stock</h1>
-                        <div class="mt-2">
-                            <table id="table-raw-stock">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Variant</th>
-                                        <th>Quantity</th>
-                                        <th>Unit</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let linkedStock of recipe.linkedStocks; let j = index">
-                                        <td>
-                                            <div>
-                                                <select-field
-                                                    [cssClass]="'form-control mat-field-border'"
-                                                    [name]="'stock_' + i + '_' + j"
-                                                    [placeholder]="'Select Stock'"
-                                                    [options]="stock"
-                                                    [defaultValue]="linkedStock.stockName"
-                                                    (selectedOption)="
-                                                        linkedStock.stockName = $event.label;
-                                                        linkedStock.stockUniqueName = $event.value
-                                                    "
-                                                >
-                                                </select-field>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <select-field
-                                                    [cssClass]="'form-control mat-field-border'"
-                                                    [name]="'variant_' + i + '_' + j"
-                                                    [placeholder]="'Select Variant'"
-                                                    [options]="stock"
-                                                    [defaultValue]="linkedStock.variant.name"
-                                                    (selectedOption)="
-                                                        linkedStock.variant.name = $event.label;
-                                                        linkedStock.variant.uniqueName = $event.value
-                                                    "
-                                                >
-                                                </select-field>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <text-field
-                                                    [cssClass]="'form-control mat-field-border'"
-                                                    class="text-right"
-                                                    [type]="'number'"
-                                                    [name]="'quantity_' + i + '_' + j"
-                                                    [placeholder]="'Enter Quantity'"
-                                                    [(ngModel)]="linkedStock.quantity"
-                                                ></text-field>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <select-field
-                                                    [cssClass]="'form-control mat-field-border'"
-                                                    [name]="'unit_' + i + '_' + j"
-                                                    [placeholder]="'Select Stock Unit'"
-                                                    [options]="stock"
-                                                    [defaultValue]="linkedStock.stockUnitCode"
-                                                    (selectedOption)="
-                                                        linkedStock.stockUnitCode = $event.label;
-                                                        linkedStock.stockUnitUniqueName = $event.value
-                                                    "
-                                                >
-                                                </select-field>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <i
-                                                class="icon-add"
-                                                aria-hidden="true"
-                                                (click)="addNewLinkedStockInRecipe(recipe)"
-                                            ></i>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+            <div class="row mt-2 add-recipe" *ngIf="receiptObject.manufacturingDetails?.length < variantsList?.length">
+                <button mat-button class="mb-2" (click)="addNewRecipe()">
+                    <span>+</span> {{ localeData?.add_recipe }}
+                </button>
             </div>
         </div>
-        <div class="row mt-2 add-recipe">
-            <button mat-button class="mb-2" (click)="addNewRecipe()"><span>+</span> Add Recipe</button>
-        </div>
-    </div>
-</section>
+    </section>
 
-<!-- view-mode -->
-<!-- <section class="create-recipe">
-    <div class="recipe-wrapper">
-        <div class="row">
-            <div class="col-3 pb-3">
-                <div>
-                    <p>Stock</p>
+    <!-- view-mode -->
+    <!-- <section class="create-recipe">
+        <div class="recipe-wrapper">
+            <div class="row">
+                <div class="col-3 pb-3">
+                    <div>
+                        <p>Stock</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row pb-4 manufacturing-border max-width-950">
-            <div class="col-3">
-                <div class="row">
-                    <div class="form-fields w-100">
-                        <div class="d-flex flex-column flex-wrap gap-between w-100">
-                            <h1 class="section-head p-0">Finished Stock</h1>
-                            <div>
-                                <p>Variant</p>
+            <div class="row pb-4 manufacturing-border max-width-950">
+                <div class="col-3">
+                    <div class="row">
+                        <div class="form-fields w-100">
+                            <div class="d-flex flex-column flex-wrap gap-between w-100">
+                                <h1 class="section-head p-0">Finished Stock</h1>
+                                <div>
+                                    <p>Variant</p>
+                                </div>
+                                <div class="d-flex">
+                                    <p class="mr-3">4500</p>
+                                    <p>722</p>
+                                </div>
                             </div>
-                            <div class="d-flex">
-                                <p class="mr-3">4500</p>
-                                <p>722</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1 d-flex justify-content-center mt-4">
+                    <span class="less-than-text"> <i class="icon-left"></i></span>
+                </div>
+                <div class="col-8 pr-0">
+                    <div class="row">
+                        <div class="consumption-details-wrapper w-100">
+                            <h1 class="section-head">Raw Stock</h1>
+                            <div class="mt-2 d-flex align-items-baseline">
+                                <table id="table-raw-stock" class="table-filled view-mode-table">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <p>Salt(White) :</p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <p>500(kg)</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="ml-4">
+                                    <button mat-stroked-button>Edit</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-1 d-flex justify-content-center mt-4">
-                <span class="less-than-text"> <i class="icon-left"></i></span>
-            </div>
-            <div class="col-8 pr-0">
-                <div class="row">
-                    <div class="consumption-details-wrapper w-100">
-                        <h1 class="section-head">Raw Stock</h1>
-                        <div class="mt-2 d-flex align-items-baseline">
-                            <table id="table-raw-stock" class="table-filled view-mode-table">
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div>
-                                                <p>Salt(White) :</p>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <p>500(kg)</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="ml-4">
-                                <button mat-stroked-button>Edit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="row mt-2 max-width-950 pl-4">
+                <button mat-stroked-button class="mb-2">Done</button>
             </div>
         </div>
-       <div class="row mt-2 max-width-950 pl-4">
-            <button mat-stroked-button class="mb-2">Done</button>
-        </div>
-    </div>
-</section> -->
+    </section> -->
+</ng-container>

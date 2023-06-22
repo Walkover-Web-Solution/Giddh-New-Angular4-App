@@ -46,6 +46,7 @@
                                                 (ngModelChange)="checkSpacingValidation(stockForm.name)"
                                                 [required]="true"
                                                 [autocomplete]="'off'"
+                                                [showError]="isFormSubmitted && !stockForm.name"
                                             >
                                             </input-field>
                                         </div>
@@ -59,6 +60,8 @@
                                                     stockUnitName = $event.label
                                                 "
                                                 [defaultValue]="stockUnitName"
+                                                [required]="true"
+                                                [showError]="isFormSubmitted && !stockForm.stockUnitUniqueName"
                                             >
                                             </dropdown-field>
                                         </div>
@@ -286,15 +289,16 @@
                                                                                     [name]="
                                                                                         'variantFixedAssetsUnitRate' + j
                                                                                     "
-                                                                                    [type]="'number'"
+                                                                                    [type]="'text'"
                                                                                     [placeholder]="
                                                                                         commonLocaleData?.app_rate
                                                                                     "
                                                                                     [(ngModel)]="
                                                                                         variantFixedAssetsUnitRate.rate
                                                                                     "
-                                                                                    [showError]="stockCreateEditForm.form.controls?.['variantFixedAssetsUnitRate' +
-                                                                                            j]?.invalid && checkUnitRateValidation[0]?.fixedAssets"
+                                                                                    [prefix]="companyCurrencySymbol"
+                                                                                    [mask]="inputMaskFormat"
+                                                                                    [useMask]="true"
                                                                                 >
                                                                                 </input-field>
                                                                             </div>
@@ -498,15 +502,16 @@
                                                                                             'variantPurchaseUnitRate' +
                                                                                             j
                                                                                         "
-                                                                                        [type]="'number'"
+                                                                                        [type]="'text'"
                                                                                         [placeholder]="
                                                                                             commonLocaleData?.app_rate
                                                                                         "
                                                                                         [(ngModel)]="
                                                                                             variantPurchaseUnitRate.rate
                                                                                         "
-                                                                                        [showError]="stockCreateEditForm.form.controls?.['variantPurchaseUnitRate' +
-                                                                                                j]?.invalid && checkUnitRateValidation[0]?.purchase"
+                                                                                        [prefix]="companyCurrencySymbol"
+                                                                                        [mask]="inputMaskFormat"
+                                                                                        [useMask]="true"
                                                                                     >
                                                                                     </input-field>
                                                                                 </div>
@@ -699,15 +704,15 @@
                                                                                         [name]="
                                                                                             'variantSalesUnitRate' + j
                                                                                         "
-                                                                                        [type]="'number'"
                                                                                         [placeholder]="
                                                                                             commonLocaleData?.app_rate
                                                                                         "
                                                                                         [(ngModel)]="
                                                                                             variantSalesUnitRate.rate
                                                                                         "
-                                                                                        [showError]="stockCreateEditForm.form.controls?.['variantSalesUnitRate' +
-                                                                                            j]?.invalid && checkUnitRateValidation[0]?.sales"
+                                                                                        [prefix]="companyCurrencySymbol"
+                                                                                        [mask]="inputMaskFormat"
+                                                                                        [useMask]="true"
                                                                                     >
                                                                                     </input-field>
                                                                                 </div>
@@ -815,13 +820,18 @@
                                                                                 [(ngModel)]="option.name"
                                                                                 [type]="'text'"
                                                                                 [required]="true"
-                                                                                [showError]="stockCreateEditForm.form.controls?.['option-'+i]?.invalid && checkOptionValidation"
+                                                                                [showError]="
+                                                                                    isFormSubmitted && !option.name
+                                                                                "
                                                                             >
                                                                             </input-field>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-2">
-                                                                        <div class="delete-btn-wrapper">
+                                                                        <div
+                                                                            class="delete-btn-wrapper"
+                                                                            *ngIf="stockForm.options?.length > 1"
+                                                                        >
                                                                             <button
                                                                                 mat-icon-button
                                                                                 class="chip-close-btn"
@@ -1020,7 +1030,10 @@
                                                             </th>
                                                         </tr>
                                                         <ng-container
-                                                            *ngFor="let variant of stockForm.variants; let i = index"
+                                                            *ngFor="
+                                                                let variant of stockForm.variants | sortBy: ['archive'];
+                                                                let i = index
+                                                            "
                                                         >
                                                             <tr class="variant-row" *ngIf="variant.name">
                                                                 <td class="variant-name-column">{{ variant.name }}</td>
@@ -1059,7 +1072,10 @@
                                                                         [(ngModel)]="
                                                                             variant.warehouseBalance[0].openingAmount
                                                                         "
-                                                                        [type]="'number'"
+                                                                        [type]="'text'"
+                                                                        [prefix]="companyCurrencySymbol"
+                                                                        [mask]="inputMaskFormat"
+                                                                        [useMask]="true"
                                                                     >
                                                                     </text-field>
                                                                 </td>
@@ -1111,8 +1127,10 @@
                                                                                 [(ngModel)]="
                                                                                     variantPurchaseUnitRate.rate
                                                                                 "
-                                                                                [type]="'number'"
-                                                                                [showError]="stockCreateEditForm.form.controls?.[ 'variantPurchaseUnitRate' + i + '_' + j]?.invalid && checkUnitRateValidation[i]?.purchase"
+                                                                                [type]="'text'"
+                                                                                [prefix]="companyCurrencySymbol"
+                                                                                [mask]="inputMaskFormat"
+                                                                                [useMask]="true"
                                                                             >
                                                                             </text-field>
                                                                             <select-field
@@ -1218,8 +1236,10 @@
                                                                                     'variantSalesUnitRate' + i + '_' + j
                                                                                 "
                                                                                 [(ngModel)]="variantSalesUnitRate.rate"
-                                                                                [type]="'number'"
-                                                                                [showError]="stockCreateEditForm.form.controls?.[ 'variantSalesUnitRate' + i + '_' + j]?.invalid && checkUnitRateValidation[i]?.sales"
+                                                                                [type]="'text'"
+                                                                                [prefix]="companyCurrencySymbol"
+                                                                                [mask]="inputMaskFormat"
+                                                                                [useMask]="true"
                                                                             >
                                                                             </text-field>
                                                                             <select-field
@@ -1313,7 +1333,7 @@
                                                                                 justify-content-between
                                                                             "
                                                                         >
-                                                                            <input-field
+                                                                            <text-field
                                                                                 [cssClass]="'text-right unit-amount'"
                                                                                 [
                                                                                 placeholder]="'0.00'"
@@ -1326,10 +1346,12 @@
                                                                                 [(ngModel)]="
                                                                                     variantFixedAssetsUnitRate.rate
                                                                                 "
-                                                                                [type]="'number'"
-                                                                                [showError]="stockCreateEditForm.form.controls?.[ 'variantFixedAssetsUnitRate' + j + '_' + i]?.invalid && checkUnitRateValidation[i]?.fixedAssets"
+                                                                                [type]="'text'"
+                                                                                [prefix]="companyCurrencySymbol"
+                                                                                [mask]="inputMaskFormat"
+                                                                                [useMask]="true"
                                                                             >
-                                                                            </input-field>
+                                                                            </text-field>
                                                                             <select-field
                                                                                 [name]="
                                                                                     'variantFixedAssetsUnit' +
@@ -1514,7 +1536,16 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.manufacturing">
-                                    <create-recipe [variants]="stockForm.variants"></create-recipe>
+                                    <div class="pd-l15 pt-3 mr-b5" *ngIf="!queryParams?.stockUniqueName">
+                                        <button mat-stroked-button color="primary" (click)="createStock(true)">
+                                            Save stock and Create recipe
+                                        </button>
+                                    </div>
+                                    <create-recipe
+                                        *ngIf="queryParams?.stockUniqueName"
+                                        [stock]="stockForm"
+                                        [inventoryType]="stockForm.type"
+                                    ></create-recipe>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.other">
                                     <div class="tab-container-new px-3">
@@ -1608,10 +1639,13 @@
                                                 <ng-container *ngIf="!isVariantAvailable">
                                                     <div class="col-sm-6 col-lg-3">
                                                         <input-field
-                                                            [name]="'openingAmount'"
-                                                            [type]="'text'"
-                                                            [placeholder]="localeData?.opening_amount"
-                                                            [(ngModel)]="stockForm.openingAmount"
+                                                            [name]="'openingQuantity'"
+                                                            [type]="'number'"
+                                                            [placeholder]="localeData?.opening_quantity"
+                                                            [(ngModel)]="
+                                                                stockForm.variants[0].warehouseBalance[0]
+                                                                    .openingQuantity
+                                                            "
                                                         >
                                                         </input-field>
                                                     </div>
@@ -1620,7 +1654,12 @@
                                                             [name]="'openingAmount'"
                                                             [type]="'text'"
                                                             [placeholder]="localeData?.opening_amount"
-                                                            [(ngModel)]="stockForm.openingAmount"
+                                                            [(ngModel)]="
+                                                                stockForm.variants[0].warehouseBalance[0].openingAmount
+                                                            "
+                                                            [prefix]="companyCurrencySymbol"
+                                                            [mask]="inputMaskFormat"
+                                                            [useMask]="true"
                                                         >
                                                         </input-field>
                                                     </div>
@@ -4718,7 +4757,7 @@
                         *ngIf="!queryParams?.stockUniqueName"
                         mat-stroked-button
                         color="primary"
-                        (click)="createStock(stockCreateEditForm)"
+                        (click)="createStock()"
                     >
                         {{ commonLocaleData?.app_create }}
                     </button>
