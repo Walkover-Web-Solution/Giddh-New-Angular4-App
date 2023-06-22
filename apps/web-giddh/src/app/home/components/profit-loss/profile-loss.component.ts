@@ -262,15 +262,14 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         let totalIncome = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.totalIncome) + "/-";
         let totalExpense = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.totalExpense) + "/-";
         let label = [totalIncome,totalExpense];
-
         let data = [this.totalIncome, this.totalExpense]
 
-        const dataChart = new Chart("profitLossChartCanvas", {
+        this.chart = new Chart("profitLossChartCanvas", {
             type: 'doughnut',            
             data: {
                 labels: label,
                 datasets: [{
-                    label: 'Profit & Loss',
+                    label: '',
                     data: data,
                     backgroundColor: ['#FED46A', '#4693F1'],
                     hoverOffset: 18,
@@ -285,8 +284,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                     legend: {
                       display: false
                     },
-                    tooltip: {
-                        
+                    tooltip: {                        
                         backgroundColor: 'rgba(255, 255, 255,0.8)',
                         borderColor: 'rgb(95, 172, 255)',
                         bodyFont: {
@@ -304,28 +302,12 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 maintainAspectRatio: false,
                 spacing:1,
                 cutout:50,  
-                radius: '95%'        
+                radius: '95%'
             } 
             });
 
             this.requestInFlight = false;
             this.cdRef.detectChanges();
-
-
-            const doughnutLabel = {
-                id: 'profitLossChartCanvas',
-                beforeDatasetsDraw(chart, args ,pluginOptions) {
-                  const { ctx, dataChart } = chart;
-                  ctx.save(); 
-                  const xCoor = chart.getDatasetMeta(0).dataChart[0].x;
-                  const yCoor = chart.getDatasetMeta(0).dataChart[0].y;
-                  ctx.font = 'bold 30px sans-serif';
-                  ctx.fillStyle = 'rgba(54, 162, 235, 1)';
-                  ctx.textAlign = 'center';
-                  ctx.textBaseline = 'middle';
-                  ctx.fillText(`jskd`, xCoor, yCoor);
-                }
-              }
      }
      
 }

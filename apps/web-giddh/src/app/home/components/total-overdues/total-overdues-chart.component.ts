@@ -275,7 +275,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         let invoiceDue = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.invoiceDue) + "/-";
         let billDue = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.billDue) + "/-";
         let label = [invoiceDue,billDue];
-
         let data = [this.invoiceDue, this.billDue];
 
         this.chart = new Chart("totaloverDueChartCanvas", {
@@ -300,7 +299,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
                     },
                     tooltip: {  
                         backgroundColor: 'rgba(255, 255, 255,0.8)',
-                        borderColor: 'rgb(37, 202, 200)',
+                        borderColor: 'rgb(248, 92, 136)',
                         bodyFont: {
                             size: 0,
                         }, 
@@ -311,8 +310,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
                         },
                         displayColors: false,
                     }
-                },
-                
+                },                
                 responsive: true,
                 maintainAspectRatio: false,
                 spacing:1,
