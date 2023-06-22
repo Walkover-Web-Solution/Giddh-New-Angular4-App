@@ -14317,3 +14317,11 @@ body.hide-scroll-body.master-page {
 .cdk-virtual-scroll-content-wrapper {
     width: 100%;
 }
+
+/*=========== Code to handle Screen Resolution ======Start=======*/
+@media only screen and (max-width: 1440px) {
+    body {
+        zoom: 85%;
+    }
+}
+/*=========== Code to handle Screen Resolution =======End========*/
