@@ -59,6 +59,8 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     private onChangeCallback: (_: any) => void = noop;
     /** True if field is autocomplete */
     @Input() public autocomplete: string;
+    /** Holds mat suffic */
+    @Input() public matSuffix: any;
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,

@@ -24,5 +24,7 @@
     "select_operation": "Select Operation",
     "enter_value": "Enter Value",
     "confirm_delete_manufacturing": "Do you want to delete the manufacturing?",
-    "info_message": "To edit data, go to branch mode."
+    "info_message": "To edit data, go to branch mode.",
+    "add_recipe": "Add Recipe",
+    "variant_already_selected": "Variant is already selected."
 }

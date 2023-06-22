@@ -263,4 +263,11 @@ export class ManufacturingService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
     }
+
+    public loadStockUnits(stockUniqueName: string): Observable<Array<any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + MANUFACTURING_API.GET_STOCK_UNITS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
+        return this.http.get(url).pipe(map((res) => res.body),catchError(e => this.errorHandler.HandleCatch<string, string>(e, '')));
+    }
 }
