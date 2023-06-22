@@ -307,9 +307,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     public addClassForDropdown(): void {
         setTimeout(() => {
             if (document.querySelectorAll(".cdk-overlay-pane")?.length) {
-                document.querySelectorAll(".cdk-overlay-pane")?.forEach(element => {
-                    element.classList.add("dropdown-position");
-                });
+                document.querySelectorAll(".cdk-overlay-pane")[document.querySelectorAll(".cdk-overlay-pane")?.length - 1].classList.add("dropdown-position");
             }
         }, 10);
     }
