@@ -14097,10 +14097,10 @@ body.hide-scroll-body.master-page {
     }
 }
 
-/*=========== Code to handle Resolution at 1366 X 768 ======Start=======*/
-@media only screen and (max-width: 1366px) {
+/*=========== Code to handle Screen Resolution ======Start=======*/
+@media only screen and (max-width: 1440px) {
     body {
-        zoom: 80%;
+        zoom: 85%;
     }
 }
-/*=========== Code to handle Resolution at 1366 X 768 =======End========*/
+/*=========== Code to handle Screen Resolution =======End========*/
