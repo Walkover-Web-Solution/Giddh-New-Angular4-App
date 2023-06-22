@@ -38,6 +38,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public maxlength: number;
     @Input() public readonly: boolean;
     @Input() public type: string = "text";
+    /** Adds red border around field if true */
     @Input() public showError: boolean = false;
     /** It will focus in the text field */
     @Input() public autoFocus: boolean = false;

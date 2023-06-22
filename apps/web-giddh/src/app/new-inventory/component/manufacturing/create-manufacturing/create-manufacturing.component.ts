@@ -268,7 +268,7 @@ export class CreateManufacturingComponent implements OnInit {
                 this.manufacturingObject.manufacturingDetails[0].manufacturingUnitCode = response.body.manufacturingDetails[0].manufacturingUnitCode;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingUnitUniqueName = response.body.manufacturingDetails[0].manufacturingUnitUniqueName;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = response.body.manufacturingDetails[0].manufacturingQuantity;
-                this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = response.body.manufacturingDetails[0].manufacturingMultipleOf;
+                this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = response.body.manufacturingDetails[0].manufacturingQuantity;
 
                 response.body.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
                     let amount = linkedStock.rate * linkedStock.quantity;
@@ -768,7 +768,7 @@ export class CreateManufacturingComponent implements OnInit {
                 this.manufacturingObject.manufacturingDetails[0].variant.name = response.body.variant.name;
                 this.manufacturingObject.manufacturingDetails[0].variant.uniqueName = response.body.variant.uniqueName;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = Number(response.body.manufacturingQuantity);
-                this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = response.body.manufacturingMultipleOf;
+                this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = Number(response.body.manufacturingQuantity);
 
                 this.selectedInventoryType = response.body.inventoryType;
 
@@ -966,14 +966,14 @@ export class CreateManufacturingComponent implements OnInit {
      * @memberof CreateManufacturingComponent
      */
     public updateRawStocksQuantity(): void {
-        const finishedStockQuantity = (!isNaN(this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity) ? Number(this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity) : 1) / this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf;
+        const finishedStockQuantity = ((Number(this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity)) ? Number(this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity) : 1) / this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf;
 
         this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
             let selectedStock = this.initialLinkedStocks?.find(stock => stock.stockUniqueName === linkedStock.stockUniqueName);
 
             if (selectedStock) {
-                linkedStock.quantity = selectedStock.quantity * finishedStockQuantity;
-                linkedStock.amount = linkedStock.quantity * linkedStock.rate;
+                linkedStock.quantity = giddhRoundOff(selectedStock.quantity * finishedStockQuantity, this.giddhBalanceDecimalPlaces);
+                linkedStock.amount = giddhRoundOff(linkedStock.quantity * linkedStock.rate, this.giddhBalanceDecimalPlaces);
             }
         });
     }

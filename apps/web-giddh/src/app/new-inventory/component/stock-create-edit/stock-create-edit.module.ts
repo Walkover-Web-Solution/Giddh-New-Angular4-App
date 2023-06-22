@@ -25,6 +25,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { RecipeModule } from "../recipe/recipe.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { SortByModule } from "../../../shared/helpers/pipes/sort-by/sort-by.module";
 
 @NgModule({
     declarations: [
@@ -56,7 +57,8 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
         MatTooltipModule,
         RecipeModule,
         DragDropModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        SortByModule
     ],
     exports: [
         StockCreateEditComponent

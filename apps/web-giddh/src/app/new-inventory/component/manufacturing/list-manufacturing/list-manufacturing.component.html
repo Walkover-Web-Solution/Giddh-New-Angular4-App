@@ -40,7 +40,7 @@
                                 >
                                 </dropdown-field>
                             </div>
-                            <div class="list-header">
+                            <div class="list-header" *ngIf="allWarehouses?.length > 1">
                                 <dropdown-field
                                     class="max-width-230"
                                     [cssClass]="'form-control'"

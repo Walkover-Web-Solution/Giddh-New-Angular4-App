@@ -9,6 +9,7 @@ import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module'
 import { MatButtonModule } from '@angular/material/button';
 import { RecipeRoutingModule } from './recipe.routing.module';
 import { MatChipsModule } from '@angular/material/chips';
+import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
 
 @NgModule({
     imports: [
@@ -18,7 +19,8 @@ import { MatChipsModule } from '@angular/material/chips';
         FormFieldsModule,
         MatButtonModule,
         MatChipsModule,
-        RecipeRoutingModule
+        RecipeRoutingModule,
+        TranslateDirectiveModule
     ],
     exports: [
         CreateRecipeComponent,
