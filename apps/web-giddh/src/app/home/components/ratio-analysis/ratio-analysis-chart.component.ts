@@ -71,7 +71,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
      
         /* ==================================CURRENT RATIO CHART CONFIG============================== */
         let currentRatioLabels = [this.localeData?.current_assets, this.localeData?.current_liabilities];
-        let currentRatioData = [this.ratioObj?.currentRatio, 100];
+        let currentRatioData = [64, 36];
         let currentRatioVal = this.ratioObj?.currentRatio;
        
         const currentRatioCenterLabel = {
@@ -111,6 +111,12 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                       display: false
                     },
                     tooltip: { 
+                      callbacks: {
+                        label: (context) => {
+                                let value  = context.parsed;
+                                return `${value}%`;
+                        }
+                    },
                       padding: 10, 
                       backgroundColor: 'rgba(255, 255, 255,0.8)',
                       borderColor: 'rgb(69, 135, 214)',
@@ -174,7 +180,13 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                     legend: {
                       display: false
                     },
-                    tooltip: {  
+                    tooltip: { 
+                      callbacks: {
+                        label: (context) => {
+                                let value  = context.parsed;
+                                return `${value}%`;
+                        }
+                    }, 
                       padding: 10,
                       backgroundColor: 'rgba(255, 255, 255,0.8)',
                       borderColor: 'rgb(239, 187, 53)',
@@ -238,6 +250,12 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                       display: false
                     },
                     tooltip: {  
+                      callbacks: {
+                        label: (context) => {
+                                let value  = context.parsed;
+                                return `${value}%`;
+                        }
+                    },
                       padding: 10,
                       backgroundColor: 'rgba(255, 255, 255,0.8)',
                       borderColor: 'rgb(217, 54, 100)',
@@ -301,6 +319,12 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                       display: false
                     },
                     tooltip: {  
+                      callbacks: {
+                        label: (context) => {
+                                let value  = context.parsed;
+                                return `${value}%`;
+                        }
+                    },
                       padding: 10,
                       backgroundColor: 'rgba(255, 255, 255,0.8)',
                       borderColor: 'rgb(8, 126, 125)',

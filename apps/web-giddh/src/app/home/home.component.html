@@ -20,10 +20,6 @@
                     <div class="col-12 col-lg-12">
                         <revenue-chart #revenue></revenue-chart>
                     </div>
-                    <!-- ratio analysis -->
-                    <div class="col-12 col-lg-12" *ngIf="!hideallcharts">
-                        <ratio-analysis-chart #ratio></ratio-analysis-chart>
-                    </div>
                     <!-- Debtors / Creditors table -->
                     <div class="col-12 col-lg-12" *ngIf="!hideallcharts">
                         <cr-dr-list [initializeDateWithUniversalDate]="true"></cr-dr-list>
