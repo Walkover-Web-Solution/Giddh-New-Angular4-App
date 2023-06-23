@@ -88,12 +88,12 @@
                                     </div>
                                     <div class="d-flex mr-l15">
                                         <button
-                                            mat-raised-button
+                                            mat-stroked-button
+                                            class="btn btn-danger"
                                             [disabled]="
                                                 currentOrganizationType === 'COMPANY' &&
                                                 currentCompanyBranches?.length > 2
                                             "
-                                            class="btn btn-danger"
                                             id="delete-ledger-mobile-view"
                                             (click)="performBulkAction('delete')"
                                             [matTooltip]="commonLocaleData?.app_delete"
@@ -104,7 +104,7 @@
                                         </button>
 
                                         <button
-                                            mat-raised-button
+                                            mat-stroked-button
                                             [disabled]="
                                                 currentOrganizationType === 'COMPANY' &&
                                                 currentCompanyBranches?.length > 2
@@ -120,7 +120,7 @@
                                         </button>
                                     </div>
                                     <button
-                                        mat-raised-button
+                                        mat-stroked-button
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
@@ -238,7 +238,7 @@
                                     *ngIf="checkedTrxWhileHovering?.length > 0 && !isMobileScreen"
                                 >
                                     <button
-                                        mat-raised-button
+                                        mat-stroked-button
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
@@ -253,7 +253,7 @@
                                     </button>
 
                                     <button
-                                        mat-raised-button
+                                        mat-stroked-button
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
@@ -268,7 +268,7 @@
                                     </button>
 
                                     <button
-                                        mat-raised-button
+                                        mat-stroked-button
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
@@ -2517,9 +2517,10 @@
                 <div>
                     <div class="text-right mr-t1 mr-b1" [hidden]="!isBankOrCashAccount">
                         <button
-                            mat-button
+                            mat-stroked-button
+                            color="primary"
                             [hidden]="!closingBalanceBeforeReconcile || showLoader"
-                            class="btn btn-primary btn-sm mr-0"
+                            class="btn-sm mr-0"
                             (click)="getReconciledBack()"
                         >
                             {{ commonLocaleData?.app_back }}
@@ -2881,7 +2882,7 @@
             <!-- modal sections -->
             <div *ngIf="isShowLedgerColumnarReportTable">
                 <div class="back-btn text-right pr-1 mt-1 mr-b1">
-                    <button mat-button class="btn btn-default bdr" (click)="isShowLedgerColumnarReportTable = false">
+                    <button mat-stroked-button class="bdr" (click)="isShowLedgerColumnarReportTable = false">
                         {{ commonLocaleData?.app_back }}
                     </button>
                 </div>

@@ -9,7 +9,7 @@
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <ng-container *ngIf="!showLoader">
         <div class="relative create-custom-field-page mr-t2">
-            <button mat-flat-button [disableRipple]="true" class="back-to-page" (click)="redirectToGetAllPage()">
+            <button mat-stroked-button [disableRipple]="true" class="back-to-page" (click)="redirectToGetAllPage()">
                 <i class="back-left icon-left"></i>
                 {{ commonLocaleData?.app_back }}
             </button>
@@ -163,15 +163,17 @@
                     <div class="button-group">
                         <ng-container *ngIf="customFieldUniqueName">
                             <button
-                                mat-button
-                                class="btn btn-primary min-width-100 bdr-radius-50"
+                                mat-stroked-button
+                                color="primary"
+                                class="min-width-100 bdr-radius-50"
                                 (click)="redirectToGetAllPage()"
                             >
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                             <button
-                                mat-button
-                                class="btn btn-success min-width-100 bdr-radius-50"
+                                mat-stroked-button
+                                color="primary"
+                                class="min-width-100 bdr-radius-50"
                                 [disabled]="
                                     customFieldCreateEditForm.invalid ||
                                     !customFieldRequest.fieldType?.type ||
@@ -184,15 +186,17 @@
                         </ng-container>
                         <ng-container *ngIf="!customFieldUniqueName">
                             <button
-                                mat-button
-                                class="btn btn-primary min-width-100 bdr-radius-50"
+                                mat-stroked-button
+                                color="primary"
+                                class="min-width-100 bdr-radius-50"
                                 (click)="resetForm(customFieldCreateEditForm)"
                             >
                                 {{ commonLocaleData?.app_clear }}
                             </button>
                             <button
-                                mat-button
-                                class="btn btn-success min-width-100 bdr-radius-50"
+                                mat-stroked-button
+                                color="primary"
+                                class="min-width-100 bdr-radius-50"
                                 [disabled]="
                                     customFieldCreateEditForm.invalid ||
                                     !customFieldRequest.fieldType?.type ||

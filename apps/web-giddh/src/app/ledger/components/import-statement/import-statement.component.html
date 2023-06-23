@@ -80,9 +80,10 @@
             </div>
             <div class="modal-wrap mr-b5">
                 <button
-                    mat-button
+                    mat-stroked-button
+                    color="primary"
                     [disabled]="!postRequest.file"
-                    class="btn btn-success mr-t1 pull-left"
+                    class="mr-t1 pull-left"
                     (click)="importStatement()"
                 >
                     {{ inputData?.localeData?.upload }}
