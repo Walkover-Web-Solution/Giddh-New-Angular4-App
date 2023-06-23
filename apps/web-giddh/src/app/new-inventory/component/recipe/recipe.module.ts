@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RecipeRoutingModule } from './recipe.routing.module';
 import { MatChipsModule } from '@angular/material/chips';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [
@@ -20,7 +21,8 @@ import { TranslateDirectiveModule } from '../../../theme/translate/translate.dir
         MatButtonModule,
         MatChipsModule,
         RecipeRoutingModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        FormsModule
     ],
     exports: [
         CreateRecipeComponent,
