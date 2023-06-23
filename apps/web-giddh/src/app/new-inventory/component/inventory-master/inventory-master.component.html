@@ -1,9 +1,11 @@
 <div class="mat-grid-wrapper">
-    <!-- <div class="d-flex justify-content-end inventory-search mt-4">
-        <text-field [type]="'text'" [cssClass]="
-            'form-control mat-field-border cash-invoice-input'
-        " [placeholder]="'Search Accounts'"></text-field>
-    </div> -->
+    <div class="d-flex inventory-search">
+        <text-field
+            [type]="'text'"
+            [cssClass]="'form-control mat-field-border cash-invoice-input'"
+            [placeholder]="'Search Accounts'"
+        ></text-field>
+    </div>
     <div class="mat-list-wrap">
         <div class="inventory-sideabar border-grid">
             <perfect-scrollbar
@@ -109,19 +111,6 @@
                             <a href="javascript:void(0)">Stock</a>
                         </li>
                     </ol>
-                </div>
-                <div>
-                    <input
-                        type="text"
-                        name="grpSrch"
-                        #grpSrch
-                        id="grpSrch"
-                        class="form-control"
-                        [placeholder]="'Search accounts'"
-                        financial-accordion="search"
-                        [style.width.px]="260"
-                        autocomplete="off"
-                    />
                 </div>
             </div>
             <div
