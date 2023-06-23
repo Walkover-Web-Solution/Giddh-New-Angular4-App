@@ -73,7 +73,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
         private elementRef: ElementRef<HTMLElement>,
         private changeDetectionRef: ChangeDetectorRef
     ) {
-        if (this.ngControl != null) {
+        if (this.ngControl !== null) {
             this.ngControl.valueAccessor = this;
         }
     }
@@ -96,14 +96,14 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      *
      * @memberof InputFieldComponent
      */
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.stateChanges.complete();
     }
 
     //////// ControlValueAccessor //////////
 
     /**
-     * This is used to get the inner value of datepicker
+     * This is used to get the inner value of field
      *
      * @type {*}
      * @memberof InputFieldComponent

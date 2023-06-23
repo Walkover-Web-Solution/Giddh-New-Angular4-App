@@ -968,7 +968,8 @@
                                                     *ngIf="
                                                         stockForm.variants?.length > 0 &&
                                                         (stockForm.options?.length > 1 ||
-                                                            (stockForm.options[0].name &&
+                                                            (stockForm.options?.length > 0 &&
+                                                                stockForm.options[0].name &&
                                                                 stockForm.options[0].values.length))
                                                     "
                                                 >
@@ -1544,6 +1545,7 @@
                                     <create-recipe
                                         *ngIf="queryParams?.stockUniqueName"
                                         [stock]="stockForm"
+                                        [variants]="stockForm.variants"
                                         [inventoryType]="stockForm.type"
                                     ></create-recipe>
                                 </mat-tab>

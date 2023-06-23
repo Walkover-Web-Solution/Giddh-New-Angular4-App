@@ -577,7 +577,7 @@ export class CreateManufacturingComponent implements OnInit {
 
         this.totals.totalRate = totalRate;
         this.totals.totalAmount = totalAmount;
-        this.totals.costPerItem = giddhRoundOff((totalAmount / (this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity * this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf)), this.giddhBalanceDecimalPlaces);
+        this.totals.costPerItem = giddhRoundOff((totalAmount / this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity), this.giddhBalanceDecimalPlaces);
 
         this.changeDetectionRef.detectChanges();
     }
