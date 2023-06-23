@@ -902,7 +902,6 @@
                                                                             <div class="data-wrap">
                                                                                 <div class="dot-img">
                                                                                     <img
-                                                                                        style="width: '20px'"
                                                                                         src="../../../../assets/images/drag-dots-com.svg"
                                                                                         alt=""
                                                                                     />
@@ -969,7 +968,7 @@
                                                         stockForm.variants?.length > 0 && stockForm.variants[0]?.name
                                                     "
                                                 >
-                                                    <table class="stock-table font-15" style="margin-left: 2px">
+                                                    <table class="stock-table font-15">
                                                         <tr>
                                                             <th class="variant-name-column table-heading-color">
                                                                 {{ localeData?.variant_name
@@ -1103,13 +1102,7 @@
                                                                             let j = index
                                                                         "
                                                                     >
-                                                                        <div
-                                                                            class="
-                                                                                sales-purchase-wrapper
-                                                                                d-flex
-                                                                                justify-content-between
-                                                                            "
-                                                                        >
+                                                                        <div class="sales-purchase-wrapper d-flex">
                                                                             <text-field
                                                                                 [cssClass]="
                                                                                     'text-right unit-amount form-control'
@@ -1217,13 +1210,7 @@
                                                                             let j = index
                                                                         "
                                                                     >
-                                                                        <div
-                                                                            class="
-                                                                                sales-purchase-wrapper
-                                                                                d-flex
-                                                                                justify-content-between
-                                                                            "
-                                                                        >
+                                                                        <div class="sales-purchase-wrapper d-flex">
                                                                             <text-field
                                                                                 [cssClass]="
                                                                                     'text-right unit-amount form-control'
@@ -1323,13 +1310,7 @@
                                                                             let j = index
                                                                         "
                                                                     >
-                                                                        <div
-                                                                            class="
-                                                                                sales-purchase-wrapper
-                                                                                d-flex
-                                                                                justify-content-between
-                                                                            "
-                                                                        >
+                                                                        <div class="sales-purchase-wrapper d-flex">
                                                                             <text-field
                                                                                 [cssClass]="'text-right unit-amount'"
                                                                                 [
@@ -4740,50 +4721,48 @@
             </div>
         </div>
         <div class="inner-content-footer">
-            <div class="d-flex">
-                <div class="button-group">
-                    <button
-                        *ngIf="!queryParams?.stockUniqueName"
-                        mat-stroked-button
-                        class="mr-3"
-                        (click)="resetForm(stockCreateEditForm)"
-                    >
-                        {{ commonLocaleData?.app_reset }}
-                    </button>
-                    <button
-                        *ngIf="!queryParams?.stockUniqueName"
-                        mat-stroked-button
-                        color="primary"
-                        (click)="createStock()"
-                    >
-                        {{ commonLocaleData?.app_create }}
-                    </button>
-                    <button
-                        *ngIf="queryParams?.stockUniqueName"
-                        mat-stroked-button
-                        class="btn-primary min-width-100"
-                        (click)="cancelEdit()"
-                    >
-                        {{ commonLocaleData?.app_close }}
-                    </button>
-                    <button
-                        *ngIf="queryParams?.stockUniqueName"
-                        mat-stroked-button
-                        class="btn-danger min-width-100"
-                        (click)="deleteStock()"
-                    >
-                        {{ commonLocaleData?.app_delete }}
-                    </button>
-                    <button
-                        *ngIf="queryParams?.stockUniqueName"
-                        mat-stroked-button
-                        class="btn-success min-width-100"
-                        (click)="updateStock(stockCreateEditForm)"
-                        [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError"
-                    >
-                        {{ commonLocaleData?.app_update }}
-                    </button>
-                </div>
+            <div class="button-group d-flex">
+                <button
+                    *ngIf="!queryParams?.stockUniqueName"
+                    mat-stroked-button
+                    class="mr-3"
+                    (click)="resetForm(stockCreateEditForm)"
+                >
+                    {{ commonLocaleData?.app_reset }}
+                </button>
+                <button
+                    *ngIf="!queryParams?.stockUniqueName"
+                    mat-stroked-button
+                    color="primary"
+                    (click)="createStock()"
+                >
+                    {{ commonLocaleData?.app_create }}
+                </button>
+                <button
+                    *ngIf="queryParams?.stockUniqueName"
+                    mat-stroked-button
+                    class="btn-primary min-width-100"
+                    (click)="cancelEdit()"
+                >
+                    {{ commonLocaleData?.app_close }}
+                </button>
+                <button
+                    *ngIf="queryParams?.stockUniqueName"
+                    mat-stroked-button
+                    class="btn-danger min-width-100"
+                    (click)="deleteStock()"
+                >
+                    {{ commonLocaleData?.app_delete }}
+                </button>
+                <button
+                    *ngIf="queryParams?.stockUniqueName"
+                    mat-stroked-button
+                    class="btn-success min-width-100"
+                    (click)="updateStock(stockCreateEditForm)"
+                    [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError"
+                >
+                    {{ commonLocaleData?.app_update }}
+                </button>
             </div>
         </div>
     </ng-container>
