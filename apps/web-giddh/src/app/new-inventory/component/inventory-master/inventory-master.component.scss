@@ -4,9 +4,17 @@
     flex-wrap: wrap;
     background-color: var(--color-white);
     height: calc(100vh - 90px);
+    position: relative;
     .inventory-search {
+        position: absolute;
+        bottom: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 99;
         text-field {
-            min-width: 250px;
+            .form-control {
+                height: 42px;
+            }
         }
     }
     .mat-list-wrap {
