@@ -37,17 +37,19 @@
                                     <div class="dis mr-r15 pull-left on-desktop-view">
                                         <div class="btn-group pull-right">
                                             <button
-                                                mat-raised-button
+                                                mat-stroked-button
+                                                color="primary"
                                                 *ngIf="activeTab == 'customer'"
-                                                class="btn-sky-blue mr-0"
+                                                class="mr-0"
                                                 (click)="openAddAndManage('customer')"
                                             >
                                                 {{ localeData?.new_customer }}
                                             </button>
                                             <button
-                                                mat-raised-button
+                                                mat-stroked-button
+                                                color="primary"
                                                 *ngIf="activeTab == 'vendor'"
-                                                class="btn-sky-blue mr-0"
+                                                class="mr-0"
                                                 (click)="openAddAndManage('vendor')"
                                             >
                                                 {{ localeData?.new_vendor }}
@@ -141,8 +143,8 @@
                                 <!-- Invoice filter section ends -->
                                 <div class="button-content">
                                     <button
-                                        mat-raised-button
-                                        class="btn btn-group btn-filter desktop-button-filter"
+                                        mat-stroked-button
+                                        class="desktop-button-filter"
                                         *ngIf="selectedCheckedContacts?.length > 0"
                                         (click)="clearSelectedContacts()"
                                     >
@@ -176,8 +178,8 @@
                                         </div>
                                         <div class="customer-footer-box pull-right">
                                             <button
-                                                mat-raised-button
-                                                class="btn btn-group btn-filter mobile-button-filter"
+                                                mat-stroked-button
+                                                class="btn-filter mobile-button-filter"
                                                 *ngIf="selectedAccountsList?.length > 0"
                                                 (click)="clearSelectedContacts()"
                                             >
@@ -201,17 +203,19 @@
                                     </div>
                                     <div class="btn-group pull-right on-mobile-view mr-t1">
                                         <button
-                                            mat-raised-button
+                                            mat-stroked-button
+                                            color="primary"
                                             *ngIf="activeTab == 'customer' && sundryDebtorsAccounts?.length"
-                                            class="btn-sky-blue mr-r05 w-100"
+                                            class="mr-r05 w-100"
                                             (click)="openAddAndManage('customer')"
                                         >
                                             {{ localeData?.new_customer }}
                                         </button>
                                         <button
-                                            mat-raised-button
+                                            mat-stroked-button
+                                            color="primary"
                                             *ngIf="activeTab == 'vendor' && sundryCreditorsAccounts?.length"
-                                            class="btn-sky-blue w-100"
+                                            class="w-100"
                                             (click)="openAddAndManage('vendor')"
                                         >
                                             {{ localeData?.new_vendor }}
@@ -463,8 +467,9 @@
                 </div>
                 <div class="mr-t4">
                     <button
-                        mat-raised-button
-                        class="btn-sm btn-success pull-right mr-l1 send-email"
+                        mat-stroked-button
+                        color="primary"
+                        class="btn-sm pull-right mr-l1 send-email"
                         (click)="send('sundrycreditors')"
                     >
                         {{ messageBody.btn.set }}
@@ -523,8 +528,9 @@
 
                 <div class="mr-t4">
                     <button
-                        mat-raised-button
-                        class="btn-sm btn-success pull-right mr-l1 send-email"
+                        mat-stroked-button
+                        color="primary"
+                        class="btn-sm pull-right mr-l1 send-email"
                         (click)="send('sundrydebtors')"
                     >
                         {{ messageBody.btn.set }}
@@ -1082,8 +1088,9 @@
                                             </div>
                                             <div class="mr-t4">
                                                 <button
-                                                    mat-raised-button
-                                                    class="btn-sm btn-success pull-right mr-l1"
+                                                    mat-stroked-button
+                                                    color="primary"
+                                                    class="btn-sm pull-right mr-l1"
                                                     (click)="send('sundrycreditors')"
                                                 >
                                                     {{ messageBody.btn.set }}
@@ -1332,17 +1339,17 @@
                         </th>
                         <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_action">
                             <button
-                                mat-raised-button
+                                mat-stroked-button
                                 *ngIf="isGetAllIntegratedBankInProgress"
-                                class="btn-small btn-light min-width-137 contact-ipad-responsive"
+                                class="btn-small min-width-137 contact-ipad-responsive"
                             >
                                 {{ commonLocaleData?.app_loading }}
                             </button>
                             <button
-                                mat-raised-button
+                                mat-stroked-button
                                 *ngIf="!isGetAllIntegratedBankInProgress && isIciciAccountPendingForApproval"
                                 class="
-                                    btn-small btn-light
+                                    btn-small
                                     min-width-137
                                     pending-approval-button
                                     contact-ipad-responsive
@@ -1352,9 +1359,9 @@
                                 {{ localeData?.pending_approval }}
                             </button>
                             <button
-                                mat-raised-button
+                                mat-stroked-button
                                 *ngIf="!isICICIIntegrated && !isGetAllIntegratedBankInProgress"
-                                class="btn-small btn-light min-width-137 contact-ipad-responsive"
+                                class="btn-small min-width-137 contact-ipad-responsive"
                                 [routerLink]="['/pages/settings/integration/payment']"
                             >
                                 {{ localeData?.connect_icici_bank }}
@@ -1367,17 +1374,18 @@
                                 "
                             >
                                 <button
-                                    mat-raised-button
+                                    mat-stroked-button
+                                    color="primary"
                                     *ngIf="account?.bankPaymentDetails && account?.country?.code === 'IN'"
-                                    class="btn-small btn-success min-width-137 contact-ipad-responsive"
+                                    class="btn-small min-width-137 contact-ipad-responsive"
                                     (click)="openBulkPaymentModal(account)"
                                 >
                                     {{ commonLocaleData?.app_pay_now }}
                                 </button>
                                 <button
-                                    mat-raised-button
+                                    mat-stroked-button
                                     *ngIf="!account?.bankPaymentDetails"
-                                    class="btn-small btn-light min-width-137 contact-ipad-responsive"
+                                    class="btn-small min-width-137 contact-ipad-responsive"
                                     (click)="updateCustomerAcc('vendor', account)"
                                 >
                                     {{ commonLocaleData?.app_add_bank_details }}
@@ -1458,17 +1466,19 @@
                 <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
                 <div class="btn-group pull-right">
                     <button
-                        mat-raised-button
+                        mat-stroked-button
+                        color="primary"
                         *ngIf="activeTab == 'customer'"
-                        class="btn-sky-blue mr-0"
+                        class="mr-0"
                         (click)="openAddAndManage('customer')"
                     >
                         {{ localeData?.new_customer }}
                     </button>
                     <button
-                        mat-raised-button
+                        mat-stroked-button
+                        color="primary"
                         *ngIf="activeTab == 'vendor'"
-                        class="btn-sky-blue mr-0"
+                        class="mr-0"
                         (click)="openAddAndManage('vendor')"
                     >
                         {{ localeData?.new_vendor }}

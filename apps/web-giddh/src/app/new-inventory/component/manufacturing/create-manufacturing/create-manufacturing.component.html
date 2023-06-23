@@ -152,7 +152,7 @@
 
                                     <div class="d-flex generate-clear w-100" *ngIf="!isCompany">
                                         <button
-                                            mat-raised-button
+                                            mat-stroked-button
                                             color="primary"
                                             class="mt-2 mr-0"
                                             [disabled]="isLoading"
@@ -171,7 +171,7 @@
                                         </button>
 
                                         <button
-                                            mat-raised-button
+                                            mat-stroked-button
                                             color="primary"
                                             class="mt-2 mr-0"
                                             [disabled]="isLoading"
@@ -181,7 +181,7 @@
                                             {{ commonLocaleData?.app_update }}
                                         </button>
                                         <button
-                                            mat-flat-button
+                                            mat-stroked-button
                                             class="mt-2"
                                             color="warn"
                                             (click)="deleteManufacturing()"

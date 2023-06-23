@@ -9,7 +9,7 @@
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <ng-container *ngIf="!showLoader">
         <div class="relative create-custom-field-page mr-t2">
-            <button mat-flat-button [disableRipple]="true" class="back-to-page" (click)="redirectToGetAllPage()">
+            <button mat-stroked-button [disableRipple]="true" class="back-to-page" (click)="redirectToGetAllPage()">
                 <i class="back-left icon-left"></i>
                 {{ commonLocaleData?.app_back }}
             </button>

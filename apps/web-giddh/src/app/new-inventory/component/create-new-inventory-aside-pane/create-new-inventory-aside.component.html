@@ -15,9 +15,10 @@
         <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" vr-item>
             <ng-container *ngIf="moduleType === 'branchtransfer'">
                 <div class="pb-3">
-                    <button
-                        class="btn btn-lg btn-primary"
-                        mat-raised-button
+                    <button                        
+                        mat-stroked-button
+                        color="primary"
+                        class="btn-lg"
                         (click)="openCreateBranchTransfer('receipt-note')"
                     >
                         Receipt Note
@@ -25,8 +26,9 @@
                 </div>
                 <div>
                     <button
-                        class="btn btn-lg btn-primary"
-                        mat-raised-button
+                        class="btn-lg"
+                        color="primary"
+                        mat-stroked-button
                         (click)="openCreateBranchTransfer('delivery-challan')"
                     >
                         Delivery Challan
@@ -35,12 +37,12 @@
             </ng-container>
             <ng-container *ngIf="moduleType !== 'branchtransfer'">
                 <div class="pb-3">
-                    <button class="btn btn-lg btn-primary" mat-raised-button (click)="createNewByAsidePanel('stock')">
+                    <button class="btn-lg" mat-stroked-button (click)="createNewByAsidePanel('stock')">
                         {{ commonLocaleData?.app_create_stock }}
                     </button>
                 </div>
                 <div>
-                    <button class="btn btn-lg btn-primary" mat-raised-button (click)="createNewByAsidePanel('group')">
+                    <button class="btn-lg" mat-stroked-button (click)="createNewByAsidePanel('group')">
                         {{ commonLocaleData?.app_create_group }}
                     </button>
                 </div>

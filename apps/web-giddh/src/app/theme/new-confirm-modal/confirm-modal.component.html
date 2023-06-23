@@ -10,7 +10,7 @@
         </p>
     </div>
     <div class="modal-footer">
-        <button mat-raised-button class="btn btn-success" (click)="sendResponse(true)">{{ inputData?.ok }}</button>
-        <button mat-raised-button class="btn btn-danger" (click)="sendResponse(false)">{{ inputData?.cancel }}</button>
+        <button mat-stroked-button color="primary" (click)="sendResponse(true)">{{ inputData?.ok }}</button>
+        <button mat-stroked-button color="warn" (click)="sendResponse(false)">{{ inputData?.cancel }}</button>
     </div>
 </div>

@@ -21,12 +21,12 @@
     </button>
     <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" *ngIf="!hideFirstScreen">
         <div class="pd-1 text-center">
-            <button mat-raised-button class="btn btn-lg btn-primary bdr" (click)="toggleAccountPane()">
+            <button mat-stroked-button color="primary" class="btn-lg bdr" (click)="toggleAccountPane()">
                 {{ localeData?.add_account }}
             </button>
         </div>
         <div class="pd-1 text-center">
-            <button mat-raised-button class="btn btn-lg btn-primary bdr" (click)="toggleStockPane()">
+            <button mat-stroked-button color="primary" class="btn-lg bdr" (click)="toggleStockPane()">
                 {{ localeData?.add_stock }}
             </button>
         </div>

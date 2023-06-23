@@ -10,7 +10,7 @@
     >
         <div class="aging-form-inline">
             <div class="btn-group pull-left on-desktop-view">
-                <button mat-flat-button class="btn-sky-blue" (click)="createNewCustomerEvent.emit(true)">
+                <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)">
                     {{ localeData?.new_customer }}
                 </button>
             </div>
@@ -113,7 +113,7 @@
             </div>
         </div>
         <div class="btn-group mr-t15 pull-left mobile-view">
-            <button mat-raised-button class="btn-sky-blue w-100" (click)="createNewCustomerEvent.emit(true)">
+            <button mat-stroked-button color="primary" class="btn-sky-blue w-100" (click)="createNewCustomerEvent.emit(true)">
                 {{ localeData?.new_customer }}
             </button>
         </div>
@@ -180,7 +180,7 @@
                     "
                 >
                     <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
-                    <button mat-flat-button class="btn-sky-blue" (click)="createNewCustomerEvent.emit(true)">
+                    <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)">
                         {{ localeData?.new_customer }}
                     </button>
                 </div>

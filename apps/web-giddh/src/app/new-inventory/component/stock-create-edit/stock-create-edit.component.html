@@ -106,8 +106,9 @@
                                             </mat-form-field>
                                             <button
                                                 *ngIf="queryParams?.stockUniqueName"
-                                                mat-raised-button
-                                                class="btn-success min-width-100 move-stock mr-0"
+                                                mat-stroked-button
+                                                color="primary"
+                                                class="min-width-100 move-stock mr-0"
                                                 (click)="moveStock()"
                                                 [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
                                                 [autocomplete]="'off'"

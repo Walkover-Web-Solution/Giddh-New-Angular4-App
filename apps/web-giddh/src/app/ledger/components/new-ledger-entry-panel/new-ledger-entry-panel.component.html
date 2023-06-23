@@ -1036,10 +1036,11 @@
             </div>
             <div class="col-12 col-md-12 pd-t1">
                 <button
-                    mat-raised-button
+                    mat-stroked-button
+                    color="warn"
                     id="ledger-reset-button"
                     [hidden]="isBankTransaction"
-                    class="btn btn-danger float-left"
+                    class="float-left"
                     (click)="resetPanel()"
                 >
                     {{ commonLocaleData?.app_reset }}
@@ -1047,28 +1048,28 @@
 
                 <div class="pull-right xs-d-block">
                     <button
-                        mat-raised-button
+                        mat-stroked-button
                         id="ledger-add-button-dr"
                         [hidden]="isBankTransaction"
-                        class="btn btn-default btn-sm"
+                        class="btn-sm"
                         (click)="addToDrOrCr('DEBIT', $event)"
                     >
                         {{ localeData?.add_to_dr }}
                     </button>
 
                     <button
-                        mat-raised-button
+                        mat-stroked-button
                         id="ledger-add-button-cr"
                         [hidden]="isBankTransaction"
-                        class="btn btn-default btn-sm"
+                        class="btn-sm"
                         (click)="addToDrOrCr('CREDIT', $event)"
                     >
                         {{ localeData?.add_to_cr }}
                     </button>
 
                     <button
-                        mat-raised-button
-                        class="btn btn-success"
+                        mat-stroked-button
+                        color="primary"
                         id="saveLedger"
                         [disabled]="isFileUploading || isReadOnly"
                         [ladda]="isLedgerCreateInProcess$ | async"

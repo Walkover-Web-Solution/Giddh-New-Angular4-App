@@ -105,21 +105,23 @@
                     <div class="filter-export d-flex align-items-center">
                         <div class="form-group mb-0 cursor-pointer">
                             <button
-                                class="advance-icon align-items-center btn btn-primary"
+                                class="advance-icon align-items-center"
                                 [matTooltip]="commonLocaleData?.app_advance_search"
                                 [matTooltipPosition]="'above'"
                                 matTooltipClass="tooltip-black"
                                 (click)="onOpenAdvanceSearch()"
-                                mat-raised-button
+                                mat-stroked-button
+                                color="primary"
                             >
                                 <span class="pd-r05 d-sm-inline d-none">{{ commonLocaleData?.app_filter }}</span>
                                 <span class="icon-advance-filter"></span>
                             </button>
                         </div>
                         <button
-                            mat-raised-button
+                            mat-stroked-button
+                            color="primary"
                             type="button"
-                            class="btn btn-default bdr export-btn mr-0 d-flex align-items-center"
+                            class="bdr export-btn mr-0 d-flex align-items-center"
                             (click)="exportDaybook()"
                             *ngIf="daybookData?.entries?.length > 0"
                         >
@@ -128,7 +130,7 @@
                     </div>
                 </div>
                 <div class="d-none clear-filter-responsive mr-t1 clear-filter" *ngIf="showAdvanceSearchIcon">
-                    <button mat-raised-button class="btn btn-filter" (click)="initialRequest()">
+                    <button mat-stroked-button  (click)="initialRequest()">
                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
