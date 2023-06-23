@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ManufacturingService } from 'apps/web-giddh/src/app/services/manufacturing.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'create-recipe',
@@ -38,7 +40,8 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         private ledgerService: LedgerService,
         private manufacturingService: ManufacturingService,
         private toaster: ToasterService,
-        private changeDetectionRef: ChangeDetectorRef
+        private changeDetectionRef: ChangeDetectorRef,
+        private dialog: MatDialog
     ) {
 
     }
@@ -327,7 +330,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      */
     public checkIfVariantIsAlreadyUsed(selectedRecipe: any, event: any, index: number): void {
         setTimeout(() => {
-            const isSelected = this.receiptObject.manufacturingDetails?.filter((recipe, i) => { recipe?.variant?.uniqueName === event.value && i !== index });
+            let isSelected = this.receiptObject.manufacturingDetails?.filter((recipe, i) => { return recipe?.variant?.uniqueName === event.value && i !== index });
             if (isSelected?.length) {
                 selectedRecipe.variant.name = "";
                 selectedRecipe.variant.uniqueName = "";
@@ -397,7 +400,22 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      * @memberof CreateRecipeComponent
      */
     public removeLinkedStock(recipeIndex: number, index: number): void {
-        this.receiptObject.manufacturingDetails[recipeIndex].linkedStocks = this.receiptObject.manufacturingDetails[recipeIndex].linkedStocks?.filter((linkedStock, i) => i !== index);
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '585px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.confirm_delete_recipe_linked_stock,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: ' '
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.receiptObject.manufacturingDetails[recipeIndex].linkedStocks = this.receiptObject.manufacturingDetails[recipeIndex].linkedStocks?.filter((linkedStock, i) => i !== index);
+            }
+        });
     }
 
     /**
@@ -407,6 +425,21 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      * @memberof CreateRecipeComponent
      */
     public removeRecipe(index: number): void {
-        this.receiptObject.manufacturingDetails = this.receiptObject.manufacturingDetails?.filter((recipe, i) => i !== index);
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '585px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.confirm_delete_recipe,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: ' '
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.receiptObject.manufacturingDetails = this.receiptObject.manufacturingDetails?.filter((recipe, i) => i !== index);
+            }
+        });
     }
 }

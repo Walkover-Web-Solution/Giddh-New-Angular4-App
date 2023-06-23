@@ -26,5 +26,7 @@
     "confirm_delete_manufacturing": "तुम्हाला उत्पादन हटवायचे आहे का?",
     "info_message": "डेटा संपादित करण्यासाठी, शाखा मोडवर जा.",
     "add_recipe": "कृती जोडा",
-    "variant_already_selected": "Variant is already selected."
+    "variant_already_selected": "Variant is already selected.",
+    "confirm_delete_recipe": "Do you want to delete the recipe?",
+    "confirm_delete_recipe_linked_stock": "Do you want to delete the raw stock?"
 }

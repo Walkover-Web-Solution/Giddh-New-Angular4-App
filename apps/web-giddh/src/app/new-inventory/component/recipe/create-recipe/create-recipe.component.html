@@ -81,7 +81,7 @@
                             <div class="consumption-details-wrapper w-100">
                                 <h1 class="section-head">Raw Stock</h1>
                                 <div class="mt-2">
-                                    <table id="table-raw-stock">
+                                    <table class="table-raw-stock">
                                         <thead>
                                             <tr>
                                                 <th>{{ commonLocaleData?.app_name }}</th>
@@ -173,6 +173,8 @@
                                                             align-item-center
                                                             table-row-delete
                                                         "
+                                                        *ngIf="recipe.linkedStocks?.length > 1"
+                                                        (click)="removeLinkedStock(i, j)"
                                                     >
                                                         <i class="icon-trash"></i>
                                                     </a>
@@ -193,16 +195,13 @@
                         <button mat-stroked-button class="mb-2" (click)="recipe.isEdit = false">Done</button>
                     </div>
                 </div>
-                <!-- <div class="row mt-2 max-width-950 pl-4" *ngIf="recipe.isEdit">
-                    <button mat-stroked-button class="mb-2" (click)="recipe.isEdit = false">Done</button>
-                </div> -->
                 <div class="manufacturing-border" *ngIf="!recipe.isEdit">
                     <div class="row pb-4 max-width-950">
                         <div class="col-3">
                             <div class="row">
                                 <div class="form-fields w-100">
                                     <div class="d-flex flex-column flex-wrap gap-between w-100">
-                                        <h1 class="section-head p-0">Finished Stock</h1>
+                                        <h1 class="section-head p-0" *ngIf="i === 0">Finished Stock</h1>
                                         <div>
                                             <p>{{ recipe?.variant?.name }}</p>
                                         </div>
@@ -221,11 +220,11 @@
                             <span class="less-than-text"> <i class="icon-left"></i></span>
                         </div>
                         <div class="col-8 pr-0">
-                            <div class="row" *ngFor="let linkedStock of recipe.linkedStocks">
+                            <div class="row" *ngFor="let linkedStock of recipe.linkedStocks; let j = index">
                                 <div class="consumption-details-wrapper w-100">
-                                    <h1 class="section-head">Raw Stock</h1>
+                                    <h1 class="section-head" *ngIf="i === 0 && j === 0">Raw Stock</h1>
                                     <div class="mt-2 d-flex align-items-baseline">
-                                        <table id="table-raw-stock" class="table-filled view-mode-table">
+                                        <table class="table-filled view-mode-table table-raw-stock">
                                             <tbody>
                                                 <tr>
                                                     <td>
@@ -250,7 +249,7 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <div class="d-flex">
+                                        <div class="d-flex" *ngIf="j === 0">
                                             <a
                                                 href="javascript:void(0);"
                                                 class="icon-remove"
@@ -265,6 +264,7 @@
                                                 class="icon-remove"
                                                 matTooltip="Delete"
                                                 matTooltipPosition="above"
+                                                (click)="removeRecipe(i)"
                                             >
                                                 <i class="icon-trash"></i>
                                             </a>
