@@ -943,8 +943,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         name: variant.warehouseBalance[0].stockUnit?.name,
                         uniqueName: variant.warehouseBalance[0].stockUnit?.uniqueName
                     },
-                    openingQuantity: this.isVariantAvailable ? variant.warehouseBalance[0].openingQuantity : this.stockForm.openingQuantity,
-                    openingAmount: this.isVariantAvailable ? variant.warehouseBalance[0].openingAmount : this.stockForm.openingAmount
+                    openingQuantity: variant.warehouseBalance[0].openingQuantity,
+                    openingAmount: variant.warehouseBalance[0].openingAmount
                 }
             ]
 
@@ -1021,7 +1021,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     return option;
                 });
 
-                this.isVariantAvailable = (this.stockForm?.variants?.length > 0) ? true : false;
+                const hasUserGeneratedVariants = this.stockForm?.variants?.filter(variant => !variant.isVariantSystemGenerated);
+                this.isVariantAvailable = hasUserGeneratedVariants?.length > 0;
                 this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
                 this.defaultStockGroupUniqueName = response.body.stockGroup?.uniqueName;
                 if (response.body.purchaseAccountUniqueNames?.length) {

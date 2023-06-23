@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
@@ -13,11 +13,14 @@ import { takeUntil } from 'rxjs/operators';
     styleUrls: ['./create-recipe.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
+export class CreateRecipeComponent implements OnChanges, OnDestroy {
+    /** Stock object */
     @Input() public stock: any = {};
+    /** List of variants in stock form */
     @Input() public variants: any[] = [];
-    @Input() public inventoryType: string = "";
+    /** Recipe object */
     public receiptObject: any = { manufacturingDetails: [] };
+    /** List of variants */
     public variantsList: any[] = [];
     /** This will hold api calls if one is already in progress */
     public preventStocksApiCall: boolean = false;
@@ -40,12 +43,13 @@ export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
 
     }
 
-    public ngOnInit(): void {
-
-    }
-
+    /**
+     * Lifecycle hook for change event
+     *
+     * @param {SimpleChanges} changes
+     * @memberof CreateRecipeComponent
+     */
     public ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
         if (changes?.stock?.currentValue && changes?.stock?.firstChange) {
             this.variantsList = [];
 
@@ -66,11 +70,21 @@ export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Lifcycle hook for destroy event
+     *
+     * @memberof CreateRecipeComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Adds new recipe section
+     *
+     * @memberof CreateRecipeComponent
+     */
     public addNewRecipe(): void {
         this.receiptObject.manufacturingDetails.push({
             manufacturingQuantity: 1,
@@ -104,6 +118,12 @@ export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
         this.changeDetectionRef.detectChanges();
     }
 
+    /**
+     * Adds new linked stock in recipe
+     *
+     * @param {*} recipe
+     * @memberof CreateRecipeComponent
+     */
     public addNewLinkedStockInRecipe(recipe: any): void {
         recipe.linkedStocks.push(
             {
@@ -122,6 +142,16 @@ export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
         this.getStocks(recipe.linkedStocks[recipe.linkedStocks?.length - 1], 1, "");
     }
 
+    /**
+     * Get list of stocks
+     *
+     * @param {*} stockObject
+     * @param {number} [page=1]
+     * @param {string} [q]
+     * @param {Function} [callback]
+     * @returns {void}
+     * @memberof CreateRecipeComponent
+     */
     public getStocks(stockObject: any, page: number = 1, q?: string, callback?: Function): void {
         if (page > stockObject.stocksTotalPages || this.preventStocksApiCall || q === undefined) {
             return;
@@ -136,7 +166,7 @@ export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         stockObject.stocksPageNumber = page;
-        this.inventoryService.getStocksV2({ inventoryType: this.inventoryType, page: page, q: q }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+        this.inventoryService.getStocksV2({ inventoryType: this.stock.type, page: page, q: q }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success" && response?.body?.results?.length) {
                 if (!callback) {
                     stockObject.stocksTotalPages = response.body.totalPages;
@@ -186,7 +216,7 @@ export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
      * @param {boolean} [loadRecipe=false]
      * @param {number} [index]
      * @returns {void}
-     * @memberof CreateManufacturingComponent
+     * @memberof CreateRecipeComponent
      */
     public getStockVariants(object: any, event: any, isEdit: boolean = false): void {
         object.stockUniqueName = event?.value;
@@ -226,6 +256,16 @@ export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
+    /**
+     * Get stock units
+     *
+     * @param {*} object
+     * @param {string} stockUniqueName
+     * @param {boolean} isFinishedStock
+     * @param {boolean} [isEdit=false]
+     * @returns {void}
+     * @memberof CreateRecipeComponent
+     */
     public getStockUnits(object: any, stockUniqueName: string, isFinishedStock: boolean, isEdit: boolean = false): void {
         if (!stockUniqueName) {
             return;
@@ -277,6 +317,14 @@ export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
+    /**
+     * Checks if variant is already selected to restrict from getting selected again
+     *
+     * @param {*} selectedRecipe
+     * @param {*} event
+     * @param {number} index
+     * @memberof CreateRecipeComponent
+     */
     public checkIfVariantIsAlreadyUsed(selectedRecipe: any, event: any, index: number): void {
         setTimeout(() => {
             const isSelected = this.receiptObject.manufacturingDetails?.filter((recipe, i) => { recipe?.variant?.uniqueName === event.value && i !== index });
@@ -288,10 +336,14 @@ export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
         }, 10);
     }
 
+    /**
+     * Gets recipe of variant
+     *
+     * @memberof CreateRecipeComponent
+     */
     public getVariantRecipe(): void {
         this.manufacturingService.getVariantRecipe(this.stock.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.manufacturingDetails?.length) {
-                console.log(cloneDeep(response?.body?.manufacturingDetails));
                 let index = 0;
                 response?.body?.manufacturingDetails?.forEach(manufacturingDetail => {
                     this.receiptObject.manufacturingDetails[index] = [];
@@ -330,7 +382,6 @@ export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
                     index++;
                 });
                 
-                console.log(this.receiptObject.manufacturingDetails);
                 this.changeDetectionRef.detectChanges();
             } else {
                 this.addNewRecipe();
@@ -338,10 +389,23 @@ export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
+    /**
+     * Removes linked stock from recipe
+     *
+     * @param {number} recipeIndex
+     * @param {number} index
+     * @memberof CreateRecipeComponent
+     */
     public removeLinkedStock(recipeIndex: number, index: number): void {
         this.receiptObject.manufacturingDetails[recipeIndex].linkedStocks = this.receiptObject.manufacturingDetails[recipeIndex].linkedStocks?.filter((linkedStock, i) => i !== index);
     }
 
+    /**
+     * Removes recipe
+     *
+     * @param {number} index
+     * @memberof CreateRecipeComponent
+     */
     public removeRecipe(index: number): void {
         this.receiptObject.manufacturingDetails = this.receiptObject.manufacturingDetails?.filter((recipe, i) => i !== index);
     }

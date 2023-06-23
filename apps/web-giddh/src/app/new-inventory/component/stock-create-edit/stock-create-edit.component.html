@@ -794,8 +794,8 @@
                                         <a
                                             href="javascript:;"
                                             class="option-color"
-                                            *ngIf="!stockForm.options?.length"
-                                            (click)="isVariantAvailable = !isVariantAvailable; addVariantOption()"
+                                            *ngIf="!isVariantAvailable"
+                                            (click)="isVariantAvailable = !isVariantAvailable"
                                         >
                                             <span class="add-option">+</span> {{ localeData?.has_multiples }}
                                         </a>
@@ -966,11 +966,7 @@
                                                 <div
                                                     class="table-responsive mt-2"
                                                     *ngIf="
-                                                        stockForm.variants?.length > 0 &&
-                                                        (stockForm.options?.length > 1 ||
-                                                            (stockForm.options?.length > 0 &&
-                                                                stockForm.options[0].name &&
-                                                                stockForm.options[0].values.length))
+                                                        stockForm.variants?.length > 0 && stockForm.variants[0]?.name
                                                     "
                                                 >
                                                     <table class="stock-table font-15" style="margin-left: 2px">
@@ -1546,7 +1542,6 @@
                                         *ngIf="queryParams?.stockUniqueName"
                                         [stock]="stockForm"
                                         [variants]="stockForm.variants"
-                                        [inventoryType]="stockForm.type"
                                     ></create-recipe>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.other">
