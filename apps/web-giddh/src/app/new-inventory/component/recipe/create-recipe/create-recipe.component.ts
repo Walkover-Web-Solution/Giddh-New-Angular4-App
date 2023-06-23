@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
@@ -13,11 +13,11 @@ import { takeUntil } from 'rxjs/operators';
     styleUrls: ['./create-recipe.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateRecipeComponent implements OnInit, OnChanges {
+export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public stock: any = {};
     @Input() public variants: any[] = [];
     @Input() public inventoryType: string = "";
-    public receiptObject: any = {};
+    public receiptObject: any = { manufacturingDetails: [] };
     public variantsList: any[] = [];
     /** This will hold api calls if one is already in progress */
     public preventStocksApiCall: boolean = false;
@@ -27,6 +27,7 @@ export class CreateRecipeComponent implements OnInit, OnChanges {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds if there are any unsaved variants */
     public newVariants: any[] = [];
 
     constructor(
@@ -65,11 +66,12 @@ export class CreateRecipeComponent implements OnInit, OnChanges {
         }
     }
 
-    public addNewRecipe(): void {
-        if (!this.receiptObject.manufacturingDetails?.length) {
-            this.receiptObject.manufacturingDetails = [];
-        }
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
+    public addNewRecipe(): void {
         this.receiptObject.manufacturingDetails.push({
             manufacturingQuantity: 1,
             manufacturingUnitUniqueName: '',
@@ -287,13 +289,11 @@ export class CreateRecipeComponent implements OnInit, OnChanges {
     }
 
     public getVariantRecipe(): void {
-        this.manufacturingService.getVariantRecipe(this.stock.uniqueName, [], false).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.manufacturingService.getVariantRecipe(this.stock.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.manufacturingDetails?.length) {
-                if (!this.receiptObject.manufacturingDetails?.length) {
-                    this.receiptObject.manufacturingDetails = [];
-                }
-                
-                response?.body?.manufacturingDetails?.forEach((manufacturingDetail, index) => {
+                console.log(cloneDeep(response?.body?.manufacturingDetails));
+                let index = 0;
+                response?.body?.manufacturingDetails?.forEach(manufacturingDetail => {
                     this.receiptObject.manufacturingDetails[index] = [];
 
                     this.receiptObject.manufacturingDetails[index].manufacturingUnitCode = manufacturingDetail.manufacturingUnitCode;
@@ -304,15 +304,14 @@ export class CreateRecipeComponent implements OnInit, OnChanges {
 
                     this.getStockUnits(this.receiptObject.manufacturingDetails[index], this.stock.uniqueName, true, true);
 
-                    manufacturingDetail.linkedStocks?.forEach((linkedStock, linkedStockIndex) => {
+                    let linkedStockIndex = 0;
+                    manufacturingDetail.linkedStocks?.forEach(linkedStock => {
                         let unitsList = [];
                         linkedStock?.stockUnits?.forEach(unit => {
                             unitsList.push({ label: unit.code, value: unit.uniqueName });
                         });
 
-                        this.receiptObject.manufacturingDetails[index].linkedStocks[linkedStockIndex] = [];
-                        this.receiptObject.manufacturingDetails[index].linkedStocks[linkedStockIndex] =
-                        {
+                        this.receiptObject.manufacturingDetails[index].linkedStocks[linkedStockIndex] = {
                             stockName: linkedStock.stockName,
                             stockUniqueName: linkedStock.stockUniqueName,
                             stockUnitCode: linkedStock.stockUnitCode,
@@ -324,12 +323,15 @@ export class CreateRecipeComponent implements OnInit, OnChanges {
 
                         this.getStocks(this.receiptObject.manufacturingDetails[index].linkedStocks[linkedStockIndex], 1, "");
                         this.getStockVariants(this.receiptObject.manufacturingDetails[index].linkedStocks[linkedStockIndex], { label: linkedStock.stockName, value: linkedStock.stockUniqueName }, true);
+
+                        linkedStockIndex++;
                     });
+
+                    index++;
                 });
-
+                
+                console.log(this.receiptObject.manufacturingDetails);
                 this.changeDetectionRef.detectChanges();
-
-                console.log(this.receiptObject);
             } else {
                 this.addNewRecipe();
             }
