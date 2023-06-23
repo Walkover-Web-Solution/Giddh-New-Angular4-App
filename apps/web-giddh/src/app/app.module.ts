@@ -84,11 +84,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false } }),
         PerfectScrollbarModule,
         RouterModule.forRoot(ROUTES, {
-            useHash: IS_ELECTRON_WA,
-            onSameUrlNavigation: 'reload',
-            preloadingStrategy: QuicklinkStrategy,
-            relativeLinkResolution: 'corrected'
-        }),
+    useHash: IS_ELECTRON_WA,
+    onSameUrlNavigation: 'reload',
+    preloadingStrategy: QuicklinkStrategy
+}),
         QuicklinkModule,
         MatSnackBarModule,
         SnackBarModule,
