@@ -289,6 +289,10 @@ export class CreateRecipeComponent implements OnInit, OnChanges {
     public getVariantRecipe(): void {
         this.manufacturingService.getVariantRecipe(this.stock.uniqueName, [], false).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.manufacturingDetails?.length) {
+                if (!this.receiptObject.manufacturingDetails?.length) {
+                    this.receiptObject.manufacturingDetails = [];
+                }
+                
                 response?.body?.manufacturingDetails?.forEach((manufacturingDetail, index) => {
                     this.receiptObject.manufacturingDetails[index] = [];
 
