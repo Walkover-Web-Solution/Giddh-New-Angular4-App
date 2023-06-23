@@ -165,28 +165,39 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="d-flex justify-content-between align-item center">
+                                                    <a
+                                                        href="javascript:void(0);"
+                                                        class="
+                                                            d-flex
+                                                            justify-content-between
+                                                            align-item-center
+                                                            table-row-delete
+                                                        "
+                                                    >
                                                         <i class="icon-trash"></i>
-                                                        <i
-                                                            class="icon-add"
-                                                            aria-hidden="true"
-                                                            (click)="addNewLinkedStockInRecipe(recipe)"
-                                                        ></i>
-                                                    </div>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <div>
+                                        <a href="javascript:void(0);" (click)="addNewLinkedStockInRecipe(recipe)">
+                                            + Add Stock
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-12 mr-t15" *ngIf="recipe.isEdit">
+                        <button mat-stroked-button class="mb-2" (click)="recipe.isEdit = false">Done</button>
+                    </div>
                 </div>
-                <div class="row mt-2 max-width-950 pl-4" *ngIf="recipe.isEdit">
+                <!-- <div class="row mt-2 max-width-950 pl-4" *ngIf="recipe.isEdit">
                     <button mat-stroked-button class="mb-2" (click)="recipe.isEdit = false">Done</button>
-                </div>
-                <div class="manufacturing-border">
-                    <div class="row pb-4 max-width-950" *ngIf="!recipe.isEdit">
+                </div> -->
+                <div class="manufacturing-border" *ngIf="!recipe.isEdit">
+                    <div class="row pb-4 max-width-950">
                         <div class="col-3">
                             <div class="row">
                                 <div class="form-fields w-100">
@@ -239,8 +250,24 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <div class="ml-4">
-                                            <button mat-stroked-button (click)="recipe.isEdit = true">Edit</button>
+                                        <div class="d-flex">
+                                            <a
+                                                href="javascript:void(0);"
+                                                class="icon-remove"
+                                                (click)="recipe.isEdit = true"
+                                                matTooltip="Edit"
+                                                matTooltipPosition="above"
+                                            >
+                                                <i class="icon-edit-pencil"></i>
+                                            </a>
+                                            <a
+                                                href="javascript:void(0);"
+                                                class="icon-remove"
+                                                matTooltip="Delete"
+                                                matTooltipPosition="above"
+                                            >
+                                                <i class="icon-trash"></i>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
