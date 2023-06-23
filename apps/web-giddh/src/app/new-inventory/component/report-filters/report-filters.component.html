@@ -1,6 +1,6 @@
 <div class="inventory-filter-bar top-main-bar align-items-center">
     <div class="back-btnn" *ngIf="reportUniqueName">
-        <button mat-stroked-button mat-button class="report-back-button" color="primary" (click)="backToPreviousPage()">
+        <button mat-stroked-button mat-stroked-button class="report-back-button" color="primary" (click)="backToPreviousPage()">
             {{ commonLocaleData?.app_back }}
         </button>
     </div>
@@ -160,7 +160,7 @@
             </mat-form-field>
         </div>
         <div class="menu-btn-control">
-            <button mat-button (click)="openModal()" class="advance-filter-button">
+            <button mat-stroked-button (click)="openModal()" class="advance-filter-button">
                 <i class="icon-advance-filter mr-2"></i>
                 {{ localeData?.header?.advance_filter }}
             </button>

@@ -98,8 +98,8 @@
                         </div>
                     </div>
                     <div *ngIf="showAdvanceSearchIcon" class="clear-filter form-group mb-0">
-                        <button mat-button class="btn btn-filter" (click)="initialRequest()">
-                            <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                        <button mat-stroked-button  (click)="initialRequest()">
+                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
                     </div>
                     <div class="filter-export d-flex align-items-center">
@@ -130,8 +130,8 @@
                     </div>
                 </div>
                 <div class="d-none clear-filter-responsive mr-t1 clear-filter" *ngIf="showAdvanceSearchIcon">
-                    <button mat-stroked-button  (click)="initialRequest()">
-                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                    <button mat-stroked-button color="primary" (click)="initialRequest()">
+                        <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
             </div>

@@ -139,15 +139,17 @@
                                 <hr />
                                 <div class="btn-group bulk-item-btn-group">
                                     <button
-                                        mat-button
-                                        class="btn-sm btn-success align-items-center justify-content-center"
+                                        mat-stroked-button
+                                        color="primary"
+                                        class="btn-sm align-items-center justify-content-center"
                                         (click)="saveItemsEvent.emit(selectedItems); closeEvent.emit()"
                                     >
                                         {{ commonLocaleData?.app_add }}
                                     </button>
                                     <button
                                         mat-stroked-button
-                                        class="btn-sm btn-primary align-items-center justify-content-center"
+                                        color="primary"
+                                        class="btn-sm align-items-center justify-content-center"
                                         (click)="closeEvent.emit()"
                                     >
                                         {{ commonLocaleData?.app_cancel }}

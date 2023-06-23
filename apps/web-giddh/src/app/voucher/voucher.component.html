@@ -2710,8 +2710,9 @@
                                                                 ></text-field>
                                                                 <div class="btn-group mt-2 pt-1 d-flex">
                                                                     <button
-                                                                        mat-button
-                                                                        class="btn btn-sm btn-success-green"
+                                                                        mat-stroked-button
+                                                                        color="primary"
+                                                                        class="btn-sm"
                                                                         type="button"
                                                                         (click)="hsnDropdownShow = !hsnDropdownShow"
                                                                         [disabled]="isEinvoiceGenerated"
@@ -2719,8 +2720,8 @@
                                                                         {{ commonLocaleData?.app_save }}
                                                                     </button>
                                                                     <button
-                                                                        mat-button
-                                                                        class="btn cancel-button mr-0"
+                                                                        mat-stroked-button
+                                                                        class="mr-0"
                                                                         (click)="hideHsnSacEditPopup(transaction)"
                                                                     >
                                                                         {{ commonLocaleData?.app_cancel }}
@@ -5197,16 +5198,17 @@
                             <!-- region generate mode -->
                             <div class="pull-right pr update-mode" *ngIf="!isUpdateMode">
                                 <button
-                                    mat-button
+                                    mat-stroked-button
+                                    color="warn"
                                     (click)="resetInvoiceForm(invoiceForm)"
-                                    class="btn btn-danger d-inline-block v-align-middle"
+                                    class="d-inline-block v-align-middle"
                                 >
                                     {{ commonLocaleData?.app_clear }}
                                 </button>
                                 <!-- region purchase invoice -->
                                 <span class="d-inline-block v-align-middle" *ngIf="isPurchaseInvoice">
                                     <button
-                                        mat-button
+                                        mat-stroked-button
                                         *ngIf="!isCompany"
                                         [disabled]="
                                             isFileUploading ||
@@ -5215,7 +5217,6 @@
                                             isMobileNumberInvalid
                                         "
                                         (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
-                                        class="btn btn-default"
                                     >
                                         {{ commonLocaleData?.app_save }}
                                     </button>
@@ -5227,14 +5228,13 @@
                                     *ngIf="!isPurchaseInvoice && !isProformaInvoice && !isEstimateInvoice"
                                 >
                                     <button
-                                        mat-button
+                                        mat-stroked-button
                                         [disabled]="
                                             !hasVoucherEntry ||
                                             (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                             isMobileNumberInvalid
                                         "
                                         (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, true)"
-                                        class="btn btn-default"
                                         *ngIf="!isCompany && isCustomerSelected && !isPendingVoucherType"
                                     >
                                         {{ generateInvoiceText }}
@@ -5250,14 +5250,14 @@
                                         "
                                     >
                                         <button
-                                            mat-button
+                                            mat-stroked-button
                                             [disabled]="
                                                 !hasVoucherEntry ||
                                                 (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                                 isMobileNumberInvalid
                                             "
                                             (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
-                                            class="btn btn-default generate-invoice"
+                                            class="generate-invoice"
                                         >
                                             {{ generateInvoiceText }}
                                         </button>
@@ -5321,13 +5321,13 @@
                                     >
                                         <button
                                             *ngIf="!isCompany"
-                                            mat-button
+                                            mat-stroked-button
                                             [disabled]="
                                                 !hasVoucherEntry ||
                                                 (invoiceForm?.controls)['message2']?.errors?.maxlength
                                             "
                                             (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
-                                            class="btn btn-default h3"
+                                            class="h3"
                                         >
                                             {{ commonLocaleData?.app_create }}
                                         </button>

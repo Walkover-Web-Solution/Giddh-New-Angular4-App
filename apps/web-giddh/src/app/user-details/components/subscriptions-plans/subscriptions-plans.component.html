@@ -2,7 +2,7 @@
     <div class="row">
         <div [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-back': showLoader }"></div>
         <div class="col-md-1 col-sm-1" *ngIf="!showLoader">
-            <button (click)="backClicked()" class="btn-cancel pr-3 pl-3 mb-2 mr-0" mat-button>
+            <button (click)="backClicked()" class="pr-3 pl-3 mb-2 mr-0" mat-stroked-button>
                 <i class="icon-left back-left"></i>
                 {{ commonLocaleData?.app_back }}
             </button>

@@ -11,8 +11,9 @@
             <button
                 *ngIf="groupUniqueName"
                 (click)="backClicked()"
-                class="btn-sky-blue btn-position-left mt-2 ml-3"
-                mat-button
+                class="btn-position-left mt-2 ml-3"
+                mat-stroked-button
+                color="primary"
             >
                 <i class="icon-left back-left"></i>
                 {{ commonLocaleData?.app_back }}
@@ -154,7 +155,8 @@
                         <button
                             *ngIf="groupUniqueName"
                             mat-stroked-button
-                            class="btn-primary min-width-100"
+                            color="primary"
+                            class="min-width-100"
                             (click)="cancelEdit()"
                         >
                             {{ commonLocaleData?.app_close }}
@@ -162,7 +164,8 @@
                         <button
                             *ngIf="groupUniqueName"
                             mat-stroked-button
-                            class="delete-button min-width-100"
+                            color=""warn
+                            class="min-width-100"
                             (click)="deleteGroup()"
                         >
                             {{ commonLocaleData?.app_delete }}

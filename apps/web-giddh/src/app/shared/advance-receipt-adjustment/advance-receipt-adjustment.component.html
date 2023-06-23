@@ -495,24 +495,26 @@
                         </div>
                         <div class="mt-2" *ngIf="isModal">
                             <button
-                                mat-button
+                                mat-stroked-button
+                                color="primary"
                                 *ngIf="!isUpdateMode"
-                                class="btn btn-success mr-r1"
+                                class="mr-r1"
                                 [disabled]="isInvalidForm"
                                 (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)"
                             >
                                 {{ commonLocaleData?.app_save }}
                             </button>
                             <button
-                                mat-button
+                                mat-stroked-button
+                                color="primary"
                                 *ngIf="isUpdateMode"
-                                class="btn btn-success mr-r1"
+                                class="mr-r1"
                                 [disabled]="isInvalidForm"
                                 (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)"
                             >
                                 {{ commonLocaleData?.app_update }}
                             </button>
-                            <button mat-button class="btn btn-cancel" (click)="onClear(true)">
+                            <button mat-stroked-button (click)="onClear(true)">
                                 {{ commonLocaleData?.app_reset }}
                             </button>
                         </div>

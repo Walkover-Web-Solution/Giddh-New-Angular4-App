@@ -177,12 +177,13 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <button mat-button class="btn-success btn unbold" (click)="exportLedger()" [disabled]="isLoading">
+                <button mat-stroked-button color="primary" class="unbold" (click)="exportLedger()" [disabled]="isLoading">
                     {{ commonLocaleData?.app_download }}
                 </button>
                 <button
-                    mat-button
-                    class="btn-success btn show-columnar-button unbold mr-l1"
+                    mat-stroked-button
+                    color="primary"
+                    class="show-columnar-button unbold mr-l1"
                     [hidden]="emailTypeSelected !== 'columnar'"
                     (click)="showColumnarReport()"
                 >
