@@ -4745,50 +4745,48 @@
             </div>
         </div>
         <div class="inner-content-footer">
-            <div class="d-flex">
-                <div class="button-group">
-                    <button
-                        *ngIf="!queryParams?.stockUniqueName"
-                        mat-stroked-button
-                        class="mr-3"
-                        (click)="resetForm(stockCreateEditForm)"
-                    >
-                        {{ commonLocaleData?.app_reset }}
-                    </button>
-                    <button
-                        *ngIf="!queryParams?.stockUniqueName"
-                        mat-stroked-button
-                        color="primary"
-                        (click)="createStock()"
-                    >
-                        {{ commonLocaleData?.app_create }}
-                    </button>
-                    <button
-                        *ngIf="queryParams?.stockUniqueName"
-                        mat-stroked-button
-                        class="btn-primary min-width-100"
-                        (click)="cancelEdit()"
-                    >
-                        {{ commonLocaleData?.app_close }}
-                    </button>
-                    <button
-                        *ngIf="queryParams?.stockUniqueName"
-                        mat-stroked-button
-                        class="btn-danger min-width-100"
-                        (click)="deleteStock()"
-                    >
-                        {{ commonLocaleData?.app_delete }}
-                    </button>
-                    <button
-                        *ngIf="queryParams?.stockUniqueName"
-                        mat-stroked-button
-                        class="btn-success min-width-100"
-                        (click)="updateStock(stockCreateEditForm)"
-                        [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError"
-                    >
-                        {{ commonLocaleData?.app_update }}
-                    </button>
-                </div>
+            <div class="button-group d-flex">
+                <button
+                    *ngIf="!queryParams?.stockUniqueName"
+                    mat-stroked-button
+                    class="mr-3"
+                    (click)="resetForm(stockCreateEditForm)"
+                >
+                    {{ commonLocaleData?.app_reset }}
+                </button>
+                <button
+                    *ngIf="!queryParams?.stockUniqueName"
+                    mat-stroked-button
+                    color="primary"
+                    (click)="createStock()"
+                >
+                    {{ commonLocaleData?.app_create }}
+                </button>
+                <button
+                    *ngIf="queryParams?.stockUniqueName"
+                    mat-stroked-button
+                    class="btn-primary min-width-100"
+                    (click)="cancelEdit()"
+                >
+                    {{ commonLocaleData?.app_close }}
+                </button>
+                <button
+                    *ngIf="queryParams?.stockUniqueName"
+                    mat-stroked-button
+                    class="btn-danger min-width-100"
+                    (click)="deleteStock()"
+                >
+                    {{ commonLocaleData?.app_delete }}
+                </button>
+                <button
+                    *ngIf="queryParams?.stockUniqueName"
+                    mat-stroked-button
+                    class="btn-success min-width-100"
+                    (click)="updateStock(stockCreateEditForm)"
+                    [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError"
+                >
+                    {{ commonLocaleData?.app_update }}
+                </button>
             </div>
         </div>
     </ng-container>

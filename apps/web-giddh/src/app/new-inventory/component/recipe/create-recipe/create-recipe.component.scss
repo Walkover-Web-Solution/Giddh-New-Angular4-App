@@ -69,7 +69,7 @@
                 width: 100%;
                 th,
                 td {
-                    padding: 10px 15px;
+                    padding: 10px 5px;
                     font-size: var(--font-size-15);
                     text-align: right;
                     &:first-child {
@@ -191,4 +191,10 @@
             }
         }
     }
+}
+.save-recipe {
+    color: var(--color-primary-header-background);
+    background-color: var(--color-common-septenary-background-for-all-components);
+    display: inline-block;
+    padding: 5px;
 }

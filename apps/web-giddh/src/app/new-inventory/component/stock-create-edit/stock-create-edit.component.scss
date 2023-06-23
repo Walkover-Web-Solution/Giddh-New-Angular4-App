@@ -363,6 +363,7 @@
     }
 
     .button-group {
+        column-gap: 15px;
         .btn-danger {
             background-color: var(--color-primary-button-background) !important;
         }

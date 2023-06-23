@@ -4,7 +4,9 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-    <div *ngIf="newVariants?.length">Please save new variants to create recipe for them</div>
+    <div class="pd-l15 pt-3">
+        <div *ngIf="newVariants?.length" class="save-recipe">Please save new variants to create recipe for them</div>
+    </div>
     <section class="create-recipe">
         <div class="recipe-wrapper">
             <!-- <div class="row">
@@ -163,11 +165,14 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <i
-                                                        class="icon-add"
-                                                        aria-hidden="true"
-                                                        (click)="addNewLinkedStockInRecipe(recipe)"
-                                                    ></i>
+                                                    <div class="d-flex justify-content-between align-item center">
+                                                        <i class="icon-trash"></i>
+                                                        <i
+                                                            class="icon-add"
+                                                            aria-hidden="true"
+                                                            (click)="addNewLinkedStockInRecipe(recipe)"
+                                                        ></i>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -180,57 +185,63 @@
                 <div class="row mt-2 max-width-950 pl-4" *ngIf="recipe.isEdit">
                     <button mat-stroked-button class="mb-2" (click)="recipe.isEdit = false">Done</button>
                 </div>
-                <div class="row pb-4 manufacturing-border max-width-950" *ngIf="!recipe.isEdit">
-                    <div class="col-3">
-                        <div class="row">
-                            <div class="form-fields w-100">
-                                <div class="d-flex flex-column flex-wrap gap-between w-100">
-                                    <h1 class="section-head p-0">Finished Stock</h1>
-                                    <div>
-                                        <p>{{ recipe?.variant?.name }}</p>
-                                    </div>
-                                    <div class="d-flex">
-                                        <p class="mr-3">
-                                            {{ recipe?.manufacturingQuantity }} ({{ recipe?.manufacturingUnitCode }})
-                                        </p>
+                <div class="manufacturing-border">
+                    <div class="row pb-4 max-width-950" *ngIf="!recipe.isEdit">
+                        <div class="col-3">
+                            <div class="row">
+                                <div class="form-fields w-100">
+                                    <div class="d-flex flex-column flex-wrap gap-between w-100">
+                                        <h1 class="section-head p-0">Finished Stock</h1>
+                                        <div>
+                                            <p>{{ recipe?.variant?.name }}</p>
+                                        </div>
+                                        <div class="d-flex">
+                                            <p class="mr-3">
+                                                {{ recipe?.manufacturingQuantity }} ({{
+                                                    recipe?.manufacturingUnitCode
+                                                }})
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-1 d-flex justify-content-center mt-4">
-                        <span class="less-than-text"> <i class="icon-left"></i></span>
-                    </div>
-                    <div class="col-8 pr-0">
-                        <div class="row" *ngFor="let linkedStock of recipe.linkedStocks">
-                            <div class="consumption-details-wrapper w-100">
-                                <h1 class="section-head">Raw Stock</h1>
-                                <div class="mt-2 d-flex align-items-baseline">
-                                    <table id="table-raw-stock" class="table-filled view-mode-table">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div>
-                                                        <p>{{ linkedStock.stockName }}</p>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <p>{{ linkedStock.variant?.name }}</p>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <p>
-                                                            {{ linkedStock.quantity }} ({{ linkedStock.stockUnitCode }})
-                                                        </p>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <div class="ml-4">
-                                        <button mat-stroked-button (click)="recipe.isEdit = true">Edit</button>
+                        <div class="col-1 d-flex justify-content-center mt-4">
+                            <span class="less-than-text"> <i class="icon-left"></i></span>
+                        </div>
+                        <div class="col-8 pr-0">
+                            <div class="row" *ngFor="let linkedStock of recipe.linkedStocks">
+                                <div class="consumption-details-wrapper w-100">
+                                    <h1 class="section-head">Raw Stock</h1>
+                                    <div class="mt-2 d-flex align-items-baseline">
+                                        <table id="table-raw-stock" class="table-filled view-mode-table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div>
+                                                            <p>{{ linkedStock.stockName }}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <p>{{ linkedStock.variant?.name }}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <p>
+                                                                {{ linkedStock.quantity }} ({{
+                                                                    linkedStock.stockUnitCode
+                                                                }})
+                                                            </p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="ml-4">
+                                            <button mat-stroked-button (click)="recipe.isEdit = true">Edit</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
