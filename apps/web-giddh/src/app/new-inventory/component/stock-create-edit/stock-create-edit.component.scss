@@ -400,6 +400,13 @@ table.stock-table {
                 text-field {
                     display: table-cell;
                 }
+                .sales-purchase-wrapper {
+                    column-gap: 15px;
+                    text-field,
+                    select-field {
+                        width: 50%;
+                    }
+                }
             }
 
             .icon-button-remove-sales {
