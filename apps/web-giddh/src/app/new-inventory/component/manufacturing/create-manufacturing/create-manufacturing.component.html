@@ -10,8 +10,8 @@
             <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoadingManufacturing"></giddh-page-loader>
             <form autocomplete="off" novalidate #manufacturingForm="ngForm" *ngIf="!isLoadingManufacturing">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div *ngIf="isCompany" class="font-16 pb-2 branch-msg">{{ localeData?.info_message }}</div>
+                    <div class="col-lg-12 mr-b15">
+                        <div *ngIf="isCompany" class="font-16 branch-msg">{{ localeData?.info_message }}</div>
                     </div>
                     <div class="form-fields w-100">
                         <div class="d-inline-flex flex-wrap align-items-end">
@@ -216,12 +216,12 @@
                                     <table id="table-raw-stock">
                                         <thead>
                                             <tr>
-                                                <th>{{ commonLocaleData?.app_name }}</th>
-                                                <th>{{ commonLocaleData?.app_variant }}</th>
-                                                <th>{{ commonLocaleData?.app_quantity }}</th>
-                                                <th>{{ commonLocaleData?.app_unit }}</th>
-                                                <th>{{ commonLocaleData?.app_rate }}</th>
-                                                <th>{{ commonLocaleData?.app_amount }}</th>
+                                                <th width="25%">{{ commonLocaleData?.app_name }}</th>
+                                                <th width="20%">{{ commonLocaleData?.app_variant }}</th>
+                                                <th width="10%">{{ commonLocaleData?.app_quantity }}</th>
+                                                <th width="20%">{{ commonLocaleData?.app_unit }}</th>
+                                                <th width="10%">{{ commonLocaleData?.app_rate }}</th>
+                                                <th width="15%">{{ commonLocaleData?.app_amount }}</th>
                                                 <th>&nbsp;</th>
                                             </tr>
                                         </thead>
