@@ -49,6 +49,7 @@
         <button
             class="cursor-pointer font-15 d-flex p-0 back-button mat-button"
             (click)="backToHomePage($event)"
+            *ngIf="communicationPlatforms?.MSG91?.isConnected"
         >
             <span class="mat-button-wrapper"
                 ><i class="icon-left"></i><span class="back-text">{{ localeData?.communication?.msg91 }}</span>
