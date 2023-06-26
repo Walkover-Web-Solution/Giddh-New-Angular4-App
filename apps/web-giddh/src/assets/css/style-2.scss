@@ -3509,15 +3509,6 @@ button:focus {
     outline: none !important;
 }
 
-.btn.focus,
-button:focus,
-button.cdk-keyboard-focused,
-.mat-button:focus,
-.mat-flat-button:focus,
-.mat-raised-button:focus {
-    box-shadow: var(--color-primary-common-box-shadow) 0px 30px 60px -12px inset,
-        var(--color-primary-common-box-shadow) 0px 18px 36px -18px inset !important;
-}
 
 .mat-raised-button:focus,
 .mat-raised-button.focus {
@@ -14398,16 +14389,19 @@ body.hide-scroll-body.master-page {
     }
 }
 
-/*--- common-btn ---*/
-.mat-button.mat-primary,
-.mat-icon-button.mat-primary,
-.mat-stroked-button.mat-primary {
-    color: var(--color-primary-header-background);
-
+/*================Material Buttons Color=======Start Here==================*/
+.mat-button,
+.mat-icon-button,
+.mat-stroked-button {
+    border-color: var(--color-secondary-input-bar-border) !important;
+    &.mat-primary{
+        color: var(--color-giddh-blue) !important;
+    }  
     .mat-button-focus-overlay {
         background-color: var(--color-primary-header-background) !important;
     }
 }
+/*================Material Buttons Color=======End Here==================*/
 
 /*--- tooltip --*/
 .mat-tooltip {
@@ -14536,7 +14530,9 @@ body.hide-scroll-body.master-page {
     }
 }
 /*=========== Code to handle Screen Resolution =======End========*/
-
+.icon-font-14{
+    font-size: 14px;
+}
 /*--- inventory-search ---*/
 .inventory-search {
     text-field {

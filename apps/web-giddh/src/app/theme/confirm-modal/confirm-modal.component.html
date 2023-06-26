@@ -8,7 +8,7 @@
         <p class="text-gray font-15 mr-t05">{{ permanentlyDeleteMessage }}</p>
     </div>
     <div class="modal-footer">
-        <button mat-raised-button class="btn-success" (click)="onSuccess($event)">{{ ok }}</button>
-        <button mat-raised-button class="btn-danger" (click)="onCancel($event)">{{ cancel }}</button>
+        <button mat-stroked-button color="primary" (click)="onSuccess($event)">{{ ok }}</button>
+        <button mat-stroked-button (click)="onCancel($event)">{{ cancel }}</button>
     </div>
 </div>

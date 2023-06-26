@@ -2146,16 +2146,16 @@
                                         class="d-flex"
                                     >
                                         <button
-                                            mat-raised-button
-                                            class="btn btn-danger"
+                                            mat-stroked-button
+                                            color="warn"
                                             id="update-ledger-delete-button"
                                             (click)="showDeleteEntryModal()"
                                         >
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            class="btn btn-success"
+                                            mat-stroked-button
+                                            color="primary"
                                             id="update-ledger-update-button"
                                             [disabled]="isFileUploading"
                                             [ladda]="isTxnUpdateInProcess$ | async"

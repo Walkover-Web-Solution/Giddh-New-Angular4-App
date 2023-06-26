@@ -57,7 +57,7 @@
         </mat-form-field>
     </div>
 
-    <button mat-raised-button class="btn btn-success" [disabled]="!rejectReason?.value" (click)="submitReject()">
+    <button mat-stroked-button color="primary" [disabled]="!rejectReason?.value" (click)="submitReject()">
         {{ commonLocaleData?.app_submit }}
     </button>
 </div>

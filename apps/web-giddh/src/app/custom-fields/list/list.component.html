@@ -9,9 +9,10 @@
     <div class="container-fluid mr-t15 custom-field-page">
         <div class="d-flex justify-content-between custom-field-header">
             <a
-                mat-button
+                mat-stroked-button
+                color="primary"
                 id="custom-field-btn"
-                class="btn btn-sky-blue mr-0 bdr-radius-50"
+                class="mr-0 bdr-radius-50"
                 [routerLink]="['/pages/custom-fields/create']"
             >
                 {{ localeData?.add_new }}
