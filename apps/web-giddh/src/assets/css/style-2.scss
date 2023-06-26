@@ -2517,7 +2517,7 @@ modal-container.modal {
         font-size: var(--font-size-15);
         position: relative;
         width: 230px !important;
-        max-width: 230px;
+        max-width: 208px;
         display: block;
         border: 1px solid var(--color-secondary-input-bar-border);
         height: 40px;
@@ -14532,6 +14532,10 @@ body.hide-scroll-body.master-page {
         width: 100% !important;
         height: 100% !important;
     }
+    /* Custom Date Picker Width*/
+    .custom-datepicker input {
+        max-width: 214px !important;
+    }
 }
 @media only screen and (max-width: 1366px) {
     body {
@@ -14541,7 +14545,6 @@ body.hide-scroll-body.master-page {
         height: calc(100vh - 56px) !important;
     }
 }
-
 /*=========== Code to handle Screen Resolution =======End========*/
 
 /*--- inventory-search ---*/
