@@ -37,12 +37,12 @@
             </ng-container>
             <ng-container *ngIf="moduleType !== 'branchtransfer'">
                 <div class="pb-3">
-                    <button class="btn-lg" mat-stroked-button (click)="createNewByAsidePanel('stock')">
+                    <button class="btn-lg" mat-stroked-button color="primary" (click)="createNewByAsidePanel('stock')">
                         {{ commonLocaleData?.app_create_stock }}
                     </button>
                 </div>
                 <div>
-                    <button class="btn-lg" mat-stroked-button (click)="createNewByAsidePanel('group')">
+                    <button class="btn-lg" mat-stroked-button color="primary" (click)="createNewByAsidePanel('group')">
                         {{ commonLocaleData?.app_create_group }}
                     </button>
                 </div>
