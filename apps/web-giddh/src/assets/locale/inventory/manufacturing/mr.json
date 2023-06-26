@@ -26,5 +26,13 @@
     "confirm_delete_manufacturing": "तुम्हाला उत्पादन हटवायचे आहे का?",
     "info_message": "डेटा संपादित करण्यासाठी, शाखा मोडवर जा.",
     "add_recipe": "कृती जोडा",
-    "variant_already_selected": "Variant is already selected."
+    "variant_already_selected": "प्रकार आधीच निवडलेला आहे.",
+    "confirm_delete_recipe": "तुम्हाला रेसिपी हटवायची आहे का?",
+    "confirm_delete_recipe_linked_stock": "तुम्हाला कच्चा स्टॉक हटवायचा आहे का?",
+    "save_variants": "कृपया रेसिपी तयार करण्यासाठी स्टॉक अपडेट करा",
+    "select_output_variant": "आउटपुट प्रकार निवडा",
+    "enter_output_quantity": "आउटपुट प्रमाण प्रविष्ट करा",
+    "select_output_stock_unit": "आउटपुट स्टॉक युनिट निवडा",
+    "enter_quantity": "प्रमाण प्रविष्ट करा",
+    "select_stock_unit": "स्टॉक युनिट निवडा"
 }

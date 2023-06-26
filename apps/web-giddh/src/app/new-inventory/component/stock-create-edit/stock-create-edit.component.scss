@@ -234,10 +234,10 @@
                 background-color: var(--color-primary-subscription-plans-top-bar-background);
                 font-size: var(--font-size-12);
             }
-        }
-        .dot-img {
-            img {
-                width: 20px;
+            .dot-img {
+                img {
+                    width: 20px;
+                }
             }
         }
         .variant-field-wrap {
@@ -293,7 +293,8 @@
                         justify-content: center;
                         position: absolute;
                         top: 10px;
-                        right: -64px;
+                        left: 95%;
+                        min-width: 95px;
                     }
                 }
 
@@ -363,6 +364,7 @@
     }
 
     .button-group {
+        column-gap: 15px;
         .btn-danger {
             background-color: var(--color-primary-button-background) !important;
         }
@@ -371,6 +373,7 @@
 
 table.stock-table {
     table-layout: fixed;
+    margin-left: 2px;
 
     .table-heading-color {
         color: var(--color-ledger-heading);
@@ -397,6 +400,13 @@ table.stock-table {
                 select-field,
                 text-field {
                     display: table-cell;
+                }
+                .sales-purchase-wrapper {
+                    column-gap: 15px;
+                    text-field,
+                    select-field {
+                        width: 50%;
+                    }
                 }
             }
 
