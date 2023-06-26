@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ReplaySubject } from "rxjs";
-import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
-import { COMMA, ENTER } from "@angular/cdk/keycodes";
+import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
@@ -12,7 +11,7 @@ import { AppState } from "../../../store";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { ActivatedRoute, Router } from "@angular/router";
 import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
-import { NgForm } from "@angular/forms";
+import { FormControl, NgForm } from "@angular/forms";
 import { INVALID_STOCK_ERROR_MESSAGE } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { CompanyActions } from "../../../actions/company.actions";
@@ -21,6 +20,7 @@ import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-
 import { FieldTypes } from "../../../custom-fields/custom-fields.constant";
 import { Location } from '@angular/common';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CreateRecipeComponent } from "../recipe/create-recipe/create-recipe.component";
 
 @Component({
     selector: "stock-create-edit",
@@ -30,8 +30,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 export class StockCreateEditComponent implements OnInit, OnDestroy {
     /** Instance of stock create/edit form */
     @ViewChild('stockCreateEditForm', { static: false }) public stockCreateEditForm: NgForm;
-    /** Key codes for handling of add variant options */
-    public matChipSeparatorKeyCodes: any[] = [ENTER, COMMA];
+    /** Instance of recipe create/update component */
+    @ViewChild('createRecipe', { static: false }) public createRecipe: CreateRecipeComponent;
     /* this will store image path*/
     public imgPath: string = "";
     /** Stock units list */
@@ -199,8 +199,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public optionEditing: any;
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
+    /** Company currency symbol */
     public companyCurrencySymbol: string = '';
+    /** Amount display format */
     public inputMaskFormat: string = '';
+    public optionValueTimeout: any;
 
     constructor(
         private inventoryService: InventoryService,
@@ -276,17 +279,21 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     /**
      * Add option value
      *
-     * @param {*} value
      * @param {number} optionIndex
      * @param {number} optionValueIndex
+     * @returns {void}
      * @memberof StockCreateEditComponent
      */
-    public addNewOptionValue(value: any, optionIndex: number, optionValueIndex: number): void {
-        // const valueIndex = this.stockForm.options[optionIndex].values?.filter((optionValue, index) => { optionValue === value && optionValueIndex !== index });
-        // if (valueIndex?.length) {
-        //     this.stockForm.options[optionIndex].values[optionValueIndex] = "";
-        //     this.toaster.showSnackBar("warning", "You've already used the option value " + value);
-        // }
+    public addNewOptionValue(optionIndex: number, optionValueIndex: number): void {
+        const value = this.stockForm.options[optionIndex].values[optionValueIndex].value;
+        const valueIndex = this.stockForm.options[optionIndex].values?.filter((optionValue, index) => { return optionValue?.value === value && optionValueIndex !== index });
+
+        if (valueIndex?.length) {
+            this.stockForm.options[optionIndex].values[optionValueIndex].value = "";
+            const message = this.localeData?.duplicate_option_value?.replace("[VALUE]", value);
+            this.toaster.showSnackBar("warning", message);
+            return;
+        }
 
         if (!this.stockForm.options[optionIndex].values[optionValueIndex + 1] && value?.trim()) {
             this.stockForm.options[optionIndex].values[optionValueIndex + 1] = { index: optionValueIndex + 1, value: "" };
@@ -870,7 +877,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.resetTaxes();
                 if (!openEditAfterSave) {
                     this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
-                    this.backClicked();
                 } else {
                     this.router.navigate(['/pages/inventory/v2/stock/' + this.stockForm.type?.toLowerCase() + '/edit/' + response.body?.uniqueName], { queryParams: { tab: 2 } });
                 }
@@ -1139,7 +1145,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.toaster.showSnackBar("success", this.localeData?.stock_update_succesfully);
-                this.backClicked();
+                if (this.createRecipe.hasRecipeForStock()) {
+                    this.createRecipe.saveRecipeFromStock();
+                } else {
+                    this.backClicked();
+                }
             } else {
                 this.toaster.showSnackBar("error", response?.message);
             }
@@ -1746,10 +1756,21 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     /**
      * Callback for option value update
      *
+     * @param {*} option
      * @param {number} optionIndex
      * @memberof StockCreateEditComponent
      */
-    public updateOptionValues(optionIndex: number): void {
+    public updateOptionValues(option: any, optionIndex: number): void {
+        if (!option?.name) {
+            this.toaster.showSnackBar("warning", this.localeData?.option_name_required);
+            return;
+        } else if (!option.values?.filter(optionValue => optionValue?.value?.trim())?.length) {
+            this.toaster.showSnackBar("warning", this.localeData?.option_value_required);
+            return;
+        }
+        
+        option.isEdit = false;
+
         if (this.optionEditing) {
             this.stockForm.options[optionIndex]?.values?.forEach((value, index) => {
                 const currentValue = value?.value?.trim();
@@ -1787,5 +1808,23 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 variant.purchaseTaxInclusive = status;
             }
         });
+    }
+
+    /**
+     * Validate's option value
+     *
+     * @param {number} optionIndex
+     * @param {number} optionValueIndex
+     * @memberof StockCreateEditComponent
+     */
+    public validateOptionValue(optionIndex: number, optionValueIndex: number): void {
+        if (this.optionValueTimeout) {
+            clearTimeout(this.optionValueTimeout);
+        }
+
+        this.optionValueTimeout = setTimeout(() => {
+            clearTimeout(this.optionValueTimeout);
+            this.addNewOptionValue(optionIndex, optionValueIndex);
+        }, 500);
     }
 }

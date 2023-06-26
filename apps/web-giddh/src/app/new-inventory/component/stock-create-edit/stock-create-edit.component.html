@@ -6,12 +6,12 @@
     (translationComplete)="translationComplete($event)"
 >
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-    <ng-container *ngIf="!showLoader">
+    <div [style.display]="showLoader ? 'none' : 'block'">
         <div class="relative create-new-inventory-page static-tabs-on-page">
             <hamburger-menu></hamburger-menu>
             <div class="select-physical-product input-border-wrapper">
                 <form class="form-body" #stockCreateEditForm="ngForm" novalidate autocomplete="off">
-                    <span *ngIf="!showLoader">
+                    <span>
                         <button
                             *ngIf="queryParams?.stockUniqueName"
                             (click)="backClicked()"
@@ -815,7 +815,7 @@
                                                                     <div class="col-lg-4 option-delete pr-0 mt-2">
                                                                         <div class="w-100">
                                                                             <input-field
-                                                                                [placeholder]="'Option name'"
+                                                                                [placeholder]="localeData?.option_name"
                                                                                 [name]="'option-' + i"
                                                                                 [(ngModel)]="option.name"
                                                                                 [type]="'text'"
@@ -844,7 +844,7 @@
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="col-lg-12">
-                                                                        <label>Option values</label>
+                                                                        <label>{{ localeData?.option_values }}</label>
                                                                     </div>
                                                                 </div>
                                                                 <div
@@ -861,7 +861,7 @@
                                                                                 [name]="'option-value-' + i + '-' + j"
                                                                                 [(ngModel)]="optionValue.value"
                                                                                 (ngModelChange)="
-                                                                                    addNewOptionValue($event, i, j)
+                                                                                    validateOptionValue(i, j)
                                                                                 "
                                                                                 class="inventory-category-field-input"
                                                                                 [type]="'text'"
@@ -887,11 +887,9 @@
                                                                 <div class="done-btn my-3">
                                                                     <button
                                                                         mat-stroked-button
-                                                                        (click)="
-                                                                            option.isEdit = false; updateOptionValues(i)
-                                                                        "
+                                                                        (click)="updateOptionValues(option, i)"
                                                                     >
-                                                                        Done
+                                                                        {{ commonLocaleData?.app_done }}
                                                                     </button>
                                                                 </div>
                                                             </ng-container>
@@ -902,8 +900,9 @@
                                                                             <div class="data-wrap">
                                                                                 <div class="dot-img">
                                                                                     <img
-                                                                                        src="../../../../assets/images/drag-dots-com.svg"
-                                                                                        alt=""
+                                                                                        src="{{
+                                                                                            imgPath
+                                                                                        }}drag-dots-com.svg"
                                                                                     />
                                                                                 </div>
                                                                                 <div>
@@ -940,7 +939,7 @@
                                                                                         editOptionValues(option)
                                                                                     "
                                                                                 >
-                                                                                    Edit
+                                                                                    {{ commonLocaleData?.app_edit }}
                                                                                 </button>
                                                                             </div>
                                                                         </div>
@@ -1520,9 +1519,11 @@
                                         </button>
                                     </div>
                                     <create-recipe
-                                        *ngIf="queryParams?.stockUniqueName"
+                                        #createRecipe
+                                        *ngIf="queryParams?.stockUniqueName && stockForm?.uniqueName"
                                         [stock]="stockForm"
                                         [variants]="stockForm.variants"
+                                        (recipeSaved)="backClicked()"
                                     ></create-recipe>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.other">
@@ -4765,5 +4766,5 @@
                 </button>
             </div>
         </div>
-    </ng-container>
+    </div>
 </ng-container>

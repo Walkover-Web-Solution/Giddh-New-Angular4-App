@@ -5,7 +5,7 @@
     (localeData)="localeData = $event"
 >
     <div class="pd-l15 pt-3">
-        <div *ngIf="newVariants?.length" class="save-recipe">Please save new variants to create recipe for them</div>
+        <div *ngIf="newVariants?.length" class="save-recipe">{{ localeData?.save_variants }}</div>
     </div>
     <section class="create-recipe">
         <div class="recipe-wrapper">
@@ -23,19 +23,19 @@
                     </div>
                 </div>
             </div> -->
-            <ng-container *ngFor="let recipe of receiptObject.manufacturingDetails; let i = index">
+            <ng-container *ngFor="let recipe of recipeObject.manufacturingDetails; let i = index">
                 <div class="row py-4 manufacturing-border" *ngIf="recipe.isEdit">
                     <div class="col-3">
                         <div class="row">
                             <div class="form-fields w-100">
                                 <div class="d-flex flex-column flex-wrap w-100 row-gap">
-                                    <h1 class="section-head pb-2">Finished Stock</h1>
+                                    <h1 class="section-head pb-2">{{ localeData?.finished_stock }}</h1>
                                     <div>
                                         <dropdown-field
                                             class="width-280"
                                             [name]="'variant_' + i"
                                             [scrollableElementId]="'variant_' + i"
-                                            [placeholder]="'Select Output Variant'"
+                                            [placeholder]="localeData?.select_output_variant"
                                             [options]="variantsList"
                                             [defaultValue]="recipe.variant?.name"
                                             (selectedOption)="
@@ -51,7 +51,7 @@
                                             class="width-280"
                                             [type]="'number'"
                                             [name]="'quantity_' + i"
-                                            [placeholder]="'Enter Output Quantity'"
+                                            [placeholder]="localeData?.enter_output_quantity"
                                             [(ngModel)]="recipe.manufacturingQuantity"
                                         ></input-field>
                                     </div>
@@ -59,7 +59,7 @@
                                         <dropdown-field
                                             [name]="'unit_' + i"
                                             [scrollableElementId]="'unit_' + i"
-                                            [placeholder]="'Select Output Stock Unit'"
+                                            [placeholder]="localeData?.select_output_stock_unit"
                                             [options]="recipe.units"
                                             [defaultValue]="recipe.manufacturingUnitCode"
                                             (selectedOption)="
@@ -79,7 +79,7 @@
                     <div class="col-8 pr-0">
                         <div class="row">
                             <div class="consumption-details-wrapper w-100">
-                                <h1 class="section-head">Raw Stock</h1>
+                                <h1 class="section-head">{{ localeData?.raw_stock }}</h1>
                                 <div class="mt-2">
                                     <table class="table-raw-stock">
                                         <thead>
@@ -142,7 +142,7 @@
                                                             class="text-right"
                                                             [type]="'number'"
                                                             [name]="'quantity_' + i + '_' + j"
-                                                            [placeholder]="'Enter Quantity'"
+                                                            [placeholder]="localeData?.enter_quantity"
                                                             [(ngModel)]="linkedStock.quantity"
                                                         ></text-field>
                                                     </div>
@@ -153,7 +153,7 @@
                                                             [cssClass]="'form-control mat-field-border'"
                                                             [name]="'unit_' + i + '_' + j"
                                                             [scrollableElementId]="'unit_' + i + '_' + j"
-                                                            [placeholder]="'Select Stock Unit'"
+                                                            [placeholder]="localeData?.select_stock_unit"
                                                             [options]="linkedStock.units"
                                                             [defaultValue]="linkedStock.stockUnitCode"
                                                             (selectedOption)="
@@ -184,7 +184,7 @@
                                     </table>
                                     <div>
                                         <a href="javascript:void(0);" (click)="addNewLinkedStockInRecipe(recipe)">
-                                            + Add Stock
+                                            {{ localeData?.add_stock }}
                                         </a>
                                     </div>
                                 </div>
@@ -192,7 +192,9 @@
                         </div>
                     </div>
                     <div class="col-12 mr-t15" *ngIf="recipe.isEdit">
-                        <button mat-stroked-button class="mb-2" (click)="recipe.isEdit = false">Done</button>
+                        <button mat-stroked-button class="mb-2" (click)="recipe.isEdit = false">
+                            {{ commonLocaleData?.app_done }}
+                        </button>
                     </div>
                 </div>
                 <div class="manufacturing-border" *ngIf="!recipe.isEdit">
@@ -201,7 +203,9 @@
                             <div class="row">
                                 <div class="form-fields w-100">
                                     <div class="d-flex flex-column flex-wrap gap-between w-100">
-                                        <h1 class="section-head p-0" *ngIf="i === 0">Finished Stock</h1>
+                                        <h1 class="section-head p-0" *ngIf="i === 0">
+                                            {{ localeData?.finished_stock }}
+                                        </h1>
                                         <div>
                                             <p>{{ recipe?.variant?.name }}</p>
                                         </div>
@@ -222,7 +226,7 @@
                         <div class="col-8 pr-0">
                             <div class="row" *ngFor="let linkedStock of recipe.linkedStocks; let j = index">
                                 <div class="consumption-details-wrapper w-100">
-                                    <h1 class="section-head" *ngIf="i === 0 && j === 0">Raw Stock</h1>
+                                    <h1 class="section-head" *ngIf="i === 0 && j === 0">{{ localeData?.raw_stock }}</h1>
                                     <div class="mt-2 d-flex align-items-baseline">
                                         <table class="table-filled view-mode-table table-raw-stock">
                                             <tbody>
@@ -254,7 +258,7 @@
                                                 href="javascript:void(0);"
                                                 class="icon-remove"
                                                 (click)="recipe.isEdit = true"
-                                                matTooltip="Edit"
+                                                [matTooltip]="commonLocaleData?.app_edit"
                                                 matTooltipPosition="above"
                                             >
                                                 <i class="icon-edit-pencil"></i>
@@ -262,7 +266,7 @@
                                             <a
                                                 href="javascript:void(0);"
                                                 class="icon-remove"
-                                                matTooltip="Delete"
+                                                [matTooltip]="commonLocaleData?.app_delete"
                                                 matTooltipPosition="above"
                                                 (click)="removeRecipe(i)"
                                             >
@@ -276,7 +280,7 @@
                     </div>
                 </div>
             </ng-container>
-            <div class="row mt-2 add-recipe" *ngIf="receiptObject.manufacturingDetails?.length < variantsList?.length">
+            <div class="row mt-2 add-recipe" *ngIf="recipeObject.manufacturingDetails?.length < variantsList?.length">
                 <button mat-button class="mb-2" (click)="addNewRecipe()">
                     <span>+</span> {{ localeData?.add_recipe }}
                 </button>

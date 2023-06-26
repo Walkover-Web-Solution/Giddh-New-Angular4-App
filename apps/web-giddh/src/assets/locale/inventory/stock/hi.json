@@ -13,6 +13,9 @@
     "is_sales_inclusive":"क्या बिक्री दर कर समावेशी है?",
     "purchase_information": "क्रय जानकारी",
     "linked_accounts": "जुड़े खातों",
+    "linked_account": "जुड़े खाते",
+    "linked_purchase_accounts": "लिंक किए गए खरीद खाते",
+    "linked_sales_accounts": "लिंक किए गए बिक्री खाते",
     "unit_price": "यूनिट मूल्य",
     "add_new":"+ नया जोड़ें",
     "sales_information": "बिक्री की जानकारी",
@@ -30,7 +33,7 @@
     "sales_unit": "बिक्री इकाई दर",
     "is_rate_inclusive":"क्या दर कर समावेशी है?",
     "fixed_assets_unit": "अचल संपत्ति इकाई दरें",
-    "custom_field": "अनुकूलित field",
+    "custom_field": "अनुकूलित फील्ड",
     "opening_balance": "प्रारंभिक जमा",
     "opening_qty": "उद्घाटन मात्रा",
     "enter_amount": "राशि डालें",
@@ -79,6 +82,11 @@
     "stock_create_succesfully":"स्टॉक सफलतापूर्वक बनाया गया।",
     "stock_update_succesfully":"स्टॉक सफलतापूर्वक अपडेट किया गया।",
     "remove_variant":"कार्रवाई करने से सभी विविधताएं हट जाएंगी, क्या आप वाकई इसे अचयनित करना चाहते हैं?",
-    "inclusive": "MRP (Inclusive)",
-    "exclusive": "Exclusive"
+    "inclusive": "एमआरपी (समावेशी)",
+    "exclusive": "अनन्य",
+    "option_name": "विकल्प का नाम",
+    "option_values": "विकल्प मान",
+    "duplicate_option_value": "आप पहले ही विकल्प मान [VALUE] का उपयोग कर चुके हैं|",
+    "option_name_required": "विकल्प का नाम आवश्यक है",
+    "option_value_required": "विकल्प मान आवश्यक है"
 }
