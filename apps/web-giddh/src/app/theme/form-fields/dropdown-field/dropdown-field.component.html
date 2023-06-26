@@ -41,7 +41,7 @@
                     [value]="option"
                     [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
                     [matTooltip]="option?.label"
-                    matTooltipPosition="above"
+                    matTooltipPosition="right"
                 >
                     <ng-template
                         [ngTemplateOutletContext]="{ option: option }"
@@ -58,7 +58,7 @@
                     *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew"
                     (click)="createNewRecord()"
                     [matTooltip]="option?.label"
-                    matTooltipPosition="above"
+                    matTooltipPosition="right"
                 >
                     <a href="javascript:;" class="options-class-create">
                         {{ commonLocaleData?.app_create_new }}
@@ -93,7 +93,7 @@
                             [value]="option"
                             [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
                             [matTooltip]="option?.label"
-                            matTooltipPosition="above"
+                            matTooltipPosition="right"
                         >
                             <ng-template
                                 [ngTemplateOutletContext]="{ option: option }"
