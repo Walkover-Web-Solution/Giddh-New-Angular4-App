@@ -88,5 +88,6 @@
     "option_values": "पर्याय मूल्ये",
     "duplicate_option_value": "तुम्ही आधीच पर्याय मूल्य [VALUE] वापरले आहे.",
     "option_name_required": "पर्यायाचे नाव आवश्यक आहे",
-    "option_value_required": "पर्याय मूल्य आवश्यक आहे"
+    "option_value_required": "पर्याय मूल्य आवश्यक आहे",
+    "save_stock_for_recipe": "स्टॉक सेव्ह करा आणि रेसिपी तयार करा"
 }

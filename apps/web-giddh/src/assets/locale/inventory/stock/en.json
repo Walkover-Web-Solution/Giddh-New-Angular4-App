@@ -88,5 +88,6 @@
     "option_values": "Option values",
     "duplicate_option_value": "You've already used the option value [VALUE].",
     "option_name_required": "Option name is required",
-    "option_value_required": "Option value is required"
+    "option_value_required": "Option value is required",
+    "save_stock_for_recipe": "Save stock and Create recipe"
 }

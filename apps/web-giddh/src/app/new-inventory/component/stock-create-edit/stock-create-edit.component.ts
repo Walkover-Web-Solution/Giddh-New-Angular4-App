@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ReplaySubject } from "rxjs";
-import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
+import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
@@ -11,7 +11,7 @@ import { AppState } from "../../../store";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { ActivatedRoute, Router } from "@angular/router";
 import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
-import { FormControl, NgForm } from "@angular/forms";
+import { NgForm } from "@angular/forms";
 import { INVALID_STOCK_ERROR_MESSAGE } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { CompanyActions } from "../../../actions/company.actions";
@@ -203,7 +203,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public companyCurrencySymbol: string = '';
     /** Amount display format */
     public inputMaskFormat: string = '';
+    /** Holds timeout to validate option value */
     public optionValueTimeout: any;
+    /** True if we need to show tax field. We are maintaining this because taxes are not getting reset on form reset */
+    public showTaxField: boolean = true;
 
     constructor(
         private inventoryService: InventoryService,
@@ -285,8 +288,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public addNewOptionValue(optionIndex: number, optionValueIndex: number): void {
-        const value = this.stockForm.options[optionIndex].values[optionValueIndex].value;
-        const valueIndex = this.stockForm.options[optionIndex].values?.filter((optionValue, index) => { return optionValue?.value === value && optionValueIndex !== index });
+        const value = this.stockForm.options[optionIndex]?.values[optionValueIndex].value;
+        const valueIndex = this.stockForm.options[optionIndex]?.values?.filter((optionValue, index) => { return optionValue?.value === value && optionValueIndex !== index });
 
         if (valueIndex?.length) {
             this.stockForm.options[optionIndex].values[optionValueIndex].value = "";
@@ -295,7 +298,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             return;
         }
 
-        if (!this.stockForm.options[optionIndex].values[optionValueIndex + 1] && value?.trim()) {
+        if (!this.stockForm.options[optionIndex]?.values[optionValueIndex + 1] && value?.trim()) {
             this.stockForm.options[optionIndex].values[optionValueIndex + 1] = { index: optionValueIndex + 1, value: "" };
         }
     }
@@ -454,7 +457,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public checkOptionValidity(): boolean {
         let isValid = true;
         this.stockForm.options?.forEach(option => {
-            if (!option.name || !option.values.length) {
+            if (!option?.name || !option?.values?.length) {
                 isValid = false;
                 return isValid;
             }
@@ -487,7 +490,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public deleteOptionValue(optionIndex: number, optionValueIndex: number): void {
-        let optionValues = this.stockForm.options[optionIndex].values?.filter((data, index) => optionValueIndex !== index);
+        let optionValues = this.stockForm.options[optionIndex]?.values?.filter((data, index) => optionValueIndex !== index);
         this.stockForm.options[optionIndex].values = optionValues;
     }
 
@@ -767,11 +770,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     * @memberof StockCreateEditComponent
     */
     public resetTaxes(): void {
-        this.taxes?.forEach(tax => {
+        this.showTaxField = false;
+        this.changeDetection.detectChanges();
+        this.taxes = this.taxes?.map(tax => {
             tax.isChecked = false;
             tax.isDisabled = false;
             return tax;
         });
+        this.showTaxField = true;
         this.changeDetection.detectChanges();
     }
 
@@ -878,7 +884,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.resetForm(this.stockCreateEditForm);
-                this.resetTaxes();
                 if (!openEditAfterSave) {
                     this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
                 } else {
@@ -1025,7 +1030,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.outOfStockSelling = response.body.outOfStockSelling;
                 this.stockForm.variants = response.body.variants;
                 this.stockForm.options = response.body.options?.map(option => {
-                    option.values = option.values?.map((optionValue, optionIndex) => {
+                    option.values = option?.values?.map((optionValue, optionIndex) => {
                         return { index: optionIndex, value: optionValue };
                     });
                     return option;
@@ -1332,7 +1337,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public resetForm(stockCreateEditForm: NgForm): void {
-        stockCreateEditForm?.form?.reset();
         stockCreateEditForm?.form?.controls?.hsn_sac?.setValue('HSN');
         this.stockForm = {
             type: this.stockForm.type,
@@ -1445,7 +1449,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             customFields: []
         };
         this.isFormSubmitted = false;
-        this.stockGroupUniqueName = this.stockGroups[0]?.value;
+        this.stockGroupUniqueName = this.stockGroups?.length ? this.stockGroups[0]?.value : '';
         this.isVariantAvailable = false;
         this.stockUnitName = "";
         this.stockGroupName = "";
@@ -1458,7 +1462,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.taxTempArray = [];
         this.isTaxSelectionOpen = false;
         this.processedTaxes = [];
-        this.changeDetection.detectChanges();
+        this.activeTabIndex = 0;
+        this.resetTaxes();
     }
 
     /**
@@ -1768,7 +1773,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (!option?.name) {
             this.toaster.showSnackBar("warning", this.localeData?.option_name_required);
             return;
-        } else if (!option.values?.filter(optionValue => optionValue?.value?.trim())?.length) {
+        } else if (!option?.values?.filter(optionValue => optionValue?.value?.trim())?.length) {
             this.toaster.showSnackBar("warning", this.localeData?.option_value_required);
             return;
         }

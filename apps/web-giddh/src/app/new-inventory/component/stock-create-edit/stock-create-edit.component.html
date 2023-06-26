@@ -44,7 +44,6 @@
                                                 [type]="'text'"
                                                 [(ngModel)]="stockForm.name"
                                                 (ngModelChange)="checkSpacingValidation(stockForm.name)"
-                                                [required]="true"
                                                 [autocomplete]="'off'"
                                                 [showError]="isFormSubmitted && !stockForm.name"
                                             >
@@ -60,7 +59,6 @@
                                                     stockUnitName = $event.label
                                                 "
                                                 [defaultValue]="stockUnitName"
-                                                [required]="true"
                                                 [showError]="isFormSubmitted && !stockForm.stockUnitUniqueName"
                                             >
                                             </dropdown-field>
@@ -116,7 +114,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="row mr-b1 mr-t15">
+                                    <div class="row mr-b1 mr-t15" *ngIf="showTaxField">
                                         <div class="col-sm-6 col-lg-6">
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-label>{{ commonLocaleData?.app_tax }}</mat-label>
@@ -795,7 +793,7 @@
                                             href="javascript:;"
                                             class="option-color"
                                             *ngIf="!isVariantAvailable"
-                                            (click)="isVariantAvailable = !isVariantAvailable"
+                                            (click)="isVariantAvailable = !isVariantAvailable; addVariantOption()"
                                         >
                                             <span class="add-option">+</span> {{ localeData?.has_multiples }}
                                         </a>
@@ -819,7 +817,6 @@
                                                                                 [name]="'option-' + i"
                                                                                 [(ngModel)]="option.name"
                                                                                 [type]="'text'"
-                                                                                [required]="true"
                                                                                 [showError]="
                                                                                     isFormSubmitted && !option.name
                                                                                 "
@@ -1515,7 +1512,7 @@
                                 <mat-tab [label]="localeData?.manufacturing">
                                     <div class="pd-l15 pt-3 mr-b5" *ngIf="!queryParams?.stockUniqueName">
                                         <button mat-stroked-button color="primary" (click)="createStock(true)">
-                                            Save stock and Create recipe
+                                            {{ localeData?.save_stock_for_recipe }}
                                         </button>
                                     </div>
                                     <create-recipe
