@@ -159,160 +159,97 @@
                                 <!-- region customer section -->
                                 <div class="clearfix">
                                     <div class="row">
-                                        <!-- region customer name -->
-                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
-                                            <label
-                                                >{{
-                                                    !isPurchaseInvoice && !isDebitNote
-                                                        ? localeData?.customer_name
-                                                        : commonLocaleData?.app_vendor_name
-                                                }}<span class="red-text">*</span></label
-                                            >
-                                        </div>
                                         <!-- endregion -->
                                         <!-- region customer dropdown -->
                                         <div
-                                            class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customers-name"
+                                            class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12 select-customers-name"
                                         >
-                                            <div class="clearfix d-flex flex-column">
-                                                <div class="d-flex">
-                                                    <!-- region if not cashinvoice show customer dropdown -->
-                                                    <ng-container *ngIf="!isCashInvoice">
-                                                        <select-field
-                                                            #openAccountSelectionDropdown
-                                                            [cssClass]="
-                                                                'form-control mat-field-border customer-dropdown'
-                                                            "
-                                                            [customPanelClass]="'panel-cl customer-dropdown-panel'"
-                                                            [name]="'voucherDetails.customerName'"
-                                                            [openDropdown]="openCustomerDropdown"
-                                                            [placeholder]="customerPlaceHolder"
-                                                            [options]="customerAcList$ | async"
-                                                            (selectedOption)="onSelectCustomer($event)"
-                                                            (createOption)="addNewAccount()"
-                                                            [readonly]="
-                                                                isEinvoiceGenerated ||
-                                                                (isUpdateMode &&
-                                                                    invoiceType !== 'sales' &&
-                                                                    invoiceType !== 'cash' &&
-                                                                    invoiceType !== 'purchase' &&
-                                                                    (voucherApiVersion === 1 ||
-                                                                        (voucherApiVersion === 2 &&
-                                                                            invoiceType !== 'debit note' &&
-                                                                            invoiceType !== 'credit note')))
-                                                            "
-                                                            [defaultValue]="invFormData.voucherDetails.customerName"
-                                                            [createNewText]="customerNotFoundText"
-                                                            [enableDynamicSearch]="true"
-                                                            (dynamicSearchedQuery)="
-                                                                onSearchQueryChanged($event, 1, 'customer')
-                                                            "
-                                                            [allowValueReset]="true"
-                                                            (onClear)="resetCustomerName($event)"
-                                                            [isPaginationEnabled]="true"
-                                                            (scrollEnd)="handleScrollEnd('customer')"
-                                                            [scrollableElementId]="'customerId'"
-                                                        >
-                                                            <ng-template #optionTemplate let-option="option">
-                                                                <a href="javascript:void(0)">
-                                                                    <div class="option-label">
-                                                                        {{ option?.label }}
-                                                                    </div>
-                                                                    <div class="option-value">
-                                                                        {{ option?.value }}
-                                                                    </div>
-                                                                </a>
-                                                            </ng-template>
-                                                        </select-field>
-                                                    </ng-container>
-                                                    <!-- endregion -->
-                                                    <!-- region if not cashinvoice show customer dropdown -->
-                                                    <ng-container *ngIf="isCashInvoice">
-                                                        <text-field
-                                                            [type]="'text'"
-                                                            [name]="'voucherDetails.customerName'"
-                                                            [autoFocus]="true"
-                                                            #inputCustomerName
-                                                            [cssClass]="
-                                                                'form-control mat-field-border cash-invoice-input'
-                                                            "
-                                                            [(ngModel)]="invFormData.voucherDetails.customerName"
-                                                            (change)="handleCustomerChange($event)"
-                                                            [readonly]="
-                                                                isEinvoiceGenerated ||
-                                                                (isUpdateMode &&
-                                                                    invoiceType !== 'sales' &&
-                                                                    invoiceType !== 'cash')
-                                                            "
-                                                        ></text-field>
-                                                    </ng-container>
-                                                    <!-- endregion -->
-                                                    <!-- region previous details commented for multicurrency changes-->
-                                                    <div
-                                                        class="d-flex cp aqua-color align-items-center ml-3"
-                                                        #copyPreviousEstimate
-                                                        *ngIf="
-                                                            !isPurchaseInvoice &&
-                                                            ((voucherApiVersion === 2 &&
-                                                                !isPendingVoucherType &&
-                                                                !isCashInvoice) ||
-                                                                (voucherApiVersion !== 2 &&
-                                                                    !(isPendingVoucherType && isCashInvoice))) &&
-                                                            (invFormData.voucherDetails.customerName ||
-                                                                invFormData.voucherDetails.customerUniquename) &&
-                                                            lastInvoices.length &&
-                                                            !isUpdateMode
+                                            <div class="w-100">
+                                                <!-- region if not cashinvoice show customer dropdown -->
+                                                <ng-container *ngIf="!isCashInvoice">
+                                                    <dropdown-field
+                                                        #openAccountSelectionDropdown
+                                                        [customPanelClass]="'panel-cl customer-dropdown-panel'"
+                                                        [name]="'voucherDetails.customerName'"
+                                                        [openDropdown]="openCustomerDropdown"
+                                                        [placeholder]="customerPlaceHolder"
+                                                        [options]="customerAcList$ | async"
+                                                        (selectedOption)="onSelectCustomer($event)"
+                                                        (createOption)="addNewAccount()"
+                                                        [readonly]="
+                                                            isEinvoiceGenerated ||
+                                                            (isUpdateMode &&
+                                                                invoiceType !== 'sales' &&
+                                                                invoiceType !== 'cash' &&
+                                                                invoiceType !== 'purchase' &&
+                                                                (voucherApiVersion === 1 ||
+                                                                    (voucherApiVersion === 2 &&
+                                                                        invoiceType !== 'debit note' &&
+                                                                        invoiceType !== 'credit note')))
                                                         "
+                                                        [defaultValue]="invFormData.voucherDetails.customerName"
+                                                        [createNewText]="customerNotFoundText"
+                                                        [enableDynamicSearch]="true"
+                                                        (dynamicSearchedQuery)="
+                                                            onSearchQueryChanged($event, 1, 'customer')
+                                                        "
+                                                        [allowValueReset]="true"
+                                                        (onClear)="resetCustomerName($event)"
+                                                        [isPaginationEnabled]="true"
+                                                        (scrollEnd)="handleScrollEnd('customer')"
+                                                        [scrollableElementId]="'customerId'"
                                                     >
-                                                        <a href="javascript:;" [matMenuTriggerFor]="menu">
-                                                            <i class="icon-copy-file"></i> {{ copyPreviousInvoiceText }}
-                                                        </a>
-                                                        <div class="previous-estimate-wrapper">
-                                                            <mat-menu #menu="matMenu" class="copy-invoice-menu">
-                                                                <button
-                                                                    mat-menu-item
-                                                                    *ngFor="let item of lastInvoices"
-                                                                    (click)="copyInvoice(item)"
-                                                                    class="line-height-initial"
-                                                                >
-                                                                    <div class="pd">
-                                                                        <div class="d-flex flex-column">
-                                                                            <div class="d-flex justify-content-between">
-                                                                                <span>{{ item?.versionNumber }}</span>
-                                                                                <span>{{
-                                                                                    item?.grandTotal?.amountForAccount
-                                                                                }}</span>
-                                                                            </div>
-                                                                            <span
-                                                                                >{{ item?.date }} (
-                                                                                {{ item?.account?.name }} )</span
-                                                                            >
-                                                                        </div>
-                                                                    </div>
-                                                                </button>
-                                                            </mat-menu>
-                                                        </div>
-                                                    </div>
-                                                    <!-- endregion -->
-                                                </div>
-                                                <!-- region Unregistered Business / customer details -->
-                                                <div
-                                                    class="d-flex aqua-color"
-                                                    *ngIf="invFormData.voucherDetails.customerName"
-                                                >
-                                                    <span
-                                                        class="cp aqua-color mr-r05"
-                                                        *ngIf="!isCashInvoice && !isUpdateMode"
-                                                    >
-                                                        <a href="javascript:void(0)" (click)="getCustomerDetails()">{{
-                                                            !isPurchaseInvoice
-                                                                ? localeData?.customer_details
-                                                                : localeData?.vendor_details
-                                                        }}</a>
-                                                    </span>
-                                                </div>
+                                                        <ng-template #optionTemplate let-option="option">
+                                                            <a href="javascript:void(0)">
+                                                                <div class="option-label">
+                                                                    {{ option?.label }}
+                                                                </div>
+                                                                <div class="option-value">
+                                                                    {{ option?.value }}
+                                                                </div>
+                                                            </a>
+                                                        </ng-template>
+                                                    </dropdown-field>
+                                                </ng-container>
+                                                <!-- endregion -->
+                                                <!-- region if not cashinvoice show customer dropdown -->
+                                                <ng-container *ngIf="isCashInvoice">
+                                                    <input-field
+                                                        [type]="'text'"
+                                                        [name]="'voucherDetails.customerName'"
+                                                        [autoFocus]="true"
+                                                        #inputCustomerName
+                                                        [cssClass]="'cash-invoice-input'"
+                                                        [(ngModel)]="invFormData.voucherDetails.customerName"
+                                                        (change)="handleCustomerChange($event)"
+                                                        [readonly]="
+                                                            isEinvoiceGenerated ||
+                                                            (isUpdateMode &&
+                                                                invoiceType !== 'sales' &&
+                                                                invoiceType !== 'cash')
+                                                        "
+                                                    ></input-field>
+                                                </ng-container>
+                                                <!-- endregion -->
                                                 <!-- endregion -->
                                             </div>
+                                            <!-- region Unregistered Business / customer details -->
+                                            <div
+                                                class="d-flex aqua-color"
+                                                *ngIf="invFormData.voucherDetails.customerName"
+                                            >
+                                                <span
+                                                    class="cp aqua-color mr-r05"
+                                                    *ngIf="!isCashInvoice && !isUpdateMode"
+                                                >
+                                                    <a href="javascript:void(0)" (click)="getCustomerDetails()">{{
+                                                        !isPurchaseInvoice
+                                                            ? localeData?.customer_details
+                                                            : localeData?.vendor_details
+                                                    }}</a>
+                                                </span>
+                                            </div>
+                                            <!-- endregion -->
                                             <!-- region search_customer image -->
                                             <ng-container *ngIf="isSalesInvoice && !isCashInvoice">
                                                 <img
@@ -338,6 +275,54 @@
                                             </ng-container>
                                             <!-- endregion -->
                                         </div>
+                                        <div class="col-lg-6">
+                                            <!-- region previous details commented for multicurrency changes-->
+                                            <div
+                                                class="d-flex cp aqua-color align-items-center ml-3"
+                                                #copyPreviousEstimate
+                                                *ngIf="
+                                                    !isPurchaseInvoice &&
+                                                    ((voucherApiVersion === 2 &&
+                                                        !isPendingVoucherType &&
+                                                        !isCashInvoice) ||
+                                                        (voucherApiVersion !== 2 &&
+                                                            !(isPendingVoucherType && isCashInvoice))) &&
+                                                    (invFormData.voucherDetails.customerName ||
+                                                        invFormData.voucherDetails.customerUniquename) &&
+                                                    lastInvoices.length &&
+                                                    !isUpdateMode
+                                                "
+                                            >
+                                                <a href="javascript:;" [matMenuTriggerFor]="menu">
+                                                    <i class="icon-copy-file"></i> {{ copyPreviousInvoiceText }}
+                                                </a>
+                                                <div class="previous-estimate-wrapper">
+                                                    <mat-menu #menu="matMenu" class="copy-invoice-menu">
+                                                        <button
+                                                            mat-menu-item
+                                                            *ngFor="let item of lastInvoices"
+                                                            (click)="copyInvoice(item)"
+                                                            class="line-height-initial"
+                                                        >
+                                                            <div class="pd">
+                                                                <div class="d-flex flex-column">
+                                                                    <div class="d-flex justify-content-between">
+                                                                        <span>{{ item?.versionNumber }}</span>
+                                                                        <span>{{
+                                                                            item?.grandTotal?.amountForAccount
+                                                                        }}</span>
+                                                                    </div>
+                                                                    <span
+                                                                        >{{ item?.date }} (
+                                                                        {{ item?.account?.name }} )</span
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                        </button>
+                                                    </mat-menu>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <!-- endregion -->
                                     </div>
                                 </div>
@@ -347,9 +332,7 @@
                                     class="row"
                                     *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.addressAllowed"
                                 >
-                                    <div
-                                        class="col-sm-12 col-xl-9 offset-lg-3 col-lg-8 col-md-9 offset-xl-2 offset-md-3"
-                                    >
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                         <ng-container>
                                             <section
                                                 [ngClass]="{
@@ -971,90 +954,64 @@
                         <!-- endregion -->
                         <!-- region attention to, email, mobile, voucher section -->
                         <div class="customer-invoice-table bg-white pd-b2 pd-t1">
-                            <div class="inner-container">
+                            <div class="inner-container fields-container">
                                 <!-- region attention to -->
                                 <div class="row">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
-                                        <label>{{ localeData?.attention_to }}</label>
+                                    <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12">
+                                        <input-field
+                                            [type]="'text'"
+                                            [name]="'accountDetails.attention'"
+                                            [placeholder]="localeData?.attention_to"
+                                            [cssClass]="'attention-to'"
+                                            [(ngModel)]="invFormData.accountDetails.attentionTo"
+                                        ></input-field>
                                     </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                        <div class="pl-0 col-sm-12 col-xl-6 col-lg-10 col-md-10">
-                                            <text-field
-                                                [type]="'text'"
-                                                [name]="'accountDetails.attention'"
-                                                [placeholder]="localeData?.attention_to"
-                                                [cssClass]="'form-control attention-to mat-field-border'"
-                                                [(ngModel)]="invFormData.accountDetails.attentionTo"
-                                            ></text-field>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- endregion-->
-                                <!-- region email -->
-                                <div class="row mt-2">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
-                                        <label>{{ commonLocaleData?.app_email_id }}</label>
-                                    </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                        <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
-                                            <text-field
-                                                [type]="'email'"
-                                                [placeholder]="localeData?.account_email_placeholder"
-                                                [name]="'accountDetails.email'"
-                                                [cssClass]="'form-control attention-to mat-field-border'"
-                                                [(ngModel)]="invFormData.accountDetails.email"
-                                            ></text-field>
-                                        </div>
+                                    <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12">
+                                        <input-field
+                                            [type]="'email'"
+                                            [placeholder]="commonLocaleData?.app_email_id"
+                                            [name]="'accountDetails.email'"
+                                            [cssClass]="'attention-to'"
+                                            [(ngModel)]="invFormData.accountDetails.email"
+                                        ></input-field>
                                     </div>
                                 </div>
                                 <!-- endregion-->
                                 <!-- region mobile no -->
-                                <div class="row mt-2 mobile-number-wrapper">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
-                                        <label>{{ commonLocaleData?.app_mobile_number }}</label>
+                                <div class="row mr-t3 mobile-number-wrapper">
+                                    <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12 mobile-number">
+                                        <input
+                                            name="accountDetails.mobileNumber"
+                                            type="tel"
+                                            #initContactProforma
+                                            id="init-contact-proforma"
+                                            (keydown.enter)="$event.preventDefault()"
+                                            [placeholder]="localeData?.mobile_number_placeholder"
+                                        />
+                                        <span id="init-contact-proforma-valid-msg" class="d-none"></span>
+                                        <span id="init-contact-proforma-error-msg" class="d-none"></span>
                                     </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                        <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0 mobile-number">
-                                            <input
-                                                name="accountDetails.mobileNumber"
-                                                type="tel"
-                                                #initContactProforma
-                                                id="init-contact-proforma"
-                                                (keydown.enter)="$event.preventDefault()"
-                                                [placeholder]="localeData?.mobile_number_placeholder"
-                                            />
-                                            <span id="init-contact-proforma-valid-msg" class="d-none"></span>
-                                            <span id="init-contact-proforma-error-msg" class="d-none"></span>
-                                        </div>
+                                    <!-- warehouse selection -->
+                                    <div
+                                        class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12"
+                                        *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1"
+                                    >
+                                        <dropdown-field
+                                            #selectWarehouse
+                                            [cssClass]="'multi-select'"
+                                            [name]="'warehouse'"
+                                            [placeholder]="localeData?.select_warehouse_placeholder"
+                                            [options]="warehouses"
+                                            (selectedOption)="onSelectWarehouse($event)"
+                                            [allowValueReset]="true"
+                                            (onClear)="onSelectWarehouse($event)"
+                                            [defaultValue]="selectedWarehouseName"
+                                        >
+                                        </dropdown-field>
                                     </div>
+                                    <!-- end warehouse field -->
                                 </div>
                                 <!-- endregion-->
-                                <!-- warehouse selection -->
-                                <div
-                                    class="row mt-2 warehouse-wrapper"
-                                    *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1"
-                                >
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
-                                        <label>{{ commonLocaleData?.app_warehouse }}</label>
-                                    </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                        <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
-                                            <select-field
-                                                #selectWarehouse
-                                                [cssClass]="'multi-select mat-field-border'"
-                                                [name]="'warehouse'"
-                                                [placeholder]="localeData?.select_warehouse_placeholder"
-                                                [options]="warehouses"
-                                                (selectedOption)="onSelectWarehouse($event)"
-                                                [allowValueReset]="true"
-                                                (onClear)="onSelectWarehouse($event)"
-                                                [defaultValue]="selectedWarehouseName"
-                                            >
-                                            </select-field>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end warehouse field -->
                                 <div class="row mt-1 delivery-from-field" *ngIf="isPurchaseInvoice">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ localeData?.deliver_to }}<span class="red-text">*</span></label>
@@ -1554,265 +1511,254 @@
                                 </div>
                                 <!-- end Link purchase order -->
                                 <!-- region invoice no, invoice date, Expiry date -->
-                                <div class="row mt-2">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
-                                        <label> {{ invoiceNoLabel }} </label>
-                                    </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                        <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10 pl-0">
-                                            <!-- Enabled for CR/DR update flow -->
-                                            <div>
-                                                <text-field
-                                                    *ngIf="!isCreditNote && !isDebitNote"
-                                                    [type]="'text'"
-                                                    [name]="'accountDetails.invoiceNum'"
-                                                    [cssClass]="
-                                                        'form-control invoice-date attention-to mat-field-border invoice-number-class'
+                                <div class="row mr-t3">
+                                    <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12">
+                                        <!-- Enabled for CR/DR update flow -->
+                                        <div>
+                                            <input-field
+                                                *ngIf="!isCreditNote && !isDebitNote"
+                                                [type]="'text'"
+                                                [name]="'accountDetails.invoiceNum'"
+                                                [cssClass]="'invoice-date attention-to invoice-number-class'"
+                                                [ngClass]="{ 'date-invoice': !isPurchaseInvoice }"
+                                                [readonly]="
+                                                    isUpdateMode && !(isDebitNote || isPurchaseInvoice)
+                                                        ? 'disabled'
+                                                        : null
+                                                "
+                                                [(ngModel)]="invFormData.voucherDetails.voucherNumber"
+                                            >
+                                            </input-field>
+                                            <ng-container *ngIf="isCreditNote || isDebitNote">
+                                                <select-field
+                                                    #linkingDropdown
+                                                    *ngIf="voucherApiVersion === 2"
+                                                    [cssClass]="'form-control mat-field-border linking-dropdown'"
+                                                    [name]="'invoiceLinking'"
+                                                    [placeholder]="commonLocaleData?.app_select_accounts"
+                                                    [options]="invoiceList$ | async"
+                                                    (selectedOption)="creditNoteInvoiceSelected($event)"
+                                                    [defaultValue]="selectedInvoiceLabel"
+                                                    [hasMoreValue]="true"
+                                                    [enableDynamicSearch]="true"
+                                                    (dynamicSearchedQuery)="
+                                                        searchReferenceVoucher = $event;
+                                                        resetInvoiceList();
+                                                        getInvoiceListsForCreditNote()
                                                     "
-                                                    [ngClass]="{ 'date-invoice': !isPurchaseInvoice }"
-                                                    [readonly]="
-                                                        isUpdateMode && !(isDebitNote || isPurchaseInvoice)
-                                                            ? 'disabled'
-                                                            : null
+                                                    [isPaginationEnabled]="true"
+                                                    (scrollEnd)="
+                                                        !searchReferenceVoucher ? getInvoiceListsForCreditNote() : ''
                                                     "
-                                                    [(ngModel)]="invFormData.voucherDetails.voucherNumber"
+                                                    [scrollableElementId]="'referenceVoucher'"
+                                                    [readonly]="isEinvoiceGenerated"
                                                 >
-                                                </text-field>
-                                                <ng-container *ngIf="isCreditNote || isDebitNote">
-                                                    <select-field
-                                                        #linkingDropdown
-                                                        *ngIf="voucherApiVersion === 2"
-                                                        [cssClass]="'form-control mat-field-border linking-dropdown'"
-                                                        [name]="'invoiceLinking'"
-                                                        [placeholder]="commonLocaleData?.app_select_accounts"
-                                                        [options]="invoiceList$ | async"
-                                                        (selectedOption)="creditNoteInvoiceSelected($event)"
-                                                        [defaultValue]="selectedInvoiceLabel"
-                                                        [hasMoreValue]="true"
-                                                        [enableDynamicSearch]="true"
-                                                        (dynamicSearchedQuery)="
-                                                            searchReferenceVoucher = $event;
-                                                            resetInvoiceList();
-                                                            getInvoiceListsForCreditNote()
-                                                        "
-                                                        [isPaginationEnabled]="true"
-                                                        (scrollEnd)="
-                                                            !searchReferenceVoucher
-                                                                ? getInvoiceListsForCreditNote()
-                                                                : ''
-                                                        "
-                                                        [scrollableElementId]="'referenceVoucher'"
-                                                        [readonly]="isEinvoiceGenerated"
-                                                    >
-                                                        <ng-template #optionTemplate let-option="option">
-                                                            <a
-                                                                *ngIf="option"
-                                                                href="javascript:void(0)"
-                                                                class="linking-item"
-                                                            >
-                                                                <div class="option-label">{{ option?.label }}</div>
-                                                                <div class="option-value">
-                                                                    ({{ commonLocaleData?.app_dated }}:
-                                                                    {{ option.additional?.voucherDate }})
-                                                                </div>
-                                                                <div class="option-value-stock">
-                                                                    ({{ commonLocaleData?.app_amount }}:
-                                                                    {{
-                                                                        voucherApiVersion === 2
-                                                                            ? (option.additional?.unadjustedAmount
-                                                                                  ?.amountForAccount | giddhCurrency)
-                                                                            : (option.additional?.balanceDue
-                                                                                  ?.amountForAccount | giddhCurrency)
-                                                                    }})
-                                                                </div>
-                                                            </a>
-                                                        </ng-template>
-                                                    </select-field>
-                                                    <select-field
-                                                        #invoiceListDropdown
-                                                        *ngIf="voucherApiVersion !== 2"
-                                                        [cssClass]="'form-control mat-field-border'"
-                                                        [name]="'invoiceLinking'"
-                                                        [placeholder]="commonLocaleData?.app_select_accounts"
-                                                        [options]="invoiceList"
-                                                        (selectedOption)="creditNoteInvoiceSelected($event)"
-                                                        [defaultValue]="invoiceSelectedLabel"
-                                                        [hasMoreValue]="true"
-                                                        [readonly]="isEinvoiceGenerated"
-                                                    >
-                                                        <ng-template #optionTemplate let-option="option">
-                                                            <a
-                                                                *ngIf="option"
-                                                                href="javascript:void(0)"
-                                                                class="linking-item"
-                                                            >
-                                                                <div class="option-label">{{ option?.label }}</div>
-                                                                <div class="option-value">
-                                                                    ({{ commonLocaleData?.app_dated }}:
-                                                                    {{
-                                                                        option?.additional?.additional?.voucherDate
-                                                                            ? option?.additional?.additional
-                                                                                  ?.voucherDate
-                                                                            : option?.additional?.voucherDate
-                                                                    }})
-                                                                </div>
-                                                                <div class="option-value-stock">
-                                                                    ({{ commonLocaleData?.app_amount }}:
-                                                                    {{
-                                                                        option.additional?.additional?.balanceDue
-                                                                            ?.amountForAccount
-                                                                            ? (option.additional?.additional?.balanceDue
-                                                                                  ?.amountForAccount | giddhCurrency)
-                                                                            : (option.additional?.balanceDue
-                                                                                  ?.amountForAccount | giddhCurrency)
-                                                                    }})
-                                                                </div>
-                                                            </a>
-                                                        </ng-template>
-                                                    </select-field>
-                                                </ng-container>
-                                            </div>
+                                                    <ng-template #optionTemplate let-option="option">
+                                                        <a
+                                                            *ngIf="option"
+                                                            href="javascript:void(0)"
+                                                            class="linking-item"
+                                                        >
+                                                            <div class="option-label">{{ option?.label }}</div>
+                                                            <div class="option-value">
+                                                                ({{ commonLocaleData?.app_dated }}:
+                                                                {{ option.additional?.voucherDate }})
+                                                            </div>
+                                                            <div class="option-value-stock">
+                                                                ({{ commonLocaleData?.app_amount }}:
+                                                                {{
+                                                                    voucherApiVersion === 2
+                                                                        ? (option.additional?.unadjustedAmount
+                                                                              ?.amountForAccount | giddhCurrency)
+                                                                        : (option.additional?.balanceDue
+                                                                              ?.amountForAccount | giddhCurrency)
+                                                                }})
+                                                            </div>
+                                                        </a>
+                                                    </ng-template>
+                                                </select-field>
+                                                <select-field
+                                                    #invoiceListDropdown
+                                                    *ngIf="voucherApiVersion !== 2"
+                                                    [cssClass]="'form-control mat-field-border'"
+                                                    [name]="'invoiceLinking'"
+                                                    [placeholder]="commonLocaleData?.app_select_accounts"
+                                                    [options]="invoiceList"
+                                                    (selectedOption)="creditNoteInvoiceSelected($event)"
+                                                    [defaultValue]="invoiceSelectedLabel"
+                                                    [hasMoreValue]="true"
+                                                    [readonly]="isEinvoiceGenerated"
+                                                >
+                                                    <ng-template #optionTemplate let-option="option">
+                                                        <a
+                                                            *ngIf="option"
+                                                            href="javascript:void(0)"
+                                                            class="linking-item"
+                                                        >
+                                                            <div class="option-label">{{ option?.label }}</div>
+                                                            <div class="option-value">
+                                                                ({{ commonLocaleData?.app_dated }}:
+                                                                {{
+                                                                    option?.additional?.additional?.voucherDate
+                                                                        ? option?.additional?.additional?.voucherDate
+                                                                        : option?.additional?.voucherDate
+                                                                }})
+                                                            </div>
+                                                            <div class="option-value-stock">
+                                                                ({{ commonLocaleData?.app_amount }}:
+                                                                {{
+                                                                    option.additional?.additional?.balanceDue
+                                                                        ?.amountForAccount
+                                                                        ? (option.additional?.additional?.balanceDue
+                                                                              ?.amountForAccount | giddhCurrency)
+                                                                        : (option.additional?.balanceDue
+                                                                              ?.amountForAccount | giddhCurrency)
+                                                                }})
+                                                            </div>
+                                                        </a>
+                                                    </ng-template>
+                                                </select-field>
+                                            </ng-container>
+                                        </div>
+                                        <div
+                                            *ngIf="
+                                                (isCreditNote || isDebitNote) && selectedInvoice && !isEinvoiceGenerated
+                                            "
+                                            class="cp for-mobile-screen remove-invoice"
+                                            (click)="removeSelectedInvoice()"
+                                        >
+                                            <span class="remove-invoice-icon mr-r05"><i class="icon-trash"></i></span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="col-sm-12 col-xl-6 col-lg-6 col-md-6"
+                                        [ngClass]="{ 'date-invoice': isPurchaseInvoice }"
+                                        *ngIf="!isMobileScreen"
+                                    >
+                                        <div class="form-inline flex-row flex-nowrap w-100">
                                             <div
                                                 *ngIf="
                                                     (isCreditNote || isDebitNote) &&
                                                     selectedInvoice &&
                                                     !isEinvoiceGenerated
                                                 "
-                                                class="cp for-mobile-screen remove-invoice"
+                                                class="cp remove-invoice"
                                                 (click)="removeSelectedInvoice()"
                                             >
                                                 <span class="remove-invoice-icon mr-r05"
                                                     ><i class="icon-trash"></i
                                                 ></span>
                                             </div>
-                                        </div>
-                                        <div
-                                            class="col-sm-12 col-xl-6 col-lg-10 col-md-10 invoice-date-due-date"
-                                            [ngClass]="{ 'date-invoice': isPurchaseInvoice }"
-                                            *ngIf="!isMobileScreen"
-                                        >
-                                            <div class="form-inline flex-row flex-nowrap">
-                                                <div
-                                                    *ngIf="
-                                                        (isCreditNote || isDebitNote) &&
-                                                        selectedInvoice &&
-                                                        !isEinvoiceGenerated
-                                                    "
-                                                    class="cp remove-invoice"
-                                                    (click)="removeSelectedInvoice()"
+                                            <div
+                                                class="form-group invoice-date-label"
+                                                [ngClass]="{
+                                                    'date-invoice-parent-form':
+                                                        isPurchaseInvoice || isEstimateInvoice || isProformaInvoice
+                                                }"
+                                            >
+                                                <label
+                                                    [ngClass]="{ 'date-invoice-label': isPurchaseInvoice }"
+                                                    class="mr-2"
+                                                    >{{ invoiceDateLabel }}</label
                                                 >
-                                                    <span class="remove-invoice-icon mr-r05"
-                                                        ><i class="icon-trash"></i
-                                                    ></span>
-                                                </div>
                                                 <div
-                                                    class="form-group invoice-date-label"
+                                                    [ngClass]="{ 'date-invoice-formgroup': isPurchaseInvoice }"
+                                                    class="date-width"
+                                                >
+                                                    <giddh-datepicker
+                                                        type="text"
+                                                        #voucherDate="ngModel"
+                                                        (keydown.enter)="$event.preventDefault()"
+                                                        [placeholder]="giddhDateFormat"
+                                                        name="voucherDate"
+                                                        [(ngModel)]="invFormData.voucherDetails.voucherDate"
+                                                        [class.invalid-inp]="
+                                                            voucherDate.errors &&
+                                                            (voucherDate.dirty || voucherDate.touched)
+                                                        "
+                                                        [disabled]="
+                                                            invoiceType !== 'purchase' && isUpdateMode
+                                                                ? 'disabled'
+                                                                : null
+                                                        "
+                                                        (datepickerState)="onFocusInvoiceDate()"
+                                                        (dateSelected)="
+                                                            onVoucherDateChanged(
+                                                                $event,
+                                                                invFormData.voucherDetails.voucherDate
+                                                            );
+                                                            onBlurInvoiceDate(0)
+                                                        "
+                                                        (focusOut)="
+                                                            !(
+                                                                currentVoucherFormDetails?.dueDate ||
+                                                                isSalesInvoice ||
+                                                                isPurchaseInvoice ||
+                                                                isProformaInvoice ||
+                                                                isEstimateInvoice
+                                                            )
+                                                                ? openFirstEntry()
+                                                                : ''
+                                                        "
+                                                        [showToggleIcon]="false"
+                                                    >
+                                                    </giddh-datepicker>
+                                                    <p
+                                                        class="text-danger"
+                                                        *ngIf="
+                                                            voucherDate.errors &&
+                                                            (voucherDate.dirty || voucherDate.touched)
+                                                        "
+                                                    >
+                                                        {{ localeData?.invalid_date }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="form-group invoice-due-label"
+                                                *ngIf="
+                                                    currentVoucherFormDetails?.dueDate ||
+                                                    isSalesInvoice ||
+                                                    isPurchaseInvoice ||
+                                                    isProformaInvoice ||
+                                                    isEstimateInvoice
+                                                "
+                                                [ngClass]="{ 'due-invoice-parent-form': isPurchaseInvoice }"
+                                            >
+                                                <label
                                                     [ngClass]="{
-                                                        'date-invoice-parent-form':
+                                                        'due-invoice-label':
                                                             isPurchaseInvoice || isEstimateInvoice || isProformaInvoice
                                                     }"
+                                                    class="mr-2"
+                                                    >{{ invoiceDueDateLabel }}</label
                                                 >
-                                                    <label [ngClass]="{ 'date-invoice-label': isPurchaseInvoice }">{{
-                                                        invoiceDateLabel
-                                                    }}</label>
-                                                    <div
-                                                        class="form-group col-xs-4 col-sm-4 mb-0"
-                                                        [ngClass]="{ 'date-invoice-formgroup': isPurchaseInvoice }"
-                                                    >
-                                                        <giddh-datepicker
-                                                            type="text"
-                                                            #voucherDate="ngModel"
-                                                            (keydown.enter)="$event.preventDefault()"
-                                                            [placeholder]="giddhDateFormat"
-                                                            name="voucherDate"
-                                                            [(ngModel)]="invFormData.voucherDetails.voucherDate"
-                                                            [class.invalid-inp]="
-                                                                voucherDate.errors &&
-                                                                (voucherDate.dirty || voucherDate.touched)
-                                                            "
-                                                            [disabled]="
-                                                                invoiceType !== 'purchase' && isUpdateMode
-                                                                    ? 'disabled'
-                                                                    : null
-                                                            "
-                                                            (datepickerState)="onFocusInvoiceDate()"
-                                                            (dateSelected)="
-                                                                onVoucherDateChanged(
-                                                                    $event,
-                                                                    invFormData.voucherDetails.voucherDate
-                                                                );
-                                                                onBlurInvoiceDate(0)
-                                                            "
-                                                            (focusOut)="
-                                                                !(
-                                                                    currentVoucherFormDetails?.dueDate ||
-                                                                    isSalesInvoice ||
-                                                                    isPurchaseInvoice ||
-                                                                    isProformaInvoice ||
-                                                                    isEstimateInvoice
-                                                                )
-                                                                    ? openFirstEntry()
-                                                                    : ''
-                                                            "
-                                                        >
-                                                        </giddh-datepicker>
-                                                        <p
-                                                            class="text-danger"
-                                                            *ngIf="
-                                                                voucherDate.errors &&
-                                                                (voucherDate.dirty || voucherDate.touched)
-                                                            "
-                                                        >
-                                                            {{ localeData?.invalid_date }}
-                                                        </p>
-                                                    </div>
-                                                </div>
                                                 <div
-                                                    class="form-group invoice-due-label"
-                                                    *ngIf="
-                                                        currentVoucherFormDetails?.dueDate ||
-                                                        isSalesInvoice ||
-                                                        isPurchaseInvoice ||
-                                                        isProformaInvoice ||
-                                                        isEstimateInvoice
-                                                    "
-                                                    [ngClass]="{ 'due-invoice-parent-form': isPurchaseInvoice }"
+                                                    [ngClass]="{ 'due-invoice-formgroup': isPurchaseInvoice }"
+                                                    class="date-width"
                                                 >
-                                                    <label
-                                                        [ngClass]="{
-                                                            'due-invoice-label':
-                                                                isPurchaseInvoice ||
-                                                                isEstimateInvoice ||
-                                                                isProformaInvoice
-                                                        }"
-                                                        >{{ invoiceDueDateLabel }}</label
+                                                    <giddh-datepicker
+                                                        type="text"
+                                                        [placeholder]="giddhDateFormat"
+                                                        (keydown.enter)="$event.preventDefault()"
+                                                        #dueDate="ngModel"
+                                                        name="dueDate"
+                                                        class="date-invoice"
+                                                        [(ngModel)]="invFormData.voucherDetails.dueDate"
+                                                        [class.invalid-inp]="
+                                                            dueDate.errors && (dueDate.dirty || dueDate.touched)
+                                                        "
+                                                        (blur)="onBlurDueDate(0)"
+                                                        (focusOut)="openFirstEntry()"
+                                                        [showToggleIcon]="false"
                                                     >
-                                                    <div
-                                                        class="form-group col-xs-4 col-sm-4 mb-0"
-                                                        [ngClass]="{ 'due-invoice-formgroup': isPurchaseInvoice }"
+                                                    </giddh-datepicker>
+                                                    <p
+                                                        class="text-danger"
+                                                        *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)"
                                                     >
-                                                        <giddh-datepicker
-                                                            type="text"
-                                                            [placeholder]="giddhDateFormat"
-                                                            (keydown.enter)="$event.preventDefault()"
-                                                            #dueDate="ngModel"
-                                                            name="dueDate"
-                                                            class="date-invoice"
-                                                            [(ngModel)]="invFormData.voucherDetails.dueDate"
-                                                            [class.invalid-inp]="
-                                                                dueDate.errors && (dueDate.dirty || dueDate.touched)
-                                                            "
-                                                            (blur)="onBlurDueDate(0)"
-                                                            (focusOut)="openFirstEntry()"
-                                                        >
-                                                        </giddh-datepicker>
-                                                        <p
-                                                            class="text-danger"
-                                                            *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)"
-                                                        >
-                                                            {{ localeData?.invalid_date }}
-                                                        </p>
-                                                    </div>
+                                                        {{ localeData?.invalid_date }}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -1927,33 +1873,28 @@
                                         (currentVoucherFormDetails?.rcmAllowed && companyCountryName === 'India')
                                     "
                                 >
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
-                                        <label></label>
-                                    </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                        <div class="col-sm-6 col-xl-6 col-lg-10 col-md-10 pl-0">
-                                            <mat-checkbox
-                                                (keydown.enter)="$event.preventDefault()"
-                                                #rcmCheckbox
-                                                id="reverse-charge"
-                                                [(ngModel)]="isRcmEntry"
-                                                (change)="changeRcmCheckboxState($event)"
-                                                class="mr-r1"
-                                                name="rcmEntry"
-                                                [disabled]="isEinvoiceGenerated"
-                                                color="primary"
-                                            >
-                                            </mat-checkbox>
-                                            <label
-                                                class="checkbox-custom-label"
-                                                for="reverse-charge"
-                                                (click)="
-                                                    !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
-                                                "
-                                                [innerHTML]="localeData?.transaction_reverse_charge"
-                                            >
-                                            </label>
-                                        </div>
+                                        <mat-checkbox
+                                            (keydown.enter)="$event.preventDefault()"
+                                            #rcmCheckbox
+                                            id="reverse-charge"
+                                            [(ngModel)]="isRcmEntry"
+                                            (change)="changeRcmCheckboxState($event)"
+                                            class="mr-r1"
+                                            name="rcmEntry"
+                                            [disabled]="isEinvoiceGenerated"
+                                            color="primary"
+                                        >
+                                        </mat-checkbox>
+                                        <label
+                                            class="checkbox-custom-label"
+                                            for="reverse-charge"
+                                            (click)="
+                                                !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
+                                            "
+                                            [innerHTML]="localeData?.transaction_reverse_charge"
+                                        >
+                                        </label>
                                     </div>
                                 </div>
                                 <!-- for purchase record end -->
@@ -3219,18 +3160,23 @@
                                 </div>
                                 <!-- endregion -->
                                 <!-- region note/messages -->
-                                <div class="pd-t1 pl-0 max-width-600" *ngIf="!isPurchaseInvoice">
-                                    <label class="mr-b1">{{ commonLocaleData?.app_note }}</label>
-                                    <textarea
-                                        class="form-control textarea-height"
-                                        hasFocus
-                                        #message2="hasFocus"
-                                        [class.error-box]="(invoiceForm?.controls)['message2']?.errors?.maxlength"
-                                        name="message2"
-                                        [maxlength]="shouldApplyMaxLengthOnNotes && !showNotesAtLastPage ? 200 : null"
-                                        [(ngModel)]="invFormData.templateDetails.other.message2"
-                                    >
-                                    </textarea>
+                                <div class="pd-t1 pl-0 max-width-600 pd-t15" *ngIf="!isPurchaseInvoice">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>{{ commonLocaleData?.app_note }}</mat-label>
+                                        <textarea
+                                            matInput
+                                            class="textarea-height"
+                                            hasFocus
+                                            #message2="hasFocus"
+                                            [class.error-box]="(invoiceForm?.controls)['message2']?.errors?.maxlength"
+                                            name="message2"
+                                            [maxlength]="
+                                                shouldApplyMaxLengthOnNotes && !showNotesAtLastPage ? 200 : null
+                                            "
+                                            [(ngModel)]="invFormData.templateDetails.other.message2"
+                                        >
+                                        </textarea>
+                                    </mat-form-field>
                                     <ng-container
                                         *ngIf="
                                             shouldApplyMaxLengthOnNotes &&
@@ -3654,16 +3600,9 @@
                                                         >
                                                             <li role="menuitem" class="mr-t1">
                                                                 <div class="payment-mode">
-                                                                    <label class="payment-label">{{
-                                                                        !isCashInvoice
-                                                                            ? commonLocaleData?.app_payment_mode
-                                                                            : localeData?.account
-                                                                    }}</label>
-                                                                    <select-field
+                                                                    <dropdown-field
                                                                         #depositDropdown
-                                                                        [cssClass]="
-                                                                            'form-control mat-field-border pull-right'
-                                                                        "
+                                                                        [cssClass]="'pull-right'"
                                                                         [name]="'depositAccountUniqueName'"
                                                                         [options]="bankAccounts$ | async"
                                                                         (selectedOption)="onSelectPaymentMode($event)"
@@ -3676,8 +3615,9 @@
                                                                                 ? selectedBankAccount
                                                                                 : selectPaymentValue
                                                                         "
+                                                                        class="w-100"
                                                                     >
-                                                                    </select-field>
+                                                                    </dropdown-field>
                                                                 </div>
                                                             </li>
                                                             <li
@@ -3695,23 +3635,18 @@
                                                                 "
                                                             >
                                                                 <div class="payment-mode">
-                                                                    <label class="payment-label">{{
-                                                                        commonLocaleData?.app_amount
-                                                                    }}</label>
-                                                                    <text-field
+                                                                    <input-field
                                                                         (change)="
                                                                             calculateBalanceDue();
                                                                             updateDepositAmount($event?.target?.value)
                                                                         "
                                                                         [placeholder]="commonLocaleData?.app_amount"
                                                                         [cssClass]="
-                                                                            'form-control
-                                                                        amount-field
+                                                                            'amount-field
                                                                         due-amount-field
                                                                         text-right
                                                                         pull-right
                                                                         max-width-100
-                                                                        mat-field-border
                                                                         multicurrency-grandtotal'
                                                                         "
                                                                         [name]="'dueAmount'"
@@ -3725,7 +3660,8 @@
                                                                         "
                                                                         [type]="'text'"
                                                                         [readonly]="isEinvoiceGenerated"
-                                                                    ></text-field>
+                                                                        class="w-100"
+                                                                    ></input-field>
                                                                 </div>
                                                             </li>
 
