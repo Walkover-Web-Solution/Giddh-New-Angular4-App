@@ -14533,8 +14533,10 @@ body.hide-scroll-body.master-page {
         height: 100% !important;
     }
     /* Custom Date Picker Width*/
-    .custom-datepicker input {
-        max-width: 214px !important;
+    .custom-datepicker {
+        input {
+            max-width: 214px !important;
+        }
     }
 }
 @media only screen and (max-width: 1366px) {
