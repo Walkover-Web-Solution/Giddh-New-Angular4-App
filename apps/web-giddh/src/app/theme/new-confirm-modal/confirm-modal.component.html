@@ -11,6 +11,6 @@
     </div>
     <div class="modal-footer">
         <button mat-stroked-button color="primary" (click)="sendResponse(true)">{{ inputData?.ok }}</button>
-        <button mat-stroked-button color="warn" (click)="sendResponse(false)">{{ inputData?.cancel }}</button>
+        <button mat-stroked-button (click)="sendResponse(false)">{{ inputData?.cancel }}</button>
     </div>
 </div>
