@@ -59,12 +59,14 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public borderConfiguration: BorderConfiguration;
     /** True, if search suggesstion should not be displayed */
     @Input() public showSearchSuggestion: boolean = true;
-    /** True, if selected values should not be reset when options change */
-    @Input() public doNotResetSelectedValues: boolean = false;
     /** True if field is required */
     @Input() public isRequired: boolean = false;
+    /** True, if selected values should not be reset when options change */
+    @Input() public doNotResetSelectedValues: boolean = false;
     /** True if select all option is checked */
     @Input() public isSelectAllChecked: boolean = false;
+    /** Custom styles */
+    @Input() public cssClass: string | Array<string>;
 
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
@@ -98,7 +100,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     public defaultValueUpdated: boolean = false;
     /** Holds string for select all records */
     public selectAllRecords: string = SELECT_ALL_RECORDS;
-    /** Keys. **/
+    /** Stores the model value set through ngModel */
+    private modelValue: string;
 
     private KEYS: any = {
         BACKSPACE: 8,
@@ -121,7 +124,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         this._options = val;
         this.updateRows(val);
         if (!this.doNotResetSelectedValues) {
-            this.selectedValues = [this.filter];
+            this.selectedValues = [this.modelValue ?? this.filter];
         }
     }
 
@@ -139,15 +142,23 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
         if (val?.length > 0 && this.rows) {
             if (this.doNotResetSelectedValues) {
-                if(typeof this._selectedValues[0] === "string") {
-                    let selectedValues = this._selectedValues.map(value => {
-                        let filteredValue = this.rows?.filter(row => row?.value === String(value));
-                        let rowNotFound: any = { label: value, value: value };
-                        return (filteredValue && filteredValue[0]?.value) ? filteredValue[0] : rowNotFound;
-                    });
-                    this._selectedValues = selectedValues;
+                if (this._selectedValues.length) {
+                    if (typeof this._selectedValues[0] === "string") {
+                        let selectedValues = this._selectedValues.map(value => {
+                            let filteredValue = this.rows?.filter(row => row?.value === String(value));
+                            let rowNotFound: any = { label: this.defaultValue ? this.defaultValue : value, value: value };
+                            return (filteredValue && filteredValue[0]?.value) ? filteredValue[0] : rowNotFound;
+                        });
+                        this._selectedValues = selectedValues;
+                    } else {
+                        this._selectedValues = this._selectedValues?.filter(selected => val?.indexOf(selected?.value) > -1);
+                    }
+                } else {
+                    const value = typeof val[0] === 'string' ? val[0] : val[0].value;
+                    let filteredValue = this.rows?.filter(row => row?.value === String(value));
+                    let rowNotFound: any = { label: this.defaultValue ? this.defaultValue : value, value: value };
+                    this.selectSingle((filteredValue && filteredValue[0]?.value) ? filteredValue[0] : rowNotFound);
                 }
-                this._selectedValues = this._selectedValues?.filter(selected => val?.indexOf(selected?.value) > -1);
             } else {
                 this._selectedValues = this.rows?.filter((f: any) => val?.findIndex(p => p === f.label || p === f?.value) !== -1);
             }
@@ -523,6 +534,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     //////// ControlValueAccessor imp //////////
 
     public writeValue(value: any) {
+        this.modelValue = value;
         this.selectedValues = value;
         if (!this.cdRef['destroyed']) {
             this.cdRef.detectChanges();

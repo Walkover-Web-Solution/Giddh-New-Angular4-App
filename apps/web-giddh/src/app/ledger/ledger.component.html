@@ -489,7 +489,7 @@
                                         [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
-                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0"
+                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0 && lc.showEledger"
                                     >
                                         <i class="icon-trash lh-0"></i>
                                     </a>
@@ -891,6 +891,11 @@
                                                                     [localeData]="localeData"
                                                                     [commonLocaleData]="commonLocaleData"
                                                                     [entrySide]="'dr'"
+                                                                    (stockVariantSelected)="
+                                                                        loadDetails(selectedAccountDetails, txn, $event)
+                                                                    "
+                                                                    [selectedAccountDetails]="selectedAccountDetails"
+                                                                    [(isTotalChanged)]="isTotalChanged"
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1178,6 +1183,11 @@
                                                                     [localeData]="localeData"
                                                                     [commonLocaleData]="commonLocaleData"
                                                                     [entrySide]="'cr'"
+                                                                    (stockVariantSelected)="
+                                                                        loadDetails(selectedAccountDetails, txn, $event)
+                                                                    "
+                                                                    [selectedAccountDetails]="selectedAccountDetails"
+                                                                    [(isTotalChanged)]="isTotalChanged"
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1825,7 +1835,30 @@
                                                         [prefix]="selectedPrefixForCurrency"
                                                         [suffix]="selectedSuffixForCurrency"
                                                         [mask]="inputMaskFormat"
+                                                        [(ngModel)]="txn.total"
+                                                        *ngIf="
+                                                            txn.selectedAccount?.stock?.variant?.salesTaxInclusive ||
+                                                            txn.selectedAccount?.stock?.variant?.purchaseTaxInclusive ||
+                                                            txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
+                                                        "
+                                                        (input)="isTotalChanged = true; handleAmountInput(txn, true)"
+                                                        (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
+                                                    />
+                                                    <input
+                                                        matInput
+                                                        class="text-right form-control"
+                                                        type="text"
+                                                        [id]="'enter-bank-amount-dr-' + i"
+                                                        [prefix]="selectedPrefixForCurrency"
+                                                        [suffix]="selectedSuffixForCurrency"
+                                                        [mask]="inputMaskFormat"
                                                         [(ngModel)]="txn.amount"
+                                                        *ngIf="
+                                                            !txn.selectedAccount?.stock?.variant?.salesTaxInclusive &&
+                                                            !txn.selectedAccount?.stock?.variant
+                                                                ?.purchaseTaxInclusive &&
+                                                            !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
+                                                        "
                                                         (input)="handleAmountInput(txn)"
                                                         (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
                                                     />
@@ -1875,6 +1908,11 @@
                                                 [localeData]="localeData"
                                                 [commonLocaleData]="commonLocaleData"
                                                 [entrySide]="'dr'"
+                                                (stockVariantSelected)="
+                                                    loadDetails(selectedAccountDetails, txn, $event)
+                                                "
+                                                [selectedAccountDetails]="selectedAccountDetails"
+                                                [(isTotalChanged)]="isTotalChanged"
                                             >
                                             </new-ledger-entry-panel>
                                         </div>
@@ -2249,7 +2287,30 @@
                                                         [prefix]="selectedPrefixForCurrency"
                                                         [suffix]="selectedSuffixForCurrency"
                                                         [mask]="inputMaskFormat"
+                                                        [(ngModel)]="txn.total"
+                                                        *ngIf="
+                                                            txn.selectedAccount?.stock?.variant?.salesTaxInclusive ||
+                                                            txn.selectedAccount?.stock?.variant?.purchaseTaxInclusive ||
+                                                            txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
+                                                        "
+                                                        (input)="isTotalChanged = true; handleAmountInput(txn, true)"
+                                                        (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
+                                                    />
+                                                    <input
+                                                        matInput
+                                                        class="text-right form-control"
+                                                        type="text"
+                                                        id="enter-bank-amount-cr"
+                                                        [prefix]="selectedPrefixForCurrency"
+                                                        [suffix]="selectedSuffixForCurrency"
+                                                        [mask]="inputMaskFormat"
                                                         [(ngModel)]="txn.amount"
+                                                        *ngIf="
+                                                            !txn.selectedAccount?.stock?.variant?.salesTaxInclusive &&
+                                                            !txn.selectedAccount?.stock?.variant
+                                                                ?.purchaseTaxInclusive &&
+                                                            !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
+                                                        "
                                                         (input)="handleAmountInput(txn)"
                                                         (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
                                                     />
@@ -2300,6 +2361,11 @@
                                                 [localeData]="localeData"
                                                 [commonLocaleData]="commonLocaleData"
                                                 [entrySide]="'cr'"
+                                                (stockVariantSelected)="
+                                                    loadDetails(selectedAccountDetails, txn, $event)
+                                                "
+                                                [selectedAccountDetails]="selectedAccountDetails"
+                                                [(isTotalChanged)]="isTotalChanged"
                                             >
                                             </new-ledger-entry-panel>
                                         </div>

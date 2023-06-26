@@ -356,6 +356,7 @@
     "app_import_type": {
         "groups": "समूहों",
         "accounts": "खाता",
+        "base_accounts": "आधार खाते",
         "inventory": "इन्वेंटरी",
         "entries": "प्रविष्टियां",
         "trial_balance": "संतुलन परीक्षण",

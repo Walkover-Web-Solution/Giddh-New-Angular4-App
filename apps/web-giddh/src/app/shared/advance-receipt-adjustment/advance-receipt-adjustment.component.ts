@@ -724,7 +724,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             }
         }
         // To restrict user to enter amount less or equal selected voucher amount
-        if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.adjustmentAmount && this.adjustVoucherForm.adjustments[index].adjustmentAmount.amountForAccount > excessAmount) {
+        if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.adjustmentAmount && this.adjustVoucherForm.adjustments[index]?.adjustmentAmount?.amountForAccount > excessAmount) {
             this.adjustVoucherForm.adjustments[index].adjustmentAmount.amountForAccount = cloneDeep(excessAmount);
             entry.adjustmentAmount.amountForAccount = excessAmount;
             this.adjustVoucherForm.adjustments = cloneDeep(this.adjustVoucherForm.adjustments);
@@ -732,7 +732,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         if (entry && entry.taxRate && entry.adjustmentAmount?.amountForAccount) {
             let taxAmount = this.calculateInclusiveTaxAmount(entry.adjustmentAmount.amountForAccount, entry.taxRate);
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = Number(taxAmount);
-        } else {
+        } else if(this.adjustVoucherForm.adjustments[index]) {
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = 0.0;
         }
         this.calculateBalanceDue();

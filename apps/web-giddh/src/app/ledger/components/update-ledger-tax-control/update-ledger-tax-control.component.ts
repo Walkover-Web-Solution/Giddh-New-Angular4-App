@@ -14,9 +14,8 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
-import { ITaxDetail } from '../../../models/interfaces/tax.interface';
+import { ITaxControlData, ITaxDetail } from '../../../models/interfaces/tax.interface';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { difference, orderBy } from '../../../lodash-optimized';
 import { GeneralService } from '../../../services/general.service';
@@ -48,7 +47,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
     @Input() public date: string;
     @Input() public taxes: TaxResponse[];
     @Input() public applicableTaxes: any[];
-    @Input() public taxRenderData: TaxControlData[];
+    @Input() public taxRenderData: ITaxControlData[];
     @Input() public showHeading: boolean = true;
     @Input() public showTaxPopup: boolean = false;
     @Input() public totalForTax: number = 0;
@@ -133,7 +132,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
                             tax.taxDetail[0].taxValue : 0;
                 }
             } else {
-                let taxObj = new TaxControlData();
+                let taxObj = new ITaxControlData();
                 taxObj.name = tax?.name;
                 taxObj.type = tax?.taxType;
                 taxObj.uniqueName = tax?.uniqueName;

@@ -2171,6 +2171,15 @@
                                             <label>{{ commonLocaleData?.app_sku }}:</label
                                             >{{ commonLocaleData?.app_number }}
                                         </div>
+                                        <p
+                                            *ngIf="
+                                                transaction.variant?.name &&
+                                                ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                            "
+                                            class="variant"
+                                        >
+                                            {{ localeData?.variant + ": " + transaction.variant?.name }}
+                                        </p>
                                         <div class="description">
                                             {{ transaction.description }}
                                         </div>
@@ -2508,6 +2517,7 @@
                                         <div class="product-name">
                                             <div class="ng-select-wrap">
                                                 <select-field
+                                                    [autofocus]="true"
                                                     #selectAccount
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('item')"
@@ -2569,6 +2579,33 @@
                                                 </select-field>
                                             </div>
                                         </div>
+                                        <ng-container
+                                            *ngIf="
+                                                transaction?.isStockTxn &&
+                                                ((stockVariants | async)[entryIdx] | async) as variants
+                                            "
+                                        >
+                                            <div *ngIf="variants?.length > 1" class="variant-name">
+                                                <!-- <select-field
+                                                    [cssClass]="'form-control mat-field-border'"
+                                                    [placeholder]="localeData?.select_variant"
+                                                    (selectedOption)="variantChanged($event, transaction, entry)"
+                                                    [options]="variants"
+                                                    [required]="true"
+                                                    [name]="'variant' + entryIdx"
+                                                    [(ngModel)]="transaction.variant.uniqueName"
+                                                >
+                                                </select-field> -->
+                                                <sh-select
+                                                    [placeholder]="localeData?.select_variant"
+                                                    [options]="variants"
+                                                    (selected)="variantChanged($event, transaction, entry)"
+                                                    [isRequired]="true"
+                                                    name="{{ 'variant' + entryIdx }}"
+                                                    [(ngModel)]="transaction.variant.uniqueName"
+                                                ></sh-select>
+                                            </div>
+                                        </ng-container>
                                         <div *ngIf="transaction.fakeAccForSelect2">
                                             <div class="sku-number">
                                                 <label>{{ commonLocaleData?.app_sku }}:</label
@@ -2758,8 +2795,7 @@
                                                 [disabled]="!transaction.isStockTxn || isEinvoiceGenerated"
                                                 (selectionChange)="
                                                     onChangeUnit(transaction, $event);
-                                                    transaction.setAmount(entry);
-                                                    calculateWhenTrxAltered(entry, transaction)
+                                                    handlePriceCalculationOnUnitChange(entry, transaction)
                                                 "
                                                 [value]="transaction.stockUnit"
                                                 [(ngModel)]="transaction.stockUnit"
@@ -3772,6 +3808,15 @@
                                                         >({{ transaction.stockDetails?.name }})</span
                                                     >
                                                 </div>
+                                                <p
+                                                    *ngIf="
+                                                        transaction.variant?.name &&
+                                                        ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                                    "
+                                                    class="variant"
+                                                >
+                                                    {{ localeData?.variant + ": " + transaction.variant?.name }}
+                                                </p>
                                                 <p class="description">
                                                     {{ transaction.description }}
                                                 </p>
@@ -4349,8 +4394,10 @@
                                                                 "
                                                                 (selectionChange)="
                                                                     onChangeUnit(transaction, $event);
-                                                                    transaction.setAmount(entry);
-                                                                    calculateWhenTrxAltered(entry, transaction)
+                                                                    handlePriceCalculationOnUnitChange(
+                                                                        entry,
+                                                                        transaction
+                                                                    )
                                                                 "
                                                                 [value]="transaction.stockUnit"
                                                                 [(ngModel)]="transaction.stockUnit"
@@ -5553,7 +5600,7 @@
             </div>
         </div>
     </ng-template>
-    <!-- region  delete attachment confirmation popup -->
+    <!-- region delete attachment confirmation popup -->
     <ng-template #attachmentDeleteConfirmationModel>
         <div class="modal-dialog modal-md">
             <div class="modal-content">

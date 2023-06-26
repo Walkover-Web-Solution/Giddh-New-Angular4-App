@@ -562,6 +562,13 @@ textarea:focus {
     inset: 0;
     width: 100%;
 }
+.delete-image {
+    width: 3%;
+    position: absolute;
+    right: 25%;
+    top: 55px;
+    cursor: pointer;
+}
 
 .delete-image {
     width: 3%;
@@ -728,6 +735,10 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
 
 .mb20 {
     margin-bottom: 20px;
+}
+
+.variant-name {
+    margin-top: 10px;
 }
 
 .description textarea {
@@ -1434,11 +1445,6 @@ table.table.table-custom-invoice.basic,
         justify-content: flex-start;
         width: 50%;
     }
-}
-
-.balance-due-text {
-    min-width: 150px !important;
-    margin-left: 23px;
 }
 
 #deposit-dropdown > strong {

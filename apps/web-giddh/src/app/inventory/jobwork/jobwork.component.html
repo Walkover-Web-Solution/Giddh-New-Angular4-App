@@ -47,7 +47,7 @@
                                         id="buttonalignment"
                                         dropdownToggle
                                         type="button"
-                                        class="btn-link mr-b05 cp mr-1 dropdown-toggle"
+                                        class="btn btn-sky-blue mr-b05 cp mr-1 dropdown-toggle"
                                         aria-controls="dropdown-alignment"
                                     >
                                         <i class="icon-download"></i> Download
@@ -386,3 +386,26 @@
     </div>
 </div>
 <!-- Advance  search popup -->
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

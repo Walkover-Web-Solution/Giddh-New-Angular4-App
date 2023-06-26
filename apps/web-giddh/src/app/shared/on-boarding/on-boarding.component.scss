@@ -42,12 +42,6 @@ label .required {
     margin-bottom: 0 !important;
 }
 
-.welcome-select {
-    .select-caret {
-        width: 85px;
-        margin-right: 28px;
-    }
-}
 .welcome-header h1 {
     font-size: var(--font-size-32);
     font-family: var(--font-regular);
@@ -74,6 +68,13 @@ label .required {
 
 .add-company-detail {
     background-color: var(--color-wild-sand);
+}
+
+.welcome-select {
+    .select-caret {
+        width: 85px;
+        margin-right: 28px;
+    }
 }
 
 @media (min-width: 768px) {

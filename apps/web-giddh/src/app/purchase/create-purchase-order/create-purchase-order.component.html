@@ -912,7 +912,7 @@
                                                                             type="number"
                                                                             class="form-control input-custom"
                                                                             autocomplete="false"
-                                                                            name="companyBillingPinCode"
+                                                                            name="companyShippingPinCode"
                                                                             [placeholder]="
                                                                                 commonLocaleData?.app_pin_code
                                                                             "
@@ -1056,7 +1056,7 @@
             class="static-purchase-table create-purchase-order-table clearfix mb-2 bg-white container-fluid"
         >
             <div class="switch-currency" *ngIf="isMulticurrencyAccount && !showSwitchedCurr">
-                <span class="left-currency">1 {{ customerCurrencyCode }}</span>
+                <span class="left-currency">{{ commonLocaleData?.app_numbers?.one }} {{ customerCurrencyCode }}</span>
                 <img
                     class="switch-icon"
                     src="assets/images/switch-icon.svg"
@@ -1105,7 +1105,7 @@
                 </span>
             </div>
             <div class="switch-currency" *ngIf="isMulticurrencyAccount && showSwitchedCurr">
-                <span class="left-currency">1 {{ companyCurrency }}</span>
+                <span class="left-currency">{{ commonLocaleData?.app_numbers?.one }} {{ companyCurrency }}</span>
                 <img
                     class="switch-icon"
                     src="assets/images/switch-icon.svg"
@@ -1186,6 +1186,14 @@
                                     >({{ transaction.stockDetails?.name }})</span
                                 >
                             </div>
+                            <p
+                                *ngIf="
+                                    transaction.variant?.name && ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                "
+                                class="variant"
+                            >
+                                {{ localeData?.variant + ": " + transaction.variant?.name }}
+                            </p>
                             <div class="description">
                                 {{ transaction.description }}
                             </div>
@@ -1221,7 +1229,7 @@
                         <td class="text-right stock-unit">
                             <div class="wrap-td-data">{{ transaction.quantity }} {{ transaction.stockUnitCode }}</div>
                         </td>
-                        <td class="text-right tra-rate item-rate">
+                        <td class="text-right trans-rate item-rate">
                             <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
                                 <div class="td-wrapper">
                                     <div>
@@ -1281,6 +1289,7 @@
                                             >
                                             </amount-field>
                                         </span>
+                                        <br />
                                     </div>
                                 </div>
                             </div>
@@ -1412,6 +1421,7 @@
                                             </span>
                                         </span>
                                     </div>
+                                    <br />
                                     <div
                                         class="tax-in-currency differ-currency"
                                         *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount"
@@ -1515,7 +1525,33 @@
                                     </sh-select>
                                 </div>
                             </div>
-
+                            <ng-container
+                                *ngIf="
+                                    transaction?.isStockTxn && ((stockVariants | async)[entryIdx] | async) as variants
+                                "
+                            >
+                                <div *ngIf="variants?.length > 1" class="variant-name">
+                                    <!-- <select-field
+                                        [disabled]="isReadOnly"
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [placeholder]="localeData?.select_variant"
+                                        (selectedOption)="variantChanged($event, transaction, entry)"
+                                        [options]="variants"
+                                        [required]="true"
+                                        [name]="'variant' + entryIdx"
+                                        [(ngModel)]="transaction.variant.uniqueName"
+                                    >
+                                    </select-field> -->
+                                    <sh-select
+                                        [placeholder]="localeData?.select_variant"
+                                        [options]="variants"
+                                        (selected)="variantChanged($event, transaction, entry)"
+                                        [isRequired]="true"
+                                        name="{{ 'variant' + entryIdx }}"
+                                        [(ngModel)]="transaction.variant.uniqueName"
+                                    ></sh-select>
+                                </div>
+                            </ng-container>
                             <div *ngIf="transaction.fakeAccForSelect2">
                                 <div class="description mt-1">
                                     <textarea
@@ -1533,7 +1569,7 @@
                                         {{ entryDescriptionLength - transaction.description?.length }}
                                     </p>
                                     <p
-                                        class="small text-muted sku-and-customfields"
+                                        class="small text-muted sku-and-custom-fields"
                                         *ngIf="transaction.sku_and_customfields"
                                     >
                                         {{ transaction.sku_and_customfields }}
@@ -1663,7 +1699,10 @@
                                 [disabled]="!transaction.isStockTxn"
                                 name="transaction.stockUnit_{{ entryIdx }}"
                                 [(ngModel)]="transaction.stockUnit"
-                                (ngModelChange)="onChangeUnit(transaction, $event); transaction.setAmount(entry)"
+                                (ngModelChange)="
+                                    onChangeUnit(transaction, $event);
+                                    handlePriceCalculationOnUnitChange(entry, transaction)
+                                "
                             >
                                 <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
                                     {{ stock.text }}
@@ -2256,7 +2295,15 @@
                                             >({{ transaction.stockDetails?.name }})</span
                                         >
                                     </div>
-
+                                    <p
+                                        *ngIf="
+                                            transaction.variant?.name &&
+                                            ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                        "
+                                        class="variant"
+                                    >
+                                        {{ localeData?.variant + ": " + transaction.variant?.name }}
+                                    </p>
                                     <p class="description">
                                         {{ transaction.description }}
                                     </p>
@@ -2579,7 +2626,7 @@
                                                     {{ entryDescriptionLength - transaction.description?.length }}
                                                 </p>
                                                 <p
-                                                    class="small text-muted sku-and-customfields"
+                                                    class="small text-muted sku-and-custom-fields"
                                                     *ngIf="transaction.sku_and_customfields"
                                                 >
                                                     {{ transaction.sku_and_customfields }}
@@ -2731,7 +2778,8 @@
                                                     name="transaction.stockUnit_{{ entryIdx }}"
                                                     [(ngModel)]="transaction.stockUnit"
                                                     (ngModelChange)="
-                                                        onChangeUnit(transaction, $event); transaction.setAmount(entry)
+                                                        onChangeUnit(transaction, $event);
+                                                        handlePriceCalculationOnUnitChange(entry, transaction)
                                                     "
                                                 >
                                                     <option
@@ -2843,8 +2891,8 @@
                                                 [maskInput]="inputMaskFormat"
                                                 [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
                                                 [suffixInput]="selectedSuffixForCurrency"
-                                                [commonLocaleData]="commonLocaleData"
                                             >
+                                                [commonLocaleData]="commonLocaleData"
                                             </discount-control-component>
                                         </div>
                                         <div class="differ-currency" *ngIf="isMulticurrencyAccount">
