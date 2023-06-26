@@ -88,5 +88,6 @@
     "option_values": "विकल्प मान",
     "duplicate_option_value": "आप पहले ही विकल्प मान [VALUE] का उपयोग कर चुके हैं|",
     "option_name_required": "विकल्प का नाम आवश्यक है",
-    "option_value_required": "विकल्प मान आवश्यक है"
+    "option_value_required": "विकल्प मान आवश्यक है",
+    "save_stock_for_recipe": "स्टॉक बचाएं और रेसिपी बनाएं"
 }
