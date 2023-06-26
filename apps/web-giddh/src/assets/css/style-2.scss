@@ -2433,7 +2433,7 @@ modal-container.modal {
         font-size: var(--font-size-15);
         position: relative;
         width: 230px !important;
-        max-width: 204px;
+        max-width: 208px;
         display: block;
         border: 1px solid var(--color-secondary-input-bar-border);
         height: 40px;
@@ -10801,6 +10801,17 @@ inventory-master {
             }
         }
     }
+    /*--- tooltip ----*/
+    .mat-tooltip {
+        margin-bottom: 40px !important;
+    }
+}
+
+@media (max-width: 1366px) {
+    /*--- tooltip ----*/
+    .mat-tooltip {
+        margin-bottom: 100px !important;
+    }
 }
 
 @media (max-width: 1024px) {
@@ -14205,4 +14216,15 @@ body.hide-scroll-body.master-page {
 }
 .cdk-virtual-scroll-content-wrapper {
     width: 100%;
+}
+
+/*--- inventory-search ---*/
+.inventory-search {
+    text-field {
+        .form-control {
+            height: 42px;
+            width: 430px;
+            box-shadow: var(--color-search-box-shadow) 0px 48px 100px 0px;
+        }
+    }
 }
