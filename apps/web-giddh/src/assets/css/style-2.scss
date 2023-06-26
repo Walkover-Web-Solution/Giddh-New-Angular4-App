@@ -668,18 +668,6 @@ textarea {
     cursor: pointer;
 }
 
-.sales-purchase-info {
-    .unit-rates {
-        max-width: 130px !important;
-        min-width: 120px !important;
-    }
-
-    .unit-amount {
-        max-width: 120px !important;
-        min-width: 120px !important;
-    }
-}
-
 .variant-row {
     &:hover {
         .form-control {
@@ -851,6 +839,13 @@ textarea {
             flex-direction: column;
             justify-content: center;
             padding: 0px 5px;
+        }
+        .data-wrap {
+            .dot-img {
+                img {
+                    width: 20px;
+                }
+            }
         }
     }
 }
@@ -10444,13 +10439,6 @@ giddh-datepicker {
                                 min-width: 320px;
                             }
                         }
-                    }
-                }
-
-                text-field,
-                select-field {
-                    input {
-                        border-radius: 2px !important;
                     }
                 }
 

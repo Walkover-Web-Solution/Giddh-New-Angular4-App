@@ -110,6 +110,9 @@
                         td {
                             color: var(--color-nero);
                             font-weight: 100;
+                            &:nth-child(2) {
+                                text-align: right;
+                            }
                         }
                     }
                 }
