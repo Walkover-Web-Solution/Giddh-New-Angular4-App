@@ -29,7 +29,7 @@
     "variant_already_selected": "वैरिएंट पहले से ही चयनित है.",
     "confirm_delete_recipe": "क्या आप नुस्खा हटाना चाहते हैं?",
     "confirm_delete_recipe_linked_stock": "क्या आप कच्चा स्टॉक हटाना चाहते हैं?",
-    "save_variants": "कृपया रेसिपी बनाने के लिए वेरिएंट सहेजें",
+    "save_variants": "रेसिपी बनाने के लिए कृपया स्टॉक अपडेट करें",
     "select_output_variant": "आउटपुट वैरिएंट चुनें",
     "enter_output_quantity": "आउटपुट मात्रा दर्ज करें",
     "select_output_stock_unit": "आउटपुट स्टॉक यूनिट का चयन करें",

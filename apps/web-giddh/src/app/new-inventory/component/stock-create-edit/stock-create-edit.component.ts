@@ -436,6 +436,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public addVariantOption(): void {
         if (this.checkOptionValidity()) {
+            if (!this.stockForm.options?.length) {
+                this.stockForm.options = [];
+            }
+
             const optionIndex = this.stockForm.options?.length + 1;
             this.stockForm.options.push({ name: "", values: [{ index: 0, value: "" }], order: optionIndex, isEdit: true });
         }
@@ -449,7 +453,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public checkOptionValidity(): boolean {
         let isValid = true;
-        this.stockForm.options.forEach(option => {
+        this.stockForm.options?.forEach(option => {
             if (!option.name || !option.values.length) {
                 isValid = false;
                 return isValid;
@@ -1768,7 +1772,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.toaster.showSnackBar("warning", this.localeData?.option_value_required);
             return;
         }
-        
+
         option.isEdit = false;
 
         if (this.optionEditing) {
@@ -1825,6 +1829,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.optionValueTimeout = setTimeout(() => {
             clearTimeout(this.optionValueTimeout);
             this.addNewOptionValue(optionIndex, optionValueIndex);
-        }, 500);
+        }, 300);
     }
 }

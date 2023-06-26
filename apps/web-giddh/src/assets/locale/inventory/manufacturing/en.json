@@ -29,7 +29,7 @@
     "variant_already_selected": "Variant is already selected.",
     "confirm_delete_recipe": "Do you want to delete the recipe?",
     "confirm_delete_recipe_linked_stock": "Do you want to delete the raw stock?",
-    "save_variants": "Please save variants to create recipe",
+    "save_variants": "Please update stock to create recipe",
     "select_output_variant": "Select Output Variant",
     "enter_output_quantity": "Enter Output Quantity",
     "select_output_stock_unit": "Select Output Stock Unit",

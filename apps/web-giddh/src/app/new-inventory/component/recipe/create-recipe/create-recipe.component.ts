@@ -76,6 +76,19 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
 
         if (changes?.variants?.currentValue) {
             this.newVariants = changes?.variants?.currentValue?.filter(variant => !variant?.uniqueName);
+            // const existingVariants = changes?.variants?.currentValue?.filter(variant => variant?.uniqueName);
+
+            // this.recipeObject.manufacturingDetails?.forEach(manufacturingDetail => {
+            //     if (manufacturingDetail?.variant?.uniqueName && !existingVariants.includes(manufacturingDetail?.variant?.uniqueName)) {
+            //         manufacturingDetail.variantError = true;
+
+            //         manufacturingDetail?.linkedStocks?.forEach(linkedStock => {
+            //             if (linkedStock?.variant?.uniqueName && !existingVariants.includes(linkedStock?.variant?.uniqueName)) {
+            //                 linkedStock.variantError = true;
+            //             }
+            //         });
+            //     }
+            // });
         }
     }
 
