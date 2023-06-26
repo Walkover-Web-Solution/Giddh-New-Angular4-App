@@ -14307,6 +14307,10 @@ body.hide-scroll-body.master-page {
         width: 100% !important;
         height: 100% !important;
     }
+    /* Custom Date Picker Width*/
+    .custom-datepicker input {
+        max-width: 214px !important;
+    }
 }
 
 @media only screen and (max-width: 1366px) {
@@ -14317,5 +14321,4 @@ body.hide-scroll-body.master-page {
         height: calc(100vh - 56px) !important;
     }
 }
-
 /*=========== Code to handle Screen Resolution =======End========*/
