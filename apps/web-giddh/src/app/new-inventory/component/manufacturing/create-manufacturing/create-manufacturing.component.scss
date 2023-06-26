@@ -45,7 +45,8 @@
                     padding: 10px 15px;
                     font-size: var(--font-size-15);
                     text-align: right;
-                    &:first-child {
+                    &:first-child,
+                    &:nth-child(2) {
                         text-align: left;
                     }
                 }
@@ -103,6 +104,9 @@
                         td {
                             color: var(--color-nero);
                             font-weight: 100;
+                            &:nth-child(2) {
+                                text-align: right;
+                            }
                         }
                     }
                 }

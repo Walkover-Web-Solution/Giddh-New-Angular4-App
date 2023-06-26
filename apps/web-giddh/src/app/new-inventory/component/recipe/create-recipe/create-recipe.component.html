@@ -202,11 +202,11 @@
                         <div class="col-3">
                             <div class="row">
                                 <div class="form-fields w-100">
-                                    <div class="d-flex flex-column flex-wrap gap-between w-100">
+                                    <div class="d-flex flex-column flex-wrap w-100">
                                         <h1 class="section-head p-0" *ngIf="i === 0">
                                             {{ localeData?.finished_stock }}
                                         </h1>
-                                        <div>
+                                        <div class="variant-view">
                                             <p>{{ recipe?.variant?.name }}</p>
                                         </div>
                                         <div class="d-flex">
@@ -224,13 +224,13 @@
                             <span class="less-than-text"> <i class="icon-left"></i></span>
                         </div>
                         <div class="col-8 pr-0">
-                            <div class="row" *ngFor="let linkedStock of recipe.linkedStocks; let j = index">
+                            <div class="row">
                                 <div class="consumption-details-wrapper w-100">
-                                    <h1 class="section-head" *ngIf="i === 0 && j === 0">{{ localeData?.raw_stock }}</h1>
-                                    <div class="mt-2 d-flex align-items-baseline">
+                                    <h1 class="section-head" *ngIf="i === 0">{{ localeData?.raw_stock }}</h1>
+                                    <div class="d-flex align-items-baseline">
                                         <table class="table-filled view-mode-table table-raw-stock">
                                             <tbody>
-                                                <tr>
+                                                <tr *ngFor="let linkedStock of recipe.linkedStocks; let j = index">
                                                     <td>
                                                         <div>
                                                             <p>{{ linkedStock.stockName }}</p>
@@ -253,7 +253,7 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <div class="d-flex" *ngIf="j === 0">
+                                        <div class="d-flex" *ngIf="i === 0">
                                             <a
                                                 href="javascript:void(0);"
                                                 class="icon-remove"
