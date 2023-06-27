@@ -92,6 +92,7 @@
 
 .flex-row {
     display: flex;
+    justify-content: space-between;
 
     .flex-row-child {
         align-self: center;
@@ -1049,6 +1050,9 @@ section.static-invoice-table {
 .inner-container {
     max-width: 1120px;
     width: 100%;
+    &.fields-container {
+        max-width: 835px;
+    }
 }
 
 // new table css
@@ -2200,5 +2204,13 @@ label.checkbox-custom-label {
     100% {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
+    }
+}
+.mobile-number-wrapper {
+    input {
+        height: 46px;
+        width: 100%;
+        border-radius: 8px !important;
+        border: 1px solid var(--color-iron);
     }
 }
