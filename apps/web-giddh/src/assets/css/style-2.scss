@@ -14543,3 +14543,36 @@ body.hide-scroll-body.master-page {
         }
     }
 }
+
+/* ======Ladda  Button Color in Material Stroked Button====Start Here=========== */
+button{
+    &.mat-stroked-button {
+        &.mat-primary{    
+            &:disabled{
+                .ladda-label{
+                    color: transparent;
+                }                
+            }        
+            &.ladda-button{
+                &:not(:disabled){
+                    .ladda-label{
+                        color: var(--color-giddh-blue) !important;
+                        display: contents;
+                        width: auto;
+                        height: auto;
+                    }
+                }
+                .ladda-spinner{
+                    div{
+                        div{
+                            div{
+                                background: var(--color-giddh-blue) !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }  
+    }
+}
+/* ======Ladda  Button Color in Material Stroked Button====End Here=========== */
