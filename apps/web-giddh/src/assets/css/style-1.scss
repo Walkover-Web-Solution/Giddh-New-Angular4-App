@@ -2498,7 +2498,6 @@ form#groupDetailForm {
 .advance-search,
 #share-modal,
 #exportModal,
-.other-details-section,
 .daybook-advance-search,
 .petty-cash-reject-modal {
     .mat-form-field {
@@ -3248,6 +3247,7 @@ td.mat-footer-cell {
 }
 
 /*-- input-new-form-field --*/
+voucher-component,
 add-company,
 stock-create-edit,
 dropdown-field,
@@ -3298,8 +3298,8 @@ input-field {
             padding: 0 !important;
             .mat-input-element {
                 margin: 0;
-                font-size: 0.875rem;
                 line-height: 1.25rem;
+                padding: 14px 0;
             }
             textarea {
                 &.mat-input-element {
@@ -3313,12 +3313,13 @@ input-field {
             padding-top: 0.75rem;
         }
         .mat-form-field-label {
-            margin-top: -1px;
+            margin-top: 1px;
+            font-size: var(--font-size-15);
         }
         .mat-form-field-wrapper {
             margin: 0;
-            padding-top: 0.375rem;
-            padding-bottom: 1.125rem;
+            padding-top: 0;
+            padding-bottom: 0;
         }
         .mat-form-field-hint-spacer {
             display: none;
@@ -3360,5 +3361,45 @@ input-field {
                 font-size: var(--font-size-15);
             }
         }
+    }
+}
+.other-details-section {
+    .mat-form-field-appearance-outline {
+        .mat-form-field-flex {
+            background-color: var(--color-white);
+        }
+    }
+}
+voucher-component {
+    .mobile-number {
+        .mat-form-field-appearance-outline {
+            .mat-form-field-label {
+                padding-left: 48px;
+            }
+            .mat-form-field-infix {
+                .mat-input-element {
+                    padding-left: 48px;
+                }
+            }
+            &.mat-form-field-can-float {
+                &.mat-form-field-should-float {
+                    .mat-form-field-label {
+                        padding-left: 64px;
+                    }
+                }
+            }
+        }
+    }
+    giddh-datepicker {
+        .mat-focused {
+            .mat-form-field-flex {
+                border: 0 !important;
+            }
+        }
+    }
+}
+.invoice-date-label {
+    &:focus-visible {
+        outline: none;
     }
 }

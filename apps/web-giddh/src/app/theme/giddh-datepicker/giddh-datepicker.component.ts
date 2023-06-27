@@ -45,6 +45,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     @Output() public focusOut: EventEmitter<any> = new EventEmitter<any>();
     /** This will hold if datepicker is open */
     public isDatepickerOpen: boolean = false;
+    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
     /** Internal data model */
     private innerValue: any = '';
     /** This is used to show default date */
