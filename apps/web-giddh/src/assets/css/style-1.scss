@@ -2490,7 +2490,6 @@ form#groupDetailForm {
 .advance-search,
 #share-modal,
 #exportModal,
-.other-details-section,
 .daybook-advance-search,
 .petty-cash-reject-modal {
     .mat-form-field {
@@ -3310,6 +3309,7 @@ td.mat-footer-cell {
 /*-- input-new-form-field --*/
 create-update-group,
 giddh-datepicker,
+voucher-component,
 add-company,
 stock-create-edit,
 dropdown-field,
@@ -3488,4 +3488,44 @@ input-field {
 }
 .row-gap {
     row-gap: 15px;
+}
+.other-details-section {
+    .mat-form-field-appearance-outline {
+        .mat-form-field-flex {
+            background-color: var(--color-white);
+        }
+    }
+}
+voucher-component {
+    .mobile-number {
+        .mat-form-field-appearance-outline {
+            .mat-form-field-label {
+                padding-left: 48px;
+            }
+            .mat-form-field-infix {
+                .mat-input-element {
+                    padding-left: 48px;
+                }
+            }
+            &.mat-form-field-can-float {
+                &.mat-form-field-should-float {
+                    .mat-form-field-label {
+                        padding-left: 64px;
+                    }
+                }
+            }
+        }
+    }
+    giddh-datepicker {
+        .mat-focused {
+            .mat-form-field-flex {
+                border: 0 !important;
+            }
+        }
+    }
+}
+.invoice-date-label {
+    &:focus-visible {
+        outline: none;
+    }
 }
