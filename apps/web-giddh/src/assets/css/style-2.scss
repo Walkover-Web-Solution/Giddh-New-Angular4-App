@@ -14444,10 +14444,11 @@ body.hide-scroll-body.master-page {
 
 /*=========== Code to handle Screen Resolution ======Start=======*/
 @media only screen and (max-width: 1440px) {
-    body {
-        zoom: 90%;
-    }
-
+    body{
+        &:not(.cdk-overlay-pane){
+            zoom: 90%;
+        }
+    }    
     /* Height of Primary Side Bar*/
     .primary-sidebar {
         .wrap-menus {
@@ -14523,7 +14524,9 @@ body.hide-scroll-body.master-page {
 }
 @media only screen and (max-width: 1366px) {
     body {
-        zoom: 85%;
+        &:not(.cdk-overlay-pane){
+            zoom: 85%;
+        }
     }
     .company-branch-nav {
         height: calc(100vh - 56px) !important;
