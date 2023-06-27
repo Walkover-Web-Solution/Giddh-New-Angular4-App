@@ -1629,15 +1629,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     * Navigate to all module
-     *
-     * @memberof HeaderComponent
-     */
-    public navigateToAllModules(): void {
-        this.router.navigate(['/pages/all-modules']);
-    }
-
-    /**
      * Loads company branches
      *
      * @memberof HeaderComponent

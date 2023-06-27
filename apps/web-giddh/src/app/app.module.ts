@@ -87,7 +87,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             useHash: IS_ELECTRON_WA,
             onSameUrlNavigation: 'reload',
             preloadingStrategy: QuicklinkStrategy,
-            relativeLinkResolution: 'corrected'
+            relativeLinkResolution: 'corrected',
+            enableTracing: true
         }),
         QuicklinkModule,
         MatSnackBarModule,

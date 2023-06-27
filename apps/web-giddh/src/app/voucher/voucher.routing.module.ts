@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { VoucherRendererComponent } from './voucher-renderer.component';
 import { VoucherComponent } from './voucher.component';
+import { PageLeaveConfirmationGuard } from '../decorators/page-leave-confirmation-guard';
 
 const routes: Routes = [
     {
@@ -13,16 +14,16 @@ const routes: Routes = [
                 path: '', redirectTo: 'invoice/proformas', pathMatch: 'full'
             },
             {
-                path: 'invoice/:invoiceType', component: VoucherComponent, canActivate: [NeedsAuthentication]
+                path: 'invoice/:invoiceType', component: VoucherComponent, canActivate: [NeedsAuthentication], canDeactivate: [PageLeaveConfirmationGuard]
             },
             {
-                path: 'invoice/:invoiceType/:accUniqueName', component: VoucherComponent, canActivate: [NeedsAuthentication]
+                path: 'invoice/:invoiceType/:accUniqueName', component: VoucherComponent, canActivate: [NeedsAuthentication], canDeactivate: [PageLeaveConfirmationGuard]
             },
             {
-                path: 'invoice/:invoiceType/:accUniqueName/:invoiceNo', component: VoucherComponent, canActivate: [NeedsAuthentication]
+                path: 'invoice/:invoiceType/:accUniqueName/:invoiceNo', component: VoucherComponent, canActivate: [NeedsAuthentication], canDeactivate: [PageLeaveConfirmationGuard]
             },
             {
-                path: 'invoice/:invoiceType/:accUniqueName/:invoiceNo/:invoiceAction', component: VoucherComponent, canActivate: [NeedsAuthentication]
+                path: 'invoice/:invoiceType/:accUniqueName/:invoiceNo/:invoiceAction', component: VoucherComponent, canActivate: [NeedsAuthentication], canDeactivate: [PageLeaveConfirmationGuard]
             }
         ]
     }
