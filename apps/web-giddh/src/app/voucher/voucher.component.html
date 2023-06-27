@@ -158,7 +158,7 @@
                                 </div>
                                 <!-- region customer section -->
                                 <div class="clearfix">
-                                    <div class="row">
+                                    <div class="row align-items-baseline">
                                         <!-- endregion -->
                                         <!-- region customer dropdown -->
                                         <div
@@ -980,14 +980,15 @@
                                 <!-- region mobile no -->
                                 <div class="row mr-t3 mobile-number-wrapper">
                                     <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12 mobile-number">
-                                        <input
-                                            name="accountDetails.mobileNumber"
-                                            type="tel"
+                                        <input-field
+                                            [name]="'accountDetails.mobileNumber'"
+                                            [type]="'tel'"
                                             #initContactProforma
-                                            id="init-contact-proforma"
+                                            [id]="'init-contact-proforma'"
                                             (keydown.enter)="$event.preventDefault()"
-                                            [placeholder]="localeData?.mobile_number_placeholder"
-                                        />
+                                            [placeholder]="commonLocaleData?.app_mobile_number"
+                                        >
+                                        </input-field>
                                         <span id="init-contact-proforma-valid-msg" class="d-none"></span>
                                         <span id="init-contact-proforma-error-msg" class="d-none"></span>
                                     </div>
@@ -1013,10 +1014,10 @@
                                 </div>
                                 <!-- endregion-->
                                 <div class="row mt-1 delivery-from-field" *ngIf="isPurchaseInvoice">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
+                                    <div class="col-sm-12 col-xl-12 col-lg-12 col-md-12">
                                         <label>{{ localeData?.deliver_to }}<span class="red-text">*</span></label>
                                     </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 select-customer-name">
+                                    <div class="col-sm-12 col-xl-12 col-lg-12 col-md-12 col-xs-12 select-customer-name">
                                         <section class="form-inline">
                                             <div class="wrap-billing-address w-100 clearfix">
                                                 <div class="row">
@@ -1466,6 +1467,7 @@
                                             class="po-mat-salect"
                                             [placeholder]="localeData?.select_order_placeholder"
                                             [disabled]="linkedPo?.length === 0 && fieldFilteredOptions?.length === 0"
+                                            [appearance]="'outline'"
                                         >
                                             <mat-select-trigger *ngIf="linkedPo?.length">
                                                 <ng-container *ngFor="let poNumber of linkedPo; let i = index"
@@ -1627,7 +1629,7 @@
                                         [ngClass]="{ 'date-invoice': isPurchaseInvoice }"
                                         *ngIf="!isMobileScreen"
                                     >
-                                        <div class="form-inline flex-row flex-nowrap w-100">
+                                        <div class="form-inline flex-row flex-nowrap">
                                             <div
                                                 *ngIf="
                                                     (isCreditNote || isDebitNote) &&
@@ -1645,12 +1647,13 @@
                                                 class="form-group invoice-date-label"
                                                 [ngClass]="{
                                                     'date-invoice-parent-form':
-                                                        isPurchaseInvoice || isEstimateInvoice || isProformaInvoice
+                                                        isPurchaseInvoice || isEstimateInvoice || isProformaInvoice,
+                                                    'w-100': isCreditNote || isDebitNote
                                                 }"
                                             >
                                                 <div
                                                     [ngClass]="{ 'date-invoice-formgroup': isPurchaseInvoice }"
-                                                    class="date-width"
+                                                    class="w-100"
                                                 >
                                                     <giddh-datepicker
                                                         type="text"
@@ -1714,15 +1717,13 @@
                                             >
                                                 <div
                                                     [ngClass]="{ 'due-invoice-formgroup': isPurchaseInvoice }"
-                                                    class="date-width"
+                                                    class="w-100"
                                                 >
                                                     <giddh-datepicker
-                                                        type="text"
                                                         [placeholder]="giddhDateFormat"
                                                         (keydown.enter)="$event.preventDefault()"
                                                         #dueDate="ngModel"
                                                         name="dueDate"
-                                                        class="date-invoice"
                                                         [(ngModel)]="invFormData.voucherDetails.dueDate"
                                                         [class.invalid-inp]="
                                                             dueDate.errors && (dueDate.dirty || dueDate.touched)
@@ -1897,24 +1898,19 @@
                                     </div>
                                     <!-- endregion -->
                                     <div
-                                        class="row mt-1"
+                                        class="row mr-t15"
                                         *ngIf="(isSalesInvoice || isCashInvoice) && invFormData.touristSchemeApplicable"
                                     >
-                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
-                                            <label>{{ localeData?.passport_number }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                            <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
-                                                <text-field
-                                                    [type]="'text'"
-                                                    [name]="'passportNumber'"
-                                                    [placeholder]="localeData?.passport_number"
-                                                    [cssClass]="'form-control attention-to mat-field-border'"
-                                                    [(ngModel)]="invFormData.passportNumber"
-                                                    (keypress)="allowAlphanumericChar()"
-                                                    (blur)="allowAlphanumericChar()"
-                                                ></text-field>
-                                            </div>
+                                        <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12">
+                                            <input-field
+                                                [type]="'text'"
+                                                [name]="'passportNumber'"
+                                                [placeholder]="localeData?.passport_number"
+                                                [cssClass]="'attention-to'"
+                                                [(ngModel)]="invFormData.passportNumber"
+                                                (keypress)="allowAlphanumericChar()"
+                                                (blur)="allowAlphanumericChar()"
+                                            ></input-field>
                                         </div>
                                     </div>
                                 </ng-container>
@@ -3057,7 +3053,7 @@
                                                             shippingDate.errors &&
                                                             (shippingDate.dirty || shippingDate.touched)
                                                         "
-                                                        [appearance]="fill"
+                                                        [appearance]="'fill'"
                                                     >
                                                     </giddh-datepicker>
                                                     <p
@@ -3134,7 +3130,7 @@
                                 </div>
                                 <!-- endregion -->
                                 <!-- region note/messages -->
-                                <div class="pd-t1 pl-0 max-width-600 pd-t15" *ngIf="!isPurchaseInvoice">
+                                <div class="pd-t1 pl-0 max-width-600 pd-t3" *ngIf="!isPurchaseInvoice">
                                     <mat-form-field appearance="outline">
                                         <mat-label>{{ commonLocaleData?.app_note }}</mat-label>
                                         <textarea
@@ -3597,7 +3593,7 @@
                                                             <li
                                                                 class="
                                                                     clearfix
-                                                                    mr-t1
+                                                                    mr-t15
                                                                     d-flex
                                                                     align-items-center
                                                                     payment-mode-amount

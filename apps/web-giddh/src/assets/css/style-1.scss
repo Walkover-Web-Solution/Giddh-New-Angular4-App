@@ -3370,3 +3370,36 @@ input-field {
         }
     }
 }
+voucher-component {
+    .mobile-number {
+        .mat-form-field-appearance-outline {
+            .mat-form-field-label {
+                padding-left: 48px;
+            }
+            .mat-form-field-infix {
+                .mat-input-element {
+                    padding-left: 48px;
+                }
+            }
+            &.mat-form-field-can-float {
+                &.mat-form-field-should-float {
+                    .mat-form-field-label {
+                        padding-left: 64px;
+                    }
+                }
+            }
+        }
+    }
+    giddh-datepicker {
+        .mat-focused {
+            .mat-form-field-flex {
+                border: 0 !important;
+            }
+        }
+    }
+}
+.invoice-date-label {
+    &:focus-visible {
+        outline: none;
+    }
+}
