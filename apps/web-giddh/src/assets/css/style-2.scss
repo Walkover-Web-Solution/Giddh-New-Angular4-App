@@ -14239,8 +14239,7 @@ body.hide-scroll-body.master-page {
         &:not(.cdk-overlay-pane){
             zoom: 90%;
         }
-    }
-    
+    }    
     /* Height of Primary Side Bar*/
     .primary-sidebar {
         .wrap-menus {
@@ -14315,9 +14314,6 @@ body.hide-scroll-body.master-page {
             max-width: 214px !important;
         }
     }
-    // .cdk-virtual-scroll-viewport{
-    //     transform: none !important;
-    // }
 }
 
 @media only screen and (max-width: 1366px) {
