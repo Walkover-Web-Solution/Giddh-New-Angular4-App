@@ -2211,3 +2211,11 @@ label.checkbox-custom-label {
 .date-width {
     max-width: 95px;
 }
+.mobile-number-wrapper {
+    input {
+        height: 46px;
+        width: 100%;
+        border-radius: 8px !important;
+        border: 1px solid var(--color-iron);
+    }
+}

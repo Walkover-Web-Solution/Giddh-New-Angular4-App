@@ -1457,56 +1457,48 @@
                                     class="row mt-3"
                                     *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))"
                                 >
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
-                                        <label>{{ localeData?.link_purchase_order }}</label>
-                                    </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                        <div class="col-xl-6 col-lg-10 col-md-10 pl-0 purchase-link">
-                                            <mat-select
-                                                name="linkedPO"
-                                                [(ngModel)]="linkedPo"
-                                                [multiple]="true"
-                                                (selectionChange)="getPurchaseOrder($event?.value, true)"
-                                                class="po-mat-salect"
-                                                [placeholder]="localeData?.select_order_placeholder"
-                                                [disabled]="
-                                                    linkedPo?.length === 0 && fieldFilteredOptions?.length === 0
-                                                "
-                                            >
-                                                <mat-select-trigger *ngIf="linkedPo?.length">
-                                                    <ng-container *ngFor="let poNumber of linkedPo; let i = index"
-                                                        >{{ purchaseOrderNumberValueMapping[poNumber]
-                                                        }}<ng-container *ngIf="linkedPo[i + 1]">, </ng-container>
-                                                    </ng-container>
-                                                </mat-select-trigger>
-                                                <mat-option class="po-options-line">
-                                                    <ngx-mat-select-search
-                                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                                        [formControl]="linkPoDropdown"
-                                                        [placeholderLabel]="localeData?.select_order_placeholder"
-                                                    >
-                                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                                    </ngx-mat-select-search>
-                                                </mat-option>
-
-                                                <mat-option
-                                                    *ngFor="let option of fieldFilteredOptions"
-                                                    [value]="option?.value"
-                                                    class="po-options-line"
-                                                    [disabled]="showLoader"
+                                    <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12 purchase-link">
+                                        <mat-select
+                                            name="linkedPO"
+                                            [(ngModel)]="linkedPo"
+                                            [multiple]="true"
+                                            (selectionChange)="getPurchaseOrder($event?.value, true)"
+                                            class="po-mat-salect"
+                                            [placeholder]="localeData?.select_order_placeholder"
+                                            [disabled]="linkedPo?.length === 0 && fieldFilteredOptions?.length === 0"
+                                        >
+                                            <mat-select-trigger *ngIf="linkedPo?.length">
+                                                <ng-container *ngFor="let poNumber of linkedPo; let i = index"
+                                                    >{{ purchaseOrderNumberValueMapping[poNumber]
+                                                    }}<ng-container *ngIf="linkedPo[i + 1]">, </ng-container>
+                                                </ng-container>
+                                            </mat-select-trigger>
+                                            <mat-option class="po-options-line">
+                                                <ngx-mat-select-search
+                                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                                    [formControl]="linkPoDropdown"
+                                                    [placeholderLabel]="localeData?.select_order_placeholder"
                                                 >
-                                                    <span class="po-option-label"> {{ option?.label }}</span>
-                                                    <span class="po-option-value" *ngIf="option?.additional?.pending">
-                                                        {{ localeData?.pending }}:
-                                                        {{ option?.additional?.pending }}</span
-                                                    >
-                                                    <span class="po-option-value" *ngIf="option.additional?.grandTotal">
-                                                        {{ commonLocaleData?.app_amount }}:
-                                                        {{ option?.additional?.grandTotal }}</span
-                                                    >
-                                                </mat-option>
-                                            </mat-select>
-                                        </div>
+                                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+
+                                            <mat-option
+                                                *ngFor="let option of fieldFilteredOptions"
+                                                [value]="option?.value"
+                                                class="po-options-line"
+                                                [disabled]="showLoader"
+                                            >
+                                                <span class="po-option-label"> {{ option?.label }}</span>
+                                                <span class="po-option-value" *ngIf="option?.additional?.pending">
+                                                    {{ localeData?.pending }}: {{ option?.additional?.pending }}</span
+                                                >
+                                                <span class="po-option-value" *ngIf="option.additional?.grandTotal">
+                                                    {{ commonLocaleData?.app_amount }}:
+                                                    {{ option?.additional?.grandTotal }}</span
+                                                >
+                                            </mat-option>
+                                        </mat-select>
                                     </div>
                                 </div>
                                 <!-- end Link purchase order -->
@@ -1527,13 +1519,14 @@
                                                         : null
                                                 "
                                                 [(ngModel)]="invFormData.voucherDetails.voucherNumber"
+                                                [placeholder]="commonLocaleData?.app_voucher_number"
                                             >
                                             </input-field>
                                             <ng-container *ngIf="isCreditNote || isDebitNote">
-                                                <select-field
+                                                <dropdown-field
                                                     #linkingDropdown
                                                     *ngIf="voucherApiVersion === 2"
-                                                    [cssClass]="'form-control mat-field-border linking-dropdown'"
+                                                    [cssClass]="'linking-dropdown'"
                                                     [name]="'invoiceLinking'"
                                                     [placeholder]="commonLocaleData?.app_select_accounts"
                                                     [options]="invoiceList$ | async"
@@ -1576,11 +1569,10 @@
                                                             </div>
                                                         </a>
                                                     </ng-template>
-                                                </select-field>
-                                                <select-field
+                                                </dropdown-field>
+                                                <dropdown-field
                                                     #invoiceListDropdown
                                                     *ngIf="voucherApiVersion !== 2"
-                                                    [cssClass]="'form-control mat-field-border'"
                                                     [name]="'invoiceLinking'"
                                                     [placeholder]="commonLocaleData?.app_select_accounts"
                                                     [options]="invoiceList"
@@ -1617,7 +1609,7 @@
                                                             </div>
                                                         </a>
                                                     </ng-template>
-                                                </select-field>
+                                                </dropdown-field>
                                             </ng-container>
                                         </div>
                                         <div
@@ -1656,11 +1648,6 @@
                                                         isPurchaseInvoice || isEstimateInvoice || isProformaInvoice
                                                 }"
                                             >
-                                                <label
-                                                    [ngClass]="{ 'date-invoice-label': isPurchaseInvoice }"
-                                                    class="mr-2"
-                                                    >{{ invoiceDateLabel }}</label
-                                                >
                                                 <div
                                                     [ngClass]="{ 'date-invoice-formgroup': isPurchaseInvoice }"
                                                     class="date-width"
@@ -1725,14 +1712,6 @@
                                                 "
                                                 [ngClass]="{ 'due-invoice-parent-form': isPurchaseInvoice }"
                                             >
-                                                <label
-                                                    [ngClass]="{
-                                                        'due-invoice-label':
-                                                            isPurchaseInvoice || isEstimateInvoice || isProformaInvoice
-                                                    }"
-                                                    class="mr-2"
-                                                    >{{ invoiceDueDateLabel }}</label
-                                                >
                                                 <div
                                                     [ngClass]="{ 'due-invoice-formgroup': isPurchaseInvoice }"
                                                     class="date-width"
@@ -1764,29 +1743,23 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row mt-1" *ngIf="voucherApiVersion === 2 && (isCreditNote || isDebitNote)">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
-                                        <label> {{ commonLocaleData?.app_number }} </label>
-                                    </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
-                                        <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10 pl-0">
-                                            <div>
-                                                <text-field
-                                                    [type]="'text'"
-                                                    [name]="'accountDetails.invoiceNum'"
-                                                    [cssClass]="
-                                                        'form-control invoice-date attention-to mat-field-border invoice-number-class'
-                                                    "
-                                                    [ngClass]="{ 'date-invoice': !isPurchaseInvoice }"
-                                                    [readonly]="
-                                                        isUpdateMode && !(isDebitNote || isPurchaseInvoice)
-                                                            ? 'disabled'
-                                                            : null
-                                                    "
-                                                    [(ngModel)]="invFormData.voucherDetails.voucherNumber"
-                                                >
-                                                </text-field>
-                                            </div>
+                                <div class="row mr-t3" *ngIf="voucherApiVersion === 2 && (isCreditNote || isDebitNote)">
+                                    <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6">
+                                        <div>
+                                            <input-field
+                                                [type]="'text'"
+                                                [name]="'accountDetails.invoiceNum'"
+                                                [cssClass]="'invoice-date attention-to invoice-number-class'"
+                                                [ngClass]="{ 'date-invoice': !isPurchaseInvoice }"
+                                                [readonly]="
+                                                    isUpdateMode && !(isDebitNote || isPurchaseInvoice)
+                                                        ? 'disabled'
+                                                        : null
+                                                "
+                                                [(ngModel)]="invFormData.voucherDetails.voucherNumber"
+                                                [placeholder]="commonLocaleData?.app_voucher_number"
+                                            >
+                                            </input-field>
                                         </div>
                                     </div>
                                 </div>
@@ -1867,7 +1840,7 @@
                                 <!-- reverse charge transction start -->
                                 <!-- for purchase record start -->
                                 <div
-                                    class="row mt-1"
+                                    class="row mt-3"
                                     *ngIf="
                                         isPurchaseInvoice ||
                                         (currentVoucherFormDetails?.rcmAllowed && companyCountryName === 'India')
@@ -3084,6 +3057,7 @@
                                                             shippingDate.errors &&
                                                             (shippingDate.dirty || shippingDate.touched)
                                                         "
+                                                        [appearance]="fill"
                                                     >
                                                     </giddh-datepicker>
                                                     <p
