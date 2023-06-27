@@ -14528,7 +14528,9 @@ body.hide-scroll-body.master-page {
 }
 @media only screen and (max-width: 1366px) {
     body {
-        zoom: 85%;
+        &:not(.cdk-overlay-pane){
+            zoom: 85%;
+        }
     }
     .company-branch-nav {
         height: calc(100vh - 56px) !important;
