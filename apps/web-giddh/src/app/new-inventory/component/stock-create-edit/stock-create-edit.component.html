@@ -243,6 +243,36 @@
                                                                                             ?.length > 1
                                                                                 }"
                                                                             >
+                                                                                <input-field
+                                                                                    [cssClass]="
+                                                                                        'text-right unit-amount'
+                                                                                    "
+                                                                                    [placeholder]="'0.00'"
+                                                                                    [name]="
+                                                                                        'variantFixedAssetsUnitRate' + j
+                                                                                    "
+                                                                                    [type]="'text'"
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_rate
+                                                                                    "
+                                                                                    [(ngModel)]="
+                                                                                        variantFixedAssetsUnitRate.rate
+                                                                                    "
+                                                                                    [prefix]="companyCurrencySymbol"
+                                                                                    [mask]="inputMaskFormat"
+                                                                                    [useMask]="true"
+                                                                                >
+                                                                                </input-field>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-6"
+                                                                                [ngClass]="{
+                                                                                    'col-sm-5 col-xs-5 pr-0':
+                                                                                        stockForm.variants[0]
+                                                                                            ?.fixedAssetsInformation
+                                                                                            ?.length > 1
+                                                                                }"
+                                                                            >
                                                                                 <dropdown-field
                                                                                     [cssClass]="
                                                                                         (!variantFixedAssetsUnitRate?.stockUnitName &&
@@ -271,36 +301,6 @@
                                                                                         variantFixedAssetsUnitRate?.stockUnitName
                                                                                     "
                                                                                 ></dropdown-field>
-                                                                            </div>
-                                                                            <div
-                                                                                class="col-6"
-                                                                                [ngClass]="{
-                                                                                    'col-sm-5 col-xs-5 pr-0':
-                                                                                        stockForm.variants[0]
-                                                                                            ?.fixedAssetsInformation
-                                                                                            ?.length > 1
-                                                                                }"
-                                                                            >
-                                                                                <input-field
-                                                                                    [cssClass]="
-                                                                                        'text-right unit-amount'
-                                                                                    "
-                                                                                    [placeholder]="'0.00'"
-                                                                                    [name]="
-                                                                                        'variantFixedAssetsUnitRate' + j
-                                                                                    "
-                                                                                    [type]="'text'"
-                                                                                    [placeholder]="
-                                                                                        commonLocaleData?.app_rate
-                                                                                    "
-                                                                                    [(ngModel)]="
-                                                                                        variantFixedAssetsUnitRate.rate
-                                                                                    "
-                                                                                    [prefix]="companyCurrencySymbol"
-                                                                                    [mask]="inputMaskFormat"
-                                                                                    [useMask]="true"
-                                                                                >
-                                                                                </input-field>
                                                                             </div>
                                                                             <button
                                                                                 mat-icon-button
@@ -457,6 +457,37 @@
                                                                                                 ?.length > 1
                                                                                     }"
                                                                                 >
+                                                                                    <input-field
+                                                                                        [cssClass]="
+                                                                                            'text-right unit-amount'
+                                                                                        "
+                                                                                        [placeholder]="'0.00'"
+                                                                                        [name]="
+                                                                                            'variantPurchaseUnitRate' +
+                                                                                            j
+                                                                                        "
+                                                                                        [type]="'text'"
+                                                                                        [placeholder]="
+                                                                                            commonLocaleData?.app_rate
+                                                                                        "
+                                                                                        [(ngModel)]="
+                                                                                            variantPurchaseUnitRate.rate
+                                                                                        "
+                                                                                        [prefix]="companyCurrencySymbol"
+                                                                                        [mask]="inputMaskFormat"
+                                                                                        [useMask]="true"
+                                                                                    >
+                                                                                    </input-field>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-6"
+                                                                                    [ngClass]="{
+                                                                                        'col-sm-5 col-xs-5 pr-0':
+                                                                                            stockForm.variants[0]
+                                                                                                ?.purchaseInformation
+                                                                                                ?.length > 1
+                                                                                    }"
+                                                                                >
                                                                                     <dropdown-field
                                                                                         [cssClass]="'unit-rates'"
                                                                                         [name]="
@@ -484,37 +515,6 @@
                                                                                         "
                                                                                     >
                                                                                     </dropdown-field>
-                                                                                </div>
-                                                                                <div
-                                                                                    class="col-6"
-                                                                                    [ngClass]="{
-                                                                                        'col-sm-5 col-xs-5 pr-0':
-                                                                                            stockForm.variants[0]
-                                                                                                ?.purchaseInformation
-                                                                                                ?.length > 1
-                                                                                    }"
-                                                                                >
-                                                                                    <input-field
-                                                                                        [cssClass]="
-                                                                                            'text-right unit-amount'
-                                                                                        "
-                                                                                        [placeholder]="'0.00'"
-                                                                                        [name]="
-                                                                                            'variantPurchaseUnitRate' +
-                                                                                            j
-                                                                                        "
-                                                                                        [type]="'text'"
-                                                                                        [placeholder]="
-                                                                                            commonLocaleData?.app_rate
-                                                                                        "
-                                                                                        [(ngModel)]="
-                                                                                            variantPurchaseUnitRate.rate
-                                                                                        "
-                                                                                        [prefix]="companyCurrencySymbol"
-                                                                                        [mask]="inputMaskFormat"
-                                                                                        [useMask]="true"
-                                                                                    >
-                                                                                    </input-field>
                                                                                 </div>
                                                                                 <button
                                                                                     mat-icon-button
@@ -666,6 +666,33 @@
                                                                                                 ?.length > 1
                                                                                     }"
                                                                                 >
+                                                                                    <input-field
+                                                                                        [cssClass]="'text-right'"
+                                                                                        [type]="'text'"
+                                                                                        [name]="
+                                                                                            'variantSalesUnitRate' + j
+                                                                                        "
+                                                                                        [placeholder]="
+                                                                                            commonLocaleData?.app_rate
+                                                                                        "
+                                                                                        [(ngModel)]="
+                                                                                            variantSalesUnitRate.rate
+                                                                                        "
+                                                                                        [prefix]="companyCurrencySymbol"
+                                                                                        [mask]="inputMaskFormat"
+                                                                                        [useMask]="true"
+                                                                                    >
+                                                                                    </input-field>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-6"
+                                                                                    [ngClass]="{
+                                                                                        'col-sm-5 col-xs-5 pr-0':
+                                                                                            stockForm.variants[0]
+                                                                                                ?.salesInformation
+                                                                                                ?.length > 1
+                                                                                    }"
+                                                                                >
                                                                                     <dropdown-field
                                                                                         [name]="'variantSalesUnit' + j"
                                                                                         [placeholder]="
@@ -690,33 +717,6 @@
                                                                                         "
                                                                                     >
                                                                                     </dropdown-field>
-                                                                                </div>
-                                                                                <div
-                                                                                    class="col-6"
-                                                                                    [ngClass]="{
-                                                                                        'col-sm-5 col-xs-5 pr-0':
-                                                                                            stockForm.variants[0]
-                                                                                                ?.salesInformation
-                                                                                                ?.length > 1
-                                                                                    }"
-                                                                                >
-                                                                                    <input-field
-                                                                                        [cssClass]="'text-right'"
-                                                                                        [type]="'text'"
-                                                                                        [name]="
-                                                                                            'variantSalesUnitRate' + j
-                                                                                        "
-                                                                                        [placeholder]="
-                                                                                            commonLocaleData?.app_rate
-                                                                                        "
-                                                                                        [(ngModel)]="
-                                                                                            variantSalesUnitRate.rate
-                                                                                        "
-                                                                                        [prefix]="companyCurrencySymbol"
-                                                                                        [mask]="inputMaskFormat"
-                                                                                        [useMask]="true"
-                                                                                    >
-                                                                                    </input-field>
                                                                                 </div>
                                                                                 <button
                                                                                     mat-icon-button
