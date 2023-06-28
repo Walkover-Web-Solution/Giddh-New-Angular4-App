@@ -207,9 +207,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                     this.summaryData.lowestLabel = res.previousLowestClosingBalance.dateLabel;
                 }
 
-                if (this.chart) {
-                    this.chart.destroy();
-                }
                 this.createChart();
             } else {
                 if (response?.status === "error" && response?.message) {
@@ -266,12 +263,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.graphExpanded = true;
         this.setPreviousDate();
         this.setCurrentDate();
-        if (this.chart) {
-            this.chart.destroy();
-        }
-        setTimeout(() => {
-            this.createChart();
-        }, 200);
+        this.createChart();
     }
 
     public updateChartFrequency(interval) {
@@ -297,7 +289,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
             this.getRevenueGraphData();
         }
     }
-
 
     public setCurrentDate() {
         if ((this.currentDateRangePickerValue[0] !== null) && (this.currentDateRangePickerValue[1] !== null)) {
@@ -330,11 +321,12 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     }
 
     public createChart(): void {
-
         const chartType = this.chartType;
         let currentData = this.currentData;
         let previousData = this.previousData;
         let label = this.chartLabelsize;
+        this.requestInFlight = true;
+        this.chart?.destroy();
 
         /* For Chart Type Line  */
         if (this.chartType === 'line') {
