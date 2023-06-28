@@ -5188,24 +5188,25 @@
                 <!-- endregion -->
                 <!-- endregion -->
                 <!-- region submit actions-->
-                <section class="clearfix mr-b5">
+                <section class="container-fluid clearfix mr-b5">
                     <section
                         id="actionPane"
-                        class="text-center mr-b2"
+                        class="text-center mr-b2 other-details-section"
                         [ngClass]="{ 'giddh-overlap-block': invFormData.voucherDetails.customerName }"
                     >
-                        <div class="col-12">
+                        <div class="col-12 pr-0">
                             <!-- region generate mode -->
                             <div class="pull-right pr update-mode" *ngIf="!isUpdateMode">
                                 <button
                                     mat-stroked-button
+                                    color="warn"
                                     (click)="resetInvoiceForm(invoiceForm)"
-                                    class="d-inline-block v-align-middle"
+                                    class="d-inline-block"
                                 >
                                     {{ commonLocaleData?.app_clear }}
                                 </button>
                                 <!-- region purchase invoice -->
-                                <span class="d-inline-block v-align-middle" *ngIf="isPurchaseInvoice">
+                                <span class="d-inline-block" *ngIf="isPurchaseInvoice">
                                     <button
                                         mat-stroked-button
                                         color="primary"
@@ -5224,7 +5225,7 @@
                                 <!-- endregion -->
                                 <!-- region non purchase -->
                                 <span
-                                    class="d-inline-block v-align-middle"
+                                    class="d-inline-block"
                                     *ngIf="!isPurchaseInvoice && !isProformaInvoice && !isEstimateInvoice"
                                 >
                                     <button
@@ -5300,8 +5301,8 @@
                                             [matMenuTriggerFor]="dropdownMenu"
                                             id="button-dropup"
                                             *ngIf="invoiceType === 'sales'"
-                                            mat-button
-                                            class="btn btn-default dropdown-toggle h2"
+                                            mat-stroked-button
+                                            class="min-width-auto"
                                         >
                                             <span class="caret"></span>
                                         </button>
@@ -5310,7 +5311,7 @@
                                 <!-- endregion -->
                                 <!-- region proforma/estimates -->
                                 <span
-                                    class="d-inline-block v-align-middle"
+                                    class="d-inline-block"
                                     *ngIf="!isCompany && (isProformaInvoice || isEstimateInvoice)"
                                 >
                                     <div
@@ -5334,8 +5335,8 @@
                                         <button
                                             [matMenuTriggerFor]="dropdownMenu2"
                                             id="button-dropup"
-                                            mat-button
-                                            class="btn btn-default dropdown-toggle dropdown-toggle-split"
+                                            mat-stroked-button
+                                            class="min-width-auto dropdown-toggle-split"
                                         >
                                             <span class="caret"></span>
                                         </button>
@@ -5374,7 +5375,7 @@
                             <div class="pull-right pr" *ngIf="isUpdateMode">
                                 <button
                                     mat-button
-                                    class="btn btn-danger d-inline-block v-align-middle"
+                                    class="btn btn-danger d-inline-block"
                                     (click)="cancelUpdate()"
                                 >
                                     {{ commonLocaleData?.app_cancel }}
