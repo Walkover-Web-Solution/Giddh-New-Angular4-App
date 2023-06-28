@@ -130,7 +130,7 @@
         }
     }
     .company-list {
-        height: calc(100vh - 345px);
+        height: calc(100vh - 345px) !important;
         overflow: auto;
         margin: 0;
         padding: 0;
