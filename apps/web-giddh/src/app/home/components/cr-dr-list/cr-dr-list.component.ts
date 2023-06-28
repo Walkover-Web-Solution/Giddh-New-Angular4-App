@@ -173,7 +173,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
             Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
-    
+
     /**
     * This will hide the datepicker
     *
