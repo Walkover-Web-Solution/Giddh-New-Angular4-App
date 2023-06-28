@@ -1528,7 +1528,6 @@
                                         *ngIf="queryParams?.stockUniqueName && stockForm?.uniqueName"
                                         [stock]="stockForm"
                                         [variants]="stockForm.variants"
-                                        (recipeSaved)="backClicked()"
                                     ></create-recipe>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.other">
@@ -4749,7 +4748,7 @@
                     mat-stroked-button
                     color="primary"
                     class="min-width-100"
-                    (click)="cancelEdit()"
+                    (click)="backClicked()"
                 >
                     {{ commonLocaleData?.app_close }}
                 </button>

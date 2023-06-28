@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep, isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
@@ -20,8 +20,6 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     @Input() public stock: any = {};
     /** List of variants in stock form */
     @Input() public variants: any[] = [];
-    /** Emits true once recipe is saved */
-    @Output() public recipeSaved: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Recipe object */
     public recipeObject: any = { manufacturingDetails: [] };
     /** List of variants */
@@ -76,19 +74,6 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
 
         if (changes?.variants?.currentValue) {
             this.newVariants = changes?.variants?.currentValue?.filter(variant => !variant?.uniqueName);
-            // const existingVariants = changes?.variants?.currentValue?.filter(variant => variant?.uniqueName);
-
-            // this.recipeObject.manufacturingDetails?.forEach(manufacturingDetail => {
-            //     if (manufacturingDetail?.variant?.uniqueName && !existingVariants.includes(manufacturingDetail?.variant?.uniqueName)) {
-            //         manufacturingDetail.variantError = true;
-
-            //         manufacturingDetail?.linkedStocks?.forEach(linkedStock => {
-            //             if (linkedStock?.variant?.uniqueName && !existingVariants.includes(linkedStock?.variant?.uniqueName)) {
-            //                 linkedStock.variantError = true;
-            //             }
-            //         });
-            //     }
-            // });
         }
     }
 
@@ -533,17 +518,47 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      * @memberof CreateRecipeComponent
      */
     public saveRecipeFromStock(): void {
-        const recipeObject = this.formatRecipeRequest();
+        let recipeObject = this.formatRecipeRequest();
+
+        if (this.existingRecipe?.manufacturingDetails?.length) {
+            this.existingRecipe?.manufacturingDetails?.forEach(existingRecipe => {
+                let recipeExists = recipeObject?.manufacturingDetails?.filter(recipe => recipe?.variant?.uniqueName === existingRecipe?.variant?.uniqueName);
+                if (!recipeExists?.length) {
+                    recipeObject.manufacturingDetails.push({ variant: existingRecipe?.variant, manufacturingQuantity: existingRecipe.manufacturingQuantity, manufacturingUnitUniqueName: existingRecipe.manufacturingUnitUniqueName, linkedStocks: []  });
+                }
+            });
+        }
+
         if (!recipeObject?.manufacturingDetails?.length) {
             return;
         }
+
         this.manufacturingService.saveRecipe(this.stock.uniqueName, recipeObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasterService.showSnackBar("success", this.localeData?.recipe_saved);
-                this.recipeSaved.emit(true);
             } else {
                 this.toasterService.showSnackBar("error", response?.body || response?.message);
             }
         });
+    }
+
+    /**
+     * Refreshes list of variants from stock create/update page
+     *
+     * @memberof CreateRecipeComponent
+     */
+    public refreshVariantsList(): void {
+        this.variantsList = [];
+
+        this.stock?.variants?.forEach(variant => {
+            if (variant?.uniqueName) {
+                this.variantsList.push({
+                    label: variant.name,
+                    value: variant.uniqueName
+                });
+            }
+        });
+
+        this.changeDetectionRef.detectChanges();
     }
 }
