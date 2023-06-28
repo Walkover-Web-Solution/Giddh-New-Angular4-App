@@ -65,6 +65,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public isRequired: boolean = false;
     /** True if select all option is checked */
     @Input() public isSelectAllChecked: boolean = false;
+    /** Custom styles */
+    @Input() public cssClass: string | Array<string>;
 
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();

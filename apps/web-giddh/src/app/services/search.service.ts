@@ -54,7 +54,7 @@ export class SearchService {
      */
     public searchAccount(params: any): Observable<any> {
         const companyUniqueName = this.generalService.companyUniqueName;
-        let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH}`?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH}`?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':version/', String(this.generalService.voucherApiVersion === 1 ? '' : 'v2/'));
         if (params) {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&'
@@ -107,7 +107,8 @@ export class SearchService {
         const companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_DETAIL}`
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-            ?.replace(':accountUniqueName', encodeURIComponent(uniqueName));
+            ?.replace(':accountUniqueName', encodeURIComponent(uniqueName))
+            ?.replace(':version', this.generalService.voucherApiVersion === 1 ? 'v2' : 'v3');
         if (params) {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&';

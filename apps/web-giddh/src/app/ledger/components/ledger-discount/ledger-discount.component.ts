@@ -147,10 +147,20 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 
     /**
      * on change of discount amount
+     *
+     * @param {*} [event] Change event
+     * @param {*} [discount] Discount value
+     * @param {boolean} [preventEmit] Prevent the total amount update event to avoid recursive calculation
+     * @memberof LedgerDiscountComponent
      */
-    public change(event?: any, discount?: any) {
+    public change(event?: any, discount?: any, preventEmit?: boolean) {
         this.discountTotal = giddhRoundOff(this.generateTotal(), this.giddhBalanceDecimalPlaces);
-        this.discountTotalUpdated.emit({ discountTotal: this.discountTotal, isActive: event, discount: discount });
+        if (!preventEmit) {
+            /** Should emit only conditionally, done to avoid
+             * recursive call to change method in case of inclusive tax calculation for stock
+            */
+            this.discountTotalUpdated.emit({ discountTotal: this.discountTotal, isActive: event, discount: discount });
+        }
     }
 
     /**

@@ -351,6 +351,7 @@
     "app_import_type": {
         "groups": "Groups",
         "accounts": "Accounts",
+        "base_accounts": "Base Accounts",
         "inventory": "Inventory",
         "entries": "Entries",
         "trial_balance": "Trial Balance",

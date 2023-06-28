@@ -44,13 +44,24 @@
                     >
                     </select-field>
                 </div>
-                <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'ENTITY_DATE'">
+                <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'ENTRY_DATE'">
                     <div class="custom-datepicker" (click)="showEntryGiddhDatepicker($event)">
                         <i class="icon-calender calendar-addon"></i>
                         <input
                             type="text"
                             name="selectedEntryDateRange"
                             [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                        />
+                    </div>
+                </div>
+                <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'VOUCHER_DATE'">
+                    <div class="custom-datepicker" (click)="showVoucherGiddhDatepicker($event)">
+                        <i class="icon-calender calendar-addon"></i>
+                        <input
+                            type="text"
+                            name="selectedVoucherDateRange"
+                            [value]="selectedVoucherDateRangeUi ? selectedVoucherDateRangeUi : ''"
                             class="giddh-datepicker date-range-picker"
                         />
                     </div>
@@ -80,6 +91,23 @@
                         [defaultValue]="activityObjLabels?.user"
                         (onClear)="resetUser($event)"
                         [allowValueReset]="true"
+                    >
+                    </select-field>
+                </div>
+                <div class="user-wrapper mr-l1" *ngIf="selectedField?.value === 'ACCOUNTS'">
+                    <select-field
+                        [cssClass]="'form-control mat-field-border'"
+                        [name]="'accounts'"
+                        [placeholder]="commonLocaleData?.app_import_type?.base_accounts"
+                        [options]="accounts"
+                        (selectedOption)="selecteAccountType($event); activityObjLabels.accounts = $event.label"
+                        [defaultValue]="activityObjLabels?.accounts"
+                        (onClear)="resetAccounts($event)"
+                        [allowValueReset]="true"
+                        (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                        [enableDynamicSearch]="true"
+                        [isPaginationEnabled]="true"
+                        (scrollEnd)="handleScrollEnd()"
                     >
                     </select-field>
                 </div>
@@ -371,6 +399,30 @@
                 [locale]="{ applyLabel: commonLocaleData?.app_done }"
                 (rangeClicked)="entryDateSelectedCallback($event)"
                 (datesUpdated)="entryDateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
+<ng-template #datepickerVoucherTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedVoucherDateRange?.startDate"
+                [inputEndDate]="selectedVoucherDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="voucherDatePickerOptions"
+                [selectedRangeLabel]="selectedVoucherRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                [locale]="{ applyLabel: commonLocaleData?.app_done }"
+                (rangeClicked)="voucherDateSelectedCallback($event)"
+                (datesUpdated)="voucherDateSelectedCallback($event)"
                 [keepCalendarOpeningWithRange]="false"
                 [showRangeLabelOnInput]="false"
                 [dateFieldPosition]="dateFieldPosition"
