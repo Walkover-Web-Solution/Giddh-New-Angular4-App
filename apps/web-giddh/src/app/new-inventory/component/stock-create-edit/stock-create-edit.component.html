@@ -542,33 +542,37 @@
                                                                                 </button>
                                                                                 <!-- <div class="col-sm-10 col-10 mr-t15">
                                                                                     <a
-                                                                                        href="javascript:;"
+                                                                                        href="javascript:void(0);"
+                                                                                        class="bg-transparent px-0 pt-2"
                                                                                         disableRipple
                                                                                         (click)="
-                                                                                            addNewVariantFixedAssetsUnitPrice(
+                                                                                            addNewVariantPurchaseUnitPrice(
                                                                                                 stockForm.variants[0]
                                                                                             )
                                                                                         "
                                                                                         *ngIf="
                                                                                             j ===
                                                                                             stockForm.variants[0]
-                                                                                                .fixedAssetsInformation
+                                                                                                ?.purchaseInformation
                                                                                                 ?.length -
                                                                                                 1
                                                                                         "
                                                                                         [disabled]="
                                                                                             !stockForm
-                                                                                                ?.fixedAssetAccountDetails
+                                                                                                ?.purchaseAccountDetails
                                                                                                 .accountUniqueName
                                                                                         "
                                                                                     >
                                                                                         <span
                                                                                             *ngIf="
                                                                                                 stockForm
-                                                                                                    ?.fixedAssetAccountDetails
+                                                                                                    ?.purchaseAccountDetails
                                                                                                     .accountUniqueName
                                                                                             "
-                                                                                            class="add-new-text-container"
+                                                                                            class="
+                                                                                                add-new-text-container
+                                                                                                font-15
+                                                                                            "
                                                                                         >
                                                                                             {{ localeData?.add_new }}
                                                                                         </span>
@@ -740,33 +744,36 @@
                                                                                 </button>
                                                                                 <!-- <div class="col-sm-10 col-10 mr-t15">
                                                                                     <a
-                                                                                        href="javascript:;"
+                                                                                        href="javascript:void(0);"
+                                                                                        class="bg-transparent px-0 pt-2"
                                                                                         disableRipple
                                                                                         (click)="
-                                                                                            addNewVariantFixedAssetsUnitPrice(
-                                                                                                stockForm.variants[0]
+                                                                                            addNewVariantSalesUnitPrice(
+                                                                                                (stockForm?.variants)[0]
                                                                                             )
                                                                                         "
                                                                                         *ngIf="
                                                                                             j ===
-                                                                                            stockForm.variants[0]
-                                                                                                .fixedAssetsInformation
+                                                                                            (stockForm?.variants)[0]
+                                                                                                ?.salesInformation
                                                                                                 ?.length -
                                                                                                 1
                                                                                         "
                                                                                         [disabled]="
                                                                                             !stockForm
-                                                                                                ?.fixedAssetAccountDetails
+                                                                                                ?.salesAccountDetails
                                                                                                 .accountUniqueName
                                                                                         "
                                                                                     >
                                                                                         <span
                                                                                             *ngIf="
                                                                                                 stockForm
-                                                                                                    ?.fixedAssetAccountDetails
+                                                                                                    ?.salesAccountDetails
                                                                                                     .accountUniqueName
                                                                                             "
-                                                                                            class="add-new-text-container"
+                                                                                            class="
+                                                                                                add-new-text-container
+                                                                                            "
                                                                                         >
                                                                                             {{ localeData?.add_new }}
                                                                                         </span>
