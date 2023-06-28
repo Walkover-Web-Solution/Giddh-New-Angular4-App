@@ -166,7 +166,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Copy from previous instance */
     @ViewChild('copyPreviousEstimate', { static: true }) public copyPreviousEstimate: ElementRef;
     /** Invoice Form instance */
-    @ViewChild('invoiceForm', { static: false }) public invoiceForm: NgForm;
+    @ViewChild('invoiceForm', { static: false }) public form: NgForm;
     /** Open Account Selection Dropdown instance */
     @ViewChild('openAccountSelectionDropdown', { static: false }) public openAccountSelectionDropdown: DropdownFieldComponent;
     /** Discount Compomnent instance */
@@ -893,9 +893,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.generateUpdateButtonClicked.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((form: NgForm) => {
             this.startLoader(true);
             if (this.isUpdateMode) {
-                this.handleUpdateInvoiceForm(form);
+                this.handleUpdateform(form);
             } else {
-                this.onSubmitInvoiceForm(form);
+                this.onSubmitform(form);
             }
         });
 
@@ -961,7 +961,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (this.invoiceType !== params['invoiceType']) {
                     this.invoiceType = decodeURI(params['invoiceType']) as VoucherTypeEnum;
                     this.prepareInvoiceTypeFlags();
-                    this.resetInvoiceForm(this.invoiceForm);
+                    this.resetform(this.form);
                     this.getInventorySettings();
 
                     // reset customer company when invoice type changes, re-check for company currency and country
@@ -1072,7 +1072,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             if (!this.isUpdateMode) {
                 if (!this.isPendingVoucherType) {
-                    this.resetInvoiceForm(this.invoiceForm);
+                    this.resetform(this.form);
                     if (!this.isMultiCurrencyModule() && !this.isPurchaseInvoice) {
                         // Hide the warehouse section if the module is other than multi-currency supported modules
                         this.shouldShowWarehouse = false;
@@ -1623,7 +1623,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 const isGenerateSuccess = result[0];
                 const isGenerateInProcess = result[1];
                 if (isGenerateSuccess) {
-                    this.resetInvoiceForm(this.invoiceForm);
+                    this.resetform(this.form);
 
                     let lastGenVoucher: { voucherNo: string, accountUniqueName: string } = {
                         voucherNo: '',
@@ -2326,7 +2326,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-    public resetInvoiceForm(f: NgForm) {
+    public resetform(f: NgForm) {
         if (f) {
             this.intl?.setNumber("");
             f.form.reset();
@@ -2412,11 +2412,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-    public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
+    public triggerSubmitform(form: NgForm, isUpdate) {
         this.updateAccount = isUpdate;
         if (this.isPendingVoucherType) {
             this.startLoader(true);
-            this.onSubmitInvoiceForm(form);
+            this.onSubmitform(form);
         } else {
             this.generateUpdateButtonClicked.next(form);
         }
@@ -2453,7 +2453,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-    public onSubmitInvoiceForm(form?: NgForm) {
+    public onSubmitform(form?: NgForm) {
         this.isShowLoader = true;
         this._cdr.detectChanges();
 
@@ -4120,8 +4120,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.callFromOutside) {
             this.location?.back();
         } else {
-            if (this.invoiceForm) {
-                this.resetInvoiceForm(this.invoiceForm);
+            if (this.form) {
+                this.resetform(this.form);
                 this.isUpdateMode = false;
             }
             this.cancelVoucherUpdate.emit(true);
@@ -4217,20 +4217,20 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     /**
      * update invoice function
-     * @param invoiceForm
+     * @param form
      */
-    public submitUpdateForm(invoiceForm: NgForm) {
-        this.generateUpdateButtonClicked.next(invoiceForm);
+    public submitUpdateForm(form: NgForm) {
+        this.generateUpdateButtonClicked.next(form);
     }
 
     /**
      * Handles the update operation of invoice form
      *
      * @private
-     * @param {NgForm} invoiceForm Form instance for values
+     * @param {NgForm} form Form instance for values
      * @memberof VoucherComponent
      */
-    private handleUpdateInvoiceForm(invoiceForm: NgForm): void {
+    private handleUpdateform(form: NgForm): void {
         let requestObject: any = this.prepareDataForApi();
         if (!requestObject) {
             this.startLoader(false);
@@ -4408,7 +4408,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
                 this.salesService.updateVoucherV4(updatedData).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
-                        this.actionsAfterVoucherUpdate(response, invoiceForm);
+                        this.actionsAfterVoucherUpdate(response, form);
                     }, (err) => {
                         this.startLoader(false);
                         this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
@@ -4466,7 +4466,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 this.salesService.updateVoucher(requestObject).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
-                        this.actionsAfterVoucherUpdate(response, invoiceForm);
+                        this.actionsAfterVoucherUpdate(response, form);
                     }, (err) => {
                         this.startLoader(false);
                         this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
@@ -4480,16 +4480,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * and performing post update actions
      * thing after sales/ cash or credit / debit note voucher updates
      * @param response
-     * @param invoiceForm
+     * @param form
      */
-    private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD> | BaseResponse<any, PurchaseRecordRequest>, invoiceForm: NgForm) {
+    private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD> | BaseResponse<any, PurchaseRecordRequest>, form: NgForm) {
         if (response?.status === 'success' && response?.body) {
             // To clear receipts voucher store
             if (this.isSalesInvoice || this.isCashInvoice) {
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
             }
             // reset form and other
-            this.resetInvoiceForm(invoiceForm);
+            this.resetform(form);
             this._toasty.successToast(this.localeData?.voucher_updated);
             this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
             this.voucherNumber = response.body.number;
@@ -6113,7 +6113,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         const apiCallObservable = this.voucherApiVersion === 2 ?
             this.salesService.generateGenericItem(request, true) : this.purchaseRecordService.generatePurchaseRecord(request);
         apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
-            this.handleGenerateResponse(response, this.invoiceForm);
+            this.handleGenerateResponse(response, this.form);
         }, () => {
             this.isShowLoader = false;
             this.startLoader(false);
@@ -6133,14 +6133,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.voucherApiVersion === 2) {
             this.salesService.updateVoucherV4(request)
                 .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
-                    this.actionsAfterVoucherUpdate(response, this.invoiceForm);
+                    this.actionsAfterVoucherUpdate(response, this.form);
                 }, () => {
                     this.startLoader(false);
                     this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 });
         } else {
             this.purchaseRecordService.generatePurchaseRecord(request, 'PATCH').pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<VoucherClass, PurchaseRecordRequest>) => {
-                this.actionsAfterVoucherUpdate(response, this.invoiceForm);
+                this.actionsAfterVoucherUpdate(response, this.form);
             }, () => {
                 this.startLoader(false);
                 this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
@@ -6161,7 +6161,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.customerAcList$ = observableOf(orderBy(this.defaultCustomerSuggestions, 'label'));
             this.salesAccounts$ = observableOf(orderBy(this.defaultItemSuggestions, 'label'));
             // reset form and other
-            this.resetInvoiceForm(form);
+            this.resetform(form);
 
             this.newVoucherUniqueName = response?.body?.uniqueName;
 

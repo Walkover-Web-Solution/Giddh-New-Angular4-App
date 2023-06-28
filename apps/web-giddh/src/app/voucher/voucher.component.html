@@ -3055,7 +3055,7 @@
                                             class="textarea-height"
                                             hasFocus
                                             #message2="hasFocus"
-                                            [class.error-box]="(invoiceForm?.controls)['message2']?.errors?.maxlength"
+                                            [class.error-box]="(form?.controls)['message2']?.errors?.maxlength"
                                             name="message2"
                                             [maxlength]="
                                                 shouldApplyMaxLengthOnNotes && !showNotesAtLastPage ? 200 : null
@@ -3069,8 +3069,7 @@
                                             shouldApplyMaxLengthOnNotes &&
                                             invFormData?.templateDetails?.other?.message2?.length &&
                                             !showNotesAtLastPage &&
-                                            (message2?.isFocused ||
-                                                (invoiceForm?.controls)['message2']?.errors?.maxlength)
+                                            (message2?.isFocused || (form?.controls)['message2']?.errors?.maxlength)
                                         "
                                     >
                                         <span class="max-character-label"
@@ -3629,7 +3628,7 @@
                             <div class="pull-right pr update-mode" *ngIf="!isUpdateMode">
                                 <button
                                     mat-button
-                                    (click)="resetInvoiceForm(invoiceForm)"
+                                    (click)="resetform(form)"
                                     class="btn btn-danger d-inline-block v-align-middle"
                                 >
                                     {{ commonLocaleData?.app_clear }}
@@ -3642,10 +3641,10 @@
                                         [disabled]="
                                             isFileUploading ||
                                             !hasVoucherEntry ||
-                                            (invoiceForm?.controls)['message2']?.errors?.maxlength ||
+                                            (form?.controls)['message2']?.errors?.maxlength ||
                                             isMobileNumberInvalid
                                         "
-                                        (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
+                                        (click)="doAction(0); triggerSubmitform(form, false)"
                                         class="btn btn-default"
                                     >
                                         {{ commonLocaleData?.app_save }}
@@ -3661,10 +3660,10 @@
                                         mat-button
                                         [disabled]="
                                             !hasVoucherEntry ||
-                                            (invoiceForm?.controls)['message2']?.errors?.maxlength ||
+                                            (form?.controls)['message2']?.errors?.maxlength ||
                                             isMobileNumberInvalid
                                         "
-                                        (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, true)"
+                                        (click)="doAction(0); triggerSubmitform(form, true)"
                                         class="btn btn-default"
                                         *ngIf="!isCompany && isCustomerSelected && !isPendingVoucherType"
                                     >
@@ -3676,7 +3675,7 @@
                                         class="btn-group"
                                         [isDisabled]="
                                             !hasVoucherEntry ||
-                                            (invoiceForm?.controls)['message2']?.errors?.maxlength ||
+                                            (form?.controls)['message2']?.errors?.maxlength ||
                                             isMobileNumberInvalid
                                         "
                                     >
@@ -3684,10 +3683,10 @@
                                             mat-button
                                             [disabled]="
                                                 !hasVoucherEntry ||
-                                                (invoiceForm?.controls)['message2']?.errors?.maxlength ||
+                                                (form?.controls)['message2']?.errors?.maxlength ||
                                                 isMobileNumberInvalid
                                             "
-                                            (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
+                                            (click)="doAction(0); triggerSubmitform(form, false)"
                                             class="btn btn-default generate-invoice"
                                         >
                                             {{ generateInvoiceText }}
@@ -3703,24 +3702,20 @@
                                                 <li role="menuitem">
                                                     <a
                                                         class="dropdown-item cp"
-                                                        (click)="
-                                                            doAction(2); triggerSubmitInvoiceForm(invoiceForm, false)
-                                                        "
+                                                        (click)="doAction(2); triggerSubmitform(form, false)"
                                                         >{{ localeData?.create_send }}</a
                                                     >
                                                 </li>
                                                 <li role="menuitem">
                                                     <a
                                                         class="dropdown-item cp"
-                                                        (click)="
-                                                            doAction(3); triggerSubmitInvoiceForm(invoiceForm, false)
-                                                        "
+                                                        (click)="doAction(3); triggerSubmitform(form, false)"
                                                         >{{ localeData?.create_print }}</a
                                                     >
                                                 </li>
                                                 <li
                                                     role="menuitem"
-                                                    (click)="doAction(4); triggerSubmitInvoiceForm(invoiceForm, false)"
+                                                    (click)="doAction(4); triggerSubmitform(form, false)"
                                                     *ngIf="voucherApiVersion !== 2"
                                                 >
                                                     <a class="dropdown-item cp">{{ localeData?.generate_recurring }}</a>
@@ -3747,17 +3742,16 @@
                                     <div
                                         class="btn-group"
                                         [isDisabled]="
-                                            !hasVoucherEntry || (invoiceForm?.controls)['message2']?.errors?.maxlength
+                                            !hasVoucherEntry || (form?.controls)['message2']?.errors?.maxlength
                                         "
                                     >
                                         <button
                                             *ngIf="!isCompany"
                                             mat-button
                                             [disabled]="
-                                                !hasVoucherEntry ||
-                                                (invoiceForm?.controls)['message2']?.errors?.maxlength
+                                                !hasVoucherEntry || (form?.controls)['message2']?.errors?.maxlength
                                             "
-                                            (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
+                                            (click)="doAction(0); triggerSubmitform(form, false)"
                                             class="btn btn-default h3"
                                         >
                                             {{ commonLocaleData?.app_create }}
@@ -3779,18 +3773,14 @@
                                                 <li role="menuitem">
                                                     <a
                                                         class="dropdown-item cp"
-                                                        (click)="
-                                                            doAction(2); triggerSubmitInvoiceForm(invoiceForm, false)
-                                                        "
+                                                        (click)="doAction(2); triggerSubmitform(form, false)"
                                                         >{{ localeData?.create_send }}</a
                                                     >
                                                 </li>
                                                 <li role="menuitem">
                                                     <a
                                                         class="dropdown-item cp"
-                                                        (click)="
-                                                            doAction(3); triggerSubmitInvoiceForm(invoiceForm, false)
-                                                        "
+                                                        (click)="doAction(3); triggerSubmitform(form, false)"
                                                         >{{ localeData?.create_print }}</a
                                                     >
                                                 </li>
@@ -3817,10 +3807,10 @@
                                     [disabled]="
                                         isFileUploading ||
                                         !hasVoucherEntry ||
-                                        (invoiceForm?.controls)['message2']?.errors?.maxlength ||
+                                        (form?.controls)['message2']?.errors?.maxlength ||
                                         isMobileNumberInvalid
                                     "
-                                    (click)="submitUpdateForm(invoiceForm)"
+                                    (click)="submitUpdateForm(form)"
                                 >
                                     {{ updateInvoiceText }}
                                 </button>
@@ -3962,7 +3952,7 @@
                     "
                     [isUpdateMode]="isUpdateMode"
                     [depositAmount]="depositAmount"
-                    [invoiceFormDetails]="invFormData"
+                    [formDetails]="invFormData"
                     [isVoucherModule]="true && voucherApiVersion !== 2"
                     [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
                     (closeModelEvent)="closeAdvanceReceiptModal()"
