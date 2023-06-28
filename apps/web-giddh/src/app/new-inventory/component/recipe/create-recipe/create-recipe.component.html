@@ -30,7 +30,7 @@
                             <div class="form-fields w-100">
                                 <div class="d-flex flex-column flex-wrap w-100 row-gap">
                                     <h1 class="section-head pb-2">{{ localeData?.finished_stock }}</h1>
-                                    <div>
+                                    <div *ngIf="stock?.variants?.length > 1">
                                         <dropdown-field
                                             class="width-280"
                                             [name]="'variant_' + i"

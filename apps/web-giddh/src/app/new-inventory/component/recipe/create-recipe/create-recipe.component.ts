@@ -411,6 +411,11 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                 this.recipeExists = false;
                 this.existingRecipe = [];
                 this.addNewRecipe();
+
+                if (this.variantsList?.length === 1) {
+                    this.recipeObject.manufacturingDetails[0].variant.name = this.variantsList[0].label;
+                    this.recipeObject.manufacturingDetails[0].variant.uniqueName = this.variantsList[0].value;
+                }
             }
         });
     }
@@ -437,6 +442,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.recipeObject.manufacturingDetails[recipeIndex].linkedStocks = this.recipeObject.manufacturingDetails[recipeIndex].linkedStocks?.filter((linkedStock, i) => i !== index);
+                this.changeDetectionRef.detectChanges();
             }
         });
     }
@@ -462,6 +468,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.recipeObject.manufacturingDetails = this.recipeObject.manufacturingDetails?.filter((recipe, i) => i !== index);
+                this.changeDetectionRef.detectChanges();
             }
         });
     }
