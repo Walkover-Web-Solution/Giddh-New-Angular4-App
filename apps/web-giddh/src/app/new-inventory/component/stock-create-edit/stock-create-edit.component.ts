@@ -1161,10 +1161,17 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.toaster.showSnackBar("success", this.localeData?.stock_update_succesfully);
+
                 if (this.createRecipe.hasRecipeForStock()) {
                     this.createRecipe.saveRecipeFromStock();
-                } else {
-                    this.backClicked();
+                }
+
+                if (this.createRecipe.newVariants?.length) {
+                    this.createRecipe.stock.variants = response.body.variants;
+                    this.createRecipe.variants = response.body.variants;
+                    this.createRecipe.newVariants = [];
+                    this.createRecipe.refreshVariantsList();
+                    this.activeTabIndex = 2;
                 }
             } else {
                 this.toaster.showSnackBar("error", response?.message);
@@ -1474,15 +1481,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will redirect to inventory list page
-     *
-     * @memberof StockCreateEditComponent
-     */
-    public cancelEdit(): void {
-        this.backClicked();
-    }
-
-    /**
      * This will use for delete stock
      *
      * @memberof StockCreateEditComponent
@@ -1506,7 +1504,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     this.toggleLoader(false);
                     if (response?.status === "success") {
                         this.toaster.showSnackBar("success", this.localeData?.stock_delete_succesfully);
-                        this.cancelEdit();
+                        this.backClicked();
                     } else {
                         this.toaster.showSnackBar("error", response?.message);
                     }
