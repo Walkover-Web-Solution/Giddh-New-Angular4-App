@@ -56,7 +56,8 @@
                                                 [options]="stockUnits"
                                                 (selectedOption)="
                                                     stockForm.stockUnitUniqueName = $event?.value;
-                                                    stockUnitName = $event.label
+                                                    stockUnitName = $event.label;
+                                                    prefillUnits()
                                                 "
                                                 [defaultValue]="stockUnitName"
                                                 [showError]="isFormSubmitted && !stockForm.stockUnitUniqueName"
@@ -213,7 +214,8 @@
                                                                                     $event?.value;
                                                                                 stockForm.variants[0].fixedAssetsInformation.accountUniqueName =
                                                                                     $event?.value;
-                                                                                fixedAssetsAccountName = $event?.label
+                                                                                fixedAssetsAccountName = $event?.label;
+                                                                                prefillUnits()
                                                                             "
                                                                             [defaultValue]="fixedAssetsAccountName"
                                                                         >
@@ -247,7 +249,7 @@
                                                                                         checkUnitRateValidation[0]
                                                                                             ?.fixedAssets
                                                                                             ? 'error-box'
-                                                                                            : '') + 'unit-rates'
+                                                                                            : '') + ' unit-rates'
                                                                                     "
                                                                                     [name]="
                                                                                         'variantFixedAssetsUnitRate' +
@@ -423,7 +425,8 @@
                                                                                         $event?.value;
                                                                                     (stockForm?.variants)[0]?.purchaseInformation.accountUniqueName =
                                                                                         $event?.value;
-                                                                                    purchaseAccountName = $event?.label
+                                                                                    purchaseAccountName = $event?.label;
+                                                                                    prefillUnits()
                                                                                 "
                                                                                 [defaultValue]="purchaseAccountName"
                                                                             >
@@ -634,7 +637,8 @@
                                                                                         $event?.value;
                                                                                     (stockForm?.variants)[0]?.salesInformation.accountUniqueName =
                                                                                         $event?.value;
-                                                                                    salesAccountName = $event?.label
+                                                                                    salesAccountName = $event?.label;
+                                                                                    prefillUnits()
                                                                                 "
                                                                                 [defaultValue]="salesAccountName"
                                                                             >
@@ -793,7 +797,10 @@
                                             href="javascript:;"
                                             class="option-color"
                                             *ngIf="!isVariantAvailable"
-                                            (click)="isVariantAvailable = !isVariantAvailable; addVariantOption()"
+                                            (click)="
+                                                isVariantAvailable = !isVariantAvailable;
+                                                !stockForm.options?.length ? addVariantOption() : ''
+                                            "
                                         >
                                             <span class="add-option">+</span> {{ localeData?.has_multiples }}
                                         </a>
@@ -1141,7 +1148,7 @@
                                                                                     checkUnitRateValidation[i]?.purchase
                                                                                         ? 'error-box'
                                                                                         : '') +
-                                                                                    'unit-rates form-control'
+                                                                                    ' unit-rates form-control'
                                                                                 "
                                                                             >
                                                                             </select-field>
@@ -1309,8 +1316,7 @@
                                                                         <div class="sales-purchase-wrapper d-flex">
                                                                             <text-field
                                                                                 [cssClass]="'text-right unit-amount'"
-                                                                                [
-                                                                                placeholder]="'0.00'"
+                                                                                [placeholder]="'0.00'"
                                                                                 [name]="
                                                                                     'variantFixedAssetsUnitRate' +
                                                                                     j +
@@ -1351,7 +1357,7 @@
                                                                                     checkUnitRateValidation[i]
                                                                                         ?.fixedAssets
                                                                                         ? 'error-box'
-                                                                                        : '') + 'unit-rates'
+                                                                                        : '') + ' unit-rates'
                                                                                 "
                                                                             ></select-field>
                                                                             <!-- <button

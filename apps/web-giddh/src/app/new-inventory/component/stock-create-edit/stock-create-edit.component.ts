@@ -298,6 +298,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             return;
         }
 
+        this.stockForm.options[optionIndex].values[optionValueIndex].value = String(value);
+
         if (!this.stockForm.options[optionIndex]?.values[optionValueIndex + 1] && value?.trim()) {
             this.stockForm.options[optionIndex].values[optionValueIndex + 1] = { index: optionValueIndex + 1, value: "" };
         }
@@ -531,7 +533,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 variantValues.push(attribute[key]);
             });
 
-            variants.push({ forward: variantValues.join(" / "), backward: variantValues.reverse().join(" / ") });
+            variants.push({ forward: cloneDeep(variantValues).join(" / "), backward: cloneDeep(variantValues.reverse()).join(" / ") });
         });
 
         let defaultWarehouse = null;
@@ -593,6 +595,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     }
                 ]
             };
+
+            variantObj.name = variant.forward;
+
             stockVariants.push(variantObj);
             this.checkUnitRateValidation.push(Object.assign({}, checkUnitRateObject));
         });
@@ -1078,6 +1083,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     return variant;
                 });
 
+                this.hsnSac = this.stockForm.hsnNumber ? 'HSN' : 'SAC';
                 this.stockUnitName = response.body?.stockUnit?.name;
                 this.stockGroupName = response.body?.stockGroup?.name;
                 this.customFieldsData = response.body?.customFields;
@@ -1086,6 +1092,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.findSalesAccountName();
                 this.findFixedAssetsAccountName();
                 this.toggleLoader(false);
+                this.prefillUnits();
                 this.changeDetection.detectChanges();
             } else {
                 this.toggleLoader(false);
@@ -1835,5 +1842,43 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             clearTimeout(this.optionValueTimeout);
             this.addNewOptionValue(optionIndex, optionValueIndex);
         }, 300);
+    }
+
+    /**
+     * Prefill stock unit in variants if not available
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public prefillUnits(): void {
+        if (this.stockForm.stockUnitUniqueName && this.stockUnitName) {
+            this.stockForm?.variants?.forEach(variant => {
+                variant.salesInformation?.forEach(variantSalesInformation => {
+                    if (!variantSalesInformation.stockUnitUniqueName) {
+                        variantSalesInformation.stockUnitUniqueName = this.stockForm.stockUnitUniqueName;
+                        variantSalesInformation.stockUnitName = this.stockUnitName;
+                    }
+                });
+                variant.purchaseInformation?.forEach(variantPurchaseInformation => {
+                    if (!variantPurchaseInformation.stockUnitUniqueName) {
+                        variantPurchaseInformation.stockUnitUniqueName = this.stockForm.stockUnitUniqueName;
+                        variantPurchaseInformation.stockUnitName = this.stockUnitName;
+                    }
+                });
+                variant.fixedAssetsInformation?.forEach(variantFixedAssetsInformation => {
+                    if (!variantFixedAssetsInformation.stockUnitUniqueName) {
+                        variantFixedAssetsInformation.stockUnitUniqueName = this.stockForm.stockUnitUniqueName;
+                        variantFixedAssetsInformation.stockUnitName = this.stockUnitName;
+                    }
+                });
+                variant.warehouseBalance?.forEach(variantWarehouseBalance => {
+                    if (!variantWarehouseBalance.stockUnit?.uniqueName) {
+                        variantWarehouseBalance.stockUnit.uniqueName = this.stockForm.stockUnitUniqueName;
+                        variantWarehouseBalance.stockUnit.name = this.stockUnitName;
+                    }
+                });
+            });
+
+            this.changeDetection.detectChanges();
+        }
     }
 }
