@@ -14228,3 +14228,11 @@ body.hide-scroll-body.master-page {
         }
     }
 }
+
+.cdk-overlay-container {
+    .mat-select-panel {
+        left: -6px !important;
+        max-width: 225px !important;
+        min-width: calc(100% + 20px) !important;
+    }
+}
