@@ -320,6 +320,11 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.getRevenueGraphData();
     }
 
+    /**
+     * Create chart
+     *
+     * @memberof RevenueChartComponent
+     */
     public createChart(): void {
         const chartType = this.chartType;
         let currentData = this.currentData;
@@ -548,7 +553,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                 }
             });
         }
-        
+
         this.requestInFlight = false;
     }
 }

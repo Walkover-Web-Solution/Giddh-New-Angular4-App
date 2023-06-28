@@ -72,7 +72,8 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
-    public chart:any;
+    /** Chart object */
+    public chart: any;
 
     constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private tlPlService: TlPlService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -120,7 +121,6 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         this.requestInFlight = false;
         this.cdRef.detectChanges();
     }
-
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
@@ -247,10 +247,6 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 if (this.totalIncome === 0 && this.totalExpense === 0) {
                     this.resetChartData();
                 } else {
-
-                    if (this.chart) {
-                        this.chart.destroy();
-                    } 
                     this.createChart()
                 }
             }
@@ -258,14 +254,21 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         });
     }
 
-    public createChart():void {
+    /**
+     * Create chart
+     *
+     * @memberof ProfitLossComponent
+     */
+    public createChart(): void {
         let totalIncome = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.totalIncome) + "/-";
         let totalExpense = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.totalExpense) + "/-";
-        let label = [totalIncome,totalExpense];
+        let label = [totalIncome, totalExpense];
         let data = [this.totalIncome, this.totalExpense]
 
+        this.chart?.destroy();
+
         this.chart = new Chart("profitLossChartCanvas", {
-            type: 'doughnut',            
+            type: 'doughnut',
             data: {
                 labels: label,
                 datasets: [{
@@ -274,17 +277,17 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                     backgroundColor: ['#FED46A', '#4693F1'],
                     hoverOffset: 18,
                     hoverBorderColor: '#fff',
-                    borderWidth: 1,		 
-                    offset: 6      
-              }],
+                    borderWidth: 1,
+                    offset: 6
+                }],
             },
 
-            options:{
+            options: {
                 plugins: {
                     legend: {
-                      display: false
+                        display: false
                     },
-                    tooltip: {                        
+                    tooltip: {
                         backgroundColor: 'rgba(255, 255, 255,0.8)',
                         borderColor: 'rgb(95, 172, 255)',
                         bodyFont: {
@@ -300,14 +303,14 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 },
                 responsive: true,
                 maintainAspectRatio: false,
-                spacing:1,
-                cutout:50,  
+                spacing: 1,
+                cutout: 50,
                 radius: '95%'
-            } 
-            });
+            }
+        });
 
-            this.requestInFlight = false;
-            this.cdRef.detectChanges();
-     }
-     
+        this.requestInFlight = false;
+        this.cdRef.detectChanges();
+    }
+
 }

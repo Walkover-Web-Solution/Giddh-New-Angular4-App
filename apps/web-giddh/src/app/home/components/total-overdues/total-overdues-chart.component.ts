@@ -74,9 +74,8 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
-    public chart:any;
-    
-
+    /** Chart object */
+    public chart: any;
 
     constructor(private store: Store<AppState>, private dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private receiptService: ReceiptService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -88,7 +87,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnInit(){
+    public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         // img path
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
@@ -179,8 +178,8 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         } else {
             if (this.chart) {
                 this.chart.destroy();
-            } 
-             this.createChart();
+            }
+            this.createChart();
         }
     }
 
@@ -191,8 +190,8 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
      */
     public getTotalOverduesData(): void {
         this.dataFound = false;
-        combineLatest([this.receiptService.getAllReceiptBalanceDue({from: this.toRequest.from, to: this.toRequest.to}, "sales"), this.receiptService.getAllReceiptBalanceDue({from: this.toRequest.from, to: this.toRequest.to}, "purchase"), this.dashboardService.getPendingVouchersCount(this.toRequest.from, this.toRequest.to, "sales"), this.dashboardService.getPendingVouchersCount(this.toRequest.from, this.toRequest.to, "purchase")]).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if(response[0] && response[1] && response[2] && response[3]) {
+        combineLatest([this.receiptService.getAllReceiptBalanceDue({ from: this.toRequest.from, to: this.toRequest.to }, "sales"), this.receiptService.getAllReceiptBalanceDue({ from: this.toRequest.from, to: this.toRequest.to }, "purchase"), this.dashboardService.getPendingVouchersCount(this.toRequest.from, this.toRequest.to, "sales"), this.dashboardService.getPendingVouchersCount(this.toRequest.from, this.toRequest.to, "purchase")]).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response[0] && response[1] && response[2] && response[3]) {
                 if (response[0] && response[0].status === 'success' && response[0].body) {
                     this.invoiceDue = giddhRoundOff(response[0].body.totalDue, this.giddhBalanceDecimalPlaces);
                     this.dataFound = true;
@@ -271,14 +270,19 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         }
     }
 
-    public createChart():void{
+    /**
+     * Create chart
+     *
+     * @memberof TotalOverduesChartComponent
+     */
+    public createChart(): void {
         let invoiceDue = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.invoiceDue) + "/-";
         let billDue = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.billDue) + "/-";
-        let label = [invoiceDue,billDue];
+        let label = [invoiceDue, billDue];
         let data = [this.invoiceDue, this.billDue];
 
         this.chart = new Chart("totaloverDueChartCanvas", {
-            type: 'doughnut',           
+            type: 'doughnut',
             data: {
                 labels: label,
                 datasets: [{
@@ -287,22 +291,22 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
                     backgroundColor: ['#F85C88', '#0CB1AF'],
                     hoverOffset: 18,
                     hoverBorderColor: '#fff',
-                    borderWidth: 1,		 
-                    offset: 6,   
-              }],
+                    borderWidth: 1,
+                    offset: 6,
+                }],
             },
 
-            options:{
+            options: {
                 plugins: {
                     legend: {
-                      display: false
+                        display: false
                     },
-                    tooltip: {  
+                    tooltip: {
                         backgroundColor: 'rgba(255, 255, 255,0.8)',
                         borderColor: 'rgb(248, 92, 136)',
                         bodyFont: {
                             size: 0,
-                        }, 
+                        },
                         titleColor: 'rgb(0, 0, 0)',
                         borderWidth: 0.5,
                         titleFont: {
@@ -310,16 +314,16 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
                         },
                         displayColors: false,
                     }
-                },                
+                },
                 responsive: true,
                 maintainAspectRatio: false,
-                spacing:1,
-                cutout:50,  
-                radius: '95%',    
-            } 
-            });
+                spacing: 1,
+                cutout: 50,
+                radius: '95%',
+            }
+        });
 
-            this.requestInFlight = false;
-            this.cdRef.detectChanges();
-     }
+        this.requestInFlight = false;
+        this.cdRef.detectChanges();
+    }
 }
