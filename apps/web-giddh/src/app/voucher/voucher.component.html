@@ -1651,6 +1651,7 @@
                                                         #voucherDate="ngModel"
                                                         (keydown.enter)="$event.preventDefault()"
                                                         [placeholder]="giddhDateFormat"
+                                                        [label]="invoiceDateLabel"
                                                         name="voucherDate"
                                                         [(ngModel)]="invFormData.voucherDetails.voucherDate"
                                                         [class.invalid-inp]="
@@ -1712,6 +1713,7 @@
                                                 >
                                                     <giddh-datepicker
                                                         [placeholder]="giddhDateFormat"
+                                                        [label]="invoiceDueDateLabel"
                                                         (keydown.enter)="$event.preventDefault()"
                                                         #dueDate="ngModel"
                                                         name="dueDate"
