@@ -5,7 +5,6 @@ import { clone, cloneDeep, filter, find, sumBy } from '../../../lodash-optimized
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { UpdateLedgerTaxData } from '../update-ledger-tax-control/update-ledger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
-import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { AccountResponse } from '../../../models/api-models/Account';
@@ -16,6 +15,7 @@ import { HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION } from '../../../app.co
 import { take } from 'rxjs/operators';
 import { GeneralService } from '../../../services/general.service';
 import { LedgerUtilityService } from '../../services/ledger-utility.service';
+import { ITaxControlData } from '../../../models/interfaces/tax.interface';
 
 export class UpdateLedgerVm {
     public otherAccountList: IFlattenAccountsResultItem[] = [];
@@ -44,7 +44,7 @@ export class UpdateLedgerVm {
     public isInvoiceGeneratedAlready: boolean = false;
     public showNewEntryPanel: boolean = true;
     public selectedTaxes: UpdateLedgerTaxData[] = [];
-    public taxRenderData: TaxControlData[] = [];
+    public taxRenderData: ITaxControlData[] = [];
     public discountComponent: UpdateLedgerDiscountComponent;
     public ledgerUnderStandingObj = {
         accountType: '',
@@ -61,6 +61,8 @@ export class UpdateLedgerVm {
     public isAdvanceReceipt: boolean = false;
     /** True, if RCM is present */
     public isRcmEntry: boolean = false;
+    /** True, when amount needs to be calculated inclusive of tax */
+    public isInclusiveTax: boolean = false;
 
     // multi-currency variables
     public isMultiCurrencyAvailable: boolean = false;
@@ -91,6 +93,8 @@ export class UpdateLedgerVm {
     public voucherApiVersion: 1 | 2;
     /* Amount should have precision up to 16 digits for better calculation */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
+    /** True if entry value is calculated inclusively */
+    public isInclusiveEntry: boolean = false;
 
     constructor(
         private generalService: GeneralService,
@@ -542,7 +546,9 @@ export class UpdateLedgerVm {
         }
 
         let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
-        if (this.isAdvanceReceipt || this.isRcmEntry) {
+        const particularAccount = this.getParticularAccount();
+        const ledgerAccount = this.getLedgerAccount(particularAccount);
+        if (this.isAdvanceReceipt || this.isRcmEntry || this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger?.voucher?.shortCode)) {
             this.totalAmount = this.grandTotal;
             this.generateGrandTotal();
         } else {
@@ -582,23 +588,21 @@ export class UpdateLedgerVm {
             }
         }
 
-        let particularAccount = this.getParticularAccount();
-        let ledgerAccount = this.getLedgerAccount(particularAccount);
-
-        if (this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger?.voucher?.shortCode)) {
-            this.totalAmount = this.grandTotal;
-            this.generateGrandTotal();
-        }
-
         this.getEntryTotal();
         this.generateCompoundTotal();
     }
 
     public unitChanged(stockUnitUniqueName: string) {
         let unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
-        this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
+        const unitRate = giddhRoundOff(unit.rate / (this.selectedLedger?.exchangeRate ?? 1), this.ratePrecision);
+        this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unitRate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
         this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
-        this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
+        if (this.isInclusiveTax) {
+            this.grandTotal = this.stockTrxEntry.inventory.quantity * this.stockTrxEntry.inventory.rate;
+            this.inventoryTotalChanged();
+        } else {
+            this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
+        }
     }
 
     public taxTrxUpdated(taxes: UpdateLedgerTaxData[]) {

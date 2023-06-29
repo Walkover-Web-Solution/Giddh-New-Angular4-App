@@ -6,6 +6,7 @@ import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
 import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
 import { VoucherAddBulkItemsComponent } from "./voucher-add-bulk-items.component";
+import { ShSelectModule } from "../../theme/ng-virtual-select/sh-select.module";
 
 @NgModule({
     declarations: [
@@ -18,7 +19,8 @@ import { VoucherAddBulkItemsComponent } from "./voucher-add-bulk-items.component
         TranslateDirectiveModule,
         PerfectScrollbarModule,
         MatButtonModule,
-        FormFieldsModule
+        FormFieldsModule,
+        ShSelectModule
     ],
     exports: [
         VoucherAddBulkItemsComponent

@@ -37,14 +37,26 @@
 
                             <div class="product-list">
                                 <perfect-scrollbar (psYReachEnd)="onScrollEnd()">
-                                    <button
-                                        mat-button
-                                        class="single-product-wrapper cp w-100"
-                                        *ngFor="let item of filteredData"
-                                        (click)="addItemToSelectedArr(item)"
-                                    >
-                                        <h5>{{ item?.name }}</h5>
-                                    </button>
+                                    <ng-container *ngFor="let item of filteredData">
+                                        <button
+                                            mat-button
+                                            class="single-product-wrapper cp w-100"
+                                            [class.mb-20]="!item.variants?.length || item.variants?.length === 1"
+                                            (click)="addItemToSelectedArr(item)"
+                                        >
+                                            <h5>{{ item?.name }}</h5>
+                                        </button>
+                                        <ng-container *ngIf="item.variants?.length > 1">
+                                            <button
+                                                *ngFor="let variant of item.variants"
+                                                mat-button
+                                                class="product-variant text-left cp w-100 pl-4"
+                                                (click)="variantChanged(item, variant)"
+                                            >
+                                                <h5>{{ variant?.label }}</h5>
+                                            </button>
+                                        </ng-container>
+                                    </ng-container>
                                 </perfect-scrollbar>
                             </div>
                         </div>
@@ -62,18 +74,30 @@
 
                             <div class="right-side-wrapper">
                                 <perfect-scrollbar>
-                                    <div class="wrap-selected-stocks" *ngFor="let item of selectedItems">
+                                    <div
+                                        class="wrap-selected-stocks"
+                                        *ngFor="let item of selectedItems; let entryIdx = index"
+                                    >
                                         <div class="single-selected-stock clearfix d-flex">
                                             <div class="flex-fill">
                                                 <div class="stock-name">
-                                                    <p>{{ item?.name }}</p>
+                                                    <p class="mb-2">
+                                                        {{
+                                                            item?.name +
+                                                                (item.variants?.length > 1 && item.variant?.name
+                                                                    ? " - " + item.variant?.name
+                                                                    : "")
+                                                        }}
+                                                    </p>
                                                     <p>
-                                                        <span *ngIf="item?.additional?.skuCode" class="stockSku"
+                                                        <span *ngIf="item?.additional?.skuCode" class="stockSku mb-1"
                                                             ><label>{{ commonLocaleData?.app_sku }}: </label
                                                             >{{ item?.additional?.skuCode }}</span
                                                         >
                                                         <span [class.rate-stock]="item?.additional?.skuCode"
-                                                            ><label>{{ commonLocaleData?.app_rate }}:</label> </span
+                                                            ><label
+                                                                >{{ commonLocaleData?.app_rate }}:&nbsp;</label
+                                                            > </span
                                                         >{{ item?.rate }}
                                                     </p>
                                                 </div>
@@ -125,7 +149,13 @@
                                                 <span
                                                     disableRipple
                                                     class="remove-stock-list"
-                                                    (click)="removeSelectedItem(item?.uniqueName)"
+                                                    (click)="
+                                                        removeSelectedItem(
+                                                            item?.variants?.length > 1
+                                                                ? item.additional?.combinedUniqueName
+                                                                : item?.uniqueName
+                                                        )
+                                                    "
                                                 >
                                                     <i class="icon-cross"></i>
                                                 </span>

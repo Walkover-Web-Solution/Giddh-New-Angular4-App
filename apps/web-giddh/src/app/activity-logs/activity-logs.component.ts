@@ -18,6 +18,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
 import { ToasterService } from '../services/toaster.service';
+import { SearchService } from '../services/search.service';
+
 /** This will use for interface */
 export interface GetActivityLogs {
     name: any;
@@ -56,12 +58,15 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         entity: "",
         operation: "",
         userUniqueNames: [],
+        accountUniqueNames: [],
         fromDate: "",
         toDate: "",
         entityId: "",
         isChecked: false,
-        entityFromDate: "",
-        entityToDate: ""
+        entryFromDate: "",
+        entryToDate: "",
+        voucherFromDate: "",
+        voucherToDate: ""
     }
     /** This will use for activity fields object */
     public activityFieldsObj = {
@@ -70,12 +75,15 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         entity: undefined,
         operation: undefined,
         userUniqueNames: [],
+        accountUniqueNames: [],
         fromDate: undefined,
         toDate: undefined,
         entityId: undefined,
         isChecked: false,
-        entityFromDate: undefined,
-        entityToDate: undefined
+        entryFromDate: undefined,
+        entryToDate: undefined,
+        voucherFromDate: undefined,
+        voucherToDate: undefined
     }
     /** Activity log form's company entity type list */
     public entities: IOption[] = [];
@@ -83,6 +91,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public filters: any[] = [];
     /** Activity log form's company operations list */
     public users: IOption[] = [];
+    /** Activity log form's company operations list */
+    public accounts: IOption[] = [];
     /** Selected from date */
     public selectedFromDate: Date;
     /** Selected to date */
@@ -91,6 +101,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /** Directive to get reference of element */
     @ViewChild('datepickerEntryTemplate') public datepickerEntryTemplate: ElementRef;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerVoucherTemplate') public datepickerVoucherTemplate: ElementRef;
     /** Universal date observer */
     public universalDate$: Observable<any>;
     /** This will store selected date range to use in api */
@@ -101,14 +113,22 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public selectedEntryDateRange: any;
     /** This will store selected entry date range to show on UI */
     public selectedEntryDateRangeUi: any;
+    /** This will store selected date range to use in api */
+    public selectedVoucherDateRange: any;
+    /** This will store selected entry date range to show on UI */
+    public selectedVoucherDateRangeUi: any;
     /** This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** This will store available date ranges */
     public entryDatePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** This will store available date ranges */
+    public voucherDatePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
     /** Selected entry range label */
     public selectedEntryRangeLabel: any = "";
+    /** Selected entry range label */
+    public selectedVoucherRangeLabel: any = "";
     /** This will store modal reference */
     public modalRef: BsModalRef;
     /** This will store the x/y position of the field to show datepicker under it */
@@ -119,11 +139,14 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public showDateReport: boolean = false;
     /** To show entry datepicker clear filter */
     public entryShowDateReport: boolean = false;
+    /** To show voucher datepicker clear filter */
+    public voucherShowDateReport: boolean = false;
     /** Holds label of selected values */
     public activityObjLabels: any = {
         entity: "",
         operation: "",
-        user: ""
+        user: "",
+        account: ""
     };
     /** To show entry date filter */
     public isShowEntryDatepicker: boolean = false;
@@ -137,7 +160,22 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public translationLoaded: boolean = false;
     /** True if initial api got called */
     public initialApiCalled: boolean = false;
-
+    /** Stores the default search results pagination details */
+    public defaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Default search suggestion list to be shown for search */
+    public defaultAccountSuggestions: Array<IOption> = [];
+    /** Stores the search results pagination details */
+    public accountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
 
     constructor(
         public activityService: ActivityLogsService,
@@ -148,6 +186,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         private ActivityLogsService: LogsService,
         private companyService: CompanyService,
         private modalService: BsModalService,
+        private searchService: SearchService,
         private toaster: ToasterService,
         private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -174,6 +213,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.loadDefaultAccountsSuggestions();
+
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
@@ -184,11 +225,121 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.activityObj.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.selectedEntryDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedEntryDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.activityObj.entityFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.activityObj.entityToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.activityObj.entryFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.activityObj.entryToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedVoucherDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedVoucherDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.activityObj.voucherFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.activityObj.voucherToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getActivityLogs();
             }
         });
+    }
+
+    /**
+     * Loads the default account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof ActivityLogsComponent
+     */
+    private loadDefaultAccountsSuggestions(): void {
+        this.onAccountSearchQueryChanged('', 1, (response) => {
+            this.defaultAccountSuggestions = response.map(result => {
+                return {
+                    value: result?.uniqueName,
+                    label: result.name
+                }
+            }) || [];
+            this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+            this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+            this.accounts = [...this.defaultAccountSuggestions];
+        });
+    }
+
+    /**
+    * Scroll end handler
+    *
+    * @returns null
+    * @memberof ActivityLogsComponent
+    */
+    public handleScrollEnd(): void {
+        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+            this.onAccountSearchQueryChanged(
+                this.accountsSearchResultsPaginationData.query,
+                this.accountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.accountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result?.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                        this.changeDetection.detectChanges();
+                    }
+                });
+        }
+    }
+
+    /**
+   * Search query change handler
+   *
+   * @param {string} query Search query
+   * @param {number} [page=1] Page to request
+   * @param {boolean} withStocks True, if search should include stocks in results
+   * @param {Function} successCallback Callback to carry out further operation
+   * @memberof ActivityLogsComponent
+   */
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.accountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page
+            }
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result?.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.accounts = searchResults;
+                    } else {
+                        this.accounts = [
+                            ...this.accounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.accounts = this.accounts;
+                    this.accountsSearchResultsPaginationData.page = data.body.page;
+                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+                    this.changeDetection.detectChanges();
+                }
+            });
+        } else {
+            this.accounts = [...this.defaultAccountSuggestions];
+            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
+            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+                this.changeDetection.detectChanges();
+            }, 500);
+        }
     }
 
     /**
@@ -231,12 +382,15 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.activityFieldsObj.entity = undefined;
         this.activityFieldsObj.operation = undefined;
         this.activityFieldsObj.userUniqueNames = undefined;
+        this.activityFieldsObj.accountUniqueNames = undefined;
         this.activityFieldsObj.fromDate = undefined;
         this.activityFieldsObj.toDate = undefined;
         this.activityFieldsObj.entityId = undefined;
         this.activityFieldsObj.isChecked = undefined;
-        this.activityFieldsObj.entityFromDate = undefined;
-        this.activityFieldsObj.entityToDate = undefined;
+        this.activityFieldsObj.entryFromDate = undefined;
+        this.activityFieldsObj.entryToDate = undefined;
+        this.activityFieldsObj.voucherFromDate = undefined;
+        this.activityFieldsObj.voucherToDate = undefined;
 
         this.selectedFields.forEach(field => {
             if (field?.value === "LOG_DATE") {
@@ -248,9 +402,14 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.activityFieldsObj.operation = this.activityObj.operation;
             } else if (field?.value === "USERS") {
                 this.activityFieldsObj.userUniqueNames = this.activityObj.userUniqueNames;
-            } else if (field?.value === "ENTITY_DATE") {
-                this.activityFieldsObj.entityFromDate = this.activityObj.entityFromDate;
-                this.activityFieldsObj.entityToDate = this.activityObj.entityToDate;
+            } else if (field?.value === "ENTRY_DATE") {
+                this.activityFieldsObj.entryFromDate = this.activityObj.entryFromDate;
+                this.activityFieldsObj.entryToDate = this.activityObj.entryToDate;
+            } else if (field?.value === "VOUCHER_DATE") {
+                this.activityFieldsObj.voucherFromDate = this.activityObj.voucherFromDate;
+                this.activityFieldsObj.voucherToDate = this.activityObj.voucherToDate;
+            } else if (field?.value === "ACCOUNTS") {
+                this.activityFieldsObj.accountUniqueNames = this.activityObj.accountUniqueNames;
             }
         });
 
@@ -299,6 +458,21 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             this.activityObj.userUniqueNames.push(event.value);
         } else {
             this.activityObj.userUniqueNames = [];
+        }
+    }
+
+    /**
+     * To select account type
+     *
+     * @param {IOption} event Selected item object
+     * @memberof ActivityLogsComponent
+     */
+    public selecteAccountType(event: IOption): void {
+        if (event && event.value) {
+            this.activityObj.accountUniqueNames = [];
+            this.activityObj.accountUniqueNames.push(event.value);
+        } else {
+            this.activityObj.accountUniqueNames = [];
         }
     }
 
@@ -380,8 +554,34 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             this.entryShowDateReport = true;
             this.selectedEntryDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedEntryDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.activityObj.entityFromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.activityObj.entityToDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.activityObj.entryFromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.activityObj.entryToDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+        }
+    }
+
+    /**
+     * Call back function for date/range selection in voucher datepicker
+     *
+     * @param {*} value
+     * @memberof ActivityLogsComponent
+     */
+    public voucherDateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedVoucherRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedVoucherRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.voucherShowDateReport = true;
+            this.selectedVoucherDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedVoucherDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.activityObj.voucherFromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.activityObj.voucherToDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 
@@ -426,6 +626,21 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         );
     }
 
+    /**
+     *To show the voucher datepicker
+     *
+     * @param {*} element
+     * @memberof ActivityLogsComponent
+     */
+     public showVoucherGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerVoucherTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
 
     /**
      * To check is entry expanded
@@ -582,6 +797,20 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This will use for on clear value of operations
+     *
+     * @param {*} event
+     * @memberof ActivityLogsComponent
+     */
+    public resetAccounts(event: any): void {
+        if (!event?.value) {
+            this.activityObjLabels.account = '';
+            this.activityObj.accountUniqueNames = [];
+            this.loadDefaultAccountsSuggestions();
+        }
+    }
+
+    /**
     * This will use for on clear value of operations
     *
     * @param {*} event
@@ -633,6 +862,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (event?.value === "USERS") {
             this.activityObjLabels.user = '';
             this.activityObj.userUniqueNames = [];
+        }
+        if (event?.value === "ACCOUNTS") {
+            this.activityObjLabels.account = '';
+            this.activityObj.accountUniqueNames = [];
         }
     }
 
@@ -686,8 +919,16 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                     value: "USERS"
                 },
                 {
-                    label: this.localeData?.entity_date,
-                    value: "ENTITY_DATE"
+                    label: this.localeData?.entry_date,
+                    value: "ENTRY_DATE"
+                },
+                {
+                    label: this.localeData?.voucher_date,
+                    value: "VOUCHER_DATE"
+                },
+                {
+                    label: this.commonLocaleData?.app_import_type?.base_accounts,
+                    value: "ACCOUNTS"
                 },
             ];
             this.activityOperations = [
