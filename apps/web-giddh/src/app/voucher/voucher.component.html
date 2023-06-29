@@ -986,7 +986,8 @@
                                             #initContactProforma
                                             [id]="'init-contact-proforma'"
                                             (keydown.enter)="$event.preventDefault()"
-                                            [placeholder]="commonLocaleData?.app_mobile_number"
+                                            [label]="commonLocaleData?.app_mobile_number"
+                                            [placeholder]="'98XXXXXXXX'" 
                                         >
                                         </input-field>
                                         <span id="init-contact-proforma-valid-msg" class="d-none"></span>
