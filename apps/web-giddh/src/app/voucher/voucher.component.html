@@ -1531,7 +1531,7 @@
                                                     *ngIf="voucherApiVersion === 2"
                                                     [cssClass]="'linking-dropdown'"
                                                     [name]="'invoiceLinking'"
-                                                    [placeholder]="commonLocaleData?.app_select_accounts"
+                                                    [placeholder]="commonLocaleData?.app_select_voucher"
                                                     [options]="invoiceList$ | async"
                                                     (selectedOption)="creditNoteInvoiceSelected($event)"
                                                     [defaultValue]="selectedInvoiceLabel"
@@ -1577,7 +1577,7 @@
                                                     #invoiceListDropdown
                                                     *ngIf="voucherApiVersion !== 2"
                                                     [name]="'invoiceLinking'"
-                                                    [placeholder]="commonLocaleData?.app_select_accounts"
+                                                    [placeholder]="commonLocaleData?.app_select_voucher"
                                                     [options]="invoiceList"
                                                     (selectedOption)="creditNoteInvoiceSelected($event)"
                                                     [defaultValue]="invoiceSelectedLabel"
