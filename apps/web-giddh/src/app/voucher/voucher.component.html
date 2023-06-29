@@ -162,7 +162,7 @@
                                         <!-- endregion -->
                                         <!-- region customer dropdown -->
                                         <div
-                                            class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12 select-customers-name"
+                                            class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12 select-customers-name pr-0"
                                         >
                                             <div class="w-100">
                                                 <!-- region if not cashinvoice show customer dropdown -->
@@ -275,7 +275,7 @@
                                             </ng-container>
                                             <!-- endregion -->
                                         </div>
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-6 pl-0">
                                             <!-- region previous details commented for multicurrency changes-->
                                             <div
                                                 class="d-flex cp aqua-color align-items-center ml-3"
@@ -986,7 +986,8 @@
                                             #initContactProforma
                                             [id]="'init-contact-proforma'"
                                             (keydown.enter)="$event.preventDefault()"
-                                            [placeholder]="commonLocaleData?.app_mobile_number"
+                                            [label]="commonLocaleData?.app_mobile_number"
+                                            [placeholder]="'98XXXXXXXX'"
                                         >
                                         </input-field>
                                         <span id="init-contact-proforma-valid-msg" class="d-none"></span>
@@ -2963,7 +2964,7 @@
                                             class="clearfix max-width-600 pd-l3 m-0 other-details-section-list"
                                         >
                                             <div class="row">
-                                                <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                                <div class="form-group col-xs-4 col-sm-4 pd-r1 mb-0">
                                                     <giddh-datepicker
                                                         [cssClass]="'shipping-date'"
                                                         (keydown.enter)="$event.preventDefault()"
@@ -2975,8 +2976,8 @@
                                                             shippingDate.errors &&
                                                             (shippingDate.dirty || shippingDate.touched)
                                                         "
-                                                        [appearance]="'fill'"
                                                         [showToggleIcon]="false"
+                                                        [appearance]="'outline'"
                                                     >
                                                     </giddh-datepicker>
                                                     <p
@@ -2989,63 +2990,58 @@
                                                         {{ localeData?.invalid_date }}
                                                     </p>
                                                 </div>
-                                                <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                    <text-field
+                                                <div class="form-group col-xs-4 col-sm-4 pd-r1 pd-l1 mb-0">
+                                                    <input-field
                                                         [type]="'text'"
                                                         [name]="'shippedVia'"
                                                         [(ngModel)]="invFormData.templateDetails.other.shippedVia"
-                                                        [cssClass]="'form-control mat-field-border'"
                                                         [placeholder]="
                                                             templatePlaceholder?.shippedViaLabel || localeData?.ship_via
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
-                                                <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                    <text-field
+                                                <div class="form-group col-xs-4 col-sm-4 pd-l1 mb-0">
+                                                    <input-field
                                                         [type]="'text'"
                                                         [name]="'trackingNumber'"
                                                         [(ngModel)]="invFormData.templateDetails.other.trackingNumber"
-                                                        [cssClass]="'form-control mat-field-border'"
                                                         [placeholder]="
                                                             templatePlaceholder?.trackingNumber ||
                                                             localeData?.tracking_number
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
                                             </div>
-                                            <div class="row bottom-other-section">
-                                                <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                    <text-field
+                                            <div class="row bottom-other-section mr-t15">
+                                                <div class="form-group col-xs-4 col-sm-4 pd-r1 mb-0">
+                                                    <input-field
                                                         [type]="'text'"
                                                         [name]="'customField1'"
                                                         [(ngModel)]="invFormData.templateDetails.other.customField1"
-                                                        [cssClass]="'form-control mat-field-border'"
                                                         [placeholder]="
                                                             templatePlaceholder?.customField1Label || localeData?.field1
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
-                                                <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                    <text-field
+                                                <div class="form-group col-xs-4 col-sm-4 pd-r1 pd-l1 mb-0">
+                                                    <input-field
                                                         [type]="'text'"
                                                         [name]="'customField2'"
                                                         [(ngModel)]="invFormData.templateDetails.other.customField2"
-                                                        [cssClass]="'form-control mat-field-border'"
                                                         [placeholder]="
                                                             templatePlaceholder?.customField2Label || localeData?.field2
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
-                                                <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                    <text-field
+                                                <div class="form-group col-xs-4 col-sm-4 pd-l1 mb-0">
+                                                    <input-field
                                                         [type]="'text'"
                                                         [name]="'customField3'"
                                                         [(ngModel)]="invFormData.templateDetails.other.customField3"
-                                                        [cssClass]="'form-control mat-field-border'"
                                                         [placeholder]="
                                                             templatePlaceholder?.customField3Label || localeData?.field3
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
                                             </div>
                                         </div>
