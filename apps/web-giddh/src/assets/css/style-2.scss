@@ -14095,3 +14095,13 @@ body.hide-scroll-body.master-page {
         background-color: var(--color-primary-header-background) !important;
     }
 }
+
+/*--- voucher-datepicker ---*/
+voucher-component {
+    .mat-datepicker-input {
+        &:disabled {
+            background-color: transparent !important;
+            cursor: not-allowed;
+        }
+    }
+}
