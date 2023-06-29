@@ -3399,8 +3399,8 @@ input-field {
     background-color: var(--color-white);
     border-radius: 4px;
     width: fit-content !important;
-    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
-        0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 5px 5px -3px var(--color-drag-shadow), 0 8px 10px 1px var(--color-drag-bottom-shadow),
+        0 3px 14px 2px var(--color-drag-right-shadow);
 
     .product-option-wrapper {
         background-color: var(--color-white);
