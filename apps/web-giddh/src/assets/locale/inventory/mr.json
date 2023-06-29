@@ -1,7 +1,7 @@
 {
     "sidebar":{
         "inventory":"इन्व्हेंटरी",
-        "stock":"साठा",
+        "stock":"उत्पादन",
         "create_new":"नवीन तयार करा",
         "item_wise":"वस्तूनुसार",
         "group_wise":"गटवार",
@@ -16,7 +16,8 @@
         "recipe":"कृती",
         "create_manufacturing":"मॅन्युफॅक्चरिंग तयार करा",
         "report":"अहवाल द्या",
-        "master":"मास्टर"
+        "master":"मास्टर",
+        "create_branch_transfer":"शाखा हस्तांतरण तयार करा"
     },
     "reports":{
         "transaction_count":"व्यवहाराची संख्या",

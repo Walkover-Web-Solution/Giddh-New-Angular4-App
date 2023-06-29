@@ -1,0 +1,13 @@
+#branch-transfer-list {
+    .mat-raised-button,
+    .mat-stroked-button {
+        &:focus {
+            box-shadow: none !important;
+        }
+    }
+}
+.no-box-shadow {
+    &:focus {
+        box-shadow: none !important;
+    }
+}

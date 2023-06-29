@@ -79,6 +79,7 @@
     "app_custom_range": "Custom Range",
     "app_select_range": "Select Range",
     "app_quantity": "Quantity",
+    "app_output_quantity": "Output Quantity",
     "app_voucher_types": {
         "sales": "Sales",
         "purchase": "Purchase",
@@ -155,10 +156,14 @@
     "app_date": "Date",
     "app_time": "Time",
     "app_warehouse": "Warehouse",
+    "app_select_warehouse": "Select Warehouse",
     "app_select_action": "Select Action",
     "app_edit": "Edit",
     "app_no_data_found": "No Data Found",
     "app_stock": "Stock",
+    "app_select_stock": "Select Stock",
+    "app_variant": "Variant",
+    "app_select_variant": "Select Variant",
     "app_transactions": "Transactions",
     "app_voucher_type": "Voucher Type",
     "app_account_name": "Account Name",
@@ -436,6 +441,7 @@
     "app_order": "Order",
     "app_permanently_delete_message": "It will be deleted permanently and will no longer be accessible from any other module.",
     "app_filter": "Filter",
+    "app_advanced_filter": "Advanced Filter",
     "app_by": "by",
     "app_ac": "A/c",
     "app_generate_voucher": "Generate Voucher",
@@ -466,6 +472,7 @@
     "app_voucher_number": "Voucher Number",
     "app_stock_name": "Stock Name",
     "app_select_group": "Select Group",
+    "app_select_parent_group": "Select Parent Group",
     "app_copy": "Copy",
     "app_inclusive_tax": "Inclusive Tax",
     "app_giddh": "Giddh",
@@ -686,5 +693,10 @@
     "app_invalid_contact_too_long": "Too long",
     "app_attachment_not_allowed": "To upload attachment, go to branch",
     "app_entry_no": "Entry No.",
-    "app_special_note": "Note: Some details of the Voucher can’t be updated as E-invoice is generated for the same."
+    "app_special_note": "Note: Some details of the Voucher can’t be updated as E-invoice is generated for the same.",
+    "app_inventory_types": {
+        "product": "PRODUCT",
+        "service": "SERVICE",
+        "fixed_assets": "FIXED ASSETS"
+    }
 }

@@ -8,7 +8,8 @@ export enum Separators {
     IND_COMMA_SEPARATED = 'ind_comma_separated',
     INT_COMMA_SEPARATED = 'int_comma_separated',
     INT_SPACE_SEPARATED = 'int_space_separated',
-    INT_APOSTROPHE_SEPARATED = 'int_apostrophe_separated'
+    INT_APOSTROPHE_SEPARATED = 'int_apostrophe_separated',
+    NOT_SEPARATED = 'not_separated'
 }
 
 @Injectable()
@@ -100,7 +101,8 @@ export class MaskApplierService {
             maskExpression.startsWith(Separators.IND_COMMA_SEPARATED) ||
             maskExpression.startsWith(Separators.INT_APOSTROPHE_SEPARATED) ||
             maskExpression.startsWith(Separators.INT_COMMA_SEPARATED) ||
-            maskExpression.startsWith(Separators.INT_SPACE_SEPARATED)
+            maskExpression.startsWith(Separators.INT_SPACE_SEPARATED) ||
+            maskExpression.startsWith(Separators.NOT_SEPARATED)
         ) {
             if (
                 inputValue.match('[wа-яА-Я]') ||
@@ -175,6 +177,10 @@ export class MaskApplierService {
                 inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
                 strForSep = inputValue?.replace(/[ ,']/g, '');
                 result = this.currencySeparator(strForSep, '\'', '.', precision);
+            } else if (maskExpression.startsWith(Separators.NOT_SEPARATED)) {
+                inputValue = this.checkInputPrecision(inputValue, precision, ',');
+                strForSep = inputValue;
+                result = strForSep;
             }
 
             const commaShift: number = result?.indexOf(',') - inputValue?.indexOf(',');
@@ -217,6 +223,9 @@ export class MaskApplierService {
                     case Separators.INT_SPACE_SEPARATED:
                         shiftCustomOperator = ' ';
                         break;
+                    case Separators.NOT_SEPARATED:
+                        shiftCustomOperator = '';
+                        break;    
                 }
                 let resultSpecialCharLength: number = (result.match(new RegExp(shiftCustomOperator, 'g')) || [])?.length;
                 let inputSpecialCharLength: number = (inputValue.match(new RegExp(shiftCustomOperator, 'g')) || [])?.length;
