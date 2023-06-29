@@ -10,7 +10,11 @@ const routes: Routes = [
         component: MainComponent,
         children: [
             {
-                path: "new",
+                path: "create",
+                component: CreateManufacturingComponent
+            },
+            {
+                path: "edit/:uniqueName",
                 component: CreateManufacturingComponent
             },
             {

@@ -21,14 +21,14 @@
                                 >
                             </h2>
                             <div class="form-group margin-datepicker">
-                                <input
-                                    type="text"
-                                    name="daterangeInput"
-                                    daterangepicker
-                                    [options]="datePickerOptions"
-                                    class="form-control date-range-picker"
-                                    (applyDaterangepicker)="dateSelected($event)"
-                                />
+                                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                    <input
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker"
+                                    />
+                                </div>
                             </div>
 
                             <div class="form-group">

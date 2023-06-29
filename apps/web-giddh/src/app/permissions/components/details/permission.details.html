@@ -89,7 +89,7 @@
                                             >
                                         </td>
                                     </tr>
-                                    <tr *ngFor="let item of page.permissions | mySortBy : ['code']; let i = index">
+                                    <tr *ngFor="let item of page.permissions | sortBy : ['code']; let i = index">
                                         <ng-container *ngIf="item.code !== 'SHR'">
                                             <td>
                                                 <input

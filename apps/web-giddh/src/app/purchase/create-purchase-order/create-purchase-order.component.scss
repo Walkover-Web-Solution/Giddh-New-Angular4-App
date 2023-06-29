@@ -143,6 +143,9 @@ form {
                         width: 200px;
                         margin-left: 20px;
                     }
+                    .form-control {
+                        font-size: var(--font-size-14) !important;
+                    }
                 }
             }
         }

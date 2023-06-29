@@ -1325,4 +1325,35 @@ export class InventoryService {
                     type: queryParams.type,
                 })));
     }
+
+    /**
+     * Get list of stocks for v2 companies
+     *
+     * @param {*} payload
+     * @returns {Observable<BaseResponse<StocksResponse, string>>}
+     * @memberof InventoryService
+     */
+    public getStocksV2(payload: any): Observable<BaseResponse<StocksResponse, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVENTORY_API.STOCKS_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        let delimiter = '?';
+        if (payload.inventoryType) {
+            url = url.concat(`${delimiter}inventoryType=${payload.inventoryType}`);
+            delimiter = '&';
+        }
+        if (payload.q) {
+            url = url.concat(`${delimiter}q=${payload.q}`);
+            delimiter = '&';
+        }
+        if (payload.page) {
+            url = url.concat(`${delimiter}page=${payload.page}&count=${payload.count || PAGINATION_LIMIT}`);
+        }
+
+        return this.http.get(url).pipe(map((res) => {
+            let data: BaseResponse<StocksResponse, string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<StocksResponse, string>(e, '', {})));
+    }
 }

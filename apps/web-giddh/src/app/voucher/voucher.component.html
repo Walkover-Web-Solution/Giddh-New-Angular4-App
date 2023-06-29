@@ -1649,22 +1649,13 @@
                                                                 <div class="option-label">{{ option?.label }}</div>
                                                                 <div class="option-value">
                                                                     ({{ commonLocaleData?.app_dated }}:
-                                                                    {{
-                                                                        option?.additional?.additional?.voucherDate
-                                                                            ? option?.additional?.additional
-                                                                                  ?.voucherDate
-                                                                            : option?.additional?.voucherDate
-                                                                    }})
+                                                                    {{ option?.additional?.voucherDate }})
                                                                 </div>
                                                                 <div class="option-value-stock">
                                                                     ({{ commonLocaleData?.app_amount }}:
                                                                     {{
-                                                                        option.additional?.additional?.balanceDue
-                                                                            ?.amountForAccount
-                                                                            ? (option.additional?.additional?.balanceDue
-                                                                                  ?.amountForAccount | giddhCurrency)
-                                                                            : (option.additional?.balanceDue
-                                                                                  ?.amountForAccount | giddhCurrency)
+                                                                        option.additional?.balanceDue?.amountForAccount
+                                                                            | giddhCurrency
                                                                     }})
                                                                 </div>
                                                             </a>
@@ -2650,7 +2641,7 @@
                                                             <label>{{ localeData?.entry_date }}: </label>
                                                             <span *ngIf="!isUpdateMode" class="custom-date-entries">
                                                                 <giddh-datepicker
-                                                                    [showToggleIcon]="true"
+                                                                    [showToggleIcon]="false"
                                                                     #dp="ngModel"
                                                                     (keydown.enter)="$event.preventDefault()"
                                                                     (dateSelected)="onBlurEntryDate(entryIdx, true)"
@@ -4203,7 +4194,7 @@
                                                                             class="custom-date-entries"
                                                                         >
                                                                             <giddh-datepicker
-                                                                                [showToggleIcon]="true"
+                                                                                [showToggleIcon]="false"
                                                                                 (keydown.enter)="
                                                                                     $event.preventDefault()
                                                                                 "
