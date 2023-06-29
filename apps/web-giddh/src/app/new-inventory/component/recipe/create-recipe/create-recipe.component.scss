@@ -43,10 +43,13 @@
         }
         .section-head {
             font-size: var(--font-size-16);
+            color: var(--color-primary-header-background);
         }
         .less-than-text {
             font-size: 32px;
             color: var(--color-abbey);
+            position: absolute;
+            top: 80px;
         }
         .form-fields {
             .gap-between {
@@ -122,9 +125,6 @@
                     }
                 }
             }
-            .section-head {
-                padding-left: 15px;
-            }
             .icon-cross {
                 color: var(--color-red);
             }
@@ -194,6 +194,11 @@
                 &:focus {
                     box-shadow: none !important;
                 }
+            }
+        }
+        .view-mode {
+            .less-than-text {
+                top: 30px;
             }
         }
     }

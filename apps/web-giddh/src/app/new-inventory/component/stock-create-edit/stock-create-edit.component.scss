@@ -210,18 +210,6 @@
         .color-field {
             align-items: baseline;
         }
-        .edit-btn {
-            button {
-                min-width: 45px;
-                height: 32px;
-                line-height: 30px;
-                font-weight: 600;
-                letter-spacing: 0.6px;
-                &:focus {
-                    box-shadow: none !important;
-                }
-            }
-        }
         .data-wrap {
             display: flex;
             column-gap: 40px;

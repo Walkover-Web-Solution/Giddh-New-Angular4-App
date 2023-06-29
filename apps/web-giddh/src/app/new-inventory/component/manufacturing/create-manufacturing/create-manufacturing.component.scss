@@ -8,6 +8,9 @@
         }
         .max-width-stock {
             max-width: 1400px;
+            .section-head {
+                color: var(--color-primary-header-background);
+            }
         }
         .less-than-text {
             font-size: 32px;
@@ -116,9 +119,6 @@
                         }
                     }
                 }
-            }
-            .section-head {
-                padding-left: 15px;
             }
             .icon-cross {
                 color: var(--color-red);

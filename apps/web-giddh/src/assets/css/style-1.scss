@@ -3348,8 +3348,8 @@ input-field {
             min-height: 3rem;
             align-items: center;
             border-radius: 0.5rem;
-            padding-left: 1rem;
-            padding-right: 1rem;
+            padding-left: 0;
+            padding-right: 0;
         }
         .mat-form-field-infix {
             display: flex;
@@ -3361,7 +3361,7 @@ input-field {
             .mat-input-element {
                 margin: 0;
                 line-height: 1.25rem;
-                padding: 14px 0;
+                padding: 14px;
             }
             textarea {
                 &.mat-input-element {
@@ -3377,6 +3377,7 @@ input-field {
         .mat-form-field-label {
             margin-top: 1px;
             font-size: var(--font-size-15);
+            padding-left: 14px;
         }
         .mat-form-field-wrapper {
             margin: 0;
@@ -3402,6 +3403,7 @@ input-field {
             &.mat-form-field-should-float {
                 .mat-form-field-label {
                     transform: translateY(-1.5em) scale(0.75) !important;
+                    padding-left: 21px;
                 }
             }
         }
@@ -3410,10 +3412,18 @@ input-field {
                 &:focus + .mat-form-field-label-wrapper {
                     .mat-form-field-label {
                         transform: translateY(-1.5em) scale(0.75) !important;
+                        padding-left: 21px;
                     }
                 }
             }
         }
+        .mat-form-field-suffix {
+            margin-left: 0;
+            margin-right: 10px;
+        }
+    }
+    mat-select {
+        padding: 0 14px;
     }
 }
 
