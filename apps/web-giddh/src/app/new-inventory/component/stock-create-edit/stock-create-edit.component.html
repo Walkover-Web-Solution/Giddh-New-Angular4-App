@@ -885,7 +885,10 @@
                                                                         <div class="col-lg-2">
                                                                             <div
                                                                                 class="delete-btn-wrapper"
-                                                                                *ngIf="option.values?.length > 1"
+                                                                                *ngIf="
+                                                                                    option.values?.length > 1 &&
+                                                                                    optionValue.value
+                                                                                "
                                                                             >
                                                                                 <button
                                                                                     mat-icon-button
