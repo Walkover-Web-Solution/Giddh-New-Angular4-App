@@ -21,6 +21,7 @@ import { FieldTypes } from "../../../custom-fields/custom-fields.constant";
 import { Location } from '@angular/common';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CreateRecipeComponent } from "../recipe/create-recipe/create-recipe.component";
+import { GeneralService } from "../../../services/general.service";
 
 @Component({
     selector: "stock-create-edit",
@@ -220,7 +221,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private customFieldsService: CustomFieldsService,
         private dialog: MatDialog,
-        private location: Location
+        private location: Location,
+        private generalService: GeneralService
     ) {
     }
 
@@ -289,19 +291,21 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public addNewOptionValue(optionIndex: number, optionValueIndex: number): void {
         const value = this.stockForm.options[optionIndex]?.values[optionValueIndex].value;
-        const valueIndex = this.stockForm.options[optionIndex]?.values?.filter((optionValue, index) => { return optionValue?.value === value && optionValueIndex !== index });
+        if (value?.trim()) {
+            const valueIndex = this.stockForm.options[optionIndex]?.values?.filter((optionValue, index) => { return optionValue?.value === value && optionValueIndex !== index });
 
-        if (valueIndex?.length) {
-            this.stockForm.options[optionIndex].values[optionValueIndex].value = "";
-            const message = this.localeData?.duplicate_option_value?.replace("[VALUE]", value);
-            this.toaster.showSnackBar("warning", message);
-            return;
-        }
+            if (valueIndex?.length) {
+                this.stockForm.options[optionIndex].values[optionValueIndex].value = "";
+                const message = this.localeData?.duplicate_option_value?.replace("[VALUE]", value);
+                this.toaster.showSnackBar("warning", message);
+                return;
+            }
 
-        this.stockForm.options[optionIndex].values[optionValueIndex].value = String(value);
+            this.stockForm.options[optionIndex].values[optionValueIndex].value = String(value);
 
-        if (!this.stockForm.options[optionIndex]?.values[optionValueIndex + 1] && value?.trim()) {
-            this.stockForm.options[optionIndex].values[optionValueIndex + 1] = { index: optionValueIndex + 1, value: "" };
+            if (!this.stockForm.options[optionIndex]?.values[optionValueIndex + 1] && value?.trim()) {
+                this.stockForm.options[optionIndex].values[optionValueIndex + 1] = { index: optionValueIndex + 1, value: "" };
+            }
         }
     }
 
@@ -533,7 +537,13 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 variantValues.push(attribute[key]);
             });
 
-            variants.push({ forward: cloneDeep(variantValues).join(" / "), backward: cloneDeep(variantValues.reverse()).join(" / ") });
+            let combinations = this.generalService.generatePermutations(variantValues);
+            combinations = combinations?.map(combination => {
+                combination = combination.join(" / ");
+                return combination;
+            });
+
+            variants.push({ current: variantValues.join(" / "), combinations: combinations });
         });
 
         let defaultWarehouse = null;
@@ -543,10 +553,23 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         const existingVariants = cloneDeep(this.stockForm.variants);
         let stockVariants = [];
         variants?.forEach(variant => {
-            let forwardVariantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant.forward);
-            let backwardVariantExists = (forwardVariantExists?.length <= 0) ? existingVariants?.filter(existingVariant => existingVariant?.name === variant.backward) : [];
-            let variantObj = (forwardVariantExists?.length > 0) ? forwardVariantExists[0] : (backwardVariantExists?.length > 0) ? backwardVariantExists[0] : {
-                name: variant.forward,
+            let variantExists = [];
+
+            existingVariants?.forEach(existingVariant => {
+                if (!variantExists?.length && variant?.combinations?.length) {
+                    let variantFound = variant?.combinations?.filter(combination => combination === existingVariant?.name);
+                    if (variantFound?.length) {
+                        variantExists[0] = existingVariant;
+                    }
+                }
+
+                if (!variantExists?.length && !variant?.combinations?.length) {
+                    variantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant.current);
+                }
+            });
+
+            let variantObj = (variantExists?.length > 0) ? variantExists[0] : {
+                name: variant.current,
                 archive: false,
                 uniqueName: undefined,
                 skuCode: undefined,
@@ -596,7 +619,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 ]
             };
 
-            variantObj.name = variant.forward;
+            variantObj.name = variant.current;
 
             stockVariants.push(variantObj);
             this.checkUnitRateValidation.push(Object.assign({}, checkUnitRateObject));
@@ -1172,6 +1195,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     this.createRecipe.newVariants = [];
                     this.createRecipe.refreshVariantsList();
                     this.activeTabIndex = 2;
+                } else {
+                    this.backClicked();
                 }
             } else {
                 this.toaster.showSnackBar("error", response?.message);
@@ -1790,13 +1815,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 const currentValue = value?.value?.trim();
                 const previousValue = this.optionEditing?.values[value?.index]?.value?.trim();
                 if (currentValue) {
-                    this.stockForm.variants?.forEach(variant => {
+                    this.stockForm.variants = this.stockForm.variants?.map(variant => {
                         let variantNames = variant?.name?.split("/");
                         variantNames?.forEach(name => {
                             if (name?.trim() === previousValue) {
-                                variant.name = variant.name.replace(previousValue, currentValue);
+                                variant.name = variant.name?.replace(previousValue, currentValue);
                             }
                         });
+                        return variant;
                     });
                 }
             });
