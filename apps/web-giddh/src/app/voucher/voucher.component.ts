@@ -711,6 +711,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public isCashBankAccount: boolean = false;
     /** Current page for reference vouchers */
     private referenceVouchersCurrentPage: number = 1;
+    /** Total pages for reference vouchers */
+    private referenceVouchersTotalPages: number = 1;
     /** Reference voucher search field */
     private searchReferenceVoucher: any = "";
     /** List of discounts */
@@ -1967,6 +1969,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 request.number = this.searchReferenceVoucher;
                 request.page = this.referenceVouchersCurrentPage;
+
+                if (request.page > 1 && this.referenceVouchersTotalPages < request.page) {
+                    return;
+                }
+
                 this.referenceVouchersCurrentPage++;
             } else {
                 request = {
@@ -1997,6 +2004,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.invoiceList = [];
                 }
                 if (response && response.body) {
+                    this.referenceVouchersTotalPages = response.body.totalPages;
                     if (response.body.results || response.body.items) {
                         let items = [];
                         if (response.body.results) {
@@ -3713,6 +3721,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.intl?.setNumber("");
         this.typeaheadNoResultsOfCustomer = false;
         this.referenceVouchersCurrentPage = 1;
+        this.referenceVouchersTotalPages = 1;
         if (item && item?.value) {
             this.invFormData.voucherDetails.customerName = item.label;
             this.invFormData.voucherDetails.customerUniquename = item.value;
@@ -8182,6 +8191,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.invoiceList = [];
         this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 1;
+        this.referenceVouchersTotalPages = 1;
     }
 
     /**
