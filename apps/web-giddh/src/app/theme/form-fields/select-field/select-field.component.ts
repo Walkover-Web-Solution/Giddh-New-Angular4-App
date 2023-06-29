@@ -137,14 +137,16 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
             this.fieldFilteredOptions = changes.options.currentValue;
         }
         if (changes?.defaultValue) {
-            this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
-            if (!this.options || this.options?.length === 0) {
-                if (this.enableDynamicSearch) {
-                    this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
-                } else {
-                    this.filterOptions(changes?.defaultValue.currentValue);
+            setTimeout(() => {
+                this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
+                if (!this.options || this.options?.length === 0) {
+                    if (this.enableDynamicSearch) {
+                        this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
+                    } else {
+                        this.filterOptions(changes?.defaultValue.currentValue);
+                    }
                 }
-            }
+            }, 500);
         }
     }
 
@@ -261,9 +263,17 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     /**
     * This will use for close dropdown panel
     *
+    * @param {*} event Pointer event
     * @memberof SelectFieldComponent
     */
-    public closeDropdownPanel(): void {
+    public closeDropdownPanel(event?: any): void {
+        if (event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") > -1) {
+            /*
+                Don't close the panel if the user clicks at the corner of the input field,
+                handles the edge case when user clicks the corner and the suggestions get hidden
+            */
+            return;
+        }
         this.trigger?.closePanel();
     }
 

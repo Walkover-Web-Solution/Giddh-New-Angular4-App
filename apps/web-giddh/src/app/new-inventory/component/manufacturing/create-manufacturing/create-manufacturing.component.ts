@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -27,7 +27,7 @@ import { take, takeUntil } from 'rxjs/operators';
     styleUrls: ['./create-manufacturing.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateManufacturingComponent implements OnInit {
+export class CreateManufacturingComponent implements OnInit, OnDestroy {
     /**  This will use for universal date */
     public universalDate: any;
     /** List of warehouses */
@@ -126,6 +126,16 @@ export class CreateManufacturingComponent implements OnInit {
                 }
             }
         });
+    }
+
+    /**
+     * Lifecycle hook for destroy
+     *
+     * @memberof CreateManufacturingComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     /**
@@ -577,7 +587,7 @@ export class CreateManufacturingComponent implements OnInit {
 
         this.totals.totalRate = totalRate;
         this.totals.totalAmount = totalAmount;
-        this.totals.costPerItem = giddhRoundOff((totalAmount / (this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity * this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf)), this.giddhBalanceDecimalPlaces);
+        this.totals.costPerItem = giddhRoundOff((totalAmount / this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity), this.giddhBalanceDecimalPlaces);
 
         this.changeDetectionRef.detectChanges();
     }

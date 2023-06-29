@@ -2,5 +2,6 @@
     "item_selected": "हा आयटम आधीपासून निवडलेला आहे कृपया त्याचे प्रमाण वाढवा",
     "add_bulk_items": "मोठ्या प्रमाणात आयटम जोडा",
     "search_stock": "स्टॉक शोध",
-    "selected_stocks": "निवडलेला साठा"
+    "selected_stocks": "निवडलेला साठा",
+    "select_variant": "प्रकार निवडा"
 }

@@ -356,6 +356,7 @@
     "app_import_type": {
         "groups": "गट",
         "accounts": "खाती",
+        "base_accounts": "बेस खाती",
         "inventory": "यादी",
         "entries": "नोंदी",
         "trial_balance": "चाचणी शिल्लक",

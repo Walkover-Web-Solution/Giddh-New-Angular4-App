@@ -71,6 +71,8 @@
     "delayed_by_days": "Delayed by [DAYS] days",
     "delivery_in_day": "Delivery in [DAYS] day",
     "delivery_in_days": "Delivery in [DAYS] days",
+    "select_variant": "Select Variant",
+    "variant": "Variant",
     "convert_bill_popup_heading": "Convert to Bill",
     "purchase_bill_number": "Purchase Bill Number",
     "po_selection_vendor_error": "Please select purchase orders of only 1 vendor."

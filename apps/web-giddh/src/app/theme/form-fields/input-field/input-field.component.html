@@ -87,6 +87,7 @@
             [prefix]="prefix"
             [suffix]="suffix"
             [mask]="mask"
+            [validation]="false"
             *ngIf="!allowDigitsOnly && useMask"
             #textField
             (keydown.enter)="$event.preventDefault()"
@@ -109,6 +110,7 @@
             [prefix]="prefix"
             [suffix]="suffix"
             [mask]="mask"
+            [validation]="false"
             *ngIf="allowDigitsOnly && useMask"
             [customDecimalPlaces]="customDecimalPlaces"
             digitsOnlyDirective
@@ -117,6 +119,7 @@
             [autocomplete]="autocomplete"
             (blur)="emitBlurEvent()"
         />
+        <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
         <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
     </mat-form-field>
 </div>
