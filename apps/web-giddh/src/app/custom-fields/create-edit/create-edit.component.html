@@ -164,8 +164,7 @@
                         <ng-container *ngIf="customFieldUniqueName">
                             <button
                                 mat-stroked-button
-                                color="primary"
-                                class="min-width-100 bdr-radius-50"
+                                class="min-width-100"
                                 (click)="redirectToGetAllPage()"
                             >
                                 {{ commonLocaleData?.app_cancel }}
@@ -173,7 +172,7 @@
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                class="min-width-100 bdr-radius-50"
+                                class="min-width-100"
                                 [disabled]="
                                     customFieldCreateEditForm.invalid ||
                                     !customFieldRequest.fieldType?.type ||
@@ -187,8 +186,7 @@
                         <ng-container *ngIf="!customFieldUniqueName">
                             <button
                                 mat-stroked-button
-                                color="primary"
-                                class="min-width-100 bdr-radius-50"
+                                class="min-width-100"
                                 (click)="resetForm(customFieldCreateEditForm)"
                             >
                                 {{ commonLocaleData?.app_clear }}
@@ -196,7 +194,7 @@
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                class="min-width-100 bdr-radius-50"
+                                class="min-width-100"
                                 [disabled]="
                                     customFieldCreateEditForm.invalid ||
                                     !customFieldRequest.fieldType?.type ||

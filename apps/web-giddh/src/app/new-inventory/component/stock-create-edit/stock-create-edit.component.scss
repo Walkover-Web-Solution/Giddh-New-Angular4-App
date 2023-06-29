@@ -210,18 +210,6 @@
         .color-field {
             align-items: baseline;
         }
-        .edit-btn {
-            button {
-                min-width: 45px;
-                height: 32px;
-                line-height: 30px;
-                font-weight: 600;
-                letter-spacing: 0.6px;
-                &:focus {
-                    box-shadow: none !important;
-                }
-            }
-        }
         .data-wrap {
             display: flex;
             column-gap: 40px;
@@ -343,7 +331,7 @@
     }
 }
 .inner-content-footer {
-    padding: 15px 22px;
+    padding: 0px 22px 15px;
     .clear-btn {
         width: 89px;
         height: 36px;
@@ -364,7 +352,6 @@
     }
 
     .button-group {
-        column-gap: 15px;
         .btn-danger {
             background-color: var(--color-primary-button-background) !important;
         }

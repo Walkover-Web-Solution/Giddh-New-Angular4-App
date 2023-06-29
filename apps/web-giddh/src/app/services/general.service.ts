@@ -1453,4 +1453,42 @@ export class GeneralService {
         });
         return discountAccountsDetails;
     }
+
+    /**
+     * swap array elements
+     *
+     * @param {*} arr
+     * @param {number} i
+     * @param {number} j
+     * @memberof GeneralService
+     */
+    public swap(arr: any, i: number, j: number): void {
+        const temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    /**
+     * generate permutations of array
+     *
+     * @param {*} arr
+     * @param {number} [start=0]
+     * @param {*} [result=[]]
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public generatePermutations(arr: any, start = 0, result = []): any {
+        if (start === arr.length - 1) {
+            result.push([...arr]);
+            return;
+        }
+
+        for (let i = start; i < arr.length; i++) {
+            this.swap(arr, start, i);
+            this.generatePermutations(arr, start + 1, result);
+            this.swap(arr, start, i); // backtrack
+        }
+
+        return result;
+    }
 }

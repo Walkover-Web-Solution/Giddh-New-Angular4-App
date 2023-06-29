@@ -219,7 +219,6 @@
                         <div class="row mt-2 mr-b15">
                             <div class="col-md-12 col-sm-12">
                                 <dropdown-field
-                                    [cssClass]="'form-control'"
                                     [name]="'inventoryType'"
                                     [placeholder]="commonLocaleData?.app_select_inventory_type"
                                     [options]="inventoryTypeFilters"
@@ -237,7 +236,6 @@
                                 <div class="list-header">
                                     <dropdown-field
                                         class="max-width-230"
-                                        [cssClass]="'form-control'"
                                         [name]="'stock'"
                                         [placeholder]="commonLocaleData?.app_select_stock"
                                         [options]="stockList"
@@ -257,7 +255,6 @@
                                 <div class="list-header">
                                     <dropdown-field
                                         class="max-width-230"
-                                        [cssClass]="'form-control'"
                                         [name]="'variant'"
                                         [placeholder]="commonLocaleData?.app_select_variant"
                                         [options]="variantList"
@@ -274,7 +271,6 @@
                         <div class="row mr-b15">
                             <div class="col-md-12 col-sm-12">
                                 <dropdown-field
-                                    [cssClass]="'form-control'"
                                     [name]="'searchBy'"
                                     [placeholder]="localeData?.select_search_by"
                                     [options]="searchByFilters"
@@ -290,7 +286,6 @@
                         <div class="row mr-b15">
                             <div class="col-md-12 col-sm-12">
                                 <dropdown-field
-                                    [cssClass]="'form-control'"
                                     [name]="'searchOperation'"
                                     [placeholder]="localeData?.select_operation"
                                     [options]="operatorFilters"
@@ -309,7 +304,6 @@
                                     [type]="'number'"
                                     [name]="'searchValue'"
                                     [placeholder]="localeData?.enter_value"
-                                    [cssClass]="'form-control'"
                                     [(ngModel)]="manufacturingSearchRequest.searchValue"
                                     [allowDecimalDigitsOnly]="true"
                                 ></input-field>
@@ -330,7 +324,7 @@
                                 </button>
                             </div>
                             <div class="ml-2">
-                                <button type="button" mat-dialog-close class="mr-0" mat-stroked-button >
+                                <button type="button" mat-dialog-close class="mr-0" mat-stroked-button>
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
                             </div>

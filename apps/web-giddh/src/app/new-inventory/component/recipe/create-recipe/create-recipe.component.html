@@ -30,7 +30,7 @@
                             <div class="form-fields w-100">
                                 <div class="d-flex flex-column flex-wrap w-100 row-gap">
                                     <h1 class="section-head pb-2">{{ localeData?.finished_stock }}</h1>
-                                    <div>
+                                    <div *ngIf="stock?.variants?.length > 1">
                                         <dropdown-field
                                             class="width-280"
                                             [name]="'variant_' + i"
@@ -73,7 +73,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-1 d-flex justify-content-center align-items-center">
+                    <div class="col-1 d-flex justify-content-center">
                         <span class="less-than-text"> <i class="icon-left"></i></span>
                     </div>
                     <div class="col-8 pr-0">
@@ -197,8 +197,8 @@
                         </button>
                     </div>
                 </div>
-                <div class="manufacturing-border" *ngIf="!recipe.isEdit">
-                    <div class="row pb-4 max-width-950">
+                <div class="manufacturing-border view-mode" *ngIf="!recipe.isEdit">
+                    <div class="row pb-4 max-width-950 align-items-baseline position-relative">
                         <div class="col-3">
                             <div class="row">
                                 <div class="form-fields w-100">
@@ -206,7 +206,7 @@
                                         <h1 class="section-head p-0" *ngIf="i === 0">
                                             {{ localeData?.finished_stock }}
                                         </h1>
-                                        <div class="variant-view">
+                                        <div class="variant-view fix-arrow">
                                             <p>{{ recipe?.variant?.name }}</p>
                                         </div>
                                         <div class="d-flex">
@@ -220,9 +220,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-1 d-flex justify-content-center mt-4">
-                            <span class="less-than-text"> <i class="icon-left"></i></span>
-                        </div>
+                        <div class="col-1 d-flex justify-content-center"></div>
                         <div class="col-8 pr-0">
                             <div class="row">
                                 <div class="consumption-details-wrapper w-100">
@@ -259,7 +257,7 @@
                                                 class="icon-remove"
                                                 (click)="recipe.isEdit = true"
                                                 [matTooltip]="commonLocaleData?.app_edit"
-                                                matTooltipPosition="above"
+                                                matTooltipPosition="left"
                                             >
                                                 <i class="icon-edit-pencil"></i>
                                             </a>
@@ -267,7 +265,7 @@
                                                 href="javascript:void(0);"
                                                 class="icon-remove"
                                                 [matTooltip]="commonLocaleData?.app_delete"
-                                                matTooltipPosition="above"
+                                                matTooltipPosition="left"
                                                 (click)="removeRecipe(i)"
                                             >
                                                 <i class="icon-trash"></i>
