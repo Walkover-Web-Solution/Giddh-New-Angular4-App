@@ -3361,7 +3361,7 @@ input-field {
             .mat-input-element {
                 margin: 0;
                 line-height: 1.25rem;
-                padding: 14px 0;
+                padding: 14px 0 !important;
             }
             textarea {
                 &.mat-input-element {
