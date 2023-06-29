@@ -2708,7 +2708,7 @@
                                                                     [(ngModel)]="transaction.sacNumber"
                                                                     [readonly]="isEinvoiceGenerated"
                                                                 ></text-field>
-                                                                <div class="btn-group mt-2 pt-1 d-flex">
+                                                                <div class="d-inline-flex mt-2 pt-1">
                                                                     <button
                                                                         mat-stroked-button
                                                                         color="primary"
@@ -5243,7 +5243,7 @@
                                     </button>
                                     <div
                                         *ngIf="!isCompany"
-                                        class="btn-group"
+                                        class="d-inline-flex"
                                         [isDisabled]="
                                             !hasVoucherEntry ||
                                             (invoiceForm?.controls)['message2']?.errors?.maxlength ||
@@ -5315,7 +5315,7 @@
                                     *ngIf="!isCompany && (isProformaInvoice || isEstimateInvoice)"
                                 >
                                     <div
-                                        class="btn-group"
+                                        class="d-inline-flex"
                                         [isDisabled]="
                                             !hasVoucherEntry || (invoiceForm?.controls)['message2']?.errors?.maxlength
                                         "
