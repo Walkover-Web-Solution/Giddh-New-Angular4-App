@@ -14485,3 +14485,13 @@ button {
     }
 }
 /* ======Ladda  Button Color in Material Stroked Button====End Here=========== */
+
+/*--- voucher-datepicker ---*/
+voucher-component {
+    .mat-datepicker-input {
+        &:disabled {
+            background-color: transparent !important;
+            cursor: not-allowed;
+        }
+    }
+}

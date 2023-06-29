@@ -162,7 +162,11 @@
                                         <!-- endregion -->
                                         <!-- region customer dropdown -->
                                         <div
-                                            class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12 select-customers-name pr-0"
+                                            class="
+                                                col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12
+                                                select-customers-name
+                                                pr-0
+                                            "
                                         >
                                             <div class="w-100">
                                                 <!-- region if not cashinvoice show customer dropdown -->
@@ -1531,7 +1535,7 @@
                                                     *ngIf="voucherApiVersion === 2"
                                                     [cssClass]="'linking-dropdown'"
                                                     [name]="'invoiceLinking'"
-                                                    [placeholder]="commonLocaleData?.app_select_accounts"
+                                                    [placeholder]="commonLocaleData?.app_select_voucher"
                                                     [options]="invoiceList$ | async"
                                                     (selectedOption)="creditNoteInvoiceSelected($event)"
                                                     [defaultValue]="selectedInvoiceLabel"
@@ -1577,7 +1581,7 @@
                                                     #invoiceListDropdown
                                                     *ngIf="voucherApiVersion !== 2"
                                                     [name]="'invoiceLinking'"
-                                                    [placeholder]="commonLocaleData?.app_select_accounts"
+                                                    [placeholder]="commonLocaleData?.app_select_voucher"
                                                     [options]="invoiceList"
                                                     (selectedOption)="creditNoteInvoiceSelected($event)"
                                                     [defaultValue]="invoiceSelectedLabel"
@@ -1652,6 +1656,7 @@
                                                         #voucherDate="ngModel"
                                                         (keydown.enter)="$event.preventDefault()"
                                                         [placeholder]="giddhDateFormat"
+                                                        [label]="invoiceDateLabel"
                                                         name="voucherDate"
                                                         [(ngModel)]="invFormData.voucherDetails.voucherDate"
                                                         [class.invalid-inp]="
@@ -1682,6 +1687,7 @@
                                                                 ? openFirstEntry()
                                                                 : ''
                                                         "
+                                                        [showToggleIcon]="false"
                                                         [appearance]="'outline'"
                                                     >
                                                     </giddh-datepicker>
@@ -1713,6 +1719,7 @@
                                                 >
                                                     <giddh-datepicker
                                                         [placeholder]="giddhDateFormat"
+                                                        [label]="invoiceDueDateLabel"
                                                         (keydown.enter)="$event.preventDefault()"
                                                         #dueDate="ngModel"
                                                         name="dueDate"
@@ -2486,12 +2493,12 @@
                                                                     #dp="ngModel"
                                                                     (keydown.enter)="$event.preventDefault()"
                                                                     (dateSelected)="onBlurEntryDate(entryIdx, true)"
-                                                                    id="transaction.date_'+entryIdx"
+                                                                    id="transaction.date_{{ entryIdx }}"
                                                                     [disabled]="isUpdateMode"
                                                                     [cssClass]="'entry-custom-date'"
-                                                                    [placeholder]="giddhDateFormat"
-                                                                    name="transaction.date_'+entryIdx"
+                                                                    name="transaction.date_{{ entryIdx }}"
                                                                     [(ngModel)]="entry.entryDate"
+                                                                    [appearance]="'fill'"
                                                                 >
                                                                 </giddh-datepicker>
                                                                 <span
@@ -3498,7 +3505,10 @@
                                                                         [placeholder]="
                                                                             commonLocaleData?.app_select_account
                                                                         "
-                                                                        (onClear)="onSelectPaymentMode($event, true)"
+                                                                        (onClear)="
+                                                                            depositAccountUniqueName = '';
+                                                                            onSelectPaymentMode($event, true)
+                                                                        "
                                                                         [defaultValue]="
                                                                             isCashInvoice
                                                                                 ? selectedBankAccount
@@ -3531,12 +3541,7 @@
                                                                         "
                                                                         [placeholder]="commonLocaleData?.app_amount"
                                                                         [cssClass]="
-                                                                            'amount-field
-                                                                        due-amount-field
-                                                                        text-right
-                                                                        pull-right
-                                                                        max-width-100
-                                                                        multicurrency-grandtotal'
+                                                                            'amount-field due-amount-field text-right pull-right max-width-100 multicurrency-grandtotal'
                                                                         "
                                                                         [name]="'dueAmount'"
                                                                         [prefix]="depositCurrSymbol"
