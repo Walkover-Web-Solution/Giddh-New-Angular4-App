@@ -377,6 +377,7 @@
     "app_payment_mode": "Payment Mode",
     "app_select_account": "Select Account",
     "app_select_accounts": "Select Accounts",
+    "app_select_voucher": "Select Voucher",
     "app_invoice_date": "Invoice Date",
     "app_invoice_number": "Invoice Number",
     "app_sku": "SKU",
