@@ -2626,6 +2626,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     (stockDetails.variant?.fixedAssetTaxInclusive && category === 'fixedassets'))) {
                     // Calculate inclusively
                     this.vm.isInclusiveTax = true;
+                    this.vm.grandTotal = this.vm.stockTrxEntry.inventory.quantity * this.vm.stockTrxEntry.inventory.rate;
                     this.vm.inventoryTotalChanged();
                 } else {
                     this.vm.isInclusiveTax = false;
