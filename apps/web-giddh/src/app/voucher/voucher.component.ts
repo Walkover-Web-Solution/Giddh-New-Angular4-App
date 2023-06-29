@@ -1424,10 +1424,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             // convert date object
                             if (this.isProformaInvoice) {
                                 obj.voucherDetails.voucherDate = dayjs(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
-                                obj.voucherDetails.voucherNumber = obj.voucherDetails.proformaNumber;
+                                obj.voucherDetails.voucherNumber = obj.voucherDetails.proformaNumber || obj.voucherDetails.voucherNumber;
                             } else if (this.isEstimateInvoice) {
                                 obj.voucherDetails.voucherDate = dayjs(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
-                                obj.voucherDetails.voucherNumber = obj.voucherDetails.estimateNumber;
+                                obj.voucherDetails.voucherNumber = obj.voucherDetails.estimateNumber || obj.voucherDetails.voucherNumber;
                             } else {
                                 obj.voucherDetails.voucherDate = dayjs(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
                             }
