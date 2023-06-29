@@ -150,6 +150,10 @@
     .mat-stroked-button{
         margin-right: 0 !important;
         margin-left: 15px !important;
+
+        &.mat-button-disabled{
+            cursor: not-allowed;
+        }
     }
 }
 
