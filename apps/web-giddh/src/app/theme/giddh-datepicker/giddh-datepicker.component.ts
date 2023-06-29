@@ -38,7 +38,9 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     /** True if we need to show error */
     @Input() public showError: boolean = false;
     /* Datepicker fill */
-    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'fill';
+    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
+    /** Hold Mat Label Text*/
+    @Input() public label: any;
     /** Emitting selected date object as output */
     @Output() public dateSelected: EventEmitter<any> = new EventEmitter<any>();
     /** Emitting the state of datepicker (open/close) */
