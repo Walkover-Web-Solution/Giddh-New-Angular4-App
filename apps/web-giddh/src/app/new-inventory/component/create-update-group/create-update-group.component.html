@@ -80,8 +80,8 @@
                                                 [placeholder]="localeData?.enter_hsn"
                                                 [type]="'number'"
                                                 formControlName="hsnNumber"
-                                                [max]="10"
-                                                [allowDecimalDigitsOnly]="true"
+                                                digitsOnlyDirective
+                                                [maxlength]="10"
                                             >
                                             </input-field>
                                         </div>
@@ -94,8 +94,8 @@
                                                 [placeholder]="localeData?.enter_sac"
                                                 [type]="'number'"
                                                 formControlName="sacNumber"
-                                                [max]="10"
-                                                [allowDecimalDigitsOnly]="true"
+                                                digitsOnlyDirective
+                                                [maxlength]="10"
                                             >
                                             </input-field>
                                         </div>
@@ -160,7 +160,6 @@
                                                 stockGroupUniqueName = $event?.value; stockGroupName = $event?.label
                                             "
                                             [defaultValue]="stockGroupName"
-                                            [autocomplete]="true"
                                         ></dropdown-field>
                                     </div>
                                 </div>
