@@ -1,5 +1,9 @@
 <div class="text-field-container">
-    <mat-form-field [ngClass]="{ 'mat-form-field-invalid': showError }" [appearance]="appearance">
+    <mat-form-field
+        [ngClass]="{ 'mat-form-field-invalid': showError }"
+        [appearance]="appearance"
+        [floatLabel]="floatLabel"
+    >
         <mat-label>{{ label ? label : placeholder }}</mat-label>
         <input
             matInput

@@ -992,6 +992,7 @@
                                             (keydown.enter)="$event.preventDefault()"
                                             [label]="commonLocaleData?.app_mobile_number"
                                             [placeholder]="'98XXXXXXXX'"
+                                            [floatLabel]="intl?.getNumber() ? 'always' : 'auto'"
                                         >
                                         </input-field>
                                         <span id="init-contact-proforma-valid-msg" class="d-none"></span>
