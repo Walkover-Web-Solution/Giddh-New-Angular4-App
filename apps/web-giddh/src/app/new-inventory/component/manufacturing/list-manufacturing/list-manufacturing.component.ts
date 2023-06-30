@@ -116,6 +116,8 @@ export class ListManufacturingComponent implements OnInit {
     private currentUrl: string = "";
     /** True if initial load of store filters */
     private initialLoad: boolean = false;
+    /** Count of warehouses */
+    public warehousesCount: number = 0;
 
     constructor(
         private dialog: MatDialog,
@@ -276,6 +278,10 @@ export class ListManufacturingComponent implements OnInit {
                 warehouses?.results?.forEach(warehouse => {
                     this.warehouses.push({ label: warehouse?.name, value: warehouse?.uniqueName });
                 });
+                if (this.currentOrganizationType !== OrganizationType.Company) {
+                    this.allWarehouses = cloneDeep(this.warehouses);
+                    this.warehousesCount = this.allWarehouses?.length;
+                }
                 this.changeDetectionRef.detectChanges();
             }
         });
@@ -476,6 +482,8 @@ export class ListManufacturingComponent implements OnInit {
                             });
                         }
                     });
+                    this.warehousesCount = Object.keys(this.allWarehouses)?.length;
+                    this.changeDetectionRef.detectChanges();
                 }
             } else {
                 this.store.dispatch(this.inventoryAction.GetAllLinkedStocks());
