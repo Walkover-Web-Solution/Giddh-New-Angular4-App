@@ -75,6 +75,9 @@ export class ManufacturingService {
         if ((model.product)) {
             url = url + 'product=' + model.product + '&';
         }
+        if ((model.productVariant)) {
+            url = url + 'productVariant=' + model.productVariant + '&';
+        }
         if ((model.searchBy)) {
             url = url + 'searchBy=' + model.searchBy + '&';
         }
@@ -83,6 +86,9 @@ export class ManufacturingService {
         }
         if ((model.searchValue)) {
             url = url + 'searchValue=' + model.searchValue + '&';
+        }
+        if ((model.inventoryType)) {
+            url = url + 'inventoryType=' + model.inventoryType + '&';
         }
         if ((model.from)) {
             url = url + 'from=' + model.from + '&';
@@ -126,7 +132,16 @@ export class ManufacturingService {
             catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
     }
 
-    public getVariantRecipe(stockUniqueName: string, variantUniqueNames: string[], withRate: boolean = false): Observable<BaseResponse<any, string>> {
+    /**
+     * Get recipe for variant
+     *
+     * @param {string} stockUniqueName
+     * @param {string[]} variantUniqueNames
+     * @param {boolean} [withRate=false]
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof ManufacturingService
+     */
+    public getVariantRecipe(stockUniqueName: string, variantUniqueNames: string[] = [], withRate: boolean = false): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + MANUFACTURING_API.GET_RECIPE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))?.replace(':withRate', String(withRate)), variantUniqueNames).pipe(
             map((res) => {
@@ -134,9 +149,17 @@ export class ManufacturingService {
                 data.queryString = stockUniqueName;
                 return data;
             }),
-            catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
     }
 
+    /**
+     * Get rate for stock
+     *
+     * @param {string} stockUniqueName
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof ManufacturingService
+     */
     public getRateForStockV2(stockUniqueName: string, model: any): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + MANUFACTURING_API.GET_RATE_FOR_STOCK?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).pipe(
@@ -148,6 +171,14 @@ export class ManufacturingService {
             catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
     }
 
+    /**
+     * Saves manufacturing details
+     *
+     * @param {string} stockUniqueName
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof ManufacturingService
+     */
     public saveManufacturing(stockUniqueName: string, model: any): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + MANUFACTURING_API.CREATE_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).pipe(
@@ -156,6 +187,87 @@ export class ManufacturingService {
                 data.queryString = stockUniqueName;
                 return data;
             }),
-            catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+    }
+
+    /**
+     * Saves recipe details
+     *
+     * @param {string} stockUniqueName
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof ManufacturingService
+     */
+    public saveRecipe(stockUniqueName: string, model: any): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + MANUFACTURING_API.CREATE_RECIPE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.queryString = stockUniqueName;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+    }
+
+    /**
+     * Get manufacturing details
+     *
+     * @param {string} manufactureUniqueName
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof ManufacturingService
+     */
+    public getManufacturingDetails(manufactureUniqueName: string): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + MANUFACTURING_API.GET_MANUFACTURING?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':manufactureUniqueName', encodeURIComponent(manufactureUniqueName))).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.queryString = manufactureUniqueName;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+    }
+
+    /**
+     * Delete manufacturing
+     *
+     * @param {string} manufactureUniqueName
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof ManufacturingService
+     */
+    public deleteManufacturing(manufactureUniqueName: string): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.delete(this.config.apiUrl + MANUFACTURING_API.GET_MANUFACTURING?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':manufactureUniqueName', encodeURIComponent(manufactureUniqueName))).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.queryString = manufactureUniqueName;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+    }
+
+    /**
+     * Update manufacturing
+     *
+     * @param {string} manufactureUniqueName
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof ManufacturingService
+     */
+    public updateManufacturing(manufactureUniqueName: string, model: any): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.put(this.config.apiUrl + MANUFACTURING_API.GET_MANUFACTURING?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':manufactureUniqueName', encodeURIComponent(manufactureUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.queryString = manufactureUniqueName;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+    }
+
+    public loadStockUnits(stockUniqueName: string): Observable<Array<any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + MANUFACTURING_API.GET_STOCK_UNITS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
+        return this.http.get(url).pipe(map((res) => res.body),catchError(e => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 }

@@ -8,6 +8,10 @@ import { HamburgerMenuModule } from '../../../shared/header/components/hamburger
 import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
 import { MatButtonModule } from '@angular/material/button';
 import { RecipeRoutingModule } from './recipe.routing.module';
+import { MatChipsModule } from '@angular/material/chips';
+import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
+import { FormsModule } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     imports: [
@@ -16,7 +20,11 @@ import { RecipeRoutingModule } from './recipe.routing.module';
         HamburgerMenuModule,
         FormFieldsModule,
         MatButtonModule,
-        RecipeRoutingModule
+        MatChipsModule,
+        RecipeRoutingModule,
+        TranslateDirectiveModule,
+        FormsModule,
+        MatTooltipModule
     ],
     exports: [
         CreateRecipeComponent,

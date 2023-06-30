@@ -72,7 +72,7 @@
     <input
         matInput
         [name]="name"
-        type="type"
+        [type]="type"
         [id]="id"
         [class]="cssClass"
         [placeholder]="placeholder"
@@ -94,7 +94,7 @@
     <input
         matInput
         [name]="name"
-        type="type"
+        [type]="type"
         [id]="id"
         [class]="cssClass"
         [placeholder]="placeholder"
@@ -115,4 +115,5 @@
         (keydown.enter)="$event.preventDefault()"
         [autocomplete]="autocomplete"
     />
+    <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
 </div>
