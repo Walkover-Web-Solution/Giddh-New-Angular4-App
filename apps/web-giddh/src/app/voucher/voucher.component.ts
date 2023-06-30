@@ -2180,7 +2180,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (data?.mobileNo) {
             let newSelectedMobileNumber = "+" + data?.mobileNo;
             this.intl?.setNumber(newSelectedMobileNumber);
-            document.getElementById('init-contact-proforma')?.focus();
         }
         this.isCashBankAccount = false;
 
