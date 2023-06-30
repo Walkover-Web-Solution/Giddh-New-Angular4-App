@@ -85,8 +85,6 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     @Input() public label: string;
     /** Adds red border around field if true */
     @Input() public showError: boolean = false;
-    /** Holds float label of dropdown field */
-    @Input() public floatLabel : 'always' | 'never' | 'auto'='auto';
 
     constructor(private cdr: ChangeDetectorRef
     ) {
