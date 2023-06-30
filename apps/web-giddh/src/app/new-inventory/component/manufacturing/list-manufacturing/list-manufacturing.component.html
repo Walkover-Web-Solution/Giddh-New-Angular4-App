@@ -31,7 +31,6 @@
                             >
                                 <dropdown-field
                                     class="max-width-230"
-                                    [cssClass]="'form-control'"
                                     [name]="'branch'"
                                     [placeholder]="commonLocaleData?.app_select_branch"
                                     [options]="currentCompanyBranches"
@@ -43,7 +42,6 @@
                             <div class="list-header" *ngIf="allWarehouses?.length > 1">
                                 <dropdown-field
                                     class="max-width-230"
-                                    [cssClass]="'form-control'"
                                     [name]="'warehouse'"
                                     [placeholder]="commonLocaleData?.app_select_warehouse"
                                     [options]="warehouses"

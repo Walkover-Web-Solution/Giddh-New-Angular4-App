@@ -276,6 +276,9 @@ export class ListManufacturingComponent implements OnInit {
                 warehouses?.results?.forEach(warehouse => {
                     this.warehouses.push({ label: warehouse?.name, value: warehouse?.uniqueName });
                 });
+                if (this.currentOrganizationType !== OrganizationType.Company) {
+                    this.allWarehouses = cloneDeep(this.warehouses);
+                }
                 this.changeDetectionRef.detectChanges();
             }
         });
