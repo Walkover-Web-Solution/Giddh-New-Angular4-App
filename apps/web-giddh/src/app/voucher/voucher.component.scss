@@ -144,14 +144,14 @@
     @include padBth(20px, 0);
     border-top: 1px solid var(--color-generate-invoice-secondary-background);
 
-    .min-width-auto{
+    .min-width-auto {
         min-width: auto !important;
     }
-    .mat-stroked-button{
+    .mat-stroked-button {
         margin-right: 0 !important;
         margin-left: 15px !important;
 
-        &.mat-button-disabled{
+        &.mat-button-disabled {
             cursor: not-allowed;
         }
     }
@@ -220,6 +220,7 @@ a[type="button"] {
         .figure-cell {
             width: 140px;
             padding-right: 0;
+            padding-left: 15px;
 
             input {
                 max-width: 130px;
