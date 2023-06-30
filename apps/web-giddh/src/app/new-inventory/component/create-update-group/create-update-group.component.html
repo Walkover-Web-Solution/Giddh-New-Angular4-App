@@ -130,6 +130,7 @@
                         </div>
                         <div class="row mr-t15">
                             <div class="col-sm-6 col-lg-6 ml-lg-2">
+                                {{ !groupForm.get("isSubGroup")?.value }}
                                 <dropdown-field
                                     class="input-width"
                                     [readonly]="!groupForm.get('isSubGroup')?.value"
@@ -140,6 +141,7 @@
                                         stockGroupUniqueName = $event?.value; stockGroupName = $event?.label
                                     "
                                     [defaultValue]="stockGroupName"
+                                    [floatLabel]="!groupForm.get('isSubGroup')?.value ? 'never' : 'auto'"
                                     [autocomplete]="true"
                                 ></dropdown-field>
                             </div>
