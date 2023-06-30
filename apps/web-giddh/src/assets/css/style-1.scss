@@ -3307,9 +3307,9 @@ td.mat-footer-cell {
 }
 
 /*-- input-new-form-field --*/
+voucher-component,
 create-update-group,
 giddh-datepicker,
-voucher-component,
 add-company,
 stock-create-edit,
 dropdown-field,
@@ -3496,9 +3496,6 @@ input-field {
         }
     }
 }
-.row-gap {
-    row-gap: 15px;
-}
 .other-details-section {
     .mat-form-field-appearance-outline {
         .mat-form-field-flex {
@@ -3538,4 +3535,8 @@ voucher-component {
     &:focus-visible {
         outline: none;
     }
+}
+
+.row-gap {
+    row-gap: 15px;
 }
