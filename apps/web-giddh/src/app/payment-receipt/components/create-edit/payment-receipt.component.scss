@@ -42,7 +42,13 @@
     position: relative;
     float: left;
     padding: 20px 0;
-    background-color: var(--color-iron);
+    border-top: 1px solid var(--color-generate-invoice-secondary-background);
+    max-width: 785px;
+
+    .mat-stroked-button{
+        margin-right: 0 !important;
+        margin-left: 15px !important;
+    }
 
     div {
         div {
