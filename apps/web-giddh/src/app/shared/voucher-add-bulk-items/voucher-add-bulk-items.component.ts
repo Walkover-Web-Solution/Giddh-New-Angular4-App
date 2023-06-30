@@ -26,6 +26,8 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     public normalData: SalesAddBulkStockItems[] = [];
     public filteredData: SalesAddBulkStockItems[] = [];
     public selectedItems: SalesAddBulkStockItems[] = [];
+    /** True, if API is in progress, required to avoid multiple addition of same stock */
+    private isLoading: boolean;
 
     /** Stores the search results pagination details */
     private searchResultsPaginationData = {
@@ -214,41 +216,47 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
      * @memberof VoucherAddBulkItemsComponent
      */
     private loadDetails(item: SalesAddBulkStockItems, requestObject: any): void {
-        this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data && data.body) {
-                // Take taxes of parent group and stock's own taxes
-                const taxes = data.body.taxes || [];
-                if (data.body.stock) {
-                    taxes.push(...data.body.stock.taxes);
+        if (!this.isLoading) {
+            this.isLoading = true;
+            this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body) {
+                    // Take taxes of parent group and stock's own taxes
+                    const taxes = data.body.taxes || [];
+                    if (data.body.stock) {
+                        taxes.push(...data.body.stock.taxes);
+                    }
+                    // directly assign additional property
+                    item.additional = {
+                        ...item.additional,
+                        label: item.name,
+                        value: item?.uniqueName,
+                        applicableTaxes: taxes,
+                        currency: data.body.currency,
+                        currencySymbol: data.body.currencySymbol,
+                        email: data.body.emails,
+                        isFixed: data.body.isFixed,
+                        mergedAccounts: data.body.mergedAccounts,
+                        mobileNo: data.body.mobileNo,
+                        nameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent.name).join(', ') : '',
+                        stock: data.body.stock,
+                        uNameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
+                        category: data.body.category,
+                        combinedUniqueName: data.body.stock?.variant ? `${item.uniqueName}#${data.body.stock.variant?.uniqueName}` : '',
+                        skuCode: data.body.stock?.skuCode,
+                    };
+                    const unitRates = data.body?.stock?.variant?.unitRates ?? [];
+                    item.rate = unitRates[0]?.rate ?? 0;
+                    item.quantity = 1;
+                    if (!data.body.stock || item.variants?.length === 1 || item.variant?.uniqueName) {
+                        this.selectedItems.unshift({ ...item });
+                    }
+                    this.isLoading = false;
+                    this.changeDetectorRef.detectChanges();
                 }
-                // directly assign additional property
-                item.additional = {
-                    ...item.additional,
-                    label: item.name,
-                    value: item?.uniqueName,
-                    applicableTaxes: taxes,
-                    currency: data.body.currency,
-                    currencySymbol: data.body.currencySymbol,
-                    email: data.body.emails,
-                    isFixed: data.body.isFixed,
-                    mergedAccounts: data.body.mergedAccounts,
-                    mobileNo: data.body.mobileNo,
-                    nameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent.name).join(', ') : '',
-                    stock: data.body.stock,
-                    uNameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
-                    category: data.body.category,
-                    combinedUniqueName: data.body.stock?.variant ? `${item.uniqueName}#${data.body.stock.variant?.uniqueName}` : '',
-                    skuCode: data.body.stock?.skuCode,
-                };
-                const unitRates = data.body?.stock?.variant?.unitRates ?? [];
-                item.rate = unitRates[0]?.rate ?? 0;
-                item.quantity = 1;
-                if (!data.body.stock || item.variants?.length === 1 || item.variant?.uniqueName) {
-                    this.selectedItems.unshift({ ...item });
-                }
-                this.changeDetectorRef.detectChanges();
-            }
-        }, () => { });
+            }, () => {
+                this.isLoading = false;
+             });
+        }
     }
 
     /**
