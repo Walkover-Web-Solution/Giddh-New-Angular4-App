@@ -1,5 +1,5 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
-    <mat-form-field [appearance]="appearance">
+    <mat-form-field [ngClass]="{ 'mat-form-field-invalid': showError }" [appearance]="appearance">
         <mat-label>{{ label ? label : placeholder }}</mat-label>
         <input
             type="text"
@@ -40,6 +40,8 @@
                     *ngFor="let option of fieldFilteredOptions"
                     [value]="option"
                     [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
+                    [matTooltip]="option?.label"
+                    matTooltipPosition="right"
                 >
                     <ng-template
                         [ngTemplateOutletContext]="{ option: option }"
@@ -55,6 +57,8 @@
                     value=""
                     *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew"
                     (click)="createNewRecord()"
+                    [matTooltip]="option?.label"
+                    matTooltipPosition="right"
                 >
                     <a href="javascript:;" class="options-class-create">
                         {{ commonLocaleData?.app_create_new }}
@@ -88,6 +92,8 @@
                             *ngFor="let option of fieldFilteredOptions"
                             [value]="option"
                             [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
+                            [matTooltip]="option?.label"
+                            matTooltipPosition="right"
                         >
                             <ng-template
                                 [ngTemplateOutletContext]="{ option: option }"
@@ -114,5 +120,8 @@
                 </app-cdk-scroll>
             </ng-template>
         </mat-autocomplete>
+        <div class="dropdown-bg" (click)="openDropdownPanel()">
+            <span class="arrow-dropdown"></span>
+        </div>
     </mat-form-field>
 </ng-container>

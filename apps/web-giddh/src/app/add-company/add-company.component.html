@@ -7,7 +7,7 @@
             <mat-step [stepControl]="firstFormGroup">
                 <form [formGroup]="firstFormGroup">
                     <ng-template matStepLabel>Company Name</ng-template>
-                    <div class="row">
+                    <div class="row row-gap">
                         <div class="col-lg-12">
                             <input-field [placeholder]="'Company Name'" formControlName="firstCtrl" required>
                             </input-field>
@@ -38,7 +38,7 @@
             <mat-step [stepControl]="secondFormGroup">
                 <form [formGroup]="secondFormGroup">
                     <ng-template matStepLabel>Company Address</ng-template>
-                    <div class="row">
+                    <div class="row row-gap">
                         <div class="col-lg-12">
                             <input-field [placeholder]="'Company Name'" formControlName="secondCtrl" disabled>
                             </input-field>

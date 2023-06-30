@@ -365,7 +365,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public selectAccount(e: IOption, txn: TransactionVM, clearAccount?: boolean, isBankTransaction?: boolean) {
+    public selectAccount(e: IOption, txn: TransactionVM, clearAccount?: boolean, isBankTransaction?: boolean, allowChangeDetection?: boolean) {
         this.keydownClassAdded = false;
         this.selectedTxnAccUniqueName = '';
         this.selectedAccountDetails = e;
@@ -391,7 +391,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         txn.stockUniqueName = e.additional.stock?.uniqueName;
         txn.oppositeAccountUniqueName = e.additional?.uniqueName;
         if (!txn.isStock) {
-            this.loadDetails(e, txn);
+            this.loadDetails(e, txn, '', allowChangeDetection);
         }
         this.cdRf.markForCheck();
     }
@@ -788,7 +788,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
         this.accountPredictionSubject.pipe(debounceTime(2000), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response) {
+            if (response) {
                 this.isHideBankLedgerPopup = false;
                 this.cdRf.detectChanges();
             }
@@ -890,7 +890,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         if (matchedTransaction?.length > 0) {
                             const account: IOption = { label: transaction.account.name, value: transaction.account.uniqueName, additional: { uniqueName: transaction?.account?.uniqueName } };
                             matchedTransaction[0].transactions[0].particular = transaction?.account.name;
-                            this.selectAccount(account, matchedTransaction[0]?.transactions[0]);
+                            this.selectAccount(account, matchedTransaction[0]?.transactions[0], false, false, true);
                         }
                     });
                 }
@@ -2587,7 +2587,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {string} [variantUniqueName] Uniquename of the variant
      * @memberof LedgerComponent
      */
-    private loadDetails(event: IOption, txn: TransactionVM, variantUniqueName?: string): void {
+    private loadDetails(event: IOption, txn: TransactionVM, variantUniqueName?: string, allowChangeDetection?: boolean): void {
         let requestObject;
         if (event.additional.stock) {
             requestObject = {
@@ -2674,7 +2674,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             name: stockName,
                             uniqueName: stockUniqueName,
                         },
-                        variant: {uniqueName: txn.selectedAccount.stock.variant?.uniqueName},
+                        variant: { uniqueName: txn.selectedAccount.stock.variant?.uniqueName },
                         quantity: 1,
                         unit: {
                             stockUnitCode: unitCode,
@@ -2692,19 +2692,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
                 txn.showOtherTax = this.showOtherTax(txn);
-                // if (this.newLedgerComponent) {
-                //     this.newLedgerComponent.preparePreAppliedDiscounts();
-                // }
                 this.handleRcmVisibility(txn);
                 this.handleTaxableAmountVisibility(txn);
-                // if (this.newLedgerComponent) {
-                    //     this.newLedgerComponent.calculatePreAppliedTax();
-                    //     this.newLedgerComponent.calculateTax();
-                    //     this.newLedgerComponent.calculateTotal();
-                    // }
                 this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
                 this.needToReCalculate.next(true);
-                // this.cdRf.detectChanges();
+                if (allowChangeDetection) {
+                    this.cdRf.detectChanges();
+                }
             }
         });
     }
