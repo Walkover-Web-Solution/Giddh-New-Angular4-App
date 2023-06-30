@@ -152,7 +152,7 @@
                                             <label>{{ localeData?.is_it_childgroup }}</label>
                                         </div>
                                     </div>
-                                    <div class="input-min-width">
+                                    <div class="input-min-width" *ngIf="groupForm.get('isSubGroup')?.value">
                                         <dropdown-field
                                             [readonly]="!groupForm.get('isSubGroup')?.value"
                                             [name]="'parentStockGroupUniqueName'"
