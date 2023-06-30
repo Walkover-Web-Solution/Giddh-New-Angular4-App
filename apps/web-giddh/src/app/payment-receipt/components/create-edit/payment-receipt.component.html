@@ -500,7 +500,7 @@
                             <div class="pull-right pr update-mode">
                                 <button
                                     type="button"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     *ngIf="!isUpdateMode"
                                     [disabled]="isLoading || isFileUploading"
                                     (click)="resetForm(receiptForm)"
@@ -510,7 +510,7 @@
                                 <button
                                     color="primary"
                                     type="button"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     *ngIf="!isUpdateMode"
                                     [disabled]="isLoading || isFileUploading"
                                     (click)="createVoucher(receiptForm)"
@@ -523,7 +523,7 @@
                                 </button>
                                 <button
                                     type="button"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     *ngIf="isUpdateMode"
                                     [routerLink]="
                                         '/pages/voucher/' +
@@ -539,7 +539,7 @@
                                 <button
                                     color="primary"
                                     type="button"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     *ngIf="isUpdateMode"
                                     [disabled]="isLoading || isFileUploading"
                                     (click)="updateVoucher()"
@@ -554,7 +554,7 @@
                                     <div class="btn-group dropup">
                                         <button
                                             class="caret-button"
-                                            mat-raised-button
+                                            mat-stroked-button
                                             [matMenuTriggerFor]="menu"
                                             [disabled]="isLoading || isFileUploading"
                                         >

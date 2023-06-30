@@ -15,8 +15,9 @@
                         <button
                             *ngIf="queryParams?.stockUniqueName"
                             (click)="backClicked()"
-                            class="btn-sky-blue btn-position-left mr-0"
-                            mat-button
+                            class="btn-position-left mr-0"
+                            mat-stroked-button
+                            color="primary"
                         >
                             <i class="icon-left back-left"></i>
                             {{ commonLocaleData?.app_back }}
@@ -105,8 +106,9 @@
                                             </mat-form-field>
                                             <button
                                                 *ngIf="queryParams?.stockUniqueName"
-                                                mat-raised-button
-                                                class="btn-success min-width-100 move-stock mr-0"
+                                                mat-stroked-button
+                                                color="primary"
+                                                class="min-width-100 move-stock mr-0"
                                                 (click)="moveStock()"
                                                 [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
                                                 [autocomplete]="'off'"
@@ -1197,7 +1199,7 @@
                                                                                 >
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
-    
+
                                                                                 <button
                                                                                     mat-icon-button
                                                                                     class="icon-button-add-sales"
@@ -1305,7 +1307,7 @@
                                                                                 >
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
-    
+
                                                                                 <button
                                                                                     mat-icon-button
                                                                                     class="icon-button-add-sales"
@@ -1414,7 +1416,7 @@
                                                                                 >
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
-    
+
                                                                                 <button
                                                                                     mat-icon-button
                                                                                     class="icon-button-add-sales"
@@ -2833,7 +2835,7 @@
                                                                     [placeholder]="commonLocaleData?.app_select_tax"
                                                                 >
                                                                 </sh-select>
-                                                                <p class="mt-1 font-14">
+                                                                <p class="mt-1 font-15">
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         id="purchase-price-tax"
@@ -2936,7 +2938,7 @@
                                                                     disabled
                                                                 >
                                                                 </sh-select>
-                                                                <p class="mt-1 font-14">
+                                                                <p class="mt-1 font-15">
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         id="sales-price-tax"
@@ -4751,7 +4753,7 @@
                                 </button>
                                 <span class="d-flex align-items-center">
                                     <input-field class="mr-1" id="fill-number" placeholder="0"> </input-field>
-                                    <span class="font-14">More rows at bottom</span>
+                                    <span class="font-15">More rows at bottom</span>
                                 </span>
                             </div>
                         </div>
@@ -4780,7 +4782,8 @@
                 <button
                     *ngIf="queryParams?.stockUniqueName"
                     mat-stroked-button
-                    class="btn-primary min-width-100"
+                    color="primary"
+                    class="min-width-100"
                     (click)="backClicked()"
                 >
                     {{ commonLocaleData?.app_close }}
@@ -4788,7 +4791,8 @@
                 <button
                     *ngIf="queryParams?.stockUniqueName"
                     mat-stroked-button
-                    class="btn-danger min-width-100"
+                    color="warn"
+                    class="min-width-100"
                     (click)="deleteStock()"
                 >
                     {{ commonLocaleData?.app_delete }}
@@ -4796,7 +4800,8 @@
                 <button
                     *ngIf="queryParams?.stockUniqueName"
                     mat-stroked-button
-                    class="btn-success min-width-100"
+                    color="primary"
+                    class="min-width-100"
                     (click)="updateStock(stockCreateEditForm)"
                     [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError"
                 >

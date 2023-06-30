@@ -376,7 +376,7 @@ export const initialState: CustomTemplateState = {
         logoUniqueName: null,
         copyFrom: 'gst_template_a',
         templateColor: '#f63407',
-        tableColor: '#f2f3f4',
+        tableColor: '#ffffff',
         templateType: 'gst_template_a',
         name: '',
     },

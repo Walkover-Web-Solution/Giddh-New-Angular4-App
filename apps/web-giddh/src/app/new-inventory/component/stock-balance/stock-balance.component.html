@@ -9,15 +9,15 @@
     <div class="stock-balance-wrapper" *ngIf="!isLoading">
         <div class="stock-balance-top-bar">
             <div class="stock-balance-top-bar-left-side">
-                <button class="new-stock-btn" mat-button [matMenuTriggerFor]="newStock">
+                <button mat-stroked-button color="primary" [matMenuTriggerFor]="newStock">
                     {{ localeData?.warehouse_opening_balance?.new_stock }}
                     <span class="caret"></span>
                 </button>
                 <mat-menu #newStock="matMenu">
-                    <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/product/create'">
+                    <button mat-menu-item [routerLink]="'/pages/inventory/v2/stock/product/create'">
                         {{ commonLocaleData?.app_product }}
                     </button>
-                    <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/service/create'">
+                    <button mat-menu-item [routerLink]="'/pages/inventory/v2/stock/service/create'">
                         {{ commonLocaleData?.app_service }}
                     </button>
                 </mat-menu>

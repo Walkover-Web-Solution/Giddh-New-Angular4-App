@@ -695,6 +695,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         let selectedVoucherOptions;
         // Object of selected voucher which was adjusted earlier
         let selectedVoucherPreAdjusted;
+        // Stores the index of pre-adjusted voucher, required to avoid doubling of amount when same voucher is selected
+        let selectedVoucherPreAdjustedIndex;
         // Amount: remaining adjusted amount + earlier adjusted amount
         let excessAmount = 0;
 
@@ -708,15 +710,21 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             });
         }
         if (entryData && this.advanceReceiptAdjustmentPreUpdatedData && this.advanceReceiptAdjustmentPreUpdatedData.adjustments && this.advanceReceiptAdjustmentPreUpdatedData.adjustments.length) {
-            selectedVoucherPreAdjusted = this.advanceReceiptAdjustmentPreUpdatedData.adjustments.find(item => {
+            selectedVoucherPreAdjusted = this.advanceReceiptAdjustmentPreUpdatedData.adjustments.find((item, index) => {
                 if (item.voucherNumber !== '-') {
+                    if (item.voucherNumber === entryData.voucherNumber) {
+                        selectedVoucherPreAdjustedIndex = index;
+                    }
                     return item.voucherNumber === entryData.voucherNumber;
                 } else {
+                    if (item?.uniqueName === entryData?.uniqueName) {
+                        selectedVoucherPreAdjustedIndex = index;
+                    }
                     return item?.uniqueName === entryData?.uniqueName;
                 }
             });
         }
-        if (selectedVoucherOptions && selectedVoucherPreAdjusted && selectedVoucherOptions.additional.balanceDue && selectedVoucherPreAdjusted?.adjustmentAmount) {
+        if (selectedVoucherOptions && selectedVoucherPreAdjusted && selectedVoucherOptions.additional.balanceDue && selectedVoucherPreAdjusted?.adjustmentAmount && selectedVoucherPreAdjustedIndex !== index) {
             excessAmount = selectedVoucherOptions.additional.balanceDue.amountForAccount + selectedVoucherPreAdjusted?.adjustmentAmount?.amountForAccount;
         } else {
             if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.balanceDue) {
@@ -724,7 +732,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             }
         }
         // To restrict user to enter amount less or equal selected voucher amount
-        if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.adjustmentAmount && this.adjustVoucherForm.adjustments[index].adjustmentAmount.amountForAccount > excessAmount) {
+        if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.adjustmentAmount && this.adjustVoucherForm.adjustments[index]?.adjustmentAmount?.amountForAccount > excessAmount) {
             this.adjustVoucherForm.adjustments[index].adjustmentAmount.amountForAccount = cloneDeep(excessAmount);
             entry.adjustmentAmount.amountForAccount = excessAmount;
             this.adjustVoucherForm.adjustments = cloneDeep(this.adjustVoucherForm.adjustments);
@@ -732,7 +740,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         if (entry && entry.taxRate && entry.adjustmentAmount?.amountForAccount) {
             let taxAmount = this.calculateInclusiveTaxAmount(entry.adjustmentAmount.amountForAccount, entry.taxRate);
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = Number(taxAmount);
-        } else {
+        } else if(this.adjustVoucherForm.adjustments[index]) {
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = 0.0;
         }
         this.calculateBalanceDue();
