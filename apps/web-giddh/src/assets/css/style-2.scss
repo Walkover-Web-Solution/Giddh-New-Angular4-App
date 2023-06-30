@@ -14420,3 +14420,13 @@ button{
     }
 }
 /* ======Ladda  Button Color in Material Stroked Button====End Here=========== */
+
+/*============Material Button Disabled Cursor======Start===========*/
+button{    
+    &.mat-button-disabled{
+        &:hover{
+            cursor: not-allowed !important;
+        }
+    }    
+}
+/*============Material Button Disabled Cursor======End===========*/

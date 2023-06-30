@@ -55,7 +55,7 @@
                 ><i class="icon-left"></i><span class="back-text">{{ localeData?.communication?.msg91 }}</span>
             </span>
         </button>
-        <div class="d-flex verify-form mr-t1">
+        <div class="d-flex align-items-end verify-form mr-t1">
             <div class="input-field">
                 <p class="label auth-label">
                     {{ communicationPlatforms?.MSG91?.fields?.auth_key?.label
@@ -76,7 +76,7 @@
             <button
                 mat-stroked-button
                 color="primary"
-                class="mt-1 verify-button font-15"
+                class="mt-1 font-15"
                 [disabled]="isCommunicationPlatformVerificationInProcess"
                 (click)="verifyCommunicationPlatform('MSG91')"
             >
