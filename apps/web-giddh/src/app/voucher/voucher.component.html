@@ -3810,13 +3810,17 @@
                             <!-- endregion -->
                             <!-- region update mode -->
                             <div class="pull-right pr" *ngIf="isUpdateMode">
-                                <button mat-button class="btn btn-danger d-inline-block" (click)="cancelUpdate()">
+                                <button
+                                    mat-stroked-button
+                                    class="d-inline-block"
+                                    (click)="cancelUpdate()"
+                                >
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
                                 <button
                                     *ngIf="!isCompany"
-                                    mat-button
-                                    class="btn btn-default"
+                                    mat-stroked-button
+                                    color="primary"
                                     [disabled]="
                                         isFileUploading ||
                                         !hasVoucherEntry ||
