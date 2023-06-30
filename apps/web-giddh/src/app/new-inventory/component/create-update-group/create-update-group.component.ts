@@ -71,8 +71,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
         this.initGroupForm();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            console.log(params);
-
             this.stockType = params?.type?.toUpperCase();
             if (this.stockType === 'FIXEDASSETS') {
                 this.stockType = 'FIXED_ASSETS';
@@ -418,14 +416,14 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.inventoryService.getStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body) {
                 this.toggleLoader(false);
-                this.stockGroupName = response.body.parentStockGroupNames;
+                this.stockGroupName = response.body.name;
                 this.groupForm?.patchValue({
                     name: response.body.name,
                     uniqueName: response.body.uniqueName,
                     showCodeType: response.body.hsnNumber ? "hsn" : "sac",
                     hsnNumber: response.body.hsnNumber,
                     sacNumber: response.body.sacNumber,
-                    parentStockGroupUniqueName: response.body.parentStockGroupNames,
+                    parentStockGroupUniqueName: response.body.parentStockGroup ? response.body.parentStockGroup.uniqueName : '',
                     isSubGroup: (response.body.parentStockGroup?.uniqueName) ? true : false,
                     taxes: response.body.taxes
                 });
