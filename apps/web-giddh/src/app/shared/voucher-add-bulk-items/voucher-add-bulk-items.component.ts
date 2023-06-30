@@ -119,7 +119,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
      */
     public getSearchRequestObject(query: string, page: number = 1): any {
         let group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
-            'operatingcost, indirectexpenses' : `otherincome, revenuefromoperations${this.generalService.voucherApiVersion === 2 ? ', fixedassets' : ''}`;
+            `operatingcost, indirectexpenses${this.generalService.voucherApiVersion === 2 ? ', fixedassets' : ''}` : `otherincome, revenuefromoperations${this.generalService.voucherApiVersion === 2 ? ', fixedassets' : ''}`;
         const requestObject = {
             q: encodeURIComponent(query),
             page,
