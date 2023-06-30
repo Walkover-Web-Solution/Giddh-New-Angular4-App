@@ -948,7 +948,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         const variantSalesAccountUniqueName = stockForm?.salesAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.salesAccountDetails?.accountUniqueName;
 
         stockForm.options = stockForm.options?.map(option => {
-            option.values = option?.values?.map(optionValue => {
+            option.values = option?.values?.filter(optionValue => optionValue.value?.trim())?.map(optionValue => {
                 return optionValue.value;
             });
             return option;
