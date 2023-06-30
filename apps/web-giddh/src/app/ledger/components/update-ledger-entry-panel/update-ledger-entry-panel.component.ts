@@ -2567,17 +2567,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // For V1 company, the unitRates is obtained in 'stock' and for v2 company, unitRates is obtained in 'stock.variant'
                     const unitRates = this.generalService.voucherApiVersion === 1 ? stockDetails?.unitRates : variantUnitRates
                     txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
-                    if (requestObject.variantUniqueName) {
-                        // Variant got changed, search the selected variant's unit and assign its rate
-                        const selectedUnitRate = unitRates.find (unitRate => unitRate.stockUnitUniqueName === this.vm.stockTrxEntry.inventory.unit.uniqueName)
-                        rate = selectedUnitRate?.rate ?? defaultUnit.rate;
-                        unitCode = selectedUnitRate?.code ?? defaultUnit.code;
-                        stockUnitUniqueName = selectedUnitRate?.stockUnitUniqueName ?? defaultUnit.stockUnitUniqueName;
-                    } else {
-                        rate = defaultUnit.rate;
-                        unitCode = defaultUnit.code;
-                        stockUnitUniqueName = defaultUnit.stockUnitUniqueName;
-                    }
+                    rate = defaultUnit.rate;
+                    unitCode = defaultUnit.code;
+                    stockUnitUniqueName = defaultUnit.stockUnitUniqueName;
                     rate = Number((rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                     stockName = defaultUnit.name;
                     stockUniqueName = stockDetails?.uniqueName;
