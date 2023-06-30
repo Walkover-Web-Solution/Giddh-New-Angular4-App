@@ -71,6 +71,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
         this.initGroupForm();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            console.log(params);
+
             this.stockType = params?.type?.toUpperCase();
             if (this.stockType === 'FIXEDASSETS') {
                 this.stockType = 'FIXED_ASSETS';
