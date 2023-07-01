@@ -36,9 +36,3 @@
         word-break: inherit !important;
     }
 }
-@media (min-width: 769px) {
-    .mobile-card-wrapper {
-        max-height: calc(100vh - 245px);
-        overflow-y: auto;
-    }
-}
