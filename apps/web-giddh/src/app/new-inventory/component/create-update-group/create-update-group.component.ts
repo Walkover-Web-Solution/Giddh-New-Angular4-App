@@ -416,7 +416,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.inventoryService.getStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body) {
                 this.toggleLoader(false);
-                this.stockGroupName = response.body.parentStockGroup.name;
+                this.stockGroupName = response.body.parentStockGroup?.name;
                 this.groupForm?.patchValue({
                     name: response.body.name,
                     uniqueName: response.body.uniqueName,
