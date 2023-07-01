@@ -33,6 +33,9 @@ form {
         .inner-container {
             max-width: 1120px;
             width: 100%;
+            &.fields-container {
+                max-width: 835px;
+            }
             .delivery-from-field {
                 margin-top: 15px;
             }
@@ -121,31 +124,15 @@ form {
                 }
             }
             .invoice-due-date {
-                position: absolute;
-                width: 435px;
-                left: 0;
-                margin-left: 0;
                 display: flex;
                 align-items: center;
-                input {
-                    float: none !important;
-                    margin-left: 0 !important;
-                    margin-right: 15px !important;
-                }
+                column-gap: 15px;
+                justify-content: space-between;
             }
             .order-expected-delivery {
                 sh-select,
                 input.form-control {
                     width: 100%;
-                }
-                .invoice-due-date {
-                    input {
-                        width: 200px;
-                        margin-left: 20px;
-                    }
-                    .form-control {
-                        font-size: var(--font-size-14) !important;
-                    }
                 }
             }
         }
@@ -385,14 +372,6 @@ a.copy-invoice img {
     margin-right: 6px;
 }
 
-.invoice-due-date .form-group,
-.invoice-due-date label {
-    display: inline-block !important;
-}
-
-.invoice-due-date label {
-    padding-right: 10px;
-}
 .shipping-address textarea {
     border-bottom: 1px solid var(--color-iron) !important;
 }
@@ -587,20 +566,13 @@ table.table.customer-purchase-table {
     padding: 8px 15px;
 }
 
-.invoice-due-date input {
-    width: 93px !important;
-}
-
 section.static-purchase-table {
     padding-top: 20px;
     margin-top: -20px;
 }
 
-.invoice-due-date {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    margin-left: 48%;
+.m-l-10 {
+    margin-left: 10px;
 }
 
 .mt-1 {
@@ -1098,18 +1070,6 @@ ul.change-address-dropdown {
     .wrapper-customer-table {
         .customer-purchase-table {
             .inner-container {
-                .invoice-due-date {
-                    left: -40px;
-                    margin-left: 3%;
-                    display: flex;
-                    align-items: flex-start;
-                    top: -23px;
-                    justify-content: flex-start;
-                    .d-flex {
-                        flex-direction: column;
-                        align-items: flex-start;
-                    }
-                }
                 .select-customer-name {
                     sh-select,
                     .select-customer-field {
@@ -1128,11 +1088,6 @@ ul.change-address-dropdown {
 }
 
 @media (max-width: 1024px) {
-    .invoice-due-date {
-        position: relative !important;
-        width: 100% !important;
-        margin-left: 0% !important;
-    }
     .customer-purchase-table.bg-white {
         margin-bottom: 0;
     }
@@ -1149,12 +1104,6 @@ ul.change-address-dropdown {
     }
     .height-row {
         height: 36px;
-    }
-
-    .invoice-due-date {
-        .d-flex {
-            align-items: center;
-        }
     }
 }
 @media (max-width: 990px) {
@@ -1183,24 +1132,6 @@ ul.change-address-dropdown {
                     flex-direction: column;
                     .col-sm-6 {
                         padding-right: 0 !important;
-                    }
-                    .invoice-due-date {
-                        padding: 0;
-                        margin-left: 0 !important;
-                        position: static;
-                        margin-top: 15px;
-                        align-items: flex-start;
-                        flex-direction: column;
-                        width: 100%;
-                        .d-flex {
-                            flex-direction: column;
-                            width: 100%;
-                            margin-bottom: 15px;
-                            input {
-                                margin-left: 0;
-                                width: 100% !important;
-                            }
-                        }
                     }
                 }
                 .select-customer-name {

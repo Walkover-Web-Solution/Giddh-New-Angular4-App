@@ -24,238 +24,419 @@
             <div class="clearfix wrapper-customer-table pd-t2">
                 <div class="customer-purchase-table">
                     <div class="inner-container">
-                        <div class="inner-container">
-                            <!-- region customer section -->
-                            <div class="clearfix">
-                                <div class="row mr-b1">
-                                    <!-- region customer name -->
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
-                                        <label
-                                            >{{ commonLocaleData?.app_vendor_name
-                                            }}<span class="red-text">*</span></label
-                                        >
-                                    </div>
-                                    <!-- region vendor dropdown -->
-                                    <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customer-name">
-                                        <div class="clearfix d-flex flex-column">
-                                            <div class="d-flex flex-column">
-                                                <sales-sh-select
-                                                    #vendorNameDropDown
-                                                    name="vendor"
-                                                    class="select-customer-field"
-                                                    [options]="vendorAcList$ | async"
-                                                    [(ngModel)]="purchaseOrder.account.uniqueName"
-                                                    [customFilter]="customMoveGroupFilter"
-                                                    (selected)="onSelectVendor($event)"
-                                                    [placeholder]="localeData?.select_vendor"
-                                                    [notFoundLink]="true"
-                                                    [doNotReset]="true"
-                                                    [isPaginationEnabled]="true"
-                                                    (scrollEnd)="handleScrollEnd('vendor')"
-                                                    (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'vendor')"
-                                                    [notFoundMsg]="noResultsFoundLabel"
-                                                    [enableDynamicSearch]="true"
-                                                    [fixedValue]="purchaseOrder.account.name"
-                                                    [forceClearReactive]="forceClear$ | async"
-                                                    [isFilterEnabled]="true"
-                                                    (noResultsClicked)="addNewAccount()"
-                                                    [multiple]="false"
-                                                    [ItemHeight]="67"
-                                                    [notFoundLinkText]="localeData?.add_vendor"
-                                                    (keyup)="resetVendor($event)"
-                                                    (onClear)="resetVendor(null)"
-                                                    [isOpen]="!isUpdateMode && !purchaseOrder.account?.uniqueName"
-                                                >
-                                                    <ng-template #optionTemplate let-option="option">
-                                                        <a
-                                                            href="javascript:void(0)"
-                                                            class="list-item flex-column border-none"
-                                                        >
-                                                            <div class="item">{{ option.label }}</div>
-                                                            <div class="item-unique">{{ option?.value }}</div>
-                                                        </a>
-                                                    </ng-template>
+                        <!-- region customer section -->
+                        <div class="clearfix">
+                            <div class="row mr-b1">
+                                <!-- region customer name -->
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                    <label
+                                        >{{ commonLocaleData?.app_vendor_name }}<span class="red-text">*</span></label
+                                    >
+                                </div>
+                                <!-- region vendor dropdown -->
+                                <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customer-name">
+                                    <div class="clearfix d-flex flex-column">
+                                        <div class="d-flex flex-column">
+                                            <sales-sh-select
+                                                #vendorNameDropDown
+                                                name="vendor"
+                                                class="select-customer-field"
+                                                [options]="vendorAcList$ | async"
+                                                [(ngModel)]="purchaseOrder.account.uniqueName"
+                                                [customFilter]="customMoveGroupFilter"
+                                                (selected)="onSelectVendor($event)"
+                                                [placeholder]="localeData?.select_vendor"
+                                                [notFoundLink]="true"
+                                                [doNotReset]="true"
+                                                [isPaginationEnabled]="true"
+                                                (scrollEnd)="handleScrollEnd('vendor')"
+                                                (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'vendor')"
+                                                [notFoundMsg]="noResultsFoundLabel"
+                                                [enableDynamicSearch]="true"
+                                                [fixedValue]="purchaseOrder.account.name"
+                                                [forceClearReactive]="forceClear$ | async"
+                                                [isFilterEnabled]="true"
+                                                (noResultsClicked)="addNewAccount()"
+                                                [multiple]="false"
+                                                [ItemHeight]="67"
+                                                [notFoundLinkText]="localeData?.add_vendor"
+                                                (keyup)="resetVendor($event)"
+                                                (onClear)="resetVendor(null)"
+                                                [isOpen]="!isUpdateMode && !purchaseOrder.account?.uniqueName"
+                                            >
+                                                <ng-template #optionTemplate let-option="option">
+                                                    <a
+                                                        href="javascript:void(0)"
+                                                        class="list-item flex-column border-none"
+                                                    >
+                                                        <div class="item">{{ option.label }}</div>
+                                                        <div class="item-unique">{{ option?.value }}</div>
+                                                    </a>
+                                                </ng-template>
 
-                                                    <ng-template #notFoundLinkTemplate>
-                                                        <a
-                                                            href="javascript:void(0)"
-                                                            class="
-                                                                list-item
-                                                                pd-l05 pd-r05
-                                                                d-flex
-                                                                justify-content-between
-                                                                w-100
-                                                                border-none
-                                                            "
-                                                            [keyboardShortcut]="'alt+c'"
-                                                        >
-                                                            <div class="item">{{ vendorNotFoundText }}</div>
-                                                            <div class="item">{{ commonLocaleData?.app_alt_c }}</div>
-                                                        </a>
-                                                    </ng-template>
-                                                </sales-sh-select>
-                                                <!-- region Unregistered Business / vendor details -->
-                                                <div
-                                                    class="d-flex aqua-color"
-                                                    *ngIf="purchaseOrder.voucherDetails.customerName"
-                                                >
-                                                    <span class="cp aqua-color" *ngIf="!isUpdateMode">
-                                                        <a href="javascript:void(0)" (click)="getVendorDetails()">{{
-                                                            localeData?.vendor_details
-                                                        }}</a>
-                                                    </span>
-                                                </div>
-                                                <!-- endregion -->
-                                                <div *ngIf="purchaseOrders && purchaseOrders.length > 0">
-                                                    <p>
-                                                        <small>{{ localeData?.pending_po }}</small>
-                                                    </p>
-                                                    <p class="font-15">
-                                                        <a
-                                                            href="javascript:;"
-                                                            (click)="
-                                                                openPurchaseOrderPreviewPopup(
-                                                                    purchaseOrderPreviewModal,
-                                                                    order?.uniqueName,
-                                                                    order.accountUniqueName
-                                                                )
-                                                            "
-                                                            *ngFor="let order of purchaseOrders; let i = index"
-                                                            >{{ order.number
-                                                            }}<span *ngIf="checkIfPipeSymbolRequired(i)"
-                                                                >&nbsp;|&nbsp;</span
-                                                            ></a
-                                                        >
-                                                    </p>
-                                                </div>
+                                                <ng-template #notFoundLinkTemplate>
+                                                    <a
+                                                        href="javascript:void(0)"
+                                                        class="
+                                                            list-item
+                                                            pd-l05 pd-r05
+                                                            d-flex
+                                                            justify-content-between
+                                                            w-100
+                                                            border-none
+                                                        "
+                                                        [keyboardShortcut]="'alt+c'"
+                                                    >
+                                                        <div class="item">{{ vendorNotFoundText }}</div>
+                                                        <div class="item">{{ commonLocaleData?.app_alt_c }}</div>
+                                                    </a>
+                                                </ng-template>
+                                            </sales-sh-select>
+                                            <!-- region Unregistered Business / vendor details -->
+                                            <div
+                                                class="d-flex aqua-color"
+                                                *ngIf="purchaseOrder.voucherDetails.customerName"
+                                            >
+                                                <span class="cp aqua-color" *ngIf="!isUpdateMode">
+                                                    <a href="javascript:void(0)" (click)="getVendorDetails()">{{
+                                                        localeData?.vendor_details
+                                                    }}</a>
+                                                </span>
+                                            </div>
+                                            <!-- endregion -->
+                                            <div *ngIf="purchaseOrders && purchaseOrders.length > 0">
+                                                <p>
+                                                    <small>{{ localeData?.pending_po }}</small>
+                                                </p>
+                                                <p class="font-15">
+                                                    <a
+                                                        href="javascript:;"
+                                                        (click)="
+                                                            openPurchaseOrderPreviewPopup(
+                                                                purchaseOrderPreviewModal,
+                                                                order?.uniqueName,
+                                                                order.accountUniqueName
+                                                            )
+                                                        "
+                                                        *ngFor="let order of purchaseOrders; let i = index"
+                                                        >{{ order.number
+                                                        }}<span *ngIf="checkIfPipeSymbolRequired(i)"
+                                                            >&nbsp;|&nbsp;</span
+                                                        ></a
+                                                    >
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- endregion -->
                                 </div>
-                                <div class="row mr-b1 delivery-from-field">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
-                                        <label>{{ localeData?.deliver_from }}<span class="red-text">*</span></label>
-                                    </div>
-                                    <!-- region vendor dropdown -->
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 select-customer-name">
-                                        <section class="form-inline">
-                                            <div class="wrap-billing-address w-100 clearfix">
-                                                <div class="row">
-                                                    <!-- region billing address -->
-                                                    <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
-                                                        <div class="form-group">
-                                                            <div class="d-flex align-items-center pb-1">
-                                                                <span class="pd-r15">{{
-                                                                    localeData?.billing_address
-                                                                }}</span>
-                                                                <span>
-                                                                    <div
-                                                                        class="btn-group btn-block"
-                                                                        dropdown
-                                                                        #billingAddressDropDownWeb="bs-dropdown"
-                                                                        [attachOutsideOnClick]="true"
-                                                                        (clickOutside)="
-                                                                            billingAddressDropDownWeb.hide()
-                                                                        "
-                                                                        *ngIf="accountAddressList?.length > 1"
+                                <!-- endregion -->
+                            </div>
+                            <div class="row mr-b1 delivery-from-field">
+                                <div class="col-sm-12 col-xl-12 col-lg-12 col-md-12 col-xs-12">
+                                    <label>{{ localeData?.deliver_from }}<span class="red-text">*</span></label>
+                                </div>
+                                <!-- region vendor dropdown -->
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 select-customer-name mr-t15">
+                                    <section class="form-inline">
+                                        <div class="wrap-billing-address w-100 clearfix">
+                                            <div class="row">
+                                                <!-- region billing address -->
+                                                <div class="col-sm-12 col-xl-6 col-md-10 bill-add pd-r1">
+                                                    <div class="form-group">
+                                                        <div class="d-flex align-items-center pb-1">
+                                                            <span class="pd-r15">{{
+                                                                localeData?.billing_address
+                                                            }}</span>
+                                                            <span>
+                                                                <div
+                                                                    class="btn-group btn-block"
+                                                                    dropdown
+                                                                    #billingAddressDropDownWeb="bs-dropdown"
+                                                                    [attachOutsideOnClick]="true"
+                                                                    (clickOutside)="billingAddressDropDownWeb.hide()"
+                                                                    *ngIf="accountAddressList?.length > 1"
+                                                                >
+                                                                    <a
+                                                                        dropdownToggle
+                                                                        type="button"
+                                                                        class="dropdown-toggle"
+                                                                        >{{ localeData?.change }}</a
                                                                     >
-                                                                        <a
-                                                                            dropdownToggle
-                                                                            type="button"
-                                                                            class="dropdown-toggle"
-                                                                            >{{ localeData?.change }}</a
+                                                                    <ul
+                                                                        *dropdownMenu
+                                                                        class="
+                                                                            dropdown-menu
+                                                                            change-address-dropdown
+                                                                            dropdown-menu-right
+                                                                        "
+                                                                        role="menu"
+                                                                    >
+                                                                        <li
+                                                                            role="menuitem"
+                                                                            *ngFor="let address of accountAddressList"
                                                                         >
-                                                                        <ul
-                                                                            *dropdownMenu
-                                                                            class="
-                                                                                dropdown-menu
-                                                                                change-address-dropdown
-                                                                                dropdown-menu-right
-                                                                            "
-                                                                            role="menu"
-                                                                        >
-                                                                            <li
-                                                                                role="menuitem"
-                                                                                *ngFor="
-                                                                                    let address of accountAddressList
+                                                                            <a
+                                                                                class="dropdown-item"
+                                                                                (click)="
+                                                                                    selectAddress(
+                                                                                        purchaseOrder.account
+                                                                                            .billingDetails,
+                                                                                        address
+                                                                                    )
                                                                                 "
                                                                             >
-                                                                                <a
-                                                                                    class="dropdown-item"
-                                                                                    (click)="
-                                                                                        selectAddress(
-                                                                                            purchaseOrder.account
-                                                                                                .billingDetails,
-                                                                                            address
-                                                                                        )
-                                                                                    "
-                                                                                >
-                                                                                    {{ address.address }}
-                                                                                    {{ address.state?.name }}
-                                                                                    <span class="d-block"
-                                                                                        >{{
-                                                                                            address.gstNumber
-                                                                                                ? (showGSTINNo
-                                                                                                      ? commonLocaleData?.app_gstin +
-                                                                                                        ": "
-                                                                                                      : commonLocaleData?.app_trn +
-                                                                                                        ": ") +
-                                                                                                  address.gstNumber
-                                                                                                : ""
-                                                                                        }}
-                                                                                    </span>
-                                                                                </a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </span>
-                                                            </div>
-                                                            <div class="billing-address clearfix">
-                                                                <textarea
-                                                                    name="vendorBillingDetailsAddress"
-                                                                    (keyup)="autoFillShippingDetails('vendor')"
-                                                                    [(ngModel)]="
-                                                                        purchaseOrder.account.billingDetails.address[0]
+                                                                                {{ address.address }}
+                                                                                {{ address.state?.name }}
+                                                                                <span class="d-block"
+                                                                                    >{{
+                                                                                        address.gstNumber
+                                                                                            ? (showGSTINNo
+                                                                                                  ? commonLocaleData?.app_gstin +
+                                                                                                    ": "
+                                                                                                  : commonLocaleData?.app_trn +
+                                                                                                    ": ") +
+                                                                                              address.gstNumber
+                                                                                            : ""
+                                                                                    }}
+                                                                                </span>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </span>
+                                                        </div>
+                                                        <div class="billing-address clearfix">
+                                                            <textarea
+                                                                name="vendorBillingDetailsAddress"
+                                                                (keyup)="autoFillShippingDetails('vendor')"
+                                                                [(ngModel)]="
+                                                                    purchaseOrder.account.billingDetails.address[0]
+                                                                "
+                                                                class="form-control"
+                                                                rows="3"
+                                                                autocomplete="off"
+                                                                autofocus="off"
+                                                                aria-autocomplete="none"
+                                                            ></textarea>
+
+                                                            <div class="row">
+                                                                <div class="col-sm-12 col-md-6">
+                                                                    <label class="sales-country-label">
+                                                                        {{ vendorCountry }}
+                                                                    </label>
+                                                                </div>
+
+                                                                <div class="col-sm-12 col-md-6" #vendorBillingState>
+                                                                    <sales-sh-select
+                                                                        [placeholder]="commonLocaleData?.app_state"
+                                                                        class="select-border-bottom"
+                                                                        (selected)="
+                                                                            fillShippingBillingDetails(
+                                                                                $event,
+                                                                                true,
+                                                                                'vendor'
+                                                                            );
+                                                                            autoFillShippingDetails('vendor')
+                                                                        "
+                                                                        #vendorStatesBilling
+                                                                        [showBottomBorderOnly]="true"
+                                                                        [options]="statesSource"
+                                                                        name="vendorBillingDetailsStateCode"
+                                                                        [(ngModel)]="
+                                                                            purchaseOrder.account.billingDetails.state
+                                                                                .code
+                                                                        "
+                                                                    >
+                                                                    </sales-sh-select>
+                                                                </div>
+
+                                                                <div
+                                                                    class="col-sm-12 col-md-6"
+                                                                    *ngIf="
+                                                                        shouldShowTrnGstField &&
+                                                                        (showGSTINNo || showTRNNo)
                                                                     "
-                                                                    class="form-control"
-                                                                    rows="3"
-                                                                    autocomplete="off"
-                                                                    autofocus="off"
-                                                                    aria-autocomplete="none"
-                                                                ></textarea>
-
-                                                                <div class="row">
-                                                                    <div class="col-sm-12 col-md-6">
-                                                                        <label class="sales-country-label">
-                                                                            {{ vendorCountry }}
-                                                                        </label>
+                                                                >
+                                                                    <input
+                                                                        maxLength="15"
+                                                                        autocomplete="None"
+                                                                        type="text"
+                                                                        name="vendorBillingDetailsTax"
+                                                                        [(ngModel)]="
+                                                                            purchaseOrder.account.billingDetails
+                                                                                .gstNumber
+                                                                        "
+                                                                        class="form-control input-custom"
+                                                                        (blur)="autoFillShippingDetails('vendor')"
+                                                                        (change)="
+                                                                            getStateCode('billingDetails', 'vendor')
+                                                                        "
+                                                                        [placeholder]="
+                                                                            showGSTINNo
+                                                                                ? commonLocaleData?.app_gstin
+                                                                                : commonLocaleData?.app_trn
+                                                                        "
+                                                                    />
+                                                                </div>
+                                                                <!-- static pin code  -->
+                                                                <div
+                                                                    [ngClass]="{
+                                                                        'col-sm-12 col-md-6': showGSTINNo || showTRNNo,
+                                                                        'col-sm-12 col-md-12': !(
+                                                                            showGSTINNo || showTRNNo
+                                                                        )
+                                                                    }"
+                                                                >
+                                                                    <div class="form-group mr-b05">
+                                                                        <input
+                                                                            type="number"
+                                                                            class="form-control input-custom"
+                                                                            autocomplete="false"
+                                                                            name="accountBillingPinCode"
+                                                                            (blur)="autoFillShippingDetails('vendor')"
+                                                                            [placeholder]="
+                                                                                commonLocaleData?.app_pin_code
+                                                                            "
+                                                                            [(ngModel)]="
+                                                                                purchaseOrder.account.billingDetails
+                                                                                    .pincode
+                                                                            "
+                                                                            decimalDigitsDirective
+                                                                            [preventDecimal]="true"
+                                                                        />
                                                                     </div>
+                                                                </div>
+                                                                <!-- static pin code end-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- endregion -->
 
-                                                                    <div class="col-sm-12 col-md-6" #vendorBillingState>
+                                                <!-- region shipping address -->
+                                                <div class="col-sm-12 col-xl-6 col-md-10 bill-add pd-l1">
+                                                    <div class="form-group p-0 width-100">
+                                                        <div class="d-flex align-items-center pb-1">
+                                                            <span class="pd-r15">
+                                                                <mat-checkbox
+                                                                    name="autoFillVendorShipping"
+                                                                    (change)="autoFillShippingDetails('vendor')"
+                                                                    [(ngModel)]="autoFillVendorShipping"
+                                                                >
+                                                                    {{ localeData?.shipping_billing_same }}
+                                                                </mat-checkbox>
+                                                            </span>
+                                                            <span>
+                                                                <div
+                                                                    class="btn-group btn-block"
+                                                                    dropdown
+                                                                    #shippingAddressDropDownWeb="bs-dropdown"
+                                                                    [attachOutsideOnClick]="true"
+                                                                    (clickOutside)="shippingAddressDropDownWeb.hide()"
+                                                                    *ngIf="
+                                                                        accountAddressList?.length > 1 &&
+                                                                        !autoFillVendorShipping
+                                                                    "
+                                                                >
+                                                                    <a
+                                                                        dropdownToggle
+                                                                        type="button"
+                                                                        class="dropdown-toggle"
+                                                                        >{{ localeData?.change }}</a
+                                                                    >
+                                                                    <ul
+                                                                        *dropdownMenu
+                                                                        class="
+                                                                            dropdown-menu
+                                                                            change-address-dropdown
+                                                                            dropdown-menu-right
+                                                                        "
+                                                                        role="menu"
+                                                                    >
+                                                                        <li
+                                                                            role="menuitem"
+                                                                            *ngFor="let address of accountAddressList"
+                                                                        >
+                                                                            <a
+                                                                                class="dropdown-item"
+                                                                                (click)="
+                                                                                    selectAddress(
+                                                                                        purchaseOrder.account
+                                                                                            .shippingDetails,
+                                                                                        address
+                                                                                    )
+                                                                                "
+                                                                            >
+                                                                                {{ address.address }}
+                                                                                {{ address.state?.name }}
+                                                                                {{
+                                                                                    address.gstNumber
+                                                                                        ? (showGSTINNo
+                                                                                              ? commonLocaleData?.app_gstin +
+                                                                                                ": "
+                                                                                              : commonLocaleData?.app_trn +
+                                                                                                ": ") +
+                                                                                          address.gstNumber
+                                                                                        : ""
+                                                                                }}
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </span>
+                                                        </div>
+                                                        <div
+                                                            [ngClass]="{
+                                                                'billing-address': true,
+                                                                'disabled': autoFillVendorShipping
+                                                            }"
+                                                        >
+                                                            <textarea
+                                                                name="vendorShippingDetailsAddress"
+                                                                [(ngModel)]="
+                                                                    purchaseOrder.account.shippingDetails.address[0]
+                                                                "
+                                                                class="form-control"
+                                                                rows="3"
+                                                                autocomplete="off"
+                                                                autofocus="off"
+                                                                aria-autocomplete="none"
+                                                            ></textarea>
+                                                            <div class="clearfix">
+                                                                <div class="form-group row">
+                                                                    <div class="col-sm-12 col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label class="sales-country-label">
+                                                                                {{ vendorCountry }}
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div
+                                                                        class="col-sm-12 col-md-6 select-border-bottom"
+                                                                        #vendorShippingState
+                                                                    >
                                                                         <sales-sh-select
                                                                             [placeholder]="commonLocaleData?.app_state"
+                                                                            [disabled]="autoFillVendorShipping"
                                                                             class="select-border-bottom"
                                                                             (selected)="
                                                                                 fillShippingBillingDetails(
                                                                                     $event,
-                                                                                    true,
+                                                                                    false,
                                                                                     'vendor'
-                                                                                );
-                                                                                autoFillShippingDetails('vendor')
+                                                                                )
                                                                             "
-                                                                            #vendorStatesBilling
+                                                                            #vendorStatesShipping
                                                                             [showBottomBorderOnly]="true"
                                                                             [options]="statesSource"
-                                                                            name="vendorBillingDetailsStateCode"
+                                                                            name="vendorShippingDetailsStateCode"
                                                                             [(ngModel)]="
-                                                                                purchaseOrder.account.billingDetails
+                                                                                purchaseOrder.account.shippingDetails
                                                                                     .state.code
                                                                             "
                                                                         >
                                                                         </sales-sh-select>
                                                                     </div>
-
                                                                     <div
                                                                         class="col-sm-12 col-md-6"
                                                                         *ngIf="
@@ -267,15 +448,17 @@
                                                                             maxLength="15"
                                                                             autocomplete="None"
                                                                             type="text"
-                                                                            name="vendorBillingDetailsTax"
+                                                                            name="vendorShippingDetailsTax"
                                                                             [(ngModel)]="
-                                                                                purchaseOrder.account.billingDetails
+                                                                                purchaseOrder.account.shippingDetails
                                                                                     .gstNumber
                                                                             "
                                                                             class="form-control input-custom"
-                                                                            (blur)="autoFillShippingDetails('vendor')"
                                                                             (change)="
-                                                                                getStateCode('billingDetails', 'vendor')
+                                                                                getStateCode(
+                                                                                    'shippingDetails',
+                                                                                    'vendor'
+                                                                                )
                                                                             "
                                                                             [placeholder]="
                                                                                 showGSTINNo
@@ -299,16 +482,13 @@
                                                                                 type="number"
                                                                                 class="form-control input-custom"
                                                                                 autocomplete="false"
-                                                                                name="accountBillingPinCode"
-                                                                                (blur)="
-                                                                                    autoFillShippingDetails('vendor')
-                                                                                "
+                                                                                name="accountShippingPinCode"
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_pin_code
                                                                                 "
                                                                                 [(ngModel)]="
-                                                                                    purchaseOrder.account.billingDetails
-                                                                                        .pincode
+                                                                                    purchaseOrder.account
+                                                                                        .shippingDetails.pincode
                                                                                 "
                                                                                 decimalDigitsDirective
                                                                                 [preventDecimal]="true"
@@ -320,254 +500,49 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!-- endregion -->
-
-                                                    <!-- region shipping address -->
-                                                    <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
-                                                        <div class="form-group p-0 width-100">
-                                                            <div class="d-flex align-items-center pb-1">
-                                                                <span class="pd-r15">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        autocomplete="None"
-                                                                        name="autoFillVendorShipping"
-                                                                        [(ngModel)]="autoFillVendorShipping"
-                                                                        (change)="autoFillShippingDetails('vendor')"
-                                                                    />
-                                                                    {{ localeData?.shipping_billing_same }}
-                                                                </span>
-                                                                <span>
-                                                                    <div
-                                                                        class="btn-group btn-block"
-                                                                        dropdown
-                                                                        #shippingAddressDropDownWeb="bs-dropdown"
-                                                                        [attachOutsideOnClick]="true"
-                                                                        (clickOutside)="
-                                                                            shippingAddressDropDownWeb.hide()
-                                                                        "
-                                                                        *ngIf="
-                                                                            accountAddressList?.length > 1 &&
-                                                                            !autoFillVendorShipping
-                                                                        "
-                                                                    >
-                                                                        <a
-                                                                            dropdownToggle
-                                                                            type="button"
-                                                                            class="dropdown-toggle"
-                                                                            >{{ localeData?.change }}</a
-                                                                        >
-                                                                        <ul
-                                                                            *dropdownMenu
-                                                                            class="
-                                                                                dropdown-menu
-                                                                                change-address-dropdown
-                                                                                dropdown-menu-right
-                                                                            "
-                                                                            role="menu"
-                                                                        >
-                                                                            <li
-                                                                                role="menuitem"
-                                                                                *ngFor="
-                                                                                    let address of accountAddressList
-                                                                                "
-                                                                            >
-                                                                                <a
-                                                                                    class="dropdown-item"
-                                                                                    (click)="
-                                                                                        selectAddress(
-                                                                                            purchaseOrder.account
-                                                                                                .shippingDetails,
-                                                                                            address
-                                                                                        )
-                                                                                    "
-                                                                                >
-                                                                                    {{ address.address }}
-                                                                                    {{ address.state?.name }}
-                                                                                    {{
-                                                                                        address.gstNumber
-                                                                                            ? (showGSTINNo
-                                                                                                  ? commonLocaleData?.app_gstin +
-                                                                                                    ": "
-                                                                                                  : commonLocaleData?.app_trn +
-                                                                                                    ": ") +
-                                                                                              address.gstNumber
-                                                                                            : ""
-                                                                                    }}
-                                                                                </a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </span>
-                                                            </div>
-                                                            <div
-                                                                [ngClass]="{
-                                                                    'billing-address': true,
-                                                                    'disabled': autoFillVendorShipping
-                                                                }"
-                                                            >
-                                                                <textarea
-                                                                    name="vendorShippingDetailsAddress"
-                                                                    [(ngModel)]="
-                                                                        purchaseOrder.account.shippingDetails.address[0]
-                                                                    "
-                                                                    class="form-control"
-                                                                    rows="3"
-                                                                    autocomplete="off"
-                                                                    autofocus="off"
-                                                                    aria-autocomplete="none"
-                                                                ></textarea>
-                                                                <div class="clearfix">
-                                                                    <div class="form-group row">
-                                                                        <div class="col-sm-12 col-md-6">
-                                                                            <div class="form-group">
-                                                                                <label class="sales-country-label">
-                                                                                    {{ vendorCountry }}
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div
-                                                                            class="
-                                                                                col-sm-12 col-md-6
-                                                                                select-border-bottom
-                                                                            "
-                                                                            #vendorShippingState
-                                                                        >
-                                                                            <sales-sh-select
-                                                                                [placeholder]="
-                                                                                    commonLocaleData?.app_state
-                                                                                "
-                                                                                [disabled]="autoFillVendorShipping"
-                                                                                class="select-border-bottom"
-                                                                                (selected)="
-                                                                                    fillShippingBillingDetails(
-                                                                                        $event,
-                                                                                        false,
-                                                                                        'vendor'
-                                                                                    )
-                                                                                "
-                                                                                #vendorStatesShipping
-                                                                                [showBottomBorderOnly]="true"
-                                                                                [options]="statesSource"
-                                                                                name="vendorShippingDetailsStateCode"
-                                                                                [(ngModel)]="
-                                                                                    purchaseOrder.account
-                                                                                        .shippingDetails.state.code
-                                                                                "
-                                                                            >
-                                                                            </sales-sh-select>
-                                                                        </div>
-                                                                        <div
-                                                                            class="col-sm-12 col-md-6"
-                                                                            *ngIf="
-                                                                                shouldShowTrnGstField &&
-                                                                                (showGSTINNo || showTRNNo)
-                                                                            "
-                                                                        >
-                                                                            <input
-                                                                                maxLength="15"
-                                                                                autocomplete="None"
-                                                                                type="text"
-                                                                                name="vendorShippingDetailsTax"
-                                                                                [(ngModel)]="
-                                                                                    purchaseOrder.account
-                                                                                        .shippingDetails.gstNumber
-                                                                                "
-                                                                                class="form-control input-custom"
-                                                                                (change)="
-                                                                                    getStateCode(
-                                                                                        'shippingDetails',
-                                                                                        'vendor'
-                                                                                    )
-                                                                                "
-                                                                                [placeholder]="
-                                                                                    showGSTINNo
-                                                                                        ? commonLocaleData?.app_gstin
-                                                                                        : commonLocaleData?.app_trn
-                                                                                "
-                                                                            />
-                                                                        </div>
-                                                                        <!-- static pin code  -->
-                                                                        <div
-                                                                            [ngClass]="{
-                                                                                'col-sm-12 col-md-6':
-                                                                                    showGSTINNo || showTRNNo,
-                                                                                'col-sm-12 col-md-12': !(
-                                                                                    showGSTINNo || showTRNNo
-                                                                                )
-                                                                            }"
-                                                                        >
-                                                                            <div class="form-group mr-b05">
-                                                                                <input
-                                                                                    type="number"
-                                                                                    class="form-control input-custom"
-                                                                                    autocomplete="false"
-                                                                                    name="accountShippingPinCode"
-                                                                                    [placeholder]="
-                                                                                        commonLocaleData?.app_pin_code
-                                                                                    "
-                                                                                    [(ngModel)]="
-                                                                                        purchaseOrder.account
-                                                                                            .shippingDetails.pincode
-                                                                                    "
-                                                                                    decimalDigitsDirective
-                                                                                    [preventDecimal]="true"
-                                                                                />
-                                                                            </div>
-                                                                        </div>
-                                                                        <!-- static pin code end-->
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- endregion -->
                                                 </div>
+                                                <!-- endregion -->
                                             </div>
-                                        </section>
-                                    </div>
-                                    <!-- endregion -->
+                                        </div>
+                                    </section>
                                 </div>
+                                <!-- endregion -->
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="customer-purchase-table bg-white pd-b2 pd-t2">
-                    <div class="inner-container">
+                <div class="customer-purchase-table bg-white pd-b2">
+                    <div class="inner-container fields-container">
                         <div class="row mr-b1" *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1">
                             <!-- region customer name -->
-                            <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
-                                <label>{{ commonLocaleData?.app_warehouse }}<span class="red-text">*</span></label>
-                            </div>
                             <!-- region customer dropdown -->
-                            <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customer-name">
-                                <div class="clearfix d-flex flex-column">
-                                    <div class="d-flex flex-column">
-                                        <!-- region if not cashinvoice show customer dropdown -->
-                                        <sh-select
-                                            class="multi-select"
-                                            name="warehouse"
-                                            [placeholder]="localeData?.select_warehouse"
-                                            [(ngModel)]="purchaseOrder.warehouse.uniqueName"
-                                            [options]="warehouses"
-                                            (selected)="onSelectWarehouse($event)"
-                                        ></sh-select>
-                                        <!-- endregion -->
-                                    </div>
-                                </div>
+                            <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12 select-customer-name pd-r1">
+                                <!-- region if not cashinvoice show customer dropdown -->
+                                <dropdown-field
+                                    class="multi-select"
+                                    name="warehouse"
+                                    [placeholder]="localeData?.select_warehouse"
+                                    [(ngModel)]="purchaseOrder.warehouse.uniqueName"
+                                    [options]="warehouses"
+                                    (selected)="onSelectWarehouse($event)"
+                                ></dropdown-field>
+                                <!-- endregion -->
                             </div>
                             <!-- endregion -->
                         </div>
+                    </div>
+                    <div class="inner-container fields-container">
                         <div class="row mr-b1">
-                            <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                            <div class="col-sm-12 col-xl-12 col-lg-12 col-md-12 col-xs-12">
                                 <label>{{ localeData?.deliver_to }}<span class="red-text">*</span></label>
                             </div>
                             <!-- region customer dropdown -->
-                            <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 select-customer-name">
+                            <div class="col-sm-12 col-xl-12 col-lg-12 col-md-12 col-xs-12 select-customer-name mr-t15">
                                 <section class="form-inline">
                                     <div class="wrap-billing-address w-100 clearfix">
                                         <div class="row">
                                             <!-- region billing address -->
-                                            <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
+                                            <div class="col-sm-12 col-xl-6 col-md-10 bill-add pd-r1">
                                                 <div class="form-group">
                                                     <div class="d-flex align-items-center pb-1">
                                                         <span class="pd-r15">{{ localeData?.billing_address }}</span>
@@ -735,18 +710,17 @@
                                             <!-- endregion -->
 
                                             <!-- region shipping address -->
-                                            <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
+                                            <div class="col-sm-12 col-xl-6 col-md-10 bill-add pd-l1">
                                                 <div class="form-group p-0 width-100">
                                                     <div class="d-flex align-items-center pb-1">
                                                         <span class="pd-r15">
-                                                            <input
-                                                                type="checkbox"
-                                                                autocomplete="None"
+                                                            <mat-checkbox
                                                                 name="autoFillCompanyShipping"
                                                                 [(ngModel)]="autoFillCompanyShipping"
                                                                 (change)="autoFillShippingDetails('company')"
-                                                            />
-                                                            {{ localeData?.shipping_billing_same }}
+                                                            >
+                                                                {{ localeData?.shipping_billing_same }}
+                                                            </mat-checkbox>
                                                         </span>
                                                         <span>
                                                             <div
@@ -938,74 +912,64 @@
                             </div>
                             <!-- endregion -->
                         </div>
-                        <div class="row mb-5 height-row">
-                            <!-- region customer name -->
-                            <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
-                                <div>
-                                    <label>{{ localeData?.order_no }}</label>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="inner-container fields-container mr-b1">
+                        <div class="row height-row">
                             <!-- region customer dropdown -->
                             <div
                                 class="
                                     select-customer-name
                                     order-expected-delivery
-                                    d-flex
-                                    col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12
+                                    col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12
+                                    pd-r1
                                 "
                             >
                                 <!-- region if not cashinvoice show customer dropdown -->
-
-                                <div class="col-sm-12 col-md-12 col-lg-6 pl-0">
-                                    <div>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            name="purchaseOrderNumber"
-                                            [(ngModel)]="purchaseOrder.number"
-                                            [disabled]="
-                                                !invoiceSettings?.purchaseBillSettings?.useCustomPONumber ||
-                                                isUpdateMode
-                                            "
-                                            [placeholder]="localeData?.order_no_placeholder"
-                                        />
-                                    </div>
+                                <div>
+                                    <input-field
+                                        type="text"
+                                        name="purchaseOrderNumber"
+                                        [(ngModel)]="purchaseOrder.number"
+                                        [disabled]="
+                                            !invoiceSettings?.purchaseBillSettings?.useCustomPONumber || isUpdateMode
+                                        "
+                                        [placeholder]="localeData?.order_no_placeholder"
+                                    >
+                                    </input-field>
                                 </div>
                                 <!-- endregion -->
-                                <div class="col-sm-6" *ngIf="!isMobileScreen">
-                                    <div class="invoice-due-date">
-                                        <div class="d-flex">
-                                            <label>{{ localeData?.order_date }}<span class="red-text">*</span></label>
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                [placeholder]="localeData?.select_date"
-                                                [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                name="purchaseOrderDate"
-                                                [(ngModel)]="purchaseOrder.voucherDetails.voucherDate"
-                                                bsDatepicker
-                                                (ngModelChange)="onUpdateOrderDate()"
-                                            />
-                                        </div>
-                                        <div class="d-flex">
-                                            <label>{{ localeData?.expected_delivery }}</label>
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                [placeholder]="localeData?.select_date"
-                                                [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                name="purchaseDueDate"
-                                                [(ngModel)]="purchaseOrder.voucherDetails.dueDate"
-                                                bsDatepicker
-                                            />
-                                        </div>
+                            </div>
+                            <div class="col-sm-6 pd-l1" *ngIf="!isMobileScreen">
+                                <div class="invoice-due-date">
+                                    <div>
+                                        <input-field
+                                            type="text"
+                                            [placeholder]="localeData?.order_date"
+                                            [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                            name="purchaseOrderDate"
+                                            [(ngModel)]="purchaseOrder.voucherDetails.voucherDate"
+                                            bsDatepicker
+                                            (ngModelChange)="onUpdateOrderDate()"
+                                        >
+                                        </input-field>
+                                    </div>
+                                    <div>
+                                        <input-field
+                                            type="text"
+                                            [placeholder]="localeData?.expected_delivery"
+                                            [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                            name="purchaseDueDate"
+                                            [(ngModel)]="purchaseOrder.voucherDetails.dueDate"
+                                            bsDatepicker
+                                        >
+                                        </input-field>
                                     </div>
                                 </div>
                             </div>
                             <!-- endregion -->
                         </div>
                         <div class="row mt-1" *ngIf="isMobileScreen">
-                            <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                            <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12 pd-l1">
                                 <label>{{ localeData?.order_date }}</label>
                             </div>
                             <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
@@ -1986,6 +1950,7 @@
                                                         (shippingDate.dirty || shippingDate.touched)
                                                     "
                                                     [showToggleIcon]="false"
+                                                    [appearance]="'outline'"
                                                 >
                                                 </giddh-datepicker>
                                                 <p
@@ -1999,22 +1964,22 @@
                                                 </p>
                                             </div>
                                             <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                <input
-                                                    type="text"
+                                                <input-field
+                                                    [type]="'text'"
                                                     name="shippedVia"
                                                     [(ngModel)]="purchaseOrder.templateDetails?.other.shippedVia"
-                                                    class="form-control"
                                                     [placeholder]="localeData?.ship_via"
-                                                />
+                                                >
+                                                </input-field>
                                             </div>
                                             <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                <input
-                                                    type="text"
+                                                <input-field
+                                                    [type]="'text'"
                                                     name="trackingNumber"
                                                     [(ngModel)]="purchaseOrder.templateDetails?.other.trackingNumber"
-                                                    class="form-control"
                                                     [placeholder]="localeData?.tracking_number"
-                                                />
+                                                >
+                                                </input-field>
                                             </div>
                                         </div>
                                     </div>
@@ -2022,13 +1987,17 @@
                             </div>
                             <!-- endregion -->
                             <!-- region note/messages -->
-                            <div class="pt-1 pl-0 max-width-600">
-                                <label class="mr-b1">{{ commonLocaleData?.app_note }}</label>
-                                <textarea
-                                    class="form-control"
-                                    name="message2"
-                                    [(ngModel)]="purchaseOrder.templateDetails?.other.message2"
-                                ></textarea>
+                            <div class="pt-1 pl-0 max-width-600 mr-t15">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>{{ commonLocaleData?.app_note }}</mat-label>
+                                    <textarea
+                                        matInput
+                                        name="message2"
+                                        [(ngModel)]="purchaseOrder.templateDetails?.other.message2"
+                                        [appearance]="'outline'"
+                                        [placeholder]="localeData?.ship_via"
+                                    ></textarea>
+                                </mat-form-field>
                             </div>
                             <!-- endregion -->
                         </td>

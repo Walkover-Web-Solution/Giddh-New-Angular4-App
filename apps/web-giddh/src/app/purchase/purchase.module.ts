@@ -44,6 +44,12 @@ import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/asid
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 @NgModule({
     declarations: [
@@ -96,7 +102,13 @@ import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
         PurchaseOrderPreviewModule,
         GenericAsideMenuAccountModule,
         AsideMenuOtherTaxesModule,
-        AsideMenuProductServiceModule
+        AsideMenuProductServiceModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatCheckboxModule,
+        FormFieldsModule
     ]
 })
 export class PurchaseModule {
