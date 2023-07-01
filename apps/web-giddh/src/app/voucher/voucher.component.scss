@@ -141,8 +141,16 @@
     width: 100%;
     position: relative;
     float: left;
-    @include padBth(20px, 0);
-    @include bgClr(var(--color-generate-invoice-secondary-background));
+    padding: 20px 0;
+    border-top: 1px solid var(--color-generate-invoice-secondary-background);
+
+    .min-width-auto{
+        min-width: auto !important;
+    }
+    .mat-stroked-button{
+        margin-right: 0 !important;
+        margin-left: 15px !important;
+    }
 }
 
 a[type="button"] {

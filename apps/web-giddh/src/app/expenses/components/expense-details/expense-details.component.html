@@ -7,16 +7,18 @@
             <div class="col-sm-6 text-right xs-left">
                 <div class="d-flex justify-content-end align-items-center">
                     <button
-                        mat-raised-button
-                        class="mr-b05 btn btn-success d-flex align-items-center"
+                        mat-stroked-button
+                        color="primary"
+                        class="mr-b05 d-flex align-items-center"
                         type="button"
                         (click)="showApproveConfirmPopup(approveConfirm)"
                     >
                         {{ localeData?.approve }}
                     </button>
                     <button
-                        mat-raised-button
-                        class="mr-b05 btn btn-danger"
+                        mat-stroked-button
+                        color="warn"
+                        class="mr-b05"
                         type="button"
                         (click)="openModal(rejectionReason)"
                     >

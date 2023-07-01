@@ -71,8 +71,8 @@
                     </div>
                     <div class="clearfix text-right" *ngIf="mode === 'create'">
                         <button
-                            mat-button
-                            class="btn btn-sm mat-field-border cancel-button"
+                            mat-stroked-button
+                            class="btn-sm mat-field-border"
                             (click)="closeAsidePane($event)"
                         >
                             {{ commonLocaleData?.app_cancel }}
@@ -88,18 +88,20 @@
                     </div>
                     <div class="clearfix text-right" *ngIf="mode === 'update'">
                         <button
-                            mat-button
+                            mat-stroked-button
+                            color="warn"
                             *ngIf="!isCompany"
-                            class="btn btn-danger btn-sm"
+                            class="btn-sm"
                             [ladda]="isDeleteLoading"
                             (click)="deleteInvoice()"
                         >
                             {{ commonLocaleData?.app_delete }}
                         </button>
                         <button
-                            mat-button
+                            mat-stroked-button
+                            color="primary"
                             *ngIf="!isCompany"
-                            class="btn btn-success btn-sm"
+                            class="btn-sm"
                             [ladda]="isLoading"
                             (click)="saveRecurringInvoice()"
                         >
