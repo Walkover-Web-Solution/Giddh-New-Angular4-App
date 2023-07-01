@@ -39,6 +39,8 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     @Input() public showError: boolean = false;
     /* Datepicker fill */
     @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'fill';
+    /** Hold Mat Label Text*/
+    @Input() public label: any;
     /** Emitting selected date object as output */
     @Output() public dateSelected: EventEmitter<any> = new EventEmitter<any>();
     /** Emitting the state of datepicker (open/close) */
@@ -47,7 +49,6 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     @Output() public focusOut: EventEmitter<any> = new EventEmitter<any>();
     /** This will hold if datepicker is open */
     public isDatepickerOpen: boolean = false;
-    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
     /** Internal data model */
     private innerValue: any = '';
     /** This is used to show default date */
