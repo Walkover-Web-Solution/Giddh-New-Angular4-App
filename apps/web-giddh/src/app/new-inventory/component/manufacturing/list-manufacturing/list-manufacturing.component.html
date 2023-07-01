@@ -25,13 +25,9 @@
                                     />
                                 </div>
                             </div>
-                            <div
-                                class="list-header"
-                                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
-                            >
+                            <div class="list-header" *ngIf="isCompany">
                                 <dropdown-field
                                     class="max-width-230"
-                                    [cssClass]="'form-control'"
                                     [name]="'branch'"
                                     [placeholder]="commonLocaleData?.app_select_branch"
                                     [options]="currentCompanyBranches"
@@ -40,10 +36,9 @@
                                 >
                                 </dropdown-field>
                             </div>
-                            <div class="list-header" *ngIf="allWarehouses?.length > 1">
+                            <div class="list-header" *ngIf="warehouses?.length > 1">
                                 <dropdown-field
                                     class="max-width-230"
-                                    [cssClass]="'form-control'"
                                     [name]="'warehouse'"
                                     [placeholder]="commonLocaleData?.app_select_warehouse"
                                     [options]="warehouses"
@@ -187,21 +182,21 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
-            <div class="pagination-wrapper" [hidden]="totalItems <= paginationLimit">
-                <pagination
-                    [totalItems]="totalItems"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="paginationLimit"
-                    [rotate]="false"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                ></pagination>
-            </div>
         </section>
+        <div class="pagination-wrapper mt-1" [hidden]="totalItems <= paginationLimit">
+            <pagination
+                [totalItems]="totalItems"
+                [maxSize]="5"
+                class="pagination-sm"
+                [boundaryLinks]="true"
+                [itemsPerPage]="paginationLimit"
+                [rotate]="false"
+                [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last"
+            ></pagination>
+        </div>
     </section>
 
     <!-- Advance Filter Modal -->

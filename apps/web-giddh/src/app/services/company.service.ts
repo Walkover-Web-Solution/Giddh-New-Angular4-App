@@ -51,7 +51,7 @@ export class CompanyService {
      * CreateCompany
      */
     public SocketCreateCompany(company: SocketNewCompanyRequest): Observable<BaseResponse<any, SocketNewCompanyRequest>> {
-        return this.http.post('https://sokt.io/app/KyMrjhxQhqznF1sn4K6Y/zwueyKWYsnTBuf6Qg2VH', company).pipe(
+        return this.http.post('https://ebl-api-h7duexlbuq-el.a.run.app/func/CMEQnVPyk2a8', company).pipe(
             map((res) => {
                 let data: BaseResponse<any, SocketNewCompanyRequest> = res;
                 data.request = company;
