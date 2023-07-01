@@ -14335,6 +14335,15 @@ body.hide-scroll-body.master-page {
     }
 }
 
+/*--- voucher-datepicker ---*/
+voucher-component {
+    .mat-datepicker-input {
+        &:disabled {
+            background-color: transparent !important;
+            cursor: not-allowed;
+        }
+    }
+}
 /*--- tooltip --*/
 .mat-tooltip {
     letter-spacing: 0.8px;

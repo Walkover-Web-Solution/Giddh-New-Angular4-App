@@ -29,6 +29,11 @@
     color: var(--color-nero) !important;
     box-shadow: none;
 }
+.iti {
+    input[type="tel"] {
+        border: 0px;
+    }
+}
 .intl-error {
     border: 1px solid var(--color-danger) !important;
 }
