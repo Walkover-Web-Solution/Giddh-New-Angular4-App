@@ -3258,6 +3258,7 @@ td.mat-footer-cell {
 }
 
 /*-- input-new-form-field --*/
+create-purchase-order,
 create-update-group,
 giddh-datepicker,
 add-company,
@@ -3311,7 +3312,7 @@ input-field {
             .mat-input-element {
                 margin: 0;
                 line-height: 1.25rem;
-                padding: 14px;
+                padding: 14px !important;
             }
             textarea {
                 &.mat-input-element {
