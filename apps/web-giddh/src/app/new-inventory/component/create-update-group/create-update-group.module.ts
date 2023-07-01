@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRadioModule } from "@angular/material/radio";
@@ -34,7 +35,8 @@ import { MainGroupComponent } from "./main-group.component";
         HamburgerMenuModule,
         MatButtonModule,
         MatSlideToggleModule,
-        GiddhPageLoaderModule
+        GiddhPageLoaderModule,
+        MatAutocompleteModule
     ],
     exports: [
         CreateUpdateGroupComponent

@@ -2806,6 +2806,13 @@ td.mat-footer-cell:first-of-type {
     white-space: normal !important;
     word-break: inherit;
 }
+.manufacturing-table {
+    th.mat-header-cell:first-of-type,
+    td.mat-cell:first-of-type,
+    td.mat-footer-cell:first-of-type {
+        white-space: nowrap !important;
+    }
+}
 
 th.mat-header-cell,
 td.mat-cell,
@@ -3119,7 +3126,6 @@ td.mat-footer-cell {
         input {
             width: 100%;
             display: inline-block;
-            border: 1px solid var(--color-secondary-input-bar-border);
         }
         input[placeholder="Search"][type="text"] {
             border: none;
@@ -3139,6 +3145,9 @@ td.mat-footer-cell {
         mat-select {
             .mat-select-placeholder {
                 color: var(--color-common-primary-input-placeholder);
+            }
+            .mat-select-min-line {
+                font-size: var(--font-size-15);
             }
         }
         .mat-tab-label {
@@ -3162,6 +3171,7 @@ td.mat-footer-cell {
 }
 
 .mat-chip-list-wrapper {
+    flex-wrap: unset !important;
     input.mat-input-element {
         border: none;
     }
@@ -3247,7 +3257,8 @@ td.mat-footer-cell {
 }
 
 /*-- input-new-form-field --*/
-voucher-component,
+create-update-group,
+giddh-datepicker,
 add-company,
 stock-create-edit,
 dropdown-field,
@@ -3286,8 +3297,8 @@ input-field {
             min-height: 3rem;
             align-items: center;
             border-radius: 0.5rem;
-            padding-left: 1rem;
-            padding-right: 1rem;
+            padding-left: 0;
+            padding-right: 0;
         }
         .mat-form-field-infix {
             display: flex;
@@ -3299,7 +3310,7 @@ input-field {
             .mat-input-element {
                 margin: 0;
                 line-height: 1.25rem;
-                padding: 14px 0;
+                padding: 14px;
             }
             textarea {
                 &.mat-input-element {
@@ -3315,6 +3326,7 @@ input-field {
         .mat-form-field-label {
             margin-top: 1px;
             font-size: var(--font-size-15);
+            padding-left: 14px;
         }
         .mat-form-field-wrapper {
             margin: 0;
@@ -3340,6 +3352,7 @@ input-field {
             &.mat-form-field-should-float {
                 .mat-form-field-label {
                     transform: translateY(-1.5em) scale(0.75) !important;
+                    padding-left: 21px;
                 }
             }
         }
@@ -3348,8 +3361,68 @@ input-field {
                 &:focus + .mat-form-field-label-wrapper {
                     .mat-form-field-label {
                         transform: translateY(-1.5em) scale(0.75) !important;
+                        padding-left: 21px;
                     }
                 }
+            }
+        }
+        .mat-form-field-suffix {
+            margin-left: 0;
+            margin-right: 10px;
+        }
+    }
+    mat-select {
+        padding: 0 14px;
+    }
+}
+
+.stock-option-fields {
+    .mat-form-field-appearance-outline {
+        .mat-form-field-wrapper {
+            padding-bottom: 0;
+        }
+    }
+}
+
+/*--- recipe ---*/
+.create-recipe {
+    .add-receipt {
+        button {
+            .mat-button-wrapper {
+                display: flex !important;
+            }
+        }
+    }
+}
+.cdk-drag-preview {
+    background-color: var(--color-white);
+    border-radius: 4px;
+    width: fit-content !important;
+    box-shadow: 0 5px 5px -3px var(--color-drag-shadow), 0 8px 10px 1px var(--color-drag-bottom-shadow),
+        0 3px 14px 2px var(--color-drag-right-shadow);
+
+    .product-option-wrapper {
+        background-color: var(--color-white);
+        padding: 20px 15px 20px 15px;
+        border-radius: 8px;
+        .data-wrap {
+            display: flex;
+            column-gap: 40px;
+            align-items: center;
+            .mat-standard-chip {
+                padding: 5px;
+                min-height: 25px;
+                min-width: 25px;
+                justify-content: center;
+                background-color: var(--color-primary-subscription-plans-top-bar-background);
+                font-size: var(--font-size-12);
+            }
+        }
+        .mat-edit-wrap {
+            display: flex !important;
+            column-gap: 20px;
+            .chip-svg-wrap {
+                min-width: 440px;
             }
         }
     }
@@ -3363,43 +3436,6 @@ input-field {
         }
     }
 }
-.other-details-section {
-    .mat-form-field-appearance-outline {
-        .mat-form-field-flex {
-            background-color: var(--color-white);
-        }
-    }
-}
-voucher-component {
-    .mobile-number {
-        .mat-form-field-appearance-outline {
-            .mat-form-field-label {
-                padding-left: 48px;
-            }
-            .mat-form-field-infix {
-                .mat-input-element {
-                    padding-left: 48px;
-                }
-            }
-            &.mat-form-field-can-float {
-                &.mat-form-field-should-float {
-                    .mat-form-field-label {
-                        padding-left: 64px;
-                    }
-                }
-            }
-        }
-    }
-    giddh-datepicker {
-        .mat-focused {
-            .mat-form-field-flex {
-                border: 0 !important;
-            }
-        }
-    }
-}
-.invoice-date-label {
-    &:focus-visible {
-        outline: none;
-    }
+.row-gap {
+    row-gap: 15px;
 }

@@ -1,5 +1,5 @@
 <div class="text-field-container">
-    <mat-form-field [appearance]="appearance">
+    <mat-form-field [ngClass]="{ 'mat-form-field-invalid': showError }" [appearance]="appearance">
         <mat-label>{{ label ? label : placeholder }}</mat-label>
         <input
             matInput
@@ -13,7 +13,6 @@
             (input)="handleInput()"
             [maxlength]="maxlength"
             [readonly]="readonly"
-            [ngClass]="{ 'error-box': showError }"
             [attr.pattern]="pattern"
             [required]="required"
             [attr.min]="min"
@@ -24,8 +23,8 @@
             #textField
             (keydown.enter)="$event.preventDefault()"
             [autocomplete]="autocomplete"
+            (blur)="emitBlurEvent()"
         />
-
         <input
             matInput
             [name]="name"
@@ -37,7 +36,6 @@
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
             [readonly]="readonly"
-            [ngClass]="{ 'error-box': showError }"
             [attr.pattern]="pattern"
             [required]="required"
             [attr.min]="min"
@@ -48,6 +46,7 @@
             #textField
             (keydown.enter)="$event.preventDefault()"
             [autocomplete]="autocomplete"
+            (blur)="emitBlurEvent()"
         />
         <input
             matInput
@@ -60,7 +59,6 @@
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
             [readonly]="readonly"
-            [ngClass]="{ 'error-box': showError }"
             [attr.pattern]="pattern"
             [required]="required"
             [attr.min]="min"
@@ -71,11 +69,12 @@
             #textField
             (keydown.enter)="$event.preventDefault()"
             [autocomplete]="autocomplete"
+            (blur)="emitBlurEvent()"
         />
         <input
             matInput
             [name]="name"
-            type="type"
+            [type]="type"
             [id]="id"
             [class]="cssClass"
             [placeholder]="placeholder"
@@ -83,21 +82,22 @@
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
             [readonly]="readonly"
-            [ngClass]="{ 'error-box': showError }"
             [attr.pattern]="pattern"
             [required]="required"
             [prefix]="prefix"
             [suffix]="suffix"
             [mask]="mask"
+            [validation]="false"
             *ngIf="!allowDigitsOnly && useMask"
             #textField
             (keydown.enter)="$event.preventDefault()"
             [autocomplete]="autocomplete"
+            (blur)="emitBlurEvent()"
         />
         <input
             matInput
             [name]="name"
-            type="type"
+            [type]="type"
             [id]="id"
             [class]="cssClass"
             [placeholder]="placeholder"
@@ -105,18 +105,21 @@
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
             [readonly]="readonly"
-            [ngClass]="{ 'error-box': showError }"
             [attr.pattern]="pattern"
             [required]="required"
             [prefix]="prefix"
             [suffix]="suffix"
             [mask]="mask"
+            [validation]="false"
             *ngIf="allowDigitsOnly && useMask"
             [customDecimalPlaces]="customDecimalPlaces"
             digitsOnlyDirective
             #textField
             (keydown.enter)="$event.preventDefault()"
             [autocomplete]="autocomplete"
+            (blur)="emitBlurEvent()"
         />
+        <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
+        <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
     </mat-form-field>
 </div>

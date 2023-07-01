@@ -130,6 +130,10 @@ const routes: Routes = [
         loadChildren: () => import('./component/manufacturing/manufacturing.module').then(module => module.ManufacturingModule)
     },
     {
+        path: "branch-transfer",
+        loadChildren: () => import('./component/branch-transfer/branch-transfer.module').then(module => module.BranchTransferModule)
+    },
+    {
         path: "inventory-dashboard",
         component: InventoryDashboardComponent,
     },
@@ -146,7 +150,7 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [],
-    imports: [RouterModule.forChild(routes), StockCreateEditModule, GroupCreateEditModule],
+    imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
 export class NewInventoryRoutingModule {
