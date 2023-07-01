@@ -116,8 +116,6 @@ export class ListManufacturingComponent implements OnInit {
     private currentUrl: string = "";
     /** True if initial load of store filters */
     private initialLoad: boolean = false;
-    /** Count of warehouses */
-    public warehousesCount: number = 0;
 
     constructor(
         private dialog: MatDialog,
@@ -230,7 +228,7 @@ export class ListManufacturingComponent implements OnInit {
                             value: this.activeCompany ? this.activeCompany.uniqueName : '',
                             isCompany: true
                         });
-                        this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches?.length > 2;
+                        this.isCompany = this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches?.length > 2;
                         let currentBranchUniqueName;
                         if (!this.currentBranch?.uniqueName) {
                             // Assign the current branch only when it is not selected. This check is necessary as
@@ -278,10 +276,6 @@ export class ListManufacturingComponent implements OnInit {
                 warehouses?.results?.forEach(warehouse => {
                     this.warehouses.push({ label: warehouse?.name, value: warehouse?.uniqueName });
                 });
-                if (this.currentOrganizationType !== OrganizationType.Company) {
-                    this.allWarehouses = cloneDeep(this.warehouses);
-                    this.warehousesCount = this.allWarehouses?.length;
-                }
                 this.changeDetectionRef.detectChanges();
             }
         });
@@ -482,7 +476,6 @@ export class ListManufacturingComponent implements OnInit {
                             });
                         }
                     });
-                    this.warehousesCount = Object.keys(this.allWarehouses)?.length;
                     this.changeDetectionRef.detectChanges();
                 }
             } else {
