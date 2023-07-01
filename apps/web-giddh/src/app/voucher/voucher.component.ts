@@ -3445,7 +3445,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 };
                 if (selectedAcc.additional.stock) {
                     txn.isStockTxn = true;
-                    this.loadStockVariants(selectedAcc.additional.stock.uniqueName);
+                    this.loadStockVariants(selectedAcc.additional.stock.uniqueName, isLinkedPoItem ? entryIndex : undefined);
                 } else {
                     this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
                 }
@@ -3480,7 +3480,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
 
-    public calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true, isBulkItem?: boolean): SalesTransactionItemClass {
+    public calculateItemValues(
+        selectedAcc: any,
+        transaction: SalesTransactionItemClass,
+        entry: SalesEntryClass,
+        calculateTransaction: boolean = true,
+        isBulkItem?: boolean,
+        isLinkedPoItem?: boolean
+    ): SalesTransactionItemClass {
         let o = cloneDeep(selectedAcc.additional);
         const variant = o.stock?.variant;
         const isInclusiveEntry = (variant?.purchaseTaxInclusive && o.category === 'expenses') ||
@@ -3582,6 +3589,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             transaction.isStockTxn = true;
             if (isBulkItem) {
                 transaction.variant = selectedAcc.variant;
+            } else if (isLinkedPoItem) {
+                transaction.variant = o.stock.variant;
             }
             // Stock item, show the warehouse drop down if it is hidden
             if ((this.isMultiCurrencyModule()) && !this.shouldShowWarehouse) {
@@ -8625,7 +8634,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : data.body.parentGroups.join(', '),
                     category: data.body.category
                 };
-                txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem);
+                txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem, false, isLinkedPoItem);
 
                 if (isLinkedPoItem) {
                     txn.applicableTaxes = entry.taxList;
