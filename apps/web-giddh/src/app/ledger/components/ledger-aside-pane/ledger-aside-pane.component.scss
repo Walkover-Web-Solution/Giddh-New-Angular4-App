@@ -105,6 +105,9 @@
     min-width: 130px;
     height: auto !important;
 }
+.buttons-wrapper {
+    display: inline-grid;
+}
 
 @media (max-width: 991px) {
     :host {

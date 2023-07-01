@@ -8,12 +8,12 @@
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <div [style.display]="showLoader ? 'none' : 'block'">
         <div class="relative create-new-inventory-page static-tabs-on-page">
-            <hamburger-menu></hamburger-menu>
+            <hamburger-menu *ngIf="!addStock"></hamburger-menu>
             <div class="select-physical-product input-border-wrapper">
                 <form class="form-body" #stockCreateEditForm="ngForm" novalidate autocomplete="off">
                     <span>
                         <button
-                            *ngIf="queryParams?.stockUniqueName"
+                            *ngIf="queryParams?.stockUniqueName && !addStock"
                             (click)="backClicked()"
                             class="btn-position-left mr-0"
                             mat-stroked-button

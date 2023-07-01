@@ -26,15 +26,55 @@
             </button>
         </div>
         <div class="pd-1 text-center">
-            <button mat-stroked-button color="primary" class="btn-lg bdr" (click)="toggleStockPane()">
+            <button
+                *ngIf="voucherApiVersion !== 2"
+                mat-raised-button
+                class="btn btn-lg btn-primary bdr"
+                (click)="toggleStockPane()"
+            >
                 {{ localeData?.add_stock }}
             </button>
+            <div class="buttons-wrapper">
+                <button
+                    *ngIf="voucherApiVersion === 2"
+                    mat-raised-button
+                    class="btn btn-lg btn-primary bdr mb-2"
+                    (click)="toggleStockPane('product')"
+                >
+                    Add Product
+                </button>
+                <button
+                    *ngIf="voucherApiVersion === 2"
+                    mat-raised-button
+                    class="btn btn-lg btn-primary bdr mb-2"
+                    (click)="toggleStockPane('service')"
+                >
+                    Add Service
+                </button>
+                <button
+                    *ngIf="voucherApiVersion === 2"
+                    mat-raised-button
+                    class="btn btn-lg btn-primary bdr mb-2"
+                    (click)="toggleStockPane('fixed_assets')"
+                >
+                    Add Fixed Assets
+                </button>
+            </div>
         </div>
     </div>
     <div class="aside-body flexy-child-1" *ngIf="isAddAccountOpen">
         <ledger-aside-pane-account [commonLocaleData]="commonLocaleData"></ledger-aside-pane-account>
     </div>
     <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen">
-        <inventory-add-stock [addStock]="true" (closeAsideEvent)="closeAsidePane()"></inventory-add-stock>
+        <ng-container *ngIf="voucherApiVersion === 2">
+            <stock-create-edit
+                [addStock]="true"
+                [stockType]="stockType"
+                (closeAsideEvent)="backButtonPressed()"
+            ></stock-create-edit>
+        </ng-container>
+        <ng-container *ngIf="voucherApiVersion !== 2">
+            <inventory-add-stock [addStock]="true" (closeAsideEvent)="closeAsidePane()"></inventory-add-stock>
+        </ng-container>
     </div>
 </div>
