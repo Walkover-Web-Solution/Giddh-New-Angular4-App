@@ -3430,9 +3430,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 };
             }
             if (isBulkItem) {
-                const allStockVariants = this.stockVariants.getValue();
-                allStockVariants.push(observableOf(selectedAcc.variants));
-                this.stockVariants.next(allStockVariants);
+                if (selectedAcc.additional?.stock) {
+                    const allStockVariants = this.stockVariants.getValue();
+                    allStockVariants.push(observableOf(selectedAcc.variants));
+                    this.stockVariants.next(allStockVariants);
+                }
                 txn = this.calculateItemValues(selectedAcc, txn, entry, true, true);
             } else {
                 this.currentTxnRequestObject[this.activeIndx] = {
