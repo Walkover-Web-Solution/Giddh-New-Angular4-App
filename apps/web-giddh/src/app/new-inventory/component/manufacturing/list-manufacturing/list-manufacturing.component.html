@@ -25,10 +25,7 @@
                                     />
                                 </div>
                             </div>
-                            <div
-                                class="list-header"
-                                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
-                            >
+                            <div class="list-header" *ngIf="isCompany">
                                 <dropdown-field
                                     class="max-width-230"
                                     [name]="'branch'"
@@ -39,7 +36,7 @@
                                 >
                                 </dropdown-field>
                             </div>
-                            <div class="list-header" *ngIf="warehousesCount > 1">
+                            <div class="list-header" *ngIf="warehouses?.length > 1">
                                 <dropdown-field
                                     class="max-width-230"
                                     [name]="'warehouse'"
@@ -58,7 +55,7 @@
                                 <button
                                     type="button"
                                     class="mr-0"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                     (click)="getReport()"
                                 >
@@ -70,7 +67,7 @@
                                 <button
                                     type="button"
                                     class="mr-0"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                     (click)="initializeSearchReqObj()"
                                     *ngIf="showClearButton"
@@ -185,21 +182,21 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
-            <div class="pagination-wrapper" [hidden]="totalItems <= paginationLimit">
-                <pagination
-                    [totalItems]="totalItems"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="paginationLimit"
-                    [rotate]="false"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                ></pagination>
-            </div>
         </section>
+        <div class="pagination-wrapper mt-1" [hidden]="totalItems <= paginationLimit">
+            <pagination
+                [totalItems]="totalItems"
+                [maxSize]="5"
+                class="pagination-sm"
+                [boundaryLinks]="true"
+                [itemsPerPage]="paginationLimit"
+                [rotate]="false"
+                [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last"
+            ></pagination>
+        </div>
     </section>
 
     <!-- Advance Filter Modal -->
@@ -313,7 +310,7 @@
                                 <button
                                     type="button"
                                     class="mr-0"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                     mat-dialog-close
                                     (click)="getReport()"
@@ -322,7 +319,7 @@
                                 </button>
                             </div>
                             <div class="ml-2">
-                                <button type="button" mat-dialog-close class="mr-0" mat-stroked-button color="primary">
+                                <button type="button" mat-dialog-close class="mr-0" mat-stroked-button >
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
                             </div>

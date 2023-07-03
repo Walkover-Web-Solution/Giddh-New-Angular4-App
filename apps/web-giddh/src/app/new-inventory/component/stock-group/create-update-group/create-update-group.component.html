@@ -222,8 +222,9 @@
                         *ngIf="!groupUniqueName"
                         id="clear-btn"
                         type="button"
-                        mat-raised-button
-                        class="btn-primary btn-left-right-round min-width-100"
+                        mat-stroked-button
+                        color="primary"
+                        class="btn-left-right-round min-width-100"
                         (click)="resetGroupForm()"
                     >
                         Clear
@@ -231,18 +232,19 @@
                     <button
                         *ngIf="groupUniqueName"
                         id="clear-btn"
-                        mat-raised-button
+                        mat-stroked-button
                         type="button"
-                        class="btn-primary btn-left-right-round min-width-100"
+                        class="btn-left-right-round min-width-100"
                         [routerLink]="'/pages/inventory/v2/stock-group/list'"
                     >
                         Cancel
                     </button>
                     <button
-                        mat-raised-button
+                        mat-stroked-button
+                        color="primary"
                         id="create-group-btn"
                         [disabled]="groupForm?.invalid || isFileUploading"
-                        class="btn-success btn-left-right-round"
+                        class="btn-left-right-round"
                     >
                         {{ groupUniqueName ? "Update Group" : "Create Group" }}
                     </button>

@@ -71,8 +71,8 @@
                     />
                 </div>
                 <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
-                    <button mat-raised-button class="btn btn-filter min-width-100 mr-l1" (click)="resetFilter()">
-                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                    <button mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
+                        <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
             </div>
@@ -101,7 +101,10 @@
                 <ng-container matColumnDef="importFile">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.import_file }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <a target="_blank" [href]="element.efsPath" mat-button class="import-button-status btn-success">
+                        <a target="_blank" [href]="element.efsPath" 
+                        mat-stroked-button
+                        color="primary"
+                        class="import-button-status">
                             {{ commonLocaleData?.app_download }}
                         </a>
                     </td>
@@ -133,8 +136,9 @@
                             *ngIf="element?.status === 'COMPLETED'"
                             target="_blank"
                             (click)="downloadErrorSheet(element)"
-                            mat-button
-                            class="import-button-status btn-success"
+                            mat-stroked-button
+                            color="primary"
+                            class="import-button-status"
                         >
                             {{ commonLocaleData?.app_download }}
                         </a>
@@ -155,8 +159,9 @@
                             *ngIf="element?.status === 'COMPLETED'"
                             target="_blank"
                             (click)="downloadSuccessSheet(element)"
-                            mat-button
-                            class="import-button-status btn-success"
+                            mat-stroked-button
+                            color="primary"
+                            class="import-button-status"
                         >
                             {{ commonLocaleData?.app_download }}
                         </a>
