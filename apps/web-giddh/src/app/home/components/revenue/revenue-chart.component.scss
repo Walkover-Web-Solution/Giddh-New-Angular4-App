@@ -88,20 +88,13 @@ p.bank-balance {
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
-a.connect-bank {
-    position: absolute;
-    bottom: 10px;
-    color: var(--color-nero);
-    font-size: var(--font-size-15);
-    text-decoration: underline;
-}
 .dashboard-container {
     padding: 15px;
 }
 .total-sales-header {
     background-color: var(--color-white);
     border: 1px solid var(--color-common-primary-border);
-    border-radius: 2px;
+    border-radius: 4px;
     padding: 15px 15px 20px;
 }
 .dashboard-container label {
@@ -204,7 +197,7 @@ a.connect-bank {
 .top-dates {
     min-height: 60px;
 }
-.single-sale-data p {
+.single-sale-data .small-heading {
     color: var(--color-nero);
     font-size: var(--font-size-15);
 }
@@ -232,6 +225,8 @@ span.date-wise-sale {
 .total-sales-tabs a {
     color: var(--color-nero);
     cursor: pointer;
+    padding-right: 3px;
+    padding-left: 3px;
 }
 .total-sales-tabs a.active-graph {
     font-family: var(--font-semibold);
@@ -248,12 +243,32 @@ input:read-only:focus {
 .panel-heading-inner-content {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
 }
 .refresh-btn {
     align-items: center;
     display: flex;
     flex-direction: row-reverse;
 }
+/*============Mat Range Date Picker Default CSS Overide =====Start===================*/
+.mat-datepicker-toggle {
+    color: var(--color-nero) !important;
+}
+.mat-form-field-flex {
+    align-items: center !important;
+}
+.mat-calendar-header {
+    background-color: var(--color-primary-header-background) !important;
+}
+.mat-form-field-type-mat-date-range-input {
+    .mat-form-field-infix {
+        width: 206px !important;
+    }
+}
+.mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+}
+/*============Mat Range Date Picker Default CSS Overide =====End=====================*/
 @media (max-width: 991px) {
     .about-date {
         font-size: var(--font-size-15);
