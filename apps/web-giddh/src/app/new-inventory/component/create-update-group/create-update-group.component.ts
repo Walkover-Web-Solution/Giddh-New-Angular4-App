@@ -241,7 +241,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     */
     public saveGroup(): void {
         this.isFormSubmitted = false;
-        if (!this.groupForm.get('name')?.value && !this.groupForm.get('uniqueName')?.value) {
+        if (!this.groupForm.get('name')?.value || !this.groupForm.get('uniqueName')?.value) {
             this.isFormSubmitted = true;
             return;
         }
