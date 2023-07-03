@@ -23,6 +23,7 @@
     }
     .inline-multiple-input-width {
         width: 530px;
+        min-height: 48px;
         .input-min-width {
             min-width: 50%;
         }
@@ -65,4 +66,9 @@
 
 .mat-select {
     min-width: unset !important;
+}
+.back-btn-position{
+    position: absolute;
+    top: -8px;
+    right: 2px;
 }
