@@ -11,8 +11,9 @@
             <button
                 *ngIf="groupUniqueName"
                 (click)="backClicked()"
-                class="btn-sky-blue btn-position-left mt-2 ml-3"
-                mat-button
+                class="btn-position-left mt-2 ml-3"
+                mat-stroked-button
+                color="primary"
             >
                 <i class="icon-left back-left"></i>
                 {{ commonLocaleData?.app_back }}

@@ -93,9 +93,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         if (this.enableDynamicSearch) {
             this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
                 if (search) {
-                    if (typeof search === "string") {
+                    if (typeof search === "string" && search !== this.defaultValue) {
                         this.dynamicSearchedQuery.emit(search);
-                    } else {
+                    } else if (search?.label !== this.defaultValue) {
                         this.dynamicSearchedQuery.emit(search?.label || "");
                     }
                 } else {
@@ -146,7 +146,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
                         this.filterOptions(changes?.defaultValue.currentValue);
                     }
                 }
-            }, 500);
+            }, 200);
         }
     }
 
@@ -307,7 +307,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      */
     public addClassForDropdown(): void {
         setTimeout(() => {
-            document.querySelectorAll(".cdk-overlay-pane")[0].classList.add("dropdown-position");
+            if (document.querySelectorAll(".cdk-overlay-pane")?.length) {
+                document.querySelectorAll(".cdk-overlay-pane")[document.querySelectorAll(".cdk-overlay-pane")?.length - 1]?.classList?.add("dropdown-position");
+            }
         }, 10);
     }
 }
