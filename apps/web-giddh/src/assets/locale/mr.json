@@ -497,6 +497,8 @@
     "app_update_account": "खाते अद्यतनित करा",
     "app_add_product": "उत्पादन जोडा",
     "app_add_service": "सेवा जोडा",
+    "app_add_account": "खाते जोडा",
+    "app_add_fixedassets": "स्थिर मालमत्ता जोडा",
     "app_account_created": "खाते यशस्वीरित्या तयार केले",
     "app_start_date": "प्रारंभ तारीख",
     "app_end_date": "शेवटची तारीख",

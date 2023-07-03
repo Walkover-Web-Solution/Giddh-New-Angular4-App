@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
+import { StockCreateEditModule } from "../../new-inventory/component/stock-create-edit/stock-create-edit.module";
 import { ShSelectModule } from "../../theme/ng-virtual-select/sh-select.module";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
 import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/generic.aside.menu.account.module";
@@ -26,7 +27,8 @@ import { SalesAddStockComponent } from "./components/create-stock/sales.create.s
         UniqueNameModule,
         TextCaseChangeModule,
         DecimalDigitsModule,
-        BsDropdownModule.forRoot()
+        BsDropdownModule.forRoot(),
+        StockCreateEditModule
     ],
     exports: [
         AsideMenuProductServiceComponent,
