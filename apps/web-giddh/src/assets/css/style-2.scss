@@ -2566,12 +2566,6 @@ modal-container.modal {
     height: initial !important;
 }
 
-.highcharts-root {
-    .highcharts-background {
-        fill: var(--color-common-primary-background-for-all-components);
-    }
-}
-
 /* my css end */
 /*input*/
 .form-control {
@@ -9799,17 +9793,6 @@ button#more-btn-inventory,
 
 .select-linked-accounts sh-select-menu .menu {
     max-height: 250px;
-}
-
-.ratio-chart-block .highcharts-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 60px;
-    white-space: normal !important;
-    word-break: break-all;
-    font-size: var(--font-size-24);
-    top: 56px !important;
 }
 
 .transaction-list-sh-select input {

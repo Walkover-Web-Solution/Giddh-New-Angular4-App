@@ -73,19 +73,6 @@ thead th {
     &:hover {
         background-color: var(--color-table-row-hover-primary-background);
     }
-
-    .do-sale-link {
-        color: var(--color-primary-basic-button-text);
-        border: 1px solid var(--color-primary-basic-button-text);
-        background-color: var(--color-white);
-        padding: 7px 10px;
-        border-radius: 5px;
-        display: inline-block;
-        &:hover {
-            background-color: var(--color-tab-primary-active);
-            color: var(--color-white);
-        }
-    }
 }
 .dashboard-datepicker {
     max-width: 190px;
