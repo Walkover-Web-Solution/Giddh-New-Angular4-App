@@ -1,6 +1,11 @@
 <div class="aside-pane">
-    <div class="form-header" *ngIf="!hideFirstScreen">
-        <h3>{{ commonLocaleData?.app_add }}</h3>
+    <div class="form-header" *ngIf="!hideFirstScreen || voucherApiVersion !== 1">
+        <h3>
+            {{ commonLocaleData?.app_add }}
+            <span *ngIf="voucherApiVersion !== 1">{{
+                stockType !== "fixed_assets" ? (stockType | titlecase) : "Fixed Assets"
+            }}</span>
+        </h3>
     </div>
     <button
         mat-button
@@ -41,7 +46,7 @@
                     class="btn btn-lg btn-primary bdr mb-2"
                     (click)="toggleStockPane('product')"
                 >
-                    Add Product
+                    {{ commonLocaleData?.app_add_product }}
                 </button>
                 <button
                     *ngIf="voucherApiVersion === 2"
@@ -49,7 +54,7 @@
                     class="btn btn-lg btn-primary bdr mb-2"
                     (click)="toggleStockPane('service')"
                 >
-                    Add Service
+                    {{ commonLocaleData?.app_add_service }}
                 </button>
                 <button
                     *ngIf="voucherApiVersion === 2"
@@ -57,7 +62,7 @@
                     class="btn btn-lg btn-primary bdr mb-2"
                     (click)="toggleStockPane('fixed_assets')"
                 >
-                    Add Fixed Assets
+                    {{ commonLocaleData?.app_add_fixedassets }}
                 </button>
             </div>
         </div>

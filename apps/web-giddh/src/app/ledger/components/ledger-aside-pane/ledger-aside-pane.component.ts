@@ -68,15 +68,28 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
         this.isAddAccountOpen = !this.isAddAccountOpen;
     }
 
+    /**
+     * This will use for back button step
+     *
+     * @memberof LedgerAsidePaneComponent
+     */
     public backButtonPressed() {
         this.store.dispatch(this.accountsAction.resetActiveGroup());
+        this.stockType = '';
         this.hideFirstScreen = false;
         this.isAddStockOpen = false;
         this.isAddAccountOpen = false;
     }
 
+    /**
+     *This will use for close aside pane
+     *
+     * @param {*} [e]
+     * @memberof LedgerAsidePaneComponent
+     */
     public closeAsidePane(e?: any) {
         this.store.dispatch(this.accountsAction.resetActiveGroup());
+        this.stockType = '';
         this.hideFirstScreen = false;
         this.isAddStockOpen = false;
         this.isAddAccountOpen = false;
