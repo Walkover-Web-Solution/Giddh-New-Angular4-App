@@ -134,10 +134,10 @@
                         <div class="form-group mr-r15">
                             <label class="d-flex"> &nbsp; </label>
                             <button
-                                mat-raised-button
+                                mat-stroked-button
+                                color="primary"
                                 type="button"
                                 *ngIf="!isPayClicked"
-                                class="btn-success"
                                 [disabled]="!isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData"
                                 [ladda]="isRequestInProcess"
                                 (click)="payClicked()"
@@ -146,9 +146,9 @@
                             </button>
 
                             <button
-                                mat-raised-button
+                                mat-stroked-button
+                                color="primary"
                                 *ngIf="isPayClicked"
-                                class="btn-success"
                                 [disabled]="
                                     !isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData || !receivedOtp
                                 "
@@ -158,10 +158,10 @@
                                 {{ commonLocaleData?.app_confirm }}
                             </button>
                             <button
-                                mat-raised-button
+                                mat-stroked-button
+                                color="primary"
                                 type="button"
                                 *ngIf="isPayClicked"
-                                class="btn-primary"
                                 (click)="clickedCancelOtp()"
                             >
                                 {{ commonLocaleData?.app_cancel }}
@@ -282,7 +282,7 @@
             <div class="modal-header">
                 <h4 class="modal-title pull-left">{{ localeData?.payment_status }}</h4>
                 <button
-                    mat-raised-button
+                    mat-stroked-button
                     type="button"
                     class="close pull-right"
                     [attr.aria-label]="commonLocaleData?.app_close"
@@ -297,7 +297,7 @@
                 </div>
                 <h4>{{ commonLocaleData?.app_payment_proceed }}</h4>
                 <p>{{ paymentSuccessfulMessage }}</p>
-                <button mat-raised-button class="btn-success" (click)="successModalRef.hide()">
+                <button mat-stroked-button color="primary" (click)="successModalRef.hide()">
                     {{ commonLocaleData?.app_done }}
                 </button>
             </div>

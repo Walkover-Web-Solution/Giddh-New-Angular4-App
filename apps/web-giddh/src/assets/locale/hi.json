@@ -382,6 +382,7 @@
     "app_payment_mode": "भुगतान का प्रकार",
     "app_select_account": "खाता चुनें",
     "app_select_accounts": "खातों का चयन करें",
+    "app_select_voucher": "वाउचर चुनें",
     "app_invoice_date": "चालान की तारीख",
     "app_invoice_number": "बिल संख्या",
     "app_sku": "एसकेयू",

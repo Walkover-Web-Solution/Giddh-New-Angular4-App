@@ -2566,12 +2566,6 @@ modal-container.modal {
     height: initial !important;
 }
 
-.highcharts-root {
-    .highcharts-background {
-        fill: var(--color-common-primary-background-for-all-components);
-    }
-}
-
 /* my css end */
 /*input*/
 .form-control {
@@ -3510,16 +3504,6 @@ button,
 input,
 button:focus {
     outline: none !important;
-}
-
-.btn.focus,
-button:focus,
-button.cdk-keyboard-focused,
-.mat-button:focus,
-.mat-flat-button:focus,
-.mat-raised-button:focus {
-    box-shadow: var(--color-primary-common-box-shadow) 0px 30px 60px -12px inset,
-        var(--color-primary-common-box-shadow) 0px 18px 36px -18px inset !important;
 }
 
 .mat-raised-button:focus,
@@ -8480,30 +8464,6 @@ button.ladda-button .ladda-label {
     padding-top: 0;
 }
 
-#incomeChart chart,
-#leftIncomeChart chart,
-highcharts-chart .highcharts-container {
-    width: 100% !important;
-    display: flex;
-    flex: 1 1 0 !important;
-    flex-shrink: 1 !important;
-}
-
-highcharts-chart {
-    .highcharts-container {
-        .highcharts-title {
-            width: 62px !important;
-            white-space: normal !important;
-            text-align: center;
-        }
-    }
-}
-
-#incomeChart #highcharts-ufrwew1-29 {
-    display: block;
-    width: 100%;
-}
-
 .panel {
     border-radius: 2px;
 }
@@ -9075,8 +9035,8 @@ input.checkbox-custom[type="checkbox"] {
     display: block;
 }
 
-.panel-block .card-body {
-    min-height: 350px;
+.panel-block .mat-card-content {
+    min-height: 361px;
 }
 
 .payment-modal {
@@ -9485,11 +9445,18 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 .dashboard-container {
-    .card {
+    mat-card {
         margin-bottom: 20px;
         min-height: 426px;
-        border-color: var(--color-common-primary-border);
+        border: 1px solid var(--color-common-primary-border);
         background-color: var(--color-common-primary-background-for-all-components);
+        box-shadow: none !important;
+        padding: 0 !important;
+    }
+    mat-card-content {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
     }
 }
 
@@ -9825,17 +9792,6 @@ button#more-btn-inventory,
 
 .select-linked-accounts sh-select-menu .menu {
     max-height: 250px;
-}
-
-.ratio-chart-block .highcharts-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 60px;
-    white-space: normal !important;
-    word-break: break-all;
-    font-size: var(--font-size-24);
-    top: 56px !important;
 }
 
 .transaction-list-sh-select input {
@@ -12265,7 +12221,7 @@ inventory-master {
         overflow-y: auto !important;
     }
 
-    .panel-block .card-body {
+    .panel-block .mat-card-content {
         min-height: auto;
     }
 
@@ -14324,17 +14280,36 @@ body.hide-scroll-body.master-page {
     }
 }
 
-/*--- common-btn ---*/
-.mat-button.mat-primary,
-.mat-icon-button.mat-primary,
-.mat-stroked-button.mat-primary {
-    color: var(--color-primary-header-background);
+/*================Material Buttons Color=======Start Here==================*/
+.mat-button,
+.mat-icon-button,
+.mat-stroked-button {
+    border-color: var(--color-secondary-input-bar-border) !important;
+    &.mat-primary {
+        color: var(--color-giddh-blue) !important;
+    }
+    /*--- common-btn ---*/
+    .mat-button.mat-primary,
+    .mat-icon-button.mat-primary,
+    .mat-stroked-button.mat-primary {
+        color: var(--color-primary-header-background);
 
-    .mat-button-focus-overlay {
-        background-color: var(--color-primary-header-background) !important;
+        .mat-button-focus-overlay {
+            background-color: var(--color-primary-header-background) !important;
+        }
     }
 }
+/*================Material Buttons Color=======End Here==================*/
 
+/*--- voucher-datepicker ---*/
+voucher-component {
+    .mat-datepicker-input {
+        &:disabled {
+            background-color: transparent !important;
+            cursor: not-allowed;
+        }
+    }
+}
 /*--- tooltip --*/
 .mat-tooltip {
     letter-spacing: 0.8px;
@@ -14373,6 +14348,9 @@ body.hide-scroll-body.master-page {
     width: 100%;
 }
 
+.icon-font-14 {
+    font-size: 14px;
+}
 /*--- inventory-search ---*/
 .inventory-search {
     text-field {
@@ -14383,3 +14361,46 @@ body.hide-scroll-body.master-page {
         }
     }
 }
+
+/* ======Ladda  Button Color in Material Stroked Button====Start Here=========== */
+button {
+    &.mat-stroked-button {
+        &.mat-primary {
+            &:disabled {
+                .ladda-label {
+                    color: transparent;
+                }
+            }
+            &.ladda-button {
+                &:not(:disabled) {
+                    .ladda-label {
+                        color: var(--color-giddh-blue) !important;
+                        display: contents;
+                        width: auto;
+                        height: auto;
+                    }
+                }
+                .ladda-spinner {
+                    div {
+                        div {
+                            div {
+                                background: var(--color-giddh-blue) !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+/* ======Ladda  Button Color in Material Stroked Button====End Here=========== */
+
+/*============Material Button Disabled Cursor======Start===========*/
+button {
+    &.mat-button-disabled {
+        &:hover {
+            cursor: not-allowed !important;
+        }
+    }
+}
+/*============Material Button Disabled Cursor======End===========*/

@@ -403,16 +403,12 @@ span.input-addon {
 }
 
 button.btn.btn-filter {
-    background: var(--color-dark-fog);
-    border: 1px solid var(--color-dark-fog);
     font-size: var(--font-size-15);
-    color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
     width: 140px !important;
     margin: 0 auto !important;
     margin-right: 0 !important;
-    box-shadow: none !important;
     height: 40px;
 }
 .btn-small {

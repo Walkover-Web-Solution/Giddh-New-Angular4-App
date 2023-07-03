@@ -5,7 +5,7 @@ name: UI build
 # Controls when the action will run.
 on:
   push:
-    branches: [ giddh-2.0, beta-stage, beta-branch, production ]
+    branches: [ production ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 concurrency: stage-build
