@@ -1,0 +1,20 @@
+.aside-pane{
+    .aside-body{
+        &.flexy-child-1{
+            height: 100%;
+            .child-wrapper{
+                background-color: var(--color-body-background);
+                height: calc(100% - 88px);
+                padding: 10px;
+                margin: 15px 0;
+                box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
+            }
+        }
+    }
+}
+#aside-pane-product-service{
+    z-index: 9999 !important;
+}
+#ledger-aside-pane{
+    z-index: 999 !important;
+}

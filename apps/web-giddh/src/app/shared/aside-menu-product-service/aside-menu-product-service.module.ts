@@ -11,6 +11,7 @@ import { TextCaseChangeModule } from "../helpers/directives/textCaseChange/textC
 import { UniqueNameModule } from "../helpers/directives/uniqueName/uniqueName.module";
 import { AsideMenuProductServiceComponent } from "./aside-menu-product-service.component";
 import { SalesAddStockComponent } from "./components/create-stock/sales.create.stock.component";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
     declarations: [
@@ -28,7 +29,8 @@ import { SalesAddStockComponent } from "./components/create-stock/sales.create.s
         TextCaseChangeModule,
         DecimalDigitsModule,
         BsDropdownModule.forRoot(),
-        StockCreateEditModule
+        StockCreateEditModule,
+        MatButtonModule 
     ],
     exports: [
         AsideMenuProductServiceComponent,

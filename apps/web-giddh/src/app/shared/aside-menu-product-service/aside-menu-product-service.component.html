@@ -7,42 +7,49 @@
             }}</span>
         </h3>
     </div>
-    <button *ngIf="hideFirstStep" id="back" (click)="backButtonPressed()">{{ commonLocaleData?.app_back }}</button>
+    <button *ngIf="hideFirstStep" id="back" mat-stroked-button (click)="backButtonPressed()">{{ commonLocaleData?.app_back }}</button>
     <button id="close" *ngIf="!hideFirstStep || stockType" (click)="closeAsidePane()">
         <i class="icon-cross"></i>
     </button>
     <div class="aside-pane">
         <div class="aside-body flexy-child" *ngIf="!hideFirstStep">
             <div class="pb-3 text-center">
-                <button class="btn btn-lg btn-primary" (click)="toggleAccountPane()">
-                    {{ commonLocaleData?.app_add_account }}
-                </button>
-            </div>
-            <div class="pb-3 text-center">
-                <button class="btn btn-lg btn-primary" *ngIf="voucherApiVersion !== 2" (click)="toggleStockPane()">
-                    {{ commonLocaleData?.app_add_product }}
-                </button>
                 <div class="buttons-wrapper">
+                    <button mat-stroked-button color="primary" class="mb-2" (click)="toggleAccountPane()">
+                        {{ commonLocaleData?.app_add_account }}
+                    </button>
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        class="mb-2"
+                        *ngIf="voucherApiVersion !== 2"
+                        (click)="toggleStockPane()"
+                    >
+                        {{ commonLocaleData?.app_add_product }}
+                    </button>
                     <button
                         *ngIf="voucherApiVersion === 2"
-                        mat-raised-button
-                        class="btn btn-lg btn-primary bdr mb-2"
+                        mat-stroked-button
+                        color="primary"
+                        class="mb-2"
                         (click)="toggleStockPane('product')"
                     >
                         {{ commonLocaleData?.app_add_product }}
                     </button>
                     <button
                         *ngIf="voucherApiVersion === 2"
-                        mat-raised-button
-                        class="btn btn-lg btn-primary bdr mb-2"
+                        mat-stroked-button
+                        color="primary"
+                        class="mb-2"
                         (click)="toggleStockPane('service')"
                     >
                         {{ commonLocaleData?.app_add_service }}
                     </button>
                     <button
                         *ngIf="voucherApiVersion === 2"
-                        mat-raised-button
-                        class="btn btn-lg btn-primary bdr mb-2"
+                        mat-stroked-button
+                        color="primary"
+                        class="mb-2"
                         (click)="toggleStockPane('fixed_assets')"
                     >
                         {{ commonLocaleData?.app_add_fixedassets }}
@@ -52,32 +59,36 @@
         </div>
 
         <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen">
-            <ng-container *ngIf="voucherApiVersion === 2">
-                <stock-create-edit
-                    [addStock]="true"
-                    [stockType]="stockType"
-                    (closeAsideEvent)="closeAsidePane($event)"
-                ></stock-create-edit>
-            </ng-container>
-            <ng-container *ngIf="voucherApiVersion !== 2">
-                <sales-create-stock
-                    [autoFocusInChild]="autoFocusInChild"
-                    (closeAsideEvent)="closeAsidePane($event)"
-                ></sales-create-stock>
-            </ng-container>
+            <div class="child-wrapper">
+                <ng-container *ngIf="voucherApiVersion === 2">
+                    <stock-create-edit
+                        [addStock]="true"
+                        [stockType]="stockType"
+                        (closeAsideEvent)="closeAsidePane($event)"
+                    ></stock-create-edit>
+                </ng-container>
+                <ng-container *ngIf="voucherApiVersion !== 2">
+                    <sales-create-stock
+                        [autoFocusInChild]="autoFocusInChild"
+                        (closeAsideEvent)="closeAsidePane($event)"
+                    ></sales-create-stock>
+                </ng-container>
+            </div>
         </div>
         <div class="aside-body flexy-child-1" *ngIf="isAddServiceOpen">
-            <generic-aside-menu-account
-                [class]="accountAsideMenuState"
-                [@slideInOut]="accountAsideMenuState"
-                (closeAsideEvent)="closeAsidePane($event)"
-                [selectedGroupUniqueName]="selectedVoucherType"
-                [isDebtorCreditor]="false"
-                [isBankAccount]="false"
-                [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
-                *ngIf="accountAsideMenuState === 'in'"
-                (addEvent)="addNewServiceAccount($event)"
-            ></generic-aside-menu-account>
+            <div class="child-wrapper">
+                <generic-aside-menu-account
+                    [class]="accountAsideMenuState"
+                    [@slideInOut]="accountAsideMenuState"
+                    (closeAsideEvent)="closeAsidePane($event)"
+                    [selectedGroupUniqueName]="selectedVoucherType"
+                    [isDebtorCreditor]="false"
+                    [isBankAccount]="false"
+                    [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
+                    *ngIf="accountAsideMenuState === 'in'"
+                    (addEvent)="addNewServiceAccount($event)"
+                ></generic-aside-menu-account>
+            </div>
         </div>
     </div>
 </div>

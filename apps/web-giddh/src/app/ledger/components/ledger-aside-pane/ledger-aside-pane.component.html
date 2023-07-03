@@ -25,61 +25,71 @@
         {{ commonLocaleData?.app_back }}
     </button>
     <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" *ngIf="!hideFirstScreen">
-        <div class="pd-1 text-center">
-            <button mat-stroked-button color="primary" class="btn-lg bdr" (click)="toggleAccountPane()">
-                {{ localeData?.add_account }}
-            </button>
-        </div>
-        <div class="pd-1 text-center">
-            <button
-                *ngIf="voucherApiVersion !== 2"
-                mat-raised-button
-                class="btn btn-lg btn-primary bdr"
-                (click)="toggleStockPane()"
-            >
-                {{ localeData?.add_stock }}
-            </button>
+
             <div class="buttons-wrapper">
+                <button 
+                    mat-stroked-button 
+                    color="primary" 
+                    class="mb-2"
+                    (click)="toggleAccountPane()"
+                >
+                    {{ localeData?.add_account }}
+                </button>
+                <button 
+                    *ngIf="voucherApiVersion !== 2" 
+                    mat-stroked-button
+                    color="primary"
+                    class="mb-2"
+                    (click)="toggleStockPane()">
+                    {{ localeData?.add_stock }}
+                </button>
                 <button
                     *ngIf="voucherApiVersion === 2"
-                    mat-raised-button
-                    class="btn btn-lg btn-primary bdr mb-2"
+                    mat-stroked-button
+                    color="primary"
+                    class="mb-2"
                     (click)="toggleStockPane('product')"
                 >
                     {{ commonLocaleData?.app_add_product }}
                 </button>
                 <button
                     *ngIf="voucherApiVersion === 2"
-                    mat-raised-button
-                    class="btn btn-lg btn-primary bdr mb-2"
+                    mat-stroked-button
+                    color="primary"
+                    class="mb-2"
                     (click)="toggleStockPane('service')"
                 >
                     {{ commonLocaleData?.app_add_service }}
                 </button>
                 <button
                     *ngIf="voucherApiVersion === 2"
-                    mat-raised-button
-                    class="btn btn-lg btn-primary bdr mb-2"
+                    mat-stroked-button
+                    color="primary"
+                    class="mb-2"
                     (click)="toggleStockPane('fixed_assets')"
                 >
                     {{ commonLocaleData?.app_add_fixedassets }}
                 </button>
             </div>
-        </div>
+      
     </div>
     <div class="aside-body flexy-child-1" *ngIf="isAddAccountOpen">
-        <ledger-aside-pane-account [commonLocaleData]="commonLocaleData"></ledger-aside-pane-account>
+        <div class="child-wrapper">
+            <ledger-aside-pane-account [commonLocaleData]="commonLocaleData"></ledger-aside-pane-account>
+        </div>
     </div>
     <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen">
-        <ng-container *ngIf="voucherApiVersion === 2">
-            <stock-create-edit
-                [addStock]="true"
-                [stockType]="stockType"
-                (closeAsideEvent)="backButtonPressed()"
-            ></stock-create-edit>
-        </ng-container>
-        <ng-container *ngIf="voucherApiVersion !== 2">
-            <inventory-add-stock [addStock]="true" (closeAsideEvent)="closeAsidePane()"></inventory-add-stock>
-        </ng-container>
+        <div class="child-wrapper">
+            <ng-container *ngIf="voucherApiVersion === 2">
+                <stock-create-edit
+                    [addStock]="true"
+                    [stockType]="stockType"
+                    (closeAsideEvent)="backButtonPressed()"
+                ></stock-create-edit>
+            </ng-container>
+            <ng-container *ngIf="voucherApiVersion !== 2">
+                <inventory-add-stock [addStock]="true" (closeAsideEvent)="closeAsidePane()"></inventory-add-stock>
+            </ng-container>
+        </div>
     </div>
 </div>
