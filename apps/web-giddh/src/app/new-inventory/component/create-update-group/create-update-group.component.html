@@ -33,6 +33,7 @@
                                     formControlName="name"
                                     [required]="true"
                                     (change)="!groupUniqueName ? generateUniqueName() : ''"
+                                    [showError]="isFormSubmitted && !this.groupForm.get('productName')?.value"
                                 >
                                 </input-field>
                             </div>
@@ -44,6 +45,7 @@
                                     formControlName="uniqueName"
                                     [type]="'text'"
                                     [required]="true"
+                                    [showError]="isFormSubmitted && !this.groupForm.get('uniqueName')?.value"
                                 >
                                 </input-field>
                             </div>
