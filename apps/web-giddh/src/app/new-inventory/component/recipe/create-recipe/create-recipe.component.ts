@@ -259,6 +259,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                         };
                     }
                 }
+                this.changeDetectionRef.detectChanges();
             }
         });
     }
@@ -320,6 +321,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                         }
                     }
                 }
+                this.changeDetectionRef.detectChanges();
             }
         });
     }
