@@ -13,8 +13,7 @@ export class PageLeaveConfirmationGuard implements CanDeactivate<ComponentCanDea
     ) { }
 
     public canDeactivate(component: any): Promise<boolean> | boolean {
-        console.log(component);
-        if (component?.form?.dirty) {
+        if (component?.showPageLeaveConfirmation) {
             return new Promise<boolean>((resolve, reject) => {
                 let dialogRef = this.pageLeaveUtilityService.openDialog();
 

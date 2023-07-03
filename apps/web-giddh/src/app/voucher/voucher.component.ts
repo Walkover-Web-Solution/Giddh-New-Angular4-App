@@ -166,7 +166,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Copy from previous instance */
     @ViewChild('copyPreviousEstimate', { static: true }) public copyPreviousEstimate: ElementRef;
     /** Invoice Form instance */
-    @ViewChild('invoiceForm', { static: false }) public form: NgForm;
+    @ViewChild('invoiceForm', { static: false }) public invoiceForm: NgForm;
     /** Open Account Selection Dropdown instance */
     @ViewChild('openAccountSelectionDropdown', { static: false }) public openAccountSelectionDropdown: DropdownFieldComponent;
     /** Discount Compomnent instance */
@@ -963,7 +963,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (this.invoiceType !== params['invoiceType']) {
                     this.invoiceType = decodeURI(params['invoiceType']) as VoucherTypeEnum;
                     this.prepareInvoiceTypeFlags();
-                    this.resetform(this.form);
+                    this.resetform(this.invoiceForm);
                     this.getInventorySettings();
 
                     // reset customer company when invoice type changes, re-check for company currency and country
@@ -1074,7 +1074,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             if (!this.isUpdateMode) {
                 if (!this.isPendingVoucherType) {
-                    this.resetform(this.form);
+                    this.resetform(this.invoiceForm);
                     if (!this.isMultiCurrencyModule() && !this.isPurchaseInvoice) {
                         // Hide the warehouse section if the module is other than multi-currency supported modules
                         this.shouldShowWarehouse = false;
@@ -1625,7 +1625,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 const isGenerateSuccess = result[0];
                 const isGenerateInProcess = result[1];
                 if (isGenerateSuccess) {
-                    this.resetform(this.form);
+                    this.resetform(this.invoiceForm);
 
                     let lastGenVoucher: { voucherNo: string, accountUniqueName: string } = {
                         voucherNo: '',
@@ -4081,7 +4081,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         find(txn.stockList, (o) => {
             if (o.id === selectedUnit?.value) {
                 txn.stockUnitCode = o.text;
-                return txn.rate = giddhRoundOff(o.rate  / this.exchangeRate, this.highPrecisionRate);
+                return txn.rate = giddhRoundOff(o.rate / this.exchangeRate, this.highPrecisionRate);
             }
         });
     }
@@ -4129,8 +4129,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.callFromOutside) {
             this.location?.back();
         } else {
-            if (this.form) {
-                this.resetform(this.form);
+            if (this.invoiceForm) {
+                this.resetform(this.invoiceForm);
                 this.isUpdateMode = false;
             }
             this.cancelVoucherUpdate.emit(true);
@@ -6122,7 +6122,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         const apiCallObservable = this.voucherApiVersion === 2 ?
             this.salesService.generateGenericItem(request, true) : this.purchaseRecordService.generatePurchaseRecord(request);
         apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
-            this.handleGenerateResponse(response, this.form);
+            this.handleGenerateResponse(response, this.invoiceForm);
         }, () => {
             this.isShowLoader = false;
             this.startLoader(false);
@@ -6142,14 +6142,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.voucherApiVersion === 2) {
             this.salesService.updateVoucherV4(request)
                 .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
-                    this.actionsAfterVoucherUpdate(response, this.form);
+                    this.actionsAfterVoucherUpdate(response, this.invoiceForm);
                 }, () => {
                     this.startLoader(false);
                     this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 });
         } else {
             this.purchaseRecordService.generatePurchaseRecord(request, 'PATCH').pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<VoucherClass, PurchaseRecordRequest>) => {
-                this.actionsAfterVoucherUpdate(response, this.form);
+                this.actionsAfterVoucherUpdate(response, this.invoiceForm);
             }, () => {
                 this.startLoader(false);
                 this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
@@ -8545,7 +8545,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     private loadStockVariants(stockUniqueName: string, index?: number): void {
         this._ledgerService.loadStockVariants(stockUniqueName).pipe(
-            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName })))).subscribe(res => {
                 const allStockVariants = this.stockVariants.getValue();
                 this.currentlyLoadedStockVariantIndex = index;
                 allStockVariants[this.currentlyLoadedStockVariantIndex ?? this.activeIndx] = observableOf(res);

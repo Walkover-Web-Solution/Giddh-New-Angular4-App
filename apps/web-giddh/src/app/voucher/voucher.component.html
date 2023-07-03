@@ -3062,7 +3062,7 @@
                                             class="textarea-height"
                                             hasFocus
                                             #message2="hasFocus"
-                                            [class.error-box]="(form?.controls)['message2']?.errors?.maxlength"
+                                            [class.error-box]="(invoiceForm?.controls)['message2']?.errors?.maxlength"
                                             name="message2"
                                             [maxlength]="
                                                 shouldApplyMaxLengthOnNotes && !showNotesAtLastPage ? 200 : null
@@ -3076,7 +3076,8 @@
                                             shouldApplyMaxLengthOnNotes &&
                                             invFormData?.templateDetails?.other?.message2?.length &&
                                             !showNotesAtLastPage &&
-                                            (message2?.isFocused || (form?.controls)['message2']?.errors?.maxlength)
+                                            (message2?.isFocused ||
+                                                (invoiceForm?.controls)['message2']?.errors?.maxlength)
                                         "
                                     >
                                         <span class="max-character-label"
@@ -3646,7 +3647,7 @@
                                         [disabled]="
                                             isFileUploading ||
                                             !hasVoucherEntry ||
-                                            (form?.controls)['message2']?.errors?.maxlength ||
+                                            (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                             isMobileNumberInvalid
                                         "
                                         (click)="doAction(0); triggerSubmitform(form, false)"
@@ -3665,7 +3666,7 @@
                                         mat-button
                                         [disabled]="
                                             !hasVoucherEntry ||
-                                            (form?.controls)['message2']?.errors?.maxlength ||
+                                            (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                             isMobileNumberInvalid
                                         "
                                         (click)="doAction(0); triggerSubmitform(form, true)"
@@ -3680,7 +3681,7 @@
                                         class="btn-group"
                                         [isDisabled]="
                                             !hasVoucherEntry ||
-                                            (form?.controls)['message2']?.errors?.maxlength ||
+                                            (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                             isMobileNumberInvalid
                                         "
                                     >
@@ -3688,7 +3689,7 @@
                                             mat-button
                                             [disabled]="
                                                 !hasVoucherEntry ||
-                                                (form?.controls)['message2']?.errors?.maxlength ||
+                                                (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                                 isMobileNumberInvalid
                                             "
                                             (click)="doAction(0); triggerSubmitform(form, false)"
@@ -3747,14 +3748,15 @@
                                     <div
                                         class="btn-group"
                                         [isDisabled]="
-                                            !hasVoucherEntry || (form?.controls)['message2']?.errors?.maxlength
+                                            !hasVoucherEntry || (invoiceForm?.controls)['message2']?.errors?.maxlength
                                         "
                                     >
                                         <button
                                             *ngIf="!isCompany"
                                             mat-button
                                             [disabled]="
-                                                !hasVoucherEntry || (form?.controls)['message2']?.errors?.maxlength
+                                                !hasVoucherEntry ||
+                                                (invoiceForm?.controls)['message2']?.errors?.maxlength
                                             "
                                             (click)="doAction(0); triggerSubmitform(form, false)"
                                             class="btn btn-default h3"
@@ -3812,10 +3814,10 @@
                                     [disabled]="
                                         isFileUploading ||
                                         !hasVoucherEntry ||
-                                        (form?.controls)['message2']?.errors?.maxlength ||
+                                        (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                         isMobileNumberInvalid
                                     "
-                                    (click)="submitUpdateForm(form)"
+                                    (click)="submitUpdateForm(invoiceForm)"
                                 >
                                     {{ updateInvoiceText }}
                                 </button>
@@ -3957,7 +3959,7 @@
                     "
                     [isUpdateMode]="isUpdateMode"
                     [depositAmount]="depositAmount"
-                    [formDetails]="invFormData"
+                    [invoiceFormDetails]="invFormData"
                     [isVoucherModule]="true && voucherApiVersion !== 2"
                     [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
                     (closeModelEvent)="closeAdvanceReceiptModal()"
