@@ -14,11 +14,11 @@
         <div>
             <button
                 mat-stroked-button
-                color="primary"
                 class="confirmation-buttons"
                 *ngFor="let button of inputData?.configuration?.buttons"
                 (click)="sendResponse(button?.text)"
                 [ngClass]="button?.cssClass"
+                [color]="button?.color"
             >
                 {{ button?.text }}
             </button>

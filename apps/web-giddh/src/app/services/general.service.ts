@@ -207,7 +207,8 @@ export class GeneralService {
      */
     public getRcmConfiguration(isRcmSelected: boolean, commonLocaleData?: any): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
-            text: (commonLocaleData) ? commonLocaleData?.app_yes : 'Yes'
+            text: (commonLocaleData) ? commonLocaleData?.app_yes : 'Yes',
+            color: 'primary'
         },
         {
             text: (commonLocaleData) ? commonLocaleData?.app_no : 'No'
@@ -632,7 +633,8 @@ export class GeneralService {
      */
     public getDateChangeConfiguration(localeData: any, commonLocaleData: any, isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
-            text: commonLocaleData?.app_yes
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
         },
         {
             text: commonLocaleData?.app_no
@@ -671,7 +673,8 @@ export class GeneralService {
      */
     public getAttachmentDeleteConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
-            text: commonLocaleData?.app_yes
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
         },
         {
             text: commonLocaleData?.app_no
