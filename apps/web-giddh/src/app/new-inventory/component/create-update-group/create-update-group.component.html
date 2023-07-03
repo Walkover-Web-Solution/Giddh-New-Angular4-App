@@ -7,7 +7,7 @@
 >
     <div class="relative">
         <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-        <span *ngIf="!showLoader">
+        <span *ngIf="!showLoader" class="back-btn-position">
             <button
                 *ngIf="groupUniqueName"
                 (click)="backClicked()"
