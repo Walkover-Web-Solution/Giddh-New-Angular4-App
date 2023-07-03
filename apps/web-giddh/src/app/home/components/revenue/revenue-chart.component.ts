@@ -557,3 +557,4 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.requestInFlight = false;
     }
 }
+
