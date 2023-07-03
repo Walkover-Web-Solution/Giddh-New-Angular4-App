@@ -3634,7 +3634,7 @@
                             <div class="pull-right pr update-mode" *ngIf="!isUpdateMode">
                                 <button
                                     mat-button
-                                    (click)="resetform(form)"
+                                    (click)="resetInvoiceForm(form)"
                                     class="btn btn-danger d-inline-block v-align-middle"
                                 >
                                     {{ commonLocaleData?.app_clear }}
@@ -3650,7 +3650,7 @@
                                             (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                             isMobileNumberInvalid
                                         "
-                                        (click)="doAction(0); triggerSubmitform(form, false)"
+                                        (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default"
                                     >
                                         {{ commonLocaleData?.app_save }}
@@ -3669,7 +3669,7 @@
                                             (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                             isMobileNumberInvalid
                                         "
-                                        (click)="doAction(0); triggerSubmitform(form, true)"
+                                        (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, true)"
                                         class="btn btn-default"
                                         *ngIf="!isCompany && isCustomerSelected && !isPendingVoucherType"
                                     >
@@ -3692,7 +3692,7 @@
                                                 (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                                 isMobileNumberInvalid
                                             "
-                                            (click)="doAction(0); triggerSubmitform(form, false)"
+                                            (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
                                             class="btn btn-default generate-invoice"
                                         >
                                             {{ generateInvoiceText }}
@@ -3708,20 +3708,24 @@
                                                 <li role="menuitem">
                                                     <a
                                                         class="dropdown-item cp"
-                                                        (click)="doAction(2); triggerSubmitform(form, false)"
+                                                        (click)="
+                                                            doAction(2); triggerSubmitInvoiceForm(invoiceForm, false)
+                                                        "
                                                         >{{ localeData?.create_send }}</a
                                                     >
                                                 </li>
                                                 <li role="menuitem">
                                                     <a
                                                         class="dropdown-item cp"
-                                                        (click)="doAction(3); triggerSubmitform(form, false)"
+                                                        (click)="
+                                                            doAction(3); triggerSubmitInvoiceForm(invoiceForm, false)
+                                                        "
                                                         >{{ localeData?.create_print }}</a
                                                     >
                                                 </li>
                                                 <li
                                                     role="menuitem"
-                                                    (click)="doAction(4); triggerSubmitform(form, false)"
+                                                    (click)="doAction(4); triggerSubmitInvoiceForm(invoiceForm, false)"
                                                     *ngIf="voucherApiVersion !== 2"
                                                 >
                                                     <a class="dropdown-item cp">{{ localeData?.generate_recurring }}</a>
@@ -3758,7 +3762,7 @@
                                                 !hasVoucherEntry ||
                                                 (invoiceForm?.controls)['message2']?.errors?.maxlength
                                             "
-                                            (click)="doAction(0); triggerSubmitform(form, false)"
+                                            (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
                                             class="btn btn-default h3"
                                         >
                                             {{ commonLocaleData?.app_create }}
@@ -3780,14 +3784,18 @@
                                                 <li role="menuitem">
                                                     <a
                                                         class="dropdown-item cp"
-                                                        (click)="doAction(2); triggerSubmitform(form, false)"
+                                                        (click)="
+                                                            doAction(2); triggerSubmitInvoiceForm(invoiceForm, false)
+                                                        "
                                                         >{{ localeData?.create_send }}</a
                                                     >
                                                 </li>
                                                 <li role="menuitem">
                                                     <a
                                                         class="dropdown-item cp"
-                                                        (click)="doAction(3); triggerSubmitform(form, false)"
+                                                        (click)="
+                                                            doAction(3); triggerSubmitInvoiceForm(invoiceForm, false)
+                                                        "
                                                         >{{ localeData?.create_print }}</a
                                                     >
                                                 </li>

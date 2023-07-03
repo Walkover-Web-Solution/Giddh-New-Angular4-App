@@ -895,9 +895,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.generateUpdateButtonClicked.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((form: NgForm) => {
             this.startLoader(true);
             if (this.isUpdateMode) {
-                this.handleUpdateform(form);
+                this.handleUpdateInvoiceForm(form);
             } else {
-                this.onSubmitform(form);
+                this.onSubmitInvoiceForm(form);
             }
         });
 
@@ -963,7 +963,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (this.invoiceType !== params['invoiceType']) {
                     this.invoiceType = decodeURI(params['invoiceType']) as VoucherTypeEnum;
                     this.prepareInvoiceTypeFlags();
-                    this.resetform(this.invoiceForm);
+                    this.resetInvoiceForm(this.invoiceForm);
                     this.getInventorySettings();
 
                     // reset customer company when invoice type changes, re-check for company currency and country
@@ -1074,7 +1074,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             if (!this.isUpdateMode) {
                 if (!this.isPendingVoucherType) {
-                    this.resetform(this.invoiceForm);
+                    this.resetInvoiceForm(this.invoiceForm);
                     if (!this.isMultiCurrencyModule() && !this.isPurchaseInvoice) {
                         // Hide the warehouse section if the module is other than multi-currency supported modules
                         this.shouldShowWarehouse = false;
@@ -1625,7 +1625,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 const isGenerateSuccess = result[0];
                 const isGenerateInProcess = result[1];
                 if (isGenerateSuccess) {
-                    this.resetform(this.invoiceForm);
+                    this.resetInvoiceForm(this.invoiceForm);
 
                     let lastGenVoucher: { voucherNo: string, accountUniqueName: string } = {
                         voucherNo: '',
@@ -2334,7 +2334,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-    public resetform(f: NgForm) {
+    public resetInvoiceForm(f: NgForm) {
         if (f) {
             this.intl?.setNumber("");
             f.form.reset();
@@ -2420,11 +2420,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-    public triggerSubmitform(form: NgForm, isUpdate) {
+    public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
         this.updateAccount = isUpdate;
         if (this.isPendingVoucherType) {
             this.startLoader(true);
-            this.onSubmitform(form);
+            this.onSubmitInvoiceForm(form);
         } else {
             this.generateUpdateButtonClicked.next(form);
         }
@@ -2461,7 +2461,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-    public onSubmitform(form?: NgForm) {
+    public onSubmitInvoiceForm(form?: NgForm) {
         this.isShowLoader = true;
         this._cdr.detectChanges();
 
@@ -4130,7 +4130,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.location?.back();
         } else {
             if (this.invoiceForm) {
-                this.resetform(this.invoiceForm);
+                this.resetInvoiceForm(this.invoiceForm);
                 this.isUpdateMode = false;
             }
             this.cancelVoucherUpdate.emit(true);
@@ -4239,7 +4239,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {NgForm} form Form instance for values
      * @memberof VoucherComponent
      */
-    private handleUpdateform(form: NgForm): void {
+    private handleUpdateInvoiceForm(form: NgForm): void {
         let requestObject: any = this.prepareDataForApi();
         if (!requestObject) {
             this.startLoader(false);
@@ -4498,7 +4498,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
             }
             // reset form and other
-            this.resetform(form);
+            this.resetInvoiceForm(form);
             this._toasty.successToast(this.localeData?.voucher_updated);
             this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
             this.voucherNumber = response.body.number;
@@ -6170,7 +6170,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.customerAcList$ = observableOf(orderBy(this.defaultCustomerSuggestions, 'label'));
             this.salesAccounts$ = observableOf(orderBy(this.defaultItemSuggestions, 'label'));
             // reset form and other
-            this.resetform(form);
+            this.resetInvoiceForm(form);
 
             this.newVoucherUniqueName = response?.body?.uniqueName;
 
