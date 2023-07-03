@@ -16,7 +16,7 @@
         <i class="icon-cross"></i>
     </button>
     <button
-        mat-button
+        mat-stroked-button
         id="back"
         (click)="backButtonPressed()"
         *ngIf="hideFirstScreen"
@@ -26,7 +26,7 @@
     </button>
     <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" *ngIf="!hideFirstScreen">
         <div class="pd-1 text-center">
-            <button mat-raised-button class="btn btn-lg btn-primary bdr" (click)="toggleAccountPane()">
+            <button mat-stroked-button color="primary" class="btn-lg bdr" (click)="toggleAccountPane()">
                 {{ localeData?.add_account }}
             </button>
         </div>

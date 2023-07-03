@@ -15,8 +15,9 @@
                         <button
                             *ngIf="queryParams?.stockUniqueName && !addStock"
                             (click)="backClicked()"
-                            class="btn-sky-blue btn-position-left mr-0"
-                            mat-button
+                            class="btn-position-left mr-0"
+                            mat-stroked-button
+                            color="primary"
                         >
                             <i class="icon-left back-left"></i>
                             {{ commonLocaleData?.app_back }}
@@ -105,8 +106,9 @@
                                             </mat-form-field>
                                             <button
                                                 *ngIf="queryParams?.stockUniqueName"
-                                                mat-raised-button
-                                                class="btn-success min-width-100 move-stock mr-0"
+                                                mat-stroked-button
+                                                color="primary"
+                                                class="min-width-100 move-stock mr-0"
                                                 (click)="moveStock()"
                                                 [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
                                                 [autocomplete]="'off'"
