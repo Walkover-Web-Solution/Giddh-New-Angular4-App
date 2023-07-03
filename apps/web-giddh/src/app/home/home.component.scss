@@ -21,9 +21,7 @@
     font-size: var(--font-size-15);
     box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
 }
-.click-here {
-    color: var(--color-blue);
-}
+
 .dashboard-container {
     max-width: 1200px;
     width: 100%;
@@ -38,18 +36,7 @@ span.icon-info-icon {
     font-size: var(--font-size-16);
     margin-right: 10px;
 }
-.dropdown-menu {
-    z-index: 1;
-    border: 1px solid var(--color-common-secondary-border);
-}
-a.dropdown-item {
-    color: var(--color-nero);
-}
 
-a.dropdown-item:hover {
-    background-color: var(--color-dark-fog);
-    color: var(--color-blue);
-}
 .dashboard-notification {
     margin-bottom: 20px;
 }
@@ -66,9 +53,7 @@ a.dropdown-item:hover {
 .form-control:focus {
     border-color: var(--color-blue) !important;
 }
-.click-here {
-    cursor: pointer;
-}
+
 .no-data-available {
     display: flex;
     height: 181px;

@@ -118,6 +118,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { SelectFieldComponent } from '../theme/form-fields/select-field/select-field.component';
+import { DropdownFieldComponent } from '../theme/form-fields/dropdown-field/dropdown-field.component';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -167,7 +168,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Invoice Form instance */
     @ViewChild('invoiceForm', { static: false }) public invoiceForm: NgForm;
     /** Open Account Selection Dropdown instance */
-    @ViewChild('openAccountSelectionDropdown', { static: false }) public openAccountSelectionDropdown: SelectFieldComponent;
+    @ViewChild('openAccountSelectionDropdown', { static: false }) public openAccountSelectionDropdown: DropdownFieldComponent;
     /** Discount Compomnent instance */
     @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
     /** Tax Compomnent instance */
@@ -201,7 +202,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Billing state field instance */
     @ViewChild('statesBilling', { static: false }) statesBilling: SelectFieldComponent;
     /** Billing state field instance */
-    @ViewChild('statesShipping', { static: false }) statesShipping: SelectFieldComponent;;
+    @ViewChild('statesShipping', { static: false }) statesShipping: SelectFieldComponent;
     /** Mobile Number state instance */
     @ViewChild('initContactProforma', { static: false }) initContactProforma: ElementRef;
     /** Instance of RCM checkbox */
@@ -221,17 +222,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Delete attachment modal */
     @ViewChild('attachmentDeleteConfirmationModel', { static: true }) public attachmentDeleteConfirmationModel: any;
     // This will use for instance of warehouse
-    @ViewChild('selectWarehouse', { static: false }) public selectWarehouse: SelectFieldComponent;
+    @ViewChild('selectWarehouse', { static: false }) public selectWarehouse: DropdownFieldComponent;
     // This will use for instance of linking dropdown
-    @ViewChild('linkingDropdown', { static: false }) public linkingDropdown: SelectFieldComponent;
+    @ViewChild('linkingDropdown', { static: false }) public linkingDropdown: DropdownFieldComponent;
     // This will use for instance of invoice list
-    @ViewChild('invoiceListDropdown', { static: false }) public invoiceListDropdown: SelectFieldComponent;
-    // This will use for instance of sales deposit dropdown
-    @ViewChild('salesDepositDropdown', { static: false }) public salesDepositDropdown: SelectFieldComponent;
+    @ViewChild('invoiceListDropdown', { static: false }) public invoiceListDropdown: DropdownFieldComponent;
     // This will use for instance of deposit dropdown
-    @ViewChild('depositDropdown', { static: false }) public depositDropdown: SelectFieldComponent;
-    // This will use for instance of customer billing state
-    @ViewChild('customerBillingState', { static: false }) public customerBillingState: SelectFieldComponent;
+    @ViewChild('depositDropdown', { static: false }) public depositDropdown: DropdownFieldComponent;
     // This will use for instance of customer shipping state
     @ViewChild('customerShippingState', { static: false }) public customerShippingState: SelectFieldComponent;
     // This will use for instance of company billing state
@@ -552,6 +549,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public defaultItemSuggestions: Array<IOption> = [];
     /** True, if API call should be prevented on default scroll caused by scroll in list */
     public preventDefaultScrollApiCall: boolean = false;
+    /** Holds images folder path */
+    public imgPath: string = "";
     /** Stores the search results pagination details for customer */
     public searchCustomerResultsPaginationData = {
         page: 0,
@@ -711,6 +710,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public isCashBankAccount: boolean = false;
     /** Current page for reference vouchers */
     private referenceVouchersCurrentPage: number = 1;
+    /** Total pages for reference vouchers */
+    private referenceVouchersTotalPages: number = 1;
     /** Reference voucher search field */
     private searchReferenceVoucher: any = "";
     /** List of discounts */
@@ -866,6 +867,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public ngOnInit() {
 
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         /** This will use for filter link purchase orders  */
         this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterPurchaseOrder(search);
@@ -1424,10 +1426,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             // convert date object
                             if (this.isProformaInvoice) {
                                 obj.voucherDetails.voucherDate = dayjs(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
-                                obj.voucherDetails.voucherNumber = obj.voucherDetails.proformaNumber;
+                                obj.voucherDetails.voucherNumber = obj.voucherDetails.proformaNumber || obj.voucherDetails.voucherNumber;
                             } else if (this.isEstimateInvoice) {
                                 obj.voucherDetails.voucherDate = dayjs(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
-                                obj.voucherDetails.voucherNumber = obj.voucherDetails.estimateNumber;
+                                obj.voucherDetails.voucherNumber = obj.voucherDetails.estimateNumber || obj.voucherDetails.voucherNumber;
                             } else {
                                 obj.voucherDetails.voucherDate = dayjs(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
                             }
@@ -1967,6 +1969,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 request.number = this.searchReferenceVoucher;
                 request.page = this.referenceVouchersCurrentPage;
+
+                if (request.page > 1 && this.referenceVouchersTotalPages < request.page) {
+                    return;
+                }
+
                 this.referenceVouchersCurrentPage++;
             } else {
                 request = {
@@ -1997,6 +2004,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.invoiceList = [];
                 }
                 if (response && response.body) {
+                    this.referenceVouchersTotalPages = response.body.totalPages;
                     if (response.body.results || response.body.items) {
                         let items = [];
                         if (response.body.results) {
@@ -2149,9 +2157,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.selectedInvoice = event.value;
                 this.invFormData.voucherDetails.referenceVoucher = {
                     uniqueName: event.value,
-                    voucherType: event.additional?.additional?.voucherType ? event.additional?.additional?.voucherType : event.additional?.voucherType,
-                    number: event.additional?.additional?.voucherNumber ? event.additional?.additional?.voucherNumber : event.additional?.voucherNumber,
-                    date: event.additional?.additional?.voucherDate ? event.additional?.additional?.voucherDate : event.additional?.voucherDate
+                    voucherType: event.additional?.voucherType,
+                    number: event.additional?.voucherNumber,
+                    date: event.additional?.voucherDate
                 }
             } else {
                 this.invoiceSelectedLabel = event?.label;
@@ -2160,7 +2168,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     linkedInvoices: [
                         {
                             invoiceUniqueName: event?.value,
-                            voucherType: event.additional?.additional?.voucherType ? event.additional?.additional?.voucherType : event.additional?.voucherType
+                            voucherType: event.additional?.voucherType
                         }
                     ]
                 }
@@ -3713,6 +3721,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.intl?.setNumber("");
         this.typeaheadNoResultsOfCustomer = false;
         this.referenceVouchersCurrentPage = 1;
+        this.referenceVouchersTotalPages = 1;
         if (item && item?.value) {
             this.invFormData.voucherDetails.customerName = item.label;
             this.invFormData.voucherDetails.customerUniquename = item.value;
@@ -7575,27 +7584,27 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public updateDueDate(): void {
-        let invoiceSettings: InvoiceSetting = null;
-        this.store.pipe(select(state => state.invoice.settings), take(1)).subscribe(res => invoiceSettings = res);
-        if (invoiceSettings) {
-            let duePeriod: number;
-            if (this.isEstimateInvoice) {
-                duePeriod = invoiceSettings.estimateSettings ? invoiceSettings.estimateSettings.duePeriod : 0;
-            } else if (this.isProformaInvoice) {
-                duePeriod = invoiceSettings.proformaSettings ? invoiceSettings.proformaSettings.duePeriod : 0;
-            } else {
-                duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
-                this.useCustomInvoiceNumber = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.useCustomInvoiceNumber : false;
-            }
-
-            if (this.invFormData.voucherDetails.voucherDate) {
-                if (typeof (this.invFormData.voucherDetails.voucherDate) === "object") {
-                    this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? dayjs(this.invFormData.voucherDetails.voucherDate).add(duePeriod, 'day').toDate() : dayjs(this.invFormData.voucherDetails.voucherDate).toDate();
+        this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(invoiceSettings => {
+            if (invoiceSettings) {
+                let duePeriod: number;
+                if (this.isEstimateInvoice) {
+                    duePeriod = invoiceSettings.estimateSettings ? invoiceSettings.estimateSettings.duePeriod : 0;
+                } else if (this.isProformaInvoice) {
+                    duePeriod = invoiceSettings.proformaSettings ? invoiceSettings.proformaSettings.duePeriod : 0;
                 } else {
-                    this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? dayjs(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).add(duePeriod, 'day').toDate() : dayjs(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
+                    duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
+                    this.useCustomInvoiceNumber = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.useCustomInvoiceNumber : false;
+                }
+
+                if (this.invFormData.voucherDetails.voucherDate) {
+                    if (typeof (this.invFormData.voucherDetails.voucherDate) === "object") {
+                        this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? dayjs(this.invFormData.voucherDetails.voucherDate).add(duePeriod, 'day').toDate() : dayjs(this.invFormData.voucherDetails.voucherDate).toDate();
+                    } else {
+                        this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? dayjs(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).add(duePeriod, 'day').toDate() : dayjs(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
+                    }
                 }
             }
-        }
+        });
     }
 
     /**
@@ -8182,6 +8191,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.invoiceList = [];
         this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 1;
+        this.referenceVouchersTotalPages = 1;
     }
 
     /**
@@ -8495,12 +8505,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.selectWarehouse?.closeDropdownPanel();
             this.linkingDropdown?.closeDropdownPanel();
             this.invoiceListDropdown?.closeDropdownPanel();
-            this.customerBillingState?.closeDropdownPanel();
             this.customerShippingState?.closeDropdownPanel();
             this.companyBillingState?.closeDropdownPanel();
             this.companyShippingState?.closeDropdownPanel();
             this.depositDropdown?.closeDropdownPanel();
-            this.salesDepositDropdown?.closeDropdownPanel();
         }
     }
 

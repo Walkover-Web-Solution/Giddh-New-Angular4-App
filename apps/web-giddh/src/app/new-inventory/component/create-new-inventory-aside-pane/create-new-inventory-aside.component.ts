@@ -92,4 +92,8 @@ export class CreateNewInventoryAsideComponent implements OnInit {
             this.translationLoaded = true;
         }
     }
+
+    public openCreateBranchTransfer(type: string): void {
+        this.router.navigate(['/pages/inventory/v2/branch-transfer/create']);
+    }
 }

@@ -9,7 +9,7 @@
     <div class="stock-balance-wrapper" *ngIf="!isLoading">
         <div class="stock-balance-top-bar">
             <div class="stock-balance-top-bar-left-side">
-                <button class="new-stock-btn" mat-button [matMenuTriggerFor]="newStock">
+                <button mat-stroked-button color="primary" [matMenuTriggerFor]="newStock">
                     {{ localeData?.warehouse_opening_balance?.new_stock }}
                     <span class="caret"></span>
                 </button>
@@ -296,9 +296,7 @@
                                                     (selectedOption)="
                                                         warehouseVariant.stockUnit.uniqueName = $event?.value;
                                                         warehouseVariant.stockUnit.name = $event.label;
-                                                        warehouseVariant.stockUnit.code =
-                                                            $event.additional?.code ||
-                                                            $event.additional?.additional?.code;
+                                                        warehouseVariant.stockUnit.code = $event.additional?.code;
                                                         stockUpdate(stock, warehouseVariant)
                                                     "
                                                     [defaultValue]="warehouseVariant?.stockUnit?.code"

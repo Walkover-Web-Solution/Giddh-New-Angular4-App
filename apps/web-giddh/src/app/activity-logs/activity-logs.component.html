@@ -22,7 +22,6 @@
                 </div>
                 <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'LOG_DATE'">
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                        <i class="icon-calender calendar-addon"></i>
                         <input
                             type="text"
                             name="selectedDateRange"
@@ -46,7 +45,6 @@
                 </div>
                 <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'ENTRY_DATE'">
                     <div class="custom-datepicker" (click)="showEntryGiddhDatepicker($event)">
-                        <i class="icon-calender calendar-addon"></i>
                         <input
                             type="text"
                             name="selectedEntryDateRange"
@@ -57,7 +55,6 @@
                 </div>
                 <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'VOUCHER_DATE'">
                     <div class="custom-datepicker" (click)="showVoucherGiddhDatepicker($event)">
-                        <i class="icon-calender calendar-addon"></i>
                         <input
                             type="text"
                             name="selectedVoucherDateRange"
@@ -121,7 +118,7 @@
             <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
         </div>
         <div class="button-wrapper">
-            <button mat-raised-button class="min160 mr-l1" (click)="getActivityLogs(true)">
+            <button mat-stroked-button class="min160 mr-l1" (click)="getActivityLogs(true)">
                 {{ localeData?.get_logs }}
             </button>
         </div>

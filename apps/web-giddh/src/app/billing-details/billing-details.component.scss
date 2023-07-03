@@ -243,11 +243,6 @@
                 font-weight: bolder;
                 height: 38px;
                 font-size: var(--font-size-16);
-                color: var(--color-senary-button-text);
-                background-color: var(--color-senary-button-background);
-                &:hover {
-                    background-color: var(--color-senary-button-background-hover);
-                }
             }
         }
     }

@@ -20,6 +20,7 @@ export const INVENTORY_API = {
     UPDATE_STOCK_GROUP: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // put call
     DELETE_STOCK_GROUP: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // DELETE call
     STOCKS: 'company/:companyUniqueName/stocks', // get call
+    STOCKS_V2: 'company/:companyUniqueName/stocks/v2', // get call
     MANUFACTURING_STOCKS: 'company/:companyUniqueName/stocks-manufacture', // get call
     CREATE_NEW_MANUFACTURING_STOCKS: 'company/:companyUniqueName/stocks?isManufactured=true', // get call
     GROUPS_STOCKS: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // get call
