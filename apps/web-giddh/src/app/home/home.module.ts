@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-import { HighchartsChartModule } from 'highcharts-angular';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -48,7 +47,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         FormsModule,
         HomeRoutingModule,
         ModalModule,
-        HighchartsChartModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
