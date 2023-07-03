@@ -36,6 +36,7 @@ import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimize
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
+import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 
 @Component({
     selector: 'account-add-new-details',
@@ -186,7 +187,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private invoiceService: InvoiceService,
         private changeDetectorRef: ChangeDetectorRef,
         private customFieldsService: CustomFieldsService,
-        private http: HttpClient) {
+        private http: HttpClient,
+        private accountsAction: AccountsAction) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
     }
 
@@ -385,6 +387,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             closingBalanceTriggerAmountType: ['CREDIT'],
             customFields: this._fb.array([])
         });
+
+        this.addAccountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+        });
+
         this.getInvoiceSettings();
     }
 

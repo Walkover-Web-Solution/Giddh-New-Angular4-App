@@ -67,6 +67,7 @@ export class AccountsAction {
     public static ASSIGN_DISCOUNT_TO_ACCOUNT = 'ASSIGN_DISCOUNT_TO_ACCOUNT';
     public static RESET_SHARE_ENTITY = 'RESET_SHARE_ENTITY';
     public static RESET_UPDATE_ACCOUNTV2 = 'RESET_UPDATE_ACCOUNTV2';
+    public static ACCOUNT_HAS_UNSAVED_CHANGES = 'ACCOUNT_HAS_UNSAVED_CHANGES';
 
     public ApplyAccountTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -850,6 +851,13 @@ export class AccountsAction {
     public resetShareEntity(): CustomActions {
         return {
             type: AccountsAction.RESET_SHARE_ENTITY
+        }
+    }
+
+    public hasUnsavedChanges(value: boolean): CustomActions {
+        return {
+            type: AccountsAction.ACCOUNT_HAS_UNSAVED_CHANGES,
+            payload: value
         }
     }
 }

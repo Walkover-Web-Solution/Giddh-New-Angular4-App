@@ -12,6 +12,7 @@ import { AppState } from "apps/web-giddh/src/app/store";
 import { Observable, ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { eventsConst } from "../eventsConst";
+import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-leave-utility.service";
 
 @Component({
     selector: "master",
@@ -62,6 +63,8 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     public activeAccount$: Observable<AccountResponseV2>;
     /** True if we need to use breadcrumb of account */
     private useAccountBreadcrumb: boolean = false;
+    /** True if account has unsaved changes */
+    private hasUnsavedChanges: boolean = false;
 
     constructor(
         private groupService: GroupService,
@@ -70,7 +73,8 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         private store: Store<AppState>,
         private scrollDispatcher: ScrollDispatcher,
         private changeDetectorRef: ChangeDetectorRef,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
 
     }
@@ -234,6 +238,10 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
                 this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
             }
         });
+
+        this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasUnsavedChanges = response;
+        });
     }
 
     /**
@@ -311,7 +319,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Handles group click
+     * Checks if there are unsaved changes in group/account on group click
      *
      * @param {*} item
      * @param {number} currentIndex
@@ -319,6 +327,26 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof MasterComponent
      */
     public onGroupClick(item: any, currentIndex: number, loadMaster: boolean = true): void {
+        if (this.hasUnsavedChanges) {
+            this.confirmPageLeave(() => {
+                this.groupClicked(item, currentIndex, loadMaster);
+            });
+            return;
+        }
+
+        this.groupClicked(item, currentIndex, loadMaster);
+    }
+
+    /**
+     * Handles group click
+     *
+     * @private
+     * @param {*} item
+     * @param {number} currentIndex
+     * @param {boolean} [loadMaster=true]
+     * @memberof MasterComponent
+     */
+    private groupClicked(item: any, currentIndex: number, loadMaster: boolean = true): void {
         this.currentGroupColumnIndex = currentIndex;
         this.currentGroupUniqueName = item?.uniqueName;
         this.showCreateNewButton = true;
@@ -334,13 +362,31 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Handles account click
+     * Checks if there are unsaved changes in group/account on account click
      *
      * @param {*} item
      * @param {number} currentIndex
      * @memberof MasterComponent
      */
     public onAccountClick(item: any, currentIndex: number): void {
+        if (this.hasUnsavedChanges) {
+            this.confirmPageLeave(() => {
+                this.accountClick(item, currentIndex);
+            });
+            return;
+        }
+        this.accountClick(item, currentIndex);
+    }
+
+    /**
+     * Handles account click
+     *
+     * @private
+     * @param {*} item
+     * @param {number} currentIndex
+     * @memberof MasterComponent
+     */
+    private accountClick(item: any, currentIndex: number): void {
         this.currentGroupColumnIndex = currentIndex;
         this.currentGroupUniqueName = this.masterColumnsData[currentIndex].groupUniqueName;
         this.showCreateNewButton = true;
@@ -397,13 +443,31 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Shows add new account form
+     * Checks if there are unsaved changes in group/account on add new account click
      *
      * @param {*} items
      * @param {number} currentIndex
      * @memberof MasterComponent
      */
     public showAddNewForm(items: any, currentIndex: number): void {
+        if (this.hasUnsavedChanges) {
+            this.confirmPageLeave(() => {
+                this.openAddNewForm(items, currentIndex);
+            });
+            return;
+        }
+        this.openAddNewForm(items, currentIndex);
+    }
+
+    /**
+     * Shows add new account form
+     *
+     * @private
+     * @param {*} items
+     * @param {number} currentIndex
+     * @memberof MasterComponent
+     */
+    private openAddNewForm(items: any, currentIndex: number): void {
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
         let activeGroup;
@@ -516,5 +580,23 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Shows page leave confirmation
+     *
+     * @private
+     * @param {Function} callback
+     * @memberof MasterComponent
+     */
+    private confirmPageLeave(callback: Function): void {
+        let dialogRef = this.pageLeaveUtilityService.openDialog();
+
+        dialogRef.afterClosed().subscribe((action) => {
+            if (action) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                callback();
+            }
+        });
     }
 }

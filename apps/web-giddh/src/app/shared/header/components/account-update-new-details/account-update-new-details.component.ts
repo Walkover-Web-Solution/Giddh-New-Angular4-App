@@ -489,6 +489,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             closingBalanceTriggerAmountType: ['CREDIT'],
             customFields: this._fb.array([])
         });
+
+        this.addAccountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+        });
+        
         this.getInvoiceSettings();
     }
 
