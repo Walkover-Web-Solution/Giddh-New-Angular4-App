@@ -7,177 +7,221 @@
 >
     <div class="relative">
         <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-        <span *ngIf="!showLoader">
-            <button
-                *ngIf="groupUniqueName"
-                (click)="backClicked()"
-                class="btn-position-left mt-2 ml-3"
-                mat-stroked-button
-                color="primary"
-            >
-                <i class="icon-left back-left"></i>
-                {{ commonLocaleData?.app_back }}
-            </button>
-        </span>
+        <hamburger-menu></hamburger-menu>
+        
         <ng-container *ngIf="!showLoader">
             <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">
                 <div class="container-fluid">
-                    <div class="create-group-page">
-                        <div class="row row-gap">
-                            <div class="col-sm-6 col-lg-6 ml-lg-2">
-                                <input-field
-                                    class="input-width"
-                                    [name]="'productName'"
-                                    [placeholder]="localeData?.enter_group"
-                                    [type]="'text'"
-                                    formControlName="name"
-                                    [required]="true"
-                                    (change)="!groupUniqueName ? generateUniqueName() : ''"
-                                >
-                                </input-field>
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="create-group-page">
+                                <div class="row row-gap">
+                                    <div class="col-sm-12 col-lg-6 ml-lg-2">
+                                        <input-field
+                                            class="input-width"
+                                            [name]="'name'"
+                                            [placeholder]="localeData?.enter_group"
+                                            [type]="'text'"
+                                            formControlName="name"
+                                            [required]="true"
+                                            (change)="!groupUniqueName ? generateUniqueName() : ''"
+                                            [showError]="isFormSubmitted && !groupForm.get('name')?.value"
+                                        >
+                                        </input-field>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-6 ml-lg-2">
+                                        <input-field
+                                            class="input-width"
+                                            [name]="'uniqueName'"
+                                            [placeholder]="commonLocaleData?.app_unique_name_placeholder"
+                                            formControlName="uniqueName"
+                                            [type]="'text'"
+                                            [required]="true"
+                                            [showError]="isFormSubmitted && !groupForm.get('uniqueName')?.value"
+                                        >
+                                        </input-field>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-6 ml-lg-2">
+                                        <div
+                                            class="
+                                                inline-multiple-input-width
+                                                d-flex
+                                                align-items-center
+                                                justify-content-space-between
+                                            "
+                                        >
+                                            <div>
+                                                <mat-radio-group
+                                                    color="primary"
+                                                    name="groupForm.showCodeType"
+                                                    formControlName="showCodeType"
+                                                    (change)="onChangeHsnSacType()"
+                                                >
+                                                    <mat-radio-button id="hsn" [value]="'hsn'">{{
+                                                        commonLocaleData?.app_hsn_code
+                                                    }}</mat-radio-button>
+                                                    <mat-radio-button id="sac" [value]="'sac'">{{
+                                                        commonLocaleData?.app_sac_code
+                                                    }}</mat-radio-button>
+                                                </mat-radio-group>
+                                            </div>
+                                            <div class="input-min-width">
+                                                <div
+                                                    class="hsnsac-field"
+                                                    *ngIf="groupForm.get('showCodeType')?.value === 'hsn'"
+                                                >
+                                                    <input-field
+                                                        [name]="'hsnCode'"
+                                                        [placeholder]="localeData?.enter_hsn"
+                                                        [type]="'number'"
+                                                        formControlName="hsnNumber"
+                                                        [maxlength]="10"
+                                                        [digitsOnlyDirective]="true"
+                                                    >
+                                                    </input-field>
+                                                </div>
+                                                <div
+                                                    class="hsnsac-field"
+                                                    *ngIf="groupForm.get('showCodeType')?.value === 'sac'"
+                                                >
+                                                    <input-field
+                                                        [name]="'sacCode'"
+                                                        [placeholder]="localeData?.enter_sac"
+                                                        [type]="'number'"
+                                                        formControlName="sacNumber"
+                                                        [maxlength]="10"
+                                                        [digitsOnlyDirective]="true"
+                                                    >
+                                                    </input-field>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-6 ml-lg-2" *ngIf="showTaxField">
+                                        <mat-form-field class="input-width" appearance="outline">
+                                            <mat-label>{{ commonLocaleData?.app_tax }}</mat-label>
+                                            <mat-select
+                                                name="taxes"
+                                                [placeholder]="commonLocaleData?.app_select_tax"
+                                                formControlName="taxes"
+                                                multiple
+                                                (openedChange)="openedSelectTax($event)"
+                                            >
+                                                <mat-option
+                                                    *ngFor="let tax of taxes"
+                                                    [value]="tax?.uniqueName"
+                                                    [disabled]="tax.isDisabled"
+                                                    [selected]="tax.isChecked"
+                                                    (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
+                                                    >{{ tax.name }}</mat-option
+                                                >
+                                                <mat-option
+                                                    class="create-update-no-data"
+                                                    [disabled]="true"
+                                                    *ngIf="!taxes?.length"
+                                                    >{{ commonLocaleData?.app_no_result_found }}</mat-option
+                                                >
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mr-t15">
+                                    <div class="col-sm-12 col-lg-6 ml-lg-2">
+                                        <div
+                                            class="
+                                                inline-multiple-input-width
+                                                d-flex
+                                                align-items-center
+                                                justify-content-space-between
+                                            "
+                                        >
+                                            <div>
+                                                <div class="d-flex toggle-childgroup">
+                                                    <mat-slide-toggle
+                                                        class="mt-1"
+                                                        color="primary"
+                                                        name="isSubGroup"
+                                                        formControlName="isSubGroup"
+                                                    >
+                                                    </mat-slide-toggle>
+                                                    <label>{{ localeData?.is_it_childgroup }}</label>
+                                                </div>
+                                            </div>
+                                            <div class="input-min-width" *ngIf="groupForm.get('isSubGroup')?.value">
+                                                <dropdown-field
+                                                    [name]="'parentStockGroupUniqueName'"
+                                                    [placeholder]="commonLocaleData?.app_select_parent_group"
+                                                    [options]="stockGroups"
+                                                    (selectedOption)="
+                                                        stockGroupUniqueName = $event?.value; stockGroupName = $event?.label
+                                                    "
+                                                    [defaultValue]="stockGroupName"
+                                                ></dropdown-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-sm-6 col-lg-6 ml-lg-2">
-                                <input-field
-                                    class="input-width"
-                                    [name]="'uniqueName'"
-                                    [placeholder]="commonLocaleData?.app_unique_name_placeholder"
-                                    formControlName="uniqueName"
-                                    [type]="'text'"
-                                    [required]="true"
-                                >
-                                </input-field>
+                            <div class="row footer-wrapper">
+                                <div class="col-sm-12 col-lg-12 ml-lg-2">
+                                    <div class="d-flex align-items-center w-100">
+                                        <div>
+                                            <button mat-stroked-button color="primary" (click)="saveGroup()">
+                                                {{
+                                                    groupUniqueName
+                                                        ? commonLocaleData?.app_update
+                                                        : commonLocaleData?.app_create
+                                                }}
+                                            </button>
+                                        </div>
+                                        <div class="ml-auto right-aligned-buttons">
+                                            <button
+                                                *ngIf="!groupUniqueName"
+                                                mat-stroked-button
+                                                (click)="resetGroupForm()"
+                                            >
+                                                {{ commonLocaleData?.app_clear }}
+                                            </button>
+        
+                                            <button
+                                                *ngIf="groupUniqueName"
+                                                mat-stroked-button
+                                                class="min-width-100"
+                                                (click)="cancelEdit()"
+                                            >
+                                                {{ commonLocaleData?.app_close }}
+                                            </button>
+                                            <button
+                                                *ngIf="groupUniqueName"
+                                                mat-stroked-button
+                                                color="warn"
+                                                class="min-width-100"
+                                                (click)="deleteGroup()"
+                                            >
+                                                {{ commonLocaleData?.app_delete }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-sm-6 col-lg-12 ml-lg-2 mb-2">
-                                <mat-radio-group
+                        </div>
+                        <div class="col-3">
+                            <span *ngIf="!showLoader" class="float-right mt-3">
+                                <button
+                                    *ngIf="groupUniqueName"
+                                    (click)="backClicked()"
+                                    class="mr-0"
+                                    mat-stroked-button
                                     color="primary"
-                                    name="groupForm.showCodeType"
-                                    formControlName="showCodeType"
-                                    (change)="onChangeHsnSacType()"
                                 >
-                                    <mat-radio-button id="hsn" [value]="'hsn'">{{
-                                        commonLocaleData?.app_hsn_code
-                                    }}</mat-radio-button>
-                                    <mat-radio-button id="sac" [value]="'sac'">{{
-                                        commonLocaleData?.app_sac_code
-                                    }}</mat-radio-button>
-                                </mat-radio-group>
-                            </div>
-                            <div class="col-sm-6 col-lg-6 ml-lg-2">
-                                <div class="hsnsac-field" *ngIf="groupForm.get('showCodeType')?.value === 'hsn'">
-                                    <input-field
-                                        class="input-width"
-                                        [name]="'hsnCode'"
-                                        [placeholder]="localeData?.enter_hsn"
-                                        [type]="'number'"
-                                        formControlName="hsnNumber"
-                                        [max]="10"
-                                        [allowDecimalDigitsOnly]="true"
-                                    >
-                                    </input-field>
-                                </div>
-                                <div class="hsnsac-field" *ngIf="groupForm.get('showCodeType')?.value === 'sac'">
-                                    <input-field
-                                        [name]="'sacCode'"
-                                        [placeholder]="localeData?.enter_sac"
-                                        [type]="'number'"
-                                        formControlName="sacNumber"
-                                        [max]="10"
-                                        [allowDecimalDigitsOnly]="true"
-                                    >
-                                    </input-field>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-6 ml-lg-2">
-                                <mat-form-field class="input-width" appearance="outline">
-                                    <mat-label>Tax</mat-label>
-                                    <mat-select
-                                        name="taxes"
-                                        [placeholder]="commonLocaleData?.app_select_tax"
-                                        formControlName="taxes"
-                                        multiple
-                                    >
-                                        <mat-option
-                                            *ngFor="let tax of taxes"
-                                            [value]="tax?.uniqueName"
-                                            [disabled]="tax?.isDisabled"
-                                            [selected]="tax?.isChecked"
-                                            (onSelectionChange)="!tax?.isDisabled ? selectTax(tax) : ''"
-                                            >{{ tax?.name }}</mat-option
-                                        >
-                                        <mat-option
-                                            class="create-update-no-data"
-                                            [disabled]="true"
-                                            *ngIf="!taxes?.length"
-                                            >{{ localeData?.no_tax_found }}</mat-option
-                                        >
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row mr-t15">
-                            <div class="col-sm-6 col-lg-4 ml-lg-2">
-                                <div class="d-flex toggle-childgroup">
-                                    <mat-slide-toggle
-                                        class="mt-1"
-                                        color="primary"
-                                        name="isSubGroup"
-                                        formControlName="isSubGroup"
-                                    >
-                                    </mat-slide-toggle>
-                                    <label>{{ localeData?.is_it_childgroup }}</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mr-t15">
-                            <div class="col-sm-6 col-lg-6 ml-lg-2">
-                                <dropdown-field
-                                    class="input-width"
-                                    [readonly]="!groupForm.get('isSubGroup')?.value"
-                                    [name]="'parentStockGroupUniqueName'"
-                                    [placeholder]="commonLocaleData?.app_select_parent_group"
-                                    [options]="stockGroups"
-                                    (selectedOption)="
-                                        stockGroupUniqueName = $event?.value; stockGroupName = $event?.label
-                                    "
-                                    [defaultValue]="stockGroupName"
-                                    [autocomplete]="true"
-                                ></dropdown-field>
-                            </div>
+                                    <i class="icon-left back-left"></i>
+                                    {{ commonLocaleData?.app_back }}
+                                </button>
+                            </span>
                         </div>
                     </div>
-                </div>
-                <div class="footer-wrapper mr-t15">
-                    <div class="button-group">
-                        <button *ngIf="!groupUniqueName" mat-stroked-button class="mr-3" (click)="resetGroupForm()">
-                            {{ commonLocaleData?.app_clear }}
-                        </button>
-
-                        <button
-                            *ngIf="groupUniqueName"
-                            mat-stroked-button
-                            color="primary"
-                            class="min-width-100"
-                            (click)="cancelEdit()"
-                        >
-                            {{ commonLocaleData?.app_close }}
-                        </button>
-                        <button
-                            *ngIf="groupUniqueName"
-                            mat-stroked-button
-                            color="warn"
-                            class="min-width-100"
-                            (click)="deleteGroup()"
-                        >
-                            {{ commonLocaleData?.app_delete }}
-                        </button>
-                        <button mat-stroked-button color="primary" (click)="saveGroup()">
-                            {{
-                                groupUniqueName
-                                    ? commonLocaleData?.app_update_group
-                                    : commonLocaleData?.app_create_group
-                            }}
-                        </button>
-                    </div>
+                   
+                    
                 </div>
             </form>
         </ng-container>

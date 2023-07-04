@@ -148,7 +148,8 @@
                                         *ngIf="selectedCheckedContacts?.length > 0"
                                         (click)="clearSelectedContacts()"
                                     >
-                                        <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_selected }}
+                                        <span class="icon-cross icon-font-14"></span>
+                                        {{ commonLocaleData?.app_clear_selected }}
                                     </button>
                                 </div>
 
@@ -1348,12 +1349,7 @@
                             <button
                                 mat-stroked-button
                                 *ngIf="!isGetAllIntegratedBankInProgress && isIciciAccountPendingForApproval"
-                                class="
-                                    btn-small
-                                    min-width-137
-                                    pending-approval-button
-                                    contact-ipad-responsive
-                                "
+                                class="btn-small min-width-137 pending-approval-button contact-ipad-responsive"
                                 (click)="showIntegrationProcess()"
                             >
                                 {{ localeData?.pending_approval }}

@@ -15,20 +15,12 @@
         <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" vr-item>
             <ng-container *ngIf="moduleType === 'branchtransfer'">
                 <div class="pb-3">
-                    <button                        
-                        mat-stroked-button
-                        color="primary"
-                        (click)="openCreateBranchTransfer('receipt-note')"
-                    >
+                    <button mat-stroked-button color="primary" (click)="openCreateBranchTransfer('receipt-note')">
                         Receipt Note
                     </button>
                 </div>
                 <div>
-                    <button
-                        color="primary"
-                        mat-stroked-button
-                        (click)="openCreateBranchTransfer('delivery-challan')"
-                    >
+                    <button color="primary" mat-stroked-button (click)="openCreateBranchTransfer('delivery-challan')">
                         Delivery Challan
                     </button>
                 </div>
