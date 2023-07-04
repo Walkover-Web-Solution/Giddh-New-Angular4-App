@@ -10024,7 +10024,7 @@ giddh-datepicker {
         }
     }
 
-    .disabled-btn-color:disabled {
+    .disabled-ladda-btn:disabled {
         .mat-button-wrapper {
             color: var(--color-common-secondary-disabled) !important;
         }
@@ -14394,6 +14394,20 @@ button{
         }  
     }
 }
+
+/* This is class used to color the only ladda button text color which is conditionally disabled*/
+.disabled-ladda-btn{
+    &.mat-stroked-button {
+        &.mat-primary{    
+            &:disabled{
+                .ladda-label{
+                    color:  var(--color-giddh-blue) !important;
+                }                
+            }                   
+        }  
+    }
+}
+
 /* ======Ladda  Button Color in Material Stroked Button====End Here=========== */
 
 /*============Material Button Disabled Cursor======Start===========*/
