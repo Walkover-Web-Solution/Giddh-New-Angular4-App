@@ -107,7 +107,7 @@
                             </div>
                             <div class="col-sm-12 col-lg-6 ml-lg-2" *ngIf="showTaxField">
                                 <mat-form-field class="input-width" appearance="outline">
-                                    <mat-label>Tax</mat-label>
+                                    <mat-label>{{ commonLocaleData?.app_tax }}</mat-label>
                                     <mat-select
                                         name="taxes"
                                         [placeholder]="commonLocaleData?.app_select_tax"
