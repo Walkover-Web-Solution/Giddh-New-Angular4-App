@@ -2364,6 +2364,7 @@
                                         <div class="product-name">
                                             <div class="ng-select-wrap">
                                                 <select-field
+                                                    [autofocus]="true"
                                                     #selectAccount
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('item')"
@@ -3809,11 +3810,7 @@
                             <!-- endregion -->
                             <!-- region update mode -->
                             <div class="pull-right pr" *ngIf="isUpdateMode">
-                                <button
-                                    mat-stroked-button
-                                    class="d-inline-block"
-                                    (click)="cancelUpdate()"
-                                >
+                                <button mat-stroked-button class="d-inline-block" (click)="cancelUpdate()">
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
                                 <button
@@ -3990,7 +3987,7 @@
             </div>
         </div>
     </ng-template>
-    <!-- region  delete attachment confirmation popup -->
+    <!-- region delete attachment confirmation popup -->
     <ng-template #attachmentDeleteConfirmationModel>
         <div class="modal-dialog modal-md">
             <div class="modal-content">

@@ -177,7 +177,13 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <button mat-stroked-button color="primary" class="unbold" (click)="exportLedger()" [disabled]="isLoading">
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    class="unbold"
+                    (click)="exportLedger()"
+                    [disabled]="isLoading"
+                >
                     {{ commonLocaleData?.app_download }}
                 </button>
                 <button
