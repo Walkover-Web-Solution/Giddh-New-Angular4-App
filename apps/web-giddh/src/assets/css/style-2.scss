@@ -14395,15 +14395,15 @@ button {
 }
 
 /* This class is used to ladda button text color which is conditionally disabled*/
-.disabled-ladda-btn{
+.disabled-ladda-btn {
     &.mat-stroked-button {
-        &.mat-primary{    
-            &:disabled{
-                .ladda-label{
-                    color:  var(--color-giddh-blue) !important;
-                }                
-            }                   
-        }  
+        &.mat-primary {
+            &:disabled {
+                .ladda-label {
+                    color: var(--color-giddh-blue) !important;
+                }
+            }
+        }
     }
 }
 
@@ -14418,3 +14418,21 @@ button {
     }
 }
 /*============Material Button Disabled Cursor======End===========*/
+
+.ledger-date {
+    .input-wrapper {
+        .mat-form-field {
+            .mat-form-field-wrapper {
+                .mat-form-field-flex {
+                    .mat-form-field-infix {
+                        border: 0 !important;
+                        width: 100%;
+                        input {
+                            border: 1px solid var(--color-secondary-input-bar-border) !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
