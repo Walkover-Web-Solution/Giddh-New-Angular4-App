@@ -57,6 +57,12 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public translationLoaded: boolean = false;
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
+    /** True if tax selection box is open */
+    public isTaxSelectionOpen: boolean = false;
+    /** Holds list of taxes processed while tax selection box was closed */
+    public processedTaxes: any[] = [];
+    /** True if we need to show tax field. We are maintaining this because taxes are not getting reset on form reset */
+    public showTaxField: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -141,7 +147,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public getTaxes(): void {
         this.store.dispatch(this.companyAction.getTax());
         this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.length > 0) {
+            if (response?.length > 0 && !this.processedTaxes?.length) {
                 this.taxes = response || [];
             }
             this.changeDetection.detectChanges();
@@ -158,15 +164,23 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * Select tax
-    *
-    * @param {*} taxSelected
-    * @memberof CreateUpdateGroupComponent
-    */
+     * Select tax
+     *
+     * @param {*} taxSelected
+     * @memberof CreateUpdateGroupComponent
+     */
     public selectTax(taxSelected: any): void {
         if (!taxSelected) {
             return;
         }
+
+        if (!this.isTaxSelectionOpen) {
+            if (this.processedTaxes.includes(taxSelected.uniqueName)) {
+                return;
+            }
+            this.processedTaxes.push(taxSelected.uniqueName);
+        }
+
         let isSelected = this.selectedTaxes?.filter(selectedTax => selectedTax === taxSelected.uniqueName);
         if (taxSelected.taxType !== 'gstcess') {
             let index = findIndex(this.taxTempArray, (taxTemp) => taxTemp.taxType === taxSelected.taxType);
@@ -234,6 +248,19 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.changeDetection.detectChanges();
     }
 
+/**
+ * Callback for tax selection box change event
+ *
+ * @param {boolean} event
+ * @memberof CreateUpdateGroupComponent
+ */
+    public openedSelectTax(event: boolean): void {
+        this.isTaxSelectionOpen = event;
+        if (event) {
+            this.processedTaxes = [];
+        }
+    }
+
     /**
     * Creates/updates the group
     *
@@ -253,7 +280,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
                     this.getStockGroups();
-                    this.selectedGroupTaxes();
                     this.toaster.clearAllToaster();
                     this.toaster.successToast(this.localeData?.stock_group_update);
                     this.backClicked();
@@ -352,36 +378,26 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.stockGroupName = '';
         this.stockGroupUniqueName = '';
         this.selectedTaxes = [];
+        this.processedTaxes = [];
         this.isFormSubmitted = false;
         this.changeDetection.detectChanges();
     }
 
+
     /**
-     * This will reset the taxes list
-     *
-     * @memberof CreateUpdateGroupComponent
-     */
+    * This will reset the taxes list
+    *
+    * @memberof CreateUpdateGroupComponent
+    */
     public resetTaxes(): void {
-        this.taxes?.forEach(tax => {
+        this.showTaxField = false;
+        this.changeDetection.detectChanges();
+        this.taxes = this.taxes?.map(tax => {
             tax.isChecked = false;
             tax.isDisabled = false;
             return tax;
         });
-        this.changeDetection.detectChanges();
-    }
-
-    /**
-     * This will use for select group tax on update
-     *
-     * @memberof CreateUpdateGroupComponent
-     */
-    public selectedGroupTaxes(): void {
-        this.taxes?.forEach(tax => {
-            if (tax?.isChecked) {
-                this.selectTax(tax);
-            }
-            return tax;
-        });
+        this.showTaxField = true;
         this.changeDetection.detectChanges();
     }
 
