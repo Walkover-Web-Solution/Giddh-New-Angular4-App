@@ -70,11 +70,7 @@
                         </select-field>
                     </div>
                     <div class="clearfix text-right" *ngIf="mode === 'create'">
-                        <button
-                            mat-stroked-button
-                            class="btn-sm mat-field-border"
-                            (click)="closeAsidePane($event)"
-                        >
+                        <button mat-stroked-button class="btn-sm mat-field-border" (click)="closeAsidePane($event)">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                         <button

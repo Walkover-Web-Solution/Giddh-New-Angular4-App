@@ -294,7 +294,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private invoiceAction: InvoiceActions,
         private commonAction: CommonActions
     ) {
-
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.trxRequest = new TransactionsRequest();

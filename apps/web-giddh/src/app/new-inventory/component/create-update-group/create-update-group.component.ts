@@ -55,6 +55,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public showLoader: boolean = false;
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** True if form is submitted to show error if available */
+    public isFormSubmitted: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -69,7 +71,20 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private location: Location,
     ) {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
+    }
+
+    /**
+     * Hook for component initialization
+     *
+     * @memberof CreateUpdateGroupComponent
+     */
+    public ngOnInit(): void {
+        /* added image path */
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        /** added parent class to body after entering create group page */
+        document.querySelector("body").classList.add("group-create-update");
         this.initGroupForm();
+        this.getTaxes();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.stockType = params?.type?.toUpperCase();
             if (this.stockType === 'FIXEDASSETS') {
@@ -81,16 +96,11 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             } else {
                 this.stockGroupUniqueName = "";
             }
+            if (this.stockType) {
+                this.getStockGroups();
+                this.changeDetection.detectChanges();
+            }
         });
-    }
-
-    /**
-     * Hook for component initialization
-     *
-     * @memberof CreateUpdateGroupComponent
-     */
-    public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.groupForm.controls['isSubGroup'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.groupForm.controls['parentStockGroupUniqueName'].enable();
@@ -101,11 +111,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 this.stockGroupUniqueName = '';
             }
         });
-        if (this.stockType) {
-            this.getStockGroups();
-            this.getTaxes();
-        }
-        document.querySelector("body").classList.add("group-create-update");
     }
 
     /**
@@ -235,6 +240,11 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     * @memberof CreateUpdateGroupComponent
     */
     public saveGroup(): void {
+        this.isFormSubmitted = false;
+        if (!this.groupForm.get('name')?.value || !this.groupForm.get('uniqueName')?.value) {
+            this.isFormSubmitted = true;
+            return;
+        }
         this.groupForm.controls['parentStockGroupUniqueName'].setValue(this.stockGroupUniqueName);
         this.groupForm.controls['type'].setValue(this.stockType);
         if (this.groupUniqueName) {
@@ -342,6 +352,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.stockGroupName = '';
         this.stockGroupUniqueName = '';
         this.selectedTaxes = [];
+        this.isFormSubmitted = false;
         this.changeDetection.detectChanges();
     }
 
@@ -416,14 +427,15 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.inventoryService.getStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body) {
                 this.toggleLoader(false);
-                this.stockGroupName = response.body.parentStockGroupNames;
+                this.stockGroupName = response.body.parentStockGroup?.name;
+                this.stockGroupUniqueName = response?.body.parentStockGroup?.uniqueName;
                 this.groupForm?.patchValue({
                     name: response.body.name,
                     uniqueName: response.body.uniqueName,
                     showCodeType: response.body.hsnNumber ? "hsn" : "sac",
                     hsnNumber: response.body.hsnNumber,
                     sacNumber: response.body.sacNumber,
-                    parentStockGroupUniqueName: response.body.parentStockGroupNames,
+                    parentStockGroupUniqueName: response.body.parentStockGroup ? response.body.parentStockGroup.uniqueName : '',
                     isSubGroup: (response.body.parentStockGroup?.uniqueName) ? true : false,
                     taxes: response.body.taxes
                 });
@@ -444,7 +456,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     * @memberof CreateUpdateGroupComponent
     */
     public cancelEdit(): void {
-        this.router.navigate(['/pages/inventory']);
+        this.backClicked();
     }
 
     /**

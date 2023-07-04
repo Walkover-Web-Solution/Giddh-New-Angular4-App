@@ -39,7 +39,12 @@
                     <ng-container>
                         <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
                         <div class="no-entries" *ngIf="!isLoading && !drAccounts?.length">
-                            <button mat-stroked-button color="primary" class="min-width-130" [routerLink]="['/pages/proforma-invoice/invoice/sales']">
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                class="min-width-130"
+                                [routerLink]="['/pages/proforma-invoice/invoice/sales']"
+                            >
                                 {{ localeData?.do_sales }}
                             </button>
                         </div>
@@ -132,7 +137,12 @@
                     <ng-container>
                         <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
                         <div class="no-entries" *ngIf="!isLoading && !crAccounts?.length">
-                           <button mat-stroked-button color="primary" class="min-width-130" [routerLink]="['/pages/proforma-invoice/invoice/purchase']">
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                class="min-width-130"
+                                [routerLink]="['/pages/proforma-invoice/invoice/purchase']"
+                            >
                                 {{ localeData?.do_purchase }}
                             </button>
                         </div>

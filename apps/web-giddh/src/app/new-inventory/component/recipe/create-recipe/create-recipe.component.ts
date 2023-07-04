@@ -233,10 +233,10 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             return;
         }
 
-        if (!isEdit) {
-            object.stockUnitCode = event?.additional?.stockUnitCode;
-            object.stockUnitUniqueName = event?.additional?.stockUnitUniqueName;
-        }
+        // if (!isEdit) {
+        //     object.stockUnitCode = event?.additional?.stockUnitCode;
+        //     object.stockUnitUniqueName = event?.additional?.stockUnitUniqueName;
+        // }
 
         object.variants = [];
 
@@ -259,6 +259,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                         };
                     }
                 }
+                this.changeDetectionRef.detectChanges();
             }
         });
     }
@@ -320,6 +321,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                         }
                     }
                 }
+                this.changeDetectionRef.detectChanges();
             }
         });
     }

@@ -101,10 +101,13 @@
                 <ng-container matColumnDef="importFile">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.import_file }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <a target="_blank" [href]="element.efsPath" 
-                        mat-stroked-button
-                        color="primary"
-                        class="import-button-status">
+                        <a
+                            target="_blank"
+                            [href]="element.efsPath"
+                            mat-stroked-button
+                            color="primary"
+                            class="import-button-status"
+                        >
                             {{ commonLocaleData?.app_download }}
                         </a>
                     </td>
