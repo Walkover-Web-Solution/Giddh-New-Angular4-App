@@ -1034,8 +1034,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public getTransactionData() {
         this.closingBalanceBeforeReconcile = null;
-        this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
-        this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
+        if (this.trxRequest?.accountUniqueName) {
+            this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
+            this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
+        }
     }
 
     public getCurrencyRate(mode: string = null) {
