@@ -50,6 +50,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
     declarations: [
@@ -108,7 +113,12 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         MatInputModule,
         MatSelectModule,
         MatCheckboxModule,
-        FormFieldsModule
+        FormFieldsModule,
+        MatListModule,
+        MatTooltipModule,
+        MatTableModule,
+        MatButtonModule,
+        MatMenuModule
     ]
 })
 export class PurchaseModule {

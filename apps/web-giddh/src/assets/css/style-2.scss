@@ -14395,15 +14395,15 @@ button {
 }
 
 /* This class is used to ladda button text color which is conditionally disabled*/
-.disabled-ladda-btn{
+.disabled-ladda-btn {
     &.mat-stroked-button {
-        &.mat-primary{    
-            &:disabled{
-                .ladda-label{
-                    color:  var(--color-giddh-blue) !important;
-                }                
-            }                   
-        }  
+        &.mat-primary {
+            &:disabled {
+                .ladda-label {
+                    color: var(--color-giddh-blue) !important;
+                }
+            }
+        }
     }
 }
 
@@ -14418,3 +14418,37 @@ button {
     }
 }
 /*============Material Button Disabled Cursor======End===========*/
+.invoice-sidebar-wrapper {
+    .mat-list-item {
+        height: auto !important;
+        .mat-list-item-content {
+            padding: 0 !important;
+        }
+    }
+    .invoice-search-box {
+        text-field {
+            input {
+                flex: 1;
+                border: 1px solid var(--color-search-bar-primary-border);
+                border-radius: 5px;
+                height: 37px;
+                padding: 0 30px;
+                background-image: url("../../assets/images/searchIcon.svg");
+                background-position: 10px 13px;
+                background-repeat: no-repeat;
+                background-color: var(--color-sidebar-primary-search-bar-background);
+                width: 100%;
+            }
+        }
+        .mat-stroked-button {
+            min-width: auto !important;
+        }
+    }
+}
+.more-menu {
+    &:hover {
+        color: var(--color-dropdown-list-hover-text) !important;
+    }
+}
+
+// background: var(--color-dropdown-list-hover-background) !important;

@@ -923,11 +923,6 @@ table.tax-table.item {
         i.icon-history-icon {
             color: var(--color-abbey);
         }
-        &:hover {
-            i.icon-history-icon {
-                color: var(--color-white);
-            }
-        }
     }
 }
 @media (max-width: 1024px) and (min-width: 992px) {

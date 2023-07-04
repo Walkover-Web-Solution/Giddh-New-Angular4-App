@@ -11,8 +11,9 @@
             <div class="d-flex date-advance-search">
                 <div class="btn-wrapper">
                     <button
+                        mat-stroked-button
+                        color="primary"
                         *ngIf="!isCompany"
-                        class="btn btn-sky-blue desktop-view-btn"
                         [routerLink]="['/pages/purchase-management/purchase-order/new']"
                     >
                         {{ localeData?.new_order }}
@@ -32,7 +33,7 @@
                     </div>
                 </form>
             </div>
-            <div class="clear-filter" *ngIf="showClearFilterButton() && !isMobileScreen">
+            <div class="clear-filter" *ngIf="showClearFilterButton()">
                 <button class="btn btn-default mr-0" (click)="clearFilter()">
                     <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                 </button>
@@ -42,100 +43,67 @@
                     *ngIf="purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0"
                     class="more-toggle"
                 >
-                    <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
-                        <button
-                            dropdownToggle
-                            type="button"
-                            class="btn btn-primary desktop-view-btn dropdown-toggle"
-                            aria-controls="dropdown-basic"
-                        >
+                    <div *ngIf="!isCompany">
+                        <button mat-stroked-button color="primary" [matMenuTriggerFor]="menu">
                             {{ commonLocaleData?.app_more }}
                             <span class="caret"></span>
                         </button>
-                        <ul
-                            *dropdownMenu
-                            class="dropdown-menu fixed-dropdown-plus"
-                            role="menu"
-                            aria-labelledby="button-basic"
-                        >
-                            <li role="menuitem">
-                                <a
-                                    class="dropdown-item cp"
-                                    href="javascript:void(0)"
-                                    (click)="openModalBulkUpdate(template)"
-                                    >{{ localeData?.bulk_update }}</a
-                                >
-                            </li>
-                            <li role="menuitem">
-                                <a
-                                    class="dropdown-item cp"
-                                    href="javascript:void(0)"
-                                    (click)="
-                                        voucherApiVersion === 2
-                                            ? openBulkConvert(purchaseBulkConvert)
-                                            : bulkUpdate('create_purchase_bill')
-                                    "
-                                >
-                                    {{ localeData?.convert_tobill }}</a
-                                >
-                            </li>
-                            <li role="menuitem">
-                                <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
-                                    {{ localeData?.expired }}</a
-                                >
-                            </li>
-                            <li role="menuitem">
-                                <a class="dropdown-item cp" href="javascript:void(0)" (click)="confirmBulkDelete()">{{
-                                    commonLocaleData?.app_delete
-                                }}</a>
-                            </li>
-                        </ul>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="openModalBulkUpdate(template)" class="more-menu">
+                                {{ localeData?.bulk_update }}
+                            </button>
+                            <button
+                                mat-menu-item
+                                (click)="
+                                    voucherApiVersion === 2
+                                        ? openBulkConvert(purchaseBulkConvert)
+                                        : bulkUpdate('create_purchase_bill')
+                                "
+                                class="more-menu"
+                            >
+                                {{ localeData?.convert_tobill }}
+                            </button>
+                            <button mat-menu-item (click)="bulkUpdate('expire')" class="more-menu">
+                                {{ localeData?.expired }}
+                            </button>
+                            <button mat-menu-item (click)="confirmBulkDelete()" class="more-menu">
+                                {{ commonLocaleData?.app_delete }}
+                            </button>
+                        </mat-menu>
                     </div>
                 </div>
-                <div
-                    class="d-flex align-items-center advance-icon btn btn-primary mr-0"
-                    [tooltip]="commonLocaleData?.app_advance_search"
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    [matTooltip]="commonLocaleData?.app_advance_search"
                     (click)="openAdvanceSearchModal(purchaseAdvanceSearch)"
                 >
-                    <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
                     <span class="icon-advance-filter"></span>
-                </div>
+                    {{ commonLocaleData?.app_filter }}
+                </button>
             </div>
         </div>
-        <div class="mobile-search" *ngIf="!isMobileScreen">
+        <div class="mobile-search">
             <div class="clear-filter mr-1" *ngIf="showClearFilterButton()">
-                <button class="btn btn-default mr-0" (click)="clearFilter()">
+                <button mat-stroked-button color="primary" (click)="clearFilter()">
                     <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                 </button>
             </div>
             <div>
-                <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
-                    <button
-                        dropdownToggle
-                        type="button"
-                        class="btn btn-primary desktop-view-btn dropdown-toggle"
-                        aria-controls="dropdown-basic"
-                    >
+                <div *ngIf="!isCompany">
+                    <button mat-stroked-button [matMenuTriggerFor]="menu">
                         {{ commonLocaleData?.app_more }}
                         <span class="caret"></span>
                     </button>
-                    <ul
-                        *dropdownMenu
-                        class="dropdown-menu fixed-dropdown-plus"
-                        role="menu"
-                        aria-labelledby="button-basic"
-                    >
-                        <li role="menuitem">
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                            <a class="cp" href="javascript:void(0)" (click)="openModalBulkUpdate(template)">{{
+                                localeData?.bulk_update
+                            }}</a>
+                        </button>
+                        <button mat-menu-item>
                             <a
-                                class="dropdown-item cp"
-                                href="javascript:void(0)"
-                                (click)="openModalBulkUpdate(template)"
-                                >{{ localeData?.bulk_update }}</a
-                            >
-                        </li>
-                        <li role="menuitem">
-                            <a
-                                class="dropdown-item cp"
+                                class="cp"
                                 href="javascript:void(0)"
                                 (click)="
                                     voucherApiVersion === 2
@@ -145,24 +113,25 @@
                             >
                                 {{ localeData?.convert_tobill }}</a
                             >
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
+                        </button>
+                        <button mat-menu-item>
+                            <a class="cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
                                 {{ localeData?.expired }}</a
                             >
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="confirmBulkDelete()">{{
+                        </button>
+                        <button mat-menu-item>
+                            <a class="cp" href="javascript:void(0)" (click)="confirmBulkDelete()">{{
                                 commonLocaleData?.app_delete
                             }}</a>
-                        </li>
-                    </ul>
+                        </button>
+                    </mat-menu>
                 </div>
             </div>
             <div class="btn-wrapper">
                 <button
+                    mat-stroked-button
+                    color="primary"
                     *ngIf="!isCompany"
-                    class="btn btn-sky-blue desktop-view-btn mr-0"
                     [routerLink]="['/pages/purchase-management/purchase-order/new']"
                 >
                     {{ localeData?.new_order }}
