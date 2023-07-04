@@ -27,7 +27,7 @@
         .input-min-width {
             min-width: 50%;
         }
-    }
+    }    
 }
 
 .create-inventory-btn {
@@ -56,6 +56,13 @@
 .footer-wrapper {
     margin-top: 45px;
     max-width: 560px;
+    
+    .right-aligned-buttons{
+        .mat-stroked-button{
+            margin-right: 0 !important;
+            margin-left: 15px;
+        }
+    }
 }
 
 .page-title-inventory {
