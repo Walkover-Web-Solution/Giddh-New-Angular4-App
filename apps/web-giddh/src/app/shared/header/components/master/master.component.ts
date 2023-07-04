@@ -240,6 +240,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
             this.hasUnsavedChanges = response;
         });
     }
