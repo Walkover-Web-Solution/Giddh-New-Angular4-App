@@ -27,13 +27,13 @@
                             <div class="col-sm-12 col-lg-6 ml-lg-2">
                                 <input-field
                                     class="input-width"
-                                    [name]="'productName'"
+                                    [name]="'name'"
                                     [placeholder]="localeData?.enter_group"
                                     [type]="'text'"
                                     formControlName="name"
                                     [required]="true"
                                     (change)="!groupUniqueName ? generateUniqueName() : ''"
-                                    [showError]="isFormSubmitted && !this.groupForm.get('productName')?.value"
+                                    [showError]="isFormSubmitted && !groupForm.get('name')?.value"
                                 >
                                 </input-field>
                             </div>
@@ -45,7 +45,7 @@
                                     formControlName="uniqueName"
                                     [type]="'text'"
                                     [required]="true"
-                                    [showError]="isFormSubmitted && !this.groupForm.get('uniqueName')?.value"
+                                    [showError]="isFormSubmitted && !groupForm.get('uniqueName')?.value"
                                 >
                                 </input-field>
                             </div>
@@ -105,7 +105,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-lg-6 ml-lg-2">
+                            <div class="col-sm-12 col-lg-6 ml-lg-2" *ngIf="showTaxField">
                                 <mat-form-field class="input-width" appearance="outline">
                                     <mat-label>Tax</mat-label>
                                     <mat-select
@@ -113,20 +113,21 @@
                                         [placeholder]="commonLocaleData?.app_select_tax"
                                         formControlName="taxes"
                                         multiple
+                                        (openedChange)="openedSelectTax($event)"
                                     >
                                         <mat-option
                                             *ngFor="let tax of taxes"
                                             [value]="tax?.uniqueName"
-                                            [disabled]="tax?.isDisabled"
-                                            [selected]="tax?.isChecked"
-                                            (onSelectionChange)="!tax?.isDisabled ? selectTax(tax) : ''"
-                                            >{{ tax?.name }}</mat-option
+                                            [disabled]="tax.isDisabled"
+                                            [selected]="tax.isChecked"
+                                            (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
+                                            >{{ tax.name }}</mat-option
                                         >
                                         <mat-option
                                             class="create-update-no-data"
                                             [disabled]="true"
                                             *ngIf="!taxes?.length"
-                                            >{{ localeData?.no_tax_found }}</mat-option
+                                            >{{ commonLocaleData?.app_no_result_found }}</mat-option
                                         >
                                     </mat-select>
                                 </mat-form-field>
