@@ -33,7 +33,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
     /** This will hold stock type */
     public stockType: string = '';
 
-    constructor(private store: Store<AppState>, private inventorySidebarAction: SidebarAction, private accountsAction: AccountsAction, private generalService: GeneralService,) {
+    constructor(private store: Store<AppState>, private inventorySidebarAction: SidebarAction, private accountsAction: AccountsAction, private generalService: GeneralService) {
         this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }

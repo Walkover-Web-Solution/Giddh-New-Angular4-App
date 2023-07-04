@@ -36,7 +36,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     /* This will hold add stock value from aside menu */
     @Input() public addStock: boolean = false;
     /* This will hold  stock type from aside menu */
-    @Input() public stockType;
+    @Input() public stockType: string;
     /* This will emit close aside menu event */
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     /* this will store image path*/

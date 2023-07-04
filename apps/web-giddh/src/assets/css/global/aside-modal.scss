@@ -12,9 +12,10 @@
         }
     }
 }
-#aside-pane-product-service{
-    z-index: 9999 !important;
-}
-#ledger-aside-pane{
-    z-index: 999 !important;
+
+.stock-create-edit{
+    .cdk-overlay-container,
+    .cdk-global-overlay-wrapper {
+        z-index: 99999 !important;
+    }  
 }

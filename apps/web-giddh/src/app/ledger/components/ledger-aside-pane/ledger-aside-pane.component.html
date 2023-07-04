@@ -1,8 +1,8 @@
 <div class="aside-pane">
-    <div class="form-header" *ngIf="!hideFirstScreen || voucherApiVersion !== 1">
+    <div class="form-header" *ngIf="!hideFirstScreen || voucherApiVersion === 2">
         <h3>
             {{ commonLocaleData?.app_add }}
-            <span *ngIf="voucherApiVersion !== 1">{{
+            <span *ngIf="voucherApiVersion === 2">{{
                 stockType !== "fixed_assets" ? (stockType | titlecase) : "Fixed Assets"
             }}</span>
         </h3>
