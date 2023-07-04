@@ -4782,7 +4782,7 @@
                 <button
                     *ngIf="queryParams?.stockUniqueName"
                     mat-stroked-button
-                    class="btn-primary min-width-100"
+                    class="min-width-100"
                     (click)="backClicked()"
                 >
                     {{ commonLocaleData?.app_close }}
@@ -4790,7 +4790,8 @@
                 <button
                     *ngIf="queryParams?.stockUniqueName"
                     mat-stroked-button
-                    class="btn-danger min-width-100"
+                    color="warn"
+                    class="min-width-100"
                     (click)="deleteStock()"
                 >
                     {{ commonLocaleData?.app_delete }}
@@ -4798,7 +4799,8 @@
                 <button
                     *ngIf="queryParams?.stockUniqueName"
                     mat-stroked-button
-                    class="btn-success min-width-100"
+                    color="primary"
+                    class="min-width-100"
                     (click)="updateStock(stockCreateEditForm)"
                     [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError"
                 >
