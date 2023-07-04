@@ -208,11 +208,10 @@ export class GeneralService {
     public getRcmConfiguration(isRcmSelected: boolean, commonLocaleData?: any): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
             text: (commonLocaleData) ? commonLocaleData?.app_yes : 'Yes',
-            cssClass: 'btn btn-success'
+            color: 'primary'
         },
         {
-            text: (commonLocaleData) ? commonLocaleData?.app_no : 'No',
-            cssClass: 'btn btn-danger'
+            text: (commonLocaleData) ? commonLocaleData?.app_no : 'No'
         }];
         const headerText: string = (commonLocaleData) ? commonLocaleData?.app_rc_heading : 'Reverse Charge Confirmation';
         const headerCssClass: string = 'd-inline-block mr-1';
@@ -635,11 +634,10 @@ export class GeneralService {
     public getDateChangeConfiguration(localeData: any, commonLocaleData: any, isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
             text: commonLocaleData?.app_yes,
-            cssClass: 'btn btn-success'
+            color: 'primary'
         },
         {
-            text: commonLocaleData?.app_no,
-            cssClass: 'btn btn-danger'
+            text: commonLocaleData?.app_no
         }];
         const headerText: string = localeData?.date_change_confirmation_heading;
         const headerCssClass: string = 'd-inline-block mr-1';
@@ -676,11 +674,10 @@ export class GeneralService {
     public getAttachmentDeleteConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
             text: commonLocaleData?.app_yes,
-            cssClass: 'btn btn-success'
+            color: 'primary'
         },
         {
-            text: commonLocaleData?.app_no,
-            cssClass: 'btn btn-danger'
+            text: commonLocaleData?.app_no
         }];
         const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';

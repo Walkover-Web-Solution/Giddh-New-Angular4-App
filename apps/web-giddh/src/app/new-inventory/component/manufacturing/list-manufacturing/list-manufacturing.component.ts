@@ -116,8 +116,6 @@ export class ListManufacturingComponent implements OnInit {
     private currentUrl: string = "";
     /** True if initial load of store filters */
     private initialLoad: boolean = false;
-    /** Count of warehouses */
-    public warehousesCount: number = 0;
 
     constructor(
         private dialog: MatDialog,
@@ -230,7 +228,7 @@ export class ListManufacturingComponent implements OnInit {
                             value: this.activeCompany ? this.activeCompany.uniqueName : '',
                             isCompany: true
                         });
-                        this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches?.length > 2;
+                        this.isCompany = this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches?.length > 2;
                         let currentBranchUniqueName;
                         if (!this.currentBranch?.uniqueName) {
                             // Assign the current branch only when it is not selected. This check is necessary as
@@ -247,7 +245,6 @@ export class ListManufacturingComponent implements OnInit {
                                     uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                                 };
 
-                                this.selectedBranchName = this.currentBranch.alias;
                                 this.handleBranchChange({ label: this.currentBranch.alias, value: this.currentBranch.uniqueName });
                             }
                         }
@@ -278,10 +275,6 @@ export class ListManufacturingComponent implements OnInit {
                 warehouses?.results?.forEach(warehouse => {
                     this.warehouses.push({ label: warehouse?.name, value: warehouse?.uniqueName });
                 });
-                if (this.currentOrganizationType !== OrganizationType.Company) {
-                    this.allWarehouses = cloneDeep(this.warehouses);
-                    this.warehousesCount = this.allWarehouses?.length;
-                }
                 this.changeDetectionRef.detectChanges();
             }
         });
@@ -328,20 +321,22 @@ export class ListManufacturingComponent implements OnInit {
         this.manufacturingSearchRequest.searchOperation = '';
         this.manufacturingSearchRequest.searchValue = '';
         this.manufacturingSearchRequest.inventoryType = '';
+        this.selectedBranchName = '';
+        this.selectedStockName = "";
+        this.selectedVariantName = "";
+        this.selectedWarehouseName = "";
+        this.selectedOperationName = "";
+        this.selectedFilterByName = "";
+        this.selectedInventoryTypeName = "";
+        this.totalItems = 0;
+
         this.manufacturingSearchRequest.page = 1;
         this.manufacturingSearchRequest.count = this.paginationLimit;
         this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
         this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.manufacturingSearchRequest.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
         this.manufacturingSearchRequest.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-        this.selectedStockName = "";
-        this.selectedVariantName = "";
-        this.selectedBranchName = this.currentBranch.alias;
-        this.selectedWarehouseName = "";
-        this.selectedOperationName = "";
-        this.selectedFilterByName = "";
-        this.selectedInventoryTypeName = "";
-        this.totalItems = 0;
+        
         this.handleBranchChange({ label: this.currentBranch.alias, value: this.currentBranch.uniqueName });
         this.getReport();
     }
@@ -456,8 +451,10 @@ export class ListManufacturingComponent implements OnInit {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity?.label;
+        this.selectedBranchName = selectedEntity?.label;
         this.manufacturingSearchRequest.branchUniqueName = selectedEntity?.value;
-
+        this.manufacturingSearchRequest.warehouseUniqueName = "";
+        this.selectedWarehouseName = "";
         this.warehouses = this.allWarehouses[selectedEntity?.value];
     }
 
@@ -482,7 +479,6 @@ export class ListManufacturingComponent implements OnInit {
                             });
                         }
                     });
-                    this.warehousesCount = Object.keys(this.allWarehouses)?.length;
                     this.changeDetectionRef.detectChanges();
                 }
             } else {
@@ -528,7 +524,7 @@ export class ListManufacturingComponent implements OnInit {
     public showHideClearFilterButton(): void {
         this.showClearButton = false;
 
-        if ((this.universalDate && (this.manufacturingSearchRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.manufacturingSearchRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))) || this.manufacturingSearchRequest.product || this.manufacturingSearchRequest.productVariant || this.manufacturingSearchRequest.warehouseUniqueName || this.manufacturingSearchRequest.inventoryType || this.manufacturingSearchRequest.searchBy || this.manufacturingSearchRequest.searchOperation || this.manufacturingSearchRequest.searchValue) {
+        if ((this.universalDate && (this.manufacturingSearchRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.manufacturingSearchRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))) || this.manufacturingSearchRequest.product || this.manufacturingSearchRequest.productVariant || this.manufacturingSearchRequest.branchUniqueName || this.manufacturingSearchRequest.warehouseUniqueName || this.manufacturingSearchRequest.inventoryType || this.manufacturingSearchRequest.searchBy || this.manufacturingSearchRequest.searchOperation || this.manufacturingSearchRequest.searchValue) {
             this.showClearButton = true;
         }
 

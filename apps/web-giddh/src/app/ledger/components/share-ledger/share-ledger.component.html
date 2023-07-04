@@ -42,14 +42,14 @@
                                         </mat-form-field>
                                         <span class="input-group-btn mr-l1">
                                             <button
-                                                mat-button
+                                                mat-stroked-button
+                                                color="primary"
                                                 class="
-                                                    btn
                                                     share-ledger-button
-                                                    btn-success btn-md
+                                                    btn-md
                                                     d-flex
                                                     align-items-center
-                                                    disabled-btn-color
+                                                    disabled-ladda-btn
                                                 "
                                                 type="submit"
                                                 [disabled]="shareAccountForm.invalid"
@@ -117,7 +117,7 @@
                                             btn-success
                                             d-flex
                                             align-items-center
-                                            disabled-btn-color
+                                            disabled-ladda-btn
                                         "
                                         (click)="toggleIsCopied()"
                                         [ngxClipboard]="magicLinkInput"

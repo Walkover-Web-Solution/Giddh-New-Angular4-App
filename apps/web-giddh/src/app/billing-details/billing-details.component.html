@@ -11,7 +11,8 @@
                 <div class="col-sm-1" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <div class="back-btnn">
                         <button
-                            class="btn btn-default back-button d-inline-flex"
+                            mat-stroked-button
+                            class="back-button"
                             (click)="backToSubscriptions()"
                             *ngIf="!showLoader"
                         >
@@ -320,7 +321,7 @@
                                 ></div>
                                 <button
                                     class="pay-now"
-                                    mat-button
+                                    mat-stroked-button
                                     color="primary"
                                     [ngClass]="{ 'pay-now-content': showLoader }"
                                     (click)="payWithRazor(billingForm)"
