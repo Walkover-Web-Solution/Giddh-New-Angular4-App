@@ -3506,7 +3506,6 @@ button:focus {
     outline: none !important;
 }
 
-
 .mat-raised-button:focus,
 .mat-raised-button.focus {
     box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%) !important;
@@ -14286,19 +14285,19 @@ body.hide-scroll-body.master-page {
 .mat-icon-button,
 .mat-stroked-button {
     border-color: var(--color-secondary-input-bar-border) !important;
-    &.mat-primary{
+    &.mat-primary {
         color: var(--color-giddh-blue) !important;
-    }  
-/*--- common-btn ---*/
-.mat-button.mat-primary,
-.mat-icon-button.mat-primary,
-.mat-stroked-button.mat-primary {
-    color: var(--color-primary-header-background);
-
-    .mat-button-focus-overlay {
-        background-color: var(--color-primary-header-background) !important;
     }
-}
+    /*--- common-btn ---*/
+    .mat-button.mat-primary,
+    .mat-icon-button.mat-primary,
+    .mat-stroked-button.mat-primary {
+        color: var(--color-primary-header-background);
+
+        .mat-button-focus-overlay {
+            background-color: var(--color-primary-header-background) !important;
+        }
+    }
 }
 /*================Material Buttons Color=======End Here==================*/
 
@@ -14349,7 +14348,7 @@ voucher-component {
     width: 100%;
 }
 
-.icon-font-14{
+.icon-font-14 {
     font-size: 14px;
 }
 /*--- inventory-search ---*/
@@ -14364,44 +14363,44 @@ voucher-component {
 }
 
 /* ======Ladda  Button Color in Material Stroked Button====Start Here=========== */
-button{
+button {
     &.mat-stroked-button {
-        &.mat-primary{    
-            &:disabled{
-                .ladda-label{
+        &.mat-primary {
+            &:disabled {
+                .ladda-label {
                     color: transparent;
-                }                
-            }        
-            &.ladda-button{
-                &:not(:disabled){
-                    .ladda-label{
+                }
+            }
+            &.ladda-button {
+                &:not(:disabled) {
+                    .ladda-label {
                         color: var(--color-giddh-blue) !important;
                         display: contents;
                         width: auto;
                         height: auto;
                     }
                 }
-                .ladda-spinner{
-                    div{
-                        div{
-                            div{
+                .ladda-spinner {
+                    div {
+                        div {
+                            div {
                                 background: var(--color-giddh-blue) !important;
                             }
                         }
                     }
                 }
             }
-        }  
+        }
     }
 }
 /* ======Ladda  Button Color in Material Stroked Button====End Here=========== */
 
 /*============Material Button Disabled Cursor======Start===========*/
-button{    
-    &.mat-button-disabled{
-        &:hover{
+button {
+    &.mat-button-disabled {
+        &:hover {
             cursor: not-allowed !important;
         }
-    }    
+    }
 }
 /*============Material Button Disabled Cursor======End===========*/

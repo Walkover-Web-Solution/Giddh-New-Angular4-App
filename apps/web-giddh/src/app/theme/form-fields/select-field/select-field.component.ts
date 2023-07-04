@@ -137,7 +137,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
             this.fieldFilteredOptions = changes.options.currentValue;
         }
         if (changes?.defaultValue) {
-            setTimeout(() => {
+            // setTimeout(() => {
                 this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
                 if (!this.options || this.options?.length === 0) {
                     if (this.enableDynamicSearch) {
@@ -146,7 +146,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
                         this.filterOptions(changes?.defaultValue.currentValue);
                     }
                 }
-            }, 200);
+            // }, 500);
         }
     }
 
