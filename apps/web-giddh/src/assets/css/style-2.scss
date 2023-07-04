@@ -14395,15 +14395,15 @@ button {
 }
 
 /* This class is used to ladda button text color which is conditionally disabled*/
-.disabled-ladda-btn{
+.disabled-ladda-btn {
     &.mat-stroked-button {
-        &.mat-primary{    
-            &:disabled{
-                .ladda-label{
-                    color:  var(--color-giddh-blue) !important;
-                }                
-            }                   
-        }  
+        &.mat-primary {
+            &:disabled {
+                .ladda-label {
+                    color: var(--color-giddh-blue) !important;
+                }
+            }
+        }
     }
 }
 

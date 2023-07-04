@@ -21,11 +21,13 @@
         min-width: 530px;
         display: inline-block;
     }
-}
-
-.delete-button {
-    color: var(--color-danger) !important;
-    border-color: var(--color-dark-fog) !important;
+    .inline-multiple-input-width {
+        width: 530px;
+        min-height: 48px;
+        .input-min-width {
+            min-width: 50%;
+        }
+    }
 }
 
 .create-inventory-btn {
@@ -52,7 +54,8 @@
     }
 }
 .footer-wrapper {
-    padding: 15px;
+    margin-top: 45px;
+    max-width: 560px;
 }
 
 .page-title-inventory {
@@ -65,8 +68,6 @@
     min-width: unset !important;
 }
 
-@media (max-width: 1440px) {
-    .hsnsac-field {
-        margin-top: 20px;
-    }
+.back-left{
+    line-height: 32px;
 }
