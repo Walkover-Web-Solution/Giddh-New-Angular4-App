@@ -39,4 +39,8 @@ export class PageLeaveUtilityService {
 
         return dialogRef;
     }
+
+    public removeBrowserConfirmationDialog(): void {
+        document.querySelector("body").removeAttribute("onbeforeunload");
+    }
 }

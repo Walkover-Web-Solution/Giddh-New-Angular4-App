@@ -138,6 +138,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         }
 
         this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            if (this.hasUnsavedChanges && !response) {
+                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+            }
+
             this.hasUnsavedChanges = response;
         });
 

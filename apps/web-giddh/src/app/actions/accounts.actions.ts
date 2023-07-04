@@ -100,6 +100,7 @@ export class AccountsAction {
             switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName)),
             map(response => {
                 if (response?.status === 'success') {
+                    this.store.dispatch(this.hasUnsavedChanges(false));
                     this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
                 }
                 return this.createAccountResponseV2(response);
@@ -191,6 +192,7 @@ export class AccountsAction {
             switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.account, action.payload?.value)),
             map(response => {
                 if (response?.status === 'success') {
+                    this.store.dispatch(this.hasUnsavedChanges(false));
                     this.store.dispatch(this.commonActions.accountUpdated(true));
                     this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
                     const updateIndexDb: IUpdateDbRequest = {
