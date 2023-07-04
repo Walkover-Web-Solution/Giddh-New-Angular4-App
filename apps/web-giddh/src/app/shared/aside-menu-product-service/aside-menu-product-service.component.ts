@@ -5,6 +5,7 @@ import { ReplaySubject } from 'rxjs';
 import { AddAccountRequest } from '../../models/api-models/Account';
 import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'aside-menu-product-service',
@@ -38,44 +39,75 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
+    /** This will hold stock type */
+    public stockType: string = '';
 
     constructor(
         private accountService: AccountService,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private generalService: GeneralService
     ) {
 
     }
-
-    public toggleStockPane() {
+    /**
+     * This will use for toggle stock pane
+     *
+     * @param {string} [type]
+     * @memberof AsideMenuProductServiceComponent
+     */
+    public toggleStockPane(type?: string) {
         this.hideFirstStep = true;
         this.isAddServiceOpen = false;
+        this.stockType = type;
         this.isAddStockOpen = !this.isAddStockOpen;
     }
 
-    public toggleServicePane() {
+    /**
+     * This will use for toggle account pane
+     *
+     * @memberof AsideMenuProductServiceComponent
+     */
+    public toggleAccountPane() {
         this.hideFirstStep = true;
         this.isAddStockOpen = false;
         this.isAddServiceOpen = !this.isAddServiceOpen;
     }
 
+    /**
+     * Ths will use for close aside pane
+     *
+     * @param {*} [e]
+     * @memberof AsideMenuProductServiceComponent
+     */
     public closeAsidePane(e?: any) {
+        this.stockType = '';
         this.hideFirstStep = false;
         this.isAddStockOpen = false;
         this.isAddServiceOpen = false;
         this.closeAsideEvent.emit();
     }
 
+    /**
+     * This will use for back step
+     *
+     * @memberof AsideMenuProductServiceComponent
+     */
     public backButtonPressed() {
+        this.stockType = '';
         this.hideFirstStep = false;
         this.isAddStockOpen = false;
         this.isAddServiceOpen = false;
     }
+
     /**
      * Lifecycle hook runs on component initialization
      *
      * @memberof AsideMenuProductServiceComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector('body')?.classList?.add('aside-menu-product-service-page');
     }
 

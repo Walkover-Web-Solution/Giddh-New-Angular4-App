@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
 import { ReplaySubject } from "rxjs";
 import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
@@ -33,6 +33,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     @ViewChild('stockCreateEditForm', { static: false }) public stockCreateEditForm: NgForm;
     /** Instance of recipe create/update component */
     @ViewChild('createRecipe', { static: false }) public createRecipe: CreateRecipeComponent;
+    /* This will hold add stock value from aside menu */
+    @Input() public addStock: boolean = false;
+    /* This will hold  stock type from aside menu */
+    @Input() public stockType: string;
+    /* This will emit close aside menu event */
+    @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     /* this will store image path*/
     public imgPath: string = "";
     /** Stock units list */
@@ -242,8 +248,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.getWarehouses();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if (params?.type) {
-                this.stockForm.type = params?.type?.toUpperCase();
+            if (params?.type || this.addStock) {
+                this.stockForm.type = params?.type ? params?.type?.toUpperCase() : this.stockType.toUpperCase();
                 this.resetForm(this.stockCreateEditForm);
                 this.getStockGroups();
                 this.changeDetection.detectChanges();
@@ -252,8 +258,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.queryParams = params;
                 this.getStockDetails();
             } else {
-                if (!["PRODUCT", "SERVICE", "FIXEDASSETS"].includes(params?.type?.toUpperCase())) {
-                    this.router.navigate(['/pages/inventory/v2']);
+                if (!this.addStock) {
+                    if (!["PRODUCT", "SERVICE", "FIXEDASSETS"].includes(params?.type?.toUpperCase())) {
+                        this.router.navigate(['/pages/inventory/v2']);
+                    }
                 }
             }
             if (this.stockForm.type === 'PRODUCT' || this.stockForm.type === 'SERVICE') {
@@ -912,10 +920,15 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.resetForm(this.stockCreateEditForm);
-                if (!openEditAfterSave) {
+                if (this.addStock) {
                     this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
+                    this.closeAsideEvent.emit();
                 } else {
-                    this.router.navigate(['/pages/inventory/v2/stock/' + this.stockForm.type?.toLowerCase() + '/edit/' + response.body?.uniqueName], { queryParams: { tab: 2 } });
+                    if (!openEditAfterSave) {
+                        this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
+                    } else {
+                        this.router.navigate(['/pages/inventory/v2/stock/' + this.stockForm.type?.toLowerCase() + '/edit/' + response.body?.uniqueName], { queryParams: { tab: 2 } });
+                    }
                 }
             } else {
                 this.toaster.showSnackBar("error", response?.message);
