@@ -4,23 +4,27 @@
             <div class="col-sm-12 col-lg-4 invoice-sidebar-wrapper pr-0">
                 <div>
                     <div class="invoice-search-box">
-                        <input type="text" [placeholder]="commonLocaleData?.app_search" #searchElement />
+                        <div class="list-search w-100">
+                            <text-field [placeholder]="commonLocaleData?.app_search"> </text-field>
+                        </div>
                         <button
                             *ngIf="!isCompany"
-                            class="btn btn-sky-blue"
+                            mat-stroked-button
+                            class="primary"
                             [routerLink]="['/pages/purchase-management/purchase-order/new']"
                         >
                             {{ localeData?.new_order }}
                         </button>
                     </div>
-                    <ul class="invoice-sidebar">
+                    <mat-list role="list" class="invoice-sidebar">
                         <perfect-scrollbar #perfectScrollbar *ngIf="filteredData && filteredData.length > 0">
-                            <li
+                            <mat-list-item
+                                role="listitem"
                                 class="single-invoice-detail cp"
                                 [ngClass]="{ 'activeItem': row?.uniqueName === purchaseOrderUniqueName }"
                                 *ngFor="let row of filteredData; let i = index"
                             >
-                                <div class="row" (click)="showPurchaseOrderPreview(row?.uniqueName)">
+                                <div class="row w-100" (click)="showPurchaseOrderPreview(row?.uniqueName)">
                                     <div class="col-7 col-sm-7">
                                         <div class="invoice-number-date">
                                             <span class="order-number">
@@ -32,7 +36,7 @@
                                             <p>{{ row.vendor?.name }}</p>
                                         </div>
                                     </div>
-                                    <div class="col-5 col-sm-5">
+                                    <div class="col-5 col-sm-5 pr-0">
                                         <div class="invoice-amount pull-right">
                                             <!-- {{row.grandTotal?.amountForAccount | giddhCurrency}} -->
                                             <amount-field
@@ -44,9 +48,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </li>
+                            </mat-list-item>
                         </perfect-scrollbar>
-                    </ul>
+                    </mat-list>
                 </div>
             </div>
             <!-- endregion -->
@@ -77,46 +81,39 @@
                                             class="btn-group change-status-dropdown pull-right"
                                             dropdown
                                         >
-                                            <button
-                                                id="button-basic"
-                                                dropdownToggle
-                                                type="button"
-                                                class="btn btn-sky-blue dropdown-toggle"
-                                                aria-controls="dropdown-basic"
-                                            >
+                                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="menu">
                                                 {{ localeData?.change_status }}
                                                 <span class="caret"></span>
                                             </button>
-
-                                            <ul
-                                                id="dropdown-basic"
-                                                *dropdownMenu
-                                                class="dropdown-menu"
-                                                role="menu"
-                                                aria-labelledby="button-basic"
-                                            >
-                                                <li class="cp" role="menuitem" *ngIf="purchaseOrder?.status === 'OPEN'">
+                                            <mat-menu #menu="matMenu">
+                                                <button
+                                                    mat-menu-item
+                                                    *ngIf="purchaseOrder?.status === 'OPEN'"
+                                                    class="status-link"
+                                                >
                                                     <a
-                                                        class="dropdown-item"
+                                                        href="javascript:void(0)"
                                                         (click)="
                                                             voucherApiVersion === 2
                                                                 ? openBulkConvert(purchaseBulkConvert)
                                                                 : convertToBill()
                                                         "
-                                                        >{{ localeData?.convert_tobill }}</a
                                                     >
-                                                </li>
-                                                <li class="cp" role="menuitem">
+                                                        {{ localeData?.convert_tobill }}
+                                                    </a>
+                                                </button>
+                                                <button mat-menu-item class="status-link">
                                                     <a
-                                                        class="dropdown-item"
+                                                        href="javascript:void(0)"
                                                         [routerLink]="[
                                                             '/pages/purchase-management/purchase-order/new/' +
                                                                 purchaseOrderUniqueName
                                                         ]"
-                                                        >{{ commonLocaleData?.app_copy }}</a
                                                     >
-                                                </li>
-                                                <li>
+                                                        {{ commonLocaleData?.app_copy }}
+                                                    </a>
+                                                </button>
+                                                <button mat-menu-item class="status-link">
                                                     <a
                                                         class="cp"
                                                         href="javascript:void(0)"
@@ -134,13 +131,13 @@
                                                         "
                                                         >{{ localeData?.open }}</a
                                                     >
-                                                </li>
-                                                <li>
+                                                </button>
+                                                <button mat-menu-item class="status-link">
                                                     <a class="cp" href="javascript:void(0)" (click)="confirmDelete()">{{
                                                         commonLocaleData?.app_delete
                                                     }}</a>
-                                                </li>
-                                            </ul>
+                                                </button>
+                                            </mat-menu>
                                         </div>
                                         <!-- endregion -->
 
@@ -149,8 +146,8 @@
                                                 <span *ngIf="!isCompany">
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_edit"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_edit"
+                                                        [matTooltipPosition]="'above'"
                                                         [routerLink]="[
                                                             '/pages/purchase-management/purchase-order/edit/' +
                                                                 purchaseOrderUniqueName
@@ -162,8 +159,8 @@
                                                 <span>
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_send_email"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_send_email"
+                                                        [matTooltipPosition]="'above'"
                                                         (click)="openSendMailModal(sendEmailModal)"
                                                         ><i class="icon-envelope font-12"></i
                                                     ></a>
@@ -172,8 +169,8 @@
                                                 <span>
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_print"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_print"
+                                                        [matTooltipPosition]="'above'"
                                                         (click)="printVoucher()"
                                                         ><i class="fa fa-print"></i
                                                     ></a>
@@ -182,8 +179,8 @@
                                                 <span>
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_download"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_download"
+                                                        [matTooltipPosition]="'above'"
                                                         (click)="downloadFile()"
                                                         ><i class="icon-file"></i
                                                     ></a>
@@ -192,8 +189,8 @@
                                                 <span *ngIf="!isCompany">
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_delete"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_delete"
+                                                        [matTooltipPosition]="'above'"
                                                         (click)="confirmDelete()"
                                                         ><i class="icon-trash"></i
                                                     ></a>
@@ -202,7 +199,8 @@
 
                                             <div class="history-btn">
                                                 <button
-                                                    class="btn btn-primary"
+                                                    mat-stroked-button
+                                                    class="primary"
                                                     (click)="toggleActivityHistoryAsidePane()"
                                                 >
                                                     <i class="icon-history-icon font-12 pr-1"></i>
