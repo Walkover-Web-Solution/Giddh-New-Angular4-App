@@ -11,7 +11,8 @@
                 <div class="col-sm-1" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <div class="back-btnn">
                         <button
-                            class="btn btn-default back-button d-inline-flex"
+                            mat-stroked-button
+                            class="back-button"
                             (click)="backToSubscriptions()"
                             *ngIf="!showLoader"
                         >

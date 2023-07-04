@@ -8,10 +8,7 @@ import { HomeComponent } from './home.component';
             { path: '', component: HomeComponent }
         ])
     ],
-
     exports: [RouterModule]
-
-
 })
 export class HomeRoutingModule {
 }

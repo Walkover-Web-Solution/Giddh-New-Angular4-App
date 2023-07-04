@@ -7,6 +7,7 @@
 export interface ConfirmationModalButton {
     text: string; // Text to be displayed on the button
     cssClass?: string; // CSS class on the button
+    color?: string; // CSS class on the button
 }
 
 /**

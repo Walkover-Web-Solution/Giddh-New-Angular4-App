@@ -8,17 +8,15 @@
         width: 100%;
         .back-button {
             margin-top: 4%;
-            background-color: var(--color-iron) !important;
-            border-color: var(--color-iron);
-            color: var(--color-nero);
-            font-family: var(--font-semibold) !important;
             margin-bottom: 15px !important;
             padding-left: 12px !important;
             padding-right: 18px !important;
+            font-family: var(--font-semibold) !important;
             height: 37px;
             .back-left {
                 font-size: 21px;
                 float: left;
+                line-height: 34px;
             }
         }
         .giddh-heading {
@@ -198,9 +196,6 @@
             .renewal-payable {
                 float: left;
                 width: 100%;
-                .mat-button-disabled {
-                    background-color: var(--color-slate) !important;
-                }
             }
             .new-payable {
                 font-size: var(--font-size-15) !important;
@@ -263,11 +258,7 @@
             display: none;
         }
     }
-    .renewal-payable {
-        .mat-button-disabled {
-            background-color: var(--color-gray) !important;
-        }
-    }
+
     .display-line {
         float: left;
         width: 100%;

@@ -2566,12 +2566,6 @@ modal-container.modal {
     height: initial !important;
 }
 
-.highcharts-root {
-    .highcharts-background {
-        fill: var(--color-common-primary-background-for-all-components);
-    }
-}
-
 /* my css end */
 /*input*/
 .form-control {
@@ -8470,30 +8464,6 @@ button.ladda-button .ladda-label {
     padding-top: 0;
 }
 
-#incomeChart chart,
-#leftIncomeChart chart,
-highcharts-chart .highcharts-container {
-    width: 100% !important;
-    display: flex;
-    flex: 1 1 0 !important;
-    flex-shrink: 1 !important;
-}
-
-highcharts-chart {
-    .highcharts-container {
-        .highcharts-title {
-            width: 62px !important;
-            white-space: normal !important;
-            text-align: center;
-        }
-    }
-}
-
-#incomeChart #highcharts-ufrwew1-29 {
-    display: block;
-    width: 100%;
-}
-
 .panel {
     border-radius: 2px;
 }
@@ -9065,8 +9035,8 @@ input.checkbox-custom[type="checkbox"] {
     display: block;
 }
 
-.panel-block .card-body {
-    min-height: 350px;
+.panel-block .mat-card-content {
+    min-height: 361px;
 }
 
 .payment-modal {
@@ -9475,11 +9445,18 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 .dashboard-container {
-    .card {
+    mat-card {
         margin-bottom: 20px;
         min-height: 426px;
-        border-color: var(--color-common-primary-border);
+        border: 1px solid var(--color-common-primary-border);
         background-color: var(--color-common-primary-background-for-all-components);
+        box-shadow: none !important;
+        padding: 0 !important;
+    }
+    mat-card-content {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
     }
 }
 
@@ -9817,17 +9794,6 @@ button#more-btn-inventory,
     max-height: 250px;
 }
 
-.ratio-chart-block .highcharts-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 60px;
-    white-space: normal !important;
-    word-break: break-all;
-    font-size: var(--font-size-24);
-    top: 56px !important;
-}
-
 .transaction-list-sh-select input {
     min-height: 49px;
     height: 49px;
@@ -10057,7 +10023,7 @@ giddh-datepicker {
         }
     }
 
-    .disabled-btn-color:disabled {
+    .disabled-ladda-btn:disabled {
         .mat-button-wrapper {
             color: var(--color-common-secondary-disabled) !important;
         }
@@ -12255,7 +12221,7 @@ inventory-master {
         overflow-y: auto !important;
     }
 
-    .panel-block .card-body {
+    .panel-block .mat-card-content {
         min-height: auto;
     }
 
@@ -14427,6 +14393,20 @@ button {
         }
     }
 }
+
+/* This class is used to ladda button text color which is conditionally disabled*/
+.disabled-ladda-btn {
+    &.mat-stroked-button {
+        &.mat-primary {
+            &:disabled {
+                .ladda-label {
+                    color: var(--color-giddh-blue) !important;
+                }
+            }
+        }
+    }
+}
+
 /* ======Ladda  Button Color in Material Stroked Button====End Here=========== */
 
 /*============Material Button Disabled Cursor======Start===========*/
