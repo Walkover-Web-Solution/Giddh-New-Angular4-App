@@ -10,6 +10,8 @@ import { ReplaySubject } from 'rxjs';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
+import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
+import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 
 @Component({
     selector: 'setting-permission',
@@ -17,15 +19,12 @@ import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
     styleUrls: ['./setting.permission.component.scss']
 })
 export class SettingPermissionComponent implements OnInit, OnDestroy {
-
     @ViewChild('editUserModal', { static: false }) public editUserModal: ModalDirective;
-
     public sharedWith: object[] = [];
     public usersList: any;
     public selectedCompanyUniqueName: string;
     public selectedUser: ShareRequestForm;
     public currentUser: any;
-
     // modals related
     public showEditUserModal: boolean = false;
     public modalConfig = {
@@ -41,17 +40,21 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if permission form has unsaved changes */
+    public hasUnsavedChanges: boolean = false;
 
     constructor(
-        private _settingsPermissionActions: SettingsPermissionActions,
-        private _permissionActions: PermissionActions,
-        private _accountsAction: AccountsAction,
+        private settingsPermissionActions: SettingsPermissionActions,
+        private permissionActions: PermissionActions,
+        private accountsAction: AccountsAction,
         private store: Store<AppState>,
-        private _generalService: GeneralService
+        private generalService: GeneralService,
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private settingsProfileActions: SettingsProfileActions
     ) {
         this.store.pipe(select(s => s.session.user), take(1)).subscribe(result => {
             if (result && result.user) {
-                this._generalService.user = result.user;
+                this.generalService.user = result.user;
                 this.loggedInUserEmail = result.user.email;
             }
         });
@@ -76,10 +79,10 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     }
 
     public getInitialData() {
-        this.store.dispatch(this._permissionActions.GetRoles());
+        this.store.dispatch(this.permissionActions.GetRoles());
         this.store.pipe(take(1)).subscribe(s => {
             this.selectedCompanyUniqueName = s.session.companyUniqueName;
-            this.store.dispatch(this._settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+            this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
             if (s.session.user) {
                 this.currentUser = s.session.user.user;
             }
@@ -111,29 +114,40 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
 
     public onRevokePermission(assignRoleEntryUniqueName: string) {
         if (assignRoleEntryUniqueName) {
-            this.store.dispatch(this._accountsAction.unShareEntity(assignRoleEntryUniqueName, 'company', this.selectedCompanyUniqueName));
+            this.store.dispatch(this.accountsAction.unShareEntity(assignRoleEntryUniqueName, 'company', this.selectedCompanyUniqueName));
             this.waitAndReloadCompany();
         }
     }
 
     public showModalForEdit(user?: any) {
         this.selectedUser = user ? user : '';
+        this.hasUnsavedChanges = false;
         this.showEditUserModal = true;
         setTimeout(() => this.editUserModal?.show(), 700);
     }
 
-    public closeEditUserModal() {
-        this.editUserModal.hide();
-        setTimeout(() => this.showEditUserModal = false, 700);
+    public closeEditUserModal(event?: any): void {
+        if (event && this.hasUnsavedChanges) {
+            this.confirmPageLeave(() => {
+                this.hasUnsavedChanges = false;
+                this.editUserModal.hide();
+                setTimeout(() => this.showEditUserModal = false, 700);
+            });
+        } else {
+            this.hasUnsavedChanges = false;
+            this.editUserModal.hide();
+            setTimeout(() => this.showEditUserModal = false, 700);
+        }
     }
 
     public waitAndReloadCompany() {
         setTimeout(() => {
-            this.store.dispatch(this._settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+            this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
         }, 2000);
     }
 
     public ngOnDestroy() {
+        this.resetUnsavedChanges();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -150,5 +164,43 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         pastPeriodDuration = pastPeriodDuration?.replace("[DURATION]", user.duration);
         pastPeriodDuration = pastPeriodDuration?.replace("[PERIOD]", user.period);
         return pastPeriodDuration;
+    }
+
+    /**
+     * Shows page leave confirmation
+     *
+     * @private
+     * @param {Function} callback
+     * @memberof SettingPermissionComponent
+     */
+    private confirmPageLeave(callback: Function): void {
+        let dialogRef = this.pageLeaveUtilityService.openDialog();
+        dialogRef.afterClosed().subscribe((action) => {
+            if (action) {
+                callback();
+            }
+        });
+    }
+
+    /**
+     * Resets form unsaved changes
+     *
+     * @private
+     * @memberof SettingPermissionComponent
+     */
+    private resetUnsavedChanges(): void {
+        this.hasUnsavedChanges = false;
+        this.store.dispatch(this.settingsProfileActions.hasUnsavedChanges(false));
+    }
+
+    /**
+     * Updates unsaved changes returned from inline form
+     *
+     * @param {*} event
+     * @memberof SettingPermissionComponent
+     */
+    public updateUnsavedChanges(event: any): void {
+        this.hasUnsavedChanges = event;
+        this.store.dispatch(this.settingsProfileActions.hasUnsavedChanges(event));
     }
 }

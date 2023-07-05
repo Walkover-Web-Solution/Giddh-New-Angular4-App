@@ -15,7 +15,7 @@
                     <h3 *ngIf="addressConfiguration.type === 'editBranch'">{{ localeData?.edit_branch }}</h3>
                     <h3 *ngIf="addressConfiguration.type === 'editWarehouse'">{{ localeData?.edit_warehouse }}</h3>
                 </div>
-                <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+                <a id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></a>
 
                 <div class="aside-body">
                     <div

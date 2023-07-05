@@ -61,6 +61,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public asideGstSidebarMenuState: string = 'in';
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** True if permission form has unsaved changes */
+    public hasUnsavedChanges: boolean = true;
+    /** Returns true if form is dirty else false */
+    public get showPageLeaveConfirmation(): boolean {
+        return this.hasUnsavedChanges;
+    }
 
     constructor(
         private store: Store<AppState>,
@@ -80,6 +86,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(state => state.settings.updateProfileInProgress), takeUntil(this.destroyed$));
         this.isCompanyProfileUpdated = false;
+
+        this.store.pipe(select(state => state.settings.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasUnsavedChanges = response;
+        });
     }
 
     public ngOnInit() {
@@ -134,7 +144,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 }, 0);
             }
 
-            if(this.activeTab === "taxes" || this.activeTab === "addresses") {
+            if (this.activeTab === "taxes" || this.activeTab === "addresses") {
                 this.asideGstSidebarMenuState = "in";
                 document.querySelector('body').classList.remove('setting-sidebar-open');
                 document.querySelector('body').classList.add('gst-sidebar-open');
@@ -171,7 +181,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public assignChildtabForIntegration(childTab: string): number {
-        if(this.voucherApiVersion === 2) {
+        if (this.voucherApiVersion === 2) {
             switch (childTab) {
                 case SETTING_INTEGRATION_TABS.PAYMENT.LABEL:
                     return SETTING_INTEGRATION_TABS.PAYMENT.VALUE;
@@ -308,7 +318,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       *
       * @memberof SettingsComponent
       */
-     public toggleGstPane(): void {
+    public toggleGstPane(): void {
         if (this.isMobileScreen && this.asideGstSidebarMenuState === 'in') {
             this.asideGstSidebarMenuState = "out";
         }
@@ -319,7 +329,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
      *
      * @memberof SettingsComponent
      */
-     public handleNavigation(): void {
+    public handleNavigation(): void {
         this.router.navigate(['pages', 'gstfiling']);
     }
 }

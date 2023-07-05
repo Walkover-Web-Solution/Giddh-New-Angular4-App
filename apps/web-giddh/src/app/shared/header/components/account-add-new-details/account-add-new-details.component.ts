@@ -302,7 +302,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
         }
 
-        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.createAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 this.addAccountForm?.markAsPristine();

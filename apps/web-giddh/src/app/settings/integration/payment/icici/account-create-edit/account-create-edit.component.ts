@@ -11,6 +11,7 @@ import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-optio
 import { Observable, of as observableOf, ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { SettingsAmountLimitDuration, UNLIMITED_LIMIT } from "../../../../constants/settings.constant";
+import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-leave-utility.service";
 
 @Component({
     selector: 'icici-account-create-edit',
@@ -59,7 +60,8 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
         private salesService: SalesService,
         private store: Store<AppState>,
         private formBuilder: FormBuilder,
-        private changeDetection: ChangeDetectorRef
+        private changeDetection: ChangeDetectorRef,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
 
     }
@@ -138,7 +140,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                 this.paymentAlertsUsersList = [];
                 let index = 0;
 
-                if(response?.length > 0) {
+                if (response?.length > 0) {
                     this.paymentAlertsUsersList.push({ index: index, label: this.commonLocaleData?.app_select_all, value: this.selectAllRecords });
                     index++;
 
@@ -149,7 +151,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                     });
 
                     let isAllOptionsChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
-                    if((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1)) {
+                    if ((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1)) {
                         // if all options checked and select all is unchecked, we need to show select all as selected
                         this.paymentAlerts.push(this.selectAllRecords);
                     }
@@ -192,7 +194,13 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public closeAccountModal(): void {
-        this.closeModalEvent.emit(true);
+        if (this.accountForm.dirty) {
+            this.confirmPageLeave(() => {
+                this.closeModalEvent.emit(true);
+            });
+        } else {
+            this.closeModalEvent.emit(true);
+        }
     }
 
     /**
@@ -202,17 +210,17 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public selectPaymentAlertUsers(event: any): void {
-        if(event) {
+        if (event) {
             let isSelectedValueAlreadyChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser === event?.value);
-            if(event?.value === this.selectAllRecords) {
-                if(isSelectedValueAlreadyChecked?.length > 0) {
+            if (event?.value === this.selectAllRecords) {
+                if (isSelectedValueAlreadyChecked?.length > 0) {
                     this.paymentAlerts = [];
                     this.forceClearPaymentUpdates$ = observableOf({ status: true });
                 } else {
                     this.paymentAlerts = this.paymentAlertsUsersList.map(user => user?.value);
                 }
             } else {
-                if(isSelectedValueAlreadyChecked?.length > 0) {
+                if (isSelectedValueAlreadyChecked?.length > 0) {
                     this.paymentAlerts = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== event?.value);
                 } else {
                     this.paymentAlerts.push(event?.value);
@@ -220,10 +228,10 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
 
                 let isAllOptionsChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
                 let isSelectAllChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser === this.selectAllRecords);
-                if((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1) && !isSelectAllChecked?.length) {
+                if ((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1) && !isSelectAllChecked?.length) {
                     // if all options checked and select all is unchecked, we need to show select all as selected
                     this.paymentAlerts.push(this.selectAllRecords);
-                } else if((isAllOptionsChecked?.length < this.paymentAlertsUsersList?.length - 1) && isSelectAllChecked) {
+                } else if ((isAllOptionsChecked?.length < this.paymentAlertsUsersList?.length - 1) && isSelectAllChecked) {
                     // if all options are not checked and select all is checked, we need to show select all as unchecked
                     this.paymentAlerts = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
                 }
@@ -238,7 +246,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public clearSingleItem(event: any): void {
-        if(event) {
+        if (event) {
             this.paymentAlerts = event?.map(user => user?.value);
             this.paymentAlerts = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
         }
@@ -313,5 +321,21 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public isSelectAllChecked(value: any): boolean {
         return ((this.selectAllRecords === value && this.paymentAlerts?.includes(value) && this.paymentAlerts?.length === this.paymentAlertsUsersList?.length) || (this.selectAllRecords === value && !this.paymentAlerts?.includes(value) && this.paymentAlerts?.length === this.paymentAlertsUsersList?.length - 1));
+    }
+
+    /**
+     * Shows page leave confirmation
+     *
+     * @private
+     * @param {Function} callback
+     * @memberof AccountCreateEditComponent
+     */
+    private confirmPageLeave(callback: Function): void {
+        let dialogRef = this.pageLeaveUtilityService.openDialog();
+        dialogRef.afterClosed().subscribe((action) => {
+            if (action) {
+                callback();
+            }
+        });
     }
 }

@@ -8,6 +8,7 @@ import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-optio
 import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { SettingsAmountLimitDuration, UNLIMITED_LIMIT } from "../../../../constants/settings.constant";
+import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-leave-utility.service";
 
 @Component({
     selector: 'icici-payor-account-create-edit',
@@ -42,7 +43,8 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private formBuilder: FormBuilder,
         private toaster: ToasterService,
-        private settingsIntegrationService: SettingsIntegrationService
+        private settingsIntegrationService: SettingsIntegrationService,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
 
     }
@@ -101,8 +103,8 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
             if (!this.accountUserForm.get('maxAmount')?.value) {
                 this.accountUserForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
             }
-            
-            if(!this.validateAmountLimit()) {
+
+            if (!this.validateAmountLimit()) {
                 return;
             }
 
@@ -129,7 +131,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
      * @memberof PayorCreateEditComponent
      */
     public validateAmountLimit(): boolean {
-        if((!this.accountUserForm.get('duration')?.value || this.accountUserForm.get('duration')?.value === UNLIMITED_LIMIT) && this.accountUserForm.get('maxAmount')?.value) {
+        if ((!this.accountUserForm.get('duration')?.value || this.accountUserForm.get('duration')?.value === UNLIMITED_LIMIT) && this.accountUserForm.get('maxAmount')?.value) {
             this.toaster.clearAllToaster();
             this.toaster.errorToast(this.localeData?.payment?.duration_error);
             return false;
@@ -144,7 +146,13 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
      * @memberof PayorCreateEditComponent
      */
     public closeAccountUserModal(): void {
-        this.closeModalEvent.emit(true);
+        if (this.accountUserForm.dirty) {
+            this.confirmPageLeave(() => {
+                this.closeModalEvent.emit(true);
+            });
+        } else {
+            this.closeModalEvent.emit(true);
+        }
     }
 
     /**
@@ -171,13 +179,13 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
      *
      * @memberof PayorCreateEditComponent
      */
-     public updateAccountUser(): void {
+    public updateAccountUser(): void {
         if (!this.accountUserForm?.invalid) {
             if (!this.accountUserForm.get('maxAmount')?.value) {
                 this.accountUserForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
             }
 
-            if(!this.validateAmountLimit()) {
+            if (!this.validateAmountLimit()) {
                 return;
             }
 
@@ -205,10 +213,26 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
      * @memberof PayorCreateEditComponent
      */
     public actionAccountUser(): void {
-        if(this.activePayorAccount) {
+        if (this.activePayorAccount) {
             this.updateAccountUser();
         } else {
             this.saveNewAccountUser();
         }
+    }
+
+    /**
+     * Shows page leave confirmation
+     *
+     * @private
+     * @param {Function} callback
+     * @memberof PayorCreateEditComponent
+     */
+    private confirmPageLeave(callback: Function): void {
+        let dialogRef = this.pageLeaveUtilityService.openDialog();
+        dialogRef.afterClosed().subscribe((action) => {
+            if (action) {
+                callback();
+            }
+        });
     }
 }

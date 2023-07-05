@@ -17,6 +17,7 @@ import { AppState } from '../../../store';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../constants/settings.constant';
 import { SettingsUtilityService } from '../../services/settings-utility.service';
 import { WarehouseActions } from '../action/warehouse.action';
+import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 
 @Component({
     selector: 'create-warehouse',
@@ -82,6 +83,10 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if need to hide link entity */
     public hideLinkEntity: boolean = true;
+    /** Returns true if form is dirty else false */
+    public get showPageLeaveConfirmation(): boolean {
+        return this.warehouseForm?.dirty;
+    }
 
     constructor(
         private commonService: CommonService,
@@ -94,7 +99,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         private settingsUtilityService: SettingsUtilityService,
         private toastService: ToasterService,
         private warehouseActions: WarehouseActions,
-        private settingsBranchActions: SettingsBranchActions
+        private settingsBranchActions: SettingsBranchActions,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.warehouseForm = this.formBuilder.group({
             name: ['', Validators.required],
@@ -475,6 +481,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.remove('setting-sidebar-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
     }
 
     /**

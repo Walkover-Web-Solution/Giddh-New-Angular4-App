@@ -320,7 +320,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             return result;
         })), takeUntil(this.destroyed$));
 
-        this.updateAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 this.addAccountForm?.markAsPristine();
