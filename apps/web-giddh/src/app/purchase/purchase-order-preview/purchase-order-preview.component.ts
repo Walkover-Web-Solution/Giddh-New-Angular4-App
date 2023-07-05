@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -17,7 +17,7 @@ import { saveAs } from 'file-saver';
 import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-order.action';
 import { DomSanitizer } from '@angular/platform-browser';
 import { GeneralService } from '../../services/general.service';
-import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
     selector: 'purchase-order-preview',
@@ -47,7 +47,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     /** Instance of PDF container iframe */
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
     /** Instance of perfect scrollbar */
-    @ViewChild('perfectScrollbar', { static: false }) public perfectScrollbar: PerfectScrollbarComponent;
+    /** Instance of cdk virtual scroller */
+    @ViewChildren(CdkVirtualScrollViewport) virtualScroll: QueryList<CdkVirtualScrollViewport>;
     /* Modal instance */
     public modalRef: BsModalRef;
     /* This will hold state of activity history aside pan */
@@ -570,9 +571,9 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     private scrollToActiveItem(): void {
-        setTimeout(() => {
-            this.perfectScrollbar?.directiveRef?.scrollToElement(".single-invoice-detail.activeItem");
-        }, 200);
+        // setTimeout(() => {
+        //     this.perfectScrollbar?.directiveRef?.scrollToElement(".single-invoice-detail.activeItem");
+        // }, 200);
     }
 
     /**

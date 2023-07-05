@@ -28,11 +28,6 @@
                         <div class="clearfix">
                             <div class="row mr-b1">
                                 <!-- region customer name -->
-                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
-                                    <label
-                                        >{{ commonLocaleData?.app_vendor_name }}<span class="red-text">*</span></label
-                                    >
-                                </div>
                                 <!-- region vendor dropdown -->
                                 <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customer-name">
                                     <div class="clearfix d-flex flex-column">
@@ -92,6 +87,49 @@
                                                     </a>
                                                 </ng-template>
                                             </sales-sh-select>
+                                            <!-- <dropdown-field
+                                                #vendorNameDropDown
+                                                name="vendor"
+                                                class="select-customer-field"
+                                                [options]="vendorAcList$ | async"
+                                                (selected)="purchaseOrder.account.uniqueName = $event.value; onSelectVendor($event)"
+                                                [placeholder]="localeData?.select_vendor"
+                                                [isPaginationEnabled]="true"
+                                                (scrollEnd)="handleScrollEnd('vendor')"
+                                                (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'vendor')"
+                                                [enableDynamicSearch]="true"
+                                                (noResultsClicked)="addNewAccount()"
+                                                (keyup)="resetVendor($event)"
+                                                (onClear)="resetVendor(null)"
+                                            >
+                                                <ng-template #optionTemplate let-option="option">
+                                                    <a
+                                                        href="javascript:void(0)"
+                                                        class="list-item flex-column border-none"
+                                                    >
+                                                        <div class="item">{{ option.label }}</div>
+                                                        <div class="item-unique">{{ option?.value }}</div>
+                                                    </a>
+                                                </ng-template>
+
+                                                <ng-template #notFoundLinkTemplate>
+                                                    <a
+                                                        href="javascript:void(0)"
+                                                        class="
+                                                            list-item
+                                                            pd-l05 pd-r05
+                                                            d-flex
+                                                            justify-content-between
+                                                            w-100
+                                                            border-none
+                                                        "
+                                                        [keyboardShortcut]="'alt+c'"
+                                                    >
+                                                        <div class="item">{{ vendorNotFoundText }}</div>
+                                                        <div class="item">{{ commonLocaleData?.app_alt_c }}</div>
+                                                    </a>
+                                                </ng-template>
+                                            </dropdown-field> -->
                                             <!-- region Unregistered Business / vendor details -->
                                             <div
                                                 class="d-flex aqua-color"
@@ -207,6 +245,7 @@
                                                         </div>
                                                         <div class="billing-address clearfix">
                                                             <textarea
+                                                                matInput
                                                                 name="vendorBillingDetailsAddress"
                                                                 (keyup)="autoFillShippingDetails('vendor')"
                                                                 [(ngModel)]="
@@ -218,7 +257,6 @@
                                                                 autofocus="off"
                                                                 aria-autocomplete="none"
                                                             ></textarea>
-
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-6">
                                                                     <label class="sales-country-label">
@@ -226,11 +264,16 @@
                                                                     </label>
                                                                 </div>
 
-                                                                <div class="col-sm-12 col-md-6" #vendorBillingState>
-                                                                    <sales-sh-select
+                                                                <div
+                                                                    class="col-sm-12 col-md-6 purchase-border"
+                                                                    #vendorBillingState
+                                                                >
+                                                                    <select-field
                                                                         [placeholder]="commonLocaleData?.app_state"
-                                                                        class="select-border-bottom"
+                                                                        [cssClass]="'select-border-bottom'"
                                                                         (selected)="
+                                                                            purchaseOrder.account.billingDetails.state.code =
+                                                                                $event.value;
                                                                             fillShippingBillingDetails(
                                                                                 $event,
                                                                                 true,
@@ -239,34 +282,29 @@
                                                                             autoFillShippingDetails('vendor')
                                                                         "
                                                                         #vendorStatesBilling
-                                                                        [showBottomBorderOnly]="true"
                                                                         [options]="statesSource"
-                                                                        name="vendorBillingDetailsStateCode"
-                                                                        [(ngModel)]="
-                                                                            purchaseOrder.account.billingDetails.state
-                                                                                .code
-                                                                        "
+                                                                        [name]="'vendorBillingDetailsStateCode'"
                                                                     >
-                                                                    </sales-sh-select>
+                                                                    </select-field>
                                                                 </div>
 
                                                                 <div
-                                                                    class="col-sm-12 col-md-6"
+                                                                    class="col-sm-12 col-md-6 purchase-border"
                                                                     *ngIf="
                                                                         shouldShowTrnGstField &&
                                                                         (showGSTINNo || showTRNNo)
                                                                     "
                                                                 >
-                                                                    <input
+                                                                    <text-field
                                                                         maxLength="15"
                                                                         autocomplete="None"
-                                                                        type="text"
-                                                                        name="vendorBillingDetailsTax"
+                                                                        [type]="'text'"
+                                                                        [name]="'vendorBillingDetailsTax'"
                                                                         [(ngModel)]="
                                                                             purchaseOrder.account.billingDetails
                                                                                 .gstNumber
                                                                         "
-                                                                        class="form-control input-custom"
+                                                                        [cssClass]="'form-control input-custom'"
                                                                         (blur)="autoFillShippingDetails('vendor')"
                                                                         (change)="
                                                                             getStateCode('billingDetails', 'vendor')
@@ -276,7 +314,8 @@
                                                                                 ? commonLocaleData?.app_gstin
                                                                                 : commonLocaleData?.app_trn
                                                                         "
-                                                                    />
+                                                                    >
+                                                                    </text-field>
                                                                 </div>
                                                                 <!-- static pin code  -->
                                                                 <div
@@ -287,10 +326,10 @@
                                                                         )
                                                                     }"
                                                                 >
-                                                                    <div class="form-group mr-b05">
-                                                                        <input
+                                                                    <div class="form-group mr-b05 purchase-border">
+                                                                        <text-field
                                                                             type="number"
-                                                                            class="form-control input-custom"
+                                                                            [cssClass]="'form-control input-custom'"
                                                                             autocomplete="false"
                                                                             name="accountBillingPinCode"
                                                                             (blur)="autoFillShippingDetails('vendor')"
@@ -303,7 +342,8 @@
                                                                             "
                                                                             decimalDigitsDirective
                                                                             [preventDecimal]="true"
-                                                                        />
+                                                                        >
+                                                                        </text-field>
                                                                     </div>
                                                                 </div>
                                                                 <!-- static pin code end-->
@@ -320,6 +360,7 @@
                                                             <span class="pd-r15">
                                                                 <mat-checkbox
                                                                     name="autoFillVendorShipping"
+                                                                    color="primary"
                                                                     (change)="autoFillShippingDetails('vendor')"
                                                                     [(ngModel)]="autoFillVendorShipping"
                                                                 >
@@ -415,11 +456,13 @@
                                                                         class="col-sm-12 col-md-6 select-border-bottom"
                                                                         #vendorShippingState
                                                                     >
-                                                                        <sales-sh-select
+                                                                        <select-field
                                                                             [placeholder]="commonLocaleData?.app_state"
-                                                                            [disabled]="autoFillVendorShipping"
-                                                                            class="select-border-bottom"
+                                                                            [readonly]="autoFillVendorShipping"
+                                                                            [cssClass]="'select-border-bottom'"
                                                                             (selected)="
+                                                                                purchaseOrder.account.shippingDetails.state.code =
+                                                                                    $event.value;
                                                                                 fillShippingBillingDetails(
                                                                                     $event,
                                                                                     false,
@@ -427,33 +470,28 @@
                                                                                 )
                                                                             "
                                                                             #vendorStatesShipping
-                                                                            [showBottomBorderOnly]="true"
                                                                             [options]="statesSource"
-                                                                            name="vendorShippingDetailsStateCode"
-                                                                            [(ngModel)]="
-                                                                                purchaseOrder.account.shippingDetails
-                                                                                    .state.code
-                                                                            "
+                                                                            [name]="'vendorShippingDetailsStateCode'"
                                                                         >
-                                                                        </sales-sh-select>
+                                                                        </select-field>
                                                                     </div>
                                                                     <div
-                                                                        class="col-sm-12 col-md-6"
+                                                                        class="col-sm-12 col-md-6 purchase-border"
                                                                         *ngIf="
                                                                             shouldShowTrnGstField &&
                                                                             (showGSTINNo || showTRNNo)
                                                                         "
                                                                     >
-                                                                        <input
+                                                                        <text-field
                                                                             maxLength="15"
                                                                             autocomplete="None"
-                                                                            type="text"
-                                                                            name="vendorShippingDetailsTax"
+                                                                            [type]="'text'"
+                                                                            [name]="'vendorShippingDetailsTax'"
                                                                             [(ngModel)]="
                                                                                 purchaseOrder.account.shippingDetails
                                                                                     .gstNumber
                                                                             "
-                                                                            class="form-control input-custom"
+                                                                            [cssClass]="'form-control input-custom'"
                                                                             (change)="
                                                                                 getStateCode(
                                                                                     'shippingDetails',
@@ -465,7 +503,8 @@
                                                                                     ? commonLocaleData?.app_gstin
                                                                                     : commonLocaleData?.app_trn
                                                                             "
-                                                                        />
+                                                                        >
+                                                                        </text-field>
                                                                     </div>
                                                                     <!-- static pin code  -->
                                                                     <div
@@ -477,12 +516,12 @@
                                                                             )
                                                                         }"
                                                                     >
-                                                                        <div class="form-group mr-b05">
-                                                                            <input
-                                                                                type="number"
-                                                                                class="form-control input-custom"
+                                                                        <div class="form-group mr-b05 purchase-border">
+                                                                            <text-field
+                                                                                [type]="'number'"
+                                                                                [cssClass]="'form-control input-custom'"
                                                                                 autocomplete="false"
-                                                                                name="accountShippingPinCode"
+                                                                                [name]="'accountShippingPinCode'"
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_pin_code
                                                                                 "
@@ -492,7 +531,8 @@
                                                                                 "
                                                                                 decimalDigitsDirective
                                                                                 [preventDecimal]="true"
-                                                                            />
+                                                                            >
+                                                                            </text-field>
                                                                         </div>
                                                                     </div>
                                                                     <!-- static pin code end-->
@@ -519,12 +559,13 @@
                             <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12 select-customer-name pd-r1">
                                 <!-- region if not cashinvoice show customer dropdown -->
                                 <dropdown-field
-                                    class="multi-select"
-                                    name="warehouse"
+                                    [cssClass]="'multi-select'"
+                                    [name]="'warehouse'"
                                     [placeholder]="localeData?.select_warehouse"
-                                    [(ngModel)]="purchaseOrder.warehouse.uniqueName"
                                     [options]="warehouses"
-                                    (selected)="onSelectWarehouse($event)"
+                                    (selected)="
+                                        purchaseOrder.warehouse.uniqueName = $event.value; onSelectWarehouse($event)
+                                    "
                                 ></dropdown-field>
                                 <!-- endregion -->
                             </div>
@@ -604,7 +645,8 @@
                                                     </div>
                                                     <div class="billing-address clearfix">
                                                         <textarea
-                                                            name="companyBillingDetailsAddress"
+                                                            matInput
+                                                            [name]="'companyBillingDetailsAddress'"
                                                             (keyup)="autoFillShippingDetails('company')"
                                                             [(ngModel)]="
                                                                 purchaseOrder.company.billingDetails.address[0]
@@ -621,11 +663,16 @@
                                                                     {{ companyCountryName }}
                                                                 </label>
                                                             </div>
-                                                            <div class="col-sm-12 col-md-6" #companyBillingState>
-                                                                <sales-sh-select
+                                                            <div
+                                                                class="col-sm-12 col-md-6 purchase-border"
+                                                                #companyBillingState
+                                                            >
+                                                                <select-field
                                                                     [placeholder]="commonLocaleData?.app_state"
-                                                                    class="select-border-bottom"
+                                                                    [cssClass]="'select-border-bottom'"
                                                                     (selected)="
+                                                                        purchaseOrder.company.billingDetails.state.code =
+                                                                            $event.value;
                                                                         fillShippingBillingDetails(
                                                                             $event,
                                                                             true,
@@ -633,10 +680,9 @@
                                                                         );
                                                                         autoFillShippingDetails('company')
                                                                     "
-                                                                    [showBottomBorderOnly]="true"
                                                                     [options]="companyStatesSource"
-                                                                    name="companyBillingDetailsStateCode"
-                                                                    [disabled]="
+                                                                    [name]="'companyBillingDetailsStateCode'"
+                                                                    [readonly]="
                                                                         purchaseOrder.company.billingDetails.state
                                                                             .code &&
                                                                         purchaseOrder.company.billingDetails
@@ -646,30 +692,24 @@
                                                                             ? true
                                                                             : null
                                                                     "
-                                                                    [fixedValue]="
-                                                                        purchaseOrder.company.billingDetails.state.name
-                                                                    "
-                                                                    [(ngModel)]="
-                                                                        purchaseOrder.company.billingDetails.state.code
-                                                                    "
                                                                 >
-                                                                </sales-sh-select>
+                                                                </select-field>
                                                             </div>
                                                             <div
-                                                                class="col-sm-12 col-md-6"
+                                                                class="col-sm-12 col-md-6 purchase-border"
                                                                 *ngIf="
                                                                     shouldShowTrnGstField && (showGSTINNo || showTRNNo)
                                                                 "
                                                             >
-                                                                <input
+                                                                <text-field
                                                                     maxlength="15"
                                                                     autocomplete="None"
                                                                     type="text"
-                                                                    name="companyBillingDetailsTax"
+                                                                    [name]="companyBillingDetailsTax"
                                                                     [(ngModel)]="
                                                                         purchaseOrder.company.billingDetails.gstNumber
                                                                     "
-                                                                    class="form-control input-custom"
+                                                                    [cssClass]="'form-control input-custom'"
                                                                     (blur)="autoFillShippingDetails('company')"
                                                                     (change)="getStateCode('billingDetails', 'company')"
                                                                     [placeholder]="
@@ -677,7 +717,8 @@
                                                                             ? commonLocaleData?.app_gstin
                                                                             : commonLocaleData?.app_trn
                                                                     "
-                                                                />
+                                                                >
+                                                                </text-field>
                                                             </div>
                                                             <!-- static pin code  -->
                                                             <div
@@ -686,12 +727,12 @@
                                                                     'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)
                                                                 }"
                                                             >
-                                                                <div class="form-group mr-b05">
-                                                                    <input
-                                                                        type="number"
-                                                                        class="form-control input-custom"
+                                                                <div class="form-group mr-b05 purchase-border">
+                                                                    <text-field
+                                                                        [type]="'number'"
+                                                                        [cssClass]="'form-control input-custom'"
                                                                         autocomplete="false"
-                                                                        name="companyBillingPinCode"
+                                                                        [name]="'companyBillingPinCode'"
                                                                         (blur)="autoFillShippingDetails('company')"
                                                                         [placeholder]="commonLocaleData?.app_pin_code"
                                                                         [(ngModel)]="
@@ -699,7 +740,8 @@
                                                                         "
                                                                         decimalDigitsDirective
                                                                         [preventDecimal]="true"
-                                                                    />
+                                                                    >
+                                                                    </text-field>
                                                                 </div>
                                                             </div>
                                                             <!-- static pin code end-->
@@ -716,6 +758,7 @@
                                                         <span class="pd-r15">
                                                             <mat-checkbox
                                                                 name="autoFillCompanyShipping"
+                                                                color="primary"
                                                                 [(ngModel)]="autoFillCompanyShipping"
                                                                 (change)="autoFillShippingDetails('company')"
                                                             >
@@ -790,6 +833,7 @@
                                                         }"
                                                     >
                                                         <textarea
+                                                            matInput
                                                             name="companyShippingDetailsAddress"
                                                             [(ngModel)]="
                                                                 purchaseOrder.company.shippingDetails.address[0]
@@ -809,11 +853,14 @@
                                                                         </label>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-sm-12 col-md-6" #companyShippingState>
-                                                                    <sales-sh-select
+                                                                <div
+                                                                    class="col-sm-12 col-md-6 purchase-border"
+                                                                    #companyShippingState
+                                                                >
+                                                                    <!-- <sales-sh-select
                                                                         [placeholder]="commonLocaleData?.app_state"
                                                                         [disabled]="autoFillCompanyShipping"
-                                                                        class="select-border-bottom disabled"
+                                                                        [cssClass]="'select-border-bottom disabled'"
                                                                         (selected)="
                                                                             fillShippingBillingDetails(
                                                                                 $event,
@@ -823,7 +870,7 @@
                                                                         "
                                                                         [showBottomBorderOnly]="true"
                                                                         [options]="companyStatesSource"
-                                                                        name="companyShippingDetailsStateCode"
+                                                                        [name]="'companyShippingDetailsStateCode'"
                                                                         [disabled]="
                                                                             purchaseOrder.company.shippingDetails.state
                                                                                 .code &&
@@ -843,25 +890,51 @@
                                                                                 .code
                                                                         "
                                                                     >
-                                                                    </sales-sh-select>
+                                                                    </sales-sh-select> -->
+                                                                    <select-field
+                                                                        [placeholder]="commonLocaleData?.app_state"
+                                                                        [cssClass]="'select-border-bottom disabled'"
+                                                                        (selected)="
+                                                                            purchaseOrder.company.shippingDetails.state.code =
+                                                                                $event.value;
+                                                                            fillShippingBillingDetails(
+                                                                                $event,
+                                                                                false,
+                                                                                'company'
+                                                                            )
+                                                                        "
+                                                                        [options]="companyStatesSource"
+                                                                        [name]="'companyShippingDetailsStateCode'"
+                                                                        [readonly]="
+                                                                            purchaseOrder.company.shippingDetails.state
+                                                                                .code &&
+                                                                            purchaseOrder.company.shippingDetails
+                                                                                .gstNumber &&
+                                                                            purchaseOrder.company.shippingDetails
+                                                                                .gstNumber.length >= 2
+                                                                                ? true
+                                                                                : null
+                                                                        "
+                                                                    >
+                                                                    </select-field>
                                                                 </div>
                                                                 <div
-                                                                    class="col-sm-12 col-md-6"
+                                                                    class="col-sm-12 col-md-6 purchase-border"
                                                                     *ngIf="
                                                                         shouldShowTrnGstField &&
                                                                         (showGSTINNo || showTRNNo)
                                                                     "
                                                                 >
-                                                                    <input
+                                                                    <text-field
                                                                         maxLength="15"
                                                                         autocomplete="None"
-                                                                        type="text"
-                                                                        name="companyShippingDetailsTax"
+                                                                        [type]="'text'"
+                                                                        [name]="'companyShippingDetailsTax'"
                                                                         [(ngModel)]="
                                                                             purchaseOrder.company.shippingDetails
                                                                                 .gstNumber
                                                                         "
-                                                                        class="form-control input-custom"
+                                                                        [cssClass]="'form-control input-custom'"
                                                                         (change)="
                                                                             getStateCode('shippingDetails', 'company')
                                                                         "
@@ -870,7 +943,7 @@
                                                                                 ? commonLocaleData?.app_gstin
                                                                                 : commonLocaleData?.app_trn
                                                                         "
-                                                                    />
+                                                                    ></text-field>
                                                                 </div>
                                                                 <!-- static pin code  -->
                                                                 <div
@@ -881,12 +954,12 @@
                                                                         )
                                                                     }"
                                                                 >
-                                                                    <div class="form-group mr-b05">
-                                                                        <input
-                                                                            type="number"
-                                                                            class="form-control input-custom"
+                                                                    <div class="form-group mr-b05 purchase-border">
+                                                                        <text-field
+                                                                            [type]="'number'"
+                                                                            [cssClass]="'form-control input-custom'"
                                                                             autocomplete="false"
-                                                                            name="companyBillingPinCode"
+                                                                            [name]="'companyBillingPinCode'"
                                                                             [placeholder]="
                                                                                 commonLocaleData?.app_pin_code
                                                                             "
@@ -896,7 +969,8 @@
                                                                             "
                                                                             decimalDigitsDirective
                                                                             [preventDecimal]="true"
-                                                                        />
+                                                                        >
+                                                                        </text-field>
                                                                     </div>
                                                                 </div>
                                                                 <!-- static pin code end-->
@@ -942,27 +1016,33 @@
                             <div class="col-sm-6 pd-l1" *ngIf="!isMobileScreen">
                                 <div class="invoice-due-date">
                                     <div>
-                                        <input-field
-                                            type="text"
-                                            [placeholder]="localeData?.order_date"
-                                            [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                            name="purchaseOrderDate"
+                                        <giddh-datepicker
+                                            name="ledgDate"
                                             [(ngModel)]="purchaseOrder.voucherDetails.voucherDate"
-                                            bsDatepicker
+                                            [placeholder]="commonLocaleData?.app_select_date"
+                                            (dateSelected)="
+                                                getInvoiceListsForCreditNote([{}, lc.blankLedger.voucherType])
+                                            "
+                                            [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                            (datepickerState)="datepickerState($event)"
                                             (ngModelChange)="onUpdateOrderDate()"
-                                        >
-                                        </input-field>
+                                            [appearance]="'outline'"
+                                        ></giddh-datepicker>
                                     </div>
                                     <div>
-                                        <input-field
-                                            type="text"
-                                            [placeholder]="localeData?.expected_delivery"
-                                            [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                        <giddh-datepicker
                                             name="purchaseDueDate"
                                             [(ngModel)]="purchaseOrder.voucherDetails.dueDate"
-                                            bsDatepicker
-                                        >
-                                        </input-field>
+                                            [placeholder]="localeData?.expected_delivery"
+                                            [label]="commonLocaleData?.app_select_date"
+                                            (dateSelected)="
+                                                getInvoiceListsForCreditNote([{}, lc.blankLedger.voucherType])
+                                            "
+                                            [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                            (datepickerState)="datepickerState($event)"
+                                            (ngModelChange)="onUpdateOrderDate()"
+                                            [appearance]="'outline'"
+                                        ></giddh-datepicker>
                                     </div>
                                 </div>
                             </div>
@@ -1436,6 +1516,54 @@
                         <td>
                             <div class="product-name">
                                 <div class="ng-select-wrap">
+                                    <!-- <select-field
+                                        [options]="salesAccounts$ | async"
+                                        #selectAccount
+                                        [(ngModel)]="transaction.fakeAccForSelect2"
+                                        name="transaction.fakeAccForSelect2_{{ entryIdx }}"
+                                        (selected)="onSelectSalesAccount($event, transaction, entry, false, entryIdx)"
+                                        [placeholder]="localeData?.select_acc"
+                                        [notFoundLink]="true"
+                                        [isPaginationEnabled]="true"
+                                        (scrollEnd)="handleScrollEnd('item')"
+                                        (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
+                                        (onHide)="noResultsFoundLabel = localeData?.search_acc"
+                                        [notFoundMsg]="noResultsFoundLabel"
+                                        [enableDynamicSearch]="true"
+                                        [fixedValue]="
+                                            transaction.stockDetails && transaction.stockDetails.name
+                                                ? transaction.accountName + ' (' + transaction.stockDetails?.name + ')'
+                                                : transaction.accountName
+                                        "
+                                        [forceClearReactive]="forceClear$ | async"
+                                        [multiple]="false"
+                                        (noResultsClicked)="onNoResultsClicked(entryIdx)"
+                                        [ItemHeight]="67"
+                                        (onClear)="onClearSalesAccount(transaction)"
+                                        [useInBuiltFilterForFlattenAc]="true">
+                                        <ng-template #optionTemplate let-option="option">
+                                            <ng-container *ngIf="!option.additional?.stock">
+                                                <a href="javascript:void(0)" class="list-item flex-column">
+                                                    <div class="item">{{ option.label }}</div>
+                                                    <div class="item-unique">
+                                                        {{ option.additional?.uniqueName }}
+                                                    </div>
+                                                </a>
+                                            </ng-container>
+                                            <ng-container *ngIf="option.additional?.stock">
+                                                <a href="javascript:void(0)" class="list-item flex-column">
+                                                    <div class="item">{{ option.label }}</div>
+                                                    <div class="item-unique">
+                                                        {{ option.additional?.uniqueName }}
+                                                    </div>
+                                                    <div class="item-stock">
+                                                        {{ commonLocaleData?.app_stock }}:
+                                                        {{ option.additional?.stock?.uniqueName }}
+                                                    </div>
+                                                </a>
+                                            </ng-container>
+                                        </ng-template>
+                                    </select-field> -->
                                     <sh-select
                                         [options]="salesAccounts$ | async"
                                         #selectAccount
@@ -1507,10 +1635,12 @@
                                     <sh-select
                                         [placeholder]="localeData?.select_variant"
                                         [options]="variants"
-                                        (selected)="variantChanged($event, transaction, entry)"
+                                        (selected)="
+                                            transaction.variant.uniqueName = $event.value;
+                                            variantChanged($event, transaction, entry)
+                                        "
                                         [isRequired]="true"
                                         name="{{ 'variant' + entryIdx }}"
-                                        [(ngModel)]="transaction.variant.uniqueName"
                                     ></sh-select>
                                 </div>
                             </ng-container>
@@ -1569,66 +1699,59 @@
                                                 </div>
                                                 <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
                                                     <div class="d-flex wrap-hsn-sac mb-2 mt-3">
-                                                        <span>
-                                                            <input
-                                                                type="radio"
-                                                                class="radio-custom radio-theme"
-                                                                name="showCodeType{{ entryIdx }}"
+                                                        <mat-radio-group
+                                                            class="d-flex mb-2"
+                                                            [(ngModel)]="transaction.showCodeType"
+                                                            name="showCodeType{{ entryIdx }}"
+                                                        >
+                                                            <mat-radio-button
+                                                                color="primary"
                                                                 id="hsnCodeType{{ entryIdx }}"
-                                                                [(ngModel)]="transaction.showCodeType"
-                                                                value="hsn"
-                                                            />
-                                                            <label
-                                                                for="hsnCodeType{{ entryIdx }}"
-                                                                class="radio-custom-label"
-                                                                >{{ commonLocaleData?.app_hsn_code }}</label
+                                                                [value]="'hsn'"
                                                             >
-                                                        </span>
-                                                        <span>
-                                                            <input
-                                                                type="radio"
-                                                                class="radio-custom radio-theme"
-                                                                name="showCodeType{{ entryIdx }}"
+                                                                {{ commonLocaleData?.app_hsn_code }}
+                                                            </mat-radio-button>
+                                                            <mat-radio-button
+                                                                color="primary"
                                                                 id="sacCodeType{{ entryIdx }}"
-                                                                [(ngModel)]="transaction.showCodeType"
-                                                                value="sac"
-                                                            />
-                                                            <label
-                                                                for="sacCodeType{{ entryIdx }}"
-                                                                class="radio-custom-label"
-                                                                >{{ commonLocaleData?.app_sac_code }}</label
+                                                                [value]="'sac'"
                                                             >
-                                                        </span>
+                                                                {{ commonLocaleData?.app_sac_code }}
+                                                            </mat-radio-button>
+                                                        </mat-radio-group>
                                                     </div>
-                                                    <input
-                                                        type="text"
+                                                    <text-field
+                                                        [type]="'text'"
                                                         maxLength="10"
                                                         decimalDigitsDirective
                                                         [placeholder]="localeData?.hsn_number"
-                                                        name="transaction.hsnNumber_{{ entryIdx }}"
+                                                        [name]="'transaction.hsnNumber_{{ entryIdx }}'"
                                                         *ngIf="transaction.showCodeType === 'hsn'"
                                                         [(ngModel)]="transaction.hsnNumber"
-                                                    />
-                                                    <input
-                                                        type="text"
+                                                    >
+                                                    </text-field>
+                                                    <text-field
+                                                        [type]="'text'"
                                                         maxLength="10"
                                                         decimalDigitsDirective
                                                         [placeholder]="localeData?.sac_number"
-                                                        name="transaction.hsnNumber_{{ entryIdx }}"
+                                                        [name]="'transaction.hsnNumber_{{ entryIdx }}'"
                                                         *ngIf="transaction.showCodeType === 'sac'"
                                                         [(ngModel)]="transaction.sacNumber"
-                                                    />
-
+                                                    >
+                                                    </text-field>
                                                     <div class="btn-group mt-2 pt-1 d-flex">
                                                         <button
-                                                            class="btn btn-sm btn-success-green"
+                                                            mat-stroked-button
+                                                            color="primary"
                                                             type="button"
                                                             (click)="hsnSacDropdownShow = !hsnSacDropdownShow"
                                                         >
                                                             {{ commonLocaleData?.app_save }}
                                                         </button>
                                                         <button
-                                                            class="btn btn-sm btn-primary mr-0"
+                                                            mat-stroked-button
+                                                            class="mr-0"
                                                             type="button"
                                                             (click)="hideHsnSacEditPopup(transaction)"
                                                         >
@@ -1645,17 +1768,36 @@
                         </td>
 
                         <td class="text-right stock-unit">
-                            <input
-                                type="text"
-                                [disabled]="!transaction.isStockTxn"
+                            <text-field
+                                [type]="'text'"
+                                [readonly]="!transaction.isStockTxn"
                                 (blur)="handleQuantityBlur(entry, transaction)"
                                 [placeholder]="commonLocaleData?.app_quantity"
                                 decimalDigitsDirective
-                                name="transaction.quantity_{{ entryIdx }}"
-                                class="form-control text-right"
+                                [name]="'transaction.quantity_{{ entryIdx }}'"
+                                [cssClass]="'form-control mat-field-border text-right mr-b1'"
                                 [(ngModel)]="transaction.quantity"
-                            />
-
+                            >
+                            </text-field>
+                            <!-- <mat-select
+                                class="form-control"
+                                [disabled]="!transaction.isStockTxn"
+                                [(ngModel)]="transaction.stockUnit"
+                                [name]="transaction.stockUnit_{{ entryIdx }}"
+                                (selectionChange)="
+                                    onChangeUnit(transaction, $event);
+                                    handlePriceCalculationOnUnitChange(entry, transaction)
+                                "
+                            >
+                                <div class="select-quantity-option">
+                                    <mat-option
+                                        *ngFor="let stock of transaction.stockList"
+                                        [value]="stock.id"
+                                    >
+                                        {{ stock.text }}
+                                    </mat-option>
+                                </div>
+                            </mat-select> -->
                             <select
                                 class="form-control"
                                 [disabled]="!transaction.isStockTxn"
@@ -2638,7 +2780,7 @@
                                                             </div>
                                                             <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
                                                                 <div class="d-flex wrap-hsn-sac mb-2 mt-3">
-                                                                    <span>
+                                                                    <!-- <span>
                                                                         <input
                                                                             type="radio"
                                                                             class="radio-custom radio-theme"
@@ -2667,30 +2809,52 @@
                                                                             class="radio-custom-label"
                                                                             >{{ commonLocaleData?.app_sac_code }}</label
                                                                         >
-                                                                    </span>
+                                                                    </span> -->
+                                                                    <mat-radio-group
+                                                                        class="d-flex mb-2"
+                                                                        [(ngModel)]="transaction.showCodeType"
+                                                                        name="showCodeType{{ entryIdx }}"
+                                                                    >
+                                                                        <mat-radio-button
+                                                                            color="primary"
+                                                                            id="hsnCodeType{{ entryIdx }}"
+                                                                            [value]="'hsn'"
+                                                                        >
+                                                                            {{ commonLocaleData?.app_hsn_code }}
+                                                                        </mat-radio-button>
+                                                                        <mat-radio-button
+                                                                            color="primary"
+                                                                            id="sacCodeType{{ entryIdx }}"
+                                                                            [value]="'sac'"
+                                                                        >
+                                                                            {{ commonLocaleData?.app_sac_code }}
+                                                                        </mat-radio-button>
+                                                                    </mat-radio-group>
                                                                 </div>
-                                                                <input
-                                                                    type="text"
+                                                                <text-field
+                                                                    [type]="'text'"
                                                                     maxLength="10"
                                                                     decimalDigitsDirective
                                                                     [placeholder]="localeData?.hsn_number"
-                                                                    name="transaction.hsnNumber_{{ entryIdx }}"
+                                                                    [name]="'transaction.hsnNumber_{{ entryIdx }}'"
                                                                     *ngIf="transaction.showCodeType === 'hsn'"
                                                                     [(ngModel)]="transaction.hsnNumber"
-                                                                />
-                                                                <input
-                                                                    type="text"
+                                                                >
+                                                                </text-field>
+                                                                <text-field
+                                                                    [type]="'text'"
                                                                     maxLength="10"
                                                                     decimalDigitsDirective
                                                                     [placeholder]="localeData?.sac_number"
-                                                                    name="transaction.hsnNumber_{{ entryIdx }}"
+                                                                    [name]="'transaction.hsnNumber_{{ entryIdx }}'"
                                                                     *ngIf="transaction.showCodeType === 'sac'"
                                                                     [(ngModel)]="transaction.sacNumber"
-                                                                />
+                                                                >
+                                                                </text-field>
                                                                 <div class="d-flex wrap-hsn-sac mb-2 mt-3">
                                                                     <button
-                                                                        class="btn btn-sm btn-success-green"
-                                                                        type="button"
+                                                                        mat-stroked-button
+                                                                        color="primary"
                                                                         (click)="
                                                                             hsnSacDropdownShow = !hsnSacDropdownShow
                                                                         "
@@ -2698,8 +2862,7 @@
                                                                         {{ commonLocaleData?.app_save }}
                                                                     </button>
                                                                     <button
-                                                                        class="btn btn-sm btn-primary mr-0"
-                                                                        type="button"
+                                                                        mat-stroked-button
                                                                         (click)="hideHsnSacEditPopup(transaction)"
                                                                     >
                                                                         {{ commonLocaleData?.app_cancel }}
@@ -2934,24 +3097,16 @@
                                                 [mask]="inputMaskFormat"
                                             />
                                             <div class="wrap-other-tax" *ngIf="isTcsTdsApplicable">
-                                                <input
-                                                    type="checkbox"
-                                                    class="other-taxes-checkbox"
+                                                <mat-checkbox
+                                                    color="primary"
                                                     [(ngModel)]="entry.isOtherTaxApplicable"
                                                     *ngIf="!entry.isOtherTaxApplicable"
                                                     (click)="tcsTdsIndex = entryIdx"
                                                     name="entry.isOtherTaxApplicable_{{ entryIdx }}"
                                                     id="entry.isOtherTaxApplicable_{{ entryIdx }}"
-                                                    (ngModelChange)="
-                                                        toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)
-                                                    "
-                                                />
-                                                <label
-                                                    for="entry.isOtherTaxApplicable_{{ entryIdx }}"
-                                                    *ngIf="!entry.isOtherTaxApplicable"
-                                                    class="other-tax-label"
-                                                    >{{ localeData?.other_tax }}</label
                                                 >
+                                                    {{ localeData?.other_tax }}
+                                                </mat-checkbox>
                                             </div>
                                             <div class="mt-1 other-taxes" *ngIf="entry.isOtherTaxApplicable">
                                                 <span>

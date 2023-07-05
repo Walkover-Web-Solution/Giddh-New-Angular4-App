@@ -19,13 +19,27 @@ import { WarehouseActions } from '../../settings/warehouse/action/warehouse.acti
 import { BULK_UPDATE_FIELDS } from '../../shared/helpers/purchaseOrderStatus';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep } from '../../lodash-optimized';
-
+export interface PeriodicElement {
+    date: number;
+    position: number;
+    weight: string;
+    symbol: string;
+    total: string;
+    expected: string;
+    status: string;
+  }
+  
+  const ELEMENT_DATA: PeriodicElement[] = [
+    {position: 1, date: 302023302023, weight: 'PO-20230630-1', symbol: '17 April', total: '₹1,148.00', expected: "Delayed By 399 Days", status: 'Cancelled'},
+    {position: 2, date: 302023, weight: 'PO-20230630-1', symbol: '17 April', total: '₹1,148.00', expected: "Delayed By 399 Days", status: 'Expired'},
+    {position: 3, date: 302023, weight: 'PO-20230630-1', symbol: '17 April', total: '₹1,148.00', expected: "Delayed By 399 Days", status: 'Open'},
+    {position: 4, date: 302023, weight: 'PO-20230630-1', symbol: '17 April', total: '₹1,148.00', expected: "Delayed By 399 Days", status: 'Converted'},
+  ];
 @Component({
     selector: 'purchase-order',
     templateUrl: './purchase-order.component.html',
     styleUrls: ['./purchase-order.component.scss']
 })
-
 export class PurchaseOrderComponent implements OnInit, OnDestroy {
     /* Datepicker component */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
@@ -140,6 +154,9 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public giddhBalanceDecimalPlaces: number = 2;
     /** This will hold po for bulk convert */
     public selectedPurchaseOrders: any[] = [];
+    public displayedColumns = ['position', 'date', 'weight', 'symbol', 'total', 'expected', 'status'];
+    public dataSource = ELEMENT_DATA;
+    
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));

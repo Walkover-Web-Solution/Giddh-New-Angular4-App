@@ -55,6 +55,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioModule } from '@angular/material/radio';
+import { SelectModule } from '../theme/ng-select/ng-select';
 
 @NgModule({
     declarations: [
@@ -118,7 +120,9 @@ import { MatMenuModule } from '@angular/material/menu';
         MatTooltipModule,
         MatTableModule,
         MatButtonModule,
-        MatMenuModule
+        MatMenuModule,
+        MatRadioModule,
+        SelectModule
     ]
 })
 export class PurchaseModule {
