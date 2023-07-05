@@ -73,23 +73,23 @@
             </div>
       
     </div>
+
     <div class="aside-body flexy-child-1" *ngIf="isAddAccountOpen">
-        <div class="child-wrapper">
             <ledger-aside-pane-account [commonLocaleData]="commonLocaleData"></ledger-aside-pane-account>
-        </div>
     </div>
-    <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen">
+
+    <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen && voucherApiVersion === 2">
         <div class="child-wrapper">
-            <ng-container *ngIf="voucherApiVersion === 2">
                 <stock-create-edit
                     [addStock]="true"
                     [stockType]="stockType"
                     (closeAsideEvent)="backButtonPressed()"
                 ></stock-create-edit>
-            </ng-container>
-            <ng-container *ngIf="voucherApiVersion !== 2">
-                <inventory-add-stock [addStock]="true" (closeAsideEvent)="closeAsidePane()"></inventory-add-stock>
-            </ng-container>
         </div>
     </div>
+    
+    <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen && voucherApiVersion !== 2">
+                <inventory-add-stock [addStock]="true" (closeAsideEvent)="closeAsidePane()"></inventory-add-stock>
+    </div>
+ 
 </div>

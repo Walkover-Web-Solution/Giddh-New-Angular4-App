@@ -12,10 +12,11 @@
         }
     }
 }
-
-.stock-create-edit{
-    .cdk-overlay-container,
-    .cdk-global-overlay-wrapper {
-        z-index: 99999 !important;
-    }  
+body{
+    &.stock-create-edit{
+        .cdk-overlay-container,
+        .cdk-global-overlay-wrapper {
+            z-index: 99999 !important;
+        }  
+    }
 }
