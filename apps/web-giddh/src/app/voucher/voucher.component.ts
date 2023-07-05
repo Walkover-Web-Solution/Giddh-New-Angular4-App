@@ -756,7 +756,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public isEinvoiceGenerated: boolean = false;
     /** Stores the stock variants */
     public stockVariants: BehaviorSubject<Array<Observable<Array<IOption>>>> = new BehaviorSubject([]);
-
     /** True, if bulk items are added to the voucher list, required to prevent repetitive stock variants processing
      * when bulk entries are added
      */
@@ -776,6 +775,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public get shouldApplyMaxLengthOnNotes(): boolean {
         return (this.isSalesInvoice || this.isProformaInvoice || this.isEstimateInvoice);
+    }
+    /** Returns true if account is selected else false */
+    public get showPageLeaveConfirmation(): boolean {
+        return !this.isUpdateMode && this.invFormData.voucherDetails.customerUniquename;
     }
 
     /**

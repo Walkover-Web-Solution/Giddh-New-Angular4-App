@@ -270,6 +270,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private accountPredictionSubject: Subject<boolean> = new Subject();
     /** Holds if we need bank ledger popup to be hidden */
     private isHideBankLedgerPopup: boolean = false;
+    /** Returns true if account is selected else false */
+    public get showPageLeaveConfirmation(): boolean {
+        let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
+        return (hasParticularSelected?.length) ? true : false;
+    }
 
     constructor(
         private store: Store<AppState>,

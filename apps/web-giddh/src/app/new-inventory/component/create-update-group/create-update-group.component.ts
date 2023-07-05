@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import { takeUntil, distinctUntilChanged, take } from "rxjs/operators";
@@ -63,6 +63,10 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public processedTaxes: any[] = [];
     /** True if we need to show tax field. We are maintaining this because taxes are not getting reset on form reset */
     public showTaxField: boolean = true;
+    /** Returns true if form is dirty else false */
+    public get showPageLeaveConfirmation(): boolean {
+        return this.groupForm?.dirty;
+    }
 
     constructor(
         private store: Store<AppState>,
@@ -72,9 +76,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private route: ActivatedRoute,
         private changeDetection: ChangeDetectorRef,
-        private router: Router,
         private dialog: MatDialog,
-        private location: Location,
+        private location: Location
     ) {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
     }
