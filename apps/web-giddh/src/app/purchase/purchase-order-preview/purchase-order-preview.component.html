@@ -17,7 +17,7 @@
                         </button>
                     </div>
                     <mat-list role="list" class="invoice-sidebar">
-                        <perfect-scrollbar #perfectScrollbar *ngIf="filteredData && filteredData.length > 0">
+                        <cdk-virtual-scroll-viewport *ngIf="filteredData && filteredData.length > 0">
                             <mat-list-item
                                 role="listitem"
                                 class="single-invoice-detail cp"
@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                             </mat-list-item>
-                        </perfect-scrollbar>
+                        </cdk-virtual-scroll-viewport>
                     </mat-list>
                 </div>
             </div>
@@ -98,6 +98,7 @@
                                                                 ? openBulkConvert(purchaseBulkConvert)
                                                                 : convertToBill()
                                                         "
+                                                        class="more-menu"
                                                     >
                                                         {{ localeData?.convert_tobill }}
                                                     </a>
@@ -109,6 +110,7 @@
                                                             '/pages/purchase-management/purchase-order/new/' +
                                                                 purchaseOrderUniqueName
                                                         ]"
+                                                        class="more-menu"
                                                     >
                                                         {{ commonLocaleData?.app_copy }}
                                                     </a>
@@ -119,10 +121,11 @@
                                                         href="javascript:void(0)"
                                                         (click)="statusUpdate('cancelled')"
                                                         *ngIf="purchaseOrder?.status !== 'CANCELLED'"
+                                                        class="more-menu"
                                                         >{{ commonLocaleData?.app_cancel }}</a
                                                     >
                                                     <a
-                                                        class="cp"
+                                                        class="cp more-menu"
                                                         href="javascript:void(0)"
                                                         (click)="statusUpdate('open')"
                                                         *ngIf="
@@ -133,9 +136,12 @@
                                                     >
                                                 </button>
                                                 <button mat-menu-item class="status-link">
-                                                    <a class="cp" href="javascript:void(0)" (click)="confirmDelete()">{{
-                                                        commonLocaleData?.app_delete
-                                                    }}</a>
+                                                    <a
+                                                        class="cp more-menu"
+                                                        href="javascript:void(0)"
+                                                        (click)="confirmDelete()"
+                                                        >{{ commonLocaleData?.app_delete }}</a
+                                                    >
                                                 </button>
                                             </mat-menu>
                                         </div>

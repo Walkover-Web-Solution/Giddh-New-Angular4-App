@@ -271,7 +271,7 @@ textarea {
 }
 
 .text-align-right {
-    text-align: right;
+    text-align: right !important;
 }
 
 .invoice-date-due-date {
@@ -14530,9 +14530,26 @@ button {
     }
 }
 .more-menu {
+    color: var(--color-black);
     &:hover {
         color: var(--color-dropdown-list-hover-text) !important;
     }
 }
+.status-link {
+    &:hover {
+        a {
+            color: var(--color-dropdown-list-hover-text) !important;
+        }
+    }
+}
 
-// background: var(--color-dropdown-list-hover-background) !important;
+.purchase-border {
+    .select-border-bottom,
+    .input-custom {
+        border: none;
+        border-bottom: 1px solid var(--color-iron);
+        border-radius: 0 !important;
+        background-color: transparent !important;
+        width: 100%;
+    }
+}

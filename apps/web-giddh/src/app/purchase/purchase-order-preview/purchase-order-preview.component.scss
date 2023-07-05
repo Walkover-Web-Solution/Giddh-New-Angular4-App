@@ -1051,3 +1051,6 @@ table.tax-table.item {
     background-color: var(--color-blue);
     animation: loading 2s linear infinite;
 }
+cdk-virtual-scroll-viewport {
+    height: 100% !important;
+}

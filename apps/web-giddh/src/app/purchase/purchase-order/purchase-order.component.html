@@ -400,6 +400,185 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" class="w-100 basic giddh-table">
+                <ng-container matColumnDef="position">
+                    <th mat-header-cell *matHeaderCellDef width="3%">
+                        <div class="check-image">
+                            <span *ngIf="!showSelectAllItemCheckbox && !allItemsSelected">#</span>
+                            <div class="table-checkbox-field" *ngIf="showSelectAllItemCheckbox || allItemsSelected">
+                                <img
+                                    src="assets/images/unchecked.png"
+                                    *ngIf="!allItemsSelected"
+                                    (click)="toggleAllItems(true)"
+                                />
+                                <img
+                                    src="assets/images/checked.png"
+                                    *ngIf="allItemsSelected"
+                                    (click)="toggleAllItems(false)"
+                                />
+                            </div>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+                </ng-container>
+                <ng-container matColumnDef="date" width="10%">
+                    <th mat-header-cell *matHeaderCellDef>Date</th>
+                    <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+                </ng-container>
+                <ng-container matColumnDef="weight" width="15%">
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef
+                        (clickOutside)="showPurchaseOrderNumberSearch = false"
+                        class="td-search-box"
+                    >
+                        <div>
+                            <i
+                                class="icon-search"
+                                (click)="showInlineSearch('purchaseOrderNumber', searchBox)"
+                                [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber"
+                            ></i>
+                            <span
+                                [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber"
+                            >
+                                Purchase Order#</span
+                            >
+                        </div>
+                        <div
+                            class="input-container"
+                            [hidden]="!showVendorNameSearch && !purchaseOrderPostRequest.vendorName"
+                        >
+                            <text-field
+                                [type]="'text'"
+                                [placeholder]="localeData?.search_vendor_name"
+                                [cssClass]="'w100'"
+                                #searchBox
+                                [(ngModel)]="purchaseOrderPostRequest.vendorName"
+                                (keyup)="columnSearch()"
+                                (keydown)="columnSearch()"
+                            ></text-field>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <a
+                            href="javascript:void(0);"
+                            routerLink="/pages/purchase-management/purchase-orders/preview/{{ item?.uniqueName }}"
+                        >
+                            {{ element.weight }}
+                        </a>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="symbol" width="15%">
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef
+                        class="td-search-box"
+                        (clickOutside)="showVendorNameSearch = false"
+                    >
+                        <div>
+                            <i
+                                class="icon-search"
+                                (click)="showInlineSearch('purchaseOrderNumber', searchBox)"
+                                [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber"
+                            ></i>
+                            <span [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName">{{
+                                commonLocaleData?.app_vendor_name
+                            }}</span>
+                        </div>
+                        <div
+                            class="input-container"
+                            [hidden]="!showVendorNameSearch && !purchaseOrderPostRequest.vendorName"
+                        >
+                            <text-field
+                                [type]="'text'"
+                                [placeholder]="localeData?.search_vendor_name"
+                                [cssClass]="'w100'"
+                                #searchBox
+                                [(ngModel)]="purchaseOrderPostRequest.vendorName"
+                                (keyup)="columnSearch()"
+                                (keydown)="columnSearch()"
+                            >
+                            </text-field>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="total" width="15%">
+                    <th mat-header-cell *matHeaderCellDef class="text-align-right">Total Amount</th>
+                    <td
+                        mat-cell
+                        *matCellDef="let element"
+                        class="text-align-right"
+                        [matTooltip]="localeData?.total_amount"
+                        [matTooltipPosition]="'above'"
+                    >
+                        {{ element.total }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="expected" width="15%">
+                    <th mat-header-cell *matHeaderCellDef>Expected Delivery</th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="late-delivery">
+                            {{ element.expected }}
+                        </span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="status" width="15%">
+                    <th mat-header-cell *matHeaderCellDef>Status</th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="status-icon">
+                            <span>
+                                {{ element.status }}
+                            </span>
+                            <span class="hide-show-icons">
+                                <div class="action-icon ml-auto">
+                                    <a
+                                        [MatTooltip]="localeData?.convert_tobill"
+                                        *ngIf="item?.status === 'open' && !isCompany"
+                                        (click)="
+                                            voucherApiVersion === 2
+                                                ? openBulkConvert(purchaseBulkConvert, item)
+                                                : bulkUpdate('create_purchase_bill', item.voucherNumber)
+                                        "
+                                    >
+                                        <span class="icon-tick font-12"></span>
+                                    </a>
+                                    <a
+                                        [MatTooltip]="commonLocaleData?.app_send_email"
+                                        (click)="openSendMailModal(item, sendEmailModal)"
+                                    >
+                                        <span class="icon-envelope font-12"></span>
+                                    </a>
+                                    <a
+                                        *ngIf="!isCompany"
+                                        [MatTooltip]="commonLocaleData?.app_copy"
+                                        [routerLink]="[
+                                            '/pages/purchase-management/purchase-order/new/' + item?.uniqueName
+                                        ]"
+                                    >
+                                        <span class="icon-copy-small font-15"></span>
+                                    </a>
+                                    <a
+                                        *ngIf="!isCompany"
+                                        [MatTooltip]="commonLocaleData?.app_delete"
+                                        (click)="confirmDelete(item)"
+                                    >
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                </div>
+                            </span>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+        </div>
+
         <pagination
             [hidden]="isLoading"
             *ngIf="purchaseOrders.totalPages > 1"
