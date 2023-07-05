@@ -130,6 +130,19 @@
                     visibility: visible;
                 }
             }
+            .check-image {
+                .table-checkbox-field {
+                    display: block;
+                }
+                span {
+                    display: none;
+                }
+            }
+        }
+    }
+    .check-image {
+        .table-checkbox-field {
+            display: none;
         }
     }
 }
