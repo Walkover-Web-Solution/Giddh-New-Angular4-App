@@ -58,25 +58,24 @@
             </div>
         </div>
 
-        <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen">
-            <div class="child-wrapper">
-                <ng-container *ngIf="voucherApiVersion === 2">
-                    <stock-create-edit
-                        [addStock]="true"
-                        [stockType]="stockType"
-                        (closeAsideEvent)="closeAsidePane($event)"
-                    ></stock-create-edit>
-                </ng-container>
-                <ng-container *ngIf="voucherApiVersion !== 2">
-                    <sales-create-stock
-                        [autoFocusInChild]="autoFocusInChild"
-                        (closeAsideEvent)="closeAsidePane($event)"
-                    ></sales-create-stock>
-                </ng-container>
+        <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen && voucherApiVersion !== 2">        
+                <sales-create-stock
+                    [autoFocusInChild]="autoFocusInChild"
+                    (closeAsideEvent)="closeAsidePane($event)"
+                ></sales-create-stock>          
+        </div>
+
+        <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen && voucherApiVersion === 2">
+            <div class="child-wrapper">               
+                <stock-create-edit
+                [addStock]="true"
+                [stockType]="stockType"
+                (closeAsideEvent)="closeAsidePane($event)"
+            ></stock-create-edit>
             </div>
         </div>
+
         <div class="aside-body flexy-child-1" *ngIf="isAddServiceOpen">
-            <div class="child-wrapper">
                 <generic-aside-menu-account
                     [class]="accountAsideMenuState"
                     [@slideInOut]="accountAsideMenuState"
@@ -88,7 +87,6 @@
                     *ngIf="accountAsideMenuState === 'in'"
                     (addEvent)="addNewServiceAccount($event)"
                 ></generic-aside-menu-account>
-            </div>
         </div>
     </div>
 </div>
