@@ -5,7 +5,8 @@
             .child-wrapper{
                 background-color: var(--color-body-background);
                 height: calc(100% - 88px);
-                min-width: 730px;
+                width: 730px;
+                overflow: auto;
                 padding: 10px;
                 margin: 15px 0;
                 box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
@@ -14,7 +15,7 @@
     }
 }
 body{
-    &.stock-create-edit{
+    &.ledger-aside-pane, &.aside-menu-product-service-page{
         .cdk-overlay-container,
         .cdk-global-overlay-wrapper {
             z-index: 99999 !important;
