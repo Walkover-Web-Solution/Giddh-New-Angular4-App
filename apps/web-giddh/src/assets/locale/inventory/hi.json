@@ -86,7 +86,11 @@
         "equals":"बराबर",
         "greater_than":"से अधिक",
         "less_than":"से कम",
-        "excluded":"छोड़ा गया"
+        "excluded":"छोड़ा गया",
+        "category":"श्रेणी",
+        "type":"प्रकार",
+        "select_value":"कीमत चुनें",
+        "enter_amount":"राशि डालें"
     },
      "warehouse_opening_balance":{
         "unique_name":"अनूठा नाम",
