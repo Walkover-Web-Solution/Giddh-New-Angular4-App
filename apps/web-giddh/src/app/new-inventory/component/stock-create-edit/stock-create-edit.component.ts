@@ -913,6 +913,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             if (response?.status === "success") {
                 this.resetForm(this.stockCreateEditForm);
                 if (!openEditAfterSave) {
+                    if (!this.stockGroups?.length) {
+                        this.getStockGroups();
+                    }
                     this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
                 } else {
                     this.router.navigate(['/pages/inventory/v2/stock/' + this.stockForm.type?.toLowerCase() + '/edit/' + response.body?.uniqueName], { queryParams: { tab: 2 } });
@@ -1900,7 +1903,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     }
                 });
                 variant.warehouseBalance?.forEach(variantWarehouseBalance => {
-                    if (!variantWarehouseBalance.stockUnit?.uniqueName) {
+                    if (!variantWarehouseBalance.stockUnit?.uniqueName || !this.isVariantAvailable) {
                         variantWarehouseBalance.stockUnit.uniqueName = this.stockForm.stockUnitUniqueName;
                         variantWarehouseBalance.stockUnit.name = this.stockUnitName;
                     }

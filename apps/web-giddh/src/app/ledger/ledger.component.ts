@@ -1035,8 +1035,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public getTransactionData() {
         this.closingBalanceBeforeReconcile = null;
-        this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
-        this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
+        if (this.trxRequest?.accountUniqueName) {
+            this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
+            this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
+        }
     }
 
     public getCurrencyRate(mode: string = null) {
@@ -2635,7 +2637,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     mobileNo: data.body.mobileNo,
                     nameStr: event.additional.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.name).join(', '),
                     stock: data.body.stock,
-                    uNameStr: event.additional.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName).join(', '),
+                    uNameStr: event.additional.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName ?? parent).join(', '),
                     accountApplicableDiscounts: data.body.applicableDiscounts,
                     parentGroups: event.additional.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
                 };

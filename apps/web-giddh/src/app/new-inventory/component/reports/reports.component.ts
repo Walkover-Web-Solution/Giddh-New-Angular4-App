@@ -721,7 +721,8 @@ export class ReportsComponent implements OnInit {
         if (this.moduleType?.toUpperCase() === 'FIXED_ASSETS') {
             this.moduleType = 'fixedassets';
         }
-        this.router.navigate(['/pages/inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName]);
+
+        this.router.navigate(['/pages/inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName], { queryParams: { tab: 1 } });
     }
 
     /**

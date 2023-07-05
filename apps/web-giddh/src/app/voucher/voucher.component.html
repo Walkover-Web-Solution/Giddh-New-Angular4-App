@@ -3809,11 +3809,7 @@
                             <!-- endregion -->
                             <!-- region update mode -->
                             <div class="pull-right pr" *ngIf="isUpdateMode">
-                                <button
-                                    mat-stroked-button
-                                    class="d-inline-block"
-                                    (click)="cancelUpdate()"
-                                >
+                                <button mat-stroked-button class="d-inline-block" (click)="cancelUpdate()">
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
                                 <button
