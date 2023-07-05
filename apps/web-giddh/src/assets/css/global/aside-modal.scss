@@ -5,6 +5,7 @@
             .child-wrapper{
                 background-color: var(--color-body-background);
                 height: calc(100% - 88px);
+                min-width: 730px;
                 padding: 10px;
                 margin: 15px 0;
                 box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
