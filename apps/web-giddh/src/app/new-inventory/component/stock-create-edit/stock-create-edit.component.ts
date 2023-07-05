@@ -920,14 +920,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.resetForm(this.stockCreateEditForm);
-                if (!openEditAfterSave) {
-                    if (!this.stockGroups?.length) {
-                        this.getStockGroups();
-                    }
+                if (this.addStock) {
                     this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
                     this.closeAsideEvent.emit();
                 } else {
                     if (!openEditAfterSave) {
+                        if (!this.stockGroups?.length) {
+                            this.getStockGroups();
+                        }
                         this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
                     } else {
                         this.router.navigate(['/pages/inventory/v2/stock/' + this.stockForm.type?.toLowerCase() + '/edit/' + response.body?.uniqueName], { queryParams: { tab: 2 } });
@@ -938,7 +938,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
     }
-
     /**
      * Formats request before sending
      *
