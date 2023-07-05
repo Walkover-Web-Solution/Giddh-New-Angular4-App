@@ -39,6 +39,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        document.querySelector('body').classList.add('ledger-aside-pane');
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.inventorySidebarAction.GetGroupsWithStocksHierarchyMin());
         // subscribe createStockSuccess for resting form
@@ -99,6 +100,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        document.querySelector('body').classList.remove('ledger-aside-pane');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
