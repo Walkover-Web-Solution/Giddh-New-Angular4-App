@@ -406,22 +406,38 @@
                 <ng-container matColumnDef="position">
                     <th mat-header-cell *matHeaderCellDef width="3%">
                         <div class="check-image">
-                            <span *ngIf="!showSelectAllItemCheckbox && !allItemsSelected">#</span>
-                            <div class="table-checkbox-field" *ngIf="showSelectAllItemCheckbox || allItemsSelected">
+                            <span class="">#</span>
+                            <div class="table-checkbox-field">
                                 <img
                                     src="assets/images/unchecked.png"
                                     *ngIf="!allItemsSelected"
                                     (click)="toggleAllItems(true)"
                                 />
-                                <img
+                                <!-- <img
                                     src="assets/images/checked.png"
                                     *ngIf="allItemsSelected"
                                     (click)="toggleAllItems(false)"
-                                />
+                                /> -->
                             </div>
                         </div>
                     </th>
-                    <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="check-image">
+                            <span>{{ element.position }}</span>
+                            <div class="table-checkbox-field">
+                                <img
+                                    src="assets/images/unchecked.png"
+                                    *ngIf="!allItemsSelected"
+                                    (click)="toggleAllItems(true)"
+                                />
+                                <!-- <img
+                                    src="assets/images/checked.png"
+                                    *ngIf="allItemsSelected"
+                                    (click)="toggleAllItems(false)"
+                                /> -->
+                            </div>
+                        </div>
+                    </td>
                 </ng-container>
                 <ng-container matColumnDef="date" width="10%">
                     <th mat-header-cell *matHeaderCellDef>Date</th>
@@ -536,7 +552,8 @@
                             <span class="hide-show-icons">
                                 <div class="action-icon ml-auto">
                                     <a
-                                        [MatTooltip]="localeData?.convert_tobill"
+                                        [matTooltip]="localeData?.convert_tobill"
+                                        matTooltipPosition="above"
                                         *ngIf="item?.status === 'open' && !isCompany"
                                         (click)="
                                             voucherApiVersion === 2
@@ -547,14 +564,16 @@
                                         <span class="icon-tick font-12"></span>
                                     </a>
                                     <a
-                                        [MatTooltip]="commonLocaleData?.app_send_email"
+                                        [matTooltip]="commonLocaleData?.app_send_email"
+                                        matTooltipPosition="above"
                                         (click)="openSendMailModal(item, sendEmailModal)"
                                     >
                                         <span class="icon-envelope font-12"></span>
                                     </a>
                                     <a
                                         *ngIf="!isCompany"
-                                        [MatTooltip]="commonLocaleData?.app_copy"
+                                        [matTooltip]="commonLocaleData?.app_copy"
+                                        matTooltipPosition="above"
                                         [routerLink]="[
                                             '/pages/purchase-management/purchase-order/new/' + item?.uniqueName
                                         ]"
@@ -563,7 +582,8 @@
                                     </a>
                                     <a
                                         *ngIf="!isCompany"
-                                        [MatTooltip]="commonLocaleData?.app_delete"
+                                        [matTooltip]="commonLocaleData?.app_delete"
+                                        matTooltipPosition="above"
                                         (click)="confirmDelete(item)"
                                     >
                                         <i class="icon-trash"></i>
