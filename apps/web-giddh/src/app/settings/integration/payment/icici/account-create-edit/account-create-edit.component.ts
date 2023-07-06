@@ -93,6 +93,12 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
             });
         }
 
+        this.accountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (this.accountForm.dirty) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        });
+
         this.loadUsersWithCompanyPermissions();
         this.loadDefaultBankAccountsSuggestions();
     }
@@ -171,6 +177,8 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
 
             this.settingsIntegrationService.bankAccountRegistration(this.accountForm.value).pipe(take(1)).subscribe(response => {
                 if (response?.status === "success") {
+                    this.accountForm.markAsPristine();
+                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                     if (response?.body?.message) {
                         this.toaster.clearAllToaster();
                         this.toaster.successToast(response?.body?.message);
@@ -199,6 +207,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                 this.closeModalEvent.emit(true);
             });
         } else {
+            this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             this.closeModalEvent.emit(true);
         }
     }
@@ -285,6 +294,8 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
 
             this.settingsIntegrationService.updateAccount(this.accountForm.value, request).pipe(take(1)).subscribe(response => {
                 if (response?.status === "success") {
+                    this.accountForm.markAsPristine();
+                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                     if (response?.body?.message) {
                         this.toaster.clearAllToaster();
                         this.toaster.successToast(response?.body?.message);

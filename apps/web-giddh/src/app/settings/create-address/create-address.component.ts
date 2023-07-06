@@ -168,6 +168,12 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 this.addressForm.get('address').updateValueAndValidity();
             });
         }
+
+        this.addressForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (this.addressForm?.dirty) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        });
     }
 
     /**
@@ -177,7 +183,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public closeAsidePane(event: any): void {
-        if (this.addressForm.dirty) {
+        if (this.addressForm?.dirty) {
             this.confirmPageLeave(() => {
                 this.closeAsideEvent.emit(event);
             });
@@ -382,5 +388,17 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 callback();
             }
         });
+    }
+
+    /**
+     * Removes browser confirmation dialog and set form has undirty on clear in create mode
+     *
+     * @memberof CreateAddressComponent
+     */
+    public clearForm(): void {
+        if (this.addressConfiguration.type === 'createAddress' || this.addressConfiguration.type === 'createBranchAddress') {
+            this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+            this.addressForm.markAsPristine();
+        }
     }
 }

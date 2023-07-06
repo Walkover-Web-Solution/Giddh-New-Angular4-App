@@ -75,7 +75,6 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
                 this.usersList = _.sortBy(arr, ['name']);
             }
         });
-
     }
 
     public getInitialData() {
@@ -122,6 +121,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     public showModalForEdit(user?: any) {
         this.selectedUser = user ? user : '';
         this.hasUnsavedChanges = false;
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         this.showEditUserModal = true;
         setTimeout(() => this.editUserModal?.show(), 700);
     }
@@ -130,11 +130,13 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         if (event && this.hasUnsavedChanges) {
             this.confirmPageLeave(() => {
                 this.hasUnsavedChanges = false;
+                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                 this.editUserModal.hide();
                 setTimeout(() => this.showEditUserModal = false, 700);
             });
         } else {
             this.hasUnsavedChanges = false;
+            this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             this.editUserModal.hide();
             setTimeout(() => this.showEditUserModal = false, 700);
         }
@@ -190,6 +192,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
      */
     private resetUnsavedChanges(): void {
         this.hasUnsavedChanges = false;
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         this.store.dispatch(this.settingsProfileActions.hasUnsavedChanges(false));
     }
 
@@ -201,6 +204,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
      */
     public updateUnsavedChanges(event: any): void {
         this.hasUnsavedChanges = event;
+        this.pageLeaveUtilityService.addBrowserConfirmationDialog();
         this.store.dispatch(this.settingsProfileActions.hasUnsavedChanges(event));
     }
 }

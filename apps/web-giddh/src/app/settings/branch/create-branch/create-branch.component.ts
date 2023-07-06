@@ -19,6 +19,7 @@ import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../constan
 import { SettingsUtilityService } from '../../services/settings-utility.service';
 import { WarehouseActions } from '../../warehouse/action/warehouse.action';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
+
 @Component({
     selector: 'create-branch',
     templateUrl: './create-branch.component.html',
@@ -36,7 +37,6 @@ import { PageLeaveUtilityService } from '../../../services/page-leave-utility.se
         ]),
     ]
 })
-
 export class CreateBranchComponent implements OnInit, OnDestroy {
     /** Aside menu pane status */
     public addressAsideMenuState: string = 'out';
@@ -69,9 +69,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public isAddressChangeInProgress: boolean = false;
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
-
+    /** Holds image root path */
     public imgPath: string = '';
-
     /** Unsubscribes from all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -141,6 +140,12 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/branch'));
 
         this.imgPath = isElectron ? 'assets/images/branch-image.svg' : AppUrl + APP_FOLDER + 'assets/images/branch-image.svg';
+
+        this.branchForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        });
     }
 
     /**
@@ -280,6 +285,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                 address.isDefault = false;
             }
         });
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        this.branchForm.markAsPristine();
     }
 
     /**

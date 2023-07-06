@@ -245,6 +245,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
             }
 
             this.hasUnsavedChanges = response;
+            if (this.hasUnsavedChanges) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
         });
     }
 

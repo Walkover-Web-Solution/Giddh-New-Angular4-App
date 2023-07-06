@@ -31,16 +31,36 @@ export class PageLeaveUtilityService {
 
         document.querySelector("body").setAttribute("onbeforeunload", "return 'true';");
 
+        dialogRef.afterOpened().subscribe(() => {
+            document.querySelector("body")?.classList?.add("page-leave-confirmation-modal-wrapper");
+        });
+
         dialogRef.afterClosed().subscribe((action) => {
+            document.querySelector("body")?.classList?.remove("page-leave-confirmation-modal-wrapper");
             if (action) {
-                document.querySelector("body").removeAttribute("onbeforeunload");
+                this.removeBrowserConfirmationDialog();
             }
         });
 
         return dialogRef;
     }
 
+    /**
+     * Removes browser leave confirmation popup
+     *
+     * @memberof PageLeaveUtilityService
+     */
     public removeBrowserConfirmationDialog(): void {
         document.querySelector("body").removeAttribute("onbeforeunload");
+        document.querySelector("body").classList?.remove("page-leave-confirmation-modal-wrapper");
+    }
+
+    /**
+     * Adds browser leave confirmation popup
+     *
+     * @memberof PageLeaveUtilityService
+     */
+    public addBrowserConfirmationDialog(): void {
+        document.querySelector("body").setAttribute("onbeforeunload", "return 'true';");
     }
 }

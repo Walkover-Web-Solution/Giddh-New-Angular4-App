@@ -15,7 +15,7 @@
                     <h3 *ngIf="addressConfiguration.type === 'editBranch'">{{ localeData?.edit_branch }}</h3>
                     <h3 *ngIf="addressConfiguration.type === 'editWarehouse'">{{ localeData?.edit_warehouse }}</h3>
                 </div>
-                <a id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></a>
+                <a class="cursor-pointer" id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></a>
 
                 <div class="aside-body">
                     <div
@@ -468,7 +468,7 @@
                                             {{ commonLocaleData?.app_update }}</ng-container
                                         >
                                     </button>
-                                    <button type="reset" class="btn btn-danger">
+                                    <button type="reset" (click)="clearForm()" class="btn btn-danger">
                                         {{ commonLocaleData?.app_clear }}
                                     </button>
                                 </div>

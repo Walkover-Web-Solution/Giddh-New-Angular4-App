@@ -81,6 +81,12 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
                 duration: ['']
             });
         }
+
+        this.accountUserForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (this.accountUserForm.dirty) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        });
     }
 
     /**
@@ -110,6 +116,8 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
 
             this.settingsIntegrationService.bankAccountMultiRegistration(this.accountUserForm.value).pipe(take(1)).subscribe(response => {
                 if (response?.status === "success") {
+                    this.accountUserForm.markAsPristine();
+                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                     if (response?.body?.message) {
                         this.toaster.clearAllToaster();
                         this.toaster.successToast(response?.body?.message);
@@ -151,6 +159,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
                 this.closeModalEvent.emit(true);
             });
         } else {
+            this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             this.closeModalEvent.emit(true);
         }
     }
@@ -193,6 +202,8 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
 
             this.settingsIntegrationService.updatePayorAccount(this.accountUserForm.value, request).pipe(take(1)).subscribe(response => {
                 if (response?.status === "success") {
+                    this.accountUserForm.markAsPristine();
+                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                     if (response?.body?.message) {
                         this.toaster.clearAllToaster();
                         this.toaster.successToast(response?.body?.message);

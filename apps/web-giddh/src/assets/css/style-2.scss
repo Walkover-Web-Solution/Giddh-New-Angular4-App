@@ -9915,9 +9915,11 @@ giddh-datepicker {
 }
 
 .ledger-body {
-    .cdk-overlay-container,
-    .cdk-global-overlay-wrapper {
-        z-index: 1000 !important;
+    &:not(.page-leave-confirmation-modal-wrapper) {
+        .cdk-overlay-container,
+        .cdk-global-overlay-wrapper {
+            z-index: 1000 !important;
+        }
     }
 
     overflow-y: auto !important;

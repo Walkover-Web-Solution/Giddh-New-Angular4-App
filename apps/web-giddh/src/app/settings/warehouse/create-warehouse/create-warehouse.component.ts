@@ -38,7 +38,6 @@ import { PageLeaveUtilityService } from '../../../services/page-leave-utility.se
 })
 
 export class CreateWarehouseComponent implements OnInit, OnDestroy {
-
     /** Address aside menu state */
     public addressAsideMenuState: string = 'out';
     /** Stores the comapny details */
@@ -70,9 +69,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     public isAddressChangeInProgress: boolean = false;
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
-
+    /** Holds image root path */
     public imgPath: string = '';
-
     /** Unsubscribe from listener */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -164,6 +162,12 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         });
 
         this.imgPath = isElectron ? 'assets/images/warehouse-image.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-image.svg';
+
+        this.warehouseForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        });
     }
 
     /**
@@ -265,6 +269,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                 address.isDefault = false;
             }
         });
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        this.warehouseForm.markAsPristine();
     }
 
     /**

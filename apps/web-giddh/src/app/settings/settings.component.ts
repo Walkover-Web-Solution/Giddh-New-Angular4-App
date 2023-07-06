@@ -21,6 +21,7 @@ import { HttpClient } from "@angular/common/http";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { LocaleService } from '../services/locale.service';
 import { GeneralService } from '../services/general.service';
+import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 
 @Component({
     templateUrl: './settings.component.html',
@@ -81,7 +82,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private http: HttpClient,
         private breakPointObservar: BreakpointObserver,
         private localeService: LocaleService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(state => state.settings.updateProfileInProgress), takeUntil(this.destroyed$));
@@ -89,6 +91,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.settings.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasUnsavedChanges = response;
+
+            if (this.hasUnsavedChanges) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
         });
     }
 
