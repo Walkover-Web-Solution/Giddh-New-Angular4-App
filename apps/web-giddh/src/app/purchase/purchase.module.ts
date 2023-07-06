@@ -57,6 +57,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatRadioModule } from '@angular/material/radio';
 import { SelectModule } from '../theme/ng-select/ng-select';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     declarations: [
@@ -122,7 +123,8 @@ import { SelectModule } from '../theme/ng-select/ng-select';
         MatButtonModule,
         MatMenuModule,
         MatRadioModule,
-        SelectModule
+        SelectModule,
+        MatDialogModule
     ]
 })
 export class PurchaseModule {

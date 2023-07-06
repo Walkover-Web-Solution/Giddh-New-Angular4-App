@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output, Input, OnDestroy, Inject } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal'
 import { IOption } from '../../theme/ng-select/ng-select';
 import * as dayjs from 'dayjs';
@@ -9,6 +9,7 @@ import { GeneralService } from '../../services/general.service';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { purchaseOrderStatus } from "../../shared/helpers/purchaseOrderStatus";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
     selector: 'purchase-advance-search',
@@ -24,9 +25,9 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will input the filters to preselect them */
     @Input() public purchaseOrderPostRequest;
     /* This will hold local JSON data */
-    @Input() public localeData: any = {};
+    public localeData: any = {};
     /* This will hold common JSON data */
-    @Input() public commonLocaleData: any = {};
+    public commonLocaleData: any = {};
     /* Emitter for filters */
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
     /* Datepicker template */
@@ -55,7 +56,10 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private modalService: BsModalService, private breakPointObservar: BreakpointObserver, private generalService: GeneralService) {
+    constructor(private modalService: BsModalService, 
+        private breakPointObservar: BreakpointObserver,
+         private generalService: GeneralService,
+         @Inject(MAT_DIALOG_DATA) public inputData) {
 
     }
 
@@ -65,6 +69,9 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
      * @memberof PurchaseAdvanceSearchComponent
      */
     public ngOnInit(): void {
+        console.log(this.inputData);
+            this.localeData = this.inputData.localeData;
+            this.commonLocaleData = this.inputData.commonLocaleData;
         this.filtersForAmount = [
             { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'GREATER_THAN' },
             { label: this.commonLocaleData?.app_comparision_filters?.greater_than_equals, value: 'GREATER_THAN_OR_EQUALS' },
