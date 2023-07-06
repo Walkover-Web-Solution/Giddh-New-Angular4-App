@@ -102,6 +102,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      * @memberof InputFieldComponent
      */
     public ngOnChanges(): void {
+        console.log(this.showError);
+
         if (this.autoFocus) {
             setTimeout(() => {
                 this.textField?.nativeElement?.focus();

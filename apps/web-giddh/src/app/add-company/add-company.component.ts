@@ -7,7 +7,7 @@ import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operat
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
-import { MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, OnBoardingType } from '../app.constant';
+import { MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, OnBoardingType, GSTIN_REGEX } from '../app.constant';
 import { isEqual } from "../lodash-optimized";
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StatesRequest } from "../models/api-models/Company";
@@ -158,6 +158,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public states: IOption[] = [];
     /** True, if item update is in progress */
     public isItemUpdateInProgress: boolean;
+    public isGstinValid: boolean = false;
+    public selectedState: string = '';
+    public gstinPattern = GSTIN_REGEX;
+
 
     /**
      * Returns true, if onboarding of Warehouse is going on
@@ -171,7 +175,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     }
 
     public activeCompany: any;
-    public isTaxNumberSameAsHeadQuarter: number = 0;
+    public isValidGstinNumber = GSTIN_REGEX;
+
     constructor(
         private formBuilder: FormBuilder,
         private _toasty: ToasterService,
@@ -213,7 +218,26 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                 }
             }
         });
+        this.secondStepForm.valueChanges.pipe(debounceTime(700), distinctUntilChanged(isEqual)).subscribe(data => {
+            console.log(this.secondStepForm.get('gstin'));
 
+            this.isGstinValid = false;
+            if (!data.gstin) {
+                this.selectedState = '';
+            } else {
+                this.states.find((state) => {
+                    let code = data?.gstin.substr(0, 2);
+                    if (state.stateGstCode == code) {
+                        this.isGstinValid = true;
+                        this.selectedState = state.label;
+                        this.changeDetection.detectChanges();
+                        return true;
+                    } else {
+
+                    }
+                });
+            }
+        });
         this.isProdMode = PRODUCTION_ENV;
         this.getCountry();
     }
@@ -234,10 +258,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         this.secondStepForm = this.formBuilder.group({
             businessType: [''],
             businessNature: [''],
-            gstin: ['', Validators.required],
-            state: [''],
+            gstin: ['', [Validators.pattern(GSTIN_REGEX),Validators.required]], //Validators.required
+            state: [''], //Validators.required
             tax: null,
-            pincode: ['', Validators.required],
+            pincode: [''],
             address: ['', Validators.required]
         });
         this.companyForm = this.formBuilder.group({
@@ -266,29 +290,15 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                     }
                     this.states.push({
                         label: res.stateList[key].code + ' - ' + res.stateList[key].name,
-                        value: res.stateList[key].code
+                        value: res.stateList[key].code,
+                        stateGstCode: res.stateList[key].stateGstCode
                     });
                 });
             }
         });
     }
 
-    /**
-     * Fills the form details with proovided entity type
-     *
-     * @private
-     * @param {*} entity Entity with which the form details will get filled
-     * @returns {boolean} True, if any one of the form field is filled with the entity details
-     * @memberof AddCompanyComponent
-     */
-    private fillFormDetails(entity: any): boolean {
-        if (entity) {
-            this.companyProfileObj.address = entity.address;
-            this.companyProfileObj.state = entity.stateCode;
-            this.companyProfileObj.pincode = entity.pincode;
-        }
-        return !!(this.companyProfileObj.address || this.companyProfileObj.state);
-    }
+
 
     /**
      * Returns the default warehouse data
@@ -534,11 +544,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     }
 
     public onSubmit(): void {
+        console.log(this.companyForm);
+
         this.isFormSubmitted = false;
-        if (this.secondStepForm.invalid) {
+        if (this.companyForm.invalid) {
             this.isFormSubmitted = true;
             return;
         }
+
     }
 
     public selectBusinessType(event: any): void {

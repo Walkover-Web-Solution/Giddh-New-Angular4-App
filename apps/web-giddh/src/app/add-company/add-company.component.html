@@ -74,6 +74,7 @@
                                 [type]="'text'"
                                 [readonly]="true"
                                 [floatLabel]="'always'"
+                                [required]="true"
                             >
                             </input-field>
                         </div>
@@ -83,6 +84,7 @@
                                 [readonly]="true"
                                 [label]="'Country'"
                                 [defaultValue]="firstStepForm.get('country')?.value.label"
+                                [required]="true"
                             >
                             </dropdown-field>
                         </div>
@@ -92,6 +94,7 @@
                                 [readonly]="true"
                                 [label]="'Currency'"
                                 [defaultValue]="firstStepForm.get('currency')?.value.value"
+                                [required]="true"
                             >
                             </dropdown-field>
                         </div>
@@ -111,6 +114,7 @@
                                 [placeholder]="firstStepForm.controls['mobile'].value"
                                 [floatLabel]="'always'"
                                 [readonly]="true"
+                                [required]="true"
                             >
                             </input-field>
                         </div>
@@ -132,53 +136,66 @@
                             >
                             </dropdown-field>
                         </div>
-                        <ng-container
-                            *ngIf="secondStepForm.controls['businessType']?.value === 'Registered' || isWarehouse"
+                        <div class="col-lg-12" *ngIf="secondStepForm.controls['businessType']?.value === 'Registered'">
+                            {{ secondStepForm.get("gstin")?.invalid }}
+                            <input-field
+                                [name]="'gstin'"
+                                [placeholder]="'GSTIN'"
+                                [type]="'text'"
+                                formControlName="gstin"
+                                [showError]="secondStepForm.get('gstin')?.invalid"
+                                [required]="true"
+                                [pattern]="gstinPattern"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="col-lg-12" *ngIf="secondStepForm.controls['businessType']?.value === 'Registered'">
+                            <dropdown-field
+                                [appearance]="'fill'"
+                                [name]="'state'"
+                                [placeholder]="'State'"
+                                [options]="states"
+                                [showError]="isFormSubmitted && !secondStepForm.get('state')?.value"
+                                [required]="true"
+                                [readonly]="isGstinValid"
+                                [label]="isGstinValid ? 'State' : ''"
+                                [defaultValue]="selectedState"
+                            >
+                            </dropdown-field>
+                        </div>
+                        <div class="col-lg-12" *ngIf="secondStepForm.controls['businessType']?.value === 'Registered'">
+                            <mat-form-field class="w-100" appearance="outline">
+                                <mat-label>Applicable Tax</mat-label>
+                                <mat-select name="tax" formControlName="tax" [placeholder]="'Applicable Tax'" multiple>
+                                    <mat-option>GST5</mat-option>
+                                    <mat-option>GST12</mat-option>
+                                    <mat-option>GST18</mat-option>
+                                    <mat-option>GST28</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div
+                            class="col-lg-12"
+                            *ngIf="
+                                secondStepForm.controls['businessType']?.value === 'Unregistered' ||
+                                secondStepForm.controls['businessType']?.value === 'Registered'
+                            "
                         >
-                            <div class="col-lg-12">
-                                <input-field
-                                    [name]="'gstin'"
-                                    [placeholder]="'GSTIN'"
-                                    [type]="'text'"
-                                    formControlName="gstin"
-                                    [showError]="isFormSubmitted && !secondStepForm.get('gstin')?.value"
-                                >
-                                </input-field>
-                            </div>
-                            <div class="col-lg-12">
-                                <dropdown-field
-                                    [name]="'state'"
-                                    [placeholder]="'State'"
-                                    [options]="states"
-                                    [searchFormControl]="secondStepForm.controls?.state"
-                                    [showError]="isFormSubmitted && !secondStepForm.get('state')?.value"
-                                >
-                                </dropdown-field>
-                            </div>
-                            <div class="col-lg-12">
-                                <mat-form-field class="w-100" appearance="outline">
-                                    <mat-label>Applicable Tax</mat-label>
-                                    <mat-select name="tax" formControlName="tax" [placeholder]="'Applicable Tax'">
-                                        <mat-option>GST5</mat-option>
-                                        <mat-option>GST12</mat-option>
-                                        <mat-option>GST18</mat-option>
-                                        <mat-option>GST28</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                        </ng-container>
-                        <div class="col-lg-12">
                             <input-field
                                 [name]="'pincode'"
                                 [placeholder]="'PIN Code'"
                                 [type]="'text'"
                                 formControlName="pincode"
-                                [required]="true"
-                                [showError]="isFormSubmitted && !secondStepForm.get('pincode')?.value"
                             >
                             </input-field>
                         </div>
-                        <div class="col-lg-12">
+                        <div
+                            class="col-lg-12"
+                            *ngIf="
+                                secondStepForm.controls['businessType']?.value === 'Unregistered' ||
+                                secondStepForm.controls['businessType']?.value === 'Registered'
+                            "
+                        >
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Company Address</mat-label>
                                 <textarea matInput rows="3" [name]="'address'" formControlName="address"></textarea>
