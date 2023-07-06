@@ -70,7 +70,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /** Callback for clear selected value */
     @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
     /** Search field form control */
-    public searchFormControl = new FormControl();
+    @Input() public searchFormControl = new FormControl();
     /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions: IOption[] = [];
     /** Selected value from option list */
