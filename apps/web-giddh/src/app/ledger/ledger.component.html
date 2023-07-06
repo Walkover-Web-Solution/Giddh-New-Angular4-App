@@ -2894,18 +2894,19 @@
                 </ledger-columnar-report-table>
             </div>
             <!-- aside menu section -->
-            <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-            <ledger-aside-pane
-                [class]="asideMenuState"
-                *ngIf="asideMenuState === 'in'"
-                [@slideInOut]="asideMenuState"
-                [keyboardShortcut]="'esc'"
-                [localeData]="localeData"
-                [commonLocaleData]="commonLocaleData"
-                (onShortcutPress)="toggleAsidePane()"
-                (closeAsideEvent)="toggleAsidePane()"
-            >
-            </ledger-aside-pane>
+            <!-- <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div> -->
+            <ng-template #ledgerAsidePane >
+                <ledger-aside-pane
+                    [class]="asideMenuState"
+                    [@slideInOut]="asideMenuState"
+                    [keyboardShortcut]="'esc'"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    (onShortcutPress)="toggleAsidePane()"
+                    (closeAsideEvent)="toggleAsidePane()"
+                >
+                </ledger-aside-pane>
+            </ng-template>
             <!-- aside menu section -->
             <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
             <app-aside-menu-sales-other-taxes

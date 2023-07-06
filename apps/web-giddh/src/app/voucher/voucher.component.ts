@@ -199,6 +199,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('itemsContainer', { read: ViewContainerRef, static: false }) container: ViewContainerRef;
     /** Template reference for each entry */
     @ViewChild('entry', { read: TemplateRef, static: false }) template: TemplateRef<any>;
+    /** Instance of aside Menu Product Service modal */
+    @ViewChild('asideMenuProductService') asideMenuProductService: TemplateRef<any>;
     /** Billing state field instance */
     @ViewChild('statesBilling', { static: false }) statesBilling: SelectFieldComponent;
     /** Billing state field instance */
@@ -2907,7 +2909,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.innerEntryIdx = idx;
         }
         this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+        // this.toggleBodyClass();
+        this.dialog.open(this.asideMenuProductService, {
+            position: {
+                right : '0',
+            },
+            width: '760px',
+            height: '100vh !important'
+        })
     }
 
     public toggleBodyClass() {

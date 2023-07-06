@@ -1,29 +1,30 @@
 <div class="aside-pane">
     <div class="form-header" *ngIf="!hideFirstScreen || voucherApiVersion === 2">
         <h3>
-            {{ commonLocaleData?.app_add }}
+               {{ commonLocaleData?.app_add }} 
             <span *ngIf="voucherApiVersion === 2">{{
                 stockType !== "fixed_assets" ? (stockType | titlecase) : "Fixed Assets"
             }}</span>
-        </h3>
+        </h3>        
     </div>
     <button
-        mat-button
-        id="close"
-        [ngClass]="!hideFirstScreen ? 'close-btn-absolute' : 'default-button'"
-        (click)="closeAsidePane()"
-    >
-        <i class="icon-cross"></i>
-    </button>
-    <button
-        mat-stroked-button
-        id="back"
-        (click)="backButtonPressed()"
-        *ngIf="hideFirstScreen"
-        class="d-flex align-items-center"
-    >
-        {{ commonLocaleData?.app_back }}
-    </button>
+            mat-dialog-close
+            mat-button
+            id="close"
+            [ngClass]="!hideFirstScreen ? 'close-btn-absolute' : 'default-button'"
+            (click)="closeAsidePane()"
+        >
+            <i class="icon-cross"></i>
+        </button>  
+        <button
+            mat-stroked-button
+            id="back"
+            (click)="backButtonPressed()"
+            *ngIf="hideFirstScreen"
+            class="d-flex align-items-center"
+        >
+            {{ commonLocaleData?.app_back }}
+        </button>
     <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" *ngIf="!hideFirstScreen">
 
             <div class="buttons-wrapper">

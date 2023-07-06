@@ -89,6 +89,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
     /** Instance of entry confirmation modal */
     @ViewChild('entryConfirmModal', { static: false }) public entryConfirmModal: any;
+     /** Instance of ledger aside pane modal */
+    @ViewChild("ledgerAsidePane") public ledgerAsidePane: TemplateRef<any>;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
     public searchTermStream: Subject<string> = new Subject();
@@ -1823,7 +1825,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.closeActiveEntry(shSelectElement);
         }
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+        this.dialog.open(this.ledgerAsidePane, {
+            position: {
+                right : '0',
+            },
+            width: '760px',
+            height: '100vh !important'
+        })
+        // this.toggleBodyClass();
         this.cdRf.detectChanges();
     }
 

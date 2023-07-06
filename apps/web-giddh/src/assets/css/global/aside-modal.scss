@@ -1,10 +1,10 @@
-.aside-pane{
-    .aside-body{
-        &.flexy-child-1{
-            height: 100%;
-            .child-wrapper{
+.aside-pane {
+    .aside-body {
+        &.flexy-child-1 {
+            // height: 100%;
+            .child-wrapper {
                 background-color: var(--color-body-background);
-                height: calc(100% - 88px);
+                height: calc( 100vh - (58.7px + 30px));
                 width: 730px;
                 overflow: auto;
                 padding: 10px;
@@ -14,11 +14,17 @@
         }
     }
 }
-body{
-    &.ledger-aside-pane, &.aside-menu-product-service-page{
-        .cdk-overlay-container,
-        .cdk-global-overlay-wrapper {
-            z-index: 99999 !important;
-        }  
+body {
+    &.ledger-aside-pane,
+    &.aside-menu-product-service-page {
+        .cdk-overlay-pane {
+            transform: unset !important;
+        }
+        .mat-dialog-container{
+            border-radius: unset !important;
+        }
+        .aside-panel-ledger{
+            height: calc(100vh - 57.8px);
+        }
     }
 }

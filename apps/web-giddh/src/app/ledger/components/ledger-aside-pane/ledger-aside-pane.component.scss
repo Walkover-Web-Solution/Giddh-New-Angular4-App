@@ -22,6 +22,7 @@
 
 #close {
     display: none;
+    min-width: 0 !important;
 }
 
 :host.in #close {
@@ -43,10 +44,18 @@
     padding-right: 0;
 }
 
-:host .aside-pane {
-    width: 100%;
-    max-width: 760px;
-    background: var(--color-body-background);
+:host {
+    .aside-pane {
+        width: 100%;
+        max-width: 760px;
+        background: var(--color-body-background);
+    
+        // .form-header{
+        //     justify-content: space-between;
+        //     position: relative;
+        //     z-index: 1;
+        // }
+    }
 }
 
 .flexy-child {

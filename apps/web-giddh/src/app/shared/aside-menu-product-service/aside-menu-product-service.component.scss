@@ -8,13 +8,14 @@
     max-width: 760px;
     z-index: 99999;
 }
-
+ 
 :host.shifted {
     right: 500px;
 }
 
 #close {
     display: none;
+    min-width: 0 !important;
 }
 
 :host.in #close {
@@ -56,10 +57,18 @@
     justify-content: center;
 }
 
+// .form-header{
+//     justify-content: space-between;
+//     position: relative;
+//     z-index: 6;
+// }
 
-:host .aside-pane {
-    width: 100%;
-    max-width: 760px;
+:host {
+    .aside-pane {
+        width: 100%;
+        max-width: 760px;
+        // height: calc(100vh - 57.8px);
+    }
 }
 
 .buttons-wrapper {
