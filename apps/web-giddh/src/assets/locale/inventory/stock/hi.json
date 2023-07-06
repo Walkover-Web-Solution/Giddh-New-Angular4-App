@@ -1,6 +1,9 @@
 {
     "fixed_assets": "अचल संपत्तियां",
     "enter_product": "उत्पाद दर्ज करें",
+    "enter_stock": "स्टॉक दर्ज करें",
+    "enter_service": "सेवा दर्ज करें",
+    "enter_fixed": "अचल संपत्ति दर्ज करें",
     "select_unit": "इकाई का चयन करें",
     "under_group": "समूह के तहत",
     "move": "समूह बदलें",

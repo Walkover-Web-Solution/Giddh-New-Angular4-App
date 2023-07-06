@@ -1,6 +1,9 @@
 {
     "fixed_assets": "स्थिर मालमत्ता",
     "enter_product": "उत्पादन प्रविष्ट करा",
+    "enter_stock": "स्टॉक प्रविष्ट करा",
+    "enter_service": "सेवा प्रविष्ट करा",
+    "enter_fixed": "मालमत्ता प्रविष्ट करा",
     "select_unit": "युनिट निवडा",
     "under_group": "गट अंतर्गत",
     "move": "गट हलवा",
