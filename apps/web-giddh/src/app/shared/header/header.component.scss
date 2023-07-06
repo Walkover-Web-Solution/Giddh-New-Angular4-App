@@ -408,7 +408,7 @@ a[vr-item]:focus {
 }
 
 .universal-date li input {
-    padding-left: 10px !important;
+    padding-left: 22px !important;
     color: var(--color-white) !important;
     padding-right: 0 !important;
     text-align: left;
@@ -429,7 +429,6 @@ a[vr-item]:focus {
 }
 
 .calendar-addon {
-    padding: 9px 8px 9px 10px;
     vertical-align: bottom;
     font-size: var(--font-size-16);
     border-radius: 2px 0 0 2px;
@@ -441,7 +440,8 @@ a[vr-item]:focus {
     border: 0px !important;
     .calendar-addon {
         position: absolute;
-        left: 7px;
+        top: 7px;
+        left: 16px;
         margin: auto;
     }
     .input-date {
@@ -789,7 +789,6 @@ ul.sub-list {
         }
         .not-today {
             .calendar-addon {
-                padding: 6px 7px 7px 8px;
                 color: var(--color-primary-button-text);
             }
             .input-date {
