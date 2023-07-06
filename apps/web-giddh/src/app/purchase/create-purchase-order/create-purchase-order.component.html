@@ -98,7 +98,7 @@
                                                 (scrollEnd)="handleScrollEnd('vendor')"
                                                 (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'vendor')"
                                                 [enableDynamicSearch]="true"
-                                                (noResultsClicked)="addNewAccount()"
+                                                (createOption)="addNewAccount()"
                                                 (keyup)="resetVendor($event)"
                                                 (onClear)="resetVendor(null)"
                                             >
@@ -453,13 +453,13 @@
                                                                         </div>
                                                                     </div>
                                                                     <div
-                                                                        class="col-sm-12 col-md-6 select-border-bottom"
+                                                                        class="col-sm-12 col-md-6 purchase-border"
                                                                         #vendorShippingState
                                                                     >
                                                                         <select-field
                                                                             [placeholder]="commonLocaleData?.app_state"
                                                                             [readonly]="autoFillVendorShipping"
-                                                                            [cssClass]="'select-border-bottom'"
+                                                                            [cssClass]="'select-border-bottom '"
                                                                             (selected)="
                                                                                 purchaseOrder.account.shippingDetails.state.code =
                                                                                     $event.value;
@@ -1001,8 +1001,8 @@
                                 <!-- region if not cashinvoice show customer dropdown -->
                                 <div>
                                     <input-field
-                                        type="text"
-                                        name="purchaseOrderNumber"
+                                        [type]="'text'"
+                                        [name]="'purchaseOrderNumber'"
                                         [(ngModel)]="purchaseOrder.number"
                                         [disabled]="
                                             !invoiceSettings?.purchaseBillSettings?.useCustomPONumber || isUpdateMode
@@ -1623,7 +1623,20 @@
                                 "
                             >
                                 <div *ngIf="variants?.length > 1" class="variant-name">
-                                    <!-- <select-field
+                                    <select-field
+                                        [readonly]="isReadOnly"
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [placeholder]="localeData?.select_variant"
+                                        (selectedOption)="
+                                            transaction.variant.uniqueName = $event.value;
+                                            variantChanged($event, transaction, entry)
+                                        "
+                                        [options]="variants"
+                                        [required]="true"
+                                        [name]="'variant' + entryIdx"
+                                    >
+                                    </select-field>
+                                    <!-- <sh-select
                                         [disabled]="isReadOnly"
                                         [cssClass]="'form-control mat-field-border'"
                                         [placeholder]="localeData?.select_variant"
@@ -1632,23 +1645,13 @@
                                         [required]="true"
                                         [name]="'variant' + entryIdx"
                                         [(ngModel)]="transaction.variant.uniqueName"
-                                    >
-                                    </select-field> -->
-                                    <sh-select
-                                        [placeholder]="localeData?.select_variant"
-                                        [options]="variants"
-                                        (selected)="
-                                            transaction.variant.uniqueName = $event.value;
-                                            variantChanged($event, transaction, entry)
-                                        "
-                                        [isRequired]="true"
-                                        name="{{ 'variant' + entryIdx }}"
-                                    ></sh-select>
+                                    ></sh-select> -->
                                 </div>
                             </ng-container>
                             <div *ngIf="transaction.fakeAccForSelect2">
                                 <div class="description mt-1">
                                     <textarea
+                                        matInput
                                         rows="3"
                                         type="text"
                                         [placeholder]="localeData?.add_description"
@@ -2079,7 +2082,7 @@
                                         </div>
                                         <div class="ico-head">{{ commonLocaleData?.app_other_details }}</div>
                                     </div>
-                                    <div [collapse]="isOthrDtlCollapsed" class="clearfix max-width-600 pd-l3 m-0">
+                                    <div [collapse]="isOthrDtlCollapsed" class="clearfix max-width-600 pd-l3 mt-3">
                                         <div class="row">
                                             <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                 <giddh-datepicker
@@ -2108,7 +2111,7 @@
                                             <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                 <input-field
                                                     [type]="'text'"
-                                                    name="shippedVia"
+                                                    [name]="'shippedVia'"
                                                     [(ngModel)]="purchaseOrder.templateDetails?.other.shippedVia"
                                                     [placeholder]="localeData?.ship_via"
                                                 >
@@ -2117,7 +2120,7 @@
                                             <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                 <input-field
                                                     [type]="'text'"
-                                                    name="trackingNumber"
+                                                    [name]="'trackingNumber'"
                                                     [(ngModel)]="purchaseOrder.templateDetails?.other.trackingNumber"
                                                     [placeholder]="localeData?.tracking_number"
                                                 >
@@ -2137,7 +2140,6 @@
                                         name="message2"
                                         [(ngModel)]="purchaseOrder.templateDetails?.other.message2"
                                         [appearance]="'outline'"
-                                        [placeholder]="commonLocaleData?.app_note"
                                     ></textarea>
                                 </mat-form-field>
                             </div>
@@ -2782,36 +2784,6 @@
                                                             </div>
                                                             <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
                                                                 <div class="d-flex wrap-hsn-sac mb-2 mt-3">
-                                                                    <!-- <span>
-                                                                        <input
-                                                                            type="radio"
-                                                                            class="radio-custom radio-theme"
-                                                                            name="showCodeType{{ entryIdx }}"
-                                                                            id="hsnCodeType{{ entryIdx }}"
-                                                                            [(ngModel)]="transaction.showCodeType"
-                                                                            value="hsn"
-                                                                        />
-                                                                        <label
-                                                                            for="hsnCodeType{{ entryIdx }}"
-                                                                            class="radio-custom-label"
-                                                                            >{{ commonLocaleData?.app_hsn_code }}</label
-                                                                        >
-                                                                    </span>
-                                                                    <span>
-                                                                        <input
-                                                                            type="radio"
-                                                                            class="radio-custom radio-theme"
-                                                                            name="showCodeType{{ entryIdx }}"
-                                                                            id="sacCodeType{{ entryIdx }}"
-                                                                            [(ngModel)]="transaction.showCodeType"
-                                                                            value="sac"
-                                                                        />
-                                                                        <label
-                                                                            for="sacCodeType{{ entryIdx }}"
-                                                                            class="radio-custom-label"
-                                                                            >{{ commonLocaleData?.app_sac_code }}</label
-                                                                        >
-                                                                    </span> -->
                                                                     <mat-radio-group
                                                                         class="d-flex mb-2"
                                                                         [(ngModel)]="transaction.showCodeType"
