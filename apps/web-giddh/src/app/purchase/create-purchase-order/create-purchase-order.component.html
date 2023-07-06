@@ -857,40 +857,6 @@
                                                                     class="col-sm-12 col-md-6 purchase-border"
                                                                     #companyShippingState
                                                                 >
-                                                                    <!-- <sales-sh-select
-                                                                        [placeholder]="commonLocaleData?.app_state"
-                                                                        [disabled]="autoFillCompanyShipping"
-                                                                        [cssClass]="'select-border-bottom disabled'"
-                                                                        (selected)="
-                                                                            fillShippingBillingDetails(
-                                                                                $event,
-                                                                                false,
-                                                                                'company'
-                                                                            )
-                                                                        "
-                                                                        [showBottomBorderOnly]="true"
-                                                                        [options]="companyStatesSource"
-                                                                        [name]="'companyShippingDetailsStateCode'"
-                                                                        [disabled]="
-                                                                            purchaseOrder.company.shippingDetails.state
-                                                                                .code &&
-                                                                            purchaseOrder.company.shippingDetails
-                                                                                .gstNumber &&
-                                                                            purchaseOrder.company.shippingDetails
-                                                                                .gstNumber.length >= 2
-                                                                                ? true
-                                                                                : null
-                                                                        "
-                                                                        [fixedValue]="
-                                                                            purchaseOrder.company.shippingDetails.state
-                                                                                .name
-                                                                        "
-                                                                        [(ngModel)]="
-                                                                            purchaseOrder.company.shippingDetails.state
-                                                                                .code
-                                                                        "
-                                                                    >
-                                                                    </sales-sh-select> -->
                                                                     <select-field
                                                                         [placeholder]="commonLocaleData?.app_state"
                                                                         [cssClass]="'select-border-bottom disabled'"
@@ -1636,16 +1602,6 @@
                                         [name]="'variant' + entryIdx"
                                     >
                                     </select-field>
-                                    <!-- <sh-select
-                                        [disabled]="isReadOnly"
-                                        [cssClass]="'form-control mat-field-border'"
-                                        [placeholder]="localeData?.select_variant"
-                                        (selectedOption)="variantChanged($event, transaction, entry)"
-                                        [options]="variants"
-                                        [required]="true"
-                                        [name]="'variant' + entryIdx"
-                                        [(ngModel)]="transaction.variant.uniqueName"
-                                    ></sh-select> -->
                                 </div>
                             </ng-container>
                             <div *ngIf="transaction.fakeAccForSelect2">
@@ -1787,9 +1743,9 @@
                             <!-- <mat-select
                                 class="form-control"
                                 [disabled]="!transaction.isStockTxn"
-                                [(ngModel)]="transaction.stockUnit"
+                                [(ngModel)]=""
                                 [name]="transaction.stockUnit_{{ entryIdx }}"
-                                (selectionChange)="
+                                (selectionChange)="transaction.stockUnit = event.value;
                                     onChangeUnit(transaction, $event);
                                     handlePriceCalculationOnUnitChange(entry, transaction)
                                 "
