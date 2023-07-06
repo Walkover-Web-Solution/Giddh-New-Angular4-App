@@ -24,7 +24,6 @@
                                 [placeholder]="'Country'"
                                 [options]="countries"
                                 (selectedOption)="selectCountry($event)"
-                                [searchFormControl]="firstStepForm.controls?.country"
                                 [showError]="isFormSubmitted && !firstStepForm.get('country')?.value"
                             >
                             </dropdown-field>
@@ -34,8 +33,8 @@
                                 [name]="'currency'"
                                 [placeholder]="'Currency'"
                                 [options]="currencies"
-                                [searchFormControl]="firstStepForm.controls?.currency"
                                 [showError]="isFormSubmitted && !firstStepForm.get('currency')?.value"
+                                [defaultValue]="firstStepForm.get('currency')?.value?.value"
                             >
                             </dropdown-field>
                         </div>
@@ -43,19 +42,18 @@
                             <input-field
                                 [name]="'mobile'"
                                 [type]="'tel'"
-                                #initContactProforma
-                                [id]="'init-contact-proforma'"
+                                #mobileNo
+                                [id]="'mobile-no'"
                                 (keydown.enter)="$event.preventDefault()"
                                 [label]="commonLocaleData?.app_mobile_number"
                                 [placeholder]="'98XXXXXXXX'"
                                 [floatLabel]="intl?.getNumber() ? 'always' : 'auto'"
                                 (onChange)="firstStepForm.controls['mobile'].setValue(intl?.getNumber())"
-                                [required]="true"
                                 [showError]="isFormSubmitted && !firstStepForm.get('mobile')?.value"
                             >
                             </input-field>
-                            <span id="init-contact-proforma-valid-msg" class="d-none"></span>
-                            <span id="init-contact-proforma-error-msg" class="d-none"></span>
+                            <span id="mobile-no-valid-msg" class="d-none"></span>
+                            <span id="mobile-no-error-msg" class="d-none"></span>
                         </div>
                     </div>
                     <div>
@@ -74,7 +72,7 @@
                                 [placeholder]="firstStepForm.get('name')?.value"
                                 [label]="'Company Name'"
                                 [type]="'text'"
-                                readonly="true"
+                                [readonly]="true"
                                 [floatLabel]="'always'"
                             >
                             </input-field>
@@ -82,7 +80,7 @@
                         <div class="col-lg-6 country-space">
                             <dropdown-field
                                 [appearance]="'fill'"
-                                readonly="true"
+                                [readonly]="true"
                                 [label]="'Country'"
                                 [defaultValue]="firstStepForm.get('country')?.value.label"
                             >
@@ -91,21 +89,28 @@
                         <div class="col-lg-6 currency-space">
                             <dropdown-field
                                 [appearance]="'fill'"
-                                readonly="true"
+                                [readonly]="true"
                                 [label]="'Currency'"
                                 [defaultValue]="firstStepForm.get('currency')?.value.value"
                             >
                             </dropdown-field>
                         </div>
                         <div class="col-lg-12 mobile-number">
+                            <img
+                                class="country-flag"
+                                *ngIf="firstStepForm.get('country')?.value.value"
+                                src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
+                                    firstStepForm.get('country')?.value.value?.toLowerCase()
+                                }}.svg"
+                                width="27"
+                            />
                             <input-field
                                 [name]="'mobile'"
                                 [type]="'tel'"
-                                #initContactProforma
-                                [id]="'init-contact-proforma'"
                                 [label]="'Mobile Number'"
                                 [placeholder]="firstStepForm.controls['mobile'].value"
                                 [floatLabel]="'always'"
+                                [readonly]="true"
                             >
                             </input-field>
                         </div>
@@ -114,7 +119,7 @@
                                 [name]="'businessType'"
                                 [placeholder]="'Select Business Type'"
                                 [options]="businessTypeList"
-                                [searchFormControl]="secondStepForm.controls?.businessType"
+                                (selectedOption)="selectBusinessType($event)"
                             >
                             </dropdown-field>
                         </div>
@@ -123,43 +128,45 @@
                                 [name]="'bussinessNature'"
                                 [placeholder]="'Select Business Nature'"
                                 [options]="businessNatureList"
-                                [searchFormControl]="secondStepForm.controls?.businessNature"
+                                (selectedOption)="selectBusinessNature($event)"
                             >
                             </dropdown-field>
                         </div>
-                        <div class="col-lg-12">
-                            <input-field
-                                [name]="'gstin'"
-                                [placeholder]="'GSTIN'"
-                                [type]="'text'"
-                                formControlName="gstin"
-                                [required]="true"
-                                [showError]="isFormSubmitted && !secondStepForm.get('gstin')?.value"
-                            >
-                            </input-field>
-                        </div>
-                        <div class="col-lg-12">
-                            <dropdown-field
-                                [name]="'state'"
-                                [placeholder]="'State'"
-                                [options]="states"
-                                [searchFormControl]="secondStepForm.controls?.state"
-                                [required]="true"
-                                [showError]="isFormSubmitted && !secondStepForm.get('state')?.value"
-                            >
-                            </dropdown-field>
-                        </div>
-                        <div class="col-lg-12">
-                            <mat-form-field class="w-100" appearance="outline">
-                                <mat-label>Applicable Tax</mat-label>
-                                <mat-select name="tax" formControlName="tax" [placeholder]="'Applicable Tax'">
-                                    <mat-option>GST5</mat-option>
-                                    <mat-option>GST12</mat-option>
-                                    <mat-option>GST18</mat-option>
-                                    <mat-option>GST28</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
+                        <ng-container
+                            *ngIf="secondStepForm.controls['businessType']?.value === 'Registered' || isWarehouse"
+                        >
+                            <div class="col-lg-12">
+                                <input-field
+                                    [name]="'gstin'"
+                                    [placeholder]="'GSTIN'"
+                                    [type]="'text'"
+                                    formControlName="gstin"
+                                    [showError]="isFormSubmitted && !secondStepForm.get('gstin')?.value"
+                                >
+                                </input-field>
+                            </div>
+                            <div class="col-lg-12">
+                                <dropdown-field
+                                    [name]="'state'"
+                                    [placeholder]="'State'"
+                                    [options]="states"
+                                    [searchFormControl]="secondStepForm.controls?.state"
+                                    [showError]="isFormSubmitted && !secondStepForm.get('state')?.value"
+                                >
+                                </dropdown-field>
+                            </div>
+                            <div class="col-lg-12">
+                                <mat-form-field class="w-100" appearance="outline">
+                                    <mat-label>Applicable Tax</mat-label>
+                                    <mat-select name="tax" formControlName="tax" [placeholder]="'Applicable Tax'">
+                                        <mat-option>GST5</mat-option>
+                                        <mat-option>GST12</mat-option>
+                                        <mat-option>GST18</mat-option>
+                                        <mat-option>GST28</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
                         <div class="col-lg-12">
                             <input-field
                                 [name]="'pincode'"

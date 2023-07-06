@@ -1,4 +1,3 @@
-import { I } from "@angular/cdk/keycodes";
 import { HttpClient } from "@angular/common/http";
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -30,7 +29,7 @@ import { IOption } from "../theme/ng-select/option.interface";
 export class AddCompanyComponent implements OnInit, AfterViewInit {
     @ViewChild('stepper') stepperIcon: any;
     /** Mobile Number state instance */
-    @ViewChild('initContactProforma', { static: false }) initContactProforma: ElementRef;
+    @ViewChild('mobileNo', { static: false }) mobileNo: ElementRef;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -108,8 +107,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public formFields: any[] = [];
     public taxesList: any = [];
     public currentTaxList: any[] = [];
-    public businessTypeList: IOption[] = [];
-    public businessNatureList: IOption[] = [];
+    public businessTypeList: IOption[] = [{ label: "Registered", value: "Registered" }, { label: "Unregistered", value: "Unregistered" }];
+    public businessNatureList: IOption[] = [{ label: "Food", value: "Food" }, { label: "Service", value: "Service" }, { label: "Manufacturing", value: "Manufacturing" }, { label: "Retail", value: "Retail" }];
     public selectedTaxes: string[] = [];
     public selectedBusinesstype: string = '';
     public companyProfileObj: any = null;
@@ -180,7 +179,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         private store: Store<AppState>,
         private generalService: GeneralService,
         private commonActions: CommonActions,
-        private companyActions: CompanyActions,
         private companyService: CompanyService,
         private changeDetection: ChangeDetectorRef,
         private generalActions: GeneralActions,
@@ -189,48 +187,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public ngOnInit(): void {
         this.initCompanyForm();
         this.companies$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
-        this.isCompanyCreationInProcess$ = this.store.pipe(select(s => s.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
-        this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
-        this.isCompanyCreated$.subscribe(s => {
-            if (s) {
-                this.store.pipe(select(state => state.session.userLoginState), take(1)).subscribe(st => {
-                    this.isNewUser = st === userLoginStateEnum.newUserLoggedIn;
-                });
-                let prevTab = '';
-                this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
-                    prevTab = se;
-                });
-                this.generalService.companyUniqueName = this.company?.uniqueName;
-            }
-        });
-        if (!this.isOnBoardingInProgress) {
-            this.companyService.GetAllBusinessNatureList().pipe(takeUntil(this.destroyed$)).subscribe((businessNatureResponse) => {
-                if (businessNatureResponse && businessNatureResponse.body) {
-                    businessNatureResponse.body.forEach(value => {
-                        this.businessNatureList.push({
-                            label: value,
-                            value: value
-                        });
-                    });
-
-                }
-                this.reFillForm();
-            });
-        }
-        this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                const formValue = res as typeof this.companyForm.value;
-                this.companyForm.setValue(formValue);
-                let mobile = formValue?.firstStepForm?.mobile;
-                setTimeout(() => {
-                    this.intl?.setNumber(mobile);
-                    this.firstStepForm.controls['mobile'].setValue(mobile);
-                }, 300);
-                if (formValue?.firstStepForm?.country?.value) {
-                    this.initialCountry = formValue?.firstStepForm?.country?.value;
-                }
-            }
-        });
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.fields) {
@@ -255,69 +211,19 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                         }
                     });
                 }
-                if (res.businessType) {
-                    res.businessType.forEach(value => {
-                        this.businessTypeList.push({
-                            label: value,
-                            value: value
-                        });
-                    });
-                    this.changeDetection.detectChanges();
-                }
-                this.reFillTax();
-            } else {
-                let onboardingFormRequest = new OnboardingFormRequest();
-                if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
-                    onboardingFormRequest.formName = this.itemOnBoardingDetails.onBoardingType?.toLowerCase();
-                } else {
-                    onboardingFormRequest.formName = 'onboarding';
-                }
-                onboardingFormRequest.country = this.firstStepForm.controls['country'].value.value;
-                this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
             }
         });
 
-        this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a && a !== '' && this.company?.uniqueName) {
-                if (a.includes(this.company?.uniqueName?.substring(0, 8))) {
-                    this.company.name = '';
-                    this.company.country = '';
-                    this.company.baseCurrency = '';
-                    this.company.contactNo = '';
-                    this.company.phoneCode = '';
-                }
-            }
-        });
         this.isProdMode = PRODUCTION_ENV;
         this.getCountry();
-
-        this.companyForm.valueChanges.pipe(debounceTime(700), distinctUntilChanged(isEqual)).subscribe(data => {
-            this.store.dispatch(this.companyActions.userStoreCreateCompany(data));
-        });
-
     }
 
-    public reFillTax() {
-        if (this.createNewCompany.taxes && this.createNewCompany.taxes.length > 0) {
-            this.createNewCompany.taxes.forEach(tax => {
-                if (this.currentTaxList[tax] !== undefined && this.selectedTaxes?.indexOf(tax) === -1) {
-                    this.selectedTaxes.push(tax);
-
-                    let matchedIndex = this.taxesList?.findIndex(listedTax => listedTax.value === tax);
-                    if (matchedIndex > -1) {
-                        this.taxesList[matchedIndex].isSelected = true;
-                    }
-                }
-            });
-        }
-    }
-
-/**
-* Initializing the group form
-*
-* @private
-* @memberof CreateUpdateGroupComponent
-*/
+    /**
+    * Initializing the group form
+    *
+    * @private
+    * @memberof CreateUpdateGroupComponent
+    */
     private initCompanyForm(): void {
         this.firstStepForm = this.formBuilder.group({
             name: ['', Validators.required],
@@ -343,7 +249,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public ngAfterViewInit(): void {
         this.stepperIcon._getIndicatorType = () => 'number';
         let interval = setInterval(() => {
-            if (this.initContactProforma) {
+            if (this.mobileNo) {
                 this.onlyPhoneNumber();
                 clearInterval(interval);
             }
@@ -351,7 +257,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     }
 
     public getStates() {
-        this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(state => state.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.stateList).forEach(key => {
                     if (res.stateList[key].stateGstCode !== null) {
@@ -363,35 +269,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                         value: res.stateList[key].code
                     });
                 });
-                this.reFillState();
-            } else {
-                let statesRequest = new StatesRequest();
-                statesRequest.country = this.firstStepForm.controls.country.value.value;
-                this.store.dispatch(this.generalActions.getAllState(statesRequest));
             }
         });
-    }
-
-    public reFillState() {
-        if (this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
-            this.companyProfileObj.state = this.createNewCompany.addresses[0].stateCode;
-
-            let stateLoop = 0;
-            for (stateLoop; stateLoop < this.states?.length; stateLoop++) {
-                if (this.states[stateLoop]?.value === this.companyProfileObj.state) {
-                    this.companyProfileObj.selectedState = this.states[stateLoop].label;
-                }
-            }
-        } else if (this.isItemUpdateInProgress && this.isWarehouse) {
-            // Prefill state details if warehouse update flow is carried out
-            this.reFillForm();
-        }
-    }
-
-    public reFillForm() {
-        if (this.isOnBoardingInProgress) {
-            this.fillOnBoardingDetails('ITEM');
-        }
     }
 
     /**
@@ -433,93 +312,15 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         return defaultWarehouse;
     }
 
-    /**
-    * Auto fills the form details recursively
-    *
-    * @private
-    * @param {string} entity Entity name with which details should be filled
-    * @memberof AddCompanyComponent
-    */
-    private fillOnBoardingDetails(entity: string): void {
-        if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
-            /*  For warehouse, if the warehouse item has detais then fill the form
-                with those details else search the default warehouse and fill with
-                default warehouse details. At last, if the details are not found
-                then fill form with default company details */
-            let isFormFilled;
-            switch (entity) {
-                case 'ITEM':
-                    // isFormFilled = this.fillFormDetails(this.itemDetails);
-                    isFormFilled = this.fillFormDetails('');
-                    if (!isFormFilled) {
-                        // Current warehouse item has no detail, try the default warehouse
-                        this.fillOnBoardingDetails('DEFAULT_WAREHOUSE');
-                    }
-                    break;
-                case 'DEFAULT_WAREHOUSE':
-                    const defaultWarehouse = this.getDefaultWarehouseDetails();
-                    isFormFilled = this.fillFormDetails(defaultWarehouse);
-                    if (!isFormFilled) {
-                        // Default warehouse has no detail, try the default company
-                        this.fillOnBoardingDetails('DEFAULT_COMPANY');
-                    }
-                    break;
-                case 'DEFAULT_COMPANY':
-                    const { address: autoFillAddress = '', stateCode } = this.getDefaultCompanyDetails();
-                    const defaultCompany = {
-                        address: autoFillAddress,
-                        stateCode
-                    };
-                    this.fillFormDetails(defaultCompany);
-                    // Check the 'Same as HQ' checkbox
-                    this.isTaxNumberSameAsHeadQuarter = 1;
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    /**
-    * Returns the default company details such as address and tax number
-    *
-    * @private
-    * @returns {*} Default company details
-    * @memberof AddCompanyComponent
-    */
-    private getDefaultCompanyDetails(): any {
-        let defaultCompany = {};
-        if (this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
-            this.activeCompany.addresses.forEach((address: any) => {
-                if (address.isDefault) {
-                    defaultCompany = address;
-                    return defaultCompany;
-                }
-            });
-        }
-        return defaultCompany;
-    }
-
     public getCountry(): void {
         this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    // Creating Country List
                     this.countries.push({
                         value: res[key].alpha2CountryCode,
                         label: res[key].alpha2CountryCode + ' - ' + res[key].countryName,
-                        additional: res[key].callingCode
+                        additional: res[key]
                     });
-                    // Creating Country Currency List
-                    if (res[key].currency !== undefined && res[key].currency !== null) {
-                        this.countryCurrency[res[key].alpha2CountryCode] = [];
-                        this.countryCurrency[res[key].alpha2CountryCode] = res[key].currency.code;
-                    }
-
-                    if (this.company.country === res[key].alpha2CountryCode) {
-                        // this.selectedCountry = res[key].alpha2CountryCode + ' - ' + res[key].countryName;
-                        this.firstStepForm.controls.country.setValue(res[key].alpha2CountryCode + ' - ' + res[key].countryName)
-                    }
                 });
                 this.getStates();
                 this.getCurrency();
@@ -532,7 +333,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     }
 
     public getCurrency(): void {
-        this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(state => state.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
                     this.currencies.push({ label: res[key].code, value: res[key].code });
@@ -543,18 +344,28 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
 
     public selectCountry(event: any): void {
         if (event) {
-            const currentCountry = Object.entries(this.countryCurrency).map(([label, value]) => ({ label, value }));
-            let currentCurrency = currentCountry?.filter(currency => currency.label == event.value);
-            this.firstStepForm.controls['currency'].setValue({ label: currentCurrency[0]?.value, value: currentCurrency[0]?.value });
-            this.intl?.setCountry(currentCurrency[0]?.label?.toLowerCase());
-            this.company.baseCurrency = this.countryCurrency[event.value];
+            this.firstStepForm.controls['country'].setValue(event);
+            this.firstStepForm.controls['currency'].setValue({ label: event?.additional?.currency?.code, value: event?.additional?.currency?.code });
+            this.intl?.setCountry(event.value?.toLowerCase());
+            let onboardingFormRequest = new OnboardingFormRequest();
+            if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
+                onboardingFormRequest.formName = this.itemOnBoardingDetails.onBoardingType?.toLowerCase();
+            } else {
+                onboardingFormRequest.formName = 'onboarding';
+            }
+            onboardingFormRequest.country = event.value;
+            this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+
+            let statesRequest = new StatesRequest();
+            statesRequest.country = event.value;
+            this.store.dispatch(this.generalActions.getAllState(statesRequest));
         }
     }
 
     public onlyPhoneNumber(): void {
-        let input = document.getElementById('init-contact-proforma');
-        const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
-        const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
+        let input = document.getElementById('mobile-no');
+        const errorMsg = document.querySelector("#mobile-no-error-msg");
+        const validMsg = document.querySelector("#mobile-no-valid-msg");
         let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
         const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']['electron'];
         if (intlTelInput && input) {
@@ -727,6 +538,20 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         if (this.secondStepForm.invalid) {
             this.isFormSubmitted = true;
             return;
+        }
+    }
+
+    public selectBusinessType(event: any): void {
+        if (event) {
+            this.secondStepForm.controls['businessType'].setValue(event.value);
+            this.changeDetection.detectChanges();
+        }
+    }
+
+    public selectBusinessNature(event: any): void {
+        if (event) {
+            this.secondStepForm.controls['businessNature'].setValue(event.value);
+            this.changeDetection.detectChanges();
         }
     }
 }
