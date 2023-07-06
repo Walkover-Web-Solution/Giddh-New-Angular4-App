@@ -9,28 +9,14 @@ const routes: Routes = [
         component: MainGroupComponent,
         children: [
             {
-                path: "product/create",
-                component: CreateUpdateGroupComponent
+                path: ":type/create",
+                component: CreateUpdateGroupComponent,
+                pathMatch: 'full'
             },
             {
-                path: "service/create",
-                component: CreateUpdateGroupComponent
-            },
-            {
-                path: "fixedassets/create",
-                component: CreateUpdateGroupComponent
-            },
-            {
-                path: "product/edit/:groupUniqueName",
-                component: CreateUpdateGroupComponent
-            },
-            {
-                path: "service/edit/:groupUniqueName",
-                component: CreateUpdateGroupComponent
-            },
-            {
-                path: "fixedassets/edit/:groupUniqueName",
-                component: CreateUpdateGroupComponent
+                path: ":type/edit/:groupUniqueName",
+                component: CreateUpdateGroupComponent,
+                pathMatch: 'full'
             }
         ]
     }

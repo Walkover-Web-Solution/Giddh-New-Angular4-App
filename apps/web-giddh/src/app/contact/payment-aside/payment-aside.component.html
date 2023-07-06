@@ -138,7 +138,10 @@
                                 color="primary"
                                 type="button"
                                 *ngIf="!isPayClicked"
-                                [ngClass]="{ 'disabled-ladda-btn': !isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData }"
+                                [ngClass]="{
+                                    'disabled-ladda-btn':
+                                        !isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData
+                                }"
                                 [disabled]="!isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData"
                                 [ladda]="isRequestInProcess"
                                 (click)="payClicked()"
@@ -150,7 +153,13 @@
                                 mat-stroked-button
                                 color="primary"
                                 *ngIf="isPayClicked"
-                                [ngClass]="{ 'disabled-ladda-btn': !isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData || !receivedOtp }"
+                                [ngClass]="{
+                                    'disabled-ladda-btn':
+                                        !isBankSelectedForBulkPayment ||
+                                        !selectedBankUrn ||
+                                        !isValidData ||
+                                        !receivedOtp
+                                }"
                                 [disabled]="
                                     !isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData || !receivedOtp
                                 "
