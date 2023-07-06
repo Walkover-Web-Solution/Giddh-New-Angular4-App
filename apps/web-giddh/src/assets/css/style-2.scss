@@ -14468,3 +14468,15 @@ button {
         width: 100%;
     }
 }
+
+purchase-advance-search {
+    mat-dialog-content {
+        margin: 0 !important;
+    }
+    .custom-datepicker {
+        input {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+    }
+}

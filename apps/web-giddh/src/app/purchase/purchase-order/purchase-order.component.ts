@@ -19,6 +19,8 @@ import { WarehouseActions } from '../../settings/warehouse/action/warehouse.acti
 import { BULK_UPDATE_FIELDS } from '../../shared/helpers/purchaseOrderStatus';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep } from '../../lodash-optimized';
+import { MatDialog } from '@angular/material/dialog';
+import { PurchaseAdvanceSearchComponent } from '../purchase-advance-search/purchase-advance-search.component';
 export interface PeriodicElement {
     date: number;
     position: number;
@@ -206,7 +208,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public dataSource = ELEMENT_DATA;
     
 
-    constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
+    constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions, private dialog: MatDialog,) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.purchaseOrderListFilters$ = this.store.pipe(select(state => state.purchaseOrder.listFilters), (takeUntil(this.destroyed$)));
@@ -349,10 +351,19 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @param {TemplateRef<any>} template
      * @memberof PurchaseOrderComponent
      */
-    public openAdvanceSearchModal(template: TemplateRef<any>): void {
-        this.modalRef = this.modalService.show(template);
+    public openAdvanceSearchModal() {
+        const dialogRef = this.dialog.open(PurchaseAdvanceSearchComponent,{
+            maxWidth: '1000px',
+            data: {
+            commonLocaleData: this.commonLocaleData,
+            localeData: this.localeData
+            }
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          console.log(`Dialog result: ${result}`);
+        });
     }
-
     /**
      * This will search the PO based on filters
      *

@@ -14,6 +14,7 @@
     "bulk_update_note": "Note: All the selected Purchase Orders will be updated with new information and you cannot undo this.",
     "expected_delivery_date": "Expected Delivery Date",
     "select_status": "Select Status",
+    "only_status": "Status",
     "order_date": "Order Date",
     "po_selection_error": "Please select atleast 1 Purchase Order",
     "po_date_error": "Please select Purchase date",
