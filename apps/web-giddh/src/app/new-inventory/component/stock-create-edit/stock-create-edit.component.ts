@@ -314,6 +314,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             if (!this.stockForm.options[optionIndex]?.values[optionValueIndex + 1] && value?.trim()) {
                 this.stockForm.options[optionIndex].values[optionValueIndex + 1] = { index: optionValueIndex + 1, value: "" };
             }
+
+            this.changeDetection.detectChanges();
         }
     }
 
@@ -486,14 +488,32 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public deleteVariantOption(index: number): void {
-        this.stockForm.options = this.stockForm.options?.filter((data, optionIndex) => optionIndex !== index).map((data, optionIndex) => {
-            return {
-                name: data.name,
-                values: data.values,
-                order: optionIndex + 1
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '585px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.confirm_delete_option,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: ' '
             }
         });
-        this.generateVariants();
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.stockForm.options = this.stockForm.options?.filter((data, optionIndex) => optionIndex !== index).map((data, optionIndex) => {
+                    return {
+                        name: data.name,
+                        values: data.values,
+                        order: optionIndex + 1
+                    }
+                });
+                if (!this.stockForm.options?.length) {
+                    this.isVariantAvailable = false;
+                }
+                this.generateVariants();
+            }
+        });
     }
 
     /**
@@ -581,9 +601,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 archive: false,
                 uniqueName: undefined,
                 skuCode: undefined,
-                salesTaxInclusive: false,
-                purchaseTaxInclusive: false,
-                fixedAssetTaxInclusive: false,
+                salesTaxInclusive: this.stockForm.variants?.length && this.stockForm.variants[0]?.salesTaxInclusive || false,
+                purchaseTaxInclusive: this.stockForm.variants?.length && this.stockForm.variants[0]?.purchaseTaxInclusive || false,
+                fixedAssetTaxInclusive: this.stockForm.variants?.length && this.stockForm.variants[0]?.fixedAssetTaxInclusive || false,
                 salesInformation: [
                     {
                         rate: undefined,
@@ -639,9 +659,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 archive: false,
                 uniqueName: undefined,
                 skuCode: undefined,
-                salesTaxInclusive: false,
-                purchaseTaxInclusive: false,
-                fixedAssetTaxInclusive: false,
+                salesTaxInclusive: this.stockForm.variants?.length && this.stockForm.variants[0]?.salesTaxInclusive || false,
+                purchaseTaxInclusive: this.stockForm.variants?.length && this.stockForm.variants[0]?.purchaseTaxInclusive || false,
+                fixedAssetTaxInclusive: this.stockForm.variants?.length && this.stockForm.variants[0]?.fixedAssetTaxInclusive || false,
                 salesInformation: [
                     {
                         rate: undefined,
@@ -925,10 +945,17 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         this.getStockGroups();
                     }
                     this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
-                    this.closeAsideEvent.emit();
+                    if (this.addStock) {
+                        this.closeAsideEvent.emit();
+                    }
                 } else {
-                    if (!openEditAfterSave) {
-                        this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
+                    if (this.addStock) {
+                        this.queryParams = { stockUniqueName: response.body?.uniqueName };
+                        this.getStockDetails(() => {
+                            this.activeTabIndex = 2;
+                            this.changeDetection.detectChanges();
+                        });
+
                     } else {
                         this.router.navigate(['/pages/inventory/v2/stock/' + this.stockForm.type?.toLowerCase() + '/edit/' + response.body?.uniqueName], { queryParams: { tab: 2 } });
                     }
@@ -1053,7 +1080,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      *
      * @memberof StockCreateEditComponent
      */
-    public getStockDetails(): void {
+    public getStockDetails(callback?: Function): void {
         this.toggleLoader(true);
         this.inventoryService.getStockV2(this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response.body) {
@@ -1138,6 +1165,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.toggleLoader(false);
                 this.prefillUnits();
                 this.changeDetection.detectChanges();
+
+                if (callback) {
+                    callback();
+                }
             } else {
                 this.toggleLoader(false);
                 this.toaster.showSnackBar("error", response?.message);
@@ -1734,7 +1765,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public backClicked(): void {
-        this.location.back();
+        if (this.addStock) {
+            this.closeAsideEvent.emit();
+        } else {
+            this.location.back();
+        }
     }
 
     /**
