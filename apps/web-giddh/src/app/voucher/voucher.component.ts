@@ -709,6 +709,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     private currentTxnRequestObject: Array<any> = [];
     /** Stores the index of current stock variants being loaded */
     private currentlyLoadedStockVariantIndex: number;
+    /** True if account has unsaved changes */
+    public hasUnsavedChanges: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1709,6 +1711,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
             this.currentlyLoadedStockVariantIndex = null;
+        });
+
+        this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasUnsavedChanges = response;
         });
     }
 

@@ -32,7 +32,7 @@
                 [selectedGroupUniqueName]="selectedVoucherType"
                 [isDebtorCreditor]="false"
                 [isBankAccount]="false"
-                [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
+                [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' && !hasUnsavedChanges }"
                 *ngIf="accountAsideMenuState === 'in'"
                 (addEvent)="addNewServiceAccount($event)"
             ></generic-aside-menu-account>

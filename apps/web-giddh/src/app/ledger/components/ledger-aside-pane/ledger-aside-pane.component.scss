@@ -18,6 +18,10 @@
     width: 100%;
     max-width: 760px;
     z-index: 99999;
+
+    &.page-leave-confirmation-showing {
+        z-index: 9999 !important;
+    }
 }
 
 #close {

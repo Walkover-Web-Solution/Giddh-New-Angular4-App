@@ -283,7 +283,7 @@
         (closeAccountModal)="closeAccountModal($event)"
         [selectedGrpUniqueName]="selectedGroupForCreateAccount"
         [createAccountFromCommandK]="true"
-        [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
+        [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' && !hasUnsavedChanges }"
         (addEvent)="addNewAccount($event)"
         *ngIf="accountAsideMenuState === 'in'"
     >
