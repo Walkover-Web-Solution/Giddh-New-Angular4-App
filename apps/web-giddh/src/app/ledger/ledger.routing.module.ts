@@ -10,7 +10,7 @@ import { PageLeaveConfirmationGuard } from '../decorators/page-leave-confirmatio
                 path: ':accountUniqueName', component: LedgerComponent, canDeactivate: [PageLeaveConfirmationGuard]
             },
             {
-                path: ':accountUniqueName/:from/:to', component: LedgerComponent
+                path: ':accountUniqueName/:from/:to', component: LedgerComponent, canDeactivate: [PageLeaveConfirmationGuard]
             },
             {
                 path: '', redirectTo: '/pages/home', pathMatch: 'full'
