@@ -8,6 +8,7 @@ import { OnboardingRoutingModule } from "./onboarding.routing.module";
 import { MatButtonModule } from "@angular/material/button";
 import { MatRadioModule } from "@angular/material/radio";
 import { FormsModule } from "@angular/forms";
+import { MatListModule } from "@angular/material/list";
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { FormsModule } from "@angular/forms";
         RouterModule,
         MatButtonModule,
         MatRadioModule,
-        FormsModule
+        FormsModule,
+        MatListModule
     ]
 })
 
