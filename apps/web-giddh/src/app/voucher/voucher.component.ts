@@ -199,6 +199,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('itemsContainer', { read: ViewContainerRef, static: false }) container: ViewContainerRef;
     /** Template reference for each entry */
     @ViewChild('entry', { read: TemplateRef, static: false }) template: TemplateRef<any>;
+    /** Instance of aside Menu Product Service modal */
+    @ViewChild('asideMenuProductService') asideMenuProductService: TemplateRef<any>;
     /** Billing state field instance */
     @ViewChild('statesBilling', { static: false }) statesBilling: SelectFieldComponent;
     /** Billing state field instance */
@@ -308,7 +310,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Hold account aside menu state  */
     public accountAsideMenuState: string = 'out';
     /** Hold aside menu state for product service  */
-    public asideMenuStateForProductService: string = 'out';
+    public asideMenuStateForProductService: any;
     /** Hold aside menu state for recurring entry  */
     public asideMenuStateForRecurringEntry: string = 'out';
     /** Hold aside menu state for other tax  */
@@ -2906,12 +2908,26 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!isUndefined(idx)) {
             this.innerEntryIdx = idx;
         }
-        this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, {
+            position: {
+                right : '0',
+            },
+            width: '760px',
+            height: '100vh !important'
+        })
+    }
+    
+    /**
+     * This Function is used to close Aside Menu Sidebar 
+     *
+     * @memberof VoucherComponent
+     */
+    public closeAsideMenuProductServiceModal(): void {
+        this.asideMenuStateForProductService?.close();
     }
 
     public toggleBodyClass() {
-        if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in'
+        if (this.accountAsideMenuState === 'in'
             || this.asideMenuStateForRecurringEntry === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
             /* add fixed class only in crete mode not in update mode
                 - because fixed class is already added in update mode due to double scrolling issue
@@ -5866,7 +5882,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if ((typeof event?.target?.className === "string" &&
             event?.target?.className?.indexOf("option") === -1) &&
             event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1 &&
-            this.accountAsideMenuState === 'out' && this.asideMenuStateForProductService === 'out' &&
+            this.accountAsideMenuState === 'out' &&
             this.asideMenuStateForRecurringEntry === 'out' && this.asideMenuStateForOtherTaxes === 'out') {
             this.activeIndx = null;
             this.checkVoucherEntries();
