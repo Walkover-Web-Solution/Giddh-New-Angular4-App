@@ -137,15 +137,16 @@
                             </dropdown-field>
                         </div>
                         <div class="col-lg-12" *ngIf="secondStepForm.controls['businessType']?.value === 'Registered'">
-                            {{ secondStepForm.get("gstin")?.invalid }}
+                            {{ isGstinValid }}
                             <input-field
                                 [name]="'gstin'"
                                 [placeholder]="'GSTIN'"
                                 [type]="'text'"
                                 formControlName="gstin"
-                                [showError]="secondStepForm.get('gstin')?.invalid"
+                                [showError]="isGstinValid && !secondStepForm.get('gstin')?.value"
                                 [required]="true"
-                                [pattern]="gstinPattern"
+                                [label]="formFields['taxName'].label"
+                                [maxlength]="10"
                             >
                             </input-field>
                         </div>
