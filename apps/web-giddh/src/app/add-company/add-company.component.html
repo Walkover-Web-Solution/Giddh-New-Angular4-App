@@ -1,5 +1,10 @@
 <div class="add-company-wrapper">
-    <ng-container>
+    <ng-container
+        appTranslate
+        [file]="'create-company'"
+        (localeData)="localeData = $event"
+        (commonLocaleData)="commonLocaleData = $event"
+    >
         <div>
             <p class="text-center p-3">Enter your company information to start hassle free accounting with Giddh.</p>
         </div>
@@ -43,23 +48,23 @@
                                 [name]="'mobile'"
                                 [type]="'tel'"
                                 #mobileNo
-                                [id]="'mobile-no'"
+                                [id]="'init-contact-proforma'"
                                 (keydown.enter)="$event.preventDefault()"
                                 [label]="commonLocaleData?.app_mobile_number"
                                 [placeholder]="'98XXXXXXXX'"
                                 [floatLabel]="intl?.getNumber() ? 'always' : 'auto'"
                                 (onChange)="firstStepForm.controls['mobile'].setValue(intl?.getNumber())"
-                                [showError]="isFormSubmitted && !firstStepForm.get('mobile')?.value"
+                                [showError]="
+                                    isFormSubmitted && !firstStepForm.get('mobile')?.value && isMobileNumberInvalid
+                                "
                             >
                             </input-field>
-                            <span id="mobile-no-valid-msg" class="d-none"></span>
-                            <span id="mobile-no-error-msg" class="d-none"></span>
+                            <span id="init-contact-proforma-valid-msg" class="d-none"></span>
+                            <span id="init-contact-proforma-error-msg" class="d-none"></span>
                         </div>
                     </div>
                     <div>
-                        <button mat-stroked-button color="primary" matStepperNext (click)="onSubmitFirstStep()">
-                            Next
-                        </button>
+                        <button mat-stroked-button color="primary" matStepperNext (click)="nextStepForm()">Next</button>
                     </div>
                 </form>
             </mat-step>
@@ -145,8 +150,8 @@
                                 formControlName="gstin"
                                 [showError]="isGstinValid && !secondStepForm.get('gstin')?.value"
                                 [required]="true"
-                                [label]="formFields['taxName'].label"
-                                [maxlength]="10"
+                                [label]="formFields['taxName']?.label"
+                                [maxlength]="15"
                             >
                             </input-field>
                         </div>
@@ -167,12 +172,55 @@
                         <div class="col-lg-12" *ngIf="secondStepForm.controls['businessType']?.value === 'Registered'">
                             <mat-form-field class="w-100" appearance="outline">
                                 <mat-label>Applicable Tax</mat-label>
-                                <mat-select name="tax" formControlName="tax" [placeholder]="'Applicable Tax'" multiple>
-                                    <mat-option>GST5</mat-option>
-                                    <mat-option>GST12</mat-option>
-                                    <mat-option>GST18</mat-option>
-                                    <mat-option>GST28</mat-option>
+                                <mat-select
+                                    [placeholder]="commonLocaleData?.app_select_tax"
+                                    [formControlName]="'taxes'"
+                                    multiple
+                                >
+                                    <mat-option *ngFor="let tax of taxesList" [value]="tax?.value">{{
+                                        tax?.label
+                                    }}</mat-option>
+                                    <mat-option
+                                        class="create-update-no-data"
+                                        [disabled]="true"
+                                        *ngIf="!taxesList?.length"
+                                        >{{ commonLocaleData?.app_no_result_found }}</mat-option
+                                    >
                                 </mat-select>
+                                <!-- <mat-select
+                                    name="taxes"
+                                    [placeholder]="commonLocaleData?.app_select_tax"
+                                    formControlName="taxes"
+                                    multiple
+                                    [value]="selectedTaxes"
+                                >
+                                    <mat-option
+                                        *ngFor="let tax of taxesList"
+                                        [value]="tax?.value"
+                                        (onSelectionChange)="selectTax($event, tax)"
+                                        >{{ tax.label }}</mat-option
+                                    >
+                                    <mat-option
+                                        class="create-update-no-data"
+                                        [disabled]="true"
+                                        *ngIf="!taxesList?.length"
+                                        >{{ commonLocaleData?.app_no_result_found }}</mat-option
+                                    >
+                                </mat-select> -->
+                                <!-- <mat-select
+                                    [value]="selectedTaxes"
+                                    name="tax"
+                                    formControlName="tax"
+                                    [placeholder]="'Applicable Tax'"
+                                      (selectionChange)="selectTax($event?.value)"
+                                    multiple
+                                >
+                                    <div class="select-quantity-option">
+                                        <mat-option *ngFor="let tax of taxesList" [value]="tax?.value">
+                                            {{ tax?.label }}
+                                        </mat-option>
+                                    </div>
+                                </mat-select> -->
                             </mat-form-field>
                         </div>
                         <div

@@ -49,5 +49,6 @@
 	"companies": "कंपनिया",
 	"unlimited_users": "असीमित उपयोगकर्ता",
 	"unlimited_contacts": "असीमित ग्राहक/विक्रेता",
-	"desktop_mobile_app": "डेस्कटॉप/मोबाइल ऐप"
+	"desktop_mobile_app": "डेस्कटॉप/मोबाइल ऐप",
+    "invalid_contact_number": "अमान्य संपर्क नंबर"
 }

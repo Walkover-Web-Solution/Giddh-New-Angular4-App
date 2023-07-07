@@ -1,17 +1,20 @@
 import { HttpClient } from "@angular/common/http";
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
-import { MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, GSTIN_REGEX } from '../app.constant';
+import { LoginActions } from "../actions/login.action";
+import { MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL } from '../app.constant';
 import { isEqual } from "../lodash-optimized";
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { Addresses, CompanyCreateRequest, CompanyResponse, CreateCompanyUsersPlan, SocketNewCompanyRequest, StatesRequest, SubscriptionRequest } from "../models/api-models/Company";
 import { UserDetails } from "../models/api-models/loginModels";
+import { userLoginStateEnum } from "../models/user-login-state";
 import { CompanyService } from "../services/company.service";
 import { GeneralService } from "../services/general.service";
 import { ToasterService } from "../services/toaster.service";
@@ -84,7 +87,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         baseCurrency: '',
         isMultipleCurrency: false,
         city: '',
-        pincode: '',
         email: '',
         taxes: [],
         userBillingDetails: {
@@ -135,8 +137,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public formFields: any[] = [];
     /** Hold active company */
     public activeCompany: any;
-    /** Hold selected tax */
-    public selectedTaxes: string[] = [];
     /** Hold subscription request form */
     public subscriptionRequestObj: SubscriptionRequest = {
         planUniqueName: '',
@@ -185,6 +185,12 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     };
     /** Hold logged user */
     public loggedInUser: UserDetails;
+    /** Observable to create company process */
+    public isCompanyCreationInProcess$: Observable<boolean>;
+    /** Observable to company created */
+    public isCompanyCreated$: Observable<boolean>;
+    /** True if new user create company */
+    public isNewUser: boolean = false;
     constructor(
         private formBuilder: FormBuilder,
         private toaster: ToasterService,
@@ -195,7 +201,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         private companyService: CompanyService,
         private changeDetection: ChangeDetectorRef,
         private generalActions: GeneralActions,
-        private companyActions: CompanyActions
+        private companyActions: CompanyActions,
+        private route: Router,
+        private loginAction: LoginActions
     ) { }
 
     /**
@@ -206,6 +214,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public ngOnInit(): void {
         this.initCompanyForm();
         this.companies$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
+        this.isCompanyCreationInProcess$ = this.store.pipe(select(s => s.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
+        this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.fields) {
@@ -296,9 +306,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         this.secondStepForm = this.formBuilder.group({
             businessType: [''],
             businessNature: [''],
-            gstin: ['', Validators.required], //Validators.required
-            state: [''], //Validators.required
-            tax: null,
+            gstin: ['', (this.secondStepForm?.controls['businessType']?.value === 'Registered') ? Validators.required : undefined],
+            state: ['', (this.secondStepForm?.controls['businessType']?.value === 'Registered') ? Validators.required : undefined],
+            taxes: null,
             pincode: [''],
             address: ['', Validators.required]
         });
@@ -317,7 +327,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         this.stepperIcon._getIndicatorType = () => 'number';
         let interval = setInterval(() => {
             if (this.mobileNo) {
-                this.onlyPhoneNumber();
+                setTimeout(() => {
+                    this.onlyPhoneNumber();
+                }, 100);
                 clearInterval(interval);
             }
         }, 500);
@@ -418,7 +430,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      * @memberof AddCompanyComponent
      */
     public selectCountry(event: any): void {
-        if (event) {
+        if (event && event.value) {
             this.firstStepForm.controls['country'].setValue(event);
             this.firstStepForm.controls['currency'].setValue({ label: event?.additional?.currency?.code, value: event?.additional?.currency?.code });
             this.intl?.setCountry(event.value?.toLowerCase());
@@ -443,9 +455,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      * @memberof AddCompanyComponent
      */
     public onlyPhoneNumber(): void {
-        let input = document.getElementById('mobile-no');
-        const errorMsg = document.querySelector("#mobile-no-error-msg");
-        const validMsg = document.querySelector("#mobile-no-valid-msg");
+        let input = document.getElementById('init-contact-proforma');
+        const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
+        const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
         let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
         const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']['electron'];
         if (intlTelInput && input) {
@@ -533,14 +545,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * This will use for on submit fist step form
+     * This will use for next step form
      *
      * @return {*}  {void}
      * @memberof AddCompanyComponent
      */
-    public onSubmitFirstStep(): void {
+    public nextStepForm(): void {
         this.isFormSubmitted = false;
-        if (this.firstStepForm.invalid) {
+        if (this.firstStepForm.invalid && this.isMobileNumberInvalid) {
             this.isFormSubmitted = true;
             return;
         }
@@ -592,7 +604,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     private removeSpecialCharacters(value: string) {
         let finalString;
         finalString = value?.replace(/[^a-zA-Z0-9]/g, '');
-        return finalString.substr(0, 6)?.toLowerCase();
+        return finalString?.substr(0, 6)?.toLowerCase();
     }
 
     /**
@@ -661,16 +673,20 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             this.isFormSubmitted = true;
             return;
         }
+        const phoneNumber = this.intl.getNumber();
+        const countryCode = this.intl.getSelectedCountryData().dialCode;
+        let number = phoneNumber.replace(countryCode, '').trim();
+        number = number.substring(1);
         this.company.name = this.companyForm.value.firstStepForm.name;
         this.company.country = this.companyForm.value.firstStepForm.country.value;
         this.company.businessNature = this.companyForm.value.secondStepForm.businessNature;
         this.company.businessType = this.companyForm.value.secondStepForm.businessType;
-        this.company.contactNo = this.companyForm.value.firstStepForm.mobile;
+        this.company.contactNo = number;
+        this.company.phoneCode = countryCode;
         this.company.addresses.push(gstDetails);
         this.company.address = gstDetails[0]?.address;
-        this.company.taxes = (this.selectedTaxes?.length > 0) ? this.selectedTaxes : [];
+        this.company.taxes = this.companyForm.value.secondStepForm.taxes;
         this.generalService.createNewCompany = this.company;
-
         this.subscriptionRequestObj.licenceKey = "";
         this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
 
@@ -683,6 +699,18 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             this.company.subscriptionRequest = this.subscriptionRequestObj;
             this.store.dispatch(this.companyActions.CreateNewCompany(this.company));
         }
+        this.isCompanyCreated$.subscribe(response => {
+            if (response) {
+                this.store.pipe(select(state => state.session.userLoginState), take(1)).subscribe(st => {
+                    this.isNewUser = st === userLoginStateEnum.newUserLoggedIn;
+                });
+                this.generalService.companyUniqueName = this.company?.uniqueName;
+                setTimeout(() => {
+                    this.store.dispatch(this.loginAction.ChangeCompany(this.company?.uniqueName));
+                    this.route.navigate([this.isNewUser ? 'welcome' : 'onboarding']);
+                }, 500);
+            }
+        });
     }
 
     /**

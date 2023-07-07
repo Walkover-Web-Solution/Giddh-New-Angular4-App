@@ -49,5 +49,6 @@
     "companies": "Companies",
     "unlimited_users": "Unlimited Users",
     "unlimited_contacts": "Unlimited Customers/Vendors",
-    "desktop_mobile_app": "Desktop/Mobile App"
+    "desktop_mobile_app": "Desktop/Mobile App",
+    "invalid_contact_number": "Invalid Contact number"
 }
