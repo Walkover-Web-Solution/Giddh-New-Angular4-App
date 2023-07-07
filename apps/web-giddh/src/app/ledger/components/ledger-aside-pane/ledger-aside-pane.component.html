@@ -8,8 +8,8 @@
         </h3>        
     </div>
     <button
-            mat-dialog-close
             mat-button
+            mat-dialog-close
             id="close"
             [ngClass]="!hideFirstScreen ? 'close-btn-absolute' : 'default-button'"
             (click)="closeAsidePane()"
@@ -92,5 +92,5 @@
     <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen && voucherApiVersion !== 2">
                 <inventory-add-stock [addStock]="true" (closeAsideEvent)="closeAsidePane()"></inventory-add-stock>
     </div>
- 
+    
 </div>

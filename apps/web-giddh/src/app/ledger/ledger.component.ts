@@ -1832,7 +1832,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             width: '760px',
             height: '100vh !important'
         })
-        // this.toggleBodyClass();
+        this.toggleBodyClass();
         this.cdRf.detectChanges();
     }
 

@@ -2909,7 +2909,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.innerEntryIdx = idx;
         }
         this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
-        // this.toggleBodyClass();
         this.dialog.open(this.asideMenuProductService, {
             position: {
                 right : '0',
@@ -2917,6 +2916,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             width: '760px',
             height: '100vh !important'
         })
+        this.toggleBodyClass();
     }
 
     public toggleBodyClass() {
