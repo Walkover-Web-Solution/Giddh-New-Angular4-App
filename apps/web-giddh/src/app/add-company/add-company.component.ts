@@ -186,9 +186,12 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public isCompanyCreated$: Observable<boolean>;
     /** True if new user create company */
     public isNewUser: boolean = false;
+<<<<<<< HEAD
     /** True if other country selected */
     public isOtherCountry: boolean = false;
 
+=======
+>>>>>>> 10fe6307fa (Had done company creation unit testing remaining)
     constructor(
         private formBuilder: FormBuilder,
         private toaster: ToasterService,
@@ -211,6 +214,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      */
     public ngOnInit(): void {
         this.initCompanyForm();
+<<<<<<< HEAD
         this.isProdMode = PRODUCTION_ENV;
         this.getCountry();
         this.loggedInUser = this.generalService.user;
@@ -225,6 +229,18 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                         if (response.fields[key]) {
                             this.formFields[response.fields[key].name] = [];
                             this.formFields[response.fields[key].name] = response.fields[key];
+=======
+        this.companies$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
+        this.isCompanyCreationInProcess$ = this.store.pipe(select(s => s.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
+        this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
+        this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                if (res.fields) {
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+>>>>>>> 10fe6307fa (Had done company creation unit testing remaining)
                         }
                     });
                     this.changeDetection.detectChanges();
@@ -433,12 +449,15 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      */
     public selectCountry(event: any): void {
         if (event && event.value) {
+<<<<<<< HEAD
             if (event.value !== 'IN') {
                 this.isOtherCountry = true;
                 this.secondStepForm.controls['businessType'].setValue('Unregistered');
             } else {
                 this.isOtherCountry = false;
             }
+=======
+>>>>>>> 10fe6307fa (Had done company creation unit testing remaining)
             this.firstStepForm.controls['country'].setValue(event);
             this.firstStepForm.controls['currency'].setValue({ label: event?.additional?.currency?.code, value: event?.additional?.currency?.code });
             this.intl?.setCountry(event.value?.toLowerCase());
@@ -683,7 +702,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             this.isFormSubmitted = true;
             return;
         }
+<<<<<<< HEAD
         let gstDetails = this.prepareGstDetail(this.companyForm);
+=======
+>>>>>>> 10fe6307fa (Had done company creation unit testing remaining)
         const phoneNumber = this.intl.getNumber();
         const countryCode = this.intl.getSelectedCountryData().dialCode;
         let number = phoneNumber.replace(countryCode, '').trim();

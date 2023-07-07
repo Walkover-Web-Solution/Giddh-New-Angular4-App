@@ -50,6 +50,7 @@
 	"unlimited_users": "असीमित उपयोगकर्ता",
 	"unlimited_contacts": "असीमित ग्राहक/विक्रेता",
 	"desktop_mobile_app": "डेस्कटॉप/मोबाइल ऐप",
+<<<<<<< HEAD
     "invalid_contact_number": "अमान्य संपर्क नंबर",
     "registered": "दर्ज कराई",
     "unregistered": "अपंजीकृत",
@@ -57,4 +58,7 @@
     "service": "सेवा",
     "manufacturing": "उत्पादन",
     "retail": "खुदरा"
+=======
+    "invalid_contact_number": "अमान्य संपर्क नंबर"
+>>>>>>> 10fe6307fa (Had done company creation unit testing remaining)
 }

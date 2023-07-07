@@ -50,10 +50,14 @@
     "unlimited_users": "Unlimited Users",
     "unlimited_contacts": "Unlimited Customers/Vendors",
     "desktop_mobile_app": "Desktop/Mobile App",
+<<<<<<< HEAD
     "registered": "Registered",
     "unregistered": "Unregistered",
     "food": "Food",
     "service": "Service",
     "manufacturing": "Manufacturing",
     "retail": "Retail"
+=======
+    "invalid_contact_number": "Invalid Contact number"
+>>>>>>> 10fe6307fa (Had done company creation unit testing remaining)
 }

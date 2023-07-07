@@ -178,17 +178,43 @@
                                     [placeholder]="commonLocaleData?.app_select_tax"
                                     [formControlName]="'taxes'"
                                     multiple
+                                    class="create-update-no-data"
                                 >
-                                    <mat-option *ngFor="let tax of taxesList" [value]="tax?.value">{{
-                                        tax?.label
-                                    }}</mat-option>
+                                </mat-select>
+                                <!-- <mat-select
+                                    name="taxes"
+                                    [placeholder]="commonLocaleData?.app_select_tax"
+                                    formControlName="taxes"
+                                    multiple
+                                    [value]="selectedTaxes"
+                                >
+                                    <mat-option
+                                        *ngFor="let tax of taxesList"
+                                        [value]="tax?.value"
+                                        (onSelectionChange)="selectTax($event, tax)"
+                                        >{{ tax.label }}</mat-option
+                                    >
                                     <mat-option
                                         class="create-update-no-data"
                                         [disabled]="true"
                                         *ngIf="!taxesList?.length"
                                         >{{ commonLocaleData?.app_no_result_found }}</mat-option
                                     >
-                                </mat-select>
+                                </mat-select> -->
+                                <!-- <mat-select
+                                    [value]="selectedTaxes"
+                                    name="tax"
+                                    formControlName="tax"
+                                    [placeholder]="'Applicable Tax'"
+                                      (selectionChange)="selectTax($event?.value)"
+                                    multiple
+                                >
+                                    <div class="select-quantity-option">
+                                        <mat-option *ngFor="let tax of taxesList" [value]="tax?.value">
+                                            {{ tax?.label }}
+                                        </mat-option>
+                                    </div>
+                                </mat-select> -->
                             </mat-form-field>
                         </div>
                         <div
