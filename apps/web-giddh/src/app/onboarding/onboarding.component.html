@@ -40,26 +40,21 @@
                             >
                         </li>
                     </ul>
-                    <h1 class="border-btm mr-t5">{{ localeData?.have_data_tally }}</h1>
+                    <h1 class="border-btm mr-t5">{{localeData?.have_data_tally}}</h1>
                     <p [innerHTML]="localeData?.giddh_usage"></p>
-                    <a
-                        class="btn btn-sync"
-                        target="_blank"
-                        href="https://giddh.com/help/sync-with-tally-1591360375828781"
-                    >
-                        {{ localeData?.sync_with_tally }}
+                    <a mat-stroked-button color="primary" class="mt-2" target="_blank"
+                        href="https://giddh.com/help/sync-with-tally-1591360375828781">
+                        {{localeData?.sync_with_tally}}
                     </a>
-                    <a
-                        class="btn btn-sync"
-                        href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp"
-                    >
-                        {{ localeData?.download_tcp }}
+                    <a  mat-stroked-button color="primary" class="mt-2"
+                        href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp">
+                        {{localeData?.download_tcp}}
                     </a>
 
                     <div class="mt-2 right-section">
                         <h1 class="border-btm">{{ localeData?.ask_question }}</h1>
                         <span>{{ localeData?.request_demo }}</span>
-                        <button class="btn btn-success mr-t1" (click)="scheduleNow()">
+                        <button mat-stroked-button color="primary" class="mr-t1" (click)="scheduleNow()">
                             {{ commonLocaleData?.app_schedule_now }}
                         </button>
                         <br />
@@ -80,33 +75,25 @@
                     <div class="right-section">
                         <h1 class="border-btm">{{ commonLocaleData?.app_select_inventory_type }}</h1>
                         <span>{{ commonLocaleData?.app_inventory_type }}</span>
-                        <div class="pd-b1 clearfix">
-                            <span class="p-0 mr-r3 d-inline-block">
-                                <input
-                                    id="product"
-                                    class="radio-custom cp ml-0"
-                                    type="radio"
-                                    [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                                    (change)="updateInventorySetting(true)"
-                                    name="inventoryType"
-                                />
-                                <label for="product" class="radio-custom-label">{{
-                                    commonLocaleData?.app_product
-                                }}</label>
-                            </span>
-                            <span class="p-0 mr-r3 d-inline-block">
-                                <input
-                                    id="service"
-                                    class="radio-custom cp ml-0"
-                                    type="radio"
-                                    [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                                    (change)="updateInventorySetting(false)"
-                                    name="inventoryType"
-                                />
-                                <label for="service" class="radio-custom-label">{{
-                                    commonLocaleData?.app_service
-                                }}</label>
-                            </span>
+                        <div class="mt-1 clearfix">
+                            <mat-radio-group                                
+                                color="primary"
+                                name="inventoryType"
+                                [(ngModel)]="inventoryTypeStatus"
+                                (change)="updateInventorySetting()"                                
+                            >
+                                <mat-radio-button 
+                                    [value]="true"
+                                >
+                                    {{ commonLocaleData?.app_product }}
+                                </mat-radio-button>
+                                <mat-radio-button 
+                                    class="ml-2" 
+                                    [value]="false"
+                                    >
+                                    {{ commonLocaleData?.app_service }}
+                                </mat-radio-button>
+                            </mat-radio-group>
                         </div>
                         <br /><br /><br />
                         <!-- <div class="import-data">
