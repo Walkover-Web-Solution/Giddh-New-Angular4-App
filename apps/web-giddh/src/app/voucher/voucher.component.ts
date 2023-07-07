@@ -2916,6 +2916,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             height: '100vh !important'
         })
     }
+    
     /**
      * This Function is used to close Aside Menu Sidebar 
      *
