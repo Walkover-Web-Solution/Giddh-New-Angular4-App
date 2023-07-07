@@ -3474,6 +3474,15 @@ voucher-component {
         }
     }
 }
+add-company {
+    .fill-form {
+        input {
+            &::placeholder {
+                color: var(--color-popup-list-input-text) !important;
+            }
+        }
+    }
+}
 .invoice-date-label {
     &:focus-visible {
         outline: none;

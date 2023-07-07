@@ -11,27 +11,27 @@
                         <div class="col-lg-12">
                             <input-field
                                 [name]="'name'"
-                                [placeholder]="'Company Name'"
+                                [placeholder]="'Company Name *'"
                                 [type]="'text'"
                                 formControlName="name"
                                 [showError]="isFormSubmitted && !firstStepForm.get('name')?.value"
                             >
                             </input-field>
                         </div>
-                        <div class="col-lg-6 currency-space">
+                        <div class="col-lg-6 country-space">
                             <dropdown-field
                                 [name]="'country'"
-                                [placeholder]="'Country'"
+                                [placeholder]="'Country *'"
                                 [options]="countries"
                                 (selectedOption)="selectCountry($event)"
                                 [showError]="isFormSubmitted && !firstStepForm.get('country')?.value"
                             >
                             </dropdown-field>
                         </div>
-                        <div class="col-lg-6 country-space">
+                        <div class="col-lg-6 currency-space">
                             <dropdown-field
                                 [name]="'currency'"
-                                [placeholder]="'Currency'"
+                                [placeholder]="'Currency *'"
                                 [options]="currencies"
                                 [showError]="isFormSubmitted && !firstStepForm.get('currency')?.value"
                                 [defaultValue]="firstStepForm.get('currency')?.value?.value"
@@ -45,7 +45,7 @@
                                 #mobileNo
                                 [id]="'mobile-no'"
                                 (keydown.enter)="$event.preventDefault()"
-                                [label]="commonLocaleData?.app_mobile_number"
+                                [label]="'Mobile Number *'"
                                 [placeholder]="'98XXXXXXXX'"
                                 [floatLabel]="intl?.getNumber() ? 'always' : 'auto'"
                                 (onChange)="firstStepForm.controls['mobile'].setValue(intl?.getNumber())"
@@ -67,38 +67,33 @@
                 <form [formGroup]="secondStepForm">
                     <ng-template matStepLabel>Company Address</ng-template>
                     <div class="row row-gap">
-                        <div class="col-lg-12">
+                        <div class="col-lg-12 fill-form">
                             <input-field
                                 [placeholder]="firstStepForm.get('name')?.value"
-                                [label]="'Company Name'"
+                                [label]="'Company Name *'"
                                 [type]="'text'"
                                 [readonly]="true"
                                 [floatLabel]="'always'"
-                                [required]="true"
                             >
                             </input-field>
                         </div>
                         <div class="col-lg-6 country-space">
                             <dropdown-field
-                                [appearance]="'fill'"
                                 [readonly]="true"
-                                [label]="'Country'"
+                                [label]="'Country *'"
                                 [defaultValue]="firstStepForm.get('country')?.value.label"
-                                [required]="true"
                             >
                             </dropdown-field>
                         </div>
                         <div class="col-lg-6 currency-space">
                             <dropdown-field
-                                [appearance]="'fill'"
                                 [readonly]="true"
-                                [label]="'Currency'"
+                                [label]="'Currency *'"
                                 [defaultValue]="firstStepForm.get('currency')?.value.value"
-                                [required]="true"
                             >
                             </dropdown-field>
                         </div>
-                        <div class="col-lg-12 mobile-number">
+                        <div class="col-lg-12 mobile-number fill-form">
                             <img
                                 class="country-flag"
                                 *ngIf="firstStepForm.get('country')?.value.value"
@@ -110,11 +105,9 @@
                             <input-field
                                 [name]="'mobile'"
                                 [type]="'tel'"
-                                [label]="'Mobile Number'"
+                                [label]="'Mobile Number *'"
                                 [placeholder]="firstStepForm.controls['mobile'].value"
                                 [floatLabel]="'always'"
-                                [readonly]="true"
-                                [required]="true"
                             >
                             </input-field>
                         </div>
@@ -137,14 +130,12 @@
                             </dropdown-field>
                         </div>
                         <div class="col-lg-12" *ngIf="secondStepForm.controls['businessType']?.value === 'Registered'">
-                            {{ isGstinValid }}
                             <input-field
                                 [name]="'gstin'"
-                                [placeholder]="'GSTIN'"
+                                [placeholder]="'GSTIN *'"
                                 [type]="'text'"
                                 formControlName="gstin"
                                 [showError]="isGstinValid && !secondStepForm.get('gstin')?.value"
-                                [required]="true"
                                 [label]="formFields['taxName'].label"
                                 [maxlength]="10"
                             >
@@ -152,12 +143,10 @@
                         </div>
                         <div class="col-lg-12" *ngIf="secondStepForm.controls['businessType']?.value === 'Registered'">
                             <dropdown-field
-                                [appearance]="'fill'"
                                 [name]="'state'"
-                                [placeholder]="'State'"
+                                [placeholder]="'State *'"
                                 [options]="states"
                                 [showError]="isFormSubmitted && !secondStepForm.get('state')?.value"
-                                [required]="true"
                                 [readonly]="isGstinValid"
                                 [label]="isGstinValid ? 'State' : ''"
                                 [defaultValue]="selectedState"
