@@ -1,3 +1,10 @@
+:host{
+    position: fixed;
+    width: 760px;
+    padding: 0 15px;
+    right: 0;
+    top: 0;
+}
 .output-row > td {
     padding: 12px 10px 12px 0 !important;
 }
@@ -77,7 +84,7 @@ tr.fsstock td {
 #close {
     position: absolute;
     left: auto;
-    right: 10px;
+    right: 18px;
     z-index: 9999999;
     background-color: transparent;
     color: var(--color-primary-right-side-popup-header-text);

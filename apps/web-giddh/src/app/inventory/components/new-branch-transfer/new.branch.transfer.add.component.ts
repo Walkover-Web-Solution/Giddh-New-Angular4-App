@@ -153,6 +153,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     private isDefaultLoad: boolean = false;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Hold aside menu state for product service  */
+    public asideMenuStateForProductService: any;
 
     constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig, public dialog: MatDialog) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
@@ -1335,19 +1337,19 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public onProductNoResultsClicked(idx?: number): void {
         this.innerEntryIndex = idx;
 
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.dialog.open(this.asideMenuProductService,{
+        this.asideMenuStateForProductService =  this.dialog.open(this.asideMenuProductService,{
             position: {
                 right : '0',
             },
             width: '760px',
             height: '100vh !important'
         })
-        this.toggleBodyClass();
-
         if (!idx) {
             this.getStock();
         }
+    }
+    public closeAsideMenuProductServiceModal(): void {
+        this.asideMenuStateForProductService?.close();
     }
 
     public clearTransportForm(): void {

@@ -13,12 +13,8 @@
     right: 500px;
 }
 
-#close {
-    display: none;
-    min-width: 0 !important;
-}
 
-:host.in #close {
+:host #close {
     position: absolute;
     left: auto;
     right: 10px;
@@ -57,17 +53,10 @@
     justify-content: center;
 }
 
-// .form-header{
-//     justify-content: space-between;
-//     position: relative;
-//     z-index: 6;
-// }
-
 :host {
     .aside-pane {
         width: 100%;
         max-width: 760px;
-        // height: calc(100vh - 57.8px);
     }
 }
 

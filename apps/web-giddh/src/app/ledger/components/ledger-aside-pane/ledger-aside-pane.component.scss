@@ -20,12 +20,9 @@
     z-index: 99999;
 }
 
-#close {
-    display: none;
-    min-width: 0 !important;
-}
 
-:host.in #close {
+
+:host #close {
     position: absolute;
     left: auto;
     z-index: 9999999;
@@ -50,11 +47,6 @@
         max-width: 760px;
         background: var(--color-body-background);
     
-        // .form-header{
-        //     justify-content: space-between;
-        //     position: relative;
-        //     z-index: 1;
-        // }
     }
 }
 
@@ -82,7 +74,7 @@
     display: none;
 }
 
-:host.in #back {
+:host #back {
     display: block;
     position: absolute;
     left: auto;

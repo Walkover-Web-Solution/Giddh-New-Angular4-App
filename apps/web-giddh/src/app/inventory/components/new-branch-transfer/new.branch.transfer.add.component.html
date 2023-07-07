@@ -1580,13 +1580,9 @@
         </div>
     </div>
 </div>
-<!-- <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div> -->
 <ng-template #asideMenuProductService>
     <aside-menu-product-service
-        *ngIf="asideMenuState === 'in'"
-        [class]="asideMenuState"
-        [@slideInOut]="asideMenuState"
-        (closeAsideEvent)="onProductNoResultsClicked(null)"
+        (closeAsideEvent)="closeAsideMenuProductServiceModal()"
         [selectedVoucherType]="'sales'"
     >
     </aside-menu-product-service>
