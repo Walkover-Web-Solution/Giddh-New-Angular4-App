@@ -7,6 +7,12 @@
             color: var(--color-abbey);
         }
         .mobile-number {
+            position: relative;
+            .country-flag {
+                position: absolute;
+                top: 15px;
+                left: 25px;
+            }
             input {
                 height: 46px;
                 width: 100%;

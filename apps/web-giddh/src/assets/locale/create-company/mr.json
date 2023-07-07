@@ -50,5 +50,11 @@
 	"unlimited_users": "अमर्यादित वापरकर्ते",
 	"unlimited_contacts": "अमर्यादित ग्राहक / विक्रेते",
 	"desktop_mobile_app": "डेस्कटॉप / मोबाइल अ‍ॅप",
-    "invalid_contact_number": "अवैध संपर्क क्रमांक"
+    "invalid_contact_number": "अवैध संपर्क क्रमांक",
+    "registered": "नोंदणीकृत",
+    "unregistered": "नोंदणी नसलेली",
+    "food": "अन्न",
+    "service": "सेवा",
+    "manufacturing": "उत्पादन",
+    "retail": "किरकोळ"
 }

@@ -50,5 +50,11 @@
 	"unlimited_users": "असीमित उपयोगकर्ता",
 	"unlimited_contacts": "असीमित ग्राहक/विक्रेता",
 	"desktop_mobile_app": "डेस्कटॉप/मोबाइल ऐप",
-    "invalid_contact_number": "अमान्य संपर्क नंबर"
+    "invalid_contact_number": "अमान्य संपर्क नंबर",
+    "registered": "दर्ज कराई",
+    "unregistered": "अपंजीकृत",
+    "food": "खाना",
+    "service": "सेवा",
+    "manufacturing": "उत्पादन",
+    "retail": "खुदरा"
 }

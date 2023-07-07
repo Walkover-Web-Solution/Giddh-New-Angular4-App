@@ -3,7 +3,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { Observable, ReplaySubject } from "rxjs";
+import { Observable, of, ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
@@ -30,16 +30,6 @@ import { IOption } from "../theme/ng-select/option.interface";
 })
 
 export class AddCompanyComponent implements OnInit, AfterViewInit {
-    /**
-     * Returns true, if onboarding of Warehouse is going on
-     *
-     * @readonly
-     * @type {boolean}
-     * @memberof AddCompanyComponent
-     */
-    public get isWarehouse(): boolean {
-        return this.itemOnBoardingDetails && this.itemOnBoardingDetails.onBoardingType === 'Warehouse';
-    }
     @ViewChild('stepper') stepperIcon: any;
     /** Mobile Number state instance */
     @ViewChild('mobileNo', { static: false }) mobileNo: ElementRef;
@@ -57,7 +47,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public firstStepForm: FormGroup;
     /** Form Group for company address form */
     public secondStepForm: FormGroup;
-    /* This will hold if it's production env or not */
+    /* This will hold if it'response production env or not */
     public isProdMode: boolean = false;
     /** True if api call in progress */
     public isLoading: boolean = false;
@@ -65,6 +55,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
     /** This will hold company create object  */
     public company: CompanyCreateRequest = {
         name: '',
@@ -80,6 +72,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             licenceKey: ''
         },
         addresses: [],
+        pincode:'',
         businessNature: '',
         businessType: '',
         address: '',
@@ -117,6 +110,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public currentTaxList: any[] = [];
     /** Hold business type list */
     public businessTypeList: IOption[] = [{ label: "Registered", value: "Registered" }, { label: "Unregistered", value: "Unregistered" }];
+    /** Hold business type for other country list */
+    public businessTypeOtherCountryOptions: IOption[] = [{ label: "Unregistered", value: "Unregistered" }];
     /** Hold business nature list */
     public businessNatureList: IOption[] = [{ label: "Food", value: "Food" }, { label: "Service", value: "Service" }, { label: "Manufacturing", value: "Manufacturing" }, { label: "Retail", value: "Retail" }];
     /** True, if on boarding is going on */
@@ -191,6 +186,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public isCompanyCreated$: Observable<boolean>;
     /** True if new user create company */
     public isNewUser: boolean = false;
+    /** True if other country selected */
+    public isOtherCountry: boolean = false;
+
     constructor(
         private formBuilder: FormBuilder,
         private toaster: ToasterService,
@@ -213,32 +211,38 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      */
     public ngOnInit(): void {
         this.initCompanyForm();
-        this.companies$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
-        this.isCompanyCreationInProcess$ = this.store.pipe(select(s => s.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
-        this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
-        this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                if (res.fields) {
-                    Object.keys(res.fields).forEach(key => {
-                        if (res.fields[key]) {
-                            this.formFields[res.fields[key].name] = [];
-                            this.formFields[res.fields[key].name] = res.fields[key];
+        this.isProdMode = PRODUCTION_ENV;
+        this.getCountry();
+        this.loggedInUser = this.generalService.user;
+        this.subscriptionRequestObj.userUniqueName = (this.loggedInUser) ? this.loggedInUser.uniqueName : "";
+        this.companies$ = this.store.pipe(select(response => response.session.companies), takeUntil(this.destroyed$));
+        this.isCompanyCreationInProcess$ = this.store.pipe(select(response => response.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
+        this.isCompanyCreated$ = this.store.pipe(select(response => response.session.isCompanyCreated), takeUntil(this.destroyed$));
+        this.store.pipe(select(response => response.common.onboardingform), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (response.fields) {
+                    Object.keys(response.fields).forEach(key => {
+                        if (response.fields[key]) {
+                            this.formFields[response.fields[key].name] = [];
+                            this.formFields[response.fields[key].name] = response.fields[key];
                         }
                     });
+                    this.changeDetection.detectChanges();
                 }
-                if (res.applicableTaxes) {
+                if (response.applicableTaxes) {
                     this.taxesList = [];
-                    Object.keys(res.applicableTaxes).forEach(key => {
-                        if (res.applicableTaxes[key]) {
+                    Object.keys(response.applicableTaxes).forEach(key => {
+                        if (response.applicableTaxes[key]) {
                             this.taxesList.push({
-                                label: res.applicableTaxes[key]?.name,
-                                value: res.applicableTaxes[key]?.uniqueName,
+                                label: response.applicableTaxes[key]?.name,
+                                value: response.applicableTaxes[key]?.uniqueName,
                                 isSelected: false
                             });
-                            this.currentTaxList[res.applicableTaxes[key]?.uniqueName] = [];
-                            this.currentTaxList[res.applicableTaxes[key]?.uniqueName] = res.applicableTaxes[key];
+                            this.currentTaxList[response.applicableTaxes[key]?.uniqueName] = [];
+                            this.currentTaxList[response.applicableTaxes[key]?.uniqueName] = response.applicableTaxes[key];
                         }
                     });
+                    this.changeDetection.detectChanges();
                 }
             }
         });
@@ -255,7 +259,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                 } else {
                     this.isGstinValid = true;
                 }
-
                 if (!this.isGstinValid) {
                     let text = 'Invalid [TAX_NAME]';
                     text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
@@ -284,10 +287,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                 });
             }
         });
-        this.isProdMode = PRODUCTION_ENV;
-        this.getCountry();
-        this.loggedInUser = this.generalService.user;
-        this.subscriptionRequestObj.userUniqueName = (this.loggedInUser) ? this.loggedInUser.uniqueName : "";
     }
 
     /**
@@ -310,7 +309,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             state: ['', (this.secondStepForm?.controls['businessType']?.value === 'Registered') ? Validators.required : undefined],
             taxes: null,
             pincode: [''],
-            address: ['', Validators.required]
+            address: ['']
         });
         this.companyForm = this.formBuilder.group({
             firstStepForm: this.firstStepForm,
@@ -335,24 +334,37 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         }, 500);
     }
 
+ /**
+ * This will return enter tax text
+ *
+ * @returns {string}
+ * @memberof AddCompanyComponent
+ */
+    public getEnterTaxText(): string {
+        let text = this.localeData?.enter_tax;
+        text = text?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+        return text;
+    }
+
     /**
      * This will use for get states list
      *
      * @memberof AddCompanyComponent
      */
     public getStates() {
-        this.store.pipe(select(state => state.general.states), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                Object.keys(res.stateList).forEach(key => {
+        this.store.pipe(select(state => state.general.states), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.states = [];
+                Object.keys(response.stateList).forEach(key => {
                     if (key) {
-                        if (res.stateList[key].stateGstCode !== null) {
-                            this.stateGstCode[res.stateList[key].stateGstCode] = [];
-                            this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
+                        if (response.stateList[key].stateGstCode !== null) {
+                            this.stateGstCode[response.stateList[key].stateGstCode] = [];
+                            this.stateGstCode[response.stateList[key].stateGstCode] = response.stateList[key].code;
                         }
                         this.states.push({
-                            label: res.stateList[key].code + ' - ' + res.stateList[key].name,
-                            value: res.stateList[key].code,
-                            stateGstCode: res.stateList[key].stateGstCode
+                            label: response.stateList[key].code + ' - ' + response.stateList[key].name,
+                            value: response.stateList[key].code,
+                            stateGstCode: response.stateList[key].stateGstCode
                         });
                     }
                 });
@@ -360,42 +372,19 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         });
     }
 
-
-
-    /**
-     * Returns the default warehouse data
-     *
-     * @private
-     * @returns {*} Default warehouse data
-     * @memberof AddCompanyComponent
-     */
-    private getDefaultWarehouseDetails(): any {
-        let defaultWarehouse: any;
-        this.store.pipe(select(state => state.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
-            if (warehouses) {
-                for (let index = 0; index < warehouses.results?.length; index++) {
-                    if (warehouses.results[index].isDefault) {
-                        defaultWarehouse = warehouses.results[index];
-                        break;
-                    }
-                }
-            }
-        });
-        return defaultWarehouse;
-    }
     /**
      * Get countries list
      *
      * @memberof AddCompanyComponent
      */
     public getCountry(): void {
-        this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                Object.keys(res).forEach(key => {
+        this.store.pipe(select(response => response.common.countries), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                Object.keys(response).forEach(key => {
                     this.countries.push({
-                        value: res[key].alpha2CountryCode,
-                        label: res[key].alpha2CountryCode + ' - ' + res[key].countryName,
-                        additional: res[key]
+                        value: response[key].alpha2CountryCode,
+                        label: response[key].alpha2CountryCode + ' - ' + response[key].countryName,
+                        additional: response[key]
                     });
                 });
                 this.getStates();
@@ -414,13 +403,26 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      * @memberof AddCompanyComponent
      */
     public getCurrency(): void {
-        this.store.pipe(select(state => state.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                Object.keys(res).forEach(key => {
-                    this.currencies.push({ label: res[key].code, value: res[key].code });
+        this.store.pipe(select(state => state.session.currencies), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                Object.keys(response).forEach(key => {
+                    this.currencies.push({ label: response[key].code, value: response[key].code });
                 });
             }
         });
+    }
+
+    /**
+     *This will use for select currency
+     *
+     * @param {*} event
+     * @memberof AddCompanyComponent
+     */
+    public selectCurrency(event: any): void {
+        if (event) {
+            this.firstStepForm.controls['currency'].setValue({ label: event?.label, value: event?.value });
+            this.changeDetection.detectChanges();
+        }
     }
 
     /**
@@ -431,9 +433,17 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      */
     public selectCountry(event: any): void {
         if (event && event.value) {
+            if (event.value !== 'IN') {
+                this.isOtherCountry = true;
+                this.secondStepForm.controls['businessType'].setValue('Unregistered');
+            } else {
+                this.isOtherCountry = false;
+            }
             this.firstStepForm.controls['country'].setValue(event);
             this.firstStepForm.controls['currency'].setValue({ label: event?.additional?.currency?.code, value: event?.additional?.currency?.code });
             this.intl?.setCountry(event.value?.toLowerCase());
+            this.changeDetection.detectChanges();
+
             let onboardingFormRequest = new OnboardingFormRequest();
             if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
                 onboardingFormRequest.formName = this.itemOnBoardingDetails.onBoardingType?.toLowerCase();
@@ -447,6 +457,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             statesRequest.country = event.value;
             this.store.dispatch(this.generalActions.getAllState(statesRequest));
         }
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -471,9 +482,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                     let countryCode = 'in';
                     const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
                     fetchIPApi.subscribe(
-                        (res) => {
-                            if (res?.ipAddress) {
-                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.ipAddress}`);
+                        (response) => {
+                            if (response?.ipAddress) {
+                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${response.ipAddress}`);
                                 fetchCountryByIpApi.subscribe(
                                     (fetchCountryByIpApiRes) => {
                                         if (fetchCountryByIpApiRes?.countryCode) {
@@ -483,7 +494,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                                         }
                                     },
                                     (fetchCountryByIpApiErr) => {
-                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL + `${res?.ipAddress}`);
+                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL + `${response?.ipAddress}`);
 
                                         fetchCountryByIpInfoApi.subscribe(
                                             (fetchCountryByIpInfoApiRes) => {
@@ -581,12 +592,12 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      * @memberof AddCompanyComponent
      */
     private getRandomString(companyName: string, city: string) {
-        let d, dateString, randomGenerate, strings;
+        let date, dateString, randomGenerate, strings;
         if (companyName) {
             companyName = this.removeSpecialCharacters(companyName);
             city = this.removeSpecialCharacters(city);
-            d = new Date();
-            dateString = d.getTime()?.toString();
+            date = new Date();
+            dateString = date.getTime()?.toString();
             randomGenerate = this.getSixCharRandom();
             strings = [companyName, city, dateString, randomGenerate];
             return strings.join('');
@@ -667,12 +678,12 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      * @memberof AddCompanyComponent
      */
     public onSubmit(): void {
-        let gstDetails = this.prepareGstDetail(this.companyForm);
         this.isFormSubmitted = false;
         if (this.companyForm.invalid) {
             this.isFormSubmitted = true;
             return;
         }
+        let gstDetails = this.prepareGstDetail(this.companyForm);
         const phoneNumber = this.intl.getNumber();
         const countryCode = this.intl.getSelectedCountryData().dialCode;
         let number = phoneNumber.replace(countryCode, '').trim();
@@ -684,6 +695,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         this.company.contactNo = number;
         this.company.phoneCode = countryCode;
         this.company.addresses.push(gstDetails);
+        this.company.pincode = gstDetails[0]?.pincode;
         this.company.address = gstDetails[0]?.address;
         this.company.taxes = this.companyForm.value.secondStepForm.taxes;
         this.generalService.createNewCompany = this.company;
@@ -746,7 +758,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      * @return {*}
      * @memberof AddCompanyComponent
      */
-    public prepareGstDetail(form) {
+    public prepareGstDetail(form:any) {
         this.addressesObj.taxNumber = form.value.secondStepForm.gstin;
         this.addressesObj.stateCode = this.selectedStateCode;
         this.addressesObj.address = form.value.secondStepForm.address;
@@ -754,5 +766,52 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         this.addressesObj.isDefault = false;
         this.addressesObj.stateName = this.selectedState;
         return this.addressesObj;
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof AddCompanyComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
+            this.businessTypeList = [
+                {
+                    label: this.localeData?.registered,
+                    value: "Registered",
+                },
+                {
+                    label: this.localeData?.unregistered,
+                    value: "Unregistered",
+                }
+            ];
+            this.businessTypeOtherCountryOptions = [
+                {
+                    label: this.localeData?.unregistered,
+                    value: "Unregistered",
+                }
+            ];
+            this.businessNatureList = [
+                {
+                    label: this.localeData?.food,
+                    value: "Food",
+                },
+                {
+                    label: this.localeData?.service,
+                    value: "Service"
+                },
+                {
+                    label: this.localeData?.manufacturing,
+                    value: "Manufacturing"
+                },
+                {
+                    label: this.localeData?.retails,
+                    value: "Retail"
+                }
+            ];
+            this.changeDetection.detectChanges();
+        }
     }
 }
