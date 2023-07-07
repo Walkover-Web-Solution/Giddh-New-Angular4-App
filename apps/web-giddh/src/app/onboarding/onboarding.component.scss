@@ -24,10 +24,6 @@
     margin-bottom: 10px;
 }
 
-.manage-invoice {
-    list-style: none;
-}
-
 .custom-body {
     padding: 0;
 }
@@ -45,48 +41,38 @@
     padding-top: 0;
 }
 
-.manage-invoice li a {
+.manage-invoice a {
     background: var(--color-common-primary-background-for-all-components);
     box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
     padding: 9px 15px;
     color: var(--color-blue);
     font-size: var(--font-size-15);
-    margin-top: 15px;
     display: block;
-    max-width: 356px;
+    width: 356px;
 }
 
-.manage-invoice li a i {
+.manage-invoice a i {
     margin-right: 20px;
     font-size: 23px;
     color: var(--color-abbey);
 }
 
-.manage-invoice li a:hover {
-    text-decoration: none;
-}
 
 .m-t-45 {
     margin-top: 45px;
 }
 
-.btn-sync {
-    color: var(--color-primary-onboarding-btn-sync);
-    margin-top: 12px;
-    background: var(--color-primary-onboarding-btn-sync-background);
-    box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
-    font-size: var(--font-size-15);
-    font-family: var(--font-regular);
-}
 
 p {
     color: var(--color-primary-onboarding-p);
 }
 
-.right-section span {
-    font-size: var(--font-size-15);
-    color: var(--color-gray);
-    display: block;
+.right-section {
+    span {
+        font-size: var(--font-size-15);
+        color: var(--color-gray);
+        display: block;
+    }
 }
 
 .btn-default {

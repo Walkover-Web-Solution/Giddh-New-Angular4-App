@@ -10,6 +10,11 @@ $custom-typography: mat-typography-config(
 );
 @include angular-material-typography($custom-typography);
 @import "../css/ngx-bs-datepicker.scss";
+<<<<<<< HEAD
+=======
+@import "../css/global/aside-modal.scss";
+@import "../css/global/onboarding.scss";
+>>>>>>> 3906d135c1... mat list added
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
