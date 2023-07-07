@@ -1333,7 +1333,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             }
         }
     }
-
+    
     public onProductNoResultsClicked(idx?: number): void {
         this.innerEntryIndex = idx;
 
@@ -1348,6 +1348,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.getStock();
         }
     }
+        
+    /**
+     * This Function is used to close Aside Menu Sidebar
+     *
+     * @memberof NewBranchTransferAddComponent
+     */
     public closeAsideMenuProductServiceModal(): void {
         this.asideMenuStateForProductService?.close();
     }

@@ -89,7 +89,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
     /** Instance of entry confirmation modal */
     @ViewChild('entryConfirmModal', { static: false }) public entryConfirmModal: any;
-     /** Instance of ledger aside pane modal */
+    /** Instance of ledger aside pane modal */
     @ViewChild("ledgerAsidePane") public ledgerAsidePane: TemplateRef<any>;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;

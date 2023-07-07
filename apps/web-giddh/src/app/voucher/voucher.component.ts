@@ -767,7 +767,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     private currentTxnRequestObject: Array<any> = [];
     /** Stores the index of current stock variants being loaded */
     private currentlyLoadedStockVariantIndex: number;
-    private 
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -2917,7 +2916,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             height: '100vh !important'
         })
     }
-
+    /**
+     * This Function is used to close Aside Menu Sidebar 
+     *
+     * @memberof VoucherComponent
+     */
     public closeAsideMenuProductServiceModal(): void {
         this.asideMenuStateForProductService?.close();
     }
