@@ -420,6 +420,13 @@ textarea:focus {
     inset: 0;
     width: 100%;
 }
+.delete-image {
+    width: 3%;
+    position: absolute;
+    right: 25%;
+    top: 55px;
+    cursor: pointer;
+}
 
 .custom-file-label {
     height: 60px;
@@ -995,11 +1002,6 @@ table.table.table-custom-invoice.basic,
         justify-content: flex-start;
         width: 50%;
     }
-}
-
-.balance-due-text {
-    min-width: 150px !important;
-    margin-left: 23px;
 }
 
 #deposit-dropdown > strong {

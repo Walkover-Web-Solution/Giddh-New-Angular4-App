@@ -1,6 +1,9 @@
 {
     "fixed_assets": "Fixed Assets",
     "enter_product": "Enter Product",
+    "enter_stock": "Enter Stock",
+    "enter_service": "Enter Service",
+    "enter_fixed": "Enter Fixed Assets",
     "select_unit": "Select Unit",
     "under_group": "Under Group",
     "move": "Move",
@@ -89,5 +92,6 @@
     "duplicate_option_value": "You've already used the option value [VALUE].",
     "option_name_required": "Option name is required",
     "option_value_required": "Option value is required",
-    "save_stock_for_recipe": "Save stock and Create recipe"
+    "save_stock_for_recipe": "Save stock and Create recipe",
+    "confirm_delete_option": "Do you want to delete the option?"
 }

@@ -13,10 +13,10 @@
         "manufacturing":"Manufacturing",
         "warehouse_balance":"Warehouse Opening Balance",
         "custom_units":"Custom Units",
+        "master":"Master",
         "recipe":"Recipe",
         "create_manufacturing":"Create Manufacturing",
         "report":"Report",
-        "master":"Master",
         "create_branch_transfer": "Create Branch Transfer"
     },
     "reports":{
@@ -87,7 +87,11 @@
         "equals":"Equals",
         "greater_than":"Greater than",
         "less_than":"Less than",
-        "excluded":"Excluded"
+        "excluded":"Excluded",
+        "category":"Category",
+        "type":"Type",
+        "select_value":"Select Value",
+        "enter_amount":"Enter Amount"
     },
     "warehouse_opening_balance":{
         "unique_name":"Unique Name",
