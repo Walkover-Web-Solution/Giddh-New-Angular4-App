@@ -8,16 +8,13 @@
     max-width: 760px;
     z-index: 99999;
 }
-
+ 
 :host.shifted {
     right: 500px;
 }
 
-#close {
-    display: none;
-}
 
-:host.in #close {
+:host #close {
     position: absolute;
     left: auto;
     right: 10px;
@@ -56,10 +53,11 @@
     justify-content: center;
 }
 
-
-:host .aside-pane {
-    width: 100%;
-    max-width: 760px;
+:host {
+    .aside-pane {
+        width: 100%;
+        max-width: 760px;
+    }
 }
 
 .buttons-wrapper {

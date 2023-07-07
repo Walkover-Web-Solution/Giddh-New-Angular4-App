@@ -41,7 +41,13 @@
                                         <div class="col-sm-6 col-lg-6">
                                             <input-field
                                                 [name]="'productName'"
-                                                [placeholder]="localeData?.enter_product"
+                                                [placeholder]="
+                                                    stockForm.type === 'PRODUCT'
+                                                        ? localeData?.enter_stock
+                                                        : stockForm.type === 'SERVICE'
+                                                        ? localeData?.enter_service
+                                                        : localeData?.enter_fixed
+                                                "
                                                 [type]="'text'"
                                                 [(ngModel)]="stockForm.name"
                                                 (ngModelChange)="checkSpacingValidation(stockForm.name)"
@@ -1352,7 +1358,7 @@
                                                                             <div class="sales-purchase-wrapper d-flex">
                                                                                 <text-field
                                                                                     [cssClass]="
-                                                                                        'text-right unit-amount'
+                                                                                        'text-right unit-amount form-control'
                                                                                     "
                                                                                     [placeholder]="'0.00'"
                                                                                     [name]="
