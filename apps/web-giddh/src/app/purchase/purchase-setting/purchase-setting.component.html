@@ -6,9 +6,9 @@
 >
     <section id="setting-tab-wrapper" class="setting-tab-data">
         <div id="invoice-setting" class="invoice-control">
-            <tabset class="tab-integration purchase-setting-tab">
-                <tab>
-                    <ng-template tabHeading>
+            <mat-tab-group class="tab-integration purchase-setting-tab">
+                <mat-tab>
+                    <ng-template mat-tab-label>
                         <span class="icon-mail"></span> {{ localeData?.integration }}
                     </ng-template>
                     <div class="single-tab-block">
@@ -18,24 +18,22 @@
                             </h4>
                             <div class="clearfix">
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
-                                        <label>{{ localeData?.from_email }}</label>
-                                    </div>
                                     <div class="col-sm-12 col-md-12 col-lg-9">
                                         <div class="row">
-                                            <div class="col-md-5 col-sm-12 col-xs-12">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
                                                 <div class="form-group mb-0">
                                                     <div class="relative" [ngClass]="{ 'input-group': true }">
-                                                        <input
-                                                            type="email"
-                                                            class="form-control"
+                                                        <input-field
+                                                            [type]="'email'"
+                                                            [label]="localeData?.from_email"
                                                             [placeholder]="localeData?.enter_email"
-                                                            name="email"
+                                                            [name]="'email'"
                                                             [(ngModel)]="invoiceSettings.purchaseBillSettings.email"
                                                             [disabled]="
                                                                 invoiceSettings.purchaseBillSettings.emailVerified
                                                             "
-                                                        />
+                                                            [readonly]="'true'"
+                                                        ></input-field>
                                                         <span
                                                             class="input-group-addon"
                                                             *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"
@@ -50,56 +48,62 @@
                                                             ><i class="icon-tick" [tooltip]="localeData?.verified"></i
                                                         ></span>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 col-sm-12 row pl-0">
-                                                <div
-                                                    class="btn-wrapper d-flex align-items-center justify-content-center"
-                                                >
-                                                    <button
-                                                        class="btn btn-success mr-r15"
-                                                        (click)="
-                                                            verifyEmail(invoiceSettings.purchaseBillSettings.email)
+                                                    <div
+                                                        class="
+                                                            btn-wrapper
+                                                            d-flex
+                                                            align-items-center
+                                                            justify-content-center
                                                         "
-                                                        [disabled]="
-                                                            !isEmailChanged &&
-                                                            (!invoiceSettings.purchaseBillSettings.email ||
-                                                                invoiceSettings.purchaseBillSettings.email?.length <
-                                                                    4 ||
-                                                                invoiceSettings.purchaseBillSettings.emailVerified)
-                                                        "
-                                                        *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"
                                                     >
-                                                        {{ localeData?.verify }}
-                                                    </button>
-                                                    <span
-                                                        *ngIf="invoiceSettings.purchaseBillSettings.emailVerified"
-                                                        class="verified-text"
-                                                        >{{ localeData?.verified }}</span
-                                                    >
-                                                    <span
-                                                        class="delete-verified-icon"
-                                                        [ngClass]="{
-                                                            'delete-icon-opacity':
-                                                                !invoiceSettings.purchaseBillSettings.email ||
-                                                                invoiceSettings.purchaseBillSettings.email?.length < 4,
-                                                            'cursor-pointer': !(
-                                                                !invoiceSettings.purchaseBillSettings.email ||
-                                                                invoiceSettings.purchaseBillSettings.email?.length < 4
-                                                            )
-                                                        }"
-                                                        (click)="
-                                                            !(
-                                                                !invoiceSettings.purchaseBillSettings.email ||
-                                                                invoiceSettings.purchaseBillSettings.email?.length < 4
-                                                            )
-                                                                ? deleteEmail(
-                                                                      invoiceSettings.purchaseBillSettings.email
-                                                                  )
-                                                                : ''
-                                                        "
-                                                        ><i class="icon-trash"></i
-                                                    ></span>
+                                                        <button
+                                                            class="btn btn-success mr-r15"
+                                                            (click)="
+                                                                verifyEmail(invoiceSettings.purchaseBillSettings.email)
+                                                            "
+                                                            [disabled]="
+                                                                !isEmailChanged &&
+                                                                (!invoiceSettings.purchaseBillSettings.email ||
+                                                                    invoiceSettings.purchaseBillSettings.email?.length <
+                                                                        4 ||
+                                                                    invoiceSettings.purchaseBillSettings.emailVerified)
+                                                            "
+                                                            *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"
+                                                        >
+                                                            {{ localeData?.verify }}
+                                                        </button>
+                                                        <span
+                                                            *ngIf="invoiceSettings.purchaseBillSettings.emailVerified"
+                                                            class="verified-text"
+                                                            >{{ localeData?.verified }}</span
+                                                        >
+                                                        <span
+                                                            class="delete-verified-icon"
+                                                            [ngClass]="{
+                                                                'delete-icon-opacity':
+                                                                    !invoiceSettings.purchaseBillSettings.email ||
+                                                                    invoiceSettings.purchaseBillSettings.email?.length <
+                                                                        4,
+                                                                'cursor-pointer': !(
+                                                                    !invoiceSettings.purchaseBillSettings.email ||
+                                                                    invoiceSettings.purchaseBillSettings.email?.length <
+                                                                        4
+                                                                )
+                                                            }"
+                                                            (click)="
+                                                                !(
+                                                                    !invoiceSettings.purchaseBillSettings.email ||
+                                                                    invoiceSettings.purchaseBillSettings.email?.length <
+                                                                        4
+                                                                )
+                                                                    ? deleteEmail(
+                                                                          invoiceSettings.purchaseBillSettings.email
+                                                                      )
+                                                                    : ''
+                                                            "
+                                                            ><i class="icon-trash"></i
+                                                        ></span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -109,18 +113,15 @@
 
                             <div class="clearfix pd-t1">
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-3">
-                                        <mat-slide-toggle
-                                            [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
-                                            class="show-on-mobile"
-                                            name="sendThroughGmail"
-                                            color="primary"
-                                            [disabled]="!isGmailIntegrated"
-                                        >
-                                        </mat-slide-toggle>
-                                        <label>{{ localeData?.send_email_gmail }}</label>
-                                    </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-9 form-group d-flex align-items-center">
+                                    <div
+                                        class="
+                                            col-sm-12 col-md-12 col-lg-9
+                                            form-group
+                                            d-flex
+                                            align-items-center
+                                            slide-gap
+                                        "
+                                    >
                                         <mat-slide-toggle
                                             [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
                                             class="hide-on-mobile"
@@ -129,6 +130,7 @@
                                             [disabled]="!isGmailIntegrated"
                                         >
                                         </mat-slide-toggle>
+                                        <label>{{ localeData?.send_email_gmail }}</label>
                                         <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
                                             <a [href]="gmailAuthCodeUrl$ | async">{{ localeData?.integrate_gmail }}</a>
                                         </span>
@@ -138,9 +140,9 @@
                             </div>
                         </div>
                     </div>
-                </tab>
-                <tab>
-                    <ng-template tabHeading>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template mat-tab-label>
                         <span class="icon-sales-order"></span> {{ localeData?.pur_order }}
                     </ng-template>
                     <div class="sales-order-tab single-tab-block">
@@ -148,25 +150,21 @@
                             <h4 class="clearfix bd-rb">{{ localeData?.purchase_order }}</h4>
                             <div class="clearfix">
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
-                                        <label>{{ localeData?.default_expiry_days }}</label>
-                                    </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-9">
+                                    <div class="col-sm-12 col-md-12 col-lg-12">
                                         <div class="default-expiry row">
                                             <div class="col-md-5">
                                                 <div class="form-group">
                                                     <div class="expiry-days" [ngClass]="{ 'input-group': true }">
-                                                        <input
-                                                            type="tel"
-                                                            class="form-control"
+                                                        <input-field
+                                                            [type]="'tel'"
                                                             maxlength="3"
-                                                            placeholder="00"
+                                                            [placeholder]="localeData?.default_expiry_days"
                                                             decimalDigitsDirective
-                                                            name="poDuePeriod"
+                                                            [name]="'poDuePeriod'"
                                                             [(ngModel)]="
                                                                 invoiceSettings.purchaseBillSettings.poDuePeriod
                                                             "
-                                                        />
+                                                        ></input-field>
                                                         <span class="mr-l05"> {{ commonLocaleData?.app_days }} </span>
                                                     </div>
                                                 </div>
@@ -176,19 +174,15 @@
                                 </div>
                                 <div class="clearfix pd-t1">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="
-                                                    invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry
-                                                "
-                                                class="show-on-mobile"
-                                                name="changePOStatusOnExpiry"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label>{{ localeData?.auto_change_status }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
+                                        <div
+                                            class="
+                                                col-sm-12 col-md-12 col-lg-12
+                                                form-group
+                                                d-flex
+                                                align-items-center
+                                                slide-gap
+                                            "
+                                        >
                                             <mat-slide-toggle
                                                 [(ngModel)]="
                                                     invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry
@@ -198,6 +192,7 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
+                                            <label>{{ localeData?.auto_change_status }}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -226,7 +221,7 @@
                                 </div> -->
                                 <div class="clearfix pd-t1">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
+                                        <!-- <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
                                                 class="show-on-mobile"
@@ -235,9 +230,9 @@
                                             >
                                             </mat-slide-toggle>
                                             <label>{{ localeData?.custom_po_number }}</label>
-                                        </div>
+                                        </div> -->
                                         <div class="col-sm-12 col-md-12 col-lg-9 custom-purchase-order-input-fields">
-                                            <div class="form-group clearfix">
+                                            <div class="form-group clearfix d-flex align-items-center slide-gap">
                                                 <mat-slide-toggle
                                                     [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
                                                     class="hide-on-mobile"
@@ -245,6 +240,7 @@
                                                     color="primary"
                                                 >
                                                 </mat-slide-toggle>
+                                                <label>{{ localeData?.custom_po_number }}</label>
                                                 <div
                                                     class="d-inline-flex custom-estimation"
                                                     *ngIf="invoiceSettings.purchaseBillSettings.useCustomPONumber"
@@ -280,9 +276,9 @@
                             <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                         </div>
                     </div>
-                </tab>
-                <tab>
-                    <ng-template tabHeading>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template mat-tab-label>
                         <span class="icon-invoice-icon"></span>{{ localeData?.pur_bill }}
                     </ng-template>
                     <div class="single-tab-block">
@@ -291,23 +287,19 @@
                             <div class="clearfix">
                                 <div class="clearfix">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <label>{{ localeData?.bill_lock_date }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9">
+                                        <div class="col-sm-12 col-md-12 col-lg-12">
                                             <div class="form-group mb-0 bill-lock-date">
-                                                <input
+                                                <giddh-datepicker
                                                     type="text"
-                                                    class="form-control invoice-lock-date"
+                                                    (keydown.enter)="$event.preventDefault()"
+                                                    [label]="localeData?.bill_lock_date"
+                                                    [placeholder]="giddhDateFormat"
                                                     name="lockDate"
-                                                    bsDatepicker
-                                                    #dp="bsDatepicker"
                                                     [(ngModel)]="invoiceSettings.purchaseBillSettings.lockDate"
-                                                    [bsConfig]="{
-                                                        adaptivePosition: true,
-                                                        dateInputFormat: giddhDateFormat
-                                                    }"
-                                                />
+                                                    [showToggleIcon]="false"
+                                                    [appearance]="'outline'"
+                                                >
+                                                </giddh-datepicker>
                                             </div>
                                         </div>
                                     </div>
@@ -315,88 +307,67 @@
 
                                 <div class="clearfix pd-t1">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
+                                        <div
+                                            class="
+                                                col-sm-12 col-md-12 col-lg-9
+                                                form-group
+                                                d-flex
+                                                align-items-center
+                                                slide-gap
+                                            "
+                                        >
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration"
-                                                class="show-on-mobile"
+                                                class="hide-on-mobile"
                                                 name="enableNarration"
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
                                             <label>{{ localeData?.show_narration_ledger }}</label>
                                         </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration"
-                                                class="hide-on-mobile"
-                                                name="enableNarration"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
+                                        <div
+                                            class="
+                                                col-sm-12 col-md-12 col-lg-9
+                                                form-group
+                                                d-flex
+                                                align-items-center
+                                                slide-gap
+                                            "
+                                        >
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.purchaseBillSettings.enableVoucherDownload"
-                                                class="show-on-mobile"
+                                                class="hide-on-mobile"
                                                 name="enableVoucherDownload"
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
                                             <label>{{ localeData?.enable_voucher_download }}</label>
                                         </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.enableVoucherDownload"
-                                                class="hide-on-mobile"
-                                                name="enableVoucherDownload"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                        <div class="col-sm-12 col-md-9 form-group d-flex align-items-center slide-gap">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.invoiceSettings.purchaseRoundOff"
                                                 name="purchaseRoundOff"
-                                                class="show-on-mobile"
+                                                class="hide-on-mobile"
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
                                             <label>{{ localeData?.apply_purchase_round_off }}</label>
                                         </div>
-                                        <div class="col-sm-12 col-md-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.invoiceSettings.purchaseRoundOff"
-                                                name="purchaseRoundOff"
-                                                class="hide-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.invoiceSettings.debitNoteRoundOff"
-                                                name="debitNoteRoundOff"
-                                                class="show-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label>{{ localeData?.apply_debit_note_round_off }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-9 form-group">
+                                        <div class="col-sm-12 col-md-9 form-group d-flex align-items-center slide-gap">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.invoiceSettings.debitNoteRoundOff"
                                                 name="debitNoteRoundOff"
@@ -404,6 +375,7 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
+                                            <label>{{ localeData?.apply_debit_note_round_off }}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -411,16 +383,16 @@
                             </div>
                         </div>
                     </div>
-                </tab>
-            </tabset>
+                </mat-tab>
+            </mat-tab-group>
         </div>
     </section>
     <ng-template #buttonsSection>
         <div class="btn-group mr-t2" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-success mr-r1" (click)="updateForm()">
+            <button mat-stroked-button color="primary" type="button" class="mr-r1" (click)="updateForm()">
                 {{ commonLocaleData?.app_save }}
             </button>
-            <button type="button" class="btn btn-cancel" (click)="resetForm()">
+            <button mat-stroked-button type="button" (click)="resetForm()">
                 {{ commonLocaleData?.app_cancel }}
             </button>
         </div>
