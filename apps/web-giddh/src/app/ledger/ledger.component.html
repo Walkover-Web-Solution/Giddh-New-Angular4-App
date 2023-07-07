@@ -355,7 +355,7 @@
                             *ngIf="!isMobileScreen"
                         >
                             <div
-                                class="advance-search-by-date date-advance-search"
+                                class="advance-search-by-date date-advance-search ledger-date"
                                 (click)="showGiddhDatepicker($event)"
                             >
                                 <span class="input-wrapper">
@@ -642,7 +642,7 @@
                                                         >
                                                             <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center">
-                                                                    <span class="pd-l05 checkbox-span">
+                                                                    <span class="checkbox-span">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -658,7 +658,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="mr-l05">
+                                                                    <span>
                                                                         <giddh-datepicker
                                                                             name="bsdateledger"
                                                                             [(ngModel)]="item.entryDate"
@@ -941,7 +941,7 @@
                                                         >
                                                             <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center">
-                                                                    <span class="pd-l05 checkbox-span">
+                                                                    <span class="checkbox-span">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -958,7 +958,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="mr-l05">
+                                                                    <span>
                                                                         <giddh-datepicker
                                                                             name="bsDates"
                                                                             [(ngModel)]="item.entryDate"

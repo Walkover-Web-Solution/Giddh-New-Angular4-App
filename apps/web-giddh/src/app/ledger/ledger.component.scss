@@ -473,7 +473,7 @@ sh-select:focus {
     height: 1px;
     width: 32%;
     background-color: var(--color-secondary-input-bar-border);
-    right: -32%;
+    right: -42%;
     top: 17px;
 }
 
@@ -603,6 +603,7 @@ sh-select:focus {
     border-radius: 30px;
     box-sizing: content-box !important;
     color: var(--color-primary-head-datepicker-text) !important;
+    text-align: center;
     &:focus {
         border-color: var(--color-blue);
     }
