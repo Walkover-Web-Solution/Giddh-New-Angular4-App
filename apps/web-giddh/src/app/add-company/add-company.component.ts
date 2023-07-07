@@ -281,12 +281,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                         this.isGstinValid = true;
                         this.selectedState = state.label;
                         this.selectedStateCode = state.value;
+                        this.secondStepForm.controls['state'].setValue({ label: state?.label, value: state?.value });
                         this.changeDetection.detectChanges();
                         return true;
                     }
                 });
             }
         });
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -305,11 +307,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         this.secondStepForm = this.formBuilder.group({
             businessType: [''],
             businessNature: [''],
-            gstin: ['', (this.secondStepForm?.controls['businessType']?.value === 'Registered') ? Validators.required : undefined],
-            state: ['', (this.secondStepForm?.controls['businessType']?.value === 'Registered') ? Validators.required : undefined],
+            gstin: ['', (this.secondStepForm?.controls['businessType']?.value === this.localeData?.registered) ? Validators.required : undefined],
+            state: ['', (this.secondStepForm?.controls['businessType']?.value === this.localeData?.registered) ? Validators.required : undefined],
             taxes: null,
             pincode: [''],
-            address: ['']
+            address: ['',Validators.required]
         });
         this.companyForm = this.formBuilder.group({
             firstStepForm: this.firstStepForm,
@@ -563,7 +565,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      */
     public nextStepForm(): void {
         this.isFormSubmitted = false;
-        if (this.firstStepForm.invalid && this.isMobileNumberInvalid) {
+        if (this.firstStepForm.invalid || this.isMobileNumberInvalid) {
             this.isFormSubmitted = true;
             return;
         }
@@ -678,6 +680,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      * @memberof AddCompanyComponent
      */
     public onSubmit(): void {
+        console.log(this.companyForm);
+
         this.isFormSubmitted = false;
         if (this.companyForm.invalid) {
             this.isFormSubmitted = true;
@@ -688,6 +692,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         const countryCode = this.intl.getSelectedCountryData().dialCode;
         let number = phoneNumber.replace(countryCode, '').trim();
         number = number.substring(1);
+        this.secondStepForm.controls['gstin'].setValue(gstDetails[0]?.taxNumber);
         this.company.name = this.companyForm.value.firstStepForm.name;
         this.company.country = this.companyForm.value.firstStepForm.country.value;
         this.company.businessNature = this.companyForm.value.secondStepForm.businessNature;

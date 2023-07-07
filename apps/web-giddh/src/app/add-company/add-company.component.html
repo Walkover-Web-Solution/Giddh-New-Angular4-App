@@ -56,7 +56,7 @@
                                 [floatLabel]="intl?.getNumber() ? 'always' : 'auto'"
                                 (onChange)="firstStepForm.controls['mobile'].setValue(intl?.getNumber())"
                                 [showError]="
-                                    isFormSubmitted && !firstStepForm.get('mobile')?.value && isMobileNumberInvalid
+                                    (isFormSubmitted && !firstStepForm.get('mobile')?.value) || isMobileNumberInvalid
                                 "
                             >
                             </input-field>
@@ -147,19 +147,28 @@
                             >
                             </dropdown-field>
                         </div>
-                        <div class="col-lg-12" *ngIf="secondStepForm.controls['businessType']?.value === 'Registered'">
+                        {{ isFormSubmitted }}
+                        {{ isGstinValid }}
+                        {{ !secondStepForm.get("gstin")?.value }}
+                        <div
+                            class="col-lg-12"
+                            *ngIf="secondStepForm.controls['businessType']?.value === localeData?.registered"
+                        >
                             <input-field
                                 [name]="'gstin'"
                                 [placeholder]="getEnterTaxText()"
                                 [type]="'text'"
                                 formControlName="gstin"
-                                [showError]="isGstinValid && !secondStepForm.get('gstin')?.value"
+                                [showError]="(isFormSubmitted && !secondStepForm.get('gstin')?.value) || isGstinValid"
                                 [label]="formFields['taxName']?.label + '*'"
                                 [maxlength]="15"
                             >
                             </input-field>
                         </div>
-                        <div class="col-lg-12" *ngIf="secondStepForm.controls['businessType']?.value === 'Registered'">
+                        <div
+                            class="col-lg-12"
+                            *ngIf="secondStepForm.controls['businessType']?.value === localeData?.registered"
+                        >
                             <dropdown-field
                                 [name]="'state'"
                                 [placeholder]="commonLocaleData?.app_state + '*'"
@@ -171,7 +180,10 @@
                             >
                             </dropdown-field>
                         </div>
-                        <div class="col-lg-12" *ngIf="secondStepForm.controls['businessType']?.value === 'Registered'">
+                        <div
+                            class="col-lg-12"
+                            *ngIf="secondStepForm.controls['businessType']?.value === localeData?.registered"
+                        >
                             <mat-form-field class="w-100" appearance="outline">
                                 <mat-label>{{ localeData?.applicable_tax }}</mat-label>
                                 <mat-select
