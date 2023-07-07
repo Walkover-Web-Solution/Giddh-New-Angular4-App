@@ -2516,7 +2516,6 @@ modal-container.modal {
         font-size: var(--font-size-15);
         position: relative;
         width: 230px !important;
-        max-width: 208px;
         display: block;
         border: 1px solid var(--color-secondary-input-bar-border);
         height: 40px;
@@ -5031,7 +5030,7 @@ label {
 #dashboard .panel-heading i {
     position: relative;
     color: var(--color-abbey);
-    padding: 8px 10px;
+    padding: 8px 8px;
 }
 
 /*************************************************** input CSS  ****************************************************/
@@ -14418,3 +14417,21 @@ button {
     }
 }
 /*============Material Button Disabled Cursor======End===========*/
+
+.ledger-date {
+    .input-wrapper {
+        .mat-form-field {
+            .mat-form-field-wrapper {
+                .mat-form-field-flex {
+                    .mat-form-field-infix {
+                        border: 0 !important;
+                        width: 100%;
+                        input {
+                            border: 1px solid var(--color-secondary-input-bar-border) !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
