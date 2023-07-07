@@ -2895,15 +2895,13 @@
             </div>
             <!-- aside menu section -->
             <!-- <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div> -->
-            <ng-template #ledgerAsidePane >
+            <ng-template #ledgerAsidePane>
                 <ledger-aside-pane
-                    [class]="asideMenuState"
-                    [@slideInOut]="asideMenuState"
                     [keyboardShortcut]="'esc'"
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
-                    (onShortcutPress)="toggleAsidePane()"
-                    (closeAsideEvent)="toggleAsidePane()"
+                    (onShortcutPress)="ledgerAsidePaneModal?.close()"
+                    (closeAsideEvent)="ledgerAsidePaneModal?.close()"
                 >
                 </ledger-aside-pane>
             </ng-template>

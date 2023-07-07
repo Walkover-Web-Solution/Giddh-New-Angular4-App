@@ -1,5 +1,5 @@
 <div class="clearfix" appTranslate (commonLocaleData)="commonLocaleData = $event">
-    <div class="form-header" *ngIf="!hideFirstStep || voucherApiVersion === 2">
+    <div class="form-header">
         <h3>
             {{ commonLocaleData?.app_add }}
             <span *ngIf="voucherApiVersion === 2">{{

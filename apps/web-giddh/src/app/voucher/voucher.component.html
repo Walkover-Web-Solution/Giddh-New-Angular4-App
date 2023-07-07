@@ -3863,10 +3863,8 @@
     <!--&lt;!&ndash; open product service aside &ndash;&gt;-->
     <ng-template #asideMenuProductService>
         <aside-menu-product-service
-            [class]="asideMenuStateForProductService"
             [selectedVoucherType]="selectedVoucherType"
-            [@slideInOut]="asideMenuStateForProductService"
-            (closeAsideEvent)="onNoResultsClicked()"
+            (closeAsideEvent)="closeAsideMenuProductServiceModal()"
         >
         </aside-menu-product-service>
     </ng-template>

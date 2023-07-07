@@ -272,6 +272,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private accountPredictionSubject: Subject<boolean> = new Subject();
     /** Holds if we need bank ledger popup to be hidden */
     private isHideBankLedgerPopup: boolean = false;
+    /** Ledger aside pan modal */
+    private ledgerAsidePaneModal: any;
 
     constructor(
         private store: Store<AppState>,
@@ -1824,15 +1826,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (shSelectElement) {
             this.closeActiveEntry(shSelectElement);
         }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.dialog.open(this.ledgerAsidePane, {
+        this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, {
             position: {
                 right : '0',
             },
             width: '760px',
             height: '100vh !important'
         })
-        this.toggleBodyClass();
         this.cdRf.detectChanges();
     }
 
