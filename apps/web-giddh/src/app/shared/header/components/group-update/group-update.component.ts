@@ -57,7 +57,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public activeGroupSelected$: Observable<string[]>;
     public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
     public isUpdateGroupInProcess$: Observable<boolean>;
-    public isUpdateGroupSuccess$: Observable<boolean>;
     public optionsForDropDown: IOption[] = [{ label: 'Vishal', value: 'vishal' }];
     public taxPopOverTemplate: string = '';
     public showEditTaxSection: boolean = false;
