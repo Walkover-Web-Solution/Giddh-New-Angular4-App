@@ -18,6 +18,7 @@
 	"select_business_type": "व्यवसाय का प्रकार चुनें",
 	"select_business_nature": "व्यवसाय प्रकृति का चयन करें",
 	"enter_tax": "[TAX_NAME] दर्ज करें",
+    "invalid_tax": "अमान्य [TAX_NAME]",
 	"same_as_company": "कंपनी के समान",
 	"applicable_tax": "लागू कर",
 	"select_taxes": "करों का चयन करें",
