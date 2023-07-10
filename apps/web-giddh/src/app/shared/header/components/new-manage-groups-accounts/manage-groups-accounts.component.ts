@@ -250,9 +250,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * @memberof ManageGroupsAccountsComponent
      */
     private confirmPageLeave(callback: Function): void {
-        let dialogRef = this.pageLeaveUtilityService.openDialog();
-
-        dialogRef.afterClosed().subscribe((action) => {
+        this.pageLeaveUtilityService.confirmPageLeave(action => {
             if (action) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 callback();

@@ -240,10 +240,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
      */
     private confirmPageLeave(callback: Function): void {
         document.querySelector("aside-menu-account")?.classList?.add("page-leave-confirmation-showing");
-
-        let dialogRef = this.pageLeaveUtilityService.openDialog();
-
-        dialogRef.afterClosed().subscribe((action) => {
+        this.pageLeaveUtilityService.confirmPageLeave(action => {
             document.querySelector("aside-menu-account")?.classList?.remove("page-leave-confirmation-showing");
             if (action) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));

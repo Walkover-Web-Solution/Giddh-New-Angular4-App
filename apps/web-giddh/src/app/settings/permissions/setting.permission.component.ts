@@ -128,7 +128,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
 
     public closeEditUserModal(event?: any): void {
         if (event && this.hasUnsavedChanges) {
-            this.confirmPageLeave(() => {
+            this.pageLeaveUtilityService.confirmPageLeave(() => {
                 this.hasUnsavedChanges = false;
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                 this.editUserModal.hide();
@@ -166,22 +166,6 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         pastPeriodDuration = pastPeriodDuration?.replace("[DURATION]", user.duration);
         pastPeriodDuration = pastPeriodDuration?.replace("[PERIOD]", user.period);
         return pastPeriodDuration;
-    }
-
-    /**
-     * Shows page leave confirmation
-     *
-     * @private
-     * @param {Function} callback
-     * @memberof SettingPermissionComponent
-     */
-    private confirmPageLeave(callback: Function): void {
-        let dialogRef = this.pageLeaveUtilityService.openDialog();
-        dialogRef.afterClosed().subscribe((action) => {
-            if (action) {
-                callback();
-            }
-        });
     }
 
     /**

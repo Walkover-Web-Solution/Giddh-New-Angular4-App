@@ -64,4 +64,23 @@ export class PageLeaveUtilityService {
     public addBrowserConfirmationDialog(): void {
         document.querySelector("body").setAttribute("onbeforeunload", "return 'true';");
     }
+
+    /**
+     * Shows page leave confirmation
+     *
+     * @private
+     * @param {Function} callback
+     * @memberof PageLeaveUtilityService
+     */
+    public confirmPageLeave(callback: Function): void {
+        let dialogRef = this.openDialog();
+
+        dialogRef.afterClosed().subscribe((action) => {
+            if (action) {
+                callback(true);
+            } else {
+                callback(false);
+            }
+        });
+    }
 }
