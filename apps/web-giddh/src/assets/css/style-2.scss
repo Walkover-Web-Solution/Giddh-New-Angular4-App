@@ -10,6 +10,7 @@ $custom-typography: mat-typography-config(
 );
 @include angular-material-typography($custom-typography);
 @import "../css/ngx-bs-datepicker.scss";
+@import "../css/global/onboarding.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -6019,10 +6020,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     background: url("../images/hand_icon.svg") no-repeat 0 0;
     width: 23px;
     height: 24px;
-}
-
-.right-section {
-    background: url("../images/Schedule.png") right 100px no-repeat;
 }
 
 /**end new modal design**/
