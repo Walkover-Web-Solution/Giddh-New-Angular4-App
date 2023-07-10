@@ -633,13 +633,16 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         name: 'Template I',
         type: 'invoice'
     };
-    // public showinvoiceTemplatePreviewModal: boolean = false;
-    // public showtemplateModal: boolean = false;
     public templateType: any;
     /** True if user has invoice template permissions */
     public hasInvoiceTemplatePermissions: boolean = true;
      /** Reference of dialog */
      private dialogRef: any;
+     /** Reference of mat dialog  */
+     public closeConfirmationDialogRef;
+     public deleteConfirmationdialogRef;
+     public templateModalDialogRef;
+     public onPreviewDialogRef;
 
     constructor(
         private _toasty: ToasterService,
@@ -666,6 +669,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        document.querySelector('body').classList.add('edit-invoice');      
         this.store.dispatch(this.invoiceActions.getTemplateState());
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(route => {
             if (route && route.selectedType) {
@@ -747,17 +751,15 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             defaultTemplate = ss.defaultTemplate;
             defaultTemplate.type = this.templateType;
-        });
-
-        if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data && defaultTemplate.sections.footer.data.companyName) { // slogan default company on new template creation
+        }); 
+        if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data && defaultTemplate.sections.footer.data.companyName) {
+            // slogan default company on new template creation
             defaultTemplate.sections.footer.data.slogan.label = defaultTemplate.sections.footer.data.companyName.label;
             defaultTemplate.sections.footer.data.textUnderSlogan.label = defaultTemplate.sections.footer.data.companyName.label;
         }
         this._invoiceUiDataService.setLogoPath('');
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
-        // this.showtemplateModal = true;
-        // this.templateModal?.show();
-        this.dialogRef = this.dialog.open(this.templateModal,{
+            this.templateModalDialogRef = this.dialog.open(this.templateModal,{
             maxWidth: '100vw',
             maxHeight: '100vh',
             height: '100%',
@@ -772,8 +774,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this.confirmationFlag = 'closeConfirmation';
         this.selectedTemplateUniqueName = null;
         this.deleteTemplateConfirmationMessage = `Are you sure want to close this popup? Your unsaved changes will be discarded`;
-        // this.customTemplateConfirmationModal?.show();
-        this.dialogRef = this.dialog.open(this.customTemplateConfirmationModal,{
+        this.closeConfirmationDialogRef = this.dialog.open(this.customTemplateConfirmationModal,{
             position: {top: '56px'} 
         });
     }
@@ -826,9 +827,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res?.status === 'success') {
                     this._toasty.successToast('Template Saved Successfully.');
-                    // this.templateModal.hide();
-                    this.dialogRef.close(this.templateModal);
-                    // this.showtemplateModal = false;
+                    this.templateModalDialogRef.close();
                     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
                 } else {
                     this._toasty.errorToast(res?.message, res?.code);
@@ -878,10 +877,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                     this.confirmationFlag = null;
                     this.selectedTemplateUniqueName = null;
                     this.deleteTemplateConfirmationMessage = null;
-                    // this.customTemplateConfirmationModal?.hide();
-                    this.dialogRef.close(this.customTemplateConfirmationModal);
-                    this.dialogRef.close(this.templateModal);
-                    // this.templateModal.hide();
+                    this.closeConfirmationDialogRef.close();
+                    this.templateModalDialogRef.close();
                     this._invoiceUiDataService.resetCustomTemplate();
                     this._invoiceUiDataService.setLogoPath('');
                     this._invoiceUiDataService.unusedImageSignature = '';
@@ -923,7 +920,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
         this._invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'preview', customCreatedTemplates, defaultTemplate);
         // let data = cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
-        this.dialog.open(this.invoiceTemplatePreviewModal, {
+        this.onPreviewDialogRef =  this.dialog.open(this.invoiceTemplatePreviewModal, {
             minWidth: '1000px',
             minHeight: '100vh'
         })
@@ -933,7 +930,6 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
      * onUpdateTemplate
      */
     public onUpdateTemplate(template) {
-        // this.showtemplateModal = true;
         let customCreatedTemplates = null;
         let defaultTemplate = null;
 
@@ -946,11 +942,11 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this._invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'update', customCreatedTemplates, defaultTemplate);
         this.selectedTemplateUniqueName = template.copyFrom;
         // this.templateModal?.show();
-        this.dialogRef = this.dialog.open(this.templateModal,{
+        this.templateModalDialogRef = this.dialog.open(this.templateModal,{
             maxWidth: '100vw',
             maxHeight: '100vh',
-            height: '100%',
-            width: '100%',
+            width: '100vw',
+            height: '100vh'
         })
     }
 
@@ -973,7 +969,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             let selectedTemplate = cloneDeep(template);
             this.deleteTemplateConfirmationMessage = `Are you sure you want to delete "<b>${selectedTemplate.name}</b>" template?`;
             this.selectedTemplateUniqueName = selectedTemplate?.uniqueName;
-            this.dialogRef = this.dialog.open(this.customTemplateConfirmationModal,{
+            this.deleteConfirmationdialogRef = this.dialog.open(this.customTemplateConfirmationModal,{
                 minWidth: '650px',
                 position: {top: '56px'} 
             });
@@ -996,11 +992,16 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             this._invoiceUiDataService.resetCustomTemplate();
             this._invoiceUiDataService.setLogoPath('');
             // this.templateModal.hide();
-            this.dialogRef.close(this.templateModal);
+            this.templateModalDialogRef.close();
+            this.closeConfirmationDialogRef.close();
             // this.showtemplateModal = false;
             this._invoiceUiDataService.unusedImageSignature = '';
         }
-        this.dialogRef.close();
+        if(userResponse.close === 'deleteConfirmation'){
+            this.deleteConfirmationdialogRef.close();
+        }else{
+            this.closeConfirmationDialogRef.close();
+        }
     }
 
      /**
@@ -1012,6 +1013,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
     
     public ngOnDestroy() {
+        document.querySelector('body').classList.remove('edit-invoice');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

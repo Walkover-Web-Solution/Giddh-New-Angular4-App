@@ -14,11 +14,11 @@
         width: 92px;
         height: fit-content;
     }
-}
 
-.template-grid h3 {
-    text-transform: capitalize;
-    font-size: var(--font-size-16);
+    h3 {
+        text-transform: capitalize;
+        font-size: var(--font-size-16);
+    }
 }
 
 .template-action {
@@ -32,32 +32,15 @@
     padding: 15px 0 0;
 }
 
-.btn-warning {
-    color: var(--color-white);
-    background-color: var(--color-primary-edit-template-btn-warning);
-    border-color: var(--color-primary-edit-template-btn-warning);
-}
-
 .more-btn-dropdown {
-    border: 1px solid var(--color-secondary-input-bar-border) !important;
-    box-shadow: none !important;
-    border-radius: 5px !important;
-    font-size: var(--font-size-15);
-    padding: 5px 10px;
-    background: var(--color-dropdown-primary-background) !important;
-    width: 160px;
+    width: 130px;
     text-align: left;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    color: var(--color-dropdown-list-quaternary);
 }
 
-.dropdown-menu > li > a:hover {
-    color: var(--color-blue);
-    background: var(--color-dark-fog);
-}
 .badge {
     background: var(--color-dark-fog) !important;
     color: var(--color-nero) !important;
@@ -122,15 +105,6 @@ button.cdk-keyboard-focused,
     width: 37px;
     line-height: 18px;
     transition: 400ms;
-    &:hover:not([disabled]) {
-        background-color: var(--color-quaternary-button-background);
-        color: var(--color-white);
-    }
-    &:disabled {
-        background-color: var(--color-quaternary-button-background);
-        filter: opacity(0.5);
-        color: var(--color-white);
-    }
 }
 .mat-menu-item {
     line-height: 36px;

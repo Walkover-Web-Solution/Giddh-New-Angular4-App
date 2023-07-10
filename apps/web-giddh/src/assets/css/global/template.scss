@@ -1,0 +1,11 @@
+body{
+    &.edit-invoice{
+        .cdk-overlay-pane {
+            height: unset !important;
+            transform: unset !important;
+        }
+        .mat-menu-content{
+            min-width: 160px;
+        }
+    }
+}

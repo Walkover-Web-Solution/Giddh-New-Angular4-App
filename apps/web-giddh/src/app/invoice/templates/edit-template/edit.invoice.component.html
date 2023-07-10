@@ -5,25 +5,28 @@
 
             <div class="select-design">
                 <button
-                    class="btn more-btn-dropdown dropdown-toggle"
-                    [matMenuTriggerFor]="selectDesign"
+                    class="no-hover"
+                    mat-stroked-button
                     #menuTrigger="matMenuTrigger"
-                    (mouseover)="openMenu(menuTrigger)"
+                    [matMenuTriggerFor]="selectDesign"
+                    (mouseenter)="openMenu(menuTrigger)"
                 >
-                    <span>
-                        {{
-                            voucherType === "debit note" || voucherType === "credit note"
-                                ? "Credit/Debit Note"
-                                : (voucherType | titlecase)
-                        }}
+                    <span class="more-btn-dropdown">
+                        <span>
+                            {{
+                                voucherType === "debit note" || voucherType === "credit note"
+                                    ? "Credit/Debit Note"
+                                    : (voucherType | titlecase)
+                            }}
+                        </span>
+                        <span class="caret"></span>
                     </span>
-                    <span class="caret"></span>
                 </button>
+                <mat-menu #selectDesign="matMenu">
+                    <button mat-menu-item (click)="voucherTypeChanged('sales')">Sales</button>
+                    <button mat-menu-item (click)="voucherTypeChanged('debit note')">Credit/Debit Note</button>
+                </mat-menu>
             </div>
-            <mat-menu #selectDesign="matMenu">
-                <button mat-menu-item (click)="voucherTypeChanged('sales')">Sales</button>
-                <button mat-menu-item (click)="voucherTypeChanged('debit note')">Credit/Debit Note</button>
-            </mat-menu>
 
             <div class="template-grid">
                 <h3 class="text-left">Design Template</h3>
@@ -31,7 +34,10 @@
                     Click to add a template from our gallery. You can customize the template title, columns,and headers
                     in line item table.
                 </small>
-                <button class="btn pull-left isActive mt-4 add-new-btn" (click)="onOpenTemplateModal()">Add New</button>
+                <button mat-stroked-button color="primary" class="add-new-btn mt-4" (click)="onOpenTemplateModal()"
+                >
+                    Add New
+                </button>
             </div>
 
             <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
@@ -119,7 +125,7 @@
     </div>
     <!-- Template modal -->
     <!-- <div bsModal #templateModal="bs-modal" class="modal fade" role="dialog" [config]="{ keyboard: true }" tabindex="-1"> -->
-    <ng-template #templateModal tabindex="-1">
+    <ng-template #templateModal>
         <div class="modal-dialog full-modal">
             <!-- modal-liq-90 class is removed for now-->
             <div class="modal-content border-radius-none">
@@ -135,7 +141,7 @@
             <!--<button class="btn btn-default">Preview</button>-->
             <div class="pull-right mr-r4" *ngIf="voucherType === 'sales'">
                 <button
-                    mat-raised-button
+                    mat-stroked-button
                     color="primary"
                     [attr.disabled]="isFormInValid ? true : null"
                     *ngIf="transactionMode == 'create'"
@@ -144,7 +150,7 @@
                     Save
                 </button>
                 <button
-                    mat-raised-button
+                    mat-stroked-button
                     color="primary"
                     [attr.disabled]="isFormInValid ? true : null"
                     *ngIf="transactionMode == 'update'"
@@ -152,11 +158,11 @@
                 >
                     Update Template
                 </button>
-                <button mat-button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
+                <button  mat-stroked-button class="mr-r4" (click)="onCloseTemplateModal()">Close</button>
             </div>
             <div class="pull-right mr-r4" *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
                 <button
-                    mat-raised-button
+                    mat-stroked-button
                     color="primary"
                     *ngIf="transactionMode == 'create'"
                     (click)="createTemplate('voucher')"
@@ -164,14 +170,17 @@
                     Save
                 </button>
                 <button
-                    mat-raised-button
+                    mat-stroked-button
                     color="primary"
                     *ngIf="transactionMode == 'update'"
                     (click)="updateTemplate('voucher')"
                 >
                     Update Template
                 </button>
-                <button mat-button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
+                <button mat-stroked-button class="mr-r4" (click)="onCloseTemplateModal()"
+                >
+                    Close
+                </button>
             </div>
         </div>
     </ng-template>
@@ -198,7 +207,7 @@
             <!-- modal-liq-90 class is removed for now-->
             <div class="modal-content">
                 <invoice-template-preview-modal
-                    (closeModelEvent)="onClosePreviewModal()"
+                  (closeModelEvent)="onPreviewDialogRef.close()"
                 ></invoice-template-preview-modal>
             </div>
         </div>
