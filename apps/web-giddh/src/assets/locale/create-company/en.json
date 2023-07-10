@@ -55,5 +55,12 @@
     "food": "Food",
     "service": "Service",
     "manufacturing": "Manufacturing",
-    "retail": "Retail"
+    "retail": "Retail",
+    "enter_company_name":"Enter Company Name",
+    "enter_country_name":"Enter Country Name",
+    "enter_currency_name":"Enter Currency Name",
+    "enter_mobile_number" : "Enter Mobile Number",
+    "select_state" : "Select State",
+    "business_type": "Business Type",
+    "business_nature": "Business Nature"
 }

@@ -56,5 +56,12 @@
     "food": "अन्न",
     "service": "सेवा",
     "manufacturing": "उत्पादन",
-    "retail": "किरकोळ"
+    "retail": "किरकोळ",
+    "enter_company_name":"कंपनीचे नाव एंटर कराe",
+    "enter_country_name":"देशाचे नाव प्रविष्ट करा",
+    "enter_currency_name":"चलनाचे नाव प्रविष्ट करा",
+    "enter_mobile_number" : "मोबाईल नंबर टाका",
+    "select_state" : "राज्य निवडा",
+    "business_type": "व्यवसाय प्रकार",
+    "business_nature": "व्यवसाय निसर्ग"
 }
