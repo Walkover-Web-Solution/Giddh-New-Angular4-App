@@ -272,6 +272,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public invoiceListRequestParams: any = {};
     /** Current page for reference vouchers */
     private referenceVouchersCurrentPage: number = 1;
+    /** Total pages for reference vouchers */
+    private referenceVouchersTotalPages: number = 1;
     /** Reference voucher search field */
     private searchReferenceVoucher: any = "";
     /** Invoice list observable */
@@ -1081,6 +1083,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
 
         request.page = this.referenceVouchersCurrentPage;
+
+        if (this.voucherApiVersion === 2 && request.page > 1 && this.referenceVouchersTotalPages < request.page) {
+            return;
+        }
+
         this.referenceVouchersCurrentPage++;
 
         let date;
@@ -1096,6 +1103,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.body) {
+                this.referenceVouchersTotalPages = response.body.totalPages;
+
                 if (response.body.results || response.body.items) {
                     let items = [];
                     if (response.body.results) {
@@ -2428,6 +2437,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.invoiceList = [];
         this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 1;
+        this.referenceVouchersTotalPages = 1;
     }
 
     /**
