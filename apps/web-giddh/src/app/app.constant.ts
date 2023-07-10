@@ -10,7 +10,7 @@ export const Configuration = {
 };
 
 /** Add Company business type*/
-export enum businessType {
+export enum BusinessTypes {
     Registered = 'Registered',
     Unregistered = 'Unregistered'
 }
