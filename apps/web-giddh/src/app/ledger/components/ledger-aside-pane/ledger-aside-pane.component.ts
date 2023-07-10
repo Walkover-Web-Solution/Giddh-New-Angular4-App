@@ -152,10 +152,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
      */
     private confirmPageLeave(callback: Function): void {
         document.querySelector("ledger-aside-pane")?.classList?.add("page-leave-confirmation-showing");
-
-        let dialogRef = this.pageLeaveUtilityService.openDialog();
-
-        dialogRef.afterClosed().subscribe((action) => {
+        this.pageLeaveUtilityService.confirmPageLeave(action => {
             document.querySelector("ledger-aside-pane")?.classList?.add("page-leave-confirmation-showing");
             if (action) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));

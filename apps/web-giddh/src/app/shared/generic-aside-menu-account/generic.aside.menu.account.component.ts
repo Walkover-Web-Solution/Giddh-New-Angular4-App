@@ -190,10 +190,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
      */
     private confirmPageLeave(callback: Function): void {
         document.querySelector("generic-aside-menu-account")?.classList?.add("page-leave-confirmation-showing");
-
-        let dialogRef = this.pageLeaveUtilityService.openDialog();
-
-        dialogRef.afterClosed().subscribe((action) => {
+        this.pageLeaveUtilityService.confirmPageLeave(action => {
             document.querySelector("generic-aside-menu-account")?.classList?.remove("page-leave-confirmation-showing");
             if (action) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));

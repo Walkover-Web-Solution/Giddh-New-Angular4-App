@@ -856,6 +856,13 @@ export class AccountsAction {
         }
     }
 
+    /**
+     * This will hold if account/group has unsaved changes
+     *
+     * @param {boolean} value
+     * @returns {CustomActions}
+     * @memberof AccountsAction
+     */
     public hasUnsavedChanges(value: boolean): CustomActions {
         return {
             type: AccountsAction.ACCOUNT_HAS_UNSAVED_CHANGES,

@@ -123,7 +123,8 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
 
     public backButtonPressed(): void {
         if (this.isAddServiceOpen && this.hasUnsavedChanges) {
-            this.confirmPageLeave(() => {
+            this.pageLeaveUtilityService.confirmPageLeave(() => {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 this.hideFirstStep = false;
                 this.isAddStockOpen = false;
                 this.isAddServiceOpen = false;
@@ -134,23 +135,5 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
             this.isAddStockOpen = false;
             this.isAddServiceOpen = false;
         }
-    }
-
-    /**
-     * Shows page leave confirmation
-     *
-     * @private
-     * @param {Function} callback
-     * @memberof AsideMenuProductServiceComponent
-     */
-    private confirmPageLeave(callback: Function): void {
-        let dialogRef = this.pageLeaveUtilityService.openDialog();
-
-        dialogRef.afterClosed().subscribe((action) => {
-            if (action) {
-                this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
-                callback();
-            }
-        });
     }
 }

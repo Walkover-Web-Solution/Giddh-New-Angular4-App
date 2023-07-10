@@ -200,7 +200,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public closeAccountModal(): void {
         if (this.accountForm.dirty) {
-            this.confirmPageLeave(() => {
+            this.pageLeaveUtilityService.confirmPageLeave(() => {
                 this.closeModalEvent.emit(true);
             });
         } else {
@@ -329,21 +329,5 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public isSelectAllChecked(value: any): boolean {
         return ((this.selectAllRecords === value && this.paymentAlerts?.includes(value) && this.paymentAlerts?.length === this.paymentAlertsUsersList?.length) || (this.selectAllRecords === value && !this.paymentAlerts?.includes(value) && this.paymentAlerts?.length === this.paymentAlertsUsersList?.length - 1));
-    }
-
-    /**
-     * Shows page leave confirmation
-     *
-     * @private
-     * @param {Function} callback
-     * @memberof AccountCreateEditComponent
-     */
-    private confirmPageLeave(callback: Function): void {
-        let dialogRef = this.pageLeaveUtilityService.openDialog();
-        dialogRef.afterClosed().subscribe((action) => {
-            if (action) {
-                callback();
-            }
-        });
     }
 }

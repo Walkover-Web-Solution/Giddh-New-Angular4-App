@@ -155,7 +155,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
      */
     public closeAccountUserModal(): void {
         if (this.accountUserForm.dirty) {
-            this.confirmPageLeave(() => {
+            this.pageLeaveUtilityService.confirmPageLeave(() => {
                 this.closeModalEvent.emit(true);
             });
         } else {
@@ -229,21 +229,5 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
         } else {
             this.saveNewAccountUser();
         }
-    }
-
-    /**
-     * Shows page leave confirmation
-     *
-     * @private
-     * @param {Function} callback
-     * @memberof PayorCreateEditComponent
-     */
-    private confirmPageLeave(callback: Function): void {
-        let dialogRef = this.pageLeaveUtilityService.openDialog();
-        dialogRef.afterClosed().subscribe((action) => {
-            if (action) {
-                callback();
-            }
-        });
     }
 }

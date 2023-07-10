@@ -184,7 +184,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public closeAsidePane(event: any): void {
         if (this.addressForm?.dirty) {
-            this.confirmPageLeave(() => {
+            this.pageLeaveUtilityService.confirmPageLeave(() => {
                 this.closeAsideEvent.emit(event);
             });
             return;
@@ -372,22 +372,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         let text = this.localeData?.branch_of_company;
         text = text?.replace("[COMPANY_NAME]", companyName);
         return text;
-    }
-
-    /**
-     * Shows page leave confirmation
-     *
-     * @private
-     * @param {Function} callback
-     * @memberof CreateAddressComponent
-     */
-    private confirmPageLeave(callback: Function): void {
-        let dialogRef = this.pageLeaveUtilityService.openDialog();
-        dialogRef.afterClosed().subscribe((action) => {
-            if (action) {
-                callback();
-            }
-        });
     }
 
     /**
