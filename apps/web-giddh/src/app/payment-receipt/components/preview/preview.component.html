@@ -23,7 +23,7 @@
                             <button
                                 *ngIf="!isCompany"
                                 class="mr-l1"
-                                mat-raised-button
+                                mat-stroked-button
                                 color="primary"
                                 [routerLink]="['/pages/voucher/' + voucherType + '/create']"
                             >
@@ -185,7 +185,7 @@
                                 </div>
                             </div>
                             <div class="pd-l15" *ngIf="attachedDocumentType?.type === 'unsupported'">
-                                <h5 class="pd-b05 font-16">
+                                <h5 class="pd-b05 font-15">
                                     <strong>{{ localeData?.uploaded_bill }}</strong>
                                 </h5>
                             </div>

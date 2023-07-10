@@ -61,9 +61,9 @@ import {
     VoucherDetailsClass,
     VoucherTypeEnum
 } from '../models/api-models/Sales';
-import { auditTime, debounceTime, delay, filter, take, takeUntil } from 'rxjs/operators';
+import { auditTime, debounceTime, delay, filter, map, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
-import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { FormControl, NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
@@ -87,7 +87,7 @@ import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { InvoiceReceiptFilter, ReciptResponse } from '../models/api-models/recipt';
 import { LedgerService } from '../services/ledger.service';
 import { TaxControlComponent } from '../theme/tax-control/tax-control.component';
-import { LedgerResponseDiscountClass } from "../models/api-models/Ledger";
+import { IVariant, LedgerResponseDiscountClass } from "../models/api-models/Ledger";
 import { OnboardingFormRequest } from '../models/api-models/Common';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
@@ -118,6 +118,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { SelectFieldComponent } from '../theme/form-fields/select-field/select-field.component';
+import { DropdownFieldComponent } from '../theme/form-fields/dropdown-field/dropdown-field.component';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -167,7 +168,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Invoice Form instance */
     @ViewChild('invoiceForm', { static: false }) public invoiceForm: NgForm;
     /** Open Account Selection Dropdown instance */
-    @ViewChild('openAccountSelectionDropdown', { static: false }) public openAccountSelectionDropdown: SelectFieldComponent;
+    @ViewChild('openAccountSelectionDropdown', { static: false }) public openAccountSelectionDropdown: DropdownFieldComponent;
     /** Discount Compomnent instance */
     @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
     /** Tax Compomnent instance */
@@ -201,7 +202,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Billing state field instance */
     @ViewChild('statesBilling', { static: false }) statesBilling: SelectFieldComponent;
     /** Billing state field instance */
-    @ViewChild('statesShipping', { static: false }) statesShipping: SelectFieldComponent;;
+    @ViewChild('statesShipping', { static: false }) statesShipping: SelectFieldComponent;
     /** Mobile Number state instance */
     @ViewChild('initContactProforma', { static: false }) initContactProforma: ElementRef;
     /** Instance of RCM checkbox */
@@ -221,17 +222,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Delete attachment modal */
     @ViewChild('attachmentDeleteConfirmationModel', { static: true }) public attachmentDeleteConfirmationModel: any;
     // This will use for instance of warehouse
-    @ViewChild('selectWarehouse', { static: false }) public selectWarehouse: SelectFieldComponent;
+    @ViewChild('selectWarehouse', { static: false }) public selectWarehouse: DropdownFieldComponent;
     // This will use for instance of linking dropdown
-    @ViewChild('linkingDropdown', { static: false }) public linkingDropdown: SelectFieldComponent;
+    @ViewChild('linkingDropdown', { static: false }) public linkingDropdown: DropdownFieldComponent;
     // This will use for instance of invoice list
-    @ViewChild('invoiceListDropdown', { static: false }) public invoiceListDropdown: SelectFieldComponent;
-    // This will use for instance of sales deposit dropdown
-    @ViewChild('salesDepositDropdown', { static: false }) public salesDepositDropdown: SelectFieldComponent;
+    @ViewChild('invoiceListDropdown', { static: false }) public invoiceListDropdown: DropdownFieldComponent;
     // This will use for instance of deposit dropdown
-    @ViewChild('depositDropdown', { static: false }) public depositDropdown: SelectFieldComponent;
-    // This will use for instance of customer billing state
-    @ViewChild('customerBillingState', { static: false }) public customerBillingState: SelectFieldComponent;
+    @ViewChild('depositDropdown', { static: false }) public depositDropdown: DropdownFieldComponent;
     // This will use for instance of customer shipping state
     @ViewChild('customerShippingState', { static: false }) public customerShippingState: SelectFieldComponent;
     // This will use for instance of company billing state
@@ -552,6 +549,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public defaultItemSuggestions: Array<IOption> = [];
     /** True, if API call should be prevented on default scroll caused by scroll in list */
     public preventDefaultScrollApiCall: boolean = false;
+    /** Holds images folder path */
+    public imgPath: string = "";
     /** Stores the search results pagination details for customer */
     public searchCustomerResultsPaginationData = {
         page: 0,
@@ -711,6 +710,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public isCashBankAccount: boolean = false;
     /** Current page for reference vouchers */
     private referenceVouchersCurrentPage: number = 1;
+    /** Total pages for reference vouchers */
+    private referenceVouchersTotalPages: number = 1;
     /** Reference voucher search field */
     private searchReferenceVoucher: any = "";
     /** List of discounts */
@@ -753,6 +754,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public giddhRoundOff: any = giddhRoundOff;
     /** True if einvoice is generated for the voucher */
     public isEinvoiceGenerated: boolean = false;
+    /** Stores the stock variants */
+    public stockVariants: BehaviorSubject<Array<Observable<Array<IOption>>>> = new BehaviorSubject([]);
+
+    /** True, if bulk items are added to the voucher list, required to prevent repetitive stock variants processing
+     * when bulk entries are added
+     */
+    private isBulkEntryInProgress: boolean;
+    /** Stores the current transaction request obj for the API */
+    private currentTxnRequestObject: Array<any> = [];
+    /** Stores the index of current stock variants being loaded */
+    private currentlyLoadedStockVariantIndex: number;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -855,6 +867,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public ngOnInit() {
 
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         /** This will use for filter link purchase orders  */
         this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterPurchaseOrder(search);
@@ -1413,10 +1426,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             // convert date object
                             if (this.isProformaInvoice) {
                                 obj.voucherDetails.voucherDate = dayjs(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
-                                obj.voucherDetails.voucherNumber = obj.voucherDetails.proformaNumber;
+                                obj.voucherDetails.voucherNumber = obj.voucherDetails.proformaNumber || obj.voucherDetails.voucherNumber;
                             } else if (this.isEstimateInvoice) {
                                 obj.voucherDetails.voucherDate = dayjs(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
-                                obj.voucherDetails.voucherNumber = obj.voucherDetails.estimateNumber;
+                                obj.voucherDetails.voucherNumber = obj.voucherDetails.estimateNumber || obj.voucherDetails.voucherNumber;
                             } else {
                                 obj.voucherDetails.voucherDate = dayjs(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
                             }
@@ -1722,6 +1735,32 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.onSearchQueryChanged(value[1]?.body?.name, 1, 'customer');
             }
         });
+
+        this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res?.length && !this.isBulkEntryInProgress) {
+                const currentlyLoadedVariantRequest = this.currentTxnRequestObject[this.currentlyLoadedStockVariantIndex ?? this.activeIndx];
+                if (!currentlyLoadedVariantRequest) {
+                    // Deletion case, item was deleted and no current entry is active
+                    return;
+                }
+                const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params.variantUniqueName;
+                let stockAllVariants;
+                res[this.currentlyLoadedStockVariantIndex ?? this.activeIndx].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
+                if (stockAllVariants.findIndex(variant => variant.value === currentEntryStockVariantUniqueName) === -1) {
+                    // Only reset the stock variant when the stock is changed
+                    if (currentlyLoadedVariantRequest.txn) {
+                        /* If transaction is present then it means the user has changed the stock of any entry
+                            otherwise the user has opened the invoice for edit flow
+                        */
+                        currentlyLoadedVariantRequest.txn.variant = { name: stockAllVariants[0].label, uniqueName: stockAllVariants[0].value };
+                        // include the variant unique name for the API call
+                        currentlyLoadedVariantRequest.params.variantUniqueName = stockAllVariants[0].value;
+                        this.loadDetails(currentlyLoadedVariantRequest);
+                    }
+                }
+            }
+            this.currentlyLoadedStockVariantIndex = null;
+        });
     }
 
     public ngAfterViewInit() {
@@ -1930,6 +1969,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 request.number = this.searchReferenceVoucher;
                 request.page = this.referenceVouchersCurrentPage;
+
+                if (request.page > 1 && this.referenceVouchersTotalPages < request.page) {
+                    return;
+                }
+
                 this.referenceVouchersCurrentPage++;
             } else {
                 request = {
@@ -1960,6 +2004,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.invoiceList = [];
                 }
                 if (response && response.body) {
+                    this.referenceVouchersTotalPages = response.body.totalPages;
                     if (response.body.results || response.body.items) {
                         let items = [];
                         if (response.body.results) {
@@ -2112,9 +2157,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.selectedInvoice = event.value;
                 this.invFormData.voucherDetails.referenceVoucher = {
                     uniqueName: event.value,
-                    voucherType: event.additional?.additional?.voucherType ? event.additional?.additional?.voucherType : event.additional?.voucherType,
-                    number: event.additional?.additional?.voucherNumber ? event.additional?.additional?.voucherNumber : event.additional?.voucherNumber,
-                    date: event.additional?.additional?.voucherDate ? event.additional?.additional?.voucherDate : event.additional?.voucherDate
+                    voucherType: event.additional?.voucherType,
+                    number: event.additional?.voucherNumber,
+                    date: event.additional?.voucherDate
                 }
             } else {
                 this.invoiceSelectedLabel = event?.label;
@@ -2123,7 +2168,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     linkedInvoices: [
                         {
                             invoiceUniqueName: event?.value,
-                            voucherType: event.additional?.additional?.voucherType ? event.additional?.additional?.voucherType : event.additional?.voucherType
+                            voucherType: event.additional?.voucherType
                         }
                     ]
                 }
@@ -3083,6 +3128,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         // Calculate discount
+        entry.discounts = entry.discounts?.length ? entry.discounts : this.generalService.getDiscountValues({
+            discountAccountsDetails: entry.discounts ?? [],
+            discountsList: this.discountsList
+        });
         let percentageDiscountTotal = entry.discounts?.filter(discount => discount.isActive)
             ?.filter(activeDiscount => activeDiscount.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
@@ -3099,6 +3148,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let taxPercentage: number = 0;
         let cessPercentage: number = 0;
         let taxTotal: number = 0;
+        entry.taxes = entry.taxes?.length ? entry.taxes : this.generalService.getTaxValues({
+            taxRenderData: entry.taxes ?? [],
+            date: entry.entryDate,
+            applicableTaxes: transaction.applicableTaxes,
+            taxes: this.companyTaxesList,
+            exceptTaxTypes: this.exceptTaxTypes,
+        });
         entry.taxes?.filter(tax => tax.isChecked).forEach(selectedTax => {
             if (selectedTax.type === 'gstcess') {
                 cessPercentage += selectedTax.amount;
@@ -3110,9 +3166,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         // Calculate amount with inclusive tax
         transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
-            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.highPrecisionRate);
+            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
         transaction.highPrecisionAmount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
             (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.highPrecisionRate);
+        transaction.convertedAmount = giddhRoundOff(transaction.amount * this.exchangeRate, this.giddhBalanceDecimalPlaces);
         let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), this.highPrecisionRate);
         entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, this.highPrecisionRate);
         if (isNaN(entry.discountSum)) {
@@ -3366,108 +3423,33 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.invFormData.entries[entryIndex] = entry;
         this.invFormData.entries[entryIndex].transactions[0] = txn;
         if ((selectedAcc?.value || isBulkItem) && selectedAcc.additional && selectedAcc.additional?.uniqueName) {
-            let requestObject;
+            let params;
             if (selectedAcc.additional.stock) {
-                requestObject = {
+                params = {
                     stockUniqueName: selectedAcc.additional.stock?.uniqueName
                 };
             }
             if (isBulkItem) {
+                const allStockVariants = this.stockVariants.getValue();
+                allStockVariants[this.activeIndx] = observableOf(selectedAcc.variants);
+                this.stockVariants.next(allStockVariants);
                 txn = this.calculateItemValues(selectedAcc, txn, entry, true, true);
             } else {
-                this.searchService.loadDetails(selectedAcc.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data && data.body) {
-                        // Take taxes of parent group and stock's own taxes
-                        const taxes = this.generalService.fetchTaxesOnPriority(
-                            data.body.stock?.taxes ?? [],
-                            data.body.stock?.groupTaxes ?? [],
-                            data.body.taxes ?? [],
-                            data.body.groupTaxes ?? []);
-                        const taxComponent = this.taxControlComponent?.find((item, index) => index === entryIndex);
-                        if (taxComponent) {
-                            taxComponent.enableAllTheTaxes();
-                        }
-                        let maxQuantity = 0;
-
-                        if (isLinkedPoItem) {
-                            maxQuantity = selectedAcc.additional.maxQuantity;
-                        }
-
-                        // directly assign additional property
-                        selectedAcc.additional = {
-                            ...selectedAcc.additional,
-                            label: selectedAcc.label,
-                            value: selectedAcc?.value,
-                            applicableTaxes: taxes,
-                            currency: data.body.currency,
-                            currencySymbol: data.body.currencySymbol,
-                            email: data.body.emails,
-                            isFixed: data.body.isFixed,
-                            mergedAccounts: data.body.mergedAccounts,
-                            mobileNo: data.body.mobileNo,
-                            nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.name).join(', ') : '',
-                            stock: (isLinkedPoItem && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
-                            hsnNumber: selectedAcc.stock?.hsnNumber ? selectedAcc.stock.hsnNumber : data.body.hsnNumber,
-                            sacNumber: selectedAcc.stock?.sacNumber ? selectedAcc.stock.sacNumber : data.body.sacNumber,
-                            uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
-                        };
-                        txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem);
-
-                        if (isLinkedPoItem) {
-                            txn.applicableTaxes = entry.taxList;
-
-                            if (selectedAcc.stock) {
-                                txn.stockDetails = selectedAcc.stock;
-
-                                if (txn.stockDetails?.uniqueName) {
-                                    let stockUniqueName = txn.stockDetails?.uniqueName.split('#');
-                                    txn.stockDetails.uniqueName = stockUniqueName[1];
-                                }
-
-                                if (selectedAcc.stock.quantity) {
-                                    txn.quantity = selectedAcc.stock.quantity;
-                                }
-                                if (selectedAcc.stock.rate) {
-                                    txn.rate = selectedAcc.stock.rate.amountForAccount;
-                                    txn.isStockTxn = true;
-                                }
-                            }
-
-                            if (selectedAcc.stock && selectedAcc.stock.quantity && selectedAcc.stock.rate) {
-                                this.calculateStockEntryAmount(txn);
-                            } else {
-                                if (selectedAcc.amount) {
-                                    txn.amount = selectedAcc.amount.amountForAccount;
-                                    txn.highPrecisionAmount = txn.amount;
-                                }
-                            }
-
-                            txn.maxQuantity = maxQuantity;
-
-                            this.calculateWhenTrxAltered(entry, txn);
-
-                            this.linkedPoItemsAdded++;
-                        }
-                        this.focusOnDescription();
-                    }
-                }, () => {
-                    txn.isStockTxn = false;
-                    txn.amount = 0;
-                    txn.highPrecisionAmount = txn.amount;
-                    txn.accountName = null;
-                    txn.accountUniqueName = null;
-                    txn.hsnOrSac = 'sac';
-                    txn.total = null;
-                    txn.rate = null;
-                    txn.sacNumber = null;
-                    txn.sacNumberExists = false;
-                    txn.taxableValue = 0;
-                    txn.applicableTaxes = [];
-                    this.focusOnDescription();
-                    return txn;
-                });
+                this.currentTxnRequestObject[this.activeIndx] = {
+                    selectedAcc,
+                    isLinkedPoItem,
+                    txn,
+                    entry,
+                    params,
+                    entryIndex
+                };
+                if (selectedAcc.additional.stock) {
+                    txn.isStockTxn = true;
+                    this.loadStockVariants(selectedAcc.additional.stock.uniqueName, isLinkedPoItem ? entryIndex : undefined);
+                } else {
+                    this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
+                }
             }
-
         } else {
             txn.isStockTxn = false;
             txn.amount = 0;
@@ -3498,9 +3480,20 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
 
-    public calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true, isBulkItem?: boolean): SalesTransactionItemClass {
+    public calculateItemValues(
+        selectedAcc: any,
+        transaction: SalesTransactionItemClass,
+        entry: SalesEntryClass,
+        calculateTransaction: boolean = true,
+        isBulkItem?: boolean,
+        isLinkedPoItem?: boolean
+    ): SalesTransactionItemClass {
         let o = cloneDeep(selectedAcc.additional);
-
+        const variant = o.stock?.variant;
+        const isInclusiveEntry = (variant?.purchaseTaxInclusive && o.category === 'expenses') ||
+            (variant?.salesTaxInclusive && o.category === 'income') ||
+            (variant?.fixedAssetTaxInclusive && o.category === 'fixedassets');
+        transaction.taxInclusive = isInclusiveEntry;
         // check if we have quantity in additional object. it's for only bulk add mode
         transaction.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
         transaction.applicableTaxes = [];
@@ -3570,11 +3563,23 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 text: o.stock.stockUnitCode
             };
             transaction.stockList = [];
-            if (o.stock && o.stock.unitRates && o.stock.unitRates.length) {
-                transaction.stockList = this.prepareUnitArr(o.stock.unitRates);
+            /*
+                From API, in get voucher API, unit rates are received within stock key.
+                And in particular API, the unit rates are received within stock.variant key.
+                This method is common for both the flows therefore we are searching the unitRates
+                in both the keys
+            */
+            const unitRates = o.stock?.unitRates ?? o.stock?.variant?.unitRates ?? [];
+            if (o.stock && unitRates.length) {
+                transaction.stockList = this.prepareUnitArr(unitRates);
                 transaction.stockUnit = transaction.stockList[0].id;
                 transaction.stockUnitCode = transaction.stockList[0].text;
-                transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                if (!isInclusiveEntry) {
+                    /* For inclusive entry we calculate the rate at the time of amount calculation,
+                        this is done to avoid the fluctuation of rate from exclusive to inclusive
+                    */
+                    transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                }
             } else {
                 transaction.stockList.push(obj);
                 transaction.stockUnit = o.stock.stockUnit.uniqueName;
@@ -3582,6 +3587,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             transaction.stockDetails = omit(o.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
+            if (isBulkItem) {
+                transaction.variant = selectedAcc.variant;
+            } else if (isLinkedPoItem) {
+                transaction.variant = o.stock.variant;
+            }
             // Stock item, show the warehouse drop down if it is hidden
             if ((this.isMultiCurrencyModule()) && !this.shouldShowWarehouse) {
                 this.shouldShowWarehouse = true;
@@ -3675,8 +3685,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.focusOnDescription();
         if (calculateTransaction) {
-            this.calculateStockEntryAmount(transaction);
-            this.calculateWhenTrxAltered(entry, transaction);
+            if (isInclusiveEntry) {
+                setTimeout(() => {
+                    // Set timeout is used as tax component is not rendered at the time control is reached here
+                    transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                    transaction.total = transaction.quantity * transaction.rate;
+                    this.calculateTransactionValueInclusively(entry, transaction);
+                });
+            } else {
+                this.calculateStockEntryAmount(transaction);
+                this.calculateWhenTrxAltered(entry, transaction);
+            }
         }
         if (!isBulkItem) {
             this._cdr.detectChanges();
@@ -3711,6 +3730,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.intl?.setNumber("");
         this.typeaheadNoResultsOfCustomer = false;
         this.referenceVouchersCurrentPage = 1;
+        this.referenceVouchersTotalPages = 1;
         if (item && item?.value) {
             this.invFormData.voucherDetails.customerName = item.label;
             this.invFormData.voucherDetails.customerUniquename = item.value;
@@ -3843,6 +3863,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
+        const stockVariants = this.stockVariants.getValue();
+        stockVariants.splice(entryIdx, 1);
+        this.stockVariants.next(stockVariants);
     }
 
     public taxAmountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
@@ -4067,7 +4090,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         find(txn.stockList, (o) => {
             if (o.id === selectedUnit?.value) {
                 txn.stockUnitCode = o.text;
-                return txn.rate = o.rate;
+                return txn.rate = giddhRoundOff(o.rate  / this.exchangeRate, this.highPrecisionRate);
             }
         });
     }
@@ -4140,6 +4163,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public addBulkStockItems(items: SalesAddBulkStockItems[]) {
         const startIndex = this.invFormData.entries?.length;
         let isBlankItemPresent;
+        this.isBulkEntryInProgress = true;
         this.ngZone.runOutsideAngular(() => {
             for (const item of items) {
                 // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
@@ -4176,6 +4200,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
                 this.onSelectSalesAccount(item, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[lastIndex], true, false, lastIndex);
             }
+            this.isBulkEntryInProgress = false;
         });
         this.buildBulkData(this.invFormData.entries?.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
     }
@@ -4267,6 +4292,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
                         salesAddBulkStockItems.stockUnitCode = tr.stockUnitCode;
                         salesAddBulkStockItems.stockUnit.uniqueName = tr.stockUnit;
+                        salesAddBulkStockItems.variant = tr.variant;
+                        salesAddBulkStockItems.taxInclusive = tr.taxInclusive;
 
                         transactionClassMul.stock = salesAddBulkStockItems;
                     }
@@ -4939,6 +4966,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 newTrxObj.showCodeType = trx.hsnNumber ? "hsn" : "sac";
                 newTrxObj.isStockTxn = trx.isStockTxn;
                 newTrxObj.applicableTaxes = entry.taxList;
+                newTrxObj.variant = trx.variant;
+                newTrxObj.taxInclusive = trx.taxInclusive;
 
                 // check if stock details is available then assign uniquename as we have done while creating option
                 if (trx.isStockTxn) {
@@ -4966,8 +4995,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             }
                             newTrxObj.sku_and_customfields = description.join(', ');
                         }
-
-                        stock.unitRates = stock.unitRates || [];
+                        /*
+                            From API, in get voucher API, unit rates are received within stock key.
+                            And in particular API, the unit rates are received within stock.variant key.
+                            This method is common for both the flows therefore we are searching the unitRates
+                            in both the keys
+                        */
+                        const unitRates = stock?.unitRates ?? stock?.variant?.unitRates ?? [];
+                        stock.unitRates = unitRates || [];
                         const unitRate = stock.unitRates.find(rate => rate.stockUnitCode === stock.stockUnit.code);
 
                         let stockUnit: IStockUnit = {
@@ -5146,18 +5181,20 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 salesEntryClass.sacNumber = (tr.showCodeType === 'sac') ? tr.sacNumber : "";
                 salesEntryClass.description = tr.description;
                 if (tr.isStockTxn) {
-                    let saalesAddBulkStockItems = new SalesAddBulkStockItems();
-                    saalesAddBulkStockItems.name = tr.stockDetails?.name;
-                    saalesAddBulkStockItems.uniqueName = tr.stockDetails?.uniqueName;
-                    saalesAddBulkStockItems.quantity = tr.quantity;
-                    saalesAddBulkStockItems.rate = {};
-                    saalesAddBulkStockItems.rate.amountForAccount = tr.rate;
-                    saalesAddBulkStockItems.sku = tr.stockDetails.skuCode;
-                    saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
-                    saalesAddBulkStockItems.stockUnit.uniqueName = tr.stockUnit;
-                    saalesAddBulkStockItems.stockUnit.code = tr.stockUnitCode;
+                    let salesAddBulkStockItems = new SalesAddBulkStockItems();
+                    salesAddBulkStockItems.name = tr.stockDetails?.name;
+                    salesAddBulkStockItems.uniqueName = tr.stockDetails?.uniqueName;
+                    salesAddBulkStockItems.quantity = tr.quantity;
+                    salesAddBulkStockItems.rate = {};
+                    salesAddBulkStockItems.rate.amountForAccount = tr.rate;
+                    salesAddBulkStockItems.sku = tr.stockDetails.skuCode;
+                    salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
+                    salesAddBulkStockItems.stockUnit.uniqueName = tr.stockUnit;
+                    salesAddBulkStockItems.stockUnit.code = tr.stockUnitCode;
+                    salesAddBulkStockItems.variant = tr.variant;
+                    salesAddBulkStockItems.taxInclusive = tr.taxInclusive;
 
-                    transactionClassMul.stock = saalesAddBulkStockItems;
+                    transactionClassMul.stock = salesAddBulkStockItems;
                 }
                 salesEntryClass.transactions.push(transactionClassMul);
             });
@@ -5259,8 +5296,27 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     }
                 });
                 if (t.stock) {
+                    this.currentTxnRequestObject[voucherClassConversion.entries.length] = {
+                        ...this.currentTxnRequestObject[voucherClassConversion.entries.length],
+                        params: {
+                            variantUniqueName: t.stock?.variant?.uniqueName
+                        },
+                        isLinkedPoItem: t.additional?.maxQuantity > 0,
+                        selectedAcc: {
+                            stock: {
+                                name: t.stock.name,
+                                uniqueName: t.stock.uniqueName,
+                            },
+                            additional: {
+                                name: t.account.name,
+                                uniqueName: t.account.uniqueName,
+                            }
+                        }
+                    };
+                    this.loadStockVariants(t.stock.uniqueName, voucherClassConversion.entries.length);
+                    const unitRates = t.stock?.unitRates ?? [];
                     if (!t.stock.stockUnit?.uniqueName && t.stock.stockUnit?.code) {
-                        const unitFound = t.stock?.unitRates?.filter(unit => unit?.stockUnitCode === t.stock.stockUnit?.code);
+                        const unitFound = unitRates?.filter(unit => unit?.stockUnitCode === t.stock.stockUnit?.code);
                         if (unitFound?.length) {
                             t.stock.stockUnit.uniqueName = unitFound[0]?.stockUnitUniqueName;
                         }
@@ -5273,7 +5329,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     salesTransactionItemClass.stockDetails.customField2 = t.stock.customField2;
                     salesTransactionItemClass.stockDetails.stockUnit = t.stock.stockUnit;
                     salesTransactionItemClass.stockDetails.stockUnitCode = t.stock.stockUnitCode;
-                    salesTransactionItemClass.stockDetails.unitRates = t.stock.unitRates;
+                    salesTransactionItemClass.stockDetails.unitRates = unitRates;
                     salesTransactionItemClass.stockDetails.uniqueName = t.stock.uniqueName;
                     salesTransactionItemClass.stockDetails.skuCodeHeading = t.stock.skuCodeHeading;
                     salesTransactionItemClass.quantity = t.stock.quantity;
@@ -5282,6 +5338,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     salesTransactionItemClass.stockUnit = t.stock.stockUnit.uniqueName;
                     salesTransactionItemClass.stockUnitCode = t.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName;
+                    salesTransactionItemClass.variant = t.stock?.variant;
+                    salesTransactionItemClass.taxInclusive = t?.stock.taxInclusive;
                 }
 
                 if (this.isPurchaseInvoice && entry.purchaseOrderLinkSummaries && entry.purchaseOrderLinkSummaries.length > 0) {
@@ -5805,7 +5863,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public handleOutsideClick(event: any): void {
-        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && this.accountAsideMenuState === 'out' && this.asideMenuStateForProductService === 'out' && this.asideMenuStateForRecurringEntry === 'out' && this.asideMenuStateForOtherTaxes === 'out') {
+        if ((typeof event?.target?.className === "string" &&
+            event?.target?.className?.indexOf("option") === -1) &&
+            event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1 &&
+            this.accountAsideMenuState === 'out' && this.asideMenuStateForProductService === 'out' &&
+            this.asideMenuStateForRecurringEntry === 'out' && this.asideMenuStateForOtherTaxes === 'out') {
             this.activeIndx = null;
             this.checkVoucherEntries();
         }
@@ -7531,27 +7593,27 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public updateDueDate(): void {
-        let invoiceSettings: InvoiceSetting = null;
-        this.store.pipe(select(state => state.invoice.settings), take(1)).subscribe(res => invoiceSettings = res);
-        if (invoiceSettings) {
-            let duePeriod: number;
-            if (this.isEstimateInvoice) {
-                duePeriod = invoiceSettings.estimateSettings ? invoiceSettings.estimateSettings.duePeriod : 0;
-            } else if (this.isProformaInvoice) {
-                duePeriod = invoiceSettings.proformaSettings ? invoiceSettings.proformaSettings.duePeriod : 0;
-            } else {
-                duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
-                this.useCustomInvoiceNumber = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.useCustomInvoiceNumber : false;
-            }
-
-            if (this.invFormData.voucherDetails.voucherDate) {
-                if (typeof (this.invFormData.voucherDetails.voucherDate) === "object") {
-                    this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? dayjs(this.invFormData.voucherDetails.voucherDate).add(duePeriod, 'day').toDate() : dayjs(this.invFormData.voucherDetails.voucherDate).toDate();
+        this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(invoiceSettings => {
+            if (invoiceSettings) {
+                let duePeriod: number;
+                if (this.isEstimateInvoice) {
+                    duePeriod = invoiceSettings.estimateSettings ? invoiceSettings.estimateSettings.duePeriod : 0;
+                } else if (this.isProformaInvoice) {
+                    duePeriod = invoiceSettings.proformaSettings ? invoiceSettings.proformaSettings.duePeriod : 0;
                 } else {
-                    this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? dayjs(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).add(duePeriod, 'day').toDate() : dayjs(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
+                    duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
+                    this.useCustomInvoiceNumber = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.useCustomInvoiceNumber : false;
+                }
+
+                if (this.invFormData.voucherDetails.voucherDate) {
+                    if (typeof (this.invFormData.voucherDetails.voucherDate) === "object") {
+                        this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? dayjs(this.invFormData.voucherDetails.voucherDate).add(duePeriod, 'day').toDate() : dayjs(this.invFormData.voucherDetails.voucherDate).toDate();
+                    } else {
+                        this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? dayjs(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).add(duePeriod, 'day').toDate() : dayjs(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
+                    }
                 }
             }
-        }
+        });
     }
 
     /**
@@ -8138,6 +8200,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.invoiceList = [];
         this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 1;
+        this.referenceVouchersTotalPages = 1;
     }
 
     /**
@@ -8451,12 +8514,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.selectWarehouse?.closeDropdownPanel();
             this.linkingDropdown?.closeDropdownPanel();
             this.invoiceListDropdown?.closeDropdownPanel();
-            this.customerBillingState?.closeDropdownPanel();
             this.customerShippingState?.closeDropdownPanel();
             this.companyBillingState?.closeDropdownPanel();
             this.companyShippingState?.closeDropdownPanel();
             this.depositDropdown?.closeDropdownPanel();
-            this.salesDepositDropdown?.closeDropdownPanel();
         }
     }
 
@@ -8481,6 +8542,179 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public handleKeyboardUpEvent(event: KeyboardEvent) {
         if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71)) {
             this.isCreatingNewAccount = false;
+        }
+    }
+
+    /**
+     * Loads the stock variants
+     *
+     * @private
+     * @param {string} stockUniqueName Uniquename of the stock
+     * @memberof VoucherComponent
+     */
+    private loadStockVariants(stockUniqueName: string, index?: number): void {
+        this._ledgerService.loadStockVariants(stockUniqueName).pipe(
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
+                const allStockVariants = this.stockVariants.getValue();
+                this.currentlyLoadedStockVariantIndex = index;
+                allStockVariants[this.currentlyLoadedStockVariantIndex ?? this.activeIndx] = observableOf(res);
+                this.stockVariants.next(allStockVariants);
+                // this.chan.detectChanges();
+            });
+    }
+
+    /**
+     * Variant change handler
+     *
+     * @param {IOption} event Change event
+     * @param {SalesTransactionItemClass} transaction Current transaction
+     * @param {SalesEntryClass} entry Current entry
+     * @memberof VoucherComponent
+     */
+    public variantChanged(event: IOption, transaction: SalesTransactionItemClass, entry: SalesEntryClass): void {
+        transaction.variant.name = event.label;
+        this.currentTxnRequestObject[this.activeIndx].txn = transaction;
+        this.currentTxnRequestObject[this.activeIndx].entry = entry;
+        if (this.currentTxnRequestObject[this.activeIndx]?.params) {
+            this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName = event.value;
+            this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
+        }
+    }
+
+    /**
+     * Loads the details of selected entry
+     *
+     * @private
+     * @param {*} requestObject Request object for the API
+     * @memberof VoucherComponent
+     */
+    private loadDetails(requestObject: any): void {
+        let {
+            selectedAcc,
+            isLinkedPoItem,
+            txn,
+            entry,
+            params,
+            entryIndex
+        } = requestObject;
+        this.searchService.loadDetails(selectedAcc.additional?.uniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data && data.body) {
+                // Take taxes of parent group and stock's own taxes
+                const taxes = this.generalService.fetchTaxesOnPriority(
+                    data.body.stock?.taxes ?? [],
+                    data.body.stock?.groupTaxes ?? [],
+                    data.body.taxes ?? [],
+                    data.body.groupTaxes ?? []);
+                const taxComponent = this.taxControlComponent?.find((item, index) => index === entryIndex);
+                if (taxComponent) {
+                    taxComponent.enableAllTheTaxes();
+                }
+                let maxQuantity = 0;
+
+                if (isLinkedPoItem) {
+                    maxQuantity = selectedAcc.additional.maxQuantity;
+                }
+
+                // directly assign additional property
+                selectedAcc.additional = {
+                    ...selectedAcc.additional,
+                    label: selectedAcc.label,
+                    value: selectedAcc?.value,
+                    applicableTaxes: taxes,
+                    currency: data.body.currency,
+                    currencySymbol: data.body.currencySymbol,
+                    email: data.body.emails,
+                    isFixed: data.body.isFixed,
+                    mergedAccounts: data.body.mergedAccounts,
+                    mobileNo: data.body.mobileNo,
+                    nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.name).join(', ') : data.body.parentGroups.join(', '),
+                    stock: (isLinkedPoItem && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
+                    hsnNumber: selectedAcc.stock?.hsnNumber ? selectedAcc.stock.hsnNumber : data.body.hsnNumber,
+                    sacNumber: selectedAcc.stock?.sacNumber ? selectedAcc.stock.sacNumber : data.body.sacNumber,
+                    uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : data.body.parentGroups.join(', '),
+                    category: data.body.category
+                };
+                txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem, false, isLinkedPoItem);
+
+                if (isLinkedPoItem) {
+                    txn.applicableTaxes = entry.taxList;
+
+                    if (selectedAcc.stock) {
+                        txn.stockDetails = selectedAcc.stock;
+
+                        if (txn.stockDetails?.uniqueName) {
+                            let stockUniqueName = txn.stockDetails?.uniqueName.split('#');
+                            txn.stockDetails.uniqueName = stockUniqueName[1];
+                        }
+
+                        if (selectedAcc.stock.quantity) {
+                            txn.quantity = selectedAcc.stock.quantity;
+                        }
+                        if (selectedAcc.stock.rate) {
+                            txn.rate = selectedAcc.stock.rate.amountForAccount;
+                            txn.isStockTxn = true;
+                        }
+                    }
+
+                    if (selectedAcc.stock && selectedAcc.stock.quantity && selectedAcc.stock.rate) {
+                        this.calculateStockEntryAmount(txn);
+                    } else {
+                        if (selectedAcc.amount) {
+                            txn.amount = selectedAcc.amount.amountForAccount;
+                            txn.highPrecisionAmount = txn.amount;
+                        }
+                    }
+
+                    txn.maxQuantity = maxQuantity;
+
+                    this.calculateWhenTrxAltered(entry, txn);
+
+                    this.linkedPoItemsAdded++;
+                }
+                this.focusOnDescription();
+            }
+        }, () => {
+            txn.isStockTxn = false;
+            txn.amount = 0;
+            txn.highPrecisionAmount = txn.amount;
+            txn.accountName = null;
+            txn.accountUniqueName = null;
+            txn.hsnOrSac = 'sac';
+            txn.total = null;
+            txn.rate = null;
+            txn.sacNumber = null;
+            txn.sacNumberExists = false;
+            txn.taxableValue = 0;
+            txn.applicableTaxes = [];
+            this.focusOnDescription();
+            return txn;
+        });
+    }
+
+    /**
+     * Handle price calculation on unit change
+     *
+     * @param {SalesEntryClass} entry Entry details
+     * @param {SalesTransactionItemClass} transaction Transaction details
+     * @memberof VoucherComponent
+     */
+    public handlePriceCalculationOnUnitChange(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        let isInclusiveTax;
+        if (transaction?.stockDetails?.variant) {
+            // Unit is changed in create flow by changing the stock
+            isInclusiveTax = transaction.stockDetails.variant.salesTaxInclusive ||
+                transaction.stockDetails.variant.purchaseTaxInclusive ||
+                transaction.stockDetails.variant.fixedAssetTaxInclusive;
+        } else {
+            // Unit is changed in update flow without changing the stock
+            isInclusiveTax = transaction?.taxInclusive;
+        }
+        if (isInclusiveTax) {
+            transaction.total = transaction.quantity * transaction.rate;
+            this.calculateTransactionValueInclusively(entry, transaction);
+        } else {
+            transaction.setAmount(entry);
+            this.calculateWhenTrxAltered(entry, transaction);
         }
     }
 }

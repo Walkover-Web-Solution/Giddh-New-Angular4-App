@@ -65,7 +65,7 @@
                     id="{{ 'tax-control-checkbox-' + idx }}"
                     name="tax_{{ idx }}"
                     [(ngModel)]="tax.isChecked"
-                    (change)="change($event)"
+                    (change)="change()"
                     (click)="$event.stopPropagation()"
                     [disabled]="tax.isDisabled"
                 >
@@ -81,7 +81,7 @@
                     id="{{ 'tax-checkbox-' + idx }}"
                     name="tax_{{ idx }}"
                     [(ngModel)]="tax.isChecked"
-                    (change)="change($event)"
+                    (change)="change()"
                     (click)="$event.stopPropagation()"
                     [disabled]="tax.isDisabled"
                 >

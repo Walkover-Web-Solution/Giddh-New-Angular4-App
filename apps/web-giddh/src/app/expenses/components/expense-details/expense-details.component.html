@@ -7,16 +7,18 @@
             <div class="col-sm-6 text-right xs-left">
                 <div class="d-flex justify-content-end align-items-center">
                     <button
-                        mat-raised-button
-                        class="mr-b05 btn btn-success d-flex align-items-center"
+                        mat-stroked-button
+                        color="primary"
+                        class="mr-b05 d-flex align-items-center"
                         type="button"
                         (click)="showApproveConfirmPopup(approveConfirm)"
                     >
                         {{ localeData?.approve }}
                     </button>
                     <button
-                        mat-raised-button
-                        class="mr-b05 btn btn-danger"
+                        mat-stroked-button
+                        color="warn"
+                        class="mr-b05"
                         type="button"
                         (click)="openModal(rejectionReason)"
                     >
@@ -76,7 +78,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="d-inline-block mr-2">
-                                    <label class="font-14">
+                                    <label class="font-15">
                                         {{ entryAgainstObject.base }}<span class="text-danger">*</span>
                                     </label>
                                     <div class="clearfix">
@@ -118,7 +120,7 @@
                                 (click)="toggleEntryAgainst()"
                                 *ngIf="entryAgainstObject.against"
                             >
-                                <a href="javascript:void(0)" class="d-inline-block pt-3 font-14">
+                                <a href="javascript:void(0)" class="d-inline-block pt-3 font-15">
                                     {{ entryAgainstObject.against }}
                                 </a>
                             </div>

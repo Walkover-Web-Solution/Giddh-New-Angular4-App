@@ -8,14 +8,15 @@ const routes: Routes = [
         path: "",
         component: MainGroupComponent,
         children: [
-
             {
                 path: ":type/create",
-                component: CreateUpdateGroupComponent
+                component: CreateUpdateGroupComponent,
+                pathMatch: 'full'
             },
             {
                 path: ":type/edit/:groupUniqueName",
-                component: CreateUpdateGroupComponent
+                component: CreateUpdateGroupComponent,
+                pathMatch: 'full'
             }
         ]
     }

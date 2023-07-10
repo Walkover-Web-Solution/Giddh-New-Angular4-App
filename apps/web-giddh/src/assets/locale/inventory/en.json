@@ -1,17 +1,23 @@
 {
     "sidebar":{
         "inventory":"INVENTORY",
-        "stock":"Stock",
+        "stock":"Product",
         "create_new":"Create New",
         "item_wise":"Item-wise",
         "group_wise":"Group-wise",
-        "variant_wise":"'Variant-wise",
+        "variant_wise":"Variant-wise",
         "transactions":"Transactions",
         "services":"Services",
         "fixed_assets":"Fixed Assets",
         "branch_transfer":"Branch Transfer",
         "manufacturing":"Manufacturing",
-        "warehouse_balance":"Warehouse Opening Balance"
+        "warehouse_balance":"Warehouse Opening Balance",
+        "custom_units":"Custom Units",
+        "recipe":"Recipe",
+        "create_manufacturing":"Create Manufacturing",
+        "report":"Report",
+        "master":"Master",
+        "create_branch_transfer": "Create Branch Transfer"
     },
     "reports":{
         "transaction_count":"Transaction Count",
@@ -81,6 +87,19 @@
         "equals":"Equals",
         "greater_than":"Greater than",
         "less_than":"Less than",
-        "excluded":"Excluded"
+        "excluded":"Excluded",
+        "category":"Category",
+        "type":"Type",
+        "select_value":"Select Value",
+        "enter_amount":"Enter Amount"
+    },
+    "warehouse_opening_balance":{
+        "unique_name":"Unique Name",
+        "stock_group":"Stock Group",
+        "new_stock":"+ New Stock",
+        "select_warehouse":"Select Warehouse",
+        "opening_bal":"Opening Bal",
+        "variant":"Variant",
+        "variants":"Variants"
     }
 }

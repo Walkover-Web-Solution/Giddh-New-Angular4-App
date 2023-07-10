@@ -1,6 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import * as Highcharts from 'highcharts';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { select, Store } from '@ngrx/store';
@@ -13,17 +12,20 @@ import { GeneralService } from "../../../services/general.service";
 import { DashboardService } from '../../../services/dashboard.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { Chart, registerables } from 'chart.js';
+import { TitleCasePipe } from '@angular/common';
+Chart.register(...registerables);
 
 @Component({
     selector: 'revenue-chart',
     templateUrl: 'revenue-chart.component.html',
-    styleUrls: ['revenue-chart.component.scss', '../../home.component.scss']
+    styleUrls: ['revenue-chart.component.scss', '../../home.component.scss'],
+    providers: [TitleCasePipe],
+    encapsulation: ViewEncapsulation.None
 })
 export class RevenueChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
     public requestInFlight: boolean = false;
-    public revenueChart: typeof Highcharts = Highcharts;
-    public chartOptions: Highcharts.Options;
     public revenueGraphTypes: any[] = [];
     public activeGraphType: any;
     public graphParams: any = {
@@ -44,20 +46,25 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public getCurrentWeekStartEndDate: any = '';
     public getPreviousWeekStartEndDate: any = '';
-    public chartType: string = 'column';
+    public chartType: 'bar' | 'line' = 'bar';
     public graphExpanded: boolean = false;
     public currentDateRangePickerValue: Date[] = [];
     public previousDateRangePickerValue: Date[] = [];
+    /** True if chart changed */
+    public chartChanged: boolean = false;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** True if chart changed */
-    public chartChanged: boolean = false;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Hold Chart and used when destroy required */
+    public chart: any;
+    /* Holds lenght of data comming from api */
+    public chartLabelsize = [];
 
-    constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService) {
+
+    constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService, private titlecasePipe: TitleCasePipe) {
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
         this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(dayjs(this.getCurrentWeekStartEndDate[0]).subtract(1, 'day'));
 
@@ -78,7 +85,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.getRevenueGraphTypes();
-        
+
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -102,7 +109,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                         this.graphParams.uniqueName = this.activeGraphType['uniqueName'];
                         this.graphParams.type = this.activeGraphType['type'];
                     }
-                    this.revenueGraphTypes.push({ uniqueName: res[key]?.uniqueName, type: res[key].type });
+                    this.revenueGraphTypes.push({ uniqueName: res[key]?.uniqueName, type: res[key].type, displayName: res[key].displayName });
                 });
 
                 this.getRevenueGraphData();
@@ -120,6 +127,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.dashboardService.GetRevenueGraphData(revenueGraphDataRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.currentData = [];
             this.previousData = [];
+            this.chartLabelsize = [];
             this.summaryData.totalCurrent = 0;
             this.summaryData.totalLast = 0;
             this.summaryData.highest = 0;
@@ -130,11 +138,14 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                 if (res.balances !== null) {
                     let x = 0;
                     Object.keys(res.balances).forEach(key => {
+
                         if (res.balances[key].current) {
+                            this.chartLabelsize.push(x);
                             this.currentData.push({
                                 x: x,
                                 y: giddhRoundOff(res.balances[key].current.closingBalance.amount, this.giddhBalanceDecimalPlaces),
-                                tooltip: res.balances[key].current.dateLabel + "<br />" + this.graphParams?.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].current.closingBalance.amount)
+                                tooltipLabel: res.balances[key].current.dateLabel,
+                                tooltipAfterLabel: this.titlecasePipe.transform(this.graphParams?.uniqueName) + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].current.closingBalance.amount)
                             });
                         }
 
@@ -142,7 +153,8 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                             this.previousData.push({
                                 x: x,
                                 y: giddhRoundOff(res.balances[key].previous.closingBalance.amount, this.giddhBalanceDecimalPlaces),
-                                tooltip: res.balances[key].previous.dateLabel + "<br />" + this.graphParams?.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].previous.closingBalance.amount)
+                                tooltipLabel: res.balances[key].previous.dateLabel,
+                                tooltipAfterLabel: this.titlecasePipe.transform(this.graphParams?.uniqueName) + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].previous.closingBalance.amount)
                             });
                         }
 
@@ -195,7 +207,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                     this.summaryData.lowestLabel = res.previousLowestClosingBalance.dateLabel;
                 }
 
-                this.generateChart();
+                this.createChart();
             } else {
                 if (response?.status === "error" && response?.message) {
                     this.toasterService.errorToast(response.message);
@@ -229,57 +241,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         return [sunday, saturday];
     }
 
-    public generateChart() {
-        let chartType: any = this.chartType;
-
-        this.chartOptions = {
-            chart: {
-                type: chartType,
-                height: '300px'
-            },
-            colors: ['#0CB1AF', '#087E7D'],
-            title: {
-                text: ''
-            },
-            credits: {
-                enabled: false
-            },
-            series: [{
-                name: '',
-                data: this.currentData,
-                type: chartType
-            }, {
-                name: '',
-                data: this.previousData,
-                type: chartType
-            }
-            ],
-            legend: {
-                enabled: false
-            },
-            tooltip: {
-                useHTML: true,
-                formatter: function () {
-                    return (this.point as any).tooltip;
-                }
-            },
-            xAxis: {
-                labels: {
-                    enabled: false
-                },
-                title: {
-                    text: ''
-                }
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                }
-            }
-        };
-
-        this.requestInFlight = false;
-    }
 
     public changeGraphType(gtype) {
         this.activeGraphType = gtype;
@@ -292,8 +253,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public showLineChart() {
         this.chartChanged = true;
         this.generalService.invokeEvent.next("hideallcharts");
-        this.currentData = [];
-        this.previousData = [];
+        this.chartLabelsize = [];
         this.summaryData.totalCurrent = 0;
         this.summaryData.totalLast = 0;
         this.summaryData.highest = 0;
@@ -301,40 +261,40 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.graphParams.interval = "daily";
         this.chartType = "line";
         this.graphExpanded = true;
-        this.generateChart();
+        this.setPreviousDate();
+        this.setCurrentDate();
+        this.createChart();
     }
 
     public updateChartFrequency(interval) {
         this.graphParams.interval = interval;
 
-        this.currentData = [];
-        this.previousData = [];
         this.summaryData.totalCurrent = 0;
         this.summaryData.totalLast = 0;
         this.summaryData.highest = 0;
         this.summaryData.lowest = 0;
 
-        this.generateChart();
+        this.createChart();
 
         setTimeout(() => {
             this.getRevenueGraphData();
         }, 200);
     }
 
-    public setPreviousDate(data) {
-        if (data && !this.chartChanged) {
-            this.graphParams.previousFrom = dayjs(data[0]).format(GIDDH_DATE_FORMAT);
-            this.graphParams.previousTo = dayjs(data[1]).format(GIDDH_DATE_FORMAT);
-            this.getPreviousWeekStartEndDate = [data[0], data[1]];
+    public setPreviousDate() {
+        if ((this.previousDateRangePickerValue[0] !== null) && (this.previousDateRangePickerValue[1] !== null)) {
+            this.graphParams.previousFrom = dayjs(this.previousDateRangePickerValue[0]).format(GIDDH_DATE_FORMAT);
+            this.graphParams.previousTo = dayjs(this.previousDateRangePickerValue[1]).format(GIDDH_DATE_FORMAT);
+            this.getPreviousWeekStartEndDate = [this.previousDateRangePickerValue[0], this.previousDateRangePickerValue[1]];
             this.getRevenueGraphData();
         }
     }
 
-    public setCurrentDate(data) {
-        if (data) {
-            this.graphParams.currentFrom = dayjs(data[0]).format(GIDDH_DATE_FORMAT);
-            this.graphParams.currentTo = dayjs(data[1]).format(GIDDH_DATE_FORMAT);
-            this.getCurrentWeekStartEndDate = [data[0], data[1]];
+    public setCurrentDate() {
+        if ((this.currentDateRangePickerValue[0] !== null) && (this.currentDateRangePickerValue[1] !== null)) {
+            this.graphParams.currentFrom = dayjs(this.currentDateRangePickerValue[0]).format(GIDDH_DATE_FORMAT);
+            this.graphParams.currentTo = dayjs(this.currentDateRangePickerValue[1]).format(GIDDH_DATE_FORMAT);
+            this.getCurrentWeekStartEndDate = [this.currentDateRangePickerValue[0], this.currentDateRangePickerValue[1]];
             this.getRevenueGraphData();
             this.chartChanged = false;
         }
@@ -343,7 +303,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public showColumnChart() {
         this.generalService.invokeEvent.next("showallcharts");
         this.graphParams.interval = "daily";
-        this.chartType = "column";
+        this.chartType = "bar";
         this.graphExpanded = false;
 
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
@@ -359,4 +319,242 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
         this.getRevenueGraphData();
     }
+
+    /**
+     * Create chart
+     *
+     * @memberof RevenueChartComponent
+     */
+    public createChart(): void {
+        const chartType = this.chartType;
+        let currentData = this.currentData;
+        let previousData = this.previousData;
+        let label = this.chartLabelsize;
+        this.requestInFlight = true;
+        this.chart?.destroy();
+
+        /* For Chart Type Line  */
+        if (this.chartType === 'line') {
+            this.chart = new Chart("revenueChartLargeCanvas", {
+                type: chartType,
+                data: {
+                    labels: label,
+                    datasets: [
+                        {
+                            label: 'Current',
+                            type: chartType,
+                            data: currentData,
+                            fill: false,
+                            borderColor: 'rgb(12, 177, 175)',
+                        },
+                        {
+                            label: 'Previous',
+                            type: chartType,
+                            data: previousData,
+                            fill: false,
+                            borderColor: 'rgb(8, 126, 125)',
+                        }
+                    ],
+
+                },
+
+                options: {
+                    interaction: {
+                        intersect: true,
+                        mode: "nearest",
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function () { return '' },
+                                afterLabel: function (context) {
+                                    let label = ''
+                                    let dataIndex = context.dataIndex;
+                                    let datasetIndex = context.datasetIndex;
+                                    let data = datasetIndex === 0 ? currentData : previousData;
+                                    let tooltipIndex = dataIndex;
+
+                                    for (let i = 0; i < data.length; i++) {
+                                        label = data[tooltipIndex].tooltipAfterLabel
+                                    }
+                                    return label;
+                                },
+                                label: function (context) {
+                                    let label = ''
+                                    let dataIndex = context.dataIndex;
+                                    let datasetIndex = context.datasetIndex;
+                                    let data = datasetIndex === 0 ? currentData : previousData;
+                                    let tooltipIndex = dataIndex;
+
+                                    for (let i = 0; i < data.length; i++) {
+                                        label = data[tooltipIndex].tooltipLabel
+                                    }
+                                    return label;
+                                }
+                            },
+                            backgroundColor: 'rgba(255,255,255,0.8)',
+                            borderColor: 'rgb(12, 177, 175)',
+                            bodyColor: 'rgb(0, 0, 0)',
+                            titleColor: 'rgb(0, 0, 0)',
+                            borderWidth: 0.5,
+                            titleFont: {
+                                weight: 'normal'
+                            },
+                            displayColors: false,
+                        },
+                    },
+                    scales: {
+                        x: {
+                            border: {
+                                display: true
+                            },
+                            display: false,
+                        },
+                        y: {
+                            border: {
+                                display: true
+                            },
+                            type: 'linear',
+                            ticks: {
+                                callback: function (value) {
+                                    var ranges = [
+                                        { divider: 1e6, suffix: 'M' },
+                                        { divider: 1e3, suffix: 'k' }
+                                    ];
+                                    function formatNumber(n) {
+                                        for (let i = 0; i < ranges.length; i++) {
+                                            if (n >= ranges[i].divider) {
+                                                return (n / ranges[i].divider).toString() + ranges[i].suffix;
+                                            }
+                                        }
+                                        if (Math.floor(n) === n) {
+                                            return value;
+                                        }
+
+                                    }
+                                    return formatNumber(value);
+                                },
+                            },
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            });
+        }
+
+        /* For Chart Type Bar  */
+        if (this.chartType === 'bar') {
+            this.chart = new Chart("revenueChartCanvas", {
+                type: chartType,
+                data: {
+                    labels: label,
+                    datasets: [
+                        {
+                            data: currentData,
+                            backgroundColor: "rgb(12, 177, 175)",
+                            borderColor: 'rgb(12, 177, 175)',
+                            barThickness: 20
+                        },
+                        {
+                            data: previousData,
+                            backgroundColor: "rgb(8, 126, 125)",
+                            borderColor: 'rgb(8, 126, 125)',
+                            barThickness: 20
+                        }
+                    ],
+
+                },
+
+                options: {
+                    interaction: {
+                        intersect: true,
+                        mode: 'point',
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function () { return '' },
+                                afterLabel: function (context) {
+                                    let label = ''
+                                    let dataIndex = context.dataIndex;
+                                    let datasetIndex = context.datasetIndex;
+                                    let data = datasetIndex === 0 ? currentData : previousData;
+                                    let tooltipIndex = dataIndex;
+
+                                    for (let i = 0; i < data.length; i++) {
+                                        label = data[tooltipIndex].tooltipAfterLabel
+                                    }
+                                    return label;
+                                },
+                                label: function (context) {
+                                    let label = ''
+                                    let dataIndex = context.dataIndex;
+                                    let datasetIndex = context.datasetIndex;
+                                    let data = datasetIndex === 0 ? currentData : previousData;
+                                    let tooltipIndex = dataIndex;
+
+                                    for (let i = 0; i < data.length; i++) {
+                                        label = data[tooltipIndex].tooltipLabel
+                                    }
+                                    return label;
+                                }
+                            },
+                            backgroundColor: 'rgba(255,255,255,0.8)',
+                            borderColor: 'rgb(12, 177, 175)',
+                            bodyColor: 'rgb(0, 0, 0)',
+                            borderWidth: 0.5,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            border: {
+                                display: false
+                            },
+                            display: false,
+                        },
+                        y: {
+                            border: {
+                                display: true,
+                            },
+                            type: 'linear',
+                            ticks: {
+                                callback: function (value) {
+                                    var ranges = [
+                                        { divider: 1e6, suffix: 'M' },
+                                        { divider: 1e3, suffix: 'k' }
+                                    ];
+                                    function formatNumber(n) {
+                                        for (let i = 0; i < ranges.length; i++) {
+                                            if (n >= ranges[i].divider) {
+                                                return (n / ranges[i].divider).toString() + ranges[i].suffix;
+                                            }
+                                        }
+                                        if (Math.floor(n) === n) {
+                                            return value;
+                                        }
+
+                                    }
+                                    return formatNumber(value);
+                                },
+                            }
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                }
+            });
+        }
+
+        this.requestInFlight = false;
+    }
 }
+

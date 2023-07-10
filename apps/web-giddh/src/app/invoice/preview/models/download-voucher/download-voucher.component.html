@@ -5,7 +5,7 @@
 
 <div class="modal-body">
     <ng-template>
-        <div class="clearfix font-14">
+        <div class="clearfix font-15">
             <div class="mb-5">
                 <p class="mr-b1">{{ localeData?.tax_invoice_copies }}</p>
                 <p class="mr-b1">
@@ -70,7 +70,7 @@
             <hr />
         </ng-container>
 
-        <div class="checkbox" *ngIf="voucherApiVersion === 2">
+        <div class="checkbox pt-1" *ngIf="voucherApiVersion === 2">
             <label>
                 <input
                     name="originalCopy"
@@ -87,7 +87,7 @@
                 }}
             </label>
         </div>
-        <div class="checkbox" *ngIf="selectedItem?.voucherType === 'sales'">
+        <div class="checkbox pt-1" *ngIf="selectedItem?.voucherType === 'sales'">
             <label>
                 <input
                     type="checkbox"
@@ -99,7 +99,7 @@
             </label>
         </div>
 
-        <div class="checkbox" *ngIf="selectedItem?.voucherType === 'sales'">
+        <div class="checkbox pt-1" *ngIf="selectedItem?.voucherType === 'sales'">
             <label>
                 <input
                     type="checkbox"
@@ -110,7 +110,7 @@
                 {{ commonLocaleData?.app_customer }}
             </label>
         </div>
-        <div class="checkbox" *ngIf="voucherApiVersion === 2 && selectedItem?.hasAttachment">
+        <div class="checkbox pt-1" *ngIf="voucherApiVersion === 2 && selectedItem?.hasAttachment">
             <label>
                 <input name="attachment" type="checkbox" value="Attachment" [(ngModel)]="isAttachment" />
                 {{ localeData?.invoice_copy_options?.attachment }}

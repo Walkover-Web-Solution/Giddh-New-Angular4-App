@@ -110,7 +110,7 @@
                                                     <p>
                                                         <small>{{ localeData?.pending_po }}</small>
                                                     </p>
-                                                    <p class="font-14">
+                                                    <p class="font-15">
                                                         <a
                                                             href="javascript:;"
                                                             (click)="
@@ -1186,6 +1186,14 @@
                                     >({{ transaction.stockDetails?.name }})</span
                                 >
                             </div>
+                            <p
+                                *ngIf="
+                                    transaction.variant?.name && ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                "
+                                class="variant"
+                            >
+                                {{ localeData?.variant + ": " + transaction.variant?.name }}
+                            </p>
                             <div class="description">
                                 {{ transaction.description }}
                             </div>
@@ -1515,7 +1523,33 @@
                                     </sh-select>
                                 </div>
                             </div>
-
+                            <ng-container
+                                *ngIf="
+                                    transaction?.isStockTxn && ((stockVariants | async)[entryIdx] | async) as variants
+                                "
+                            >
+                                <div *ngIf="variants?.length > 1" class="variant-name">
+                                    <!-- <select-field
+                                        [disabled]="isReadOnly"
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [placeholder]="localeData?.select_variant"
+                                        (selectedOption)="variantChanged($event, transaction, entry)"
+                                        [options]="variants"
+                                        [required]="true"
+                                        [name]="'variant' + entryIdx"
+                                        [(ngModel)]="transaction.variant.uniqueName"
+                                    >
+                                    </select-field> -->
+                                    <sh-select
+                                        [placeholder]="localeData?.select_variant"
+                                        [options]="variants"
+                                        (selected)="variantChanged($event, transaction, entry)"
+                                        [isRequired]="true"
+                                        name="{{ 'variant' + entryIdx }}"
+                                        [(ngModel)]="transaction.variant.uniqueName"
+                                    ></sh-select>
+                                </div>
+                            </ng-container>
                             <div *ngIf="transaction.fakeAccForSelect2">
                                 <div class="description mt-1">
                                     <textarea
@@ -1663,7 +1697,10 @@
                                 [disabled]="!transaction.isStockTxn"
                                 name="transaction.stockUnit_{{ entryIdx }}"
                                 [(ngModel)]="transaction.stockUnit"
-                                (ngModelChange)="onChangeUnit(transaction, $event); transaction.setAmount(entry)"
+                                (ngModelChange)="
+                                    onChangeUnit(transaction, $event);
+                                    handlePriceCalculationOnUnitChange(entry, transaction)
+                                "
                             >
                                 <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
                                     {{ stock.text }}
@@ -1910,7 +1947,7 @@
                 <!-- region add bulk items -->
                 <div class="p-1 aqua-color add-line-bulk-item">
                     <a href="javascript:void 0" (click)="addBlankRow(null)">{{ localeData?.add_new_line }}</a>
-                    <span class="font-14"> | </span>
+                    <span class="font-15"> | </span>
                     <a (click)="addBulkItems()" href="javascript:;">{{ localeData?.add_bulk_entries }}</a>
                 </div>
                 <!-- endregion -->
@@ -2256,7 +2293,15 @@
                                             >({{ transaction.stockDetails?.name }})</span
                                         >
                                     </div>
-
+                                    <p
+                                        *ngIf="
+                                            transaction.variant?.name &&
+                                            ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                        "
+                                        class="variant"
+                                    >
+                                        {{ localeData?.variant + ": " + transaction.variant?.name }}
+                                    </p>
                                     <p class="description">
                                         {{ transaction.description }}
                                     </p>
@@ -2731,7 +2776,8 @@
                                                     name="transaction.stockUnit_{{ entryIdx }}"
                                                     [(ngModel)]="transaction.stockUnit"
                                                     (ngModelChange)="
-                                                        onChangeUnit(transaction, $event); transaction.setAmount(entry)
+                                                        onChangeUnit(transaction, $event);
+                                                        handlePriceCalculationOnUnitChange(entry, transaction)
                                                     "
                                                 >
                                                     <option

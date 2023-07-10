@@ -18,7 +18,7 @@ import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TaxResponse } from '../../models/api-models/Company';
-import { ITaxDetail } from '../../models/interfaces/tax.interface';
+import { ITaxControlData, ITaxDetail } from '../../models/interfaces/tax.interface';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { AppState } from '../../store';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
@@ -32,16 +32,6 @@ export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     useExisting: forwardRef(() => TaxControlComponent),
     multi: true
 };
-
-export class TaxControlData {
-    public name?: string;
-    public uniqueName: string;
-    public amount?: number;
-    public isChecked?: boolean;
-    public isDisabled?: boolean;
-    public type?: string;
-    public calculationMethod?: string;
-}
 
 @Component({
     selector: 'tax-control',
@@ -58,7 +48,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public date: string;
     @Input() public taxes: TaxResponse[];
     @Input() public applicableTaxes: string[] = [];
-    @Input() public taxRenderData: TaxControlData[];
+    @Input() public taxRenderData: ITaxControlData[];
     @Input() public showHeading: boolean = true;
     /** Custom heading to be applied to tax control header */
     @Input() public customHeading: string = '';
@@ -75,9 +65,11 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
-    /** True, if current transaction is advance receipt
-     * Required for inclusive tax rate calculation
+    /** True, if current transaction tax needed to be calculated inclusively
+     * Required for inclusive tax rate calculation for advance receipt, variant (purchase-sales-<fixed-asset>) inclusive
     */
+    @Input() public calculateTaxInclusively: boolean;
+    /** True if advance receipt entry is created */
     @Input() public isAdvanceReceipt: boolean;
 
     @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
@@ -125,15 +117,17 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             }
         }
 
-        if ('applicableTaxes' in changes && (Array.isArray(changes.applicableTaxes.currentValue)) && !isEqual(changes.applicableTaxes.currentValue, changes.applicableTaxes.previousValue)) {
+        if ('applicableTaxes' in changes && (Array.isArray(changes.applicableTaxes.currentValue))) {
             this.prepareTaxObject();
-            this.change();
+            if (!isEqual(changes.applicableTaxes.currentValue, changes.applicableTaxes.previousValue)) {
+                this.change();
+            }
         }
 
         if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
             this.calculateInclusiveOrExclusiveTaxes();
         }
-        if (changes['isAdvanceReceipt'] && changes['isAdvanceReceipt'].currentValue !== changes['isAdvanceReceipt'].previousValue) {
+        if (changes['calculateTaxInclusively'] && changes['calculateTaxInclusively'].currentValue !== changes['calculateTaxInclusively'].previousValue) {
             this.change();
         }
 
@@ -172,7 +166,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 }
             } else {
 
-                let taxObj = new TaxControlData();
+                let taxObj = new ITaxControlData();
                 taxObj.name = tax.name;
                 taxObj.uniqueName = tax?.uniqueName;
                 taxObj.type = tax.taxType;
@@ -228,8 +222,11 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
     /**
      * select/deselect tax checkbox
+     *
+     * @param {boolean} [preventEmit] Prevent the total amount update event to avoid recursive calculation
+     * @memberof TaxControlComponent
      */
-    public change(event?: any) {
+    public change(preventEmit?: boolean) {
         this.selectedTaxes = [];
         this.taxSum = this.calculateSum();
         this.calculateInclusiveOrExclusiveTaxes();
@@ -288,7 +285,12 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
             }
         }, 100);
-        this.taxAmountSumEvent.emit(this.taxSum);
+        if (!preventEmit) {
+            /** Should emit only conditionally, done to avoid
+             * recursive call to change method in case of inclusive tax calculation for stock
+            */
+            this.taxAmountSumEvent.emit(this.taxSum);
+        }
         if (this.taxRenderData?.length > 0) {
             this.selectedTaxEvent.emit(this.selectedTaxes);
         }
@@ -366,7 +368,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof TaxControlComponent
      */
     private calculateInclusiveOrExclusiveTaxes(): void {
-        if (this.isAdvanceReceipt) {
+        if (this.calculateTaxInclusively) {
             // Inclusive tax rate
             this.taxTotalAmount = giddhRoundOff((this.totalForTax * this.taxSum) / (100 + this.taxSum), this.giddhBalanceDecimalPlaces);
         } else {

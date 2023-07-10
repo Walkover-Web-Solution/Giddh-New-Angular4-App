@@ -81,7 +81,7 @@
     border: 1px solid var(--color-white);
     color: var(--color-white);
     padding: 3px 14px;
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 :host.in #back:hover {
     color: var(--color-giddh-blue);

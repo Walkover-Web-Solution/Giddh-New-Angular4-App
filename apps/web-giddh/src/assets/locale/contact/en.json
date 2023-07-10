@@ -69,5 +69,15 @@
     "connect_icici_bank": "Connect ICICI Bank",
     "pending_approval": "Pending approval",
     "due": "Due",
-    "bulk_payment_unsupported_error": "Bulk Payment is not supported."
+    "bulk_payment_unsupported_error": "Bulk Payment is not supported.",
+    "customer_name":"Customer Name",
+    "sales": "Sales",
+    "receipt": "Receipts",
+    "vendor_name":"Vendor Name",
+    "purchase": "Purchase",
+    "payment":"Payment",
+    "action":"Action",
+    "parent_group":"Parent Group",
+    "state":"State",
+    "gstin":"Tax Number"
 }

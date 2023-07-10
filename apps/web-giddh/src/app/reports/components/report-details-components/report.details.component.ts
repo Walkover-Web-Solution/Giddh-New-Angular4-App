@@ -280,6 +280,14 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.selectedMonth = null;
             }
             this.selectedType = interval?.charAt(0)?.toUpperCase() + interval?.slice(1);
+
+            if (this.currentOrganizationType === OrganizationType.Branch) {
+                if (!this.currentBranch) {
+                    this.currentBranch = {};
+                }
+                this.currentBranch.uniqueName = this.generalService.currentBranchUniqueName;
+            }
+
             let request: ReportsRequestModel = {
                 to: endDate,
                 from: startDate,
@@ -326,8 +334,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public getDateFromMonth(selectedMonth) {
         let firstDay = '', lastDay = '';
         if (this.activeFinacialYr) {
-            let mdyFrom = this.activeFinacialYr.financialYearStarts.split('-');
-            let mdyTo = this.activeFinacialYr.financialYearEnds.split('-');
+            let mdyFrom = this.activeFinacialYr.financialYearStarts?.split('-');
+            let mdyTo = this.activeFinacialYr.financialYearEnds?.split('-');
 
             let startDate;
 
@@ -441,8 +449,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
      * @memberof ReportsDetailsComponent
      */
     public export(): void {
-        let startDate = this.activeFinacialYr.financialYearStarts?.toString();
-        let endDate = this.activeFinacialYr.financialYearEnds?.toString();
+        let startDate = this.activeFinacialYr?.financialYearStarts?.toString();
+        let endDate = this.activeFinacialYr?.financialYearEnds?.toString();
         if (this.selectedMonth) {
             let startEndDate = this.getDateFromMonth(this.monthNames?.indexOf(this.selectedMonth) + 1);
             startDate = startEndDate.firstDay;

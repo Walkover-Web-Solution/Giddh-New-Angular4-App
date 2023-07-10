@@ -27,6 +27,9 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
 import { SendEmailModule } from "../shared/send-email/send-email.module";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { AsideMenuOtherTaxesModule } from "../shared/aside-menu-other-taxes/aside-menu-other-taxes.module";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { AdvanceReceiptAdjustmentModule } from "../shared/advance-receipt-adjustment/advance-receipt-adjustment.module";
 
 @NgModule({
     declarations: [
@@ -60,7 +63,10 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         MatDialogModule,
         GiddhPageLoaderModule,
         MatAutocompleteModule,
-        MatTooltipModule
+        AsideMenuOtherTaxesModule,
+        MatSlideToggleModule,
+        MatTooltipModule,
+        AdvanceReceiptAdjustmentModule
     ],
     providers: [TitleCasePipe]
 })

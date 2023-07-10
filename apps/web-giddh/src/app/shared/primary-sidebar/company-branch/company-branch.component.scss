@@ -1,5 +1,5 @@
 .company-branch-dropdown {
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     .search-box {
         padding: 0 20px;
         .input-group-text {
@@ -27,7 +27,7 @@
             }
         }
         .input-group-append {
-            font-size: 12px;
+            font-size: var(--font-size-12);
             color: var(--color-primary-company-branch-input-group-append);
             right: 10px;
             top: 0;
@@ -51,7 +51,7 @@
     }
     tab {
         position: relative;
-        font-family: "opensans-regular" !important;
+        font-family: var(--font-regular) !important;
     }
     tab.icon-company {
         margin: 0 -20px;
@@ -71,7 +71,7 @@
             p {
                 span {
                     small {
-                        font-size: 10px;
+                        font-size: var(--font-size-9);
                         line-height: 12.4px;
                         font-weight: 500;
                         padding: 2px 5px;
@@ -338,7 +338,7 @@
                 height: 24px;
                 background-color: var(--color-secondary-button-background);
                 border-radius: 30px;
-                font-size: 12px;
+                font-size: var(--font-size-12);
                 justify-content: center;
                 align-items: center;
                 color: var(--color-secondary-button-text);
@@ -355,10 +355,10 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                font-size: 12px;
+                font-size: var(--font-size-12);
                 padding: 5px 10px;
                 border-radius: 5px !important;
-                font-size: 12px;
+                font-size: var(--font-size-12);
                 &:hover {
                     background-color: var(--color-tertiary-button-background-hover);
                 }
@@ -380,7 +380,7 @@
                     small {
                         background: var(--color-primary-company-branch-wrap-company-refresh-small-background);
                         color: var(--color-primary-company-branch-wrap-company-refresh-small);
-                        font-size: 10px;
+                        font-size: var(--font-size-9);
                         line-height: 12.4px;
                         font-weight: 700;
                         padding: 2px 5px;
@@ -494,7 +494,7 @@
     margin-right: 2px;
 }
 .font-semibold {
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 
 ::ng-deep {

@@ -59,7 +59,7 @@
                     padding: 0 0;
                     border-radius: 0;
                     height: auto;
-                    font-size: 14px;
+                    font-size: var(--font-size-15);
                     background-color: transparent;
                     display: inline-block;
                     &:focus {
@@ -76,11 +76,11 @@
         ul {
             list-style: none;
             li {
-                font-size: 14px;
+                font-size: var(--font-size-15);
                 a {
                     padding: 10px 0;
                     color: var(--color-nero);
-                    font-family: "opensans-semibold";
+                    font-family: var(--font-semibold);
                     display: flex;
                     white-space: normal;
                     word-break: break-word;

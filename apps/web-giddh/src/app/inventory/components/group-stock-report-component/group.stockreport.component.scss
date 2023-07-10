@@ -35,7 +35,7 @@ table {
 }
 
 .head-report {
-    font-size: 20px;
+    font-size: var(--font-size-16);
     font-weight: bold;
     text-transform: capitalize;
     max-width: 600px;
@@ -151,11 +151,11 @@ table {
         padding: 41px;
         h2 {
             color: var(--color-gray);
-            font-size: 20px;
+            font-size: var(--font-size-16);
             margin-bottom: 10px;
         }
         h1 {
-            font-size: 32px;
+            font-size: var(--font-size-32);
         }
     }
 }
@@ -166,7 +166,7 @@ table {
 }
 
 .btn-download {
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 
 .btn-group.open.show {
@@ -230,19 +230,19 @@ table {
             min-width: 20px;
         }
         .operators {
-            font-size: 39px;
+            font-size: var(--font-size-32);
             color: var(--color-gray);
         }
         h2 {
-            font-size: 18px;
+            font-size: var(--font-size-16);
             line-height: 20px;
         }
         h3 {
-            font-size: 14px;
+            font-size: var(--font-size-15);
             line-height: 20px;
         }
         h4 {
-            font-size: 14px;
+            font-size: var(--font-size-15);
             line-height: 20px;
         }
         @media only screen and (max-width: 1024px) {
@@ -299,7 +299,7 @@ td.border-right-none {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
+    font-size: var(--font-size-16);
     border: 1px solid var(--color-primary-button-border);
     border-radius: 5px;
     color: var(--color-giddh-blue);
@@ -321,7 +321,7 @@ td.border-right-none {
 button.btn.btn-filter {
     background: var(--color-dark-fog);
     border: 1px solid var(--color-primary-button-border);
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
@@ -368,7 +368,7 @@ button.btn.btn-filter {
 @media (max-width: 991px) {
     .wrap-head-report {
         .head-report {
-            font-size: 16px;
+            font-size: var(--font-size-15);
             white-space: normal;
             word-break: break-all;
         }
@@ -392,7 +392,7 @@ button.btn.btn-filter {
     }
     .head-report {
         margin-right: 0 !important;
-        font-size: 16px;
+        font-size: var(--font-size-15);
     }
     .btn-link {
         margin-right: 0 !important;
@@ -441,7 +441,7 @@ button.btn.btn-filter {
             border: 1px solid var(--color-blue);
             color: var(--color-white);
             border-radius: 5px;
-            font-size: 14px;
+            font-size: var(--font-size-15);
             padding: 7px 8px;
             width: auto;
         }

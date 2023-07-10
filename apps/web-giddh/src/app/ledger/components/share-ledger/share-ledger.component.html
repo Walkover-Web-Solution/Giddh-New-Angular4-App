@@ -42,14 +42,12 @@
                                         </mat-form-field>
                                         <span class="input-group-btn mr-l1">
                                             <button
-                                                mat-button
+                                                mat-stroked-button
+                                                color="primary"
                                                 class="
-                                                    btn
                                                     share-ledger-button
-                                                    btn-success btn-md
                                                     d-flex
                                                     align-items-center
-                                                    disabled-btn-color
                                                 "
                                                 type="submit"
                                                 [disabled]="shareAccountForm.invalid"
@@ -88,7 +86,7 @@
                             <div class="clearfix">
                                 <span>{{ commonLocaleData?.app_or | titlecase }}</span>
                                 <a
-                                    class="btn-link share-link mr-b05 font-14"
+                                    class="btn-link share-link mr-b05 font-15"
                                     href="javascript:;"
                                     (click)="getMagicLink()"
                                 >
@@ -109,15 +107,13 @@
                                 </mat-form-field>
                                 <span class="input-group-btn mr-l1">
                                     <button
-                                        mat-button
+                                        mat-stroked-button
+                                        color="primary"
                                         [disabled]="!magicLink ? 'disabled' : null"
                                         class="
-                                            btn
                                             share-ledger-button
-                                            btn-success
                                             d-flex
                                             align-items-center
-                                            disabled-btn-color
                                         "
                                         (click)="toggleIsCopied()"
                                         [ngxClipboard]="magicLinkInput"

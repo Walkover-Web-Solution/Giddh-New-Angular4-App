@@ -8,5 +8,6 @@ export const COMMON_API = {
     COMMAND_K: 'company/:companyUniqueName/cmdk?page=:page&q=:q&group=:group&refresh=false&isMobile=:isMobile',
     DOWNLOAD_FILE: 'company/:companyUniqueName/download-file?voucherVersion=2&fileType=:fileType&downloadOption=:downloadOption',
     STOCK_UNITS: 'stock-units',
-    GST_STOCK_UNITS: 'v2/company/:companyUniqueName/gst/unit-mapping'
+    GST_STOCK_UNITS: 'v2/company/:companyUniqueName/gst/unit-mapping',
+    MODULE_WISE_COLUMNS: 'company/:companyUniqueName/report-filters?module=:module',
 };

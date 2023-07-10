@@ -105,7 +105,10 @@
                                 <div class="row">
                                     <div class="col-sm-12 mr-t1">
                                         <button class="btn btn-link btn-xs" (click)="expandLongCode = !expandLongCode">
-                                            <i class="icon-plus" [ngClass]="{ 'icon-minus': expandLongCode }"></i>
+                                            <i
+                                                class="icon-plus font-12"
+                                                [ngClass]="{ 'icon-minus': expandLongCode }"
+                                            ></i>
                                             {{ localeData?.mobile_number?.long_code }}
                                         </button>
                                         <div class="long-code-details" *ngIf="expandLongCode">

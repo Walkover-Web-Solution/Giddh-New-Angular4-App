@@ -37,17 +37,19 @@
                                     <div class="dis mr-r15 pull-left on-desktop-view">
                                         <div class="btn-group pull-right">
                                             <button
-                                                mat-raised-button
+                                                mat-stroked-button
+                                                color="primary"
                                                 *ngIf="activeTab == 'customer'"
-                                                class="btn-sky-blue mr-0"
+                                                class="mr-0"
                                                 (click)="openAddAndManage('customer')"
                                             >
                                                 {{ localeData?.new_customer }}
                                             </button>
                                             <button
-                                                mat-raised-button
+                                                mat-stroked-button
+                                                color="primary"
                                                 *ngIf="activeTab == 'vendor'"
-                                                class="btn-sky-blue mr-0"
+                                                class="mr-0"
                                                 (click)="openAddAndManage('vendor')"
                                             >
                                                 {{ localeData?.new_vendor }}
@@ -113,7 +115,6 @@
                                                 class="form-group custom-datepicker mr-r15"
                                                 (click)="showGiddhDatepicker($event)"
                                             >
-                                                <i class="icon-calender calendar-addon"></i>
                                                 <input
                                                     matInput
                                                     type="text"
@@ -135,19 +136,20 @@
                                     "
                                     *ngIf="showClearFilter"
                                 >
-                                    <button class="btn btn-filters mr-0" (click)="resetAdvanceSearch()">
+                                    <button mat-stroked-button class="mr-0" (click)="resetAdvanceSearch()">
                                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                                     </button>
                                 </div>
                                 <!-- Invoice filter section ends -->
                                 <div class="button-content">
                                     <button
-                                        mat-raised-button
-                                        class="btn btn-group btn-filter desktop-button-filter"
+                                        mat-stroked-button
+                                        class="desktop-button-filter"
                                         *ngIf="selectedCheckedContacts?.length > 0"
                                         (click)="clearSelectedContacts()"
                                     >
-                                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_selected }}
+                                        <span class="icon-cross icon-font-14"></span>
+                                        {{ commonLocaleData?.app_clear_selected }}
                                     </button>
                                 </div>
 
@@ -177,8 +179,8 @@
                                         </div>
                                         <div class="customer-footer-box pull-right">
                                             <button
-                                                mat-raised-button
-                                                class="btn btn-group btn-filter mobile-button-filter"
+                                                mat-stroked-button
+                                                class="btn-filter mobile-button-filter"
                                                 *ngIf="selectedAccountsList?.length > 0"
                                                 (click)="clearSelectedContacts()"
                                             >
@@ -188,75 +190,33 @@
                                             </button>
                                         </div>
                                         <div class="mr-0" *ngIf="activeTab !== 'aging'">
-                                            <button
-                                                mat-icon-button
-                                                [matMenuTriggerFor]="menu"
-                                                matTooltipPosition="left"
-                                                matTooltip="{{ localeData?.filter_toggle }}"
+                                            <select-table-column
+                                                [moduleType]="moduleType"
+                                                [customiseColumns]="customiseColumns"
+                                                (selectedColumns)="showSelectedHeaderColumns($event)"
+                                                [localeData]="localeData"
+                                                [commonLocaleData]="commonLocaleData"
+                                                [iconClass]="'icon-options select-multiple-icon-options'"
+                                                (isLoading)="isLoading = $event"
                                             >
-                                                <i class="icon-options"></i>
-                                            </button>
-                                            <mat-menu #menu="matMenu">
-                                                <button
-                                                    mat-menu-item
-                                                    (click)="$event.stopPropagation()"
-                                                    (keydown.enter)="
-                                                        $event.stopPropagation();
-                                                        selectAllCheckbox.checked = !selectAllCheckbox?.checked;
-                                                        selectAllColumns(selectAllCheckbox?.checked)
-                                                    "
-                                                >
-                                                    <mat-checkbox
-                                                        #selectAllCheckbox
-                                                        color="primary"
-                                                        name="selectAll"
-                                                        [(ngModel)]="selectAll"
-                                                        (change)="selectAllColumns($event?.checked)"
-                                                        >{{ commonLocaleData?.app_select_all }}
-                                                    </mat-checkbox>
-                                                </button>
-                                                <ng-container *ngFor="let item of availableColumnsCount">
-                                                    <button
-                                                        *ngIf="showFieldFilter[item?.value]"
-                                                        mat-menu-item
-                                                        (click)="$event.stopPropagation()"
-                                                        (keydown.enter)="
-                                                            $event.stopPropagation();
-                                                            optionsCheckbox.checked = !optionsCheckbox?.checked;
-                                                            columnFilter(
-                                                                !showFieldFilter[item?.value].visibility,
-                                                                item?.value
-                                                            )
-                                                        "
-                                                    >
-                                                        <mat-checkbox
-                                                            #optionsCheckbox
-                                                            class="text-capitalize"
-                                                            color="primary"
-                                                            name="{{ item?.value }}"
-                                                            (ngModelChange)="columnFilter($event, item?.value)"
-                                                            [(ngModel)]="showFieldFilter[item?.value].visibility"
-                                                        >
-                                                            {{ showFieldFilter[item?.value].displayName }}</mat-checkbox
-                                                        >
-                                                    </button>
-                                                </ng-container>
-                                            </mat-menu>
+                                            </select-table-column>
                                         </div>
                                     </div>
                                     <div class="btn-group pull-right on-mobile-view mr-t1">
                                         <button
-                                            mat-raised-button
+                                            mat-stroked-button
+                                            color="primary"
                                             *ngIf="activeTab == 'customer' && sundryDebtorsAccounts?.length"
-                                            class="btn-sky-blue mr-r05 w-100"
+                                            class="mr-r05 w-100"
                                             (click)="openAddAndManage('customer')"
                                         >
                                             {{ localeData?.new_customer }}
                                         </button>
                                         <button
-                                            mat-raised-button
+                                            mat-stroked-button
+                                            color="primary"
                                             *ngIf="activeTab == 'vendor' && sundryCreditorsAccounts?.length"
-                                            class="btn-sky-blue w-100"
+                                            class="w-100"
                                             (click)="openAddAndManage('vendor')"
                                         >
                                             {{ localeData?.new_vendor }}
@@ -337,10 +297,7 @@
                                     </mat-menu>
                                 </div>
                             </div>
-                            <div
-                                class="total-details-box mr-r05 border-none opening-box min-width-230"
-                                *ngIf="showFieldFilter?.openingBalance?.visibility"
-                            >
+                            <div class="total-details-box mr-r05 border-none opening-box min-width-230">
                                 <h5>
                                     {{ localeData?.opening }}
                                     <div>
@@ -481,7 +438,7 @@
                 </button>
             </div>
             <div class="modal-body pd-l2 pd-r2 clearfix">
-                <h1 class="mr-b1 font-14" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
+                <h1 class="mr-b1 font-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
                 <text-field
                     *ngIf="messageBody.type == 'Email'"
                     [cssClass]="'form-control mr-b1'"
@@ -491,7 +448,7 @@
                     [placeholder]="localeData?.enter_subject_placeholder"
                 >
                 </text-field>
-                <h1 class="mr-b1 font-14">{{ localeData?.type_message_body }}:</h1>
+                <h1 class="mr-b1 font-15">{{ localeData?.type_message_body }}:</h1>
                 <textarea
                     matInput
                     #messageBox
@@ -511,8 +468,9 @@
                 </div>
                 <div class="mr-t4">
                     <button
-                        mat-raised-button
-                        class="btn-sm btn-success pull-right mr-l1 send-email"
+                        mat-stroked-button
+                        color="primary"
+                        class="btn-sm pull-right mr-l1 send-email"
                         (click)="send('sundrycreditors')"
                     >
                         {{ messageBody.btn.set }}
@@ -539,7 +497,7 @@
             </div>
 
             <div class="modal-body pd-l2 pd-r2 clearfix">
-                <h1 class="mr-b1 font-14" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
+                <h1 class="mr-b1 font-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
                 <text-field
                     *ngIf="messageBody.type == 'Email'"
                     [cssClass]="'form-control mr-b1'"
@@ -550,7 +508,7 @@
                 >
                 </text-field>
 
-                <h1 class="mr-b1 font-14">{{ localeData?.type_message_body }}:</h1>
+                <h1 class="mr-b1 font-15">{{ localeData?.type_message_body }}:</h1>
                 <textarea
                     matInput
                     #messageBox
@@ -571,8 +529,9 @@
 
                 <div class="mr-t4">
                     <button
-                        mat-raised-button
-                        class="btn-sm btn-success pull-right mr-l1 send-email"
+                        mat-stroked-button
+                        color="primary"
+                        class="btn-sm pull-right mr-l1 send-email"
                         (click)="send('sundrydebtors')"
                     >
                         {{ messageBody.btn.set }}
@@ -614,14 +573,14 @@
         <div class="mobile-card-wrapper table-responsive vendor-page all-table">
             <ng-container *ngIf="activeTab === 'customer'">
                 <table
-                    *ngIf="(searchStr || sundryDebtorsAccounts?.length) && customFieldsLoaded"
+                    *ngIf="searchStr || sundryDebtorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryDebtorsAccounts"
                     class="w-100"
                     (mouseenter)="showSelectAll = true"
                     (mouseleave)="showSelectAll = false"
                 >
-                    <ng-container matColumnDef="customerName">
+                    <ng-container matColumnDef="customer_name">
                         <th
                             class="mat-customer-name"
                             mat-header-cell
@@ -738,7 +697,7 @@
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="parentGroup">
+                    <ng-container matColumnDef="parent_group">
                         <th mat-header-cell *matHeaderCellDef>
                             <div class="d-flex align-items-center">
                                 {{ commonLocaleData?.app_parent_group }}
@@ -751,7 +710,7 @@
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="openingBalance">
+                    <ng-container matColumnDef="opening">
                         <th mat-header-cell *matHeaderCellDef>
                             <div class="d-flex justify-content-end align-items-center">
                                 {{ localeData?.opening }}
@@ -873,7 +832,7 @@
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="contact">
+                    <ng-container matColumnDef="contacts">
                         <th class="contact-header" mat-header-cell *matHeaderCellDef>
                             <div class="d-flex">
                                 <div class="flex-fill">
@@ -946,31 +905,21 @@
                             </ng-container>
                         </td>
                     </ng-container>
-
-                    <ng-container *ngFor="let column of companyCustomFields$ | async">
-                        <ng-container [matColumnDef]="column?.uniqueName">
-                            <th mat-header-cell *matHeaderCellDef>{{ column?.key }}</th>
-                            <td mat-cell *matCellDef="let account" [attr.data-title]="column?.key">
-                                {{ account.customFields[column?.uniqueName]?.value }}
-                            </td>
-                        </ng-container>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayColumns$ | async; sticky: true"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayColumns$ | async; let idx = index"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns; let idx = index"></tr>
                 </table>
             </ng-container>
 
             <ng-container *ngIf="activeTab === 'vendor'" class="sticky-table">
                 <table
-                    *ngIf="(searchStr || sundryCreditorsAccounts?.length) && customFieldsLoaded"
+                    *ngIf="searchStr || sundryCreditorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryCreditorsAccounts"
                     class="w-100"
                     (mouseenter)="showSelectAll = true"
                     (mouseleave)="showSelectAll = false"
                 >
-                    <ng-container matColumnDef="vendorName">
+                    <ng-container matColumnDef="vendor_name">
                         <th
                             class="mat-vendor-name"
                             mat-header-cell
@@ -1140,8 +1089,9 @@
                                             </div>
                                             <div class="mr-t4">
                                                 <button
-                                                    mat-raised-button
-                                                    class="btn-sm btn-success pull-right mr-l1"
+                                                    mat-stroked-button
+                                                    color="primary"
+                                                    class="btn-sm pull-right mr-l1"
                                                     (click)="send('sundrycreditors')"
                                                 >
                                                     {{ messageBody.btn.set }}
@@ -1176,7 +1126,7 @@
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="parentGroup">
+                    <ng-container matColumnDef="parent_group">
                         <th mat-header-cell *matHeaderCellDef>
                             <div class="d-flex align-items-center">
                                 {{ commonLocaleData?.app_parent_group }}
@@ -1189,7 +1139,7 @@
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="openingBalance">
+                    <ng-container matColumnDef="opening">
                         <th mat-header-cell *matHeaderCellDef>
                             <div class="d-flex justify-content-end align-items-center">
                                 {{ localeData?.opening }}
@@ -1310,7 +1260,7 @@
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="contact">
+                    <ng-container matColumnDef="contacts">
                         <th class="contact-header" mat-header-cell *matHeaderCellDef>
                             <div class="d-flex">
                                 <div class="flex-fill">
@@ -1384,44 +1334,30 @@
                         </td>
                     </ng-container>
 
-                    <ng-container *ngFor="let column of companyCustomFields$ | async">
-                        <ng-container [matColumnDef]="column?.uniqueName">
-                            <th mat-header-cell *matHeaderCellDef>{{ column?.key }}</th>
-                            <td mat-cell *matCellDef="let account" [attr.data-title]="column?.key">
-                                {{ account.customFields[column?.uniqueName]?.value }}
-                            </td>
-                        </ng-container>
-                    </ng-container>
-
                     <ng-container matColumnDef="action">
                         <th mat-header-cell *matHeaderCellDef width="200px">
                             {{ commonLocaleData?.app_action }}
                         </th>
                         <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_action">
                             <button
-                                mat-raised-button
+                                mat-stroked-button
                                 *ngIf="isGetAllIntegratedBankInProgress"
-                                class="btn-small btn-light min-width-137 contact-ipad-responsive"
+                                class="btn-small min-width-137 contact-ipad-responsive"
                             >
                                 {{ commonLocaleData?.app_loading }}
                             </button>
                             <button
-                                mat-raised-button
+                                mat-stroked-button
                                 *ngIf="!isGetAllIntegratedBankInProgress && isIciciAccountPendingForApproval"
-                                class="
-                                    btn-small btn-light
-                                    min-width-137
-                                    pending-approval-button
-                                    contact-ipad-responsive
-                                "
+                                class="btn-small min-width-137 pending-approval-button contact-ipad-responsive"
                                 (click)="showIntegrationProcess()"
                             >
                                 {{ localeData?.pending_approval }}
                             </button>
                             <button
-                                mat-raised-button
+                                mat-stroked-button
                                 *ngIf="!isICICIIntegrated && !isGetAllIntegratedBankInProgress"
-                                class="btn-small btn-light min-width-137 contact-ipad-responsive"
+                                class="btn-small min-width-137 contact-ipad-responsive"
                                 [routerLink]="['/pages/settings/integration/payment']"
                             >
                                 {{ localeData?.connect_icici_bank }}
@@ -1434,17 +1370,18 @@
                                 "
                             >
                                 <button
-                                    mat-raised-button
+                                    mat-stroked-button
+                                    color="primary"
                                     *ngIf="account?.bankPaymentDetails && account?.country?.code === 'IN'"
-                                    class="btn-small btn-success min-width-137 contact-ipad-responsive"
+                                    class="btn-small min-width-137 contact-ipad-responsive"
                                     (click)="openBulkPaymentModal(account)"
                                 >
                                     {{ commonLocaleData?.app_pay_now }}
                                 </button>
                                 <button
-                                    mat-raised-button
+                                    mat-stroked-button
                                     *ngIf="!account?.bankPaymentDetails"
-                                    class="btn-small btn-light min-width-137 contact-ipad-responsive"
+                                    class="btn-small min-width-137 contact-ipad-responsive"
                                     (click)="updateCustomerAcc('vendor', account)"
                                 >
                                     {{ commonLocaleData?.app_add_bank_details }}
@@ -1453,8 +1390,8 @@
                         </td>
                     </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayColumns$ | async; sticky: true"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayColumns$ | async; let idx = index"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
             </ng-container>
         </div>
@@ -1525,17 +1462,19 @@
                 <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
                 <div class="btn-group pull-right">
                     <button
-                        mat-raised-button
+                        mat-stroked-button
+                        color="primary"
                         *ngIf="activeTab == 'customer'"
-                        class="btn-sky-blue mr-0"
+                        class="mr-0"
                         (click)="openAddAndManage('customer')"
                     >
                         {{ localeData?.new_customer }}
                     </button>
                     <button
-                        mat-raised-button
+                        mat-stroked-button
+                        color="primary"
                         *ngIf="activeTab == 'vendor'"
-                        class="btn-sky-blue mr-0"
+                        class="mr-0"
                         (click)="openAddAndManage('vendor')"
                     >
                         {{ localeData?.new_vendor }}

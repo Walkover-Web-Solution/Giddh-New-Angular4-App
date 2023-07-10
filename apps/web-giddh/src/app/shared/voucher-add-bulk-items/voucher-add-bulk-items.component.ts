@@ -4,6 +4,10 @@ import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operato
 import { SalesAddBulkStockItems, VoucherTypeEnum } from '../../models/api-models/Sales';
 import { SearchService } from '../../services/search.service';
 import { ToasterService } from '../../services/toaster.service';
+import { LedgerService } from '../../services/ledger.service';
+import { IVariant } from '../../models/api-models/Ledger';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'voucher-add-bulk-items-component',
@@ -22,6 +26,8 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     public normalData: SalesAddBulkStockItems[] = [];
     public filteredData: SalesAddBulkStockItems[] = [];
     public selectedItems: SalesAddBulkStockItems[] = [];
+    /** True, if API is in progress, required to avoid multiple addition of same stock */
+    private isLoading: boolean;
 
     /** Stores the search results pagination details */
     private searchResultsPaginationData = {
@@ -39,7 +45,9 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private toaster: ToasterService,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private ledgerService: LedgerService,
+        private generalService: GeneralService
     ) {
     }
 
@@ -111,7 +119,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
      */
     public getSearchRequestObject(query: string, page: number = 1): any {
         let group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
-            'operatingcost, indirectexpenses' : 'otherincome, revenuefromoperations';
+            `operatingcost, indirectexpenses${this.generalService.voucherApiVersion === 2 ? ', fixedassets' : ''}` : `otherincome, revenuefromoperations${this.generalService.voucherApiVersion === 2 ? ', fixedassets' : ''}`;
         const requestObject = {
             q: encodeURIComponent(query),
             page,
@@ -122,47 +130,31 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     }
 
     public addItemToSelectedArr(item: SalesAddBulkStockItems) {
-        let index = this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
+        let index;
+        if (!item.additional.stock || this.generalService.voucherApiVersion === 1) {
+            index = this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
+        } else {
+            if (this.generalService.voucherApiVersion === 2 && item.variants?.length === 1) {
+                const variant = item.variants[0];
+                index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${item.uniqueName}#${variant.value}`);
+            }
+        }
         if (index > -1) {
             this.toaster.warningToast(this.localeData?.item_selected);
             return;
         }
         let requestObject = {
-            stockUniqueName: item.additional && item.additional.stock ? item.additional.stock?.uniqueName : ''
+            stockUniqueName: item.additional?.stock?.uniqueName ?? ''
         };
-        this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data && data.body) {
-                // Take taxes of parent group and stock's own taxes
-                const taxes = data.body.taxes || [];
-                if (data.body.stock) {
-                    taxes.push(...data.body.stock.taxes);
-                }
-                // directly assign additional property
-                item.additional = {
-                    ...item.additional,
-                    label: item.name,
-                    value: item?.uniqueName,
-                    applicableTaxes: taxes,
-                    currency: data.body.currency,
-                    currencySymbol: data.body.currencySymbol,
-                    email: data.body.emails,
-                    isFixed: data.body.isFixed,
-                    mergedAccounts: data.body.mergedAccounts,
-                    mobileNo: data.body.mobileNo,
-                    nameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent.name).join(', ') : '',
-                    stock: data.body.stock,
-                    uNameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
-                };
-                item.rate = data.body.stock ? data.body.stock.rate || 0 : 0;
-                item.quantity = 1;
-                this.selectedItems.push({ ...item });
-                this.changeDetectorRef.detectChanges();
-            }
-        }, () => { });
+        if (item.additional.stock) {
+            this.loadStockVariants(item);
+        } else {
+            this.loadDetails(item, requestObject);
+        }
     }
 
     public removeSelectedItem(uniqueName: string) {
-        this.selectedItems = this.selectedItems?.filter(f => f?.uniqueName !== uniqueName);
+        this.selectedItems = this.selectedItems?.filter(f => f?.uniqueName !== uniqueName && f?.additional.combinedUniqueName !== uniqueName);
     }
 
     public alterQuantity(item: SalesAddBulkStockItems, mode: 'plus' | 'minus' = 'plus') {
@@ -209,11 +201,115 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                     map((e: any) => e.target?.value),
                     takeUntil(this.destroyed$)
                 ).subscribe((res: string) => {
-                    if (res) {
-                        this.onSearchQueryChanged(res, 1);
-                    }
+                    this.onSearchQueryChanged(res, 1);
                 });
             }, 100);
         }
+    }
+
+    /**
+     * Loads the details of selected entry
+     *
+     * @private
+     * @param {SalesAddBulkStockItems} item Item details
+     * @param {*} requestObject Request object for the API
+     * @memberof VoucherAddBulkItemsComponent
+     */
+    private loadDetails(item: SalesAddBulkStockItems, requestObject: any): void {
+        if (!this.isLoading) {
+            this.isLoading = true;
+            this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body) {
+                    // Take taxes of parent group and stock's own taxes
+                    const taxes = data.body.taxes || [];
+                    if (data.body.stock) {
+                        taxes.push(...data.body.stock.taxes);
+                    }
+                    // directly assign additional property
+                    item.additional = {
+                        ...item.additional,
+                        label: item.name,
+                        value: item?.uniqueName,
+                        applicableTaxes: taxes,
+                        currency: data.body.currency,
+                        currencySymbol: data.body.currencySymbol,
+                        email: data.body.emails,
+                        isFixed: data.body.isFixed,
+                        mergedAccounts: data.body.mergedAccounts,
+                        mobileNo: data.body.mobileNo,
+                        nameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent.name).join(', ') : '',
+                        stock: data.body.stock,
+                        uNameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
+                        category: data.body.category,
+                        combinedUniqueName: data.body.stock?.variant ? `${item.uniqueName}#${data.body.stock.variant?.uniqueName}` : '',
+                        skuCode: data.body.stock?.skuCode,
+                    };
+                    const unitRates = data.body?.stock?.variant?.unitRates ?? [];
+                    item.rate = unitRates[0]?.rate ?? 0;
+                    item.quantity = 1;
+                    if (!data.body.stock || item.variants?.length === 1 || item.variant?.uniqueName) {
+                        this.selectedItems.unshift({ ...item });
+                    }
+                    this.isLoading = false;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, () => {
+                this.isLoading = false;
+             });
+        }
+    }
+
+    /**
+     * Loads the stock variants
+     *
+     * @private
+     * @param {SalesAddBulkStockItems} item Item details
+     * @memberof VoucherAddBulkItemsComponent
+     */
+    private loadStockVariants(item: SalesAddBulkStockItems): void {
+        this.ledgerService.loadStockVariants(item.additional?.stock?.uniqueName).pipe(
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
+                item.variants = res;
+                if (res.length === 1) {
+                    // Single variant stock, add to list after loading details
+                    const defaultVariant: IVariant = {name: res[0].label, uniqueName: res[0].value};
+                    item.variant = defaultVariant;
+                    const requestObj = {
+                        stockUniqueName: item.additional?.stock?.uniqueName ?? '',
+                        variantUniqueName: defaultVariant.uniqueName
+                    };
+                    if (item.variants?.length === 1) {
+                        const variant = item.variants[0];
+                        const index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${item.uniqueName}#${variant.value}`);
+                        if (index > -1) {
+                            this.toaster.warningToast(this.localeData?.item_selected);
+                            return;
+                        }
+                    }
+                    this.loadDetails(item, requestObj);
+                }
+                this.changeDetectorRef.detectChanges();
+            });
+    }
+
+    /**
+     * Variant change handler
+     *
+     * @param {SalesAddBulkStockItems} item Item details
+     * @param {IOption} event Variant changed event
+     * @memberof VoucherAddBulkItemsComponent
+     */
+    public variantChanged(item: SalesAddBulkStockItems, event: IOption): void {
+        item.variant = {name: event.label, uniqueName: event.value};
+        const index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${item.uniqueName}#${event.value}`);
+        if (index > -1) {
+            this.toaster.warningToast(this.localeData?.item_selected);
+            return;
+        }
+        const requestObj = {
+            stockUniqueName: item.additional?.stock?.uniqueName ?? '',
+            variantUniqueName: event.value
+        };
+        this.loadDetails(item, requestObj);
     }
 }

@@ -11,7 +11,7 @@
     width: 100%;
 }
 .dropdown-menu li label {
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 :host .disabled-label {
     cursor: not-allowed;

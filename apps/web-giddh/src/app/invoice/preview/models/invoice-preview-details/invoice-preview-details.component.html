@@ -229,7 +229,7 @@
                                                     *ngIf="voucherType === 'sales'"
                                                     class="cp"
                                                     role="menuitem"
-                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"
+                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
                                                 >
                                                     <a class="dropdown-item">{{
                                                         commonLocaleData?.app_payment_status?.paid
@@ -497,7 +497,7 @@
                                         <p class="payment-content">{{ localeData?.record_payment }}</p>
                                         <a
                                             href="javascript:;"
-                                            (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"
+                                            (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
                                             >{{ localeData?.receipt_payment }}</a
                                         >
                                     </div>
@@ -550,7 +550,7 @@
                             </div>
                         </div>
                         <div
-                            class="linked-purchase-order font-14 mr-t15"
+                            class="linked-purchase-order font-15 mr-t15"
                             *ngIf="
                                 selectedItem?.voucherType === 'purchase' &&
                                 purchaseOrderNumbers &&
@@ -575,7 +575,7 @@
                             *ngIf="selectedItem?.voucherType === 'purchase' && !shouldShowUploadAttachment"
                             class="pd-l15"
                         >
-                            <h5 class="pd-b05 font-16">
+                            <h5 class="pd-b05 font-15">
                                 <strong>{{ localeData?.uploaded_purchase_bill }}</strong>
                             </h5>
                         </div>
@@ -638,7 +638,7 @@
                                             <img src="assets/images/new/import_icon.svg" />
                                         </div>
                                         <div class="clearfix pd-r2 pd-l2">
-                                            <label class="clearfix text-light-2 font-14">{{
+                                            <label class="clearfix text-light-2 font-15">{{
                                                 localeData?.drop_file
                                             }}</label>
                                             <div class="mr-t3">
@@ -688,7 +688,7 @@
                             >
                                 <h5
                                     *ngIf="selectedItem?.voucherType === 'purchase' && isPdfAvailable"
-                                    class="text-left pd-l15 font-16 pd-t1 pd-b1"
+                                    class="text-left pd-l15 font-15 pd-t1 pd-b1"
                                 >
                                     <strong>{{ localeData?.auto_generated_purchase_bill }}</strong>
                                 </h5>
@@ -877,7 +877,8 @@
                 [selectedInvoiceForPayment]="selectedItem"
                 [localeData]="localeData"
                 [commonLocaleData]="commonLocaleData"
-                (closeModelEvent)="processPaymentEvent.emit($event); receivePaymentPopup.toggle()"
+                (performActionPopup)="processPaymentEvent.emit($event)"
+                (closeModelEvent)="closePerformActionPopup(); receivePaymentPopup.hide()"
             >
             </invoice-payment-model>
         </div>

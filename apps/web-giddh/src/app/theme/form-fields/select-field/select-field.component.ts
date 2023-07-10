@@ -4,7 +4,6 @@ import { FormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
-import { cloneDeep } from "../../../lodash-optimized";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
 
 @Component({
@@ -94,9 +93,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         if (this.enableDynamicSearch) {
             this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
                 if (search) {
-                    if (typeof search === "string") {
+                    if (typeof search === "string" && search !== this.defaultValue) {
                         this.dynamicSearchedQuery.emit(search);
-                    } else {
+                    } else if (search?.label !== this.defaultValue) {
                         this.dynamicSearchedQuery.emit(search?.label || "");
                     }
                 } else {
@@ -135,17 +134,19 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
-            this.fieldFilteredOptions = cloneDeep(changes.options.currentValue);
+            this.fieldFilteredOptions = changes.options.currentValue;
         }
         if (changes?.defaultValue) {
-            this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
-            if(!this.options || this.options?.length === 0) {
-                if (this.enableDynamicSearch) {
-                    this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
-                } else {
-                    this.filterOptions(changes?.defaultValue.currentValue);
+            // setTimeout(() => {
+                this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
+                if (!this.options || this.options?.length === 0) {
+                    if (this.enableDynamicSearch) {
+                        this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
+                    } else {
+                        this.filterOptions(changes?.defaultValue.currentValue);
+                    }
                 }
-            }
+            // }, 500);
         }
     }
 
@@ -178,7 +179,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         let filteredOptions: IOption[] = [];
         this.options?.forEach(option => {
             if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
-                filteredOptions.push({ label: option.label, value: option?.value, additional: option });
+                filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
             }
         });
 
@@ -262,9 +263,17 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     /**
     * This will use for close dropdown panel
     *
+    * @param {*} event Pointer event
     * @memberof SelectFieldComponent
     */
-    public closeDropdownPanel(): void {
+    public closeDropdownPanel(event?: any): void {
+        if (event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") > -1) {
+            /*
+                Don't close the panel if the user clicks at the corner of the input field,
+                handles the edge case when user clicks the corner and the suggestions get hidden
+            */
+            return;
+        }
         this.trigger?.closePanel();
     }
 
@@ -291,4 +300,16 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         document?.removeEventListener(event, fun.bind(this), options || {});
     }
 
+    /**
+     * Adds dropdown-position class on cdk-overlay for position issue
+     *
+     * @memberof SelectFieldComponent
+     */
+    public addClassForDropdown(): void {
+        setTimeout(() => {
+            if (document.querySelectorAll(".cdk-overlay-pane")?.length) {
+                document.querySelectorAll(".cdk-overlay-pane")[document.querySelectorAll(".cdk-overlay-pane")?.length - 1]?.classList?.add("dropdown-position");
+            }
+        }, 10);
+    }
 }

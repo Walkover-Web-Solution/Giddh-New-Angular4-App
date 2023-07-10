@@ -55,7 +55,7 @@
                 </div>
                 <div class="company-list mt-2">
                     <ul
-                        class="list-style-none font-14"
+                        class="list-style-none font-15"
                         *ngIf="
                             companyListForFilter && companyListForFilter.length && !(isCompanyRefreshInProcess$ | async)
                         "
@@ -76,7 +76,7 @@
                                 <i class="icon-company mr-2"></i>
                                 <span class="company-name-right">{{ company?.name }}</span>
                                 <span
-                                    class="font-11 text-right branch-count pt-0 pb-0"
+                                    class="font-12 text-right branch-count pt-0 pb-0"
                                     *ngIf="company?.branchCount > 1 && company?.unarchivedBranchCount >= 1"
                                     >{{ company?.unarchivedBranchCount }}</span
                                 >
@@ -121,7 +121,7 @@
                     </button>
                 </div>
                 <div class="company-list branch-list mt-2">
-                    <ul class="list-style-none font-14" *ngIf="!branchRefreshInProcess">
+                    <ul class="list-style-none font-15" *ngIf="!branchRefreshInProcess">
                         <ng-container *ngIf="companyBranches?.unarchivedBranchCount >= 1">
                             <li
                                 *ngIf="
@@ -139,7 +139,7 @@
                                     <i class="icon-head-branch mr-2"></i>
                                     <span class="d-flex flex-column">
                                         <span class="branch-alias">{{ companyBranches?.name }}</span>
-                                        <span class="font-11 branch-company-name">{{
+                                        <span class="font-12 branch-company-name">{{
                                             localeData?.company_consolidated_data
                                         }}</span>
                                     </span>

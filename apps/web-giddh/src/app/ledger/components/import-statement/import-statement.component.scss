@@ -6,7 +6,7 @@
     word-break: break-all;
 }
 .file-upload-label sup {
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-danger);
     top: 0px;
 }

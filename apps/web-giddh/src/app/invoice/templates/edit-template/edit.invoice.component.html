@@ -1,7 +1,8 @@
 <div validateSectionPermission [hasPermission]="hasInvoiceTemplatePermissions">
     <div class="template-grid-container">
         <div class="clearfix" id="template-grid-wrapper">
-            <label class="mr-b05">Select Design for</label>
+            <label class="mr-b05 font-16">Select Design for</label>
+
             <div class="select-design">
                 <button
                     class="btn more-btn-dropdown dropdown-toggle"
@@ -26,13 +27,11 @@
 
             <div class="template-grid">
                 <h3 class="text-left">Design Template</h3>
-                <small class="mr-t3 text-left grey d-block">
+                <small class="mr-t2 text-left grey d-block">
                     Click to add a template from our gallery. You can customize the template title, columns,and headers
                     in line item table.
                 </small>
-                <button mat-raised-button class="pull-left mt-5 p-0 add-new-btn" (click)="onOpenTemplateModal()">
-                    Add New
-                </button>
+                <button class="btn pull-left isActive mt-4 add-new-btn" (click)="onOpenTemplateModal()">Add New</button>
             </div>
 
             <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
@@ -40,12 +39,12 @@
                     <div class="template-info text-center">
                         <h3 class="primary-color text-ellipsis">{{ template.name }}</h3>
 
-                        <span *ngIf="template.isDefault" class="badge btn-sky-blue mr-t2"
+                        <span *ngIf="template.isDefault" class="badge btn-sky-blue mr-t2 font-12"
                             ><i class="icon-favorite-selected"></i> Default Template</span
                         >
                         <span
                             *ngIf="!template.isDefault"
-                            class="badge btn-success mr-t2 cp"
+                            class="badge btn-success mr-t2 cp font-12"
                             (click)="onSetTemplateAsDefault(template, 'invoice')"
                             ><i class="icon-favorite-selected"></i> Set as Default</span
                         >
@@ -80,12 +79,12 @@
                         <div class="template-info text-center">
                             <h3 class="primary-color text-ellipsis">{{ template.name }}</h3>
 
-                            <span *ngIf="template.isDefaultForVoucher" class="badge btn-sky-blue mr-t2"
+                            <span *ngIf="template.isDefaultForVoucher" class="badge btn-sky-blue mr-t2 font-12"
                                 ><i class="icon-favorite-selected"></i> Default Template</span
                             >
                             <span
                                 *ngIf="!template.isDefaultForVoucher"
-                                class="badge btn-success mr-t2 cp"
+                                class="badge btn-success mr-t2 cp font-12"
                                 (click)="onSetTemplateAsDefault(template, 'voucher')"
                                 ><i class="icon-favorite-selected"></i> Set as Default</span
                             >

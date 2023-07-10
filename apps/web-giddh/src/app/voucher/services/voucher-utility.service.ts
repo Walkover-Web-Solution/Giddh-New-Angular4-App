@@ -88,6 +88,7 @@ export class VoucherUtilityService {
                 entry?.transactions?.forEach(transaction => {
                     if (transaction?.stock) {
                         transaction.stock.rate.rateForAccount = transaction.stock.rate?.amountForAccount;
+                        transaction.stock.taxInclusive = transaction.stock.taxInclusive ?? transaction.taxInclusive;
                         delete transaction.stock.rate?.amountForAccount;
                     }
                 });

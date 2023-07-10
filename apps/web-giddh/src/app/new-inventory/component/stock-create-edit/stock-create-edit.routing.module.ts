@@ -8,14 +8,15 @@ const routes: Routes = [
         path: "",
         component: MainComponent,
         children: [
-
             {
                 path: ":type/create",
-                component: StockCreateEditComponent
+                component: StockCreateEditComponent,
+                pathMatch: 'full'
             },
             {
                 path: ":type/edit/:stockUniqueName",
-                component: StockCreateEditComponent
+                component: StockCreateEditComponent,
+                pathMatch: 'full'
             }
         ]
     }

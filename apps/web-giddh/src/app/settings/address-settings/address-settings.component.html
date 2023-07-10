@@ -5,7 +5,7 @@
             class="w-100 d-flex justify-content-between mb-4 align-items-center address-list-top"
         >
             <div class="search-container">
-                <div class="font-14">{{ localeData?.company_address_list }}</div>
+                <div class="font-15">{{ localeData?.company_address_list }}</div>
                 <a
                     class="cp mr-l1 clear-filter-btn"
                     *ngIf="searchStateInput?.value || searchAddressInput?.value || searchAddressNameInput?.value"
@@ -25,7 +25,7 @@
             *ngIf="organizationType === 'BRANCH'"
             class="w-100 d-flex justify-content-between mb-4 align-items-center address-list-top"
         >
-            <div class="font-14">{{ localeData?.address_list }}</div>
+            <div class="font-15">{{ localeData?.address_list }}</div>
             <button type="button" class="btn btn-sky-blue mr-0" (click)="openAddAndManage()">
                 {{ localeData?.add_address }}
             </button>

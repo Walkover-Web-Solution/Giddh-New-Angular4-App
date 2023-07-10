@@ -105,6 +105,7 @@ export class ManufacturingItemRequest {
 */
 
 export interface IMfStockSearchRequest {
+    inventoryType?: string;
     product?: string;
     searchOperation?: string;
     searchBy?: string;
@@ -116,4 +117,5 @@ export interface IMfStockSearchRequest {
     dateRange?: Date[];
     branchUniqueName?: string;
     warehouseUniqueName?: any;
+    productVariant?: string;
 }

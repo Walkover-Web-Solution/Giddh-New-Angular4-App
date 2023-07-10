@@ -6,9 +6,6 @@
     }
     .import-table {
         width: 100%;
-        th {
-            z-index: 0 !important;
-        }
         .import-table-btn {
             color: var(--color-tertiary-button-text);
             background-color: var(--color-tertiary-button-background);
@@ -52,7 +49,7 @@
     .btn-filter {
         background: var(--color-dark-fog);
         border: 1px solid var(--color-primary-button-border);
-        font-size: 14px;
+        font-size: var(--font-size-15);
         color: var(--color-giddh-blue);
         display: inline-flex;
         justify-content: space-between;

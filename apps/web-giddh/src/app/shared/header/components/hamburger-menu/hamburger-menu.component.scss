@@ -24,8 +24,8 @@
     &.page-has-heading {
         width: 100%;
         h4 {
-            font-family: "opensans-semibold";
-            font-size: 20px;
+            font-family: var(--font-semibold);
+            font-size: var(--font-size-16);
         }
     }
 }
@@ -49,7 +49,7 @@
             }
             h4 {
                 color: var(--color-white);
-                font-size: 16px;
+                font-size: var(--font-size-15);
                 text-transform: initial !important;
             }
         }
@@ -97,7 +97,7 @@
             }
             h4 {
                 color: var(--color-white);
-                font-size: 16px;
+                font-size: var(--font-size-15);
                 text-transform: initial !important;
             }
         }
