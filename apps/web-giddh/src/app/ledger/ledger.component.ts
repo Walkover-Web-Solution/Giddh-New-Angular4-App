@@ -10,7 +10,7 @@ import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
-import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
+import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
@@ -49,6 +49,7 @@ import { CommonService } from '../services/common.service';
 import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { CommonActions } from '../actions/common.actions';
+import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 
 @Component({
     selector: 'ledger',
@@ -276,6 +277,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private ledgerAsidePaneModal: any;
     /** Total pages for reference vouchers */
     public referenceVouchersTotalPages: number = 1;
+    /** Returns true if account is selected else false */
+    public get showPageLeaveConfirmation(): boolean {
+        let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
+        return (hasParticularSelected?.length) ? true : false;
+    }
 
     constructor(
         private store: Store<AppState>,
@@ -298,7 +304,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private commonService: CommonService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private invoiceAction: InvoiceActions,
-        private commonAction: CommonActions
+        private commonAction: CommonActions,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -728,6 +735,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.loaderService.show();
                     this.getBankTransactions();
                 });
+                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             }
         });
 
@@ -1135,6 +1143,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public resetBlankTransaction() {
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         this.lc.blankLedger = this.lc.getBlankLedger();
         this.lc.blankLedger.transactions =
             (this.currentOrganizationType === OrganizationType.Branch ||
@@ -2714,5 +2723,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         });
+    }
+
+    /**
+     * Add browser confirmation dialog
+     *
+     * @memberof LedgerComponent
+     */
+    public addBrowserConfirmation(): void {
+        this.pageLeaveUtilityService.addBrowserConfirmationDialog();
     }
 }

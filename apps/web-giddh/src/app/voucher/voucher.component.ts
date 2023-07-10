@@ -1,29 +1,5 @@
-import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    EventEmitter,
-    HostListener,
-    Input,
-    NgZone,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    Output,
-    QueryList,
-    SimpleChanges,
-    TemplateRef,
-    ViewChild,
-    ViewChildren,
-    ViewContainerRef
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import {
-    BsModalRef,
-    ModalOptions
-} from 'ngx-bootstrap/modal';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { select, Store } from '@ngrx/store';
@@ -36,31 +12,7 @@ import { ToasterService } from '../services/toaster.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { InvoiceReceiptActions } from '../actions/invoice/receipt/receipt.actions';
-import {
-    AccountDetailsClass,
-    ActionTypeAfterVoucherGenerateOrUpdate,
-    AmountClassMulticurrency,
-    CodeStockMulticurrency,
-    DiscountMulticurrency,
-    GenericRequestForGenerateSCD,
-    GstDetailsClass,
-    IForceClear,
-    IStockUnit,
-    PurchaseRecordRequest,
-    SalesAddBulkStockItems,
-    SalesEntryClass,
-    SalesEntryClassMulticurrency,
-    SalesOtherTaxesCalculationMethodEnum,
-    SalesOtherTaxesModal,
-    SalesTransactionItemClass,
-    StateCode,
-    TemplateDetailsClass,
-    TransactionClassMulticurrency,
-    VOUCHER_TYPE_LIST,
-    VoucherClass,
-    VoucherDetailsClass,
-    VoucherTypeEnum
-} from '../models/api-models/Sales';
+import { AccountDetailsClass, ActionTypeAfterVoucherGenerateOrUpdate, AmountClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, GenericRequestForGenerateSCD, GstDetailsClass, IForceClear, IStockUnit, PurchaseRecordRequest, SalesAddBulkStockItems, SalesEntryClass, SalesEntryClassMulticurrency, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, SalesTransactionItemClass, StateCode, TemplateDetailsClass, TransactionClassMulticurrency, VOUCHER_TYPE_LIST, VoucherClass, VoucherDetailsClass, VoucherTypeEnum } from '../models/api-models/Sales';
 import { auditTime, debounceTime, delay, filter, map, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
@@ -119,6 +71,7 @@ import { HttpClient } from '@angular/common/http';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { SelectFieldComponent } from '../theme/form-fields/select-field/select-field.component';
 import { DropdownFieldComponent } from '../theme/form-fields/dropdown-field/dropdown-field.component';
+import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -349,13 +302,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public selectedVoucherType: string = 'sales';
     /**  This will use for template params */
     public tempDateParams: any = {};
-    /**  This will use for modal config  */
-    public modalConfig: ModalOptions = {
-        animated: true,
-        keyboard: false,
-        backdrop: 'static',
-        ignoreBackdropClick: true
-    };
     /**  This will use for page list array  */
     public pageList: IOption[] = VOUCHER_TYPE_LIST;
     /**  This will use for universal date */
@@ -387,7 +333,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public actionAfterGenerateORUpdate: ActionTypeAfterVoucherGenerateOrUpdate = ActionTypeAfterVoucherGenerateOrUpdate.generate;
     public companyCurrency: string;
     public fetchedConvertedRate: number = 0;
-    public modalRef: BsModalRef;
     public message: string;
     public exceptTaxTypes: string[];
     /** this is showing pending sales page **/
@@ -758,7 +703,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public isEinvoiceGenerated: boolean = false;
     /** Stores the stock variants */
     public stockVariants: BehaviorSubject<Array<Observable<Array<IOption>>>> = new BehaviorSubject([]);
-
     /** True, if bulk items are added to the voucher list, required to prevent repetitive stock variants processing
      * when bulk entries are added
      */
@@ -767,6 +711,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     private currentTxnRequestObject: Array<any> = [];
     /** Stores the index of current stock variants being loaded */
     private currentlyLoadedStockVariantIndex: number;
+    /** True if account has unsaved changes */
+    public hasUnsavedChanges: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -778,6 +724,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public get shouldApplyMaxLengthOnNotes(): boolean {
         return (this.isSalesInvoice || this.isProformaInvoice || this.isEstimateInvoice);
+    }
+    /** Returns true if account is selected else false */
+    public get showPageLeaveConfirmation(): boolean {
+        return !this.isUpdateMode && this.invFormData.voucherDetails.customerUniquename;
     }
 
     /**
@@ -817,7 +767,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         private warehouseActions: WarehouseActions,
         private commonActions: CommonActions,
         private purchaseRecordAction: PurchaseRecordActions,
-        public purchaseOrderService: PurchaseOrderService,
+        private purchaseOrderService: PurchaseOrderService,
         private searchService: SearchService,
         private settingsBranchAction: SettingsBranchActions,
         private ngZone: NgZone,
@@ -829,7 +779,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         private gstAction: GstReconcileActions,
         private settingsDiscountService: SettingsDiscountService,
         private http: HttpClient,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -1763,6 +1714,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             this.currentlyLoadedStockVariantIndex = null;
         });
+
+        this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasUnsavedChanges = response;
+        });
     }
 
     public ngAfterViewInit() {
@@ -2337,6 +2292,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public resetInvoiceForm(f: NgForm) {
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         if (f) {
             this.intl?.setNumber("");
             f.form.reset();
@@ -3782,6 +3738,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 entry.purchaseOrderItemMapping = null;
             });
         }
+        this.pageLeaveUtilityService.addBrowserConfirmationDialog();
     }
 
     public onSelectBankCash(item: IOption) {
@@ -4106,7 +4063,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         find(txn.stockList, (o) => {
             if (o.id === selectedUnit?.value) {
                 txn.stockUnitCode = o.text;
-                return txn.rate = giddhRoundOff(o.rate  / this.exchangeRate, this.highPrecisionRate);
+                return txn.rate = giddhRoundOff(o.rate / this.exchangeRate, this.highPrecisionRate);
             }
         });
     }
@@ -4251,20 +4208,20 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     /**
      * update invoice function
-     * @param invoiceForm
+     * @param form
      */
-    public submitUpdateForm(invoiceForm: NgForm) {
-        this.generateUpdateButtonClicked.next(invoiceForm);
+    public submitUpdateForm(form: NgForm) {
+        this.generateUpdateButtonClicked.next(form);
     }
 
     /**
      * Handles the update operation of invoice form
      *
      * @private
-     * @param {NgForm} invoiceForm Form instance for values
+     * @param {NgForm} form Form instance for values
      * @memberof VoucherComponent
      */
-    private handleUpdateInvoiceForm(invoiceForm: NgForm): void {
+    private handleUpdateInvoiceForm(form: NgForm): void {
         let requestObject: any = this.prepareDataForApi();
         if (!requestObject) {
             this.startLoader(false);
@@ -4442,7 +4399,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
                 this.salesService.updateVoucherV4(updatedData).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
-                        this.actionsAfterVoucherUpdate(response, invoiceForm);
+                        this.actionsAfterVoucherUpdate(response, form);
                     }, (err) => {
                         this.startLoader(false);
                         this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
@@ -4500,7 +4457,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 this.salesService.updateVoucher(requestObject).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
-                        this.actionsAfterVoucherUpdate(response, invoiceForm);
+                        this.actionsAfterVoucherUpdate(response, form);
                     }, (err) => {
                         this.startLoader(false);
                         this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
@@ -4514,16 +4471,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * and performing post update actions
      * thing after sales/ cash or credit / debit note voucher updates
      * @param response
-     * @param invoiceForm
+     * @param form
      */
-    private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD> | BaseResponse<any, PurchaseRecordRequest>, invoiceForm: NgForm) {
+    private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD> | BaseResponse<any, PurchaseRecordRequest>, form: NgForm) {
         if (response?.status === 'success' && response?.body) {
             // To clear receipts voucher store
             if (this.isSalesInvoice || this.isCashInvoice) {
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
             }
             // reset form and other
-            this.resetInvoiceForm(invoiceForm);
+            this.resetInvoiceForm(form);
             this._toasty.successToast(this.localeData?.voucher_updated);
             this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
             this.voucherNumber = response.body.number;
@@ -6211,9 +6168,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             if (this.isPurchaseInvoice) {
                 this._toasty.successToast(this.localeData?.purchase_bill_created);
+                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             } else {
                 let message = (this.voucherNumber) ? `${this.localeData?.entry_created}: ${this.voucherNumber}` : this.commonLocaleData?.app_messages?.voucher_saved;
                 this._toasty.successToast(message);
+                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             }
 
             /** For pending type need to navigate to get all module of voucher type   */
@@ -8570,7 +8529,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     private loadStockVariants(stockUniqueName: string, index?: number): void {
         this._ledgerService.loadStockVariants(stockUniqueName).pipe(
-            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName })))).subscribe(res => {
                 const allStockVariants = this.stockVariants.getValue();
                 this.currentlyLoadedStockVariantIndex = index;
                 allStockVariants[this.currentlyLoadedStockVariantIndex ?? this.activeIndx] = observableOf(res);

@@ -17,6 +17,7 @@ dayjs.extend(customParseFormat);
 import { GeneralService } from '../../../services/general.service';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { cloneDeep, forEach, isEmpty, isNull } from '../../../lodash-optimized';
+import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 // some local const
 const DATE_RANGE = 'daterange';
 const PAST_PERIOD = 'pastperiod';
@@ -43,7 +44,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Output() public onSubmitForm: EventEmitter<any> = new EventEmitter(null);
-
+    /** Emits true if form has unsaved changes */
+    @Output() public hasUnsavedChanges: EventEmitter<boolean> = new EventEmitter(null);
     public showTimeSpan: boolean = false;
     public showIPWrap: boolean = false;
     public permissionForm: FormGroup;
@@ -75,7 +77,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService,
         private store: Store<AppState>,
         private _fb: FormBuilder,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private settingsProfileActions: SettingsProfileActions
     ) {
         this.createPermissionInProcess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionInProcess), takeUntil(this.destroyed$));
         this.createPermissionSuccess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionSuccess), takeUntil(this.destroyed$));
@@ -145,6 +148,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
         this.permissionForm.get('ipOptions').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(val => {
             this.toggleIpOptVal(val);
+        });
+
+        this.permissionForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.hasUnsavedChanges.emit(this.permissionForm?.dirty);
         });
     }
 
