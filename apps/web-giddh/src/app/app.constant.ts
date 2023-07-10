@@ -9,6 +9,12 @@ export const Configuration = {
     APP_FOLDER
 };
 
+/** Add Company business type*/
+export enum businessType {
+    Registered = 'Registered',
+    Unregistered = 'Unregistered'
+}
+
 export const APP_DEFAULT_TITLE = '';
 
 export const DEFAULT_TOASTER_OPTIONS = {
