@@ -249,7 +249,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type || this.addStock) {
-                this.stockForm.type = params?.type ? params?.type?.toUpperCase() : this.stockType.toUpperCase();
+                this.stockForm.type = this.addStock ? this.stockType.toUpperCase() : params?.type?.toUpperCase();
                 this.resetForm(this.stockCreateEditForm);
                 this.getStockGroups();
                 this.changeDetection.detectChanges();
@@ -955,7 +955,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                             this.activeTabIndex = 2;
                             this.changeDetection.detectChanges();
                         });
-
                     } else {
                         this.router.navigate(['/pages/inventory/v2/stock/' + this.stockForm.type?.toLowerCase() + '/edit/' + response.body?.uniqueName], { queryParams: { tab: 2 } });
                     }
