@@ -50,7 +50,6 @@
 	"unlimited_users": "अमर्यादित वापरकर्ते",
 	"unlimited_contacts": "अमर्यादित ग्राहक / विक्रेते",
 	"desktop_mobile_app": "डेस्कटॉप / मोबाइल अ‍ॅप",
-<<<<<<< HEAD
     "invalid_contact_number": "अवैध संपर्क क्रमांक",
     "registered": "नोंदणीकृत",
     "unregistered": "नोंदणी नसलेली",
@@ -58,7 +57,4 @@
     "service": "सेवा",
     "manufacturing": "उत्पादन",
     "retail": "किरकोळ"
-=======
-    "invalid_contact_number": "अवैध संपर्क क्रमांक"
->>>>>>> 10fe6307fa (Had done company creation unit testing remaining)
 }
