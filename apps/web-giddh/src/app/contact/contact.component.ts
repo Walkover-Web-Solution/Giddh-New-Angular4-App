@@ -1609,8 +1609,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             return;
         }
         if (this.selectedAccountsList?.length > 1) {
-            this.toaster.showSnackBar("warning", this.localeData?.bulk_payment_unsupported_error);
-        } else {
             if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
                 this.dialog.open(this.bulkPaymentModalRef, {
                     width: '980px',
