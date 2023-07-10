@@ -940,7 +940,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.resetForm(this.stockCreateEditForm);
-                if (this.addStock) {
+                if (!openEditAfterSave) {
+                    if (!this.stockGroups?.length) {
+                        this.getStockGroups();
+                    }
                     this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
                     if (this.addStock) {
                         this.closeAsideEvent.emit();
@@ -961,6 +964,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
     }
+    
     /**
      * Formats request before sending
      *
