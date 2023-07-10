@@ -20,11 +20,9 @@
     z-index: 99999;
 }
 
-#close {
-    display: none;
-}
 
-:host.in #close {
+
+:host #close {
     position: absolute;
     left: auto;
     z-index: 9999999;
@@ -43,10 +41,13 @@
     padding-right: 0;
 }
 
-:host .aside-pane {
-    width: 100%;
-    max-width: 760px;
-    background: var(--color-body-background);
+:host {
+    .aside-pane {
+        width: 100%;
+        max-width: 760px;
+        background: var(--color-body-background);
+    
+    }
 }
 
 .flexy-child {
@@ -73,7 +74,7 @@
     display: none;
 }
 
-:host.in #back {
+:host #back {
     display: block;
     position: absolute;
     left: auto;

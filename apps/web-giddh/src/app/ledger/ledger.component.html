@@ -212,8 +212,9 @@
                                 </span>
                                 <button
                                     id="advance-filter"
+                                    mat-stroked-button
                                     (click)="onOpenAdvanceSearch()"
-                                    class="advance-icon d-flex advance-search-filter pointer"
+                                    class="advance-icon d-flex advance-search-filter icon-button-width pointer"
                                     [matTooltip]="commonLocaleData?.app_advance_search"
                                     [matTooltipPosition]="'below'"
                                     matTooltipClass="tooltip-black"
@@ -242,14 +243,14 @@
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
-                                        class="btn btn-danger d-flex align-items-center justify-content-center"
+                                        class="d-flex align-items-center justify-content-center icon-button-width"
                                         id="delete-ledger"
                                         (click)="performBulkAction('delete')"
                                         [matTooltip]="commonLocaleData?.app_delete"
                                         [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
-                                        <i class="icon-trash font-15"></i>
+                                        <i class="icon-trash"></i>
                                     </button>
 
                                     <button
@@ -258,13 +259,13 @@
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
                                         id="generate-invoice"
-                                        class="btn btn-warning d-flex align-items-center justify-content-center"
+                                        class="d-flex align-items-center justify-content-center icon-button-width"
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher"
                                         [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
-                                        <i class="icon-generate-invoice font-15"></i>
+                                        <i class="icon-generate-invoice"></i>
                                     </button>
 
                                     <button
@@ -272,14 +273,14 @@
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
-                                        class="btn btn-success d-flex align-items-center justify-content-center"
+                                        class="d-flex align-items-center justify-content-center icon-button-width"
                                         id="attach-file"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
                                         [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
-                                        <i class="icon-file-path font-15"></i>
+                                        <i class="icon-file-path"></i>
                                     </button>
                                     <input
                                         type="file"
@@ -354,7 +355,7 @@
                             *ngIf="!isMobileScreen"
                         >
                             <div
-                                class="advance-search-by-date date-advance-search"
+                                class="advance-search-by-date date-advance-search ledger-date"
                                 (click)="showGiddhDatepicker($event)"
                             >
                                 <span class="input-wrapper">
@@ -641,7 +642,7 @@
                                                         >
                                                             <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center">
-                                                                    <span class="pd-l05 checkbox-span">
+                                                                    <span class="checkbox-span">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -657,7 +658,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="mr-l05">
+                                                                    <span>
                                                                         <giddh-datepicker
                                                                             name="bsdateledger"
                                                                             [(ngModel)]="item.entryDate"
@@ -940,7 +941,7 @@
                                                         >
                                                             <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center">
-                                                                    <span class="pd-l05 checkbox-span">
+                                                                    <span class="checkbox-span">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -957,7 +958,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="mr-l05">
+                                                                    <span>
                                                                         <giddh-datepicker
                                                                             name="bsDates"
                                                                             [(ngModel)]="item.entryDate"
@@ -2894,18 +2895,16 @@
                 </ledger-columnar-report-table>
             </div>
             <!-- aside menu section -->
-            <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-            <ledger-aside-pane
-                [class]="asideMenuState"
-                *ngIf="asideMenuState === 'in'"
-                [@slideInOut]="asideMenuState"
-                [keyboardShortcut]="'esc'"
-                [localeData]="localeData"
-                [commonLocaleData]="commonLocaleData"
-                (onShortcutPress)="toggleAsidePane()"
-                (closeAsideEvent)="toggleAsidePane()"
-            >
-            </ledger-aside-pane>
+            <ng-template #ledgerAsidePane>
+                <ledger-aside-pane
+                    [keyboardShortcut]="'esc'"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    (onShortcutPress)="ledgerAsidePaneModal?.close()"
+                    (closeAsideEvent)="ledgerAsidePaneModal?.close()"
+                >
+                </ledger-aside-pane>
+            </ng-template>
             <!-- aside menu section -->
             <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
             <app-aside-menu-sales-other-taxes
