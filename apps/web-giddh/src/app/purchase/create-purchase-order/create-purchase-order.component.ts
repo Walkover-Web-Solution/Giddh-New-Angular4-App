@@ -3023,13 +3023,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public openPurchaseOrderPreviewPopup(template: TemplateRef<any>, purchaseOrderUniqueName: any, accountUniqueName: any): void {
         this.purchaseOrderPreviewUniqueName = purchaseOrderUniqueName;
         this.purchaseOrderPreviewAccountUniqueName = accountUniqueName;
-
-        this.modalRef = this.modalService.show(
-            template,
-            Object.assign({}, { class: 'modal-xl' })
-        );
+        this.dialog.open(template,{
+            width: '980px',
+            height: '80vh'
+        });
     }
-
     /**
      * This will close the purchase order preview popup
      *
