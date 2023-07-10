@@ -6,6 +6,16 @@ body{
         }
         .mat-menu-content{
             min-width: 160px;
+            
+            .mat-menu-item{
+
+                &.cdk-program-focused{               
+                        background-color: transparent !important;                    
+                }
+                &:hover{
+                    background-color: var(--color-dropdown-list-hover-background) !important;
+                }   
+            }
         }
     }
 }
