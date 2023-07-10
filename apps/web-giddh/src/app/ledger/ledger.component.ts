@@ -271,6 +271,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private accountPredictionSubject: Subject<boolean> = new Subject();
     /** Holds if we need bank ledger popup to be hidden */
     private isHideBankLedgerPopup: boolean = false;
+    /** Total pages for reference vouchers */
+    public referenceVouchersTotalPages: number = 1;
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
         let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
@@ -1009,6 +1011,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.invoiceList = [];
             this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 if (response && response.body) {
+                    this.referenceVouchersTotalPages = response.body.totalPages;
                     let items = [];
                     if (response.body.results) {
                         items = response.body.results;

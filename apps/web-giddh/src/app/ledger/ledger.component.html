@@ -886,6 +886,9 @@
                                                                     (getInvoiceListsForCreditNote)="
                                                                         getInvoiceListsForCreditNote($event)
                                                                     "
+                                                                    [referenceVouchersTotalPages]="
+                                                                        referenceVouchersTotalPages
+                                                                    "
                                                                     [isTouristSchemeApplicable]="
                                                                         isTouristSchemeApplicable
                                                                     "
@@ -1180,6 +1183,9 @@
                                                                     "
                                                                     (getInvoiceListsForCreditNote)="
                                                                         getInvoiceListsForCreditNote($event)
+                                                                    "
+                                                                    [referenceVouchersTotalPages]="
+                                                                        referenceVouchersTotalPages
                                                                     "
                                                                     [invoiceList]="invoiceList"
                                                                     (saveOtherTax)="saveOtherTax(item, $event)"
@@ -1904,6 +1910,7 @@
                                                 (saveBlankLedger)="saveBlankTransaction()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                                 (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
+                                                [referenceVouchersTotalPages]="referenceVouchersTotalPages"
                                                 (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                 [invoiceList]="invoiceList"
                                                 [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
@@ -2360,6 +2367,7 @@
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                                 (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                 (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
+                                                [referenceVouchersTotalPages]="referenceVouchersTotalPages"
                                                 [invoiceList]="invoiceList"
                                                 [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
                                                 [shouldShowItcSection]="shouldShowItcSection"

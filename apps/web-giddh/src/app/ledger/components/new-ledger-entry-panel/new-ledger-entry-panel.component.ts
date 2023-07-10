@@ -137,6 +137,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public entrySide: string;
     /** Stores the selected account details */
     @Input() public selectedAccountDetails: IOption;
+    /** Total pages for reference vouchers */
+    @Input() private referenceVouchersTotalPages: number = 1;
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
     public selectedInvoices: string[] = [];
@@ -1848,6 +1850,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
 
             request.page = this.referenceVouchersCurrentPage;
+
+            if (this.voucherApiVersion === 2 && request.page > 1 && this.referenceVouchersTotalPages < request.page) {
+                return;
+            }
+
             this.referenceVouchersCurrentPage++;
 
             let date;
@@ -1861,6 +1868,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
             this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 if (response && response.body) {
+                    this.referenceVouchersTotalPages = response.body.totalPages;
                     let items = [];
                     if (response.body.results) {
                         items = response.body.results;
@@ -1894,6 +1902,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.invoiceList = [];
         this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 2;
+        this.referenceVouchersTotalPages = 1;
     }
 
     /**
