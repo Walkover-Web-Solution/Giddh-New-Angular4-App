@@ -109,7 +109,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     /** Hold business type list */
     public businessTypeList: IOption[] = [];
     /** Hold business nature list */
-    public businessNatureList: IOption[] = [];
+    public businessNatureList: IOption[] = [{ label: "Food", value: "Food" }, { label: "Service", value: "Service" }, { label: "Manufacturing", value: "Manufacturing" }, { label: "Retail", value: "Retail" }];
     /** True, if on boarding is going on */
     public isOnBoardingInProgress: boolean;
     /** Stores the item on boarding store data */
@@ -300,7 +300,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             state: ['', (this.secondStepForm?.controls['businessType']?.value === this.businessTypes.Registered) ? Validators.required : undefined],
             taxes: null,
             pincode: [''],
-            address: ['', (this.secondStepForm?.controls['businessType']?.value) ? Validators.required : undefined]
+            address: ['',Validators.required]
         });
         this.companyForm = this.formBuilder.group({
             firstStepForm: this.firstStepForm,
@@ -436,8 +436,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                 this.businessTypeList.push({ label: this.localeData.registered, value: this.businessTypes.Registered }, { label: this.localeData.unregistered, value: this.businessTypes.Unregistered });
             }
             this.firstStepForm.controls['country'].setValue(event);
+            this.company.baseCurrency = event?.additional?.currency?.code;
             this.firstStepForm.controls['currency'].setValue({ label: event?.additional?.currency?.code, value: event?.additional?.currency?.code });
             this.intl?.setCountry(event.value?.toLowerCase());
+            this.changeDetection.detectChanges();
             let onboardingFormRequest = new OnboardingFormRequest();
             if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
                 onboardingFormRequest.formName = this.itemOnBoardingDetails.onBoardingType?.toLowerCase();
@@ -728,13 +730,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             if (event.value === this.businessTypes.Registered) {
                 this.secondStepForm.get('gstin').setValidators(Validators.required);
                 this.secondStepForm.get('state').setValidators(Validators.required);
-                this.secondStepForm.get('address').setValidators(Validators.required);
             } else {
                 this.secondStepForm.get('gstin').removeValidators(Validators.required);
                 this.secondStepForm.get('state').removeValidators(Validators.required);
-                this.secondStepForm.get('address').removeValidators(Validators.required);
             }
-
             this.changeDetection.detectChanges();
         }
     }

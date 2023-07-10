@@ -39,7 +39,7 @@
                                 [placeholder]="commonLocaleData?.app_currency + '*'"
                                 [options]="currencies"
                                 [showError]="isFormSubmitted && !firstStepForm.get('currency')?.value"
-                                [defaultValue]="firstStepForm.get('currency')?.value?.value"
+                                [defaultValue]="company.baseCurrency"
                                 (selectedOption)="selectCurrency($event)"
                             >
                             </dropdown-field>
