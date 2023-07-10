@@ -103,7 +103,6 @@
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     href="javascript:void(0);"
-                                    routerLink="ledger/{{ acc?.uniqueName }}"
                                     [routerLinkActive]="['active']"
                                     [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
                                     (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide()"
@@ -283,7 +282,7 @@
         (closeAccountModal)="closeAccountModal($event)"
         [selectedGrpUniqueName]="selectedGroupForCreateAccount"
         [createAccountFromCommandK]="true"
-        [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
+        [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' && !hasUnsavedChanges }"
         (addEvent)="addNewAccount($event)"
         *ngIf="accountAsideMenuState === 'in'"
     >

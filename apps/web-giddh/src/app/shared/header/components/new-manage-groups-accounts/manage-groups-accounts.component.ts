@@ -11,6 +11,7 @@ import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.a
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 import { MasterComponent } from '../master/master.component';
+import { PageLeaveUtilityService } from 'apps/web-giddh/src/app/services/page-leave-utility.service';
 
 @Component({
     selector: 'app-manage-groups-accounts',
@@ -20,7 +21,7 @@ import { MasterComponent } from '../master/master.component';
 export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
     /** Instance of master component */
-    @ViewChild('master', {static: false}) public master: MasterComponent;
+    @ViewChild('master', { static: false }) public master: MasterComponent;
     @ViewChild('header', { static: true }) public header: ElementRef;
     @ViewChild('grpSrch', { static: true }) public groupSrch: ElementRef;
     public headerRect: any;
@@ -48,6 +49,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public topSharedGroups: any[] = [];
     /** List of data searched */
     public searchedMasterData: any[] = [];
+    /** True if account has unsaved changes */
+    private hasUnsavedChanges: boolean = false;
 
     // tslint:disable-next-line:no-empty
     constructor(
@@ -58,7 +61,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         private generalService: GeneralService,
         private generalAction: GeneralActions,
         private groupService: GroupService,
-        private accountsAction: AccountsAction
+        private accountsAction: AccountsAction,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
         this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
@@ -133,6 +137,14 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             }, 200);
         }
 
+        this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            if (this.hasUnsavedChanges && !response) {
+                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+            }
+
+            this.hasUnsavedChanges = response;
+        });
+
         document.querySelector('body')?.classList?.add('master-page');
     }
 
@@ -160,7 +172,23 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.searchString = "";
     }
 
-    public closePopupEvent() {
+    public closePopupEvent(): void {
+        if (this.hasUnsavedChanges) {
+            this.confirmPageLeave(() => {
+                this.closePopup();
+            });
+            return;
+        }
+        this.closePopup();
+    }
+
+    /**
+     * Closes master popup
+     *
+     * @private
+     * @memberof ManageGroupsAccountsComponent
+     */
+    private closePopup(): void {
         this.store.dispatch(this.generalAction.addAndManageClosed());
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
         this.closeEvent.emit(true);
@@ -210,6 +238,24 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.groupService.getTopSharedGroups().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.topSharedGroups = response?.body?.results;
+            }
+        });
+    }
+
+    /**
+     * Shows page leave confirmation
+     *
+     * @private
+     * @param {Function} callback
+     * @memberof ManageGroupsAccountsComponent
+     */
+    private confirmPageLeave(callback: Function): void {
+        let dialogRef = this.pageLeaveUtilityService.openDialog();
+
+        dialogRef.afterClosed().subscribe((action) => {
+            if (action) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                callback();
             }
         });
     }

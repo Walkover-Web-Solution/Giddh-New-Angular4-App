@@ -310,17 +310,22 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.selectedaccountForMerge = '';
         });
-        this.isTaxableAccount$ = this.store.pipe(select(createSelector([
-            (state: AppState) => state.groupwithaccounts.activeAccount],
-            (activeAccount) => {
-                let result: boolean = false;
-                if (this.activeGroupUniqueName && activeAccount) {
-                    result = this.getAccountFromGroup(activeAccount, false);
-                } else {
-                    result = false;
-                }
-                return result;
-            })), takeUntil(this.destroyed$));
+        this.isTaxableAccount$ = this.store.pipe(select(createSelector([(state: AppState) => state.groupwithaccounts.activeAccount], (activeAccount) => {
+            let result: boolean = false;
+            if (this.activeGroupUniqueName && activeAccount) {
+                result = this.getAccountFromGroup(activeAccount, false);
+            } else {
+                result = false;
+            }
+            return result;
+        })), takeUntil(this.destroyed$));
+
+        this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                this.addAccountForm?.markAsPristine();
+            }
+        });
     }
 
     public ngAfterViewInit() {
@@ -489,6 +494,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             closingBalanceTriggerAmountType: ['CREDIT'],
             customFields: this._fb.array([])
         });
+
+        this.addAccountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+        });
+
         this.getInvoiceSettings();
     }
 
