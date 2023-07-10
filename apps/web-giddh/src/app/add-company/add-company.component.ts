@@ -109,7 +109,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     /** Hold business type list */
     public businessTypeList: IOption[] = [];
     /** Hold business nature list */
-    public businessNatureList: IOption[] = [{ label: "Food", value: "Food" }, { label: "Service", value: "Service" }, { label: "Manufacturing", value: "Manufacturing" }, { label: "Retail", value: "Retail" }];
+    public businessNatureList: IOption[] = [];
     /** True, if on boarding is going on */
     public isOnBoardingInProgress: boolean;
     /** Stores the item on boarding store data */
@@ -242,16 +242,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                 }
             }
         });
-        this.secondStepForm.valueChanges.pipe(debounceTime(700), distinctUntilChanged(isEqual)).subscribe(data => {
+        this.secondStepForm.controls['gstin']?.valueChanges?.pipe(debounceTime(700), distinctUntilChanged(isEqual)).subscribe(data => {
             this.isGstinValid = false;
-            console.log(data.gstin);
-
-            if (data?.gstin) {
+            if (this.secondStepForm.get('gstin')?.value) {
                 if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                     for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
                         let regex = new RegExp(this.formFields['taxName']['regex'][key]);
-                        if (regex.test(data?.gstin)) {
-
+                        if (regex.test(this.secondStepForm.get('gstin')?.value)) {
                             this.isGstinValid = true;
                         }
                     }
@@ -262,21 +259,12 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                     let text = 'Invalid [TAX_NAME]';
                     text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
                     this.toaster.errorToast(text);
-                    this.isGstinValid = true;
                     this.selectedState = '';
-                } else {
-                    this.isGstinValid = false;
                 }
-            } else {
-                this.isGstinValid = false;
-            }
-            if (!data.gstin) {
-                this.selectedState = '';
-            } else {
+
                 this.states.find((state) => {
-                    let code = data?.gstin.substr(0, 2);
+                    let code = this.secondStepForm.get('gstin')?.value?.substr(0, 2);
                     if (state.stateGstCode == code) {
-                        this.isGstinValid = true;
                         this.selectedState = state.label;
                         this.selectedStateCode = state.value;
                         this.secondStepForm.controls['state'].setValue({ label: state?.label, value: state?.value });
@@ -284,6 +272,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                         return true;
                     }
                 });
+            } else {
+                this.isGstinValid = false;
+                this.selectedState = '';
             }
         });
         this.changeDetection.detectChanges();
@@ -309,7 +300,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             state: ['', (this.secondStepForm?.controls['businessType']?.value === this.businessTypes.Registered) ? Validators.required : undefined],
             taxes: null,
             pincode: [''],
-            address: ['', Validators.required]
+            address: ['', (this.secondStepForm?.controls['businessType']?.value) ? Validators.required : undefined]
         });
         this.companyForm = this.formBuilder.group({
             firstStepForm: this.firstStepForm,
@@ -679,15 +670,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      * @memberof AddCompanyComponent
      */
     public onSubmit(): void {
-        console.log(this.companyForm);
-        console.log(this.isGstinValid);
-
         this.isFormSubmitted = false;
         if (this.companyForm.invalid) {
             this.isFormSubmitted = true;
             return;
         }
-        return;
         let gstDetails = this.prepareGstDetail(this.companyForm);
         const phoneNumber = this.intl.getNumber();
         const countryCode = this.intl.getSelectedCountryData().dialCode;
@@ -737,6 +724,17 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public selectBusinessType(event: any): void {
         if (event) {
             this.secondStepForm.controls['businessType'].setValue(event.value);
+
+            if (event.value === this.businessTypes.Registered) {
+                this.secondStepForm.get('gstin').setValidators(Validators.required);
+                this.secondStepForm.get('state').setValidators(Validators.required);
+                this.secondStepForm.get('address').setValidators(Validators.required);
+            } else {
+                this.secondStepForm.get('gstin').removeValidators(Validators.required);
+                this.secondStepForm.get('state').removeValidators(Validators.required);
+                this.secondStepForm.get('address').removeValidators(Validators.required);
+            }
+
             this.changeDetection.detectChanges();
         }
     }
