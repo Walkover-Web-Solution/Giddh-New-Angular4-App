@@ -93,5 +93,5 @@
     "option_name_required": "Option name is required",
     "option_value_required": "Option value is required",
     "save_stock_for_recipe": "Save stock and Create recipe",
-    "confirm_delete_option": "Do you want to delete the option?"
+    "confirm_delete_option": "Deleting the option will also remove all the variants of the option. Do you still want to delete the option?"
 }
