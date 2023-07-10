@@ -16,7 +16,8 @@
                         <div class="col-lg-12">
                             <input-field
                                 [name]="'name'"
-                                [placeholder]="commonLocaleData?.app_company_name + '*'"
+                                [label]="commonLocaleData?.app_company_name + '*'"
+                                [placeholder]="localeData?.enter_company_name"
                                 [type]="'text'"
                                 formControlName="name"
                                 [showError]="isFormSubmitted && !firstStepForm.get('name')?.value"
@@ -26,7 +27,8 @@
                         <div class="col-lg-6 country-space">
                             <dropdown-field
                                 [name]="'country'"
-                                [placeholder]="commonLocaleData?.app_country + '*'"
+                                [label]="commonLocaleData?.app_country + '*'"
+                                [placeholder]="localeData?.enter_country_name"
                                 [options]="countries"
                                 (selectedOption)="selectCountry($event)"
                                 [showError]="isFormSubmitted && !firstStepForm.get('country')?.value"
@@ -36,10 +38,11 @@
                         <div class="col-lg-6 currency-space">
                             <dropdown-field
                                 [name]="'currency'"
-                                [placeholder]="commonLocaleData?.app_currency + '*'"
+                                [label]="commonLocaleData?.app_currency + '*'"
+                                [placeholder]="localeData?.enter_currency_name"
                                 [options]="currencies"
                                 [showError]="isFormSubmitted && !firstStepForm.get('currency')?.value"
-                                [defaultValue]="firstStepForm.get('currency')?.value?.value"
+                                [defaultValue]="company.baseCurrency"
                                 (selectedOption)="selectCurrency($event)"
                             >
                             </dropdown-field>
@@ -52,11 +55,11 @@
                                 [id]="'init-contact-proforma'"
                                 (keydown.enter)="$event.preventDefault()"
                                 [label]="commonLocaleData?.app_mobile_number + '*'"
-                                [placeholder]="commonLocaleData?.app_mobile_number + '*'"
+                                [placeholder]="localeData?.enter_mobile_number"
                                 [floatLabel]="intl?.getNumber() ? 'always' : 'auto'"
                                 (onChange)="firstStepForm.controls['mobile'].setValue(intl?.getNumber())"
                                 [showError]="
-                                    isFormSubmitted && !firstStepForm.get('mobile')?.value && isMobileNumberInvalid
+                                    (isFormSubmitted && !firstStepForm.get('mobile')?.value) || isMobileNumberInvalid
                                 "
                             >
                             </input-field>
@@ -78,7 +81,7 @@
                         <div class="col-lg-12 fill-form">
                             <input-field
                                 [placeholder]="firstStepForm.get('name')?.value"
-                                [placeholder]="commonLocaleData?.app_company_name + '*'"
+                                [label]="commonLocaleData?.app_company_name + '*'"
                                 [type]="'text'"
                                 [readonly]="true"
                                 [floatLabel]="'always'"
@@ -89,7 +92,7 @@
                             <dropdown-field
                                 [readonly]="true"
                                 [label]="commonLocaleData?.app_country + '*'"
-                                [defaultValue]="firstStepForm.get('country')?.value.label"
+                                [defaultValue]="firstStepForm.get('country')?.value?.label"
                             >
                             </dropdown-field>
                         </div>
@@ -97,16 +100,16 @@
                             <dropdown-field
                                 [readonly]="true"
                                 [label]="commonLocaleData?.app_currency + '*'"
-                                [defaultValue]="firstStepForm.get('currency')?.value.value"
+                                [defaultValue]="firstStepForm.get('currency')?.value?.value"
                             >
                             </dropdown-field>
                         </div>
                         <div class="col-lg-12 mobile-number fill-form">
                             <img
                                 class="country-flag"
-                                *ngIf="firstStepForm.get('country')?.value.value"
+                                *ngIf="firstStepForm.get('country')?.value?.value"
                                 src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
-                                    firstStepForm.get('country')?.value.value?.toLowerCase()
+                                    firstStepForm.get('country')?.value?.value?.toLowerCase()
                                 }}.svg"
                                 width="27"
                             />
@@ -119,103 +122,98 @@
                             >
                             </input-field>
                         </div>
-                        <div class="col-lg-12" *ngIf="isOtherCountry">
+                        <div class="col-lg-12">
                             <dropdown-field
                                 [name]="'businessType'"
-                                [placeholder]="localeData?.select_business_type"
-                                [options]="businessTypeOtherCountryOptions"
-                                (selectedOption)="selectBusinessType($event)"
-                                [defaultValue]="businessTypeOtherCountryOptions[0].label"
-                            >
-                            </dropdown-field>
-                        </div>
-                        <div class="col-lg-12" *ngIf="!isOtherCountry">
-                            <dropdown-field
-                                [name]="'businessType'"
+                                [label]="localeData?.business_type"
                                 [placeholder]="localeData?.select_business_type"
                                 [options]="businessTypeList"
                                 (selectedOption)="selectBusinessType($event)"
+                                [defaultValue]="isOtherCountry ? businessTypeList[0].label : ''"
                             >
                             </dropdown-field>
                         </div>
                         <div class="col-lg-12">
                             <dropdown-field
                                 [name]="'bussinessNature'"
+                                [label]="localeData?.business_nature"
                                 [placeholder]="localeData?.select_business_nature"
                                 [options]="businessNatureList"
                                 (selectedOption)="selectBusinessNature($event)"
                             >
                             </dropdown-field>
                         </div>
-                        <div class="col-lg-12" *ngIf="secondStepForm.controls['businessType']?.value === 'Registered'">
-                            <input-field
-                                [name]="'gstin'"
-                                [placeholder]="getEnterTaxText()"
-                                [type]="'text'"
-                                formControlName="gstin"
-                                [showError]="isGstinValid && !secondStepForm.get('gstin')?.value"
-                                [label]="formFields['taxName']?.label + '*'"
-                                [maxlength]="15"
-                            >
-                            </input-field>
-                        </div>
-                        <div class="col-lg-12" *ngIf="secondStepForm.controls['businessType']?.value === 'Registered'">
-                            <dropdown-field
-                                [name]="'state'"
-                                [placeholder]="commonLocaleData?.app_state + '*'"
-                                [options]="states"
-                                [showError]="isFormSubmitted && !secondStepForm.get('state')?.value"
-                                [readonly]="isGstinValid"
-                                [label]="isGstinValid ? commonLocaleData?.app_state + '*' : ''"
-                                [defaultValue]="selectedState"
-                            >
-                            </dropdown-field>
-                        </div>
-                        <div class="col-lg-12" *ngIf="secondStepForm.controls['businessType']?.value === 'Registered'">
-                            <mat-form-field class="w-100" appearance="outline">
-                                <mat-label>{{ localeData?.applicable_tax }}</mat-label>
-                                <mat-select
-                                    [placeholder]="commonLocaleData?.app_select_tax"
-                                    [formControlName]="'taxes'"
-                                    multiple
-                                >
-                                    <mat-option *ngFor="let tax of taxesList" [value]="tax?.value">{{
-                                        tax?.label
-                                    }}</mat-option>
-                                    <mat-option
-                                        class="create-update-no-data"
-                                        [disabled]="true"
-                                        *ngIf="!taxesList?.length"
-                                        >{{ commonLocaleData?.app_no_result_found }}</mat-option
-                                    >
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <div
-                            class="col-lg-12"
-                            *ngIf="
-                                secondStepForm.controls['businessType']?.value === localeData?.unregistered ||
-                                secondStepForm.controls['businessType']?.value === localeData?.registered
-                            "
+                        <ng-container
+                            *ngIf="secondStepForm.controls['businessType']?.value === businessTypes.Registered"
                         >
+                            <div class="col-lg-12">
+                                <input-field
+                                    [name]="'gstin'"
+                                    [placeholder]="getEnterTaxText()"
+                                    [type]="'text'"
+                                    formControlName="gstin"
+                                    [showError]="
+                                        isFormSubmitted && (!secondStepForm.get('gstin')?.value || !isGstinValid)
+                                    "
+                                    [label]="formFields['taxName']?.label + '*'"
+                                    [maxlength]="15"
+                                >
+                                </input-field>
+                            </div>
+                            <div class="col-lg-12">
+                                <dropdown-field
+                                    [name]="'state'"
+                                    [label]="commonLocaleData?.app_state + '*'"
+                                    [placeholder]="localeData?.select_state"
+                                    [options]="states"
+                                    [showError]="isFormSubmitted && !secondStepForm.get('state')?.value"
+                                    [readonly]="isGstinValid"
+                                    [label]="isGstinValid ? commonLocaleData?.app_state + '*' : ''"
+                                    [defaultValue]="selectedState"
+                                >
+                                </dropdown-field>
+                            </div>
+                            <div class="col-lg-12">
+                                <mat-form-field class="w-100" appearance="outline">
+                                    <mat-label>{{ localeData?.applicable_tax }}</mat-label>
+                                    <mat-select
+                                        [placeholder]="commonLocaleData?.app_select_tax"
+                                        [formControlName]="'taxes'"
+                                        multiple
+                                    >
+                                        <mat-option *ngFor="let tax of taxesList" [value]="tax?.value">{{
+                                            tax?.label
+                                        }}</mat-option>
+                                        <mat-option
+                                            class="create-update-no-data"
+                                            [disabled]="true"
+                                            *ngIf="!taxesList?.length"
+                                            >{{ commonLocaleData?.app_no_result_found }}</mat-option
+                                        >
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
+                        <div class="col-lg-12">
                             <input-field
                                 [name]="'pincode'"
-                                [placeholder]="'PIN Code'"
+                                [label]="commonLocaleData?.app_pin_code"
+                                [placeholder]="commonLocaleData?.app_enter_pin_code"
                                 [type]="'text'"
                                 formControlName="pincode"
                             >
                             </input-field>
                         </div>
-                        <div
-                            class="col-lg-12"
-                            *ngIf="
-                                secondStepForm.controls['businessType']?.value === localeData?.unregistered ||
-                                secondStepForm.controls['businessType']?.value === localeData?.registered
-                            "
-                        >
+                        <div class="col-lg-12">
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Company Address</mat-label>
-                                <textarea matInput rows="3" [name]="'address'" formControlName="address"></textarea>
+                                <mat-label>{{ localeData?.company_address }}</mat-label>
+                                <textarea
+                                    matInput
+                                    rows="3"
+                                    [name]="'address'"
+                                    formControlName="address"
+                                    [placeholder]="localeData?.type_your_address"
+                                ></textarea>
                             </mat-form-field>
                         </div>
                         <div class="col-lg-12">

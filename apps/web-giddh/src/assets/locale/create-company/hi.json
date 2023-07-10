@@ -56,5 +56,12 @@
     "food": "खाना",
     "service": "सेवा",
     "manufacturing": "उत्पादन",
-    "retail": "खुदरा"
+    "retail": "खुदरा",
+    "enter_company_name":"कंपनी का नाम दर्ज करें",
+    "enter_country_name":"देश का नाम दर्ज करें",
+    "enter_currency_name":"मुद्रा का नाम दर्ज करें",
+    "enter_mobile_number" : "मोबाइल नंबर दर्ज करेंr",
+    "select_state" : "राज्य चुनें",
+    "business_type": "व्यापार के प्रकार",
+    "business_nature": "व्यापार की प्रकृति"
 }
