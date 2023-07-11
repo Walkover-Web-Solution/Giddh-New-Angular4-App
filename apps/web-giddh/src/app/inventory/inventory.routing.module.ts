@@ -61,6 +61,10 @@ import { NewBranchTransferListComponent } from "./components/new-branch-transfer
                     {
                         path: "report",
                         component: NewBranchTransferListComponent
+                    },
+                    {
+                        path: "report/:action",
+                        component: NewBranchTransferListComponent
                     }
                 ]
             }
