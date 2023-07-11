@@ -86,7 +86,7 @@
                                 [type]="'text'"
                                 [readonly]="true"
                                 [floatLabel]="'always'"
-                                [ngClass]="{ 'readonly-color': firstStepForm.get('name')?.value }"
+                                [ngClass]="{ 'readonly-field-color': firstStepForm.get('name')?.value }"
                             >
                             </input-field>
                         </div>
@@ -95,7 +95,7 @@
                                 [readonly]="true"
                                 [label]="commonLocaleData?.app_country + '*'"
                                 [defaultValue]="firstStepForm.get('country')?.value?.label"
-                                [ngClass]="{ 'readonly-color': firstStepForm.get('country')?.value?.label }"
+                                [ngClass]="{ 'readonly-field-color': firstStepForm.get('country')?.value?.label }"
                             >
                             </dropdown-field>
                         </div>
@@ -104,7 +104,7 @@
                                 [readonly]="true"
                                 [label]="commonLocaleData?.app_currency + '*'"
                                 [defaultValue]="firstStepForm.get('currency')?.value?.value"
-                                [ngClass]="{ 'readonly-color': firstStepForm.get('currency')?.value?.value }"
+                                [ngClass]="{ 'readonly-field-color': firstStepForm.get('currency')?.value?.value }"
                             >
                             </dropdown-field>
                         </div>
@@ -124,7 +124,7 @@
                                 [placeholder]="firstStepForm.controls['mobile'].value"
                                 [floatLabel]="'always'"
                                 [readonly]="true"
-                                [ngClass]="{ 'readonly-color': firstStepForm.get('mobile')?.value }"
+                                [ngClass]="{ 'readonly-field-color': firstStepForm.get('mobile')?.value }"
                             >
                             </input-field>
                         </div>
