@@ -76,7 +76,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('addmanage', { static: true }) public addmanage: ElementViewContainerRef;
     @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: ModalDirective;
     @ViewChild('addCompanyModal', { static: true }) public addCompanyModal: ModalDirective;
-    @ViewChild('addCompanyNewModal', { static: true }) public addCompanyNewModal: ModalDirective;
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     @ViewChild('dateRangePickerCmp', { static: true }) public dateRangePickerCmp: ElementRef;
     @ViewChild('dropdown', { static: true }) public companyDropdown: BsDropdownDirective;
@@ -431,11 +430,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
         this.totalNumberOfcompanies$ = this.store.pipe(select(state => state.session.totalNumberOfcompanies), takeUntil(this.destroyed$));
-        this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
-            if (value === 'resetcompanysession') {
-                this.removeCompanySessionData();
-            }
-        });
 
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
@@ -772,9 +766,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             }
         });
-        if (this.router.url === '/new-user') {
-            this.showAddCompanyModal();
-        }
+
         this.store.dispatch(this.loginAction.FetchUserDetails());
 
         // Get universal date
@@ -1014,36 +1006,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.manageGroupsAccountsModal.hide();
     }
 
-    public showAddCompanyModal() {
-        this.loadAddCompanyNewUiComponent();
-        this.addCompanyNewModal?.show();
-    }
 
-    public hideAddCompanyModal() {
-        this.addCompanyNewModal?.hide();
-    }
-
-    public hideCompanyModalAndShowAddAndManage() {
-        this.addCompanyModal.hide();
-        this.manageGroupsAccountsModal?.show();
-    }
 
     public onHide() {
         this.store.dispatch(this.companyActions.ResetCompanyPopup());
     }
 
-    public loadAddCompanyNewUiComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddNewUiComponent);
-        let viewContainerRef = this.companynewadd.viewContainerRef;
-        viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
-            this.hideAddCompanyModal();
-        });
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
-            this.hideCompanyModalAndShowAddAndManage();
-        });
-    }
 
     public loadAddManageComponent() {
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(ManageGroupsAccountsComponent);
@@ -1333,12 +1301,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
-    public removeCompanySessionData() {
-        this.generalService.createNewCompany = null;
-        this.store.dispatch(this.commonActions.resetCountry());
-        this.store.dispatch(this.companyActions.removeCompanyCreateSession());
-    }
-
     public setCurrentPage() {
         let currentUrl = this.router.url;
 
@@ -1389,17 +1351,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public openScheduleModel() {
         this.store.dispatch(this._generalActions.isOpenCalendlyModel(true));
     }
-
-    /**
-     * Opens new company modal
-     *
-     * @memberof HeaderComponent
-     */
-    public createNewCompany(): void {
-        this.removeCompanySessionData();
-        this.showAddCompanyModal();
-    }
-
 
     /**
      * Fetches whether company country has other taxes (TCS/TDS)
