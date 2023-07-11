@@ -840,6 +840,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
 
                 this.toggleStateRequired();
+                this.changeDetectorRef.detectChanges();
             } else {
                 let statesRequest = new StatesRequest();
                 statesRequest.country = countryCode;

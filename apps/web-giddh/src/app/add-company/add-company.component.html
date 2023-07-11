@@ -172,10 +172,9 @@
                             <dropdown-field
                                 [name]="'state'"
                                 [label]="
-                                    commonLocaleData?.app_state + secondStepForm.controls['businessType']?.value ===
-                                    businessTypes.Registered
-                                        ? '*'
-                                        : ''
+                                    secondStepForm.controls['businessType']?.value === businessTypes.Registered
+                                        ? commonLocaleData?.app_state + '*'
+                                        : commonLocaleData?.app_state
                                 "
                                 [placeholder]="localeData?.select_state"
                                 [options]="states"
@@ -190,10 +189,9 @@
                             <dropdown-field
                                 [name]="'county'"
                                 [label]="
-                                    commonLocaleData?.app_region + secondStepForm.controls['businessType']?.value ===
-                                    businessTypes.Registered
-                                        ? '*'
-                                        : ''
+                                    secondStepForm.controls['businessType']?.value === businessTypes.Registered
+                                        ? commonLocaleData?.app_region + '*'
+                                        : commonLocaleData?.app_region
                                 "
                                 [placeholder]="commonLocaleData?.app_select_region"
                                 [options]="countyList"
