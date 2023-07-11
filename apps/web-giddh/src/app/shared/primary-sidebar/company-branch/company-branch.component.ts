@@ -30,8 +30,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    /** Event to carry out new company onboarding */
-    @Output() public createNewCompany: EventEmitter<void> = new EventEmitter();
     /** Stores the list of all the companies for a user */
     public companies$: Observable<CompanyResponse[]>;
     /** Stores the total company list */
@@ -234,15 +232,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         event.preventDefault();
         this.companyListForFilter = [];
         this.store.dispatch(this.companyActions.RefreshCompanies());
-    }
-
-    /**
-     * Opens new company modal
-     *
-     * @memberof CompanyBranchComponent
-     */
-    public openModalCreateNewCompany(): void {
-        this.createNewCompany.emit();
     }
 
     /**
