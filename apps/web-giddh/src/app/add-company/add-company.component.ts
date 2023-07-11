@@ -314,6 +314,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             address: [''],
         });
         this.companyForm = this.formBuilder.group({
+            firstStepForm: this.firstStepForm,
             secondStepForm: this.secondStepForm
         });
     }
