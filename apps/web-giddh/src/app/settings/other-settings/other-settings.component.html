@@ -20,103 +20,80 @@
         </div>
     </div>
     <div *ngIf="organizationType === 'COMPANY'" class="row pb-2">
-        <div class="col-lg-12 col-xl-7 other-information mr-t4">
+        <div class="col-lg-12 col-xl-7 other-information mr-t2">
             <div class="clearfix">
                 <div class="form-group row">
                     <div class="col-md-12 col-lg-6 col-12">
                         <div class="row">
                             <div class="col-12 col-sm-6">
                                 <div class="form-group">
-                                    <label>{{ localeData?.digits_after_decimal }}</label>
-                                    <sh-select
+                                    <dropdown-field
+                                        [label]="localeData?.digits_after_decimal"
                                         [options]="decimalDigitSource"
                                         [placeholder]="commonLocaleData?.app_select_type"
-                                        (selected)="profileUpdated('balanceDecimalPlaces')"
+                                        (selected)="
+                                            profileData.balanceDecimalPlaces = $event.value;
+                                            profileUpdated('balanceDecimalPlaces')
+                                        "
                                         [isFilterEnabled]="true"
-                                        name="balanceDecimalPlaces"
-                                        [(ngModel)]="profileData.balanceDecimalPlaces"
-                                    >
-                                    </sh-select>
+                                        [name]="'balanceDecimalPlaces'"
+                                    ></dropdown-field>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6">
                                 <div class="form-group">
-                                    <label>{{ localeData?.number_system_label }}</label>
-                                    <sh-select
+                                    <dropdown-field
+                                        [label]="localeData?.number_system_label"
                                         [options]="numberSystemSource"
                                         [placeholder]="commonLocaleData?.app_select_type"
-                                        (selected)="profileUpdated('balanceDisplayFormat')"
+                                        (selected)="
+                                            profileData.balanceDisplayFormat = $event.value;
+                                            profileUpdated('balanceDisplayFormat')
+                                        "
                                         [isFilterEnabled]="true"
-                                        name="balanceDisplayFormat"
-                                        [(ngModel)]="profileData.balanceDisplayFormat"
-                                    >
-                                    </sh-select>
+                                        [name]="'balanceDisplayFormat'"
+                                    ></dropdown-field>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6">
                                 <div class="form-group">
                                     <label>{{ localeData?.inventory_type }}</label>
                                     <div class="mr-t1">
-                                        <span class="p-0 mr-r3">
-                                            <input
-                                                id="radio-1"
-                                                class="radio-custom cp ml-0"
-                                                name="radio-group"
-                                                type="radio"
-                                                [checked]="profileData?.manageInventory"
-                                                (change)="inventoryTypeUpdated(true)"
-                                                name="inventoryType"
-                                                checked
-                                            />
-                                            <label for="radio-1" class="radio-custom-label">{{
-                                                commonLocaleData?.app_product
-                                            }}</label>
-                                        </span>
-                                        <span class="p-0">
-                                            <input
-                                                id="radio-2"
-                                                class="radio-custom cp ml-0"
-                                                name="radio-group"
-                                                type="radio"
-                                                [checked]="!profileData?.manageInventory"
-                                                (change)="inventoryTypeUpdated(false)"
-                                                name="inventoryType"
-                                            />
-                                            <label for="radio-2" class="radio-custom-label">{{
-                                                commonLocaleData?.app_service
-                                            }}</label>
-                                        </span>
+                                        <mat-radio-group class="d-flex mb-2" name="radio-group">
+                                            <mat-radio-button color="primary" id="radio-1" [value]="'product'">
+                                                {{ commonLocaleData?.app_product }}
+                                            </mat-radio-button>
+                                            <mat-radio-button color="primary" id="radio-2" [value]="'service'">
+                                                {{ commonLocaleData?.app_service }}
+                                            </mat-radio-button>
+                                        </mat-radio-group>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6">
                                 <div class="form-group">
-                                    <label>{{ localeData?.language }}</label>
-                                    <sh-select
-                                        class="language-selection"
+                                    <dropdown-field
+                                        [label]="localeData?.language"
+                                        [cssClass]="'language-selection'"
                                         [options]="translationLocales"
                                         [placeholder]="localeData?.select_language"
-                                        (selected)="selectLocale($event)"
+                                        (selected)="activeLocale = $event.value; selectLocale($event)"
                                         [isFilterEnabled]="true"
-                                        name="activeLocale"
-                                        [(ngModel)]="activeLocale"
-                                    >
-                                    </sh-select>
+                                        [name]="'activeLocale'"
+                                    ></dropdown-field>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6">
                                 <div class="form-group">
-                                    <label>{{ localeData?.theme }}</label>
-                                    <sh-select
-                                        class="theme-selection"
+                                    <dropdown-field
+                                        [label]="localeData?.theme"
+                                        [cssClass]="'theme-selection'"
                                         [options]="availableThemes"
                                         [placeholder]="localeData?.select_theme"
-                                        (selected)="setActiveTheme($event)"
+                                        (selected)="activeTheme = $event.value; setActiveTheme($event)"
                                         [isFilterEnabled]="true"
-                                        name="activeTheme"
-                                        [(ngModel)]="activeTheme"
-                                    >
-                                    </sh-select>
+                                        [name]="'activeTheme'"
+                                    ></dropdown-field>
                                 </div>
                             </div>
                         </div>

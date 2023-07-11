@@ -3,7 +3,9 @@
         padding-bottom: 5px;
     }
 }
-
+.other-setting-container {
+    padding: 0 15px;
+}
 @media (min-width: 1200px) and (max-width: 1302px) {
     .other-information {
         flex: 0 0 66.666667% !important;

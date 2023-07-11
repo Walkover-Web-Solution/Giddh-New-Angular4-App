@@ -76,62 +76,66 @@
             </tab>
         </tabset> -->
 
-        <mat-tab-group mat-align-tabs="start">
-            <mat-tab
-                [id]="currentTab === 'personal' ? 'giddh-page-heading' : ''"
-                [label]="personalInformationTabHeading"
-            >
-                <personal-information
-                    (saveProfile)="handleSaveProfile($event)"
-                    [profileData]="companyProfileObj"
-                    [organizationType]="currentOrganizationType"
-                    [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData"
-                >
-                </personal-information>
-            </mat-tab>
-            <mat-tab
-                [label]="
-                    companyProfileObj?.taxType
-                        ? localeData?.address + companyProfileObj?.taxType
-                        : localeData?.addresses
-                "
-                [id]="currentTab === 'address' ? 'giddh-page-heading' : ''"
-            >
-                <address-settings
-                    *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'address'"
-                    [addresses]="addresses"
-                    [(isAddressChangeInProgress)]="isAddressChangeInProgress"
-                    [(closeSidePane)]="closeAddressSidePane"
-                    [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-                    (searchAddress)="handleSearchInAddress($event)"
-                    (pageChanged)="handlePageChanged($event)"
-                    [addressConfiguration]="addressConfiguration"
-                    (saveNewAddress)="createNewAddress($event)"
-                    (updatedAddress)="updateAddress($event)"
-                    (deleteAddress)="handleDeleteAddress($event)"
-                    (unLinkAddress)="handleAddressUnlinking($event)"
-                    (setDefaultAddress)="handleDefaultAddress($event)"
-                    [profileData]="companyProfileObj"
-                    [shouldShowLoader]="shouldShowAddressLoader"
-                    [paginationConfig]="addressTabPaginationData"
-                    [paginationLimit]="20"
-                    [organizationType]="currentOrganizationType"
-                    [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData"
-                    [taxType]="taxType"
-                ></address-settings>
-            </mat-tab>
-            <mat-tab [label]="localeData?.other" [id]="currentTab === 'other' ? 'giddh-page-heading' : ''">
-                <other-settings
-                    [organizationType]="currentOrganizationType"
-                    (saveProfile)="handleSaveProfile($event)"
-                    [profileData]="companyProfileObj"
-                    [localeData]="localeData"
-                >
-                </other-settings>
-            </mat-tab>
-        </mat-tab-group>
+        <div class="row">
+            <div class="col-lg-12">
+                <mat-tab-group mat-align-tabs="start">
+                    <mat-tab
+                        [id]="currentTab === 'personal' ? 'giddh-page-heading' : ''"
+                        [label]="personalInformationTabHeading"
+                    >
+                        <personal-information
+                            (saveProfile)="handleSaveProfile($event)"
+                            [profileData]="companyProfileObj"
+                            [organizationType]="currentOrganizationType"
+                            [localeData]="localeData"
+                            [commonLocaleData]="commonLocaleData"
+                        >
+                        </personal-information>
+                    </mat-tab>
+                    <mat-tab
+                        [label]="
+                            companyProfileObj?.taxType
+                                ? localeData?.address + companyProfileObj?.taxType
+                                : localeData?.addresses
+                        "
+                        [id]="currentTab === 'address' ? 'giddh-page-heading' : ''"
+                    >
+                        <address-settings
+                            *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'address'"
+                            [addresses]="addresses"
+                            [(isAddressChangeInProgress)]="isAddressChangeInProgress"
+                            [(closeSidePane)]="closeAddressSidePane"
+                            [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                            (searchAddress)="handleSearchInAddress($event)"
+                            (pageChanged)="handlePageChanged($event)"
+                            [addressConfiguration]="addressConfiguration"
+                            (saveNewAddress)="createNewAddress($event)"
+                            (updatedAddress)="updateAddress($event)"
+                            (deleteAddress)="handleDeleteAddress($event)"
+                            (unLinkAddress)="handleAddressUnlinking($event)"
+                            (setDefaultAddress)="handleDefaultAddress($event)"
+                            [profileData]="companyProfileObj"
+                            [shouldShowLoader]="shouldShowAddressLoader"
+                            [paginationConfig]="addressTabPaginationData"
+                            [paginationLimit]="20"
+                            [organizationType]="currentOrganizationType"
+                            [localeData]="localeData"
+                            [commonLocaleData]="commonLocaleData"
+                            [taxType]="taxType"
+                        ></address-settings>
+                    </mat-tab>
+                    <mat-tab [label]="localeData?.other" [id]="currentTab === 'other' ? 'giddh-page-heading' : ''">
+                        <other-settings
+                            [organizationType]="currentOrganizationType"
+                            (saveProfile)="handleSaveProfile($event)"
+                            [profileData]="companyProfileObj"
+                            [localeData]="localeData"
+                        >
+                        </other-settings>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
     </div>
     <div class="settings-profile-tabs" *ngIf="addressOnly">
         <div

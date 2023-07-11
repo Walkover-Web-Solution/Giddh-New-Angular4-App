@@ -1,0 +1,18 @@
+.mat-tab-label {
+    opacity: 1 !important;
+    .mat-tab-label-content {
+        color: var(--color-tab-primary-inactive);
+    }
+    &.mat-tab-label-active {
+        .mat-tab-label-content {
+            color: var(--color-tab-primary-active) !important;
+        }
+    }
+}
+.mat-tab-group {
+    &.mat-primary {
+        .mat-ink-bar {
+            background-color: var(--color-tab-primary-selected-tab-bottom-border) !important;
+        }
+    }
+}
