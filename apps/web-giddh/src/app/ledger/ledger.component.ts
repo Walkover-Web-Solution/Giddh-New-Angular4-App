@@ -274,6 +274,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private isHideBankLedgerPopup: boolean = false;
     /** Ledger aside pan modal */
     private ledgerAsidePaneModal: any;
+    /** Total pages for reference vouchers */
+    public referenceVouchersTotalPages: number = 1;
 
     constructor(
         private store: Store<AppState>,
@@ -1005,6 +1007,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.invoiceList = [];
             this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 if (response && response.body) {
+                    this.referenceVouchersTotalPages = response.body.totalPages;
                     let items = [];
                     if (response.body.results) {
                         items = response.body.results;
