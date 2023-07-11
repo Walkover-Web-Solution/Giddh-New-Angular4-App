@@ -256,41 +256,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             }, 500);
         });
 
-        this.secondStepForm.controls['gstin']?.valueChanges?.pipe(debounceTime(700), distinctUntilChanged(isEqual)).subscribe(data => {
-            this.isGstinValid = false;
-            if (this.secondStepForm.get('gstin')?.value) {
-                if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
-                    for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
-                        let regex = new RegExp(this.formFields['taxName']['regex'][key]);
-                        if (regex.test(this.secondStepForm.get('gstin')?.value)) {
-                            this.isGstinValid = true;
-                        }
-                    }
-                } else {
-                    this.isGstinValid = true;
-                }
-                if (!this.isGstinValid) {
-                    let text = this.localeData?.invalid_tax;
-                    text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
-                    this.toaster.showSnackBar("error", text);
-                    this.selectedState = '';
-                }
-
-                this.states?.find((state) => {
-                    let code = this.secondStepForm.get('gstin')?.value?.substr(0, 2);
-                    if (state.stateGstCode == code) {
-                        this.selectedState = state.label;
-                        this.selectedStateCode = state.value;
-                        this.secondStepForm.controls['state'].setValue({ label: state?.label, value: state?.value });
-                        this.changeDetection.detectChanges();
-                        return true;
-                    }
-                });
-            } else {
-                this.isGstinValid = false;
-                this.selectedState = '';
-            }
-        });
         this.changeDetection.detectChanges();
     }
 
@@ -339,6 +304,48 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                 clearInterval(interval);
             }
         }, 500);
+    }
+
+    /**
+     * This will use validate gst number
+     *
+     * @param {*} event
+     * @memberof AddCompanyComponent
+     */
+    public validateGstNumber(event: any): void {
+        this.isGstinValid = false;
+        if (this.secondStepForm.get('gstin')?.value) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
+                for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
+                    let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                    if (regex.test(this.secondStepForm.get('gstin')?.value)) {
+                        this.isGstinValid = true;
+                    }
+                }
+            } else {
+                this.isGstinValid = true;
+            }
+            if (!this.isGstinValid) {
+                let text = this.localeData?.invalid_tax;
+                text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                this.toaster.showSnackBar("error", text);
+                this.selectedState = '';
+            }
+
+            this.states?.find((state) => {
+                let code = this.secondStepForm.get('gstin')?.value?.substr(0, 2);
+                if (state.stateGstCode == code) {
+                    this.selectedState = state.label;
+                    this.selectedStateCode = state.value;
+                    this.secondStepForm.controls['state'].setValue({ label: state?.label, value: state?.value });
+                    this.changeDetection.detectChanges();
+                    return true;
+                }
+            });
+        } else {
+            this.isGstinValid = false;
+            this.selectedState = '';
+        }
     }
 
     /**
@@ -463,7 +470,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             this.company.baseCurrency = event?.additional?.currency?.code;
             this.firstStepForm.controls['currency'].setValue({ label: event?.additional?.currency?.code, value: event?.additional?.currency?.code });
             this.intl?.setCountry(event.value?.toLowerCase());
-
             let onboardingFormRequest = new OnboardingFormRequest();
             if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
                 onboardingFormRequest.formName = this.itemOnBoardingDetails.onBoardingType?.toLowerCase();
@@ -569,6 +575,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                         }
                     } else {
                         this.isMobileNumberInvalid = false;
+
                     }
                 }
             });
@@ -584,12 +591,12 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      */
     public nextStepForm(): void {
         this.isFormSubmitted = false;
-
         if (this.firstStepForm.invalid || this.isMobileNumberInvalid) {
             this.isFormSubmitted = true;
             this.selectedStep = 0;
             return;
         }
+        this.firstStepForm.controls['mobile'].setValue(this.intl?.getNumber());
         this.selectedStep = 1;
         let companies = null;
         this.company.name = this.firstStepForm.controls['name'].value;
@@ -768,6 +775,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                 }
                 this.secondStepForm.get('address').setValidators(Validators.required);
             }
+            this.secondStepForm.get('gstin')?.updateValueAndValidity();
+            this.secondStepForm.get('address')?.updateValueAndValidity();
+            this.secondStepForm.get('state')?.updateValueAndValidity();
+            this.secondStepForm.get('country')?.updateValueAndValidity();
             this.changeDetection.detectChanges();
         }
     }

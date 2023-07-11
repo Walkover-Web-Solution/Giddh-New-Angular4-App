@@ -86,6 +86,7 @@
                                 [type]="'text'"
                                 [readonly]="true"
                                 [floatLabel]="'always'"
+                                [ngClass]="{ 'readonly-field-color': firstStepForm.get('name')?.value }"
                             >
                             </input-field>
                         </div>
@@ -94,6 +95,7 @@
                                 [readonly]="true"
                                 [label]="commonLocaleData?.app_country + '*'"
                                 [defaultValue]="firstStepForm.get('country')?.value?.label"
+                                [ngClass]="{ 'readonly-field-color': firstStepForm.get('country')?.value?.label }"
                             >
                             </dropdown-field>
                         </div>
@@ -102,6 +104,7 @@
                                 [readonly]="true"
                                 [label]="commonLocaleData?.app_currency + '*'"
                                 [defaultValue]="firstStepForm.get('currency')?.value?.value"
+                                [ngClass]="{ 'readonly-field-color': firstStepForm.get('currency')?.value?.value }"
                             >
                             </dropdown-field>
                         </div>
@@ -121,6 +124,7 @@
                                 [placeholder]="firstStepForm.controls['mobile'].value"
                                 [floatLabel]="'always'"
                                 [readonly]="true"
+                                [ngClass]="{ 'readonly-field-color': firstStepForm.get('mobile')?.value }"
                             >
                             </input-field>
                         </div>
@@ -159,6 +163,7 @@
                                     "
                                     [label]="formFields['taxName']?.label + '*'"
                                     [maxlength]="15"
+                                    (change)="validateGstNumber($event)"
                                 >
                                 </input-field>
                             </div>
@@ -250,7 +255,7 @@
                             </mat-form-field>
                         </div>
                         <div class="col-lg-12">
-                            <p class="pb-4">{{ localeData?.onboarding_note }}</p>
+                            <p class="pb-2">{{ localeData?.onboarding_note }}</p>
                             <p
                                 class="taxation-not-supported"
                                 [innerHTML]="localeData?.tax_reports_note"
@@ -258,8 +263,8 @@
                             ></p>
                         </div>
                     </div>
-                    <div class="pt-4">
-                        <button mat-stroked-button matStepperPrevious class="mr-3">
+                    <div class="pt-2">
+                        <button mat-stroked-button matStepperPrevious class="mr-3" (click)="selectedStep = 0">
                             {{ commonLocaleData?.app_back }}
                         </button>
                         <button mat-stroked-button color="primary" (click)="onSubmit()">

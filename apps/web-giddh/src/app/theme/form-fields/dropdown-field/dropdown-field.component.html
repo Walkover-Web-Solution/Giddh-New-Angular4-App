@@ -19,6 +19,7 @@
             (keydown.enter)="$event.preventDefault()"
             matAutocompletePosition="auto"
             [required]="required"
+            [attr.aria-expanded]="readonly ? false : true"
         />
         <mat-autocomplete
             autoActiveFirstOption

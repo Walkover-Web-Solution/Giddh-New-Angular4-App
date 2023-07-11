@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
-import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
+import { ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
@@ -741,7 +741,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
-                    this.router.navigate(['/new-user']);
+                    this.router.navigate(['/new-company']);
                 });
             } else if (s === userLoginStateEnum.userLoggedIn) {
                 if (this.generalService.getUtmParameter("companyUniqueName")) {

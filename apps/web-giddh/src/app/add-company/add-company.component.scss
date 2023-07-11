@@ -12,6 +12,7 @@
                 position: absolute;
                 top: 15px;
                 left: 25px;
+                z-index: 9 !important;
             }
             input {
                 height: 46px;
@@ -21,10 +22,10 @@
             }
         }
         .country-space {
-            padding-right: 11px;
+            padding-right: 6px;
         }
         .currency-space {
-            padding-left: 11px;
+            padding-left: 6px;
         }
     }
 }
