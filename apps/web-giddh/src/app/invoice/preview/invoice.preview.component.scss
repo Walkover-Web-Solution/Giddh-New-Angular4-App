@@ -653,9 +653,6 @@ span.icon-export-icon {
         background-color: var(--color-white);
         z-index: -1;
     }
-    .d-block {
-        display: block !important;
-    }
     .click-dropdown ul {
         left: auto;
         right: 0;
@@ -854,7 +851,7 @@ span.icon-export-icon {
 
     .min-wid-check {
         min-width: 40px;
-        .check-image {
+        .check-img {
             width: 20px;
         }
     }

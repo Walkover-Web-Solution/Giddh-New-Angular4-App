@@ -13,10 +13,10 @@
         "manufacturing":"उत्पादन",
         "warehouse_balance":"गोदाम उघडण्याची शिल्लक",
         "custom_units":"सानुकूल युनिट",
+        "master":"मास्टर",
         "recipe":"कृती",
         "create_manufacturing":"मॅन्युफॅक्चरिंग तयार करा",
         "report":"अहवाल द्या",
-        "master":"मास्टर",
         "create_branch_transfer":"शाखा हस्तांतरण तयार करा"
     },
     "reports":{
@@ -86,7 +86,11 @@
         "equals":"बरोबरी",
         "greater_than":"या पेक्षा मोठे",
         "less_than":"च्या पेक्षा कमी",
-        "excluded":"वगळलेले"
+        "excluded":"वगळलेले",
+        "category":"श्रेणी",
+        "type":"प्रकार",
+        "select_value":"मूल्य निवडा",
+        "enter_amount":"रक्कम प्रविष्ट करा"
     },
      "warehouse_opening_balance":{
         "unique_name":"अद्वितीय नाव",

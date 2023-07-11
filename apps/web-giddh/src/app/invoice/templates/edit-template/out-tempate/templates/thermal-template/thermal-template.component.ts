@@ -44,7 +44,7 @@ export class ThermalTemplateComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions) {
-        this.companySetting$ = this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$));
+        this.companySetting$ = this.store.pipe(select(response => response.settings.profile), takeUntil(this.destroyed$));
     }
 
     /**
@@ -52,11 +52,11 @@ export class ThermalTemplateComponent implements OnInit, OnDestroy, OnChanges {
      *
      * @memberof ThermalTemplateComponent
      */
-    public ngOnInit() : void {
-        this.companySetting$.subscribe(a => {
-            if (a && a.address) {
-                this.companyAddress = cloneDeep(a.address);
-            } else if (!a) {
+    public ngOnInit(): void {
+        this.companySetting$.subscribe(response => {
+            if (response && response.address) {
+                this.companyAddress = cloneDeep(response.address);
+            } else if (!response) {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
@@ -67,7 +67,7 @@ export class ThermalTemplateComponent implements OnInit, OnDestroy, OnChanges {
      * @param {SimpleChanges} changes
      * @memberof ThermalTemplateComponent
      */
-    public ngOnChanges(changes: SimpleChanges) : void {
+    public ngOnChanges(changes: SimpleChanges): void {
         if ((changes.fieldsAndVisibility && changes.fieldsAndVisibility.previousValue && changes.fieldsAndVisibility.currentValue !== changes.fieldsAndVisibility.previousValue) || changes.fieldsAndVisibility && changes.fieldsAndVisibility.firstChange) {
             this.columnsVisibled = 0;
             if (changes.fieldsAndVisibility.currentValue.table) {
@@ -111,7 +111,7 @@ export class ThermalTemplateComponent implements OnInit, OnDestroy, OnChanges {
      * @param {string} sectionName
      * @memberof ThermalTemplateComponent
      */
-    public onClickSection(sectionName: string) : void {
+    public onClickSection(sectionName: string): void {
         if (!this.isPreviewMode) {
             this.sectionName.emit(sectionName);
         }
@@ -122,7 +122,7 @@ export class ThermalTemplateComponent implements OnInit, OnDestroy, OnChanges {
      *
      * @memberof ThermalTemplateComponent
      */
-    public ngOnDestroy() : void {
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

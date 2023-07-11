@@ -8,7 +8,7 @@
     <div class="relative">
         <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
         <hamburger-menu></hamburger-menu>
-        
+
         <ng-container *ngIf="!showLoader">
             <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">
                 <div class="container-fluid">
@@ -23,7 +23,6 @@
                                             [placeholder]="localeData?.enter_group"
                                             [type]="'text'"
                                             formControlName="name"
-                                            [required]="true"
                                             (change)="!groupUniqueName ? generateUniqueName() : ''"
                                             [showError]="isFormSubmitted && !groupForm.get('name')?.value"
                                         >
@@ -36,7 +35,6 @@
                                             [placeholder]="commonLocaleData?.app_unique_name_placeholder"
                                             formControlName="uniqueName"
                                             [type]="'text'"
-                                            [required]="true"
                                             [showError]="isFormSubmitted && !groupForm.get('uniqueName')?.value"
                                         >
                                         </input-field>
@@ -153,7 +151,8 @@
                                                     [placeholder]="commonLocaleData?.app_select_parent_group"
                                                     [options]="stockGroups"
                                                     (selectedOption)="
-                                                        stockGroupUniqueName = $event?.value; stockGroupName = $event?.label
+                                                        stockGroupUniqueName = $event?.value;
+                                                        stockGroupName = $event?.label
                                                     "
                                                     [defaultValue]="stockGroupName"
                                                 ></dropdown-field>
@@ -179,10 +178,11 @@
                                                 *ngIf="!groupUniqueName"
                                                 mat-stroked-button
                                                 (click)="resetGroupForm()"
+                                                type="button"
                                             >
                                                 {{ commonLocaleData?.app_clear }}
                                             </button>
-        
+
                                             <button
                                                 *ngIf="groupUniqueName"
                                                 mat-stroked-button
@@ -220,8 +220,6 @@
                             </span>
                         </div>
                     </div>
-                   
-                    
                 </div>
             </form>
         </ng-container>

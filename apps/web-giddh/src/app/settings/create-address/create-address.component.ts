@@ -7,6 +7,7 @@ import { IForceClear } from '../../models/api-models/Sales';
 import { ToasterService } from '../../services/toaster.service';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { SettingsAsideConfiguration } from '../constants/settings.constant';
+import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
     return (field: FormControl): { [key: string]: any } => {
@@ -24,22 +25,18 @@ function validateFieldWithPatterns(patterns: Array<string>) {
     styleUrls: ['./create-address.component.scss'],
 })
 export class CreateAddressComponent implements OnInit, OnDestroy {
-
     /** Emits when aside menu is closed */
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     /** Emits when save operation is performed */
     @Output() public saveAddress: EventEmitter<any> = new EventEmitter();
     /** Emits when update operation is performed */
     @Output() public updateAddress: EventEmitter<any> = new EventEmitter();
-
     /** Address form */
     public addressForm: FormGroup;
     /** Force clears the sh-select dropdown */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-
     /** Unsubscribes from the subscribers */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
     /** Address configuration */
     @Input() public addressConfiguration: SettingsAsideConfiguration;
     /** Stores the address to be updated */
@@ -66,7 +63,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
 
     constructor(
         private formBuilder: FormBuilder,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
     }
 
@@ -172,6 +170,12 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 this.addressForm.get('address').updateValueAndValidity();
             });
         }
+
+        this.addressForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (this.addressForm?.dirty) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        });
     }
 
     /**
@@ -180,8 +184,15 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof CreateAddressComponent
      */
-    public closeAsidePane(event): void {
-        this.closeAsideEvent.emit(event);
+    public closeAsidePane(event: any): void {
+        if (this.addressForm?.dirty) {
+            this.pageLeaveUtilityService.confirmPageLeave(() => {
+                this.closeAsideEvent.emit(event);
+            });
+            return;
+        } else {
+            this.closeAsideEvent.emit(event);
+        }
     }
 
     /**
@@ -192,6 +203,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         document.querySelector('body').classList.remove('fixed');
     }
 
@@ -362,5 +374,17 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         let text = this.localeData?.branch_of_company;
         text = text?.replace("[COMPANY_NAME]", companyName);
         return text;
+    }
+
+    /**
+     * Removes browser confirmation dialog and set form has undirty on clear in create mode
+     *
+     * @memberof CreateAddressComponent
+     */
+    public clearForm(): void {
+        if (this.addressConfiguration.type === 'createAddress' || this.addressConfiguration.type === 'createBranchAddress') {
+            this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+            this.addressForm.markAsPristine();
+        }
     }
 }

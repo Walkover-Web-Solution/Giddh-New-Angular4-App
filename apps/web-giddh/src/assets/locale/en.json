@@ -498,6 +498,8 @@
     "app_update_account": "Update Account",
     "app_add_product": "Add Product",
     "app_add_service": "Add Service",
+    "app_add_account": "Add Account",
+    "app_add_fixedassets": "Add Fixed Assets",
     "app_account_created": "Account Created Successfully",
     "app_start_date": "Start Date",
     "app_end_date": "End Date",
@@ -698,6 +700,12 @@
         "product": "PRODUCT",
         "service": "SERVICE",
         "fixed_assets": "FIXED ASSETS"
+    },
+    "app_unsaved_changes": {
+        "title": "Leave page with unsaved changes?",
+        "content": "You have unsaved changes. Do you want to save and leave this page?",
+        "no": "Stay",
+        "yes": "Leave page"
     },
     "app_region": "Region",
     "app_select_region": "Select Region"

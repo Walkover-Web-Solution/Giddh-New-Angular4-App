@@ -54,6 +54,7 @@ import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-s
 import { LedgerService } from '../../services/ledger.service';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
 import { MatDialog } from '@angular/material/dialog';
+import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 
 /** Type of search: vendor and item (product/service) search */
 const SEARCH_TYPE = {
@@ -365,10 +366,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public translationLoaded: boolean = false;
     /** Length of entry description */
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
-    /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
     /** True if form save in progress */
     public isFormSaveInProgress: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
     /** List of discounts */
     public discountsList: any[] = [];
     /** Stores the current active entry */
@@ -388,6 +389,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     private currentTxnRequestObject: Array<any> = [];
     /** Stores the index of current stock variants being loaded */
     private currentlyLoadedStockVariantIndex: number;
+    /** Returns true if account is selected else false */
+    public get showPageLeaveConfirmation(): boolean {
+        return (!this.isUpdateMode && this.purchaseOrder?.account?.uniqueName) ? true : false;
+    }
 
     constructor(
         private store: Store<AppState>,
@@ -413,7 +418,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private ngZone: NgZone,
         private changeDetection: ChangeDetectorRef,
         private settingsDiscountService: SettingsDiscountService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
@@ -827,6 +833,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.isMulticurrencyAccount = item.additional.currency !== this.companyCurrency;
             }
             this.getAccountDetails(item?.value);
+            this.pageLeaveUtilityService.addBrowserConfirmationDialog();
         }
     }
 
@@ -2441,6 +2448,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public resetForm(): void {
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         if (this.container) {
             this.container.clear();
         }
@@ -3447,9 +3455,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                 }
             } else {
-                transaction.stockList.push(obj);
                 transaction.stockUnit = additional.stock.stockUnit.uniqueName;
                 transaction.stockUnitCode = additional.stock.stockUnit.code;
+                transaction.stockList.push(obj);
             }
             transaction.stockDetails = _.omit(additional.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
@@ -3665,35 +3673,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     }
 
     /**
-     * Checks for auto fill shipping address for account and company shipping address
-     *
-     * @private
-     * @param {string} sectionName Section name: company/account
-     * @memberof CreatePurchaseOrderComponent
-     */
-    private checkForAutoFillShippingAddress(sectionName: string): void {
-        if (sectionName === 'account') {
-            if (this.purchaseOrder?.account?.billingDetails?.address[0] === this.purchaseOrder?.account?.shippingDetails?.address[0] &&
-                this.purchaseOrder?.account?.billingDetails?.stateCode === this.purchaseOrder?.account?.shippingDetails?.stateCode &&
-                this.purchaseOrder?.account?.billingDetails?.gstNumber === this.purchaseOrder?.account?.shippingDetails?.gstNumber &&
-                this.purchaseOrder?.account?.billingDetails?.pincode === this.purchaseOrder?.account?.shippingDetails?.pincode) {
-                this.autoFillVendorShipping = true;
-            } else {
-                this.autoFillVendorShipping = false;
-            }
-        } else if (sectionName === 'company') {
-            if (this.purchaseOrder?.company?.billingDetails?.address[0] === this.purchaseOrder?.company?.shippingDetails?.address[0] &&
-                this.purchaseOrder?.company?.billingDetails?.stateCode === this.purchaseOrder?.company?.shippingDetails?.stateCode &&
-                this.purchaseOrder?.company?.billingDetails?.gstNumber === this.purchaseOrder?.company?.shippingDetails?.gstNumber &&
-                this.purchaseOrder?.company?.billingDetails?.pincode === this.purchaseOrder?.company?.shippingDetails?.pincode) {
-                this.autoFillCompanyShipping = true;
-            } else {
-                this.autoFillCompanyShipping = false;
-            }
-        }
-    }
-
-    /**
      * Callback for translation response complete
      *
      * @param {*} event
@@ -3894,6 +3873,35 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), this.giddhBalanceDecimalPlaces);
             } else {
                 transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.giddhBalanceDecimalPlaces);
+            }
+        }
+    }
+
+    /**
+     * Checks for auto fill shipping address for account and company shipping address
+     *
+     * @private
+     * @param {string} sectionName Section name: company/account
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private checkForAutoFillShippingAddress(sectionName: string): void {
+        if (sectionName === 'account') {
+            if (this.purchaseOrder?.account?.billingDetails?.address[0] === this.purchaseOrder?.account?.shippingDetails?.address[0] &&
+                this.purchaseOrder?.account?.billingDetails?.stateCode === this.purchaseOrder?.account?.shippingDetails?.stateCode &&
+                this.purchaseOrder?.account?.billingDetails?.gstNumber === this.purchaseOrder?.account?.shippingDetails?.gstNumber &&
+                this.purchaseOrder?.account?.billingDetails?.pincode === this.purchaseOrder?.account?.shippingDetails?.pincode) {
+                this.autoFillVendorShipping = true;
+            } else {
+                this.autoFillVendorShipping = false;
+            }
+        } else if (sectionName === 'company') {
+            if (this.purchaseOrder?.company?.billingDetails?.address[0] === this.purchaseOrder?.company?.shippingDetails?.address[0] &&
+                this.purchaseOrder?.company?.billingDetails?.stateCode === this.purchaseOrder?.company?.shippingDetails?.stateCode &&
+                this.purchaseOrder?.company?.billingDetails?.gstNumber === this.purchaseOrder?.company?.shippingDetails?.gstNumber &&
+                this.purchaseOrder?.company?.billingDetails?.pincode === this.purchaseOrder?.company?.shippingDetails?.pincode) {
+                this.autoFillCompanyShipping = true;
+            } else {
+                this.autoFillCompanyShipping = false;
             }
         }
     }

@@ -25,6 +25,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* This will hold Radio Button Selected Value */
+    public inventoryTypeStatus:boolean = false;
 
     constructor(
         private _router: Router, private _generalService: GeneralService,
@@ -83,13 +85,18 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = _.cloneDeep(o);
                 this.CompanySettingsObj = inventorySetting;
+                if(this.CompanySettingsObj.companyInventorySettings?.manageInventory){
+                    this.inventoryTypeStatus = true;
+                } else {
+                    this.inventoryTypeStatus = false;
+                }
             }
         });
     }
 
-    public updateInventorySetting(data) {
+    public updateInventorySetting() {
         let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
-        dataToSaveNew.companyInventorySettings = { manageInventory: data };
+        dataToSaveNew.companyInventorySettings = { manageInventory: this.inventoryTypeStatus };
         this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
     }
 

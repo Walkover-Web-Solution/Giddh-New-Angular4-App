@@ -6,7 +6,7 @@ import { AppState } from '../../store';
 import { AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 
 @Component({
     selector: 'generic-aside-menu-account',
@@ -14,7 +14,6 @@ import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions
     templateUrl: './generic.aside.menu.account.component.html'
 })
 export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
-
     @Input() public selectedGrpUniqueName: string;
     /** This will hold group unique name */
     @Input() public selectedGroupUniqueName: string;
@@ -62,7 +61,6 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
      * used to fetch groups
     */
     @Input() public isCustomerCreation: boolean;
-
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
@@ -71,11 +69,13 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     public actionAccount: string = "";
     /** Holds true if master is open */
     private isMasterOpen: boolean = false;
+    /** True if account has unsaved changes */
+    private hasUnsavedChanges: boolean = false;
 
     constructor(
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
-        private groupWithAccountsAction: GroupWithAccountsAction
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         // account-add component's property
         this.createAccountInProcess$ = this.store.pipe(select(state => state.sales.createAccountInProcess), takeUntil(this.destroyed$));
@@ -84,7 +84,6 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 
     public ngOnInit() {
         this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
-
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
             if (activeTab === 1) {
                 this.isMasterOpen = true;
@@ -92,6 +91,17 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
                 if (this.isMasterOpen) {
                     this.isMasterOpen = false;
                 }
+            }
+        });
+
+        this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            if (this.hasUnsavedChanges && !response) {
+                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+            }
+
+            this.hasUnsavedChanges = response;
+            if (this.hasUnsavedChanges) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
         });
     }
@@ -107,8 +117,15 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 
     public closeAsidePane(event) {
         if (event) {
-            this.store.dispatch(this.accountsAction.resetActiveGroup());
-            this.closeAsideEvent.emit(event);
+            if (this.hasUnsavedChanges) {
+                this.confirmPageLeave(() => {
+                    this.store.dispatch(this.accountsAction.resetActiveGroup());
+                    this.closeAsideEvent.emit(event);
+                });
+            } else {
+                this.store.dispatch(this.accountsAction.resetActiveGroup());
+                this.closeAsideEvent.emit(event);
+            }
         }
     }
 
@@ -162,5 +179,23 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         if (event) {
             this.actionAccount = this.selectedAccountUniqueName ? this.commonLocaleData?.app_update_account : this.commonLocaleData?.app_create_account;
         }
+    }
+
+    /**
+     * Shows page leave confirmation
+     *
+     * @private
+     * @param {Function} callback
+     * @memberof GenericAsideMenuAccountComponent
+     */
+    private confirmPageLeave(callback: Function): void {
+        document.querySelector("generic-aside-menu-account")?.classList?.add("page-leave-confirmation-showing");
+        this.pageLeaveUtilityService.confirmPageLeave(action => {
+            document.querySelector("generic-aside-menu-account")?.classList?.remove("page-leave-confirmation-showing");
+            if (action) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                callback();
+            }
+        });
     }
 }
