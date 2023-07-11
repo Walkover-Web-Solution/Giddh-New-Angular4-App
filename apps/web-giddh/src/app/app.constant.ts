@@ -13,7 +13,7 @@ export const Configuration = {
 export enum BusinessTypes {
     Registered = 'Registered',
     Unregistered = 'Unregistered'
-}
+};
 
 export const APP_DEFAULT_TITLE = '';
 
