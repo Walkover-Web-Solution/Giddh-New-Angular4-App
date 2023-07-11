@@ -1,15 +1,15 @@
-<div>
+<ng-container>
     <div class="row">
         <div class="col-md-12 mr-t4 border-bottom pd-b15">
             <div class="row pd-b1">
-                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
+                <!-- <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
                     <label *ngIf="organizationType === 'COMPANY'" class="font-15">{{ localeData?.company_name }}</label>
                     <label *ngIf="organizationType === 'BRANCH'" class="font-15">{{ localeData?.branch_name }}</label>
-                </div>
+                </div> -->
                 <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
                     <div class="form-group mb-0">
                         <div class="input-group">
-                            <input
+                            <!-- <input
                                 *ngIf="organizationType === 'COMPANY'"
                                 [(ngModel)]="profileData.name"
                                 (ngModelChange)="profileUpdated('name')"
@@ -24,7 +24,25 @@
                                 (ngModelChange)="profileUpdated('alias')"
                                 type="text"
                                 class="form-control"
-                            />
+                            /> -->
+                            <input-field
+                                *ngIf="organizationType === 'COMPANY'"
+                                [(ngModel)]="profileData.name"
+                                (ngModelChange)="profileUpdated('name')"
+                                [type]="'text'"
+                                [name]="'companyName'"
+                                [label]="localeData?.company_name"
+                            >
+                            </input-field>
+                            <input-field
+                                *ngIf="organizationType === 'BRANCH'"
+                                [name]="'alias'"
+                                [(ngModel)]="profileData.alias"
+                                (ngModelChange)="profileUpdated('alias')"
+                                [type]="'text'"
+                                [label]="localeData?.branch_name"
+                            >
+                            </input-field>
                         </div>
                     </div>
                 </div>
@@ -115,4 +133,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>
