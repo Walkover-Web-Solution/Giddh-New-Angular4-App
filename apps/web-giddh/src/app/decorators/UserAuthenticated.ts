@@ -40,7 +40,7 @@ export class UserAuthenticated implements CanActivate {
             }
             if (p.userLoginState === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
-                    this.router.navigate(['/new-user']);
+                    this.router.navigate(['/new-company']);
                 });
             }
             return !(p.userLoginState === userLoginStateEnum.userLoggedIn || p.userLoginState === userLoginStateEnum.newUserLoggedIn);

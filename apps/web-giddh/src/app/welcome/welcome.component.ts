@@ -560,7 +560,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.router.navigate(['pages', 'settings', 'branch']); // <!-- pages/settings/branch -->
             } else {
                 this.zone.run(() => {
-                    this.router.navigate(['/new-user']);
+                    this.router.navigate(['/new-company']);
                 });
             }
         }

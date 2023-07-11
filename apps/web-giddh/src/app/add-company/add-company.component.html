@@ -234,7 +234,7 @@
                         </div>
                     </div>
                     <div class="pt-2">
-                        <button mat-stroked-button matStepperPrevious class="mr-3">
+                        <button mat-stroked-button matStepperPrevious class="mr-3" (click)="selectedStep = 0">
                             {{ commonLocaleData?.app_back }}
                         </button>
                         <button mat-stroked-button color="primary" (click)="onSubmit()">

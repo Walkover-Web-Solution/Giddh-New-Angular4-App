@@ -554,6 +554,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                         }
                     } else {
                         this.isMobileNumberInvalid = false;
+
                     }
                 }
             });
@@ -569,7 +570,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      */
     public nextStepForm(): void {
         this.isFormSubmitted = false;
-
         if (this.firstStepForm.invalid || this.isMobileNumberInvalid) {
             this.isFormSubmitted = true;
             this.selectedStep = 0;
