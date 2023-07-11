@@ -699,5 +699,6 @@
         "service": "SERVICE",
         "fixed_assets": "FIXED ASSETS"
     },
-    "app_region": "Region"
+    "app_region": "Region",
+    "app_select_region": "Select Region"
 }

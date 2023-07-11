@@ -182,6 +182,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public currentFlag: any;
     /** Hold selected tab*/
     public selectedStep: number = 0;
+    /** List of counties of country */
+    public countyList: IOption[] = [];
+    /** List of registered business type countries */
+    public registeredTypeCountryList: any[] = ["IN", "GB", "AE"];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -272,7 +276,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                     this.selectedState = '';
                 }
 
-                this.states.find((state) => {
+                this.states?.find((state) => {
                     let code = this.secondStepForm.get('gstin')?.value?.substr(0, 2);
                     if (state.stateGstCode == code) {
                         this.selectedState = state.label;
@@ -309,6 +313,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             businessNature: [''],
             gstin: [''],
             state: [''],
+            county: [''],
             taxes: null,
             pincode: [''],
             address: [''],
@@ -357,19 +362,29 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(state => state.general.states), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.states = [];
-                Object.keys(response.stateList).forEach(key => {
-                    if (key) {
-                        if (response.stateList[key].stateGstCode !== null) {
-                            this.stateGstCode[response.stateList[key].stateGstCode] = [];
-                            this.stateGstCode[response.stateList[key].stateGstCode] = response.stateList[key].code;
+                this.countyList = [];
+
+                if (response.stateList) {
+                    Object.keys(response.stateList).forEach(key => {
+                        if (key) {
+                            if (response.stateList[key].stateGstCode !== null) {
+                                this.stateGstCode[response.stateList[key].stateGstCode] = [];
+                                this.stateGstCode[response.stateList[key].stateGstCode] = response.stateList[key].code;
+                            }
+                            this.states.push({
+                                label: response.stateList[key].code + ' - ' + response.stateList[key].name,
+                                value: response.stateList[key].code,
+                                stateGstCode: response.stateList[key].stateGstCode
+                            });
                         }
-                        this.states.push({
-                            label: response.stateList[key].code + ' - ' + response.stateList[key].name,
-                            value: response.stateList[key].code,
-                            stateGstCode: response.stateList[key].stateGstCode
-                        });
-                    }
-                });
+                    });
+                }
+
+                if (response.countyList) {
+                    this.countyList = response.countyList?.map(county => {
+                        return { label: county.name, value: county.code };
+                    });
+                }
             }
         });
     }
@@ -436,7 +451,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public selectCountry(event: any): void {
         if (event?.value) {
             this.businessTypeList = [];
-            if (event.value !== 'IN') {
+            if (!this.registeredTypeCountryList.includes(event.value)) {
                 this.isOtherCountry = true;
                 this.secondStepForm.controls['businessType'].setValue(this.businessTypes.Unregistered);
                 this.businessTypeList.push({ label: this.localeData.unregistered, value: this.businessTypes.Unregistered });
@@ -695,7 +710,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         const countryCode = this.intl.getSelectedCountryData().dialCode;
         let number = phoneNumber.replace(countryCode, '').trim();
         number = number.substring(1);
-        this.secondStepForm.controls['gstin'].setValue(taxDetails[0]?.taxNumber);
         this.company.name = this.firstStepForm.value.name;
         this.company.country = this.firstStepForm.value.country.value;
         this.company.businessNature = this.secondStepForm.value.businessNature;
@@ -740,15 +754,19 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public selectBusinessType(event: any): void {
         if (event) {
             this.secondStepForm.controls['businessType'].setValue(event.value);
+            this.secondStepForm.get('gstin').removeValidators(Validators.required);
+            this.secondStepForm.get('state').removeValidators(Validators.required);
+            this.secondStepForm.get('county').removeValidators(Validators.required);
+            this.secondStepForm.get('address').removeValidators(Validators.required);
 
             if (event.value === this.businessTypes.Registered) {
                 this.secondStepForm.get('gstin').setValidators(Validators.required);
-                this.secondStepForm.get('state').setValidators(Validators.required);
+                if (this.countyList?.length) {
+                    this.secondStepForm.get('county').setValidators(Validators.required);
+                } else {
+                    this.secondStepForm.get('state').setValidators(Validators.required);
+                }
                 this.secondStepForm.get('address').setValidators(Validators.required);
-            } else {
-                this.secondStepForm.get('gstin').removeValidators(Validators.required);
-                this.secondStepForm.get('state').removeValidators(Validators.required);
-                this.secondStepForm.get('address').removeValidators(Validators.required);
             }
             this.changeDetection.detectChanges();
         }
@@ -777,7 +795,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public prepareTaxDetail(form: any): any {
         if (form?.value) {
             this.addressesObj.taxNumber = form.value.secondStepForm.gstin;
-            this.addressesObj.stateCode = this.selectedStateCode;
+            if (this.countyList?.length) {
+                this.addressesObj.county = { code: form.value.secondStepForm.county?.value };
+            } else {
+                this.addressesObj.stateCode = this.selectedStateCode;
+            }
             this.addressesObj.address = form.value.secondStepForm.address;
             this.addressesObj.pincode = form.value.secondStepForm.pincode;
             this.addressesObj.isDefault = false;
