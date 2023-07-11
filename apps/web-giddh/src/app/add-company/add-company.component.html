@@ -170,7 +170,6 @@
                                     [options]="states"
                                     [showError]="isFormSubmitted && !secondStepForm.get('state')?.value"
                                     [readonly]="isGstinValid"
-                                    [label]="isGstinValid ? commonLocaleData?.app_state + '*' : ''"
                                     [defaultValue]="selectedState"
                                 >
                                 </dropdown-field>
@@ -215,7 +214,13 @@
                                     [name]="'address'"
                                     formControlName="address"
                                     [placeholder]="localeData?.type_your_address"
-                                    [required]="true"
+                                    [required]="
+                                        isFormSubmitted &&
+                                        secondStepForm.controls['businessType']?.value === businessTypes.Registered &&
+                                        !secondStepForm.get('address')?.value
+                                            ? 'true'
+                                            : 'false'
+                                    "
                                 ></textarea>
                             </mat-form-field>
                         </div>
