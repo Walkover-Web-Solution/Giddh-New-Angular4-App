@@ -5,10 +5,11 @@
         (localeData)="localeData = $event"
         (commonLocaleData)="commonLocaleData = $event"
     >
+        <hamburger-menu></hamburger-menu>
         <div>
             <p class="text-center p-3">{{ localeData?.create_company_note }}</p>
         </div>
-        <mat-stepper linear #stepper [formGroup]="companyForm" name="companyForm" autocomplete="off" novalidate>
+        <mat-stepper linear #stepper [formGroup]="companyForm" name="companyForm" [selectedIndex]="selectedStep">
             <mat-step [stepControl]="firstStepForm">
                 <form [formGroup]="firstStepForm" name="firstStepForm" autocomplete="off" novalidate>
                     <ng-template matStepLabel>{{ commonLocaleData?.app_company_name }}</ng-template>
@@ -47,7 +48,7 @@
                             >
                             </dropdown-field>
                         </div>
-                        <div class="col-lg-12 mobile-number pb-3 pt-1">
+                        <div class="col-lg-12 mobile-number mobile-number-wrapper pb-3 pt-1">
                             <input-field
                                 [name]="'mobile'"
                                 [type]="'tel'"
@@ -59,7 +60,7 @@
                                 [floatLabel]="intl?.getNumber() ? 'always' : 'auto'"
                                 (onChange)="firstStepForm.controls['mobile'].setValue(intl?.getNumber())"
                                 [showError]="
-                                    (isFormSubmitted && !firstStepForm.get('mobile')?.value) || isMobileNumberInvalid
+                                    isFormSubmitted && (!firstStepForm.get('mobile')?.value || isMobileNumberInvalid)
                                 "
                             >
                             </input-field>
@@ -68,14 +69,14 @@
                         </div>
                     </div>
                     <div>
-                        <button mat-stroked-button color="primary" matStepperNext (click)="nextStepForm()">
+                        <button mat-stroked-button color="primary" (click)="nextStepForm()">
                             {{ commonLocaleData?.app_next }}
                         </button>
                     </div>
                 </form>
             </mat-step>
-            <mat-step [stepControl]="secondStepForm" name="secondStepForm" autocomplete="off" novalidate>
-                <form [formGroup]="secondStepForm">
+            <mat-step [stepControl]="secondStepForm" name="secondStepForm">
+                <form [formGroup]="secondStepForm" autocomplete="off" novalidate>
                     <ng-template matStepLabel>{{ localeData?.company_address }}</ng-template>
                     <div class="row row-gap">
                         <div class="col-lg-12 fill-form">
@@ -109,7 +110,7 @@
                                 class="country-flag"
                                 *ngIf="firstStepForm.get('country')?.value?.value"
                                 src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
-                                    firstStepForm.get('country')?.value?.value?.toLowerCase()
+                                    currentFlag
                                 }}.svg"
                                 width="27"
                             />
@@ -119,6 +120,7 @@
                                 [label]="commonLocaleData?.app_mobile_number + '*'"
                                 [placeholder]="firstStepForm.controls['mobile'].value"
                                 [floatLabel]="'always'"
+                                [readonly]="true"
                             >
                             </input-field>
                         </div>
@@ -168,7 +170,6 @@
                                     [options]="states"
                                     [showError]="isFormSubmitted && !secondStepForm.get('state')?.value"
                                     [readonly]="isGstinValid"
-                                    [label]="isGstinValid ? commonLocaleData?.app_state + '*' : ''"
                                     [defaultValue]="selectedState"
                                 >
                                 </dropdown-field>
@@ -213,6 +214,13 @@
                                     [name]="'address'"
                                     formControlName="address"
                                     [placeholder]="localeData?.type_your_address"
+                                    [required]="
+                                        isFormSubmitted &&
+                                        secondStepForm.controls['businessType']?.value === businessTypes.Registered &&
+                                        !secondStepForm.get('address')?.value
+                                            ? 'true'
+                                            : 'false'
+                                    "
                                 ></textarea>
                             </mat-form-field>
                         </div>
