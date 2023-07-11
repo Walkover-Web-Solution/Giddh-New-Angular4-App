@@ -247,7 +247,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         this.firstStepForm.controls['mobile']?.valueChanges?.pipe(debounceTime(700), distinctUntilChanged(isEqual)).subscribe(data => {
             setTimeout(() => {
                 let currencyFlag = this.intl?.getSelectedCountryData();
-                this.currentFlag = currencyFlag.iso2;
+                this.currentFlag = currencyFlag?.iso2;
                 this.changeDetection.detectChanges();
             }, 500);
         });
@@ -686,7 +686,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      */
     public onSubmit(): void {
         this.isFormSubmitted = false;
-        if (this.secondStepForm.invalid || !this.secondStepForm.controls['address'].value) {
+        if (this.companyForm.invalid) {
             this.isFormSubmitted = true;
             return;
         }
