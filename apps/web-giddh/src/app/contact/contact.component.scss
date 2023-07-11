@@ -414,8 +414,9 @@ button.btn.btn-filter {
 .btn-small {
     box-shadow: none !important;
 }
-button.btn.btn-filter span.icon-cross {
-    margin-right: 5px;
+
+.icon-cross {
+    line-height: 32px;
 }
 
 .customer-form-inline {
@@ -960,9 +961,6 @@ button.btn.btn-filter span.icon-cross {
 }
 .min-width-137 {
     min-width: 137px;
-    color: var(--color-denary-button-text);
-    background-color: var(--color-denary-button-background);
-    border: 1px solid var(--color-primary-button-border);
 }
 
 .btn-light:not(:disabled):not(.disabled).active,

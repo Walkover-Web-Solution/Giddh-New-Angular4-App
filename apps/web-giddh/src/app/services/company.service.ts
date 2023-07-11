@@ -335,6 +335,9 @@ export class CompanyService {
      * @memberof CompanyService
      */
     public getIntegratedBankInCompany(companyUniqueName: string): Observable<BaseResponse<any, any>> {
+        if (!companyUniqueName) {
+            companyUniqueName = this.generalService.companyUniqueName;
+        }
         return this.http.get(this.config.apiUrl + COMPANY_API.GET_COMPANY_INTEGRATED_BANK_LIST
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))).pipe(map((res) => {
                 let data: BaseResponse<any, string> = res;

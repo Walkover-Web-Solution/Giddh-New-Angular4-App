@@ -270,6 +270,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private accountPredictionSubject: Subject<boolean> = new Subject();
     /** Holds if we need bank ledger popup to be hidden */
     private isHideBankLedgerPopup: boolean = false;
+    /** Total pages for reference vouchers */
+    public referenceVouchersTotalPages: number = 1;
 
     constructor(
         private store: Store<AppState>,
@@ -1001,6 +1003,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.invoiceList = [];
             this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 if (response && response.body) {
+                    this.referenceVouchersTotalPages = response.body.totalPages;
                     let items = [];
                     if (response.body.results) {
                         items = response.body.results;
@@ -1035,8 +1038,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public getTransactionData() {
         this.closingBalanceBeforeReconcile = null;
-        this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
-        this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
+        if (this.trxRequest?.accountUniqueName) {
+            this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
+            this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
+        }
     }
 
     public getCurrencyRate(mode: string = null) {
