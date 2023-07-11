@@ -22,7 +22,7 @@
                             color="primary"
                             name="companyNameCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['companyName'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Company Name
@@ -33,7 +33,7 @@
                             color="primary"
                             name="titleCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display"
-                            (change)="changeInvoiceHeader($event); onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="changeInvoiceHeader($event); onChangeFieldVisibility(null, null, null)"
                         >
                             Document Title: This is your
                         </mat-checkbox>
@@ -45,7 +45,7 @@
                                 [maxlength]="15"
                                 [name]="'title'"
                                 [(ngModel)]="customTemplate.sections['header'].data['formNameInvoice'].label"
-                                (change)="onFieldChange(null, null, null)"
+                                (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="!customTemplate.sections['header'].data['formNameInvoice'].display"
                             ></text-field>
                             <ng-container
@@ -65,7 +65,7 @@
                                 [maxlength]="15"
                                 [name]="'taxTitle'"
                                 [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].label"
-                                (change)="onFieldChange(null, null, null)"
+                                (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="!customTemplate.sections['header'].data['formNameTaxInvoice'].display"
                             ></text-field>
 
@@ -95,7 +95,7 @@
                             color="primary"
                             name="irnCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['showIrnNumber'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         >
                             Show IRN number
                         </mat-checkbox>
@@ -113,7 +113,7 @@
                             color="primary"
                             name="showQrCodeCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         >
                             Show QR code
                         </mat-checkbox>
@@ -132,7 +132,7 @@
                             color="primary"
                             name="companyAddressCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['showCompanyAddress'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Company Address
@@ -151,7 +151,7 @@
                             color="primary"
                             name="warehouseAddressCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['warehouseAddress'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Warehouse Address
@@ -165,7 +165,7 @@
                             color="primary"
                             name="gstinCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['gstin'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             GSTIN
@@ -185,7 +185,7 @@
                             color="primary"
                             name="gstCompositionLabel"
                             [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                         </mat-checkbox>
@@ -198,7 +198,7 @@
                                 [name]="'gstComposition'"
                                 [placeholder]="'Registered under Composition Scheme'"
                                 [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].label"
-                                (change)="onFieldChange(null, null, null)"
+                                (ngModelChange)="onFieldChange(null, null, null)"
                             ></text-field>
                             <ng-container
                                 *ngIf="
@@ -220,7 +220,7 @@
                                 color="primary"
                                 name="invoiceDateCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['invoiceDate'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                                 Invoice Date
@@ -233,7 +233,7 @@
                                     [maxlength]="customTemplate.templateType === 'thermal_template' ? 12 : 15"
                                     [name]="'invoiceDate'"
                                     [(ngModel)]="customTemplate.sections['header'].data['invoiceDate'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['invoiceDate'].display"
                                 ></text-field>
                                 <ng-container
@@ -256,7 +256,7 @@
                                 color="primary"
                                 name="invoiceNumberCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                                 Invoice Number
@@ -269,7 +269,7 @@
                                     [maxlength]="customTemplate.templateType === 'thermal_template' ? 14 : 15"
                                     [name]="'invoiceNo'"
                                     [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['invoiceNumber'].display"
                                 ></text-field>
                                 <ng-container
@@ -294,7 +294,7 @@
                                 color="primary"
                                 name="voucherDateCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['voucherDate'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                                 Voucher Date
@@ -307,7 +307,7 @@
                                     [maxlength]="15"
                                     [name]="'invoiceDate'"
                                     [(ngModel)]="customTemplate.sections['header'].data['voucherDate'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['voucherDate'].display"
                                 ></text-field>
                                 <ng-container
@@ -328,7 +328,7 @@
                                 color="primary"
                                 name="voucherNumberCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['voucherNumber'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                                 Voucher Number
@@ -341,7 +341,7 @@
                                     [maxlength]="15"
                                     [name]="'voucherNo'"
                                     [(ngModel)]="customTemplate.sections['header'].data['voucherNumber'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['voucherNumber'].display"
                                 ></text-field>
                                 <ng-container
@@ -367,7 +367,7 @@
                             color="primary"
                             name="dueDateCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['dueDate'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Due Date
@@ -380,7 +380,7 @@
                                 [maxlength]="15"
                                 [name]="'dueDate1'"
                                 [(ngModel)]="customTemplate.sections['header'].data['dueDate'].label"
-                                (change)="onFieldChange(null, null, null)"
+                                (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="!customTemplate.sections['header'].data['dueDate'].display"
                             ></text-field>
                             <ng-container
@@ -408,7 +408,7 @@
                             color="primary"
                             name="documentTitleCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display"
-                            (change)="changeInvoiceHeader($event); onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="changeInvoiceHeader($event); onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Document Title
@@ -428,7 +428,7 @@
                                 [maxlength]="15"
                                 [name]="'title'"
                                 [(ngModel)]="customTemplate.sections['header'].data['formNameInvoice'].label"
-                                (change)="onFieldChange(null, null, null)"
+                                (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="!customTemplate.sections['header'].data['formNameInvoice'].display"
                             ></text-field>
                             <ng-container
@@ -449,7 +449,7 @@
                                 [maxlength]="15"
                                 [name]="'taxTitle'"
                                 [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].label"
-                                (change)="onFieldChange(null, null, null)"
+                                (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="!customTemplate.sections['header'].data['formNameTaxInvoice'].display"
                             ></text-field>
                             <ng-container
@@ -481,7 +481,7 @@
                             color="primary"
                             name="customerNameCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['customerName'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Customer Name
@@ -498,7 +498,7 @@
                             color="primary"
                             name="attentionToCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['attentionTo'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Attention To
@@ -521,7 +521,7 @@
                             color="primary"
                             name="emailIdCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['customerEmail'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Email ID
@@ -541,7 +541,7 @@
                             color="primary"
                             name="mobileNumberCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['customerMobileNumber'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Mobile Number
@@ -555,7 +555,7 @@
                             color="primary"
                             name="billingAddressCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['billingAddress'].display"
-                            (change)="onChangeFieldVisibility(null, null, null); changeDisableBilling()"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableBilling()"
                         >
                             Billing Address
                         </mat-checkbox>
@@ -567,7 +567,7 @@
                                 [maxlength]="18"
                                 [name]="'bill'"
                                 [(ngModel)]="customTemplate.sections['header'].data['billingAddress'].label"
-                                (change)="onFieldChange(null, null, null)"
+                                (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="!customTemplate.sections['header'].data['billingAddress'].display"
                             ></text-field>
                             <ng-container
@@ -586,7 +586,7 @@
                             name="billingStateCheckbox"
                             [disabled]="!customTemplate.sections['header'].data['billingAddress'].display"
                             [(ngModel)]="customTemplate.sections['header'].data['billingState'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         >
                             State
                         </mat-checkbox>
@@ -597,7 +597,7 @@
                             name="billingGstinCheckbox"
                             [disabled]="!customTemplate.sections['header'].data['billingAddress'].display"
                             [(ngModel)]="customTemplate.sections['header'].data['billingGstin'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         >
                             GSTIN
                         </mat-checkbox>
@@ -609,7 +609,7 @@
                                 [maxlength]="15"
                                 [name]="'billingGstin'"
                                 [(ngModel)]="customTemplate.sections['header'].data['billingGstin'].label"
-                                (change)="onFieldChange(null, null, null)"
+                                (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="
                                     !customTemplate.sections['header'].data['billingAddress'].display ||
                                     !customTemplate.sections['header'].data['billingGstin'].display
@@ -645,7 +645,7 @@
                             [checked]="true"
                             name="shippingAddressCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display"
-                            (change)="onChangeFieldVisibility(null, null, null); changeDisableShipping()"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableShipping()"
                         >
                             Shipping Address
                         </mat-checkbox>
@@ -657,7 +657,7 @@
                                 [maxlength]="18"
                                 [name]="'shpAd'"
                                 [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].label"
-                                (change)="onFieldChange(null, null, null)"
+                                (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display"
                             ></text-field>
                             <ng-container
@@ -676,7 +676,7 @@
                             name="shippingStateCheckbox"
                             [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display"
                             [(ngModel)]="customTemplate.sections['header'].data['shippingState'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         >
                             State
                         </mat-checkbox>
@@ -687,7 +687,7 @@
                             name="shippingGstinCheckbox"
                             [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display"
                             [(ngModel)]="customTemplate.sections['header'].data['shippingGstin'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         >
                             GSTIN
                         </mat-checkbox>
@@ -699,7 +699,7 @@
                                 [class.error-box]="contentForm?.controls['shippingGstin']?.errors?.maxlength"
                                 [maxlength]="15"
                                 [(ngModel)]="customTemplate.sections['header'].data['shippingGstin'].label"
-                                (change)="onFieldChange(null, null, null)"
+                                (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="
                                     !customTemplate.sections['header'].data['shippingAddress'].display ||
                                     !customTemplate.sections['header'].data['shippingGstin'].display
@@ -742,7 +742,7 @@
                                 color="primary"
                                 name="transportDetailsCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['shippingDate'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             >
                                 Ship Date
                             </mat-checkbox>
@@ -754,7 +754,7 @@
                                     [maxlength]="15"
                                     [name]="'shippingDate'"
                                     [(ngModel)]="customTemplate.sections['header'].data['shippingDate'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['shippingDate'].display"
                                 ></text-field>
                                 <ng-container
@@ -775,7 +775,7 @@
                                 color="primary"
                                 name="shipViaCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['shippedVia'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                                 Ship Via
@@ -788,7 +788,7 @@
                                     [maxlength]="15"
                                     [name]="'shippedVia'"
                                     [(ngModel)]="customTemplate.sections['header'].data['shippedVia'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['shippedVia'].display"
                                 ></text-field>
                                 <ng-container
@@ -814,7 +814,7 @@
                                 color="primary"
                                 name="trackingNumberCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['trackingNumber'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                                 Tracking No.
@@ -827,7 +827,7 @@
                                     [maxlength]="15"
                                     [name]="'trackingNumber'"
                                     [(ngModel)]="customTemplate.sections['header'].data['trackingNumber'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['trackingNumber'].display"
                                 ></text-field>
                                 <ng-container
@@ -872,7 +872,7 @@
                                 color="primary"
                                 name="customField1Checkbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['customField1'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                             </mat-checkbox>
@@ -884,7 +884,7 @@
                                     [maxlength]="15"
                                     [name]="'customField1'"
                                     [(ngModel)]="customTemplate.sections['header'].data['customField1'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['customField1'].display"
                                 ></text-field>
                                 <ng-container
@@ -909,7 +909,7 @@
                                 color="primary"
                                 name="customField2Checkbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['customField2'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                             </mat-checkbox>
@@ -921,7 +921,7 @@
                                     [maxlength]="15"
                                     [name]="'customField2'"
                                     [(ngModel)]="customTemplate.sections['header'].data['customField2'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['customField2'].display"
                                 ></text-field>
                                 <ng-container
@@ -946,7 +946,7 @@
                                 color="primary"
                                 name="customField3Checkbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['customField3'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                             </mat-checkbox>
@@ -958,7 +958,7 @@
                                     [maxlength]="15"
                                     [name]="'customField3'"
                                     [(ngModel)]="customTemplate.sections['header'].data['customField3'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['customField3'].display"
                                 ></text-field>
                                 <ng-container
@@ -1004,7 +1004,7 @@
                                     color="primary"
                                     name="sN"
                                     [(ngModel)]="customTemplate.sections['table'].data['sNo'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null)"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     [checked]="true"
                                 >
                                     Number
@@ -1018,7 +1018,7 @@
                                     [class.error-box]="contentForm?.controls['ss']?.errors?.maxlength"
                                     [name]="'ss'"
                                     [(ngModel)]="customTemplate.sections['table'].data['sNo'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['table'].data['sNo'].display"
                                 ></text-field>
                                 <ng-container *ngIf="sNo?.isFocused || contentForm?.controls['ss']?.errors?.maxlength">
@@ -1039,7 +1039,7 @@
                                     color="primary"
                                     name="dt"
                                     [(ngModel)]="customTemplate.sections['table'].data['date'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null)"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     [checked]="true"
                                 >
                                     Date
@@ -1053,7 +1053,7 @@
                                     [class.error-box]="contentForm?.controls['dt1']?.errors?.maxlength"
                                     [name]="'dt1'"
                                     [(ngModel)]="customTemplate.sections['table'].data['date'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['table'].data['date'].display"
                                 ></text-field>
                                 <ng-container
@@ -1072,7 +1072,7 @@
                                     color="primary"
                                     name="it"
                                     [(ngModel)]="customTemplate.sections['table'].data['item'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null)"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     [checked]="true"
                                 >
                                     Date
@@ -1086,7 +1086,7 @@
                                     [class.error-box]="contentForm?.controls['it1']?.errors?.maxlength"
                                     [name]="'it1'"
                                     [(ngModel)]="customTemplate.sections['table'].data['item'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['table'].data['item'].display"
                                 ></text-field>
                                 <ng-container
@@ -1113,7 +1113,7 @@
                                     color="primary"
                                     name="showDescriptionInRows"
                                     [(ngModel)]="customTemplate.sections['table'].data['showDescriptionInRows'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null)"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 >
                                     Show description as a new row
                                 </mat-checkbox>
@@ -1129,7 +1129,7 @@
                                     color="primary"
                                     name="hsn"
                                     [(ngModel)]="customTemplate.sections['table'].data['hsnSac'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null)"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     [checked]="true"
                                 >
                                     HSN/SAC
@@ -1143,7 +1143,7 @@
                                     [class.error-box]="contentForm?.controls['hsn1']?.errors?.maxlength"
                                     [name]="'hsn1'"
                                     [(ngModel)]="customTemplate.sections['table'].data['hsnSac'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['table'].data['hsnSac'].display"
                                 ></text-field>
                                 <ng-container
@@ -1162,7 +1162,7 @@
                                     color="primary"
                                     name="qt"
                                     [(ngModel)]="customTemplate.sections['table'].data['quantity'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null); changeDisableQuantity()"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableQuantity()"
                                     [checked]="true"
                                 >
                                     Quantity
@@ -1176,7 +1176,7 @@
                                     [class.error-box]="contentForm?.controls['qt1']?.errors?.maxlength"
                                     [name]="'qt1'"
                                     [(ngModel)]="customTemplate.sections['table'].data['quantity'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['table'].data['quantity'].display"
                                 ></text-field>
                                 <ng-container
@@ -1209,7 +1209,7 @@
                                     color="primary"
                                     name="dsc"
                                     [(ngModel)]="customTemplate.sections['table'].data['description'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null)"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     [checked]="true"
                                 >
                                     Description
@@ -1223,7 +1223,7 @@
                                     [class.error-box]="contentForm?.controls['dsc1']?.errors?.maxlength"
                                     [name]="'dsc1'"
                                     [(ngModel)]="customTemplate.sections['table'].data['description'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['table'].data['description'].display"
                                 ></text-field>
                                 <ng-container
@@ -1242,7 +1242,7 @@
                                     color="primary"
                                     name="rt"
                                     [(ngModel)]="customTemplate.sections['table'].data['rate'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null)"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     [checked]="true"
                                 >
                                     Rate/Item
@@ -1256,7 +1256,7 @@
                                     [class.error-box]="contentForm?.controls['rt1']?.errors?.maxlength"
                                     [name]="'rt1'"
                                     [(ngModel)]="customTemplate.sections['table'].data['rate'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['table'].data['rate'].display"
                                 ></text-field>
                                 <ng-container
@@ -1281,7 +1281,7 @@
                                     color="primary"
                                     name="ds"
                                     [(ngModel)]="customTemplate.sections['table'].data['discount'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null)"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     [checked]="true"
                                 >
                                     Discount/Item
@@ -1295,7 +1295,7 @@
                                     [class.error-box]="contentForm?.controls['ds1']?.errors?.maxlength"
                                     [name]="'ds1'"
                                     [(ngModel)]="customTemplate.sections['table'].data['discount'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['table'].data['discount'].display"
                                 ></text-field>
                                 <ng-container
@@ -1319,7 +1319,7 @@
                                     color="primary"
                                     name="tv"
                                     [(ngModel)]="customTemplate.sections['table'].data['taxableValue'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null)"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     [checked]="true"
                                 >
                                     Taxable Value
@@ -1333,7 +1333,7 @@
                                     [class.error-box]="contentForm?.controls['tv1']?.errors?.maxlength"
                                     [name]="'tv1'"
                                     [(ngModel)]="customTemplate.sections['table'].data['taxableValue'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['table'].data['taxableValue'].display"
                                 ></text-field>
                                 <ng-container
@@ -1352,7 +1352,7 @@
                                     color="primary"
                                     name="ta"
                                     [(ngModel)]="customTemplate.sections['table'].data['tax'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null)"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     [checked]="true"
                                 >
                                     Tax
@@ -1366,7 +1366,7 @@
                                     [class.error-box]="contentForm?.controls['t1']?.errors?.maxlength"
                                     [name]="'t1'"
                                     [(ngModel)]="customTemplate.sections['table'].data['tax'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['table'].data['tax'].display"
                                 ></text-field>
                                 <ng-container *ngIf="tax?.isFocused || contentForm?.controls['t1']?.errors?.maxlength">
@@ -1383,7 +1383,7 @@
                                     color="primary"
                                     name="tot"
                                     [(ngModel)]="customTemplate.sections['table'].data['total'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null)"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     [checked]="true"
                                 >
                                     Total
@@ -1397,7 +1397,7 @@
                                     [class.error-box]="contentForm?.controls['tot1']?.errors?.maxlength"
                                     [name]="'tot1'"
                                     [(ngModel)]="customTemplate.sections['table'].data['total'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['table'].data['total'].display"
                                 ></text-field>
                                 <ng-container
@@ -1424,7 +1424,7 @@
                                     color="primary"
                                     name="preDue"
                                     [(ngModel)]="customTemplate.sections['table'].data['previousDue'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null)"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     [checked]="true"
                                 >
                                     Previous Due
@@ -1438,7 +1438,7 @@
                                     [class.error-box]="contentForm?.controls['previousDue']?.errors?.maxlength"
                                     [name]="'previousDue'"
                                     [(ngModel)]="customTemplate.sections['table'].data['previousDue'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['table'].data['previousDue'].display"
                                 ></text-field>
                                 <ng-container
@@ -1483,7 +1483,7 @@
                                         color="primary"
                                         name="tcsCheckbox"
                                         [(ngModel)]="customTemplate.sections['table'].data['tcs'].display"
-                                        (change)="onChangeFieldVisibility(null, null, null)"
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                         [checked]="true"
                                     >
                                         TCS
@@ -1498,7 +1498,7 @@
                                         [name]="'tcs'"
                                         [value]="'TCS'"
                                         [(ngModel)]="customTemplate.sections['table'].data['tcs'].label"
-                                        (change)="onFieldChange(null, null, null)"
+                                        (ngModelChange)="onFieldChange(null, null, null)"
                                         [disabled]="!customTemplate.sections['table'].data['tcs'].display"
                                     ></text-field>
                                     <ng-container
@@ -1517,7 +1517,7 @@
                                         color="primary"
                                         name="tdsCheckbox"
                                         [(ngModel)]="customTemplate.sections['table'].data['tds'].display"
-                                        (change)="onChangeFieldVisibility(null, null, null)"
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                         [checked]="true"
                                     >
                                         TDS
@@ -1532,7 +1532,7 @@
                                         [maxlength]="10"
                                         [class.error-box]="contentForm?.controls['tds']?.errors?.maxlength"
                                         [(ngModel)]="customTemplate.sections['table'].data['tds'].label"
-                                        (change)="onFieldChange(null, null, null)"
+                                        (ngModelChange)="onFieldChange(null, null, null)"
                                         [disabled]="!customTemplate.sections['table'].data['tds'].display"
                                     ></text-field>
                                     <ng-container
@@ -1551,7 +1551,7 @@
                                         color="primary"
                                         name="totalDueCheckbox"
                                         [(ngModel)]="customTemplate.sections['table'].data['totalDue'].display"
-                                        (change)="onChangeFieldVisibility(null, null, null)"
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                         [checked]="true"
                                     >
                                         Total Due
@@ -1566,7 +1566,7 @@
                                         [maxlength]="40"
                                         [class.error-box]="contentForm?.controls['totalDue']?.errors?.maxlength"
                                         [(ngModel)]="customTemplate.sections['table'].data['totalDue'].label"
-                                        (change)="onFieldChange(null, null, null)"
+                                        (ngModelChange)="onFieldChange(null, null, null)"
                                         [disabled]="!customTemplate.sections['table'].data['totalDue'].display"
                                     ></text-field>
                                     <ng-container
@@ -1597,7 +1597,7 @@
                                     color="primary"
                                     name="inword"
                                     [(ngModel)]="customTemplate.sections['footer'].data['totalInWords'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null)"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     [checked]="true"
                                 >
                                     Invoice Total(in words)
@@ -1618,7 +1618,7 @@
                                     name="totalQuantity"
                                     [(ngModel)]="customTemplate.sections['table'].data['totalQuantity'].display"
                                     [disabled]="!customTemplate.sections['table'].data['quantity'].display"
-                                    (change)="onChangeFieldVisibility(null, null, null)"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     [checked]="true"
                                 >
                                     Total Quantity
@@ -1634,7 +1634,7 @@
                                     color="primary"
                                     name="taxBifurcationCheckbox"
                                     [(ngModel)]="customTemplate.sections['table'].data['taxBifurcation'].display"
-                                    (change)="
+                                    (ngModelChange)="
                                         onChangeFieldVisibility(null, null, null);
                                         checkedTaxBifurcation('taxRateBifurcation', 'table')
                                     "
@@ -1646,7 +1646,7 @@
                                 <div class="clearfix mr-b05">
                                     <mat-radio-group
                                         class="d-flex mb-2"
-                                        (change)="onFieldChange(null, null, null)"
+                                        (ngModelChange)="onFieldChange(null, null, null)"
                                         name="tax-rate"
                                     >
                                         <mat-radio-button
@@ -1701,7 +1701,7 @@
                                 color="primary"
                                 name="tcsCheckbox"
                                 [(ngModel)]="customTemplate.sections['footer'].data['tcs'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                                 TCS
@@ -1715,7 +1715,7 @@
                                     [class.error-box]="contentForm?.controls['tcs']?.errors?.maxlength"
                                     [maxlength]="10"
                                     [(ngModel)]="customTemplate.sections['footer'].data['tcs'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['footer'].data['tcs'].display"
                                 ></text-field>
                                 <ng-container *ngIf="tcs?.isFocused || contentForm?.controls['tcs']?.errors?.maxlength">
@@ -1732,7 +1732,7 @@
                                 [value]="true"
                                 name="tdsCheckbox"
                                 [(ngModel)]="customTemplate.sections['footer'].data['tds'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                                 TDS
@@ -1746,7 +1746,7 @@
                                     [class.error-box]="contentForm?.controls['tds']?.errors?.maxlength"
                                     [maxlength]="10"
                                     [(ngModel)]="customTemplate.sections['footer'].data['tds'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['footer'].data['tds'].display"
                                 ></text-field>
                                 <ng-container *ngIf="tds?.isFocused || contentForm?.controls['tds']?.errors?.maxlength">
@@ -1762,7 +1762,7 @@
                                 color="primary"
                                 name="totalDues"
                                 [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                                 Total Due
@@ -1776,7 +1776,7 @@
                                     [class.error-box]="contentForm?.controls['totalDue']?.errors?.maxlength"
                                     [maxlength]="40"
                                     [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].label"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['footer'].data['totalDue'].display"
                                 ></text-field>
                                 <ng-container
@@ -1801,7 +1801,7 @@
                             color="primary"
                             name="footerCompanyNameCheckbox"
                             [(ngModel)]="customTemplate.sections['footer'].data['companyName'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Company Name
@@ -1812,7 +1812,7 @@
                             color="primary"
                             name="showQrCodeCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         >
                             Show QR code
                         </mat-checkbox>
@@ -1826,7 +1826,7 @@
                             color="primary"
                             name="footerGstinCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['gstin'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             GSTIN
@@ -1843,7 +1843,7 @@
                             color="primary"
                             name="cad"
                             [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Company Address
@@ -1858,7 +1858,7 @@
                                 placeholder="Company Address"
                                 [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].label"
                                 name="cmpAdd"
-                                (change)="onFieldChange(null, null, null)"
+                                (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="!customTemplate.sections['footer'].data['companyAddress'].display"
                             ></textarea>
                             <ng-container
@@ -1886,7 +1886,7 @@
                             color="primary"
                             name="tam"
                             [(ngModel)]="customTemplate.sections['footer'].data['taxableAmount'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         >
                             Taxable Amount
                         </mat-checkbox>
@@ -1896,7 +1896,7 @@
                             color="primary"
                             name="ttx"
                             [(ngModel)]="customTemplate.sections['footer'].data['totalTax'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         >
                             Total Tax
                         </mat-checkbox>
@@ -1909,7 +1909,7 @@
                             color="primary"
                             name="itot"
                             [(ngModel)]="customTemplate.sections['footer'].data['total'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         >
                             Invoice Total
                         </mat-checkbox>
@@ -1927,7 +1927,7 @@
                                 color="primary"
                                 name="totalQuantityCheck"
                                 [(ngModel)]="customTemplate.sections['table'].data['totalQuantity'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                                 Total Quantity
@@ -1963,7 +1963,7 @@
                             color="primary"
                             name="totalDueCheckbox"
                             [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Invoice Total
@@ -1989,7 +1989,7 @@
                             color="primary"
                             name="ds"
                             [(ngModel)]="customTemplate.sections['table'].data['discount'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Discount
@@ -2002,7 +2002,7 @@
                                 [class.error-box]="contentForm?.controls['ds1']?.errors?.maxlength"
                                 [name]="'ds1'"
                                 [(ngModel)]="customTemplate.sections['table'].data['discount'].label"
-                                (change)="onFieldChange(null, null, null)"
+                                (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="!customTemplate.sections['table'].data['discount'].display"
                             ></text-field>
                             <ng-container
@@ -2020,7 +2020,7 @@
                             color="primary"
                             name="tam"
                             [(ngModel)]="customTemplate.sections['footer'].data['taxableAmount'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         >
                             Taxable Amount
                         </mat-checkbox>
@@ -2032,7 +2032,7 @@
                                 [class.error-box]="contentForm?.controls['tv1']?.errors?.maxlength"
                                 [name]="'tv1'"
                                 [(ngModel)]="customTemplate.sections['table'].data['taxableValue'].label"
-                                (change)="onFieldChange(null, null, null)"
+                                (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="!customTemplate.sections['table'].data['taxableValue'].display"
                             ></text-field>
                             <ng-container
@@ -2059,7 +2059,7 @@
                             color="primary"
                             name="itiw"
                             [(ngModel)]="customTemplate.sections['footer'].data['totalInWords'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         >
                             Invoice Total(in words)
                         </mat-checkbox>
@@ -2077,7 +2077,7 @@
                                 color="primary"
                                 name="taxBifurcationCheckbox"
                                 [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display"
-                                (change)="
+                                (ngModelChange)="
                                     onChangeFieldVisibility(null, null, null);
                                     checkedTaxBifurcation('taxRateBifurcation', 'footer')
                                 "
@@ -2089,7 +2089,7 @@
                             <div class="clearfix mr-b05">
                                 <mat-radio-group
                                     class="d-flex mb-2"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     name="tax-rate"
                                 >
                                     <mat-radio-button
@@ -2133,7 +2133,7 @@
                                 name="showNotesAtLastPage"
                                 [checked]="customTemplate.sections['footer'].data['showNotesAtLastPage']?.display"
                                 [(ngModel)]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             >
                                 Show notes at the last page
                             </mat-checkbox>
@@ -2152,7 +2152,7 @@
                                 color="primary"
                                 name="taxBifurcationCheckbox"
                                 [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display"
-                                (change)="
+                                (ngModelChange)="
                                     onChangeFieldVisibility(null, null, null);
                                     checkedTaxBifurcation('taxRateBifurcation', 'footer')
                                 "
@@ -2164,7 +2164,7 @@
                             <div class="clearfix mr-b05">
                                 <mat-radio-group
                                     class="d-flex mb-2"
-                                    (change)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     name="tax-rate"
                                 >
                                     <mat-radio-button
@@ -2189,7 +2189,7 @@
                                 color="primary"
                                 name="msg1"
                                 [(ngModel)]="customTemplate.sections['footer'].data['message1'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                                 Note 1
@@ -2246,7 +2246,7 @@
                                 color="primary"
                                 [checked]="customTemplate.sections.footer.data.showMessage2?.display"
                                 [(ngModel)]="customTemplate.sections['footer'].data['showMessage2'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             >
                                 Note 2
                             </mat-checkbox>
@@ -2259,7 +2259,7 @@
                                 class="mt-1 mr-2"
                                 name="ty"
                                 [(ngModel)]="customTemplate.sections['footer'].data['thanks'].display"
-                                (change)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                 [checked]="true"
                             >
                             </mat-checkbox>
@@ -2298,7 +2298,7 @@
                             color="primary"
                             name="footerCompanyNameCheckbox"
                             [(ngModel)]="customTemplate.sections['footer'].data['companyName'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Company Name
@@ -2317,7 +2317,7 @@
                             color="primary"
                             name="textUnderSloganCheckbox"
                             [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].display"
-                            (change)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             [checked]="true"
                         >
                             Text under Image Signature / Slogan
@@ -2364,20 +2364,11 @@
                     <div *ngIf="customTemplate?.templateType !== 'thermal_template'" class="clearfix mr-t1 row">
                         <mat-radio-group
                             class="d-flex mb-2"
-                            (change)="onFieldChange(null, null, null)"
+                            (ngModelChange)="onFieldChange(null, null, null)"
                             name="signatureType"
                         >
                             <div class="clearfix" class="col-lg-6 col-md-12">
-                                <div class="mb-4px">
-                                    <!-- <input
-                                    type="radio"
-                                    class="radio-theme ml-0"
-                                    name="signatureType"
-                                    (change)="chooseSigntureType('image')"
-                                    (ngModelChange)="onFieldChange(null, null, null)"
-                                    [checked]="customTemplate.sections.footer.data.imageSignature.display"
-                                /> 
-                                Image Signature-->
+                                <div class="mb-4px">                                  
                                     <mat-radio-button
                                         color="primary"
                                         [value]="'image'"
@@ -2442,15 +2433,6 @@
                             </div>
                             <div class="clearfix" class="col-lg-6 col-md-12">
                                 <div>
-                                    <!-- <input
-                                    type="radio"
-                                    class="radio-theme"
-                                    name="signatureType"
-                                    (change)="chooseSigntureType('slogan')"
-                                    (ngModelChange)="onFieldChange(null, null, null)"
-                                    [checked]="customTemplate.sections.footer.data.slogan.display"
-                                />
-                                Slogan -->
                                     <mat-radio-button
                                         color="primary"
                                         [value]="'slogan'"

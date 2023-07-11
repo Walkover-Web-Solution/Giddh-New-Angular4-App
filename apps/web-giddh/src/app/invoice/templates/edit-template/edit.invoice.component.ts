@@ -5,7 +5,6 @@ import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { CustomTemplateResponse, GetInvoiceTemplateDetailsResponse, ISection } from '../../../models/api-models/Invoice';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -947,7 +946,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             maxHeight: '100vh',
             width: '100vw',
             height: '100vh'
-        })
+        });
     }
 
     /**
