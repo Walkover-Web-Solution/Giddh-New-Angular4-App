@@ -5,6 +5,10 @@ import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
 import { OnboardingComponent } from "./onboarding.component";
 import { OnboardingRoutingModule } from "./onboarding.routing.module";
+import { MatButtonModule } from "@angular/material/button";
+import { MatRadioModule } from "@angular/material/radio";
+import { FormsModule } from "@angular/forms";
+import { MatListModule } from "@angular/material/list";
 
 @NgModule({
     declarations: [
@@ -15,7 +19,11 @@ import { OnboardingRoutingModule } from "./onboarding.routing.module";
         OnboardingRoutingModule,
         TranslateDirectiveModule,
         HamburgerMenuModule,
-        RouterModule
+        RouterModule,
+        MatButtonModule,
+        MatRadioModule,
+        FormsModule,
+        MatListModule
     ]
 })
 

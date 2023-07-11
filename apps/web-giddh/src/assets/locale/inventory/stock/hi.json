@@ -1,6 +1,9 @@
 {
     "fixed_assets": "अचल संपत्तियां",
     "enter_product": "उत्पाद दर्ज करें",
+    "enter_stock": "स्टॉक दर्ज करें",
+    "enter_service": "सेवा दर्ज करें",
+    "enter_fixed": "अचल संपत्ति दर्ज करें",
     "select_unit": "इकाई का चयन करें",
     "under_group": "समूह के तहत",
     "move": "समूह बदलें",
@@ -89,5 +92,6 @@
     "duplicate_option_value": "आप पहले ही विकल्प मान [VALUE] का उपयोग कर चुके हैं|",
     "option_name_required": "विकल्प का नाम आवश्यक है",
     "option_value_required": "विकल्प मान आवश्यक है",
-    "save_stock_for_recipe": "स्टॉक बचाएं और रेसिपी बनाएं"
+    "save_stock_for_recipe": "स्टॉक बचाएं और रेसिपी बनाएं",
+    "confirm_delete_option": "विकल्प को हटाने से विकल्प के सभी प्रकार भी हट जायेंगे। क्या आप अब भी विकल्प हटाना चाहते हैं?"
 }

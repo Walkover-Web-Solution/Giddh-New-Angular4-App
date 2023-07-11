@@ -186,8 +186,10 @@ tr.mat-header-row {
     }
     .mat-table tbody {
         tr {
-            td:first-child {
-                padding-left: 18px;
+            td {
+                &:first-child {
+                    padding-left: 18px;
+                }
             }
         }
     }
@@ -245,8 +247,10 @@ tr.mat-header-row {
     .main-table {
         tbody {
             tr {
-                td:first-child {
-                    min-width: 242px !important;
+                td {
+                    &:first-child {
+                        min-width: 242px !important;
+                    }
                 }
             }
         }
@@ -255,8 +259,10 @@ tr.mat-header-row {
 @media (max-width: 1024px) {
     .main-table {
         th {
-            .mat-header-cell:first-of-type {
-                min-width: 242px !important;
+            .mat-header-cell {
+                &:first-of-type {
+                    min-width: 242px !important;
+                }
             }
         }
     }
@@ -429,4 +435,8 @@ tr.mat-header-row {
     padding-top: 10px;
     margin-top: 17px;
     box-shadow: 0 0 19px var(--color-primary-common-box-shadow);
+}
+
+.icon-cross {
+    line-height: 32px;
 }

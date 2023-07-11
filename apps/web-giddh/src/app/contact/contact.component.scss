@@ -414,8 +414,9 @@ button.btn.btn-filter {
 .btn-small {
     box-shadow: none !important;
 }
-button.btn.btn-filter span.icon-cross {
-    margin-right: 5px;
+
+.icon-cross {
+    line-height: 32px;
 }
 
 .customer-form-inline {
@@ -790,7 +791,6 @@ button.btn.btn-filter span.icon-cross {
         padding-top: 0;
         float: none !important;
     }
-
     .position-relative.word-wrap .icon-dots-three-vertical {
         display: block;
     }

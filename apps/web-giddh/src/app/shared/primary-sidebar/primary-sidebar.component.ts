@@ -97,10 +97,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
-    /** This will holds true if we added ledger item in local db once */
-    public isItemAdded: boolean = false;
     /** This will open company branch switch dropdown */
     public showCompanyBranchSwitch: boolean = false;
+    /** This will holds true if we added ledger item in local db once */
+    public isItemAdded: boolean = false;
     /** This will show/hide account sidepan */
     public accountAsideMenuState: string = 'out';
     /** This will hold group unique name from CMD+k for creating account */
@@ -109,6 +109,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     private createAccountIsSuccess$: Observable<boolean>;
     /* This will hold the active route url */
     public isActiveRoute: string;
+    /** True if account has unsaved changes */
+    public hasUnsavedChanges: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -149,6 +151,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasUnsavedChanges = response;
+        });
     }
 
     /**
@@ -241,7 +247,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (response && response.length) {
                 this.currentCompanyBranches = response;
                 if (this.generalService.currentBranchUniqueName) {
-                    this.currentBranch = response.find(branch => (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+                    this.currentBranch = response.find(branch => (this.generalService.currentBranchUniqueName === branch?.uniqueName)) || {};
                     if (!this.activeCompanyForDb) {
                         this.activeCompanyForDb = new CompAidataModel();
                     }
@@ -495,6 +501,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             item.time = +new Date();
             let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
             this.doEntryInDb(entity, item, fromInvalidState);
+            this.closeAccountModal(true);
         }, 200);
     }
 
