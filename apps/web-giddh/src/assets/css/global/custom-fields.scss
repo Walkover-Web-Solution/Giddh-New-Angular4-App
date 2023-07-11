@@ -1,13 +1,5 @@
 .create-custom-field-page {
-    .custom-field-wrapper {
-       .minMaxField-wrapper {
-            .minMaxField {
-                display: flex;
-                align-items: center;
-                column-gap: 15px;
-            }
-        }
-       
+    .custom-field-wrapper {      
         .no-bottom-space {
             .mat-form-field-wrapper {
                 padding-bottom: 0 !important;
