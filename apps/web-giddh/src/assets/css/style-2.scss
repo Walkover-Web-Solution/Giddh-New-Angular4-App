@@ -2177,10 +2177,7 @@ ul.sub-list {
         color: var(--color-abbey);
         padding-left: unset !important;
     }
-    // input[type=radio]:checked+.mat-radio-label-content  {
-    //     background: var(--color-dark-fog);
-    //     clear: both;
-    // }
+
     .selected-radio {
         .mat-radio-label-content {
             background: var(--color-dark-fog);
@@ -5291,8 +5288,20 @@ label {
     margin-bottom: 0;
 }
 
-#customInvoice .template-editor .table > tbody > tr > td input {
-    text-align: left !important;
+#customInvoice {
+	.template-editor {
+		.table {
+			>tbody {
+				>tr {
+					>td {
+						input {
+							text-align: left !important;
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 #customInvoice .template-editor .custom-field span:not(.max-character-label) {
