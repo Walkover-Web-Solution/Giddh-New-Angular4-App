@@ -19,7 +19,6 @@ import { GeneralService } from '../../services/general.service';
 import { SettingsBranchService } from '../../services/settings.branch.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { ToasterService } from '../../services/toaster.service';
-import { CompanyAddNewUiComponent } from '../../shared/header/components';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../../store/roots';
@@ -48,7 +47,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Change status modal instance */
     @ViewChild('statusModal', { static: true }) public statusModal: ModalDirective;
     @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal', { static: false }) public addCompanyModal: ModalDirective;
     @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
     @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
     public bsConfig: Partial<BsDatepickerConfig> = {
@@ -215,15 +213,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngAfterViewInit() {
-        if (this.isBranch) {
-            this.openCreateCompanyModal()
-        }
-    }
-
-    public openCreateCompanyModal(isUpdateMode?: boolean): void {
-        this.loadAddCompanyComponent(isUpdateMode);
-        this.hideAddBranchModal();
-        this.addCompanyModal?.show();
     }
 
     /**
@@ -245,44 +234,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     }
 
-    public hideAddCompanyModal() {
-        this.addCompanyModal.hide();
-    }
-
-    public hideCompanyModalAndShowAddAndManage() {
-        this.addCompanyModal.hide();
-    }
-
-    public loadAddCompanyComponent(isUpdateMode?: boolean): void {
-        this.store.dispatch(this.commonActions.resetCountry());
-
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddNewUiComponent);
-        let viewContainerRef = this.companyadd.viewContainerRef;
-        viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as CompanyAddNewUiComponent).createBranch = true;
-        (componentRef.instance as CompanyAddNewUiComponent).isUpdateMode = isUpdateMode;
-        (componentRef.instance as CompanyAddNewUiComponent).entityDetails = this.branchDetails;
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
-            this.hideAddCompanyModal();
-            if (isUpdateMode) {
-                this.getAllBranches();
-            }
-        });
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
-            this.hideCompanyModalAndShowAddAndManage();
-        });
-    }
-
     public openAddBranchModal() {
         this.router.navigate(['pages/settings/create-branch']);
-    }
-
-    public hideAddBranchModal() {
-        this.isAllSelected$ = observableOf(false);
-        this.selectedCompaniesUniquename = [];
-        this.selectedCompaniesName = [];
-        this.branchModal.hide();
     }
 
     public selectAllCompanies(ev) {
@@ -319,7 +272,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public createBranches() {
         let dataToSend = { childCompanyUniqueNames: this.selectedCompaniesUniquename };
         this.store.dispatch(this.settingsBranchActions.CreateBranches(dataToSend));
-        this.hideAddBranchModal();
     }
 
     public removeBranch(branchUniqueName, companyName) {
