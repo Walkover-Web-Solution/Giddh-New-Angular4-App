@@ -706,5 +706,7 @@
         "content": "You have unsaved changes. Do you want to save and leave this page?",
         "no": "Stay",
         "yes": "Leave page"
-    }
+    },
+    "app_region": "Region",
+    "app_select_region": "Select Region"
 }

@@ -99,6 +99,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
+    /** List of counties of country */
+    public countyList: IOption[] = [];
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
     public activeCompany: CompanyResponse;
@@ -414,6 +416,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 stateGstCode: ['']
             }),
             stateCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
+            county: this._fb.group({
+                code: [''],
+                name: ['']
+            }),
+            countyCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
             isDefault: [false],
             isComposite: [false],
             partyType: ['NOT APPLICABLE'],
@@ -428,6 +435,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
             control.get('stateCode')?.patchValue(null);
+            control.get('countyCode')?.patchValue(null);
             control.get('state').get('code')?.patchValue(null);
             control.get('gstNumber')?.setValue("");
         }
@@ -568,7 +576,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 let addressExists = false;
 
                 accountRequest.addresses.forEach(address => {
-                    if (address?.address?.trim() || address?.gstNumber?.trim() || address?.stateCode?.trim() || address?.pincode?.trim()) {
+                    if (address?.address?.trim() || address?.gstNumber?.trim() || address?.stateCode?.trim() || address?.countyCode?.trim() || address?.pincode?.trim()) {
                         addressExists = true;
                     }
                 });
@@ -606,6 +614,18 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
+
+        if (accountRequest.addresses && accountRequest.addresses.length > 0) {
+            accountRequest.addresses.forEach(address => {
+                if (this.countyList?.length) {
+                    delete address['state'];
+                    delete address['stateCode'];
+                } else {
+                    delete address['county'];
+                    delete address['countyCode'];
+                }
+            });
+        }
 
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
@@ -658,7 +678,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             gstForm.get('stateCode')?.patchValue(event?.value);
             gstForm.get('state').get('code')?.patchValue(event?.value);
         }
+    }
 
+    public selectedCounty(gstForm: FormGroup, event) {
+        if (gstForm && event?.label) {
+            gstForm.get('countyCode')?.patchValue(event?.value);
+            gstForm.get('county').get('code')?.patchValue(event?.value);
+            gstForm.get('county').get('name')?.patchValue(event?.label);
+        }
     }
 
     public selectGroup(event: IOption) {
@@ -800,22 +827,34 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.states = [];
+                this.stateList = [];
+                this.countyList = [];
+                this.statesSource$ = observableOf([]);
+
                 if (res.stateList) {
                     this.stateList = res.stateList;
-                }
-                Object.keys(res.stateList).forEach(key => {
 
-                    if (res.stateList[key].stateGstCode !== null) {
-                        this.stateGstCode[res.stateList[key].stateGstCode] = [];
-                        this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
-                    }
+                    Object.keys(res.stateList).forEach(key => {
+                        if (res.stateList[key].stateGstCode !== null) {
+                            this.stateGstCode[res.stateList[key].stateGstCode] = [];
+                            this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
+                        }
 
-                    this.states.push({
-                        label: res.stateList[key].code + ' - ' + res.stateList[key].name,
-                        value: res.stateList[key].code
+                        this.states.push({
+                            label: res.stateList[key].code + ' - ' + res.stateList[key].name,
+                            value: res.stateList[key].code
+                        });
                     });
-                });
-                this.statesSource$ = observableOf(this.states);
+                    this.statesSource$ = observableOf(this.states);
+                }
+
+                if (res.countyList) {
+                    this.countyList = res.countyList?.map(county => {
+                        return { label: county.name, value: county.code };
+                    });
+                }
+
+                this.toggleStateRequired();
             } else {
                 let statesRequest = new StatesRequest();
                 statesRequest.country = countryCode;
@@ -863,11 +902,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         let i = 0;
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
+            control.get('stateCode').setValidators(null);
+            control.get('countyCode').setValidators(null);
             if (this.isStateRequired) {
-                control.get('stateCode').setValidators([Validators.required]);
-            } else {
-                control.get('stateCode').setValidators(null);
+                if (this.countyList?.length) {
+                    control.get('countyCode').setValidators([Validators.required]);
+                } else {
+                    control.get('stateCode').setValidators([Validators.required]);
+                }
             }
+            control.get('countyCode').updateValueAndValidity();
             control.get('stateCode').updateValueAndValidity();
             i++;
         }

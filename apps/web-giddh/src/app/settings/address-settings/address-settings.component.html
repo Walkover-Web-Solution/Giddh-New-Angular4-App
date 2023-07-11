@@ -123,7 +123,9 @@
                                             searchTemplate;
                                             context: {
                                                 $implicit: showSearchState,
-                                                title: commonLocaleData?.app_state,
+                                                title: addressConfiguration.countyList?.length
+                                                    ? commonLocaleData?.app_region
+                                                    : commonLocaleData?.app_state,
                                                 fieldName: 'searchStateInput',
                                                 formControl: searchStateInput
                                             }
@@ -163,8 +165,19 @@
                                     </ng-container>
                                 </div>
                             </td>
-                            <td [attr.data-title]="commonLocaleData?.app_state">
-                                <div>{{ address.stateCode }} - {{ address.stateName }}</div>
+                            <td
+                                [attr.data-title]="
+                                    addressConfiguration.countyList?.length
+                                        ? commonLocaleData?.app_region
+                                        : commonLocaleData?.app_state
+                                "
+                            >
+                                <div *ngIf="addressConfiguration.countyList?.length">
+                                    {{ address.county?.code }} - {{ address.county?.name }}
+                                </div>
+                                <div *ngIf="!addressConfiguration.countyList?.length">
+                                    {{ address.stateCode }} - {{ address.stateName }}
+                                </div>
                             </td>
                             <td
                                 [attr.data-title]="localeData?.linked_with"
