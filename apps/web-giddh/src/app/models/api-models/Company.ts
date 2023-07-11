@@ -234,6 +234,10 @@ export class States {
         stateGstCode: string;
         name: string;
         code: string;
+    }];
+    public countyList: [{
+        name: string;
+        code: string;
     }]
 }
 

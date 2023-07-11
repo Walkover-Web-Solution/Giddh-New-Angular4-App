@@ -695,5 +695,6 @@
         "product": "उत्पाद",
         "service": "सेवा",
         "fixed_assets": "अचल संपत्तियां"
-    }
+    },
+    "app_region": "क्षेत्र"
 }
