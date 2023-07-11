@@ -6,8 +6,9 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatStepperModule } from '@angular/material/stepper';
-import { SharedModule } from "../shared/shared.module";
+import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/hamburger-menu.module";
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
 import { AddCompanyComponent } from "./add-company.component";
 import { AddCompanyRoutingModule } from "./add-company.routing.module";
 
@@ -26,7 +27,8 @@ import { AddCompanyRoutingModule } from "./add-company.routing.module";
         MatButtonModule,
         MatSelectModule,
         FormFieldsModule,
-        SharedModule
+        HamburgerMenuModule,
+        TranslateDirectiveModule
     ],
     providers: [
 
