@@ -184,8 +184,12 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public closeAsidePane(event: any): void {
         if (this.addressForm?.dirty) {
-            this.pageLeaveUtilityService.confirmPageLeave(() => {
-                this.closeAsideEvent.emit(event);
+            document.querySelector("create-address")?.classList?.add("page-leave-confirmation-showing");
+            this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                document.querySelector("create-address")?.classList?.remove("page-leave-confirmation-showing");
+                if (action) {
+                    this.closeAsideEvent.emit(event);
+                }
             });
             return;
         } else {

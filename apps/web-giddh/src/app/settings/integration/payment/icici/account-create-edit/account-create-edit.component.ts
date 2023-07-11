@@ -203,8 +203,10 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public closeAccountModal(): void {
         if (this.accountForm.dirty) {
-            this.pageLeaveUtilityService.confirmPageLeave(() => {
-                this.closeModalEvent.emit(true);
+            this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                if (action) {
+                    this.closeModalEvent.emit(true);
+                }
             });
         } else {
             this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
