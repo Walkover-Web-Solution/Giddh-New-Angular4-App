@@ -155,8 +155,10 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
      */
     public closeAccountUserModal(): void {
         if (this.accountUserForm.dirty) {
-            this.pageLeaveUtilityService.confirmPageLeave(() => {
-                this.closeModalEvent.emit(true);
+            this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                if (action) {
+                    this.closeModalEvent.emit(true);
+                }
             });
         } else {
             this.pageLeaveUtilityService.removeBrowserConfirmationDialog();

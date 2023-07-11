@@ -128,11 +128,13 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
 
     public closeEditUserModal(event?: any): void {
         if (event && this.hasUnsavedChanges) {
-            this.pageLeaveUtilityService.confirmPageLeave(() => {
-                this.hasUnsavedChanges = false;
-                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-                this.editUserModal.hide();
-                setTimeout(() => this.showEditUserModal = false, 700);
+            this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                if (action) {
+                    this.hasUnsavedChanges = false;
+                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                    this.editUserModal.hide();
+                    setTimeout(() => this.showEditUserModal = false, 700);
+                }
             });
         } else {
             this.hasUnsavedChanges = false;
