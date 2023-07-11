@@ -4,18 +4,18 @@
             .minMaxField {
                 display: flex;
                 align-items: center;
-                column-gap: 20px;
+                column-gap: 15px;
             }
         }
-        mat-form-field {
-            &.no-bottom-space {
-                .mat-form-field-wrapper {
-                    padding-bottom: 0 !important;
-                    margin-bottom: 0 !important; 
-                    margin-top: 1px !important;
-                }
+       
+        .no-bottom-space {
+            .mat-form-field-wrapper {
+                padding-bottom: 0 !important;
+                margin-bottom: 0 !important; 
+                margin-top: 1px !important;
             }
         }
+    
         .mat-form-field-appearance-outline {
             .mat-form-field-outline-thick {
                 .mat-form-field-outline-start,
