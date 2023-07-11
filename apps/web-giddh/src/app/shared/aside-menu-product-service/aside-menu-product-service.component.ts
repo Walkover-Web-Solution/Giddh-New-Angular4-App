@@ -123,12 +123,14 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
 
     public backButtonPressed(): void {
         if (this.isAddServiceOpen && this.hasUnsavedChanges) {
-            this.pageLeaveUtilityService.confirmPageLeave(() => {
-                this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
-                this.hideFirstStep = false;
-                this.isAddStockOpen = false;
-                this.isAddServiceOpen = false;
-                this.changeDetectionRef.detectChanges();
+            this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                if (action) {
+                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                    this.hideFirstStep = false;
+                    this.isAddStockOpen = false;
+                    this.isAddServiceOpen = false;
+                    this.changeDetectionRef.detectChanges();
+                }
             });
         } else {
             this.hideFirstStep = false;
