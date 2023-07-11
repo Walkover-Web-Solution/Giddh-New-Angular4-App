@@ -4,7 +4,7 @@
             height: 100%;
             .child-wrapper {
                 background-color: var(--color-body-background);
-                height: calc( 100vh - (58.7px + 30px));
+                height: calc(100vh - (58.7px + 30px));
                 width: 730px;
                 overflow: auto;
                 margin: 15px 0;
@@ -19,10 +19,10 @@ body {
         .cdk-overlay-pane {
             transform: unset !important;
         }
-        .mat-dialog-container{
+        .mat-dialog-container {
             border-radius: unset !important;
         }
-        .aside-panel-ledger{
+        .aside-panel-ledger {
             height: calc(100vh - 57.8px);
         }
     }

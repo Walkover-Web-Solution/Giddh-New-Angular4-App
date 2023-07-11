@@ -8,11 +8,10 @@
     max-width: 760px;
     z-index: 99999;
 }
- 
+
 :host.shifted {
     right: 500px;
 }
-
 
 :host #close {
     position: absolute;
