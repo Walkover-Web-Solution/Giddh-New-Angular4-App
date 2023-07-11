@@ -268,7 +268,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                 if (!this.isGstinValid) {
                     let text = this.localeData?.invalid_tax;
                     text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
-                    this.toaster.errorToast(text);
+                    this.toaster.showSnackBar("error", text);
                     this.selectedState = '';
                 }
 
@@ -547,7 +547,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                             this.isMobileNumberInvalid = true;
                             let errorCode = this.intl?.getValidationError();
                             if (errorMsg && errorMap[errorCode]) {
-                                this.toaster.errorToast(this.localeData?.invalid_contact_number);
+                                this.toaster.showSnackBar("error", this.localeData?.invalid_contact_number);
                                 errorMsg.innerHTML = errorMap[errorCode];
                                 errorMsg.classList.remove("d-none");
                             }
