@@ -49,7 +49,7 @@ export class SearchFilterComponent implements OnInit {
         this.searchDataSet = this.searchQueryForm.controls['searchQuery'] as FormArray;
     }
 
-    public ngOnInit() {
+    public ngOnInit() {        
         this.queryTypes = [
             { name: this.localeData?.query_types.closing_balance, uniqueName: 'closingBalance' },
             { name: this.localeData?.query_types.opening_balance, uniqueName: 'openingBalance' },

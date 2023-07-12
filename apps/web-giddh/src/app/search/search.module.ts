@@ -17,6 +17,14 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SharedModule } from '../shared/shared.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { MatButtonModule } from '@angular/material/button';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatChipsModule } from '@angular/material/chips';
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
@@ -47,7 +55,15 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
         ClickOutsideModule,
         CurrencyModule,
         SharedModule,
-        NoDataModule
+        NoDataModule,
+        FormFieldsModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatTableModule,
+        MatCheckboxModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatChipsModule
     ]
 })
 export class SearchModule {

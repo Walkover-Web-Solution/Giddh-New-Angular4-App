@@ -7,24 +7,17 @@
             [autoClose]="false"
             (clickOutside)="filterDropdown.hide()"
         >
-            <button type="button" class="btn btn-default" dropdownToggle>
+            <button type="button" mat-stroked-button color="primary" [matMenuTriggerFor]="filterByAccountMenu">
                 {{ localeData?.filter_by_account }} <span class="caret"></span>
             </button>
-            <div
-                id="dropdown-basic1"
-                *dropdownMenu
-                class="dropdown-menu dropdown-menu-left"
-                role="menu"
-                aria-labelledby="button-basic1"
-                [style.width.px]="550"
-                (click)="toggleFilters = false"
-            >
+            <mat-menu #filterByAccountMenu="matMenu" (click)="$event.stopPropagation();">
                 <form
                     [formGroup]="searchQueryForm"
                     novalidate
                     name="searchQueryForm"
                     id="searchQueryForm"
                     class="form-inline flex-row flex-wrap pd-1"
+                    (click)="$event.stopPropagation();"
                 >
                     <!-- repeater -->
                     <div
@@ -34,7 +27,7 @@
                         *ngFor="let item of searchQueryForm.get('searchQuery')['controls']; let i = index; let l = last"
                     >
                         <div [formGroupName]="i" class="d-flex">
-                            <label>{{ localeData?.whose }}</label>
+                            <!-- <label>{{ localeData?.whose }}</label>
                             <span class="position-relative form-group">
                                 <select class="form-control custom-select-field" formControlName="queryType" required>
                                     <option value="">{{ commonLocaleData?.app_select_type }}</option>
@@ -43,8 +36,16 @@
                                     </option>
                                 </select>
                                 <i class="icon-caret-down"></i>
-                            </span>
-                            <label>{{ localeData?.is }}</label>
+                            </span> -->
+                            <dropdown-field
+                            (click)="$event.stopPropagation();"
+                                class="mr-3"
+                                [required]="true"
+                                [placeholder]="commonLocaleData?.app_select_type"
+                                [label]="localeData?.whose"
+                            >
+                            </dropdown-field>
+                            <!-- <label>{{ localeData?.is }}</label>
                             <span class="position-relative form-group">
                                 <select class="form-control custom-select-field" formControlName="queryDiffer" required>
                                     <option value="">{{ localeData?.select_query }}</option>
@@ -53,8 +54,16 @@
                                     </option>
                                 </select>
                                 <i class="icon-caret-down"></i>
-                            </span>
-                            <label
+                            </span> -->
+                            <dropdown-field
+                            (click)="$event.stopPropagation();"
+                                class="mr-3"
+                                [required]="true"
+                                [placeholder]="localeData?.select_query"
+                                [label]="localeData?.is"
+                            >
+                            </dropdown-field>
+                            <!-- <label
                                 *ngIf="
                                     item?.value.queryDiffer === 'Less' ||
                                     item?.value.queryDiffer === 'Greater' ||
@@ -76,7 +85,35 @@
                                     decimalDigitsDirective
                                     [DecimalPlaces]="2"
                                 />
-                            </span>
+                            </span> -->
+                            <input-field
+                            (click)="$event.stopPropagation();"
+                                *ngIf="
+                                    item?.value.queryDiffer === 'Less' ||
+                                    item?.value.queryDiffer === 'Greater' ||
+                                    !item?.value.queryDiffer
+                                "
+                                [type]="'text'"
+                                [required]="true"
+                                [allowDecimalDigitsOnly]="true"
+                                [customDecimalPlaces]="2"
+                                [placeholder]="commonLocaleData?.app_amount"
+                                [label]="localeData?.than"
+                            >
+                            </input-field>
+
+                            <input-field
+                            (click)="$event.stopPropagation();"
+                                *ngIf="item?.value.queryDiffer === 'Equals'"
+                                [type]="'text'"
+                                [required]="true"
+                                [allowDecimalDigitsOnly]="true"
+                                [customDecimalPlaces]="2"
+                                [placeholder]="commonLocaleData?.app_amount"
+                                [label]="localeData?.to"
+                            >
+                            </input-field>
+
                             <!--By and To: Not required in paginated API -->
                             <span
                                 class="position-relative form-group"
@@ -110,21 +147,24 @@
                     <div class="clearfix mr-t4">
                         <button
                             [disabled]="searchQueryForm.invalid"
-                            class="btn btn-success pull-right"
+                            mat-stroked-button 
+                            color="primary"
+                            class="pull-right"
                             (click)="filterData(); filterDropdown.hide()"
                         >
                             {{ commonLocaleData?.app_search }}
                         </button>
                         <button
                             [disabled]="searchDataSet?.controls?.length > 3 || searchQueryForm.invalid"
-                            class="btn btn-default"
+                            mat-stroked-button
                             (click)="addSearchRow()"
                         >
                             {{ localeData?.add_new_query }}
                         </button>
                         <button
                             *ngIf="searchDataSet?.controls?.length > 1"
-                            class="btn btn-default mr-r1"
+                            mat-stroked-button
+                            class="mr-r1"
                             (click)="removeSearchRow()"
                         >
                             {{ localeData?.delete_row }}
@@ -132,37 +172,36 @@
                     </div>
                     <!-- end of second row -->
                 </form>
-            </div>
+            </mat-menu>
         </div>
-        <button *ngIf="isFiltered | async" (click)="resetQuery()" class="btn btn-default">
+        <button *ngIf="isFiltered | async" (click)="resetQuery()" mat-stroked-button>
             <i class="icon-refresh"></i>
             {{ commonLocaleData?.app_reset }}
         </button>
         <div class="pull-right">
-            <div class="btn-group" dropdown *ngIf="showSendButton">
-                <button type="button" class="btn btn-default" dropdownToggle>
+            <div class="btn-group" *ngIf="showSendButton">
+                <button type="button" mat-stroked-button [matMenuTriggerFor]="sendAsMenu">
                     {{ localeData?.send_as }}
                     <span class="caret"></span>
                 </button>
-                <ul
-                    id="dropdown-basic"
-                    *dropdownMenu
+                <mat-menu #sendAsMenu="matMenu">
+                    <button mat-menu-item (click)="openEmailDialog.emit()">{{ commonLocaleData?.app_email }}</button>
+                </mat-menu>
+                <!-- <ul
+                   
                     class="dropdown-menu dropdown-menu-right"
-                    role="menu"
-                    aria-labelledby="button-basic"
-                    [style.min-width.px]="90"
                 >
                     <li role="menuitem">
                         <a class="dropdown-item cp" (click)="openEmailDialog.emit()">{{
                             commonLocaleData?.app_email
                         }}</a>
-                    </li>
+                    </li> -->
                     <!-- <li role="menuitem" (click)="openSmsDialog.emit()">
                         <a class="dropdown-item cp">{{commonLocaleData?.app_sms}}</a>
                     </li> -->
-                </ul>
+                <!-- </ul> -->
             </div>
-            <button type="button" class="btn btn-success" *ngIf="showDownloadCsv" (click)="createCSV()">
+            <button type="button" mat-stroked-button color="primary" *ngIf="showDownloadCsv" (click)="createCSV()">
                 {{ commonLocaleData?.app_download_csv }}
             </button>
         </div>
