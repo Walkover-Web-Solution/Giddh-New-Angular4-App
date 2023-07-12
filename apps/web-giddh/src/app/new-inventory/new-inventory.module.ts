@@ -78,6 +78,7 @@ import { RecipeModule } from "./component/recipe/recipe.module";
 import { ManufacturingModule } from "../manufacturing/manufacturing.module";
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
+import { ScrollingModule } from "@angular/cdk/scrolling";
 
 @NgModule({
     declarations: [
@@ -160,7 +161,8 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         MatListModule,
         RecipeModule,
         ManufacturingModule,
-        SelectTableColumnModule
+        SelectTableColumnModule,
+        ScrollingModule
     ],
     exports: [
         NewInventoryComponent,
