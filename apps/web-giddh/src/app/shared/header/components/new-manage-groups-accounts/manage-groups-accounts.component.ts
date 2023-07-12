@@ -51,6 +51,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public searchedMasterData: any[] = [];
     /** True if account has unsaved changes */
     private hasUnsavedChanges: boolean = false;
+    /** True if confirmation is open on search groups/accounts keyup event */
+    private isPageLeaveConfirmationOpen: boolean = false;
 
     // tslint:disable-next-line:no-empty
     constructor(
@@ -153,6 +155,18 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     }
 
     public searchGroups(term: string): void {
+        if (this.hasUnsavedChanges) {
+            if (!this.isPageLeaveConfirmationOpen) {
+                this.confirmPageLeave(() => {
+                    this.searchGroupsAndAccounts(term);
+                });
+            }
+            return;
+        }
+        this.searchGroupsAndAccounts(term);
+    }
+
+    private searchGroupsAndAccounts(term: string): void {
         this.store.dispatch(this.groupWithAccountsAction.setGroupAndAccountsSearchString(term));
         this.groupSearchTerms.next(term);
         this.breadcrumbPath = [];
@@ -160,6 +174,18 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     }
 
     public resetGroupSearchString(needToFireRequest: boolean = true) {
+        if (this.hasUnsavedChanges) {
+            if (!this.isPageLeaveConfirmationOpen) {
+                this.confirmPageLeave(() => {
+                    this.resetSearchString(needToFireRequest);
+                });
+            }
+            return;
+        }
+        this.resetSearchString(needToFireRequest);
+    }
+
+    private resetSearchString(needToFireRequest: boolean = true): void {
         if (needToFireRequest) {
             this.groupSearchTerms.next('');
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
@@ -250,7 +276,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * @memberof ManageGroupsAccountsComponent
      */
     private confirmPageLeave(callback: Function): void {
+        this.isPageLeaveConfirmationOpen = true;
         this.pageLeaveUtilityService.confirmPageLeave(action => {
+            this.isPageLeaveConfirmationOpen = false;
             if (action) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 callback();
