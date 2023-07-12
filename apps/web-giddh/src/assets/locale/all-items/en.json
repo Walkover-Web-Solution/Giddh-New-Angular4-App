@@ -290,13 +290,37 @@
                     "label": "Inventory",
                     "link": "/pages/inventory",
                     "icon": "icon-inventory",
-                    "description": "Import/create stock, group & unit"
+                    "description": "Import/create stock, group & unit",
+                    "additional": {
+                        "voucherVersion": 1
+                    }
                 },
                 {
                     "label": "Manufacturing",
                     "link": "/pages/inventory/manufacturing",
                     "icon": "icon-manufacturing1",
-                    "description": "Find mfg. inventory status"
+                    "description": "Find mfg. inventory status",
+                    "additional": {
+                        "voucherVersion": 1
+                    }
+                },
+                {
+                    "label": "Inventory",
+                    "link": "/pages/inventory/v2/reports/product/stock",
+                    "icon": "icon-inventory",
+                    "description": "Import/create stock, group & unit",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
+                },
+                {
+                    "label": "Manufacturing",
+                    "link": "/pages/inventory/v2/manufacturing/list",
+                    "icon": "icon-manufacturing1",
+                    "description": "Find mfg. inventory status",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
                 },
                 {
                     "label": "Warehouse",
