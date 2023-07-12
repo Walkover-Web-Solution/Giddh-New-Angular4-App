@@ -1,4 +1,7 @@
-.readonly-field-color {
+.readonly-field {
+    .dropdown-bg {
+        display: none !important;
+    }
     .mat-form-field-flex {
         background-color: var(--color-primary-input-bar-background) !important;
     }

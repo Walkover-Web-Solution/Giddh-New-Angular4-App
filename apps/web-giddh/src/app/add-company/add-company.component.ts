@@ -313,19 +313,21 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      * @memberof AddCompanyComponent
      */
     public validateGstNumber(event: any): void {
-        this.isGstinValid = false;
+        let isValid: boolean = false;
         if (this.secondStepForm.get('gstin')?.value) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(this.secondStepForm.get('gstin')?.value)) {
-                        this.isGstinValid = true;
+                        isValid = true;
                     }
                 }
             } else {
-                this.isGstinValid = true;
+                isValid = true;
+                this.selectedState = '';
             }
-            if (!this.isGstinValid) {
+
+            if (this.formFields['taxName'] && !isValid) {
                 let text = this.localeData?.invalid_tax;
                 text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
                 this.toaster.showSnackBar("error", text);
@@ -338,7 +340,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                     this.selectedState = state.label;
                     this.selectedStateCode = state.value;
                     this.secondStepForm.controls['state'].setValue({ label: state?.label, value: state?.value });
-                    this.changeDetection.detectChanges();
+                    this.isGstinValid = true;
                     return true;
                 }
             });
@@ -346,6 +348,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             this.isGstinValid = false;
             this.selectedState = '';
         }
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -482,7 +485,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             let statesRequest = new StatesRequest();
             statesRequest.country = event.value;
             this.store.dispatch(this.generalActions.getAllState(statesRequest));
-
             this.changeDetection.detectChanges();
         }
     }
@@ -575,7 +577,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                         }
                     } else {
                         this.isMobileNumberInvalid = false;
-
                     }
                 }
             });
