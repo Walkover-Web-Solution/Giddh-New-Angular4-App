@@ -79,5 +79,6 @@
     "action":"Action",
     "parent_group":"Parent Group",
     "state":"State",
-    "gstin":"Tax Number"
+    "gstin":"Tax Number",
+    "bulk_payment_warning": "A single debit transaction will be generated for the bulk payment, and you will not be able to map it to multiple entries in Giddh."
 }

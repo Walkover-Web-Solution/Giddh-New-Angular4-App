@@ -10,6 +10,10 @@ $custom-typography: mat-typography-config(
 );
 @include angular-material-typography($custom-typography);
 @import "../css/ngx-bs-datepicker.scss";
+@import "../css/global/aside-modal.scss";
+@import "../css/global/onboarding.scss";
+@import "../css/global/custom-fields.scss";
+@import "../css/global/inventory.scss";
 @import "./global//add-company.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
@@ -78,13 +82,6 @@ textarea {
         width: 18.2% !important;
     }
 }
-
-.billing-details {
-    .mat-form-field-infix {
-        border-top: 0 !important;
-    }
-}
-
 .all-table {
     .mat-column-contact {
         text-transform: lowercase;
@@ -102,7 +99,11 @@ textarea {
         min-width: 170px !important;
     }
 }
-
+.billing-details {
+    .mat-form-field-infix {
+        border-top: 0 !important;
+    }
+}
 .branch-profile-wrapper {
     float: left !important;
     width: auto !important;
@@ -746,6 +747,21 @@ textarea {
 
 .purchase-customise-column-button {
     float: right !important;
+}
+
+/*--- custom ---*/
+.obj-gap {
+    column-gap: 5px;
+}
+/*---- custom -----*/
+.inline-adjustment {
+    .adjustments-list {
+        height: auto !important;
+        overflow-y: unset !important;
+    }
+    advance-receipt-adjustment-component {
+        min-width: 750px;
+    }
 }
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
@@ -1571,7 +1587,6 @@ input {
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: var(--color-white);
 }
-
 .navbar {
     min-height: auto;
     margin-bottom: 10px;
@@ -2517,7 +2532,6 @@ modal-container.modal {
         font-size: var(--font-size-15);
         position: relative;
         width: 230px !important;
-        max-width: 208px;
         display: block;
         border: 1px solid var(--color-secondary-input-bar-border);
         height: 40px;
@@ -2568,6 +2582,7 @@ modal-container.modal {
 }
 
 /* my css end */
+
 /*input*/
 .form-control {
     background: var(--color-secondary-input-bar-background) !important;
@@ -3326,6 +3341,10 @@ input[type="checkbox"]:checked:after {
     font-size: var(--font-size-12) !important;
 }
 
+.font-14 {
+    font-size: var(--font-size-14);
+}
+
 .font-15 {
     font-size: var(--font-size-15) !important;
 }
@@ -4004,10 +4023,10 @@ a.btn.btn-xs.btn-link.pull-right {
     position: relative;
     background: var(--color-primary-header-background) !important;
     color: var(--color-white);
+    border-color: var(--color-primary-popup-list-header-bottom-border);
     height: 65px;
     display: flex;
     align-items: center;
-    border-color: var(--color-primary-popup-list-header-bottom-border);
 }
 
 .modal-body {
@@ -5032,7 +5051,7 @@ label {
 #dashboard .panel-heading i {
     position: relative;
     color: var(--color-abbey);
-    padding: 8px 10px;
+    padding: 8px 8px;
 }
 
 /*************************************************** input CSS  ****************************************************/
@@ -6021,10 +6040,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     background: url("../images/hand_icon.svg") no-repeat 0 0;
     width: 23px;
     height: 24px;
-}
-
-.right-section {
-    background: url("../images/Schedule.png") right 100px no-repeat;
 }
 
 /**end new modal design**/
@@ -7628,6 +7643,41 @@ footer#footer.absolute-footer {
                 }
             }
         }
+        .scroll-container {
+            .wrap-account-sidebar {
+                .grp-wrapper {
+                    .col-wrapper {
+                        border-color: var(--color-common-secondary-border);
+                        &:nth-child(1) {
+                            background-color: var(--color-common-primary-background-for-all-components);
+                        }
+                    }
+                }
+            }
+        }
+
+        .manage-group-acc {
+            account-operations {
+                #middleBody {
+                    .top-bar {
+                        border-color: var(--color-common-secondary-border) !important;
+                    }
+                }
+            }
+        }
+    }
+    login {
+        .modal.fade {
+            .modal-body.clearfix {
+                #authModal {
+                    button[type="login"].ladda-button {
+                        .ladda-label {
+                            color: var(--color-secondary-button-text);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -8467,10 +8517,6 @@ button.ladda-button .ladda-label {
 
 .panel {
     border-radius: 2px;
-}
-
-.invoice-modal-content .app-aside-menu-other-taxes:host {
-    top: 60px !important;
 }
 
 .mat-chip-list {
@@ -9916,13 +9962,15 @@ giddh-datepicker {
 }
 
 .ledger-body {
-    .cdk-overlay-container,
-    .cdk-global-overlay-wrapper {
-        z-index: 1000 !important;
+    &:not(.page-leave-confirmation-modal-wrapper) {
+        .cdk-overlay-container,
+        .cdk-global-overlay-wrapper {
+            z-index: 1000 !important;
+        }
     }
 
     overflow-y: auto !important;
-
+    height: auto;
     .advance-search {
         #export-body {
             sh-select {
@@ -10801,6 +10849,25 @@ body.update-scroll-hidden {
                     }
                 }
             }
+            .modal-body {
+                sh-select-menu {
+                    .menu {
+                        virtual-scroll {
+                            .total-padding {
+                                height: auto;
+                            }
+                        }
+                        .mat-dialog-container {
+                            .modal-body {
+                                input,
+                                textarea {
+                                    border: 1px solid var(--color-secondary-input-bar-border);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         .cdk-overlay-connected-position-bounding-box {
@@ -10815,7 +10882,35 @@ body.update-scroll-hidden {
         }
     }
 }
+.ledger-attachments-popup {
+    .cdk-overlay-container {
+        .mat-dialog-container {
+            background-color: var(--color-popup-background);
+        }
 
+        .cdk-overlay-connected-position-bounding-box {
+            .mat-menu-panel {
+                .mat-menu-content {
+                    button:focus {
+                        box-shadow: none !important;
+                        background-color: var(--color-dropdown-list-hover-background);
+                    }
+                }
+            }
+        }
+    }
+
+    button.mat-menu-item {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px !important;
+    }
+    .mat-menu-content {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+    }
+}
 .cdk-overlay-pane {
     height: auto !important;
     transform: translateX(-5px) translateY(-13px) !important;
@@ -10958,8 +11053,14 @@ inventory-master {
     }
 
     .main-table {
-        tbody > tr > td:first-child {
-            min-width: 242px !important;
+        tbody {
+            tr {
+                td {
+                    &:first-child {
+                        min-width: 242px !important;
+                    }
+                }
+            }
         }
     }
 
@@ -11041,13 +11142,11 @@ inventory-master {
     .right-bar {
         width: 100% !important;
     }
-
     .activity-log-page {
         .cdk-overlay-container {
             z-index: 99999;
         }
     }
-
     .unit-mapping-page {
         .unit-mapping-grid-list {
             .grid-box-content {
@@ -13062,15 +13161,6 @@ body.prevent-body-scroll {
             }
         }
     }
-
-    .mat-form-field-wrapper {
-        .mat-form-field-infix {
-            .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
-                padding-left: 32px !important;
-            }
-        }
-    }
-
     .invoice-date-due-date {
         .mat-datepicker-toggle {
             .mat-button-wrapper {
@@ -13689,6 +13779,10 @@ hamburger-menu {
     .cdk-overlay-container-z-index {
         z-index: 1000 !important;
     }
+
+    .cdk-overlay-container {
+        z-index: 9999 !important;
+    }
 }
 
 //inventory control styling
@@ -14063,45 +14157,6 @@ hamburger-menu {
     left: -7px;
 }
 
-.create-custom-field-page {
-    .custom-field-wrapper {
-        text-field {
-            .text-field-container {
-                input {
-                    width: 100%;
-                    height: auto;
-                    border: 1px solid var(--color-secondary-input-bar-border);
-                    background-color: var(--color-secondary-input-bar-background);
-
-                    &::placeholder {
-                        color: var(--color-common-primary-input-placeholder);
-                    }
-                }
-            }
-        }
-
-        .mat-select {
-            .mat-select-placeholder {
-                font-size: var(--font-size-15);
-                color: var(--color-common-primary-input-placeholder);
-            }
-        }
-
-        .minMaxField-wrapper {
-            .minMaxField {
-                .text-field-container {
-                    width: 42%;
-                    display: inline-block;
-
-                    &:first-child {
-                        margin-right: 10px;
-                    }
-                }
-            }
-        }
-    }
-}
-
 .select-physical-product {
     .product-option {
         .product-option-wrapper {
@@ -14289,28 +14344,12 @@ body.hide-scroll-body.master-page {
     &.mat-primary {
         color: var(--color-giddh-blue) !important;
     }
-    /*--- common-btn ---*/
-    .mat-button.mat-primary,
-    .mat-icon-button.mat-primary,
-    .mat-stroked-button.mat-primary {
-        color: var(--color-primary-header-background);
-
-        .mat-button-focus-overlay {
-            background-color: var(--color-primary-header-background) !important;
-        }
+    .mat-button-focus-overlay {
+        background-color: var(--color-primary-header-background) !important;
     }
 }
 /*================Material Buttons Color=======End Here==================*/
 
-/*--- voucher-datepicker ---*/
-voucher-component {
-    .mat-datepicker-input {
-        &:disabled {
-            background-color: transparent !important;
-            cursor: not-allowed;
-        }
-    }
-}
 /*--- tooltip --*/
 .mat-tooltip {
     letter-spacing: 0.8px;
@@ -14345,6 +14384,7 @@ voucher-component {
 .mat-form-field-suffix {
     margin-left: 3px;
 }
+
 .cdk-virtual-scroll-content-wrapper {
     width: 100%;
 }
@@ -14410,6 +14450,15 @@ button {
 
 /* ======Ladda  Button Color in Material Stroked Button====End Here=========== */
 
+/*--- voucher-datepicker ---*/
+voucher-component {
+    .mat-datepicker-input {
+        &:disabled {
+            background-color: transparent !important;
+            cursor: not-allowed;
+        }
+    }
+}
 /*============Material Button Disabled Cursor======Start===========*/
 button {
     &.mat-button-disabled {
@@ -14419,3 +14468,21 @@ button {
     }
 }
 /*============Material Button Disabled Cursor======End===========*/
+
+.ledger-date {
+    .input-wrapper {
+        .mat-form-field {
+            .mat-form-field-wrapper {
+                .mat-form-field-flex {
+                    .mat-form-field-infix {
+                        border: 0 !important;
+                        width: 100%;
+                        input {
+                            border: 1px solid var(--color-secondary-input-bar-border) !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -17,7 +17,6 @@
             #trigger="matAutocompleteTrigger"
             #selectField
             (keydown.enter)="$event.preventDefault()"
-            (clickOutside)="closeDropdownPanel()"
             matAutocompletePosition="auto"
             [required]="required"
             [attr.aria-expanded]="readonly ? false : true"

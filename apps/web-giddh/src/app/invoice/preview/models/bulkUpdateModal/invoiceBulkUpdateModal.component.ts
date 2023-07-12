@@ -324,7 +324,6 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                     this.bulkUpdateRequest(this.updateDueDatesRequest, 'duedate');
 
                     break;
-
                 case 'shippingDetails':
                     break;
 
