@@ -186,6 +186,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public countyList: IOption[] = [];
     /** List of registered business type countries */
     public registeredTypeCountryList: any[] = ["IN", "GB", "AE"];
+    /** This will hold disable State */
+    public disabledState: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -324,29 +326,38 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                 }
             } else {
                 isValid = true;
-                this.selectedState = '';
             }
 
-            if (this.formFields['taxName'] && !isValid) {
+            if (!isValid) {
                 let text = this.localeData?.invalid_tax;
                 text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
                 this.toaster.showSnackBar("error", text);
                 this.selectedState = '';
+                this.selectedStateCode = '';
+                this.isGstinValid = false;
+            } else {
+                this.isGstinValid = true;
             }
+        }
 
-            this.states?.find((state) => {
-                let code = this.secondStepForm.get('gstin')?.value?.substr(0, 2);
-                if (state.stateGstCode == code) {
-                    this.selectedState = state.label;
-                    this.selectedStateCode = state.value;
-                    this.secondStepForm.controls['state'].setValue({ label: state?.label, value: state?.value });
-                    this.isGstinValid = true;
-                    return true;
-                }
-            });
+            if (this.secondStepForm.get('gstin')?.value?.length >= 2) {
+                this.states?.find((state) => {
+                    let code = this.secondStepForm.get('gstin')?.value?.substr(0, 2);
+                    let matchCode = state.stateGstCode == code;
+                    this.disabledState = false;
+                    if (matchCode) {
+                        this.disabledState = true;
+                        this.selectedState = state.label;
+                        this.selectedStateCode = state.value;
+                        this.secondStepForm.controls['state'].setValue({ label: state?.label, value: state?.value });
+                        return true;
+                    }
+                });
         } else {
+            this.disabledState = false;
             this.isGstinValid = false;
             this.selectedState = '';
+            this.selectedStateCode = '';
         }
         this.changeDetection.detectChanges();
     }
@@ -659,7 +670,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     private getRandomString(companyName: string, country: string): string {
         if (companyName) {
             let date, dateString, randomGenerate, strings;
-
             companyName = this.removeSpecialCharacters(companyName);
             country = this.removeSpecialCharacters(country);
             date = new Date();
@@ -735,6 +745,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
         this.companyService.sendNewUserInfo(newUserInfo).pipe(take(1)).subscribe(response => { });
     }
 
+    public selectState(event: any): void {
+        this.selectedStateCode = event?.value;
+        this.selectedState = event?.label;
+        this.secondStepForm.controls['state']?.setValue(this.selectedStateCode);
+        this.changeDetection.detectChanges();
+    }
+
     /**
      * This will use for on submit company form
      *
@@ -743,7 +760,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      */
     public onSubmit(): void {
         this.isFormSubmitted = false;
-        if (this.companyForm.invalid) {
+        if (this.companyForm.invalid || !this.isGstinValid) {
             this.isFormSubmitted = true;
             return;
         }

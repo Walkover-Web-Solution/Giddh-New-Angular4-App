@@ -186,10 +186,10 @@
                                 [placeholder]="localeData?.select_state"
                                 [options]="states"
                                 [showError]="isFormSubmitted && !secondStepForm.get('state')?.value"
-                                [readonly]="isGstinValid"
+                                [readonly]="disabledState"
                                 [defaultValue]="selectedState"
-                                (selectedOption)="selectedStateCode = $event.value"
-                                [ngClass]="{ 'readonly-field': isGstinValid && secondStepForm.get('gstin')?.value }"
+                                (selectedOption)="selectState($event)"
+                                [ngClass]="{ 'readonly-field': disabledState }"
                             >
                             </dropdown-field>
                         </div>
