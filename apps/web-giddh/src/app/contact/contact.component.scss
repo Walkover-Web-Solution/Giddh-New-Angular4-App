@@ -414,8 +414,9 @@ button.btn.btn-filter {
 .btn-small {
     box-shadow: none !important;
 }
-button.btn.btn-filter span.icon-cross {
-    margin-right: 5px;
+
+.icon-cross {
+    line-height: 32px;
 }
 
 .customer-form-inline {

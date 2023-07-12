@@ -96,6 +96,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public removeGroupSuccess$: Observable<any>;
     /** True if get branches api has initiated once */
     private getBranchesInitiated: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private store: Store<AppState>,
@@ -129,6 +131,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
+
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        if (this.voucherApiVersion === 2) {
+            document.querySelector("body")?.classList?.add("inventory-v2");
+        }
+
         this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches], (companies, branches) => {
             if (branches) {
                 if (branches.length) {
@@ -208,6 +216,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnDestroy() {
+        if (this.voucherApiVersion === 2) {
+            document.querySelector("body")?.classList?.remove("inventory-v2");
+        }
         this.store.dispatch(this._inventoryAction.ResetInventoryState());
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -482,18 +493,18 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {boolean} event
      * @memberof InventoryComponent
      */
-     public getPageHeading(): string {
-        if(this.isMobileView){
-            if(this.activeTabIndex === 0) {
+    public getPageHeading(): string {
+        if (this.isMobileView) {
+            if (this.activeTabIndex === 0) {
                 return "Inventory";
             }
-            else if(this.activeTabIndex === 1) {
+            else if (this.activeTabIndex === 1) {
                 return "Job Work";
             }
-            else if(this.activeTabIndex === 2) {
+            else if (this.activeTabIndex === 2) {
                 return "Manufacturing";
             }
-            else if(this.activeTabIndex === 3) {
+            else if (this.activeTabIndex === 3) {
                 return "Report";
             }
         }

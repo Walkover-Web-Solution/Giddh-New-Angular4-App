@@ -1805,16 +1805,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     private saveLastState(): void {
         let companyUniqueName = null;
-
         let lastState = this.router.url;
-
         lastState = lastState?.replace("/pages", "pages");
         this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = decodeURI(lastState);
-        console.log(lastState);
-
         if (lastState !== 'pages/new-company') {
             this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
         }
