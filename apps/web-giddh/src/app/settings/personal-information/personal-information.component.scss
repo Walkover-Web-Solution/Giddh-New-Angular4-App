@@ -60,3 +60,10 @@
         margin-top: 5px;
     }
 }
+.unique-name,
+.country-name {
+    .view-txt {
+        display: flex;
+        justify-content: flex-end;
+    }
+}

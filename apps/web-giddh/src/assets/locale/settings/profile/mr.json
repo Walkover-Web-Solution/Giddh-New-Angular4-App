@@ -53,5 +53,6 @@
 	"language": "भाषा",
 	"select_language": "भाषा निवडा",
     "theme": "थीम",
-    "select_theme": "थीम निवडा"
+    "select_theme": "थीम निवडा",
+	"select_inventory": "यादीचा प्रकार निवडा"
 }

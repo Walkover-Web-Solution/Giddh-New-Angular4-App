@@ -53,5 +53,6 @@
 	"language": "भाषा",
 	"select_language": "भाषा का चयन करें",
     "theme": "थीम",
-    "select_theme": "थीम का चयन करें"
+    "select_theme": "थीम का चयन करें",
+	"select_inventory": "इन्वेंटरी प्रकार का चयन करें"
 }

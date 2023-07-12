@@ -1,5 +1,6 @@
 .mat-tab-label {
     opacity: 1 !important;
+    height: 35px !important;
     .mat-tab-label-content {
         color: var(--color-tab-primary-inactive);
     }
@@ -13,6 +14,22 @@
     &.mat-primary {
         .mat-ink-bar {
             background-color: var(--color-tab-primary-selected-tab-bottom-border) !important;
+        }
+    }
+}
+body {
+    &.on-setting-page,
+    &.aside-menu-product-service-page {
+        .cdk-overlay-pane {
+            transform: unset !important;
+        }
+        .mat-dialog-container {
+            border-radius: unset !important;
+        }
+    }
+    create-address {
+        .mat-dialog-content {
+            overflow: inherit;
         }
     }
 }

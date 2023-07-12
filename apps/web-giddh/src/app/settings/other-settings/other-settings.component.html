@@ -25,7 +25,7 @@
                 <div class="form-group row">
                     <div class="col-md-12 col-lg-6 col-12">
                         <div class="row">
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6 pd-r05">
                                 <div class="form-group">
                                     <dropdown-field
                                         [label]="localeData?.digits_after_decimal"
@@ -40,7 +40,7 @@
                                     ></dropdown-field>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6 pd-l05">
                                 <div class="form-group">
                                     <dropdown-field
                                         [label]="localeData?.number_system_label"
@@ -55,22 +55,7 @@
                                     ></dropdown-field>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-6">
-                                <div class="form-group">
-                                    <label>{{ localeData?.inventory_type }}</label>
-                                    <div class="mr-t1">
-                                        <mat-radio-group class="d-flex mb-2" name="radio-group">
-                                            <mat-radio-button color="primary" id="radio-1" [value]="'product'">
-                                                {{ commonLocaleData?.app_product }}
-                                            </mat-radio-button>
-                                            <mat-radio-button color="primary" id="radio-2" [value]="'service'">
-                                                {{ commonLocaleData?.app_service }}
-                                            </mat-radio-button>
-                                        </mat-radio-group>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6 pd-r05">
                                 <div class="form-group">
                                     <dropdown-field
                                         [label]="localeData?.language"
@@ -83,7 +68,7 @@
                                     ></dropdown-field>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6 pd-l05">
                                 <div class="form-group">
                                     <dropdown-field
                                         [label]="localeData?.theme"
@@ -94,6 +79,17 @@
                                         [isFilterEnabled]="true"
                                         [name]="'activeTheme'"
                                     ></dropdown-field>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 pd-r05">
+                                <div class="form-group">
+                                    <dropdown-field
+                                        [label]="localeData?.inventory_type"
+                                        [name]="radio - group"
+                                        [placeholder]="localeData?.select_inventory"
+                                        [options]="inventoryType"
+                                    >
+                                    </dropdown-field>
                                 </div>
                             </div>
                         </div>

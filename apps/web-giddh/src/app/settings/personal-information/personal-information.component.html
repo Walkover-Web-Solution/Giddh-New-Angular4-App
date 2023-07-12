@@ -2,7 +2,7 @@
     <div class="row mr-0">
         <div class="col-md-12 mr-t2 border-bottom pd-b15">
             <div class="row pd-b1">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-lg-4 col-xl-3">
+                <div class="col-md-12 col-sm-12 col-lg-5 col-xl-4">
                     <div class="form-group mb-0">
                         <input-field
                             *ngIf="organizationType === 'COMPANY'"
@@ -26,18 +26,18 @@
                 </div>
             </div>
             <div class="row pd-b1 unique-name">
-                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2">
+                <div class="col-md-6 col-sm-12 col-lg-2 col-xl-1">
                     <label class="font-15">{{ commonLocaleData?.app_unique_name }}:</label>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
+                <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 view-txt">
                     <div class="font-15">{{ profileData?.uniqueName }}</div>
                 </div>
             </div>
             <div *ngIf="organizationType === 'BRANCH'" class="row pb-1 parent-name">
-                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2">
+                <div class="col-md-6 col-sm-12 col-lg-2 col-xl-1">
                     <label class="font-15">{{ localeData?.parent }}:</label>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
+                <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3">
                     <div *ngIf="profileData?.parent?.name" class="font-15">
                         {{ profileData?.parent?.name }} ({{ profileData?.parent?.businessType }})
                     </div>
@@ -45,10 +45,10 @@
                 </div>
             </div>
             <div class="row country-name">
-                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2">
+                <div class="col-md-6 col-sm-12 col-lg-2 col-xl-2">
                     <label class="font-15">{{ localeData?.country_currency }}:</label>
                 </div>
-                <div class="country-info col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
+                <div class="country-info col-md-6 col-sm-12 col-lg-3 col-xl-2 view-txt">
                     <img
                         class="country-flag"
                         *ngIf="profileData?.country?.countryCode"
@@ -66,7 +66,7 @@
     </div>
     <div class="personal-other-details">
         <div class="row mr-0" *ngIf="organizationType === 'COMPANY'">
-            <div class="col-md-4 col-lg-4 col-xl-3 mt-3">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 pd-r05">
                 <div class="form-group">
                     <dropdown-field
                         [readonly]="true"
@@ -83,7 +83,7 @@
                     </dropdown-field>
                 </div>
             </div>
-            <div class="col-md-4 col-lg-4 col-xl-3 mt-3">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 pd-l05 pd-r05">
                 <div class="form-group">
                     <input-field
                         [label]="localeData?.company_alias"
@@ -94,7 +94,7 @@
                     ></input-field>
                 </div>
             </div>
-            <div class="col-md-4 col-lg-4 col-xl-3 mt-3">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 pd-l05">
                 <div class="form-group">
                     <input-field
                         [label]="localeData?.headquarter_name"

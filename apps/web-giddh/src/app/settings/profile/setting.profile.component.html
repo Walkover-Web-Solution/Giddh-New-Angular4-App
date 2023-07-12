@@ -78,7 +78,7 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <mat-tab-group mat-align-tabs="start">
+                <mat-tab-group mat-align-tabs="start" animationDuration="0ms">
                     <mat-tab
                         [id]="currentTab === 'personal' ? 'giddh-page-heading' : ''"
                         [label]="personalInformationTabHeading"
@@ -101,7 +101,6 @@
                         [id]="currentTab === 'address' ? 'giddh-page-heading' : ''"
                     >
                         <address-settings
-                            *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'address'"
                             [addresses]="addresses"
                             [(isAddressChangeInProgress)]="isAddressChangeInProgress"
                             [(closeSidePane)]="closeAddressSidePane"

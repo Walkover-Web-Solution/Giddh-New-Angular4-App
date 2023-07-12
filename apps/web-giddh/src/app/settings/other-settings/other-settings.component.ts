@@ -17,7 +17,6 @@ import { OrganizationProfile } from '../constants/settings.constant';
     styleUrls: ['./other-settings.component.scss']
 })
 export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
-
     /** Stores the company number system */
     public numberSystemSource: IOption[] = [];
     /** Stores the company decimal system */
@@ -69,6 +68,8 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public showLanguageChangeMessage: boolean = false;
     /** List of available themes */
     public availableThemes: IOption[] = [];
+    /** Stores the company decimal system */
+    public inventoryType: IOption[] = [];
     /** This holds the active theme */
     public activeTheme: string = "";
 
