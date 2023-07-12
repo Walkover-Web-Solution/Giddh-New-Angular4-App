@@ -9,7 +9,14 @@
         <div>
             <p class="text-center p-3">{{ localeData?.create_company_note }}</p>
         </div>
-        <mat-stepper linear #stepper [formGroup]="companyForm" name="companyForm" [selectedIndex]="selectedStep">
+        <mat-stepper
+            linear
+            #stepper
+            [formGroup]="companyForm"
+            name="companyForm"
+            [selectedIndex]="selectedStep"
+            (selectionChange)="onSelectedTab($event)"
+        >
             <mat-step [stepControl]="firstStepForm">
                 <form [formGroup]="firstStepForm" name="firstStepForm" autocomplete="off" novalidate>
                     <ng-template matStepLabel>{{ commonLocaleData?.app_company_name }}</ng-template>

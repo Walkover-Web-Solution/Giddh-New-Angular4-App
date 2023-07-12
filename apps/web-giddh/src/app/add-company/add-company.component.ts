@@ -453,6 +453,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     }
 
     /**
+     * This will use for selected tab index
+     *
+     * @param {*} event
+     * @memberof AddCompanyComponent
+     */
+    public onSelectedTab(event: any): void {
+        this.selectedStep = event?.selectedIndex;
+    }
+
+    /**
      * This will use for select country
      *
      * @param {*} event
@@ -481,22 +491,18 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                 const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
                 let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
                 if (input) {
-                    if (phoneNumber?.length) {
-                        if (this.intl?.isValidNumber()) {
-                            validMsg?.classList?.remove("d-none");
-                            this.isMobileNumberInvalid = false;
-                        } else {
-                            input?.classList?.add("error");
-                            this.isMobileNumberInvalid = true;
-                            let errorCode = this.intl?.getValidationError();
-                            if (errorMsg && errorMap[errorCode]) {
-                                this.toaster.showSnackBar("error", this.localeData?.invalid_contact_number);
-                                errorMsg.innerHTML = errorMap[errorCode];
-                                errorMsg.classList.remove("d-none");
-                            }
-                        }
-                    } else {
+                    if (this.intl?.isValidNumber()) {
+                        validMsg?.classList?.remove("d-none");
                         this.isMobileNumberInvalid = false;
+                    } else {
+                        input?.classList?.add("error");
+                        this.isMobileNumberInvalid = true;
+                        let errorCode = this.intl?.getValidationError();
+                        if (errorMsg && errorMap[errorCode]) {
+                            this.toaster.showSnackBar("error", this.localeData?.invalid_contact_number);
+                            errorMsg.innerHTML = errorMap[errorCode];
+                            errorMsg.classList.remove("d-none");
+                        }
                     }
                 }
             }
