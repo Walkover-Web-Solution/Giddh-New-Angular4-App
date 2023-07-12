@@ -701,7 +701,7 @@
     },
     "app_unsaved_changes": {
         "title": "Leave page with unsaved changes?",
-        "content": "You have unsaved changes. Do you want to save and leave this page?",
+        "content": "You have unsaved changes. Do you want to leave this page?",
         "no": "Stay",
         "yes": "Leave page"
     }
