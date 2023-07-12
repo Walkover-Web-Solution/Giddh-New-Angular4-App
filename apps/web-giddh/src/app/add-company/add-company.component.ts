@@ -473,6 +473,34 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             this.company.baseCurrency = event?.additional?.currency?.code;
             this.firstStepForm.controls['currency'].setValue({ label: event?.additional?.currency?.code, value: event?.additional?.currency?.code });
             this.intl?.setCountry(event.value?.toLowerCase());
+
+            let phoneNumber = this.intl?.getNumber();
+            if (phoneNumber?.length) {
+                let input = document.getElementById('init-contact-proforma');
+                const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
+                const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
+                let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
+                if (input) {
+                    if (phoneNumber?.length) {
+                        if (this.intl?.isValidNumber()) {
+                            validMsg?.classList?.remove("d-none");
+                            this.isMobileNumberInvalid = false;
+                        } else {
+                            input?.classList?.add("error");
+                            this.isMobileNumberInvalid = true;
+                            let errorCode = this.intl?.getValidationError();
+                            if (errorMsg && errorMap[errorCode]) {
+                                this.toaster.showSnackBar("error", this.localeData?.invalid_contact_number);
+                                errorMsg.innerHTML = errorMap[errorCode];
+                                errorMsg.classList.remove("d-none");
+                            }
+                        }
+                    } else {
+                        this.isMobileNumberInvalid = false;
+                    }
+                }
+            }
+
             let onboardingFormRequest = new OnboardingFormRequest();
             if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
                 onboardingFormRequest.formName = this.itemOnBoardingDetails.onBoardingType?.toLowerCase();
@@ -775,6 +803,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                     this.secondStepForm.get('state').setValidators(Validators.required);
                 }
                 this.secondStepForm.get('address').setValidators(Validators.required);
+            } else {
+                this.secondStepForm.get('gstin')?.setValue('');
+                this.isGstinValid = false;
+                this.selectedState = '';
             }
             this.secondStepForm.get('gstin')?.updateValueAndValidity();
             this.secondStepForm.get('address')?.updateValueAndValidity();
