@@ -892,7 +892,7 @@ aside-create-group {
 
         .mat-grid-tile {
             height: 100%;
-            min-height: 670px;
+            min-height: calc(100vh - 115px);
         }
         .inventory-sub-sideabar {
             .item-list {
@@ -925,7 +925,8 @@ aside-create-group {
             }
         }
         .cdk-virtual-scroll-viewport {
-            height: calc(100vh) !important;
+            height: 100% !important;
+            min-height: calc(100vh - 188px);
         }
     }
 
@@ -971,6 +972,9 @@ aside-create-group {
             &.map-item {
                 .mat-list-item-content {
                     justify-content: flex-end;
+                }
+                &.mat-gap {
+                    padding-right: 15px;
                 }
             }
 
@@ -3328,6 +3332,10 @@ input[type="checkbox"]:checked:after {
 
 .font-12 {
     font-size: var(--font-size-12) !important;
+}
+
+.font-14 {
+    font-size: var(--font-size-14);
 }
 
 .font-15 {
