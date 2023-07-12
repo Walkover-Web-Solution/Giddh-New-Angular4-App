@@ -22,7 +22,9 @@
             </div>
             <button
                 type="button"
-                class="btn btn-sky-blue mr-0"
+                mat-stroked-button
+                color="primary"
+                class="mr-0"
                 (click)="downloadReport()"
                 [disabled]="isLoading || !fromDate || !toDate || !downloadRequest.companyUniqueName"
             >

@@ -7,9 +7,9 @@
                         class="linked-entities"
                         *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
                     >
-                        <label class="d-block">{{ commonLocaleData?.app_select_entity }}</label>
+                        <!-- <label class="d-block">{{ commonLocaleData?.app_select_entity }}</label> -->
                         <div class="form-group">
-                            <sh-select
+                            <!-- <sh-select
                                 [options]="currentCompanyBranches"
                                 name="entity"
                                 [(ngModel)]="currentBranch.uniqueName"
@@ -48,13 +48,21 @@
                                         </a>
                                     </ng-container>
                                 </ng-template>
-                            </sh-select>
+                            </sh-select> -->
+                            <dropdown-field
+                                class="entity-dropdown"
+                                [options]="currentCompanyBranches"
+                                [name]="'entity'"
+                                (selectedOption)="handleBranchChange($event)"
+                                [placeholder]="commonLocaleData?.app_select_entity"
+                                [label]="commonLocaleData?.app_select_entity"
+                            >
+                            </dropdown-field>
                         </div>
                     </div>
                 </div>
-                <div class="form-group select-group mr-r15">
-                    <label class="d-block">{{ localeData?.select_groups_label }}</label>
-                    <sh-select
+                <div class="mr-r15">
+                    <!-- <sh-select
                         [options]="searchedGroups"
                         name="groups"
                         [(ngModel)]="groupName"
@@ -71,11 +79,20 @@
                         (scrollEnd)="handleGroupScrollEnd()"
                         (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
                     >
-                    </sh-select>
+                    </sh-select>-->
+                    <dropdown-field
+                        [options]="searchedGroups"
+                        [name]="'groups'"
+                        (selectedOption)="onSelectGroup($event)"
+                        [required]="true"
+                        [placeholder]="localeData?.select_groups_placeholder"
+                        [label]="localeData?.select_groups_label"
+                    >
+                    </dropdown-field>
                 </div>
                 <div class="form-group mr-r15">
-                    <label>{{ localeData?.from_to }}</label>
-                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                    <!-- <label>{{ localeData?.from_to }}</label> -->
+                    <div class="custom-datepicker custom-new-datepicker" (click)="showGiddhDatepicker($event)">
                         <input
                             type="text"
                             name="selectedDateRange"
@@ -111,22 +128,17 @@
             </div>
         </div> -->
                 <div>
-                    <label>&nbsp;</label>
                     <button
                         [disabled]="search.invalid"
-                        class="btn btn-sm btn-success"
+                        mat-stroked-button
+                        color="primary"
                         (click)="getClosingBalance(false, $event)"
                     >
                         {{ commonLocaleData?.app_search }}
                     </button>
                 </div>
                 <div>
-                    <label>&nbsp;</label>
-                    <button
-                        [disabled]="search.invalid"
-                        class="btn btn-sm btn-default"
-                        (click)="getClosingBalance(true, $event)"
-                    >
+                    <button [disabled]="search.invalid" mat-stroked-button (click)="getClosingBalance(true, $event)">
                         {{ commonLocaleData?.app_refresh }}
                     </button>
                 </div>
