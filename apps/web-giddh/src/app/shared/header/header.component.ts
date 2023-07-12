@@ -1795,6 +1795,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = decodeURI(lastState);
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+        if (lastState !== 'pages/new-company') {
+            this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+        }
     }
 }
