@@ -51,7 +51,9 @@
                         <span class="option-value" *ngIf="showValueInLabel">{{ option.additional?.uniqueName }}</span>
                     </ng-container>
                 </mat-option>
-                <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
+                <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">{{
+                    noResultsFoundMessage ? noResultsFoundMessage : commonLocaleData?.app_no_result_found
+                }}</mat-option>
                 <mat-option
                     value=""
                     *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew"
@@ -105,7 +107,9 @@
                                 }}</span>
                             </ng-container>
                         </mat-option>
-                        <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
+                        <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">{{
+                            noResultsFoundMessage ? noResultsFoundMessage : commonLocaleData?.app_no_result_found
+                        }}</mat-option>
                         <mat-option
                             value=""
                             *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew"

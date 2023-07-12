@@ -79,6 +79,7 @@ import { ManufacturingModule } from "../manufacturing/manufacturing.module";
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
     declarations: [
@@ -162,7 +163,8 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
         RecipeModule,
         ManufacturingModule,
         SelectTableColumnModule,
-        ScrollingModule
+        ScrollingModule,
+        FormsModule
     ],
     exports: [
         NewInventoryComponent,

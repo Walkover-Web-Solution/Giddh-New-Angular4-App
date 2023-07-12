@@ -64,17 +64,15 @@
                     <!-- <button mat-stroked-button color="primary" (click)="createGroupToggleAsidePane()">
                         Create Group
                     </button> -->
-                    <button mat-stroked-button color="primary" (click)="createUnitToggleAsidePane()">
-                        Create Unit
-                    </button>
+                    <button mat-stroked-button color="primary" (click)="openCreateUnitModal()">Create Unit</button>
                 </div>
             </mat-grid-tile>
         </mat-grid-list>
     </div>
 </div>
-<div class="aside-overlay" *ngIf="asideCreateUnitMenuState === 'in' || asideCreateGroupMenuState === 'in'"></div>
-<aside-create-unit *ngIf="asideCreateUnitMenuState === 'in'" (closeAsideEvent)="createUnitToggleAsidePane()">
-</aside-create-unit>
+<ng-template #createUnit>
+    <aside-create-unit (closeAsideEvent)="closeCreateUnitModal($event)"></aside-create-unit>
+</ng-template>
 <!-- <aside-create-group
     *ngIf="asideCreateGroupMenuState === 'in'"
     (closeAsideEvent)="createGroupToggleAsidePane()"

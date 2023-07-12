@@ -12,10 +12,12 @@ export class AsideCreateNewUnitComponent implements OnInit {
     public asideMenuState: string = 'out';
 
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    public closeAsidePane(event?) {
-        this.closeAsideEvent.emit();
-    }
+    
     public ngOnInit() {
 
+    }
+
+    public closeAsidePane(event: any) {
+        this.closeAsideEvent.emit(event);
     }
 }
