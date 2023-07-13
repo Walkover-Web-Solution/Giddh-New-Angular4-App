@@ -505,12 +505,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 name: [''],
                 stateGstCode: ['']
             }),
-            stateCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
+            stateCode: [{ value: '', disabled: false }, (this.isStateRequired && !this.countyList?.length) ? Validators.required : ""],
             county: this._fb.group({
                 code: [''],
                 name: ['']
             }),
-            countyCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
+            countyCode: [{ value: '', disabled: false }, (this.isStateRequired && this.countyList?.length) ? Validators.required : ""],
             isDefault: [false],
             isComposite: [false],
             partyType: ['NOT APPLICABLE'],
@@ -969,6 +969,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         return { label: county.name, value: county.code };
                     });
                 }
+
+                this.toggleStateRequired();
             } else {
                 let statesRequest = new StatesRequest();
                 statesRequest.country = countryCode;

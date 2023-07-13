@@ -479,7 +479,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      */
     public selectCountry(event: any): void {
         if (event?.value) {
+            this.secondStepForm.get('gstin')?.setValue('');
+            this.secondStepForm.get('state')?.setValue('');
+            this.selectedState = "";
+            this.selectedStateCode = "";
+            this.disabledState = false;
             this.businessTypeList = [];
+            
             if (!this.registeredTypeCountryList.includes(event.value)) {
                 this.isOtherCountry = true;
                 this.secondStepForm.controls['businessType'].setValue(this.businessTypes.Unregistered);
