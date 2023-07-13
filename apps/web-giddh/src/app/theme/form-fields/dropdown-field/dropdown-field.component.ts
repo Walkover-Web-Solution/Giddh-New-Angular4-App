@@ -59,6 +59,16 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     @Input() public hasMoreValue: boolean = false;
     /** True if we need to scroll element by id */
     @Input() public scrollableElementId = '';
+    /** Allow custom dropdown value */
+    @Input() public allowCustomDropdownValue: any = '';
+    /** No results found message */
+    @Input() public noResultsFoundMessage: string = '';
+    /** Holds appearance of dropdown field */
+    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
+    /** Holds Mat Input Label */
+    @Input() public label: string;
+    /** Adds red border around field if true */
+    @Input() public showError: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -79,12 +89,6 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Holds appearance of dropdown field */
-    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
-    /** Holds Mat Input Label */
-    @Input() public label: string;
-    /** Adds red border around field if true */
-    @Input() public showError: boolean = false;
 
     constructor(private cdr: ChangeDetectorRef
     ) {
@@ -262,6 +266,11 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
             if (!this.searchFormControl?.value && !this.defaultValue) {
                 this.selectedValue = "";
                 this.selectedOption.emit({ label: '', value: '' });
+            }
+
+            if (this.allowCustomDropdownValue && this.searchFormControl?.value && typeof this.searchFormControl?.value !== "object") {
+                this.selectedValue = this.searchFormControl?.value;
+                this.selectedOption.emit({ label: this.searchFormControl?.value, value: this.searchFormControl?.value });
             }
         }, 200);
     }

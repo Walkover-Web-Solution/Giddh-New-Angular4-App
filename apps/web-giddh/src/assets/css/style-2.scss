@@ -906,7 +906,7 @@ aside-create-group {
 
         .mat-grid-tile {
             height: 100%;
-            min-height: 670px;
+            min-height: calc(100vh - 115px);
         }
         .inventory-sub-sideabar {
             .item-list {
@@ -933,10 +933,19 @@ aside-create-group {
             }
         }
         mat-grid-list {
-            height: calc(100vh - 120px) !important;
+            height: 100% !important;
             mat-grid-tile {
                 height: 100% !important;
+                &.form-btn {
+                    .mat-grid-tile-content {
+                        overflow-y: scroll;
+                    }
+                }
             }
+        }
+        .cdk-virtual-scroll-viewport {
+            height: 100% !important;
+            min-height: calc(100vh - 188px);
         }
     }
 
@@ -982,6 +991,9 @@ aside-create-group {
             &.map-item {
                 .mat-list-item-content {
                     justify-content: flex-end;
+                }
+                &.mat-gap {
+                    padding-right: 15px;
                 }
             }
 
@@ -1323,7 +1335,6 @@ input {
 
 // Mat Divider
 .mat-divider {
-    border-top-width: 2px !important;
     border-top-color: var(--color-primary-mat-divider);
 }
 

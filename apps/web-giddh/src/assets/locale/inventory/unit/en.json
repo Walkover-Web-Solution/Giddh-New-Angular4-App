@@ -1,0 +1,15 @@
+{
+    "unit_updated" : "Unit updated successfully.",
+    "unit_created" : "Unit created successfully.",
+    "unit_deleted" : "Unit deleted successfully.",
+    "delete_message" : "Do you want to delete the unit?",
+    "select_unit": "Select Unit",
+    "create_unit": "Type to create custom unit",
+    "code": "Code",
+    "enter_code": "Enter Code",
+    "parent_unit": "Parent Unit",
+    "select_parent_unit": "Select Parent Unit",
+    "enter_quantity": "Enter Quantity",
+    "mapped_unit": "Mapped",
+    "add_new":"+ Add New"
+}
