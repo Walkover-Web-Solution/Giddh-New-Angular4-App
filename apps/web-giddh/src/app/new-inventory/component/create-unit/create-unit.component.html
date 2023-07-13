@@ -36,7 +36,7 @@
             </div>
             <div class="unit-quantity" formArrayName="mappings">
                 <div
-                    class="row mr-b15"
+                    class="row mr-b15 align-items-center"
                     *ngFor="let mapping of unitForm?.get('mappings')['controls']; let i = index"
                     [formGroupName]="i"
                 >
@@ -93,53 +93,55 @@
                                 >
                                     <i class="icon-trash delete"></i>
                                 </button>
-                                <button
-                                    class="btn mr-0"
-                                    (click)="addNewMappedUnit()"
-                                    [style.visibility]="
-                                        unitForm?.get('mappings')['controls']?.length - 1 === i ? 'visible' : 'hidden'
-                                    "
-                                >
-                                    {{ localeData?.add_new }}
-                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <button class="btn mr-0 add-new" (click)="addNewMappedUnit()">
+                            {{ localeData?.add_new }}
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="row mt-4">
-                <div class="col-sm-12">
+                <div class="col-sm-4">
                     <button mat-stroked-button color="primary" type="button" (click)="saveUnit()">
                         {{ commonLocaleData?.app_save }}
                     </button>
-                    <button
-                        mat-stroked-button
-                        type="button"
-                        class="btn-sm"
-                        (click)="resetForm()"
-                        *ngIf="!unitDetails?.uniqueName"
-                    >
-                        {{ commonLocaleData?.app_clear }}
-                    </button>
-                    <button
-                        mat-stroked-button
-                        type="button"
-                        class="btn-sm"
-                        (click)="closeAsideEvent.emit(false)"
-                        *ngIf="unitDetails?.uniqueName"
-                    >
-                        {{ commonLocaleData?.app_close }}
-                    </button>
-                    <button
-                        mat-stroked-button
-                        color="warn"
-                        type="button"
-                        class="btn-sm"
-                        (click)="deleteUnit()"
-                        *ngIf="unitDetails?.uniqueName"
-                    >
-                        {{ commonLocaleData?.app_delete }}
-                    </button>
+                </div>
+                <div class="col-lg-8">
+                    <div class="pull-right">
+                        <button
+                            mat-stroked-button
+                            type="button"
+                            class="btn-sm"
+                            (click)="resetForm()"
+                            *ngIf="!unitDetails?.uniqueName"
+                        >
+                            {{ commonLocaleData?.app_clear }}
+                        </button>
+                        <button
+                            mat-stroked-button
+                            type="button"
+                            class="btn-sm"
+                            (click)="closeAsideEvent.emit(false)"
+                            *ngIf="unitDetails?.uniqueName"
+                        >
+                            {{ commonLocaleData?.app_close }}
+                        </button>
+                        <button
+                            mat-stroked-button
+                            color="warn"
+                            type="button"
+                            class="btn-sm mr-0"
+                            (click)="deleteUnit()"
+                            *ngIf="unitDetails?.uniqueName"
+                        >
+                            {{ commonLocaleData?.app_delete }}
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>
