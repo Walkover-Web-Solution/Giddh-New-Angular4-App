@@ -27,7 +27,8 @@ export class PageLeaveUtilityService {
                 cancel: this.localeService.translate("app_unsaved_changes.no"),
                 permanentlyDeleteMessage: ' '
             },
-            panelClass: 'page-leave-confirmation-modal'
+            panelClass: 'page-leave-confirmation-modal',
+            width: '585px'
         });
 
         document.querySelector("body").setAttribute("onbeforeunload", "return 'true';");

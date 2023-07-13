@@ -215,6 +215,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * @memberof ManageGroupsAccountsComponent
      */
     private closePopup(): void {
+        document.querySelector('body')?.classList?.remove('master-page');
         this.store.dispatch(this.generalAction.addAndManageClosed());
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
         this.closeEvent.emit(true);
@@ -284,5 +285,15 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                 callback();
             }
         });
+    }
+
+    /**
+     * Closes modal if escape is pressed
+     *
+     * @memberof ManageGroupsAccountsComponent
+     */
+    @HostListener("document:keyup.esc", ['$event'])
+    public onPressEscape(): void {
+        this.closePopupEvent();
     }
 }

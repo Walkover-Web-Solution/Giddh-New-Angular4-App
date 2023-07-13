@@ -10112,6 +10112,15 @@ giddh-datepicker {
     z-index: 9999;
 }
 
+body {
+    &.page-leave-confirmation-modal-wrapper {
+        .cdk-overlay-container,
+        .cdk-global-overlay-wrapper {
+            z-index: 99999 !important;
+        }
+    }
+}
+
 .cdk-overlay-connected-position-bounding-box {
     z-index: 9999;
 }
