@@ -1,86 +1,92 @@
-<div class="mat-grid-wrapper">
-    <div class="mat-list-wrap">
-        <mat-grid-list cols="8" rowHeight="500px">
-            <!-- <mat-grid-tile [colspan]="2" class="border-grid">
-                <mat-list class="item-list">
-                    <strong class="pb-2 list-font">Group</strong>
-                    <mat-divider></mat-divider>
-                    <mat-list-item class="items">
-                        <a href="javascript:void(0);">Item 1</a>
-                    </mat-list-item>
-                    <mat-divider></mat-divider>
-                    <mat-list-item class="items">
-                        <a href="javascript:void(0);">Item 2</a>
-                    </mat-list-item>
-                    <mat-divider></mat-divider>
-                    <mat-list-item class="items">
-                        <a href="javascript:void(0);"> Item 3</a>
-                    </mat-list-item>
-                </mat-list>
-            </mat-grid-tile> -->
-            <mat-grid-tile [colspan]="3" class="border-grid">
-                <mat-list class="item-list">
-                    <strong class="pb-2 list-font">Unit</strong>
-                    <mat-divider></mat-divider>
-                    <mat-list role="list" class="list-head">
+<ng-container
+    appTranslate
+    [file]="'inventory/unit'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <div class="mat-grid-wrapper">
+        <div class="mat-list-wrap">
+            <mat-grid-list cols="8" rowHeight="500px">
+                <!-- <mat-grid-tile [colspan]="2" class="border-grid">
+                    <mat-list class="item-list">
+                        <strong class="pb-2 list-font">Group</strong>
+                        <mat-divider></mat-divider>
                         <mat-list-item class="items">
-                            <strong>Name</strong>
+                            <a href="javascript:void(0);">Item 1</a>
                         </mat-list-item>
-                        <mat-list-item class="items map-item pd-r2">
-                            <strong>Mapped</strong>
+                        <mat-divider></mat-divider>
+                        <mat-list-item class="items">
+                            <a href="javascript:void(0);">Item 2</a>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item class="items">
+                            <a href="javascript:void(0);"> Item 3</a>
                         </mat-list-item>
                     </mat-list>
-                    <cdk-virtual-scroll-viewport
-                        class="virtual-group-list overflow-x-hidden"
-                        [itemSize]="38"
-                        [minBufferPx]="400"
-                        [maxBufferPx]="800"
-                    >
-                        <ng-container *cdkVirtualFor="let mapping of unitMappings">
-                            <mat-divider></mat-divider>
-                            <mat-list role="list" class="list-head" (click)="editUnit(mapping?.stockUnitX?.uniqueName)">
-                                <mat-list-item class="items">
-                                    <a href="javascript:void(0);"
-                                        >{{ mapping?.stockUnitX?.name }} ({{ mapping?.stockUnitX?.code }})</a
-                                    >
-                                </mat-list-item>
-                                <mat-list-item class="items map-item mat-gap">
-                                    <a href="javascript:void(0);"
-                                        >{{ mapping?.quantity }} {{ mapping?.stockUnitX?.name }} ({{
-                                            mapping?.stockUnitX?.code
-                                        }})</a
-                                    >
-                                </mat-list-item>
-                            </mat-list>
-                        </ng-container>
-                    </cdk-virtual-scroll-viewport>
-                </mat-list>
-            </mat-grid-tile>
-            <mat-grid-tile [colspan]="5" class="form-btn">
-                <div class="custom-form">
-                    <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
-                    <create-unit
-                        [style.visibility]="hasEditFormLoaded ? 'visible' : 'hidden'"
-                        *ngIf="!isLoading && unitDetails?.uniqueName"
-                        [unitDetails]="unitDetails"
-                        (closeAsideEvent)="closeUpdateUnit($event)"
-                        (formHasLoaded)="formHasLoaded($event)"
-                    ></create-unit>
-                </div>
-                <div class="create-btn-grp">
-                    <!-- <button mat-stroked-button color="primary" (click)="createGroupToggleAsidePane()">
-                        Create Group
-                    </button> -->
-                    <button mat-stroked-button color="primary" (click)="openCreateUnitModal()">Create Unit</button>
-                </div>
-            </mat-grid-tile>
-        </mat-grid-list>
+                </mat-grid-tile> -->
+                <mat-grid-tile [colspan]="3" class="border-grid">
+                    <mat-list class="item-list">
+                        <strong class="pb-2 list-font">{{ commonLocaleData?.app_unit }}</strong>
+                        <mat-divider></mat-divider>
+                        <mat-list role="list" class="list-head">
+                            <mat-list-item class="items">
+                                <strong>{{ commonLocaleData?.app_name }}</strong>
+                            </mat-list-item>
+                            <mat-list-item class="items map-item pd-r2">
+                                <strong>{{ localeData?.mapped_unit }}</strong>
+                            </mat-list-item>
+                        </mat-list>
+                        <cdk-virtual-scroll-viewport
+                            class="virtual-group-list overflow-x-hidden"
+                            [itemSize]="38"
+                            [minBufferPx]="400"
+                            [maxBufferPx]="800"
+                        >
+                            <ng-container *cdkVirtualFor="let mapping of unitMappings">
+                                <mat-divider></mat-divider>
+                                <mat-list
+                                    role="list"
+                                    class="list-head cursor-pointer"
+                                    (click)="editUnit(mapping?.stockUnitX?.uniqueName)"
+                                >
+                                    <mat-list-item class="items">
+                                        <a href="javascript:void(0);"
+                                            >{{ mapping?.stockUnitX?.name }} ({{ mapping?.stockUnitX?.code }})</a
+                                        >
+                                    </mat-list-item>
+                                    <mat-list-item class="items map-item mat-gap">
+                                        <a href="javascript:void(0);"
+                                            >{{ mapping?.quantity }} {{ mapping?.stockUnitX?.name }} ({{
+                                                mapping?.stockUnitX?.code
+                                            }})</a
+                                        >
+                                    </mat-list-item>
+                                </mat-list>
+                            </ng-container>
+                        </cdk-virtual-scroll-viewport>
+                    </mat-list>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="5" class="form-btn">
+                    <div class="custom-form">
+                        <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+                        <create-unit
+                            [style.visibility]="hasEditFormLoaded ? 'visible' : 'hidden'"
+                            *ngIf="!isLoading && unitDetails?.uniqueName"
+                            [unitDetails]="unitDetails"
+                            (closeAsideEvent)="closeUpdateUnit($event)"
+                            (formHasLoaded)="formHasLoaded()"
+                        ></create-unit>
+                    </div>
+                    <div class="create-btn-grp">
+                        <button mat-stroked-button color="primary" (click)="openCreateUnitModal()">
+                            {{ commonLocaleData?.app_create_unit }}
+                        </button>
+                    </div>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div>
     </div>
-</div>
+</ng-container>
 <ng-template #createUnit>
     <aside-create-unit (closeAsideEvent)="closeCreateUnitModal($event)"></aside-create-unit>
 </ng-template>
-<!-- <aside-create-group
-    *ngIf="asideCreateGroupMenuState === 'in'"
-    (closeAsideEvent)="createGroupToggleAsidePane()"
-></aside-create-group> -->

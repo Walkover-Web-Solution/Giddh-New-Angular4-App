@@ -11,13 +11,24 @@ import { ToasterService } from "../../../services/toaster.service";
     styleUrls: ["./custom-units.component.scss"]
 })
 export class CustomUnitsComponent implements OnInit, OnDestroy {
+    /** Instance of create unit component */
     @ViewChild("createUnit", { static: false }) public createUnit: any;
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds unit mappings */
     public unitMappings: any[] = [];
+    /** Modal instance */
     public matDialogRef: any;
+    /** Holds unit details */
     public unitDetails: any = {};
+    /** True if api call in progress */
     public isLoading: boolean = false;
+    /** Holds if edit form has data loaded */
     public hasEditFormLoaded: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /* Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private inventoryService: InventoryService,
@@ -27,18 +38,32 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * Lifecycle hook for init component
+     *
+     * @memberof CustomUnitsComponent
+     */
     public ngOnInit(): void {
         document.querySelector('body').classList.add('custom-units');
-
         this.getUnitMappings();
     }
 
+    /**
+     * Lifecycle hook for destroy component
+     *
+     * @memberof CustomUnitsComponent
+     */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('custom-units');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Opens create unit modal
+     *
+     * @memberof CustomUnitsComponent
+     */
     public openCreateUnitModal(): void {
         this.matDialogRef = this.dialog.open(this.createUnit, {
             width: '1000px',
@@ -49,6 +74,12 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Closes create unit modal
+     *
+     * @param {boolean} event
+     * @memberof CustomUnitsComponent
+     */
     public closeCreateUnitModal(event: boolean): void {
         this.matDialogRef?.close();
 
@@ -57,6 +88,11 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Get list of unit mappings
+     *
+     * @memberof CustomUnitsComponent
+     */
     public getUnitMappings(): void {
         this.unitMappings = [];
         this.inventoryService.getStockMappedUnit().pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -66,6 +102,12 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Get unit details to edit unit
+     *
+     * @param {string} uniqueName
+     * @memberof CustomUnitsComponent
+     */
     public editUnit(uniqueName: string): void {
         this.unitDetails = {};
         this.isLoading = true;
@@ -80,6 +122,12 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Closes update unit form
+     *
+     * @param {boolean} event
+     * @memberof CustomUnitsComponent
+     */
     public closeUpdateUnit(event: boolean): void {
         this.unitDetails = {};
 
@@ -88,7 +136,12 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
         }
     }
 
-    public formHasLoaded(event: any): void {
+    /**
+     * Callback to handle if form has loaded
+     *
+     * @memberof CustomUnitsComponent
+     */
+    public formHasLoaded(): void {
         this.hasEditFormLoaded = true;
     }
 }
