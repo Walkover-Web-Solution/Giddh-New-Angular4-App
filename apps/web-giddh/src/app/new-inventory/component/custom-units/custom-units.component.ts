@@ -42,10 +42,9 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
     public openCreateUnitModal(): void {
         this.matDialogRef = this.dialog.open(this.createUnit, {
             width: '1000px',
-            height: '100vh !important',
             position: {
                 right: '0',
-                top: '0'
+                top: '14px'
             }
         });
     }

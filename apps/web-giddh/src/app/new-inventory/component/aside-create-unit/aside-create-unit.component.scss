@@ -55,3 +55,6 @@
         display: flex;
     }
 }
+mat-dialog-content {
+    overflow: inherit !important;
+}
