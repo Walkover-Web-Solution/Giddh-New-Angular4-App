@@ -13,7 +13,7 @@
     "type": "प्रकार",
     "length": "लंबाई/सीमा",
     "add_new_row": "नई पंक्ति जोड़ें",
-    "field_type_placeholder": "फ़िल्टर करने के लिए टाइप करें",
+    "field_type_placeholder": "प्रकार चुनें",
     "modules": {
         "account": "खाता",
         "stock": "स्टॉक",
