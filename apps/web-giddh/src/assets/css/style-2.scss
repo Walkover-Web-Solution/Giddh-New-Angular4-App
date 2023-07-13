@@ -922,6 +922,11 @@ aside-create-group {
             height: 100% !important;
             mat-grid-tile {
                 height: 100% !important;
+                &.form-btn {
+                    .mat-grid-tile-content {
+                        overflow-y: scroll;
+                    }
+                }
             }
         }
         .cdk-virtual-scroll-viewport {
@@ -1316,7 +1321,6 @@ input {
 
 // Mat Divider
 .mat-divider {
-    border-top-width: 2px !important;
     border-top-color: var(--color-primary-mat-divider);
 }
 

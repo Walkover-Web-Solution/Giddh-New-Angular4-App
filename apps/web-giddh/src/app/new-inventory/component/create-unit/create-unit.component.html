@@ -85,7 +85,6 @@
                 <div class="inc-dec">
                     <div class="plus-minus">
                         <button
-                            mat-stroked-button
                             class="btn mr-0"
                             (click)="addNewMappedUnit()"
                             *ngIf="unitForm?.get('mappings')['controls']?.length - 1 === i"
@@ -93,7 +92,6 @@
                             <i class="icon-plus add-row"></i>
                         </button>
                         <button
-                            mat-stroked-button
                             class="btn mr-0"
                             *ngIf="unitForm?.get('mappings')['controls']?.length > 1"
                             (click)="removeMappedUnit(i)"
