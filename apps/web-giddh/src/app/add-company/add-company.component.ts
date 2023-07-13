@@ -186,6 +186,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     public countyList: IOption[] = [];
     /** List of registered business type countries */
     public registeredTypeCountryList: any[] = ["IN", "GB", "AE"];
+    /** This will hold disable State */
+    public disabledState: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -248,13 +250,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             }
         });
 
-        this.firstStepForm.controls['mobile']?.valueChanges?.pipe(debounceTime(700), distinctUntilChanged(isEqual)).subscribe(data => {
-            setTimeout(() => {
-                let currencyFlag = this.intl?.getSelectedCountryData();
-                this.currentFlag = currencyFlag?.iso2;
-                this.changeDetection.detectChanges();
-            }, 500);
-        });
 
         this.changeDetection.detectChanges();
     }
@@ -324,29 +319,38 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                 }
             } else {
                 isValid = true;
-                this.selectedState = '';
             }
 
-            if (this.formFields['taxName'] && !isValid) {
+            if (!isValid) {
                 let text = this.localeData?.invalid_tax;
                 text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
                 this.toaster.showSnackBar("error", text);
                 this.selectedState = '';
+                this.selectedStateCode = '';
+                this.isGstinValid = false;
+            } else {
+                this.isGstinValid = true;
             }
+        }
 
+        if (this.secondStepForm.get('gstin')?.value?.length >= 2) {
             this.states?.find((state) => {
                 let code = this.secondStepForm.get('gstin')?.value?.substr(0, 2);
-                if (state.stateGstCode == code) {
+                let matchCode = state.stateGstCode == code;
+                this.disabledState = false;
+                if (matchCode) {
+                    this.disabledState = true;
                     this.selectedState = state.label;
                     this.selectedStateCode = state.value;
                     this.secondStepForm.controls['state'].setValue({ label: state?.label, value: state?.value });
-                    this.isGstinValid = true;
                     return true;
                 }
             });
         } else {
+            this.disabledState = false;
             this.isGstinValid = false;
             this.selectedState = '';
+            this.selectedStateCode = '';
         }
         this.changeDetection.detectChanges();
     }
@@ -453,6 +457,21 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     }
 
     /**
+     * This will use for selected tab index
+     *
+     * @param {*} event
+     * @memberof AddCompanyComponent
+     */
+    public onSelectedTab(event: any): void {
+        this.selectedStep = event?.selectedIndex;
+        setTimeout(() => {
+            let currencyFlag = this.intl?.getSelectedCountryData();
+            this.currentFlag = currencyFlag?.iso2;
+            this.changeDetection.detectChanges();
+        }, 500);
+    }
+
+    /**
      * This will use for select country
      *
      * @param {*} event
@@ -473,6 +492,30 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             this.company.baseCurrency = event?.additional?.currency?.code;
             this.firstStepForm.controls['currency'].setValue({ label: event?.additional?.currency?.code, value: event?.additional?.currency?.code });
             this.intl?.setCountry(event.value?.toLowerCase());
+
+            let phoneNumber = this.intl?.getNumber();
+            if (phoneNumber?.length) {
+                let input = document.getElementById('init-contact-proforma');
+                const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
+                const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
+                let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
+                if (input) {
+                    if (this.intl?.isValidNumber()) {
+                        validMsg?.classList?.remove("d-none");
+                        this.setMobileNumberValid(true);
+                    } else {
+                        input?.classList?.add("error");
+                        this.setMobileNumberValid(false);
+                        let errorCode = this.intl?.getValidationError();
+                        if (errorMsg && errorMap[errorCode]) {
+                            this.toaster.showSnackBar("error", this.localeData?.invalid_contact_number);
+                            errorMsg.innerHTML = errorMap[errorCode];
+                            errorMsg.classList.remove("d-none");
+                        }
+                    }
+                }
+            }
+
             let onboardingFormRequest = new OnboardingFormRequest();
             if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
                 onboardingFormRequest.formName = this.itemOnBoardingDetails.onBoardingType?.toLowerCase();
@@ -564,10 +607,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                     if (phoneNumber?.length) {
                         if (this.intl?.isValidNumber()) {
                             validMsg?.classList?.remove("d-none");
-                            this.isMobileNumberInvalid = false;
+                            this.setMobileNumberValid(true);
                         } else {
                             input?.classList?.add("error");
-                            this.isMobileNumberInvalid = true;
+                            this.setMobileNumberValid(false);
                             let errorCode = this.intl?.getValidationError();
                             if (errorMsg && errorMap[errorCode]) {
                                 this.toaster.showSnackBar("error", this.localeData?.invalid_contact_number);
@@ -576,12 +619,23 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                             }
                         }
                     } else {
-                        this.isMobileNumberInvalid = false;
+                        this.setMobileNumberValid(true);
                     }
                 }
             });
         }
         this.changeDetection.detectChanges();
+    }
+
+    /**
+     * This will use for set mobile number validation.
+     *
+     * @param {boolean} value
+     * @memberof AddCompanyComponent
+     */
+    public setMobileNumberValid(value: boolean): void {
+        this.firstStepForm.controls['mobile'].setErrors(value ? null : { invalidMobileNumber: true });
+        this.isMobileNumberInvalid = !value;
     }
 
     /**
@@ -625,7 +679,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     private getRandomString(companyName: string, country: string): string {
         if (companyName) {
             let date, dateString, randomGenerate, strings;
-
             companyName = this.removeSpecialCharacters(companyName);
             country = this.removeSpecialCharacters(country);
             date = new Date();
@@ -702,6 +755,19 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
     }
 
     /**
+     * This will use for select state
+     *
+     * @param {*} event
+     * @memberof AddCompanyComponent
+     */
+    public selectState(event: any): void {
+        this.selectedStateCode = event?.value;
+        this.selectedState = event?.label;
+        this.secondStepForm.controls['state']?.setValue(this.selectedStateCode);
+        this.changeDetection.detectChanges();
+    }
+
+    /**
      * This will use for on submit company form
      *
      * @return {*}  {void}
@@ -709,7 +775,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      */
     public onSubmit(): void {
         this.isFormSubmitted = false;
-        if (this.companyForm.invalid) {
+        if (this.companyForm.invalid || !this.isGstinValid) {
             this.isFormSubmitted = true;
             return;
         }
@@ -775,6 +841,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                     this.secondStepForm.get('state').setValidators(Validators.required);
                 }
                 this.secondStepForm.get('address').setValidators(Validators.required);
+            } else {
+                this.secondStepForm.get('gstin')?.setValue('');
+                this.isGstinValid = false;
             }
             this.secondStepForm.get('gstin')?.updateValueAndValidity();
             this.secondStepForm.get('address')?.updateValueAndValidity();
