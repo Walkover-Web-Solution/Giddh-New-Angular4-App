@@ -844,6 +844,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             } else {
                 this.secondStepForm.get('gstin')?.setValue('');
                 this.isGstinValid = false;
+                this.disabledState = false;
             }
             this.secondStepForm.get('gstin')?.updateValueAndValidity();
             this.secondStepForm.get('address')?.updateValueAndValidity();
