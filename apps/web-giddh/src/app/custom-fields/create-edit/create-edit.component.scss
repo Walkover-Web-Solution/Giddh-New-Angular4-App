@@ -44,20 +44,6 @@
     }
 }
 
-.inventory-footer {
-    background-color: var(--color-secondary-footer-background);
-    z-index: 3;
-    width: calc(100% - 240px);
-    padding-right: 15px;
-    line-height: 1.8;
-    text-align: left;
-    min-height: 60px;
-    align-items: center;
-    display: flex;
-    position: static;
-    width: 100%;
-    padding-left: 15px;
-}
 
 @media (max-width: 767px) {
     .create-custom-field-page {
