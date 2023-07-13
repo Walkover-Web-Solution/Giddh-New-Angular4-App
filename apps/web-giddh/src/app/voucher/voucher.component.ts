@@ -3807,7 +3807,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public addBlankRow(txn: SalesTransactionItemClass) {
-        this.toggleAccountSelectionDropdown(true);
         if (!txn) {
             let entry: SalesEntryClass = new SalesEntryClass();
             if (this.isUpdateMode) {
