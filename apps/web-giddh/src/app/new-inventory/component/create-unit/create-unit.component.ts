@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { InventoryService } from '../../../services/inventory.service';
 import { ReplaySubject } from 'rxjs';
@@ -12,6 +12,7 @@ import { ToasterService } from '../../../services/toaster.service';
     styleUrls: ['./create-unit.component.scss']
 })
 export class CreateNewUnitComponent implements OnInit {
+    @Input() public unitDetails: any = {};
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     public unitList: any[] = [];
     /** Form Group for unit form */
@@ -40,24 +41,41 @@ export class CreateNewUnitComponent implements OnInit {
             mappings: this.formBuilder.array([]),
         });
 
-        this.addNewMappedUnit();
+        if (!this.unitDetails?.uniqueName) {
+            this.addNewMappedUnit();
+        } else {
+            this.unitForm.get('name').patchValue(this.unitDetails?.name);
+            this.unitForm.get('code').patchValue(this.unitDetails?.code);
+
+            this.unitDetails.mappings?.forEach(mapping => {
+                this.addNewMappedUnit(mapping);
+            });
+        }
     }
 
-    public addNewMappedUnit(): void {
+    public addNewMappedUnit(mapping?: any): void {
         let mappings = this.unitForm.get('mappings') as FormArray;
-        mappings.push(this.addNewMappingForm());
+        mappings.push(this.addNewMappingForm(mapping));
     }
 
-    private addNewMappingForm(): FormGroup {
+    private addNewMappingForm(mapping?: any): FormGroup {
         let mappingForm = this.formBuilder.group({
-            quantity: [''],
+            quantity: [mapping?.quantity ?? ''],
             stockUnitX: this.formBuilder.group({
-                name: [''],
-                code: ['']
+                name: [mapping?.stockUnitX?.name ?? ''],
+                code: [mapping?.stockUnitX?.code ?? '']
+            }),
+            stockUnitXGroup: this.formBuilder.group({
+                name: [mapping?.stockUnitXGroup?.name ?? ''],
+                uniqueName: [mapping?.stockUnitXGroup?.uniqueName ?? '']
             }),
             stockUnitY: this.formBuilder.group({
-                name: [''],
-                code: ['']
+                name: [mapping?.stockUnitY?.name ?? ''],
+                code: [mapping?.stockUnitY?.code ?? '']
+            }),
+            stockUnitYGroup: this.formBuilder.group({
+                name: [mapping?.stockUnitYGroup?.name ?? ''],
+                uniqueName: [mapping?.stockUnitYGroup?.uniqueName ?? '']
             })
         });
 
@@ -113,15 +131,26 @@ export class CreateNewUnitComponent implements OnInit {
         });
 
         if (this.isValidForm && this.isValidFormMappings) {
-            this.inventoryService.CreateStockUnit(this.unitForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.status === "success") {
-                    this.resetForm();
-                    this.closeAsideEvent.emit(true);
-                    this.toaster.showSnackBar("success", "Unit added successfully");
-                } else {
-                    this.toaster.showSnackBar("error", response?.message);
-                }
-            });
+            if(this.unitDetails?.uniqueName) {
+                this.inventoryService.UpdateStockUnit(this.unitForm.value, this.unitDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === "success") {
+                        this.closeAsideEvent.emit(true);
+                        this.toaster.showSnackBar("success", "Unit updated successfully");
+                    } else {
+                        this.toaster.showSnackBar("error", response?.message);
+                    }
+                });
+            } else {
+                this.inventoryService.CreateStockUnit(this.unitForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === "success") {
+                        this.resetForm();
+                        this.closeAsideEvent.emit(true);
+                        this.toaster.showSnackBar("success", "Unit added successfully");
+                    } else {
+                        this.toaster.showSnackBar("error", response?.message);
+                    }
+                });
+            }
         }
     }
 

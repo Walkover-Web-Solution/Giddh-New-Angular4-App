@@ -3,6 +3,7 @@ import { InventoryService } from "../../../services/inventory.service";
 import { takeUntil } from "rxjs/operators";
 import { ReplaySubject } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
+import { ToasterService } from "../../../services/toaster.service";
 
 @Component({
     selector: "custom-units",
@@ -14,10 +15,13 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public unitMappings: any[] = [];
     public matDialogRef: any;
+    public unitDetails: any = {};
+    public isLoading: boolean = false;
 
     constructor(
         private inventoryService: InventoryService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private toaster: ToasterService
     ) {
 
     }
@@ -44,7 +48,7 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
         });
     }
 
-    public closeCreateUnitModal(event: any): void {
+    public closeCreateUnitModal(event: boolean): void {
         this.matDialogRef?.close();
 
         if (event) {
@@ -59,5 +63,27 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
                 this.unitMappings = response.body;
             }
         });
+    }
+
+    public editUnit(uniqueName: string): void {
+        this.unitDetails = {};
+        this.isLoading = true;
+
+        this.inventoryService.getStockMappedUnitByUniqueName(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.unitDetails = response.body;
+            } else {
+                this.toaster.showSnackBar("error", response?.message);
+            }
+            this.isLoading = false;
+        });
+    }
+
+    public closeUpdateUnit(event: boolean): void {
+        this.unitDetails = {};
+        
+        if (event) {
+            this.getUnitMappings();
+        }
     }
 }

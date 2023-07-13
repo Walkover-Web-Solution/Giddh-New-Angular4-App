@@ -38,7 +38,7 @@
                     >
                         <ng-container *cdkVirtualFor="let mapping of unitMappings">
                             <mat-divider></mat-divider>
-                            <mat-list role="list" class="list-head">
+                            <mat-list role="list" class="list-head" (click)="editUnit(mapping?.stockUnitX?.uniqueName)">
                                 <mat-list-item class="items">
                                     <a href="javascript:void(0);"
                                         >{{ mapping?.stockUnitX?.name }} ({{ mapping?.stockUnitX?.code }})</a
@@ -58,7 +58,12 @@
             </mat-grid-tile>
             <mat-grid-tile [colspan]="5" class="form-btn">
                 <div class="custom-form">
-                    <!-- <create-unit></create-unit> -->
+                    <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+                    <create-unit
+                        *ngIf="!isLoading && unitDetails?.uniqueName"
+                        [unitDetails]="unitDetails"
+                        (closeAsideEvent)="closeUpdateUnit($event)"
+                    ></create-unit>
                 </div>
                 <div class="create-btn-grp">
                     <!-- <button mat-stroked-button color="primary" (click)="createGroupToggleAsidePane()">
