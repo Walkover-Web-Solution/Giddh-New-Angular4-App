@@ -3807,6 +3807,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public addBlankRow(txn: SalesTransactionItemClass) {
+        this.toggleAccountSelectionDropdown(true);
         if (!txn) {
             let entry: SalesEntryClass = new SalesEntryClass();
             if (this.isUpdateMode) {
@@ -8411,6 +8412,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public changeRcmCheckboxState(event: any): void {
         this.closeAllDropdown(true);
+        if (!this.isUpdateMode) {
+            document.querySelector('body').classList.remove('fixed');
+        }
         this.isRcmEntry = !this.isRcmEntry;
         this.toggleRcmCheckbox(event, 'checkbox');
     }
