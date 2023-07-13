@@ -16,6 +16,8 @@ import { SettingsBranchService } from '../../../services/settings.branch.service
 import { AppState } from '../../../store';
 import { AuthService } from '../../../theme/ng-social-login-module';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
+import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
+import { CommonActions } from '../../../actions/common.actions';
 
 @Component({
     selector: 'company-branch',
@@ -78,7 +80,9 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         private companyService: CompanyService,
         private router: Router,
         private invoiceAction: InvoiceActions,
-        private warehouseAction: WarehouseActions
+        private warehouseAction: WarehouseActions,
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private commonAction: CommonActions
     ) {
 
     }
@@ -94,7 +98,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.session.user), takeUntil(this.destroyed$)).subscribe(user => {
-            if(user?.user) {
+            if (user?.user) {
                 this.userEmail = user?.user?.email;
             }
         });
@@ -119,7 +123,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                 this.activeCompany = selectedCmp;
                 this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
 
-                if(!this.companyBranches?.branches) {
+                if (!this.companyBranches?.branches) {
                     this.companyBranches = selectedCmp;
                 }
 
@@ -128,7 +132,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                         let unarchivedBranches = response.filter(branch => branch.isArchived === false);
                         this.branchList = unarchivedBranches?.sort(this.generalService.sortBranches);
                         this.currentCompanyBranches = this.branchList;
-                        if(this.companyBranches) {
+                        if (this.companyBranches) {
                             this.companyBranches.branches = this.branchList;
                             this.companyBranches.branchCount = response?.length
                             this.companyBranches.unarchivedBranchCount = this.branchList?.length;
@@ -185,6 +189,33 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      * @memberof CompanyBranchComponent
      */
     public changeCompany(company: any, selectBranchUniqueName: string, fetchLastState?: boolean) {
+        let hasUnsavedChanges: boolean = false;
+        this.store.pipe(select(state => state.common.hasUnsavedChanges), take(1)).subscribe(response => hasUnsavedChanges = response);
+
+        if (hasUnsavedChanges) {
+            this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                if (action) {
+                    this.store.dispatch(this.commonAction.bypassUnsavedChanges(true));
+                    this.switchCompany(company, selectBranchUniqueName, fetchLastState);
+                } else {
+                    this.store.dispatch(this.commonAction.bypassUnsavedChanges(false));
+                }
+            }, false);
+            return;
+        }
+        this.switchCompany(company, selectBranchUniqueName, fetchLastState);
+    }
+
+    /**
+     * Switches company
+     *
+     * @private
+     * @param {*} company
+     * @param {string} selectBranchUniqueName
+     * @param {boolean} [fetchLastState]
+     * @memberof CompanyBranchComponent
+     */
+    private switchCompany(company: any, selectBranchUniqueName: string, fetchLastState?: boolean): void {
         this.store.dispatch(this.companyActions.resetActiveCompanyData());
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
         this.generalService.companyUniqueName = company?.uniqueName;
@@ -195,7 +226,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             }
         };
 
-        if(selectBranchUniqueName) {
+        if (selectBranchUniqueName) {
             this.setOrganizationDetails(OrganizationType.Branch, details);
         } else {
             this.setOrganizationDetails(OrganizationType.Company, details);
@@ -298,7 +329,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
                     this.changeDetectorRef.detectChanges();
 
-                    if(!reloadBranches && this.companyBranches.branchCount > 1) {
+                    if (!reloadBranches && this.companyBranches.branchCount > 1) {
                         this.showAllBranches(company);
                     }
                 } else {
@@ -325,14 +356,14 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      */
     public showAllBranches(company: any): void {
         this.companyBranches.branchCount = company?.branchCount;
-        if(company?.branchCount > 1) {
+        if (company?.branchCount > 1) {
             setTimeout(() => {
                 if (this.staticTabs && this.staticTabs.tabs[1]) {
                     this.staticTabs.tabs[1].active = true;
                 }
             }, 20);
         } else {
-            if(company?.uniqueName !== this.activeCompany?.uniqueName) {
+            if (company?.uniqueName !== this.activeCompany?.uniqueName) {
                 this.changeCompany(company, '', false);
             }
         }
@@ -349,7 +380,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         this.searchBranch = "";
         this.filterBranchList(this.searchBranch);
 
-        if(tabName === "company") {
+        if (tabName === "company") {
             const unarchivedBranchCount = this.companyBranches?.unarchivedBranchCount;
             const branchCount = this.companyBranches?.branchCount;
 
@@ -369,7 +400,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      * @memberof CompanyBranchComponent
      */
     public filterBranchList(event: any): void {
-        if(this.companyBranches) {
+        if (this.companyBranches) {
             this.companyBranches.branches = this.branchList?.filter((branch) => {
                 if (!branch.alias) {
                     return branch.name?.toLowerCase().includes(event?.toLowerCase());
@@ -392,11 +423,39 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         event.stopPropagation();
         event.preventDefault();
 
+        let hasUnsavedChanges: boolean = false;
+        this.store.pipe(select(state => state.common.hasUnsavedChanges), take(1)).subscribe(response => hasUnsavedChanges = response);
+
+        if (hasUnsavedChanges) {
+            this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                if (action) {
+                    this.store.dispatch(this.commonAction.bypassUnsavedChanges(true));
+                    this.switchBranch(company, branchUniqueName, event);
+                } else {
+                    this.store.dispatch(this.commonAction.bypassUnsavedChanges(false));
+                }
+            }, false);
+            return;
+        }
+
+        this.switchBranch(company, branchUniqueName, event);
+    }
+
+    /**
+     * Switches branch
+     *
+     * @private
+     * @param {*} company
+     * @param {string} branchUniqueName
+     * @param {*} event
+     * @memberof CompanyBranchComponent
+     */
+    private switchBranch(company: any, branchUniqueName: string, event: any): void {
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
 
         if (this.activeCompany?.uniqueName !== company?.uniqueName) {
             this.changeCompany(company, branchUniqueName, false);
-        } else if(branchUniqueName !== this.generalService.currentBranchUniqueName) {
+        } else if (branchUniqueName !== this.generalService.currentBranchUniqueName) {
             const details = {
                 branchDetails: {
                     uniqueName: branchUniqueName
