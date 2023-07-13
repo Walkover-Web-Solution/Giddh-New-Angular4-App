@@ -10,10 +10,10 @@
             position: relative;
             .country-flag {
                 position: absolute;
-                top: 15px;
+                top: 50%;
                 left: 25px;
                 z-index: 1 !important;
-                height: 100%;
+                transform: translateY(-50%);
                 img {
                     height: 14px;
                 }
