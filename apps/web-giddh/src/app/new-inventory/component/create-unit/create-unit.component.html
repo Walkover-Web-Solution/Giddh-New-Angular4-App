@@ -64,6 +64,7 @@
                             [label]="commonLocaleData?.app_quantity"
                             [placeholder]="localeData?.enter_quantity"
                             formControlName="quantity"
+                            [allowDigitsOnly]="true"
                             [showError]="!isValidFormMappings && !mapping?.get('quantity')?.value"
                         >
                         </input-field>
