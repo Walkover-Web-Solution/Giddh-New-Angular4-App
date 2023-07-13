@@ -94,7 +94,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         },
     ];
     @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
-    @ViewChild('messageBox', { static: true }) public messageBox: ElementRef;
+    @ViewChild('messageBox') public messageBox:  ElementRef<HTMLInputElement>;;
     public searchRequest$: Observable<SearchRequest>;
     public isAllChecked: boolean = false;
     public get sortReverse(): boolean {
@@ -346,21 +346,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      * @param {*} val
      * @memberof SearchGridComponent
      */
-    public addValueToMsg(val: any): void {
-        this.typeInTextarea(val?.value);
-    }
-
-    public typeInTextarea(newText) {
-        let el: HTMLInputElement = this.messageBox?.nativeElement;
-        let start = el.selectionStart;
-        let end = el.selectionEnd;
-        let text = el?.value;
-        let before = text.substring(0, start);
-        let after = text.substring(end, (text ? text.length : 0));
-        el.value = (before + newText + after);
-        el.selectionStart = el.selectionEnd = start + (newText ? newText.length : 0);
-        el.focus();
-        this.messageBody.msg = el?.value;
+    public addValueToMsg(newText: any): void {
+       this.messageBody.msg += newText;
+        this.messageBox.nativeElement.focus();
     }
 
     /**
@@ -374,7 +362,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.messageBody.type = 'Email';
         this.messageBody.btn.set = this.messageBody.btn.email;
         this.messageBody.header.set = this.messageBody.header.email;
-        // this.mailModal.show();
         this.mailSmsDialogRef = this.dialog.open(this.mailSmsDialog, {
             width: '630px',
             height: '515px'

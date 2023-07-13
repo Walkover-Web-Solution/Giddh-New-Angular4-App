@@ -25,6 +25,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
@@ -63,7 +64,8 @@ import { MatChipsModule } from '@angular/material/chips';
         MatCheckboxModule,
         MatFormFieldModule,
         MatInputModule,
-        MatChipsModule
+        MatChipsModule,
+        MatTooltipModule
     ]
 })
 export class SearchModule {
