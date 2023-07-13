@@ -27,6 +27,7 @@ export class SearchFilterComponent implements OnInit {
     @Output() public openSmsDialog = new EventEmitter();
     @ViewChild('filterDropdown', { static: true }) public filterDropdown: BsDropdownDirective;
     public queryTypes = [];
+    // public queryTypesOptions = ['closingBalance','openingBalance','creditTotal','debitTotal'];
     public queryDiffers = [];
     public balType = [];
     public searchQueryForm: FormGroup;
@@ -51,21 +52,21 @@ export class SearchFilterComponent implements OnInit {
 
     public ngOnInit() {        
         this.queryTypes = [
-            { name: this.localeData?.query_types.closing_balance, uniqueName: 'closingBalance' },
-            { name: this.localeData?.query_types.opening_balance, uniqueName: 'openingBalance' },
-            { name: this.localeData?.query_types.cr_total, uniqueName: 'creditTotal' },
-            { name: this.localeData?.query_types.dr_total, uniqueName: 'debitTotal' }
+            { label: this.localeData?.query_types.closing_balance, value: 'closingBalance' },
+            { label: this.localeData?.query_types.opening_balance, value: 'openingBalance' },
+            { label: this.localeData?.query_types.cr_total, value: 'creditTotal' },
+            { label: this.localeData?.query_types.dr_total, value: 'debitTotal' }
         ];
 
         this.queryDiffers = [
-            this.localeData?.query_differs.less,
-            this.localeData?.query_differs.greater,
-            this.localeData?.query_differs.equals
+            { label: this.localeData?.query_differs.less, value: this.localeData?.query_differs.less},
+            { label: this.localeData?.query_differs.greater, value: this.localeData?.query_differs.greater },
+            { label: this.localeData?.query_differs.equals, value: this.localeData?.query_differs.equals }
         ];
 
         this.balType = [
-            { name: this.localeData?.balance_type.cr, uniqueName: 'CREDIT' },
-            { name: this.localeData?.balance_type.dr, uniqueName: 'DEBIT' }
+            { label: this.localeData?.balance_type.cr, value: 'CREDIT' },
+            { label: this.localeData?.balance_type.dr, value: 'DEBIT' }
         ];
     }
 
@@ -97,6 +98,10 @@ export class SearchFilterComponent implements OnInit {
     public removeSearchRow() {
         let arr = this.searchQueryForm.controls['searchQuery'] as FormArray;
         arr.removeAt(-1);
+    }
+    
+    public check(event:any){
+        console.log( this.searchQueryForm);
     }
 
 }

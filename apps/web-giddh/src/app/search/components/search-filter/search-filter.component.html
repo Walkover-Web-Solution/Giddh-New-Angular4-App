@@ -10,14 +10,14 @@
             <button type="button" mat-stroked-button color="primary" [matMenuTriggerFor]="filterByAccountMenu">
                 {{ localeData?.filter_by_account }} <span class="caret"></span>
             </button>
-            <mat-menu #filterByAccountMenu="matMenu" (click)="$event.stopPropagation();">
+            <mat-menu #filterByAccountMenu="matMenu">
                 <form
                     [formGroup]="searchQueryForm"
                     novalidate
                     name="searchQueryForm"
                     id="searchQueryForm"
                     class="form-inline flex-row flex-wrap pd-1"
-                    (click)="$event.stopPropagation();"
+                    (click)="$event.stopPropagation()"
                 >
                     <!-- repeater -->
                     <div
@@ -27,85 +27,56 @@
                         *ngFor="let item of searchQueryForm.get('searchQuery')['controls']; let i = index; let l = last"
                     >
                         <div [formGroupName]="i" class="d-flex">
-                            <!-- <label>{{ localeData?.whose }}</label>
-                            <span class="position-relative form-group">
-                                <select class="form-control custom-select-field" formControlName="queryType" required>
-                                    <option value="">{{ commonLocaleData?.app_select_type }}</option>
-                                    <option *ngFor="let queryType of queryTypes" value="{{ queryType?.uniqueName }}">
-                                        {{ queryType.name }}
-                                    </option>
-                                </select>
-                                <i class="icon-caret-down"></i>
-                            </span> -->
                             <dropdown-field
-                            (click)="$event.stopPropagation();"
-                                class="mr-3"
+                                class="width-queryTypes mr-3"
+                                [options]="queryTypes"
                                 [required]="true"
+                                (selectedOption)="item?.get('queryType').patchValue($event.value)"
+                                [defaultValue]="item?.get('queryType').value"
                                 [placeholder]="commonLocaleData?.app_select_type"
                                 [label]="localeData?.whose"
                             >
                             </dropdown-field>
-                            <!-- <label>{{ localeData?.is }}</label>
-                            <span class="position-relative form-group">
-                                <select class="form-control custom-select-field" formControlName="queryDiffer" required>
-                                    <option value="">{{ localeData?.select_query }}</option>
-                                    <option *ngFor="let queryDiffer of queryDiffers" value="{{ queryDiffer }}">
-                                        {{ queryDiffer }}
-                                    </option>
-                                </select>
-                                <i class="icon-caret-down"></i>
-                            </span> -->
                             <dropdown-field
-                            (click)="$event.stopPropagation();"
-                                class="mr-3"
+                                class="width-queryDiffers mr-3"
+                                [options]="queryDiffers"
+                                (selectedOption)="item?.get('queryDiffer').patchValue($event.value)"
+                                [defaultValue]="item?.get('queryDiffer').value"
                                 [required]="true"
                                 [placeholder]="localeData?.select_query"
                                 [label]="localeData?.is"
                             >
                             </dropdown-field>
-                            <!-- <label
-                                *ngIf="
-                                    item?.value.queryDiffer === 'Less' ||
-                                    item?.value.queryDiffer === 'Greater' ||
-                                    !item?.value.queryDiffer
-                                "
-                                >{{ localeData?.than }}</label
-                            >
-                            <label *ngIf="item?.value.queryDiffer === 'Equals'" [style.margin-right.px]="15">{{
-                                localeData?.to
-                            }}</label>
-                            <span class="form-group">
+                            <!--================================================================================
                                 <input
-                                    required
-                                    [style.width.px]="70"
-                                    class="form-control"
-                                    formControlName="amount"
-                                    type="text"
-                                    [placeholder]="commonLocaleData?.app_amount"
                                     decimalDigitsDirective
                                     [DecimalPlaces]="2"
-                                />
-                            </span> -->
+                                /> 
+                            =================================================================================-->
                             <input-field
-                            (click)="$event.stopPropagation();"
+                                class="width-queryDiffers mr-3"
                                 *ngIf="
                                     item?.value.queryDiffer === 'Less' ||
                                     item?.value.queryDiffer === 'Greater' ||
                                     !item?.value.queryDiffer
                                 "
                                 [type]="'text'"
+                                formControlName="amount"
                                 [required]="true"
                                 [allowDecimalDigitsOnly]="true"
                                 [customDecimalPlaces]="2"
                                 [placeholder]="commonLocaleData?.app_amount"
                                 [label]="localeData?.than"
+                                (keyup)="check($event)"
                             >
                             </input-field>
 
                             <input-field
-                            (click)="$event.stopPropagation();"
+                                class="width-queryDiffers mr-3"
+                                (click)="$event.stopPropagation()"
                                 *ngIf="item?.value.queryDiffer === 'Equals'"
                                 [type]="'text'"
+                                formControlName="amount"
                                 [required]="true"
                                 [allowDecimalDigitsOnly]="true"
                                 [customDecimalPlaces]="2"
@@ -119,23 +90,26 @@
                                 class="position-relative form-group"
                                 *ngIf="item?.value.queryType === 'openingBalance'"
                             >
-                                <select class="form-control custom-select-field" formControlName="openingBalanceType">
-                                    <option *ngFor="let type of balType" value="{{ type?.uniqueName }}">
-                                        {{ type.name }}
-                                    </option>
-                                </select>
-                                <i class="icon-caret-down"></i>
+                            <!-- ========================DEFAULT VALUE=========DR/ CR NOT SHOW================================ -->
+                                <dropdown-field
+                                    class="width-balance-type"
+                                    [options]="balType"
+                                    (selectedOption)="item?.get('openingBalanceType').patchValue($event.value)"
+                                    [placeholder]=""
+                                >
+                                </dropdown-field>
                             </span>
                             <span
                                 class="position-relative form-group"
                                 *ngIf="item?.value.queryType === 'closingBalance'"
                             >
-                                <select class="form-control custom-select-field" formControlName="closingBalanceType">
-                                    <option *ngFor="let type of balType" value="{{ type?.uniqueName }}">
-                                        {{ type.name }}
-                                    </option>
-                                </select>
-                                <i class="icon-caret-down"></i>
+                             <!-- ========================DEFAULT VALUE=========DR/ CR NOT SHOW================================ -->
+                                <dropdown-field
+                                    class="width-balance-type"
+                                    [options]="balType"
+                                    (selectedOption)="item?.get('closingBalanceType').patchValue($event.value)"
+                                >
+                                </dropdown-field>
                             </span>
                             <label *ngIf="searchDataSet?.controls?.length > 1 && !l" class="condition_tag">{{
                                 localeData?.and
@@ -147,7 +121,7 @@
                     <div class="clearfix mr-t4">
                         <button
                             [disabled]="searchQueryForm.invalid"
-                            mat-stroked-button 
+                            mat-stroked-button
                             color="primary"
                             class="pull-right"
                             (click)="filterData(); filterDropdown.hide()"
@@ -186,20 +160,8 @@
                 </button>
                 <mat-menu #sendAsMenu="matMenu">
                     <button mat-menu-item (click)="openEmailDialog.emit()">{{ commonLocaleData?.app_email }}</button>
+                    <!-- <button mat-menu-item (click)="openSmsDialog.emit()">{{ commonLocaleData?.app_sms }}</button> -->
                 </mat-menu>
-                <!-- <ul
-                   
-                    class="dropdown-menu dropdown-menu-right"
-                >
-                    <li role="menuitem">
-                        <a class="dropdown-item cp" (click)="openEmailDialog.emit()">{{
-                            commonLocaleData?.app_email
-                        }}</a>
-                    </li> -->
-                    <!-- <li role="menuitem" (click)="openSmsDialog.emit()">
-                        <a class="dropdown-item cp">{{commonLocaleData?.app_sms}}</a>
-                    </li> -->
-                <!-- </ul> -->
             </div>
             <button type="button" mat-stroked-button color="primary" *ngIf="showDownloadCsv" (click)="createCSV()">
                 {{ commonLocaleData?.app_download_csv }}

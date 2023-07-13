@@ -2,14 +2,14 @@
     <div>
         <div>
             <form #search="ngForm" name="searchFormClb" novalidate="" class="form-inline flex-row flex-nowrap">
-                <div class="form-group select-entity mr-r15">
+                <div class="form-group select-entity mr-r15 select-entity-height">
                     <div
                         class="linked-entities"
                         *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
                     >
                         <!-- <label class="d-block">{{ commonLocaleData?.app_select_entity }}</label> -->
                         <div class="form-group">
-                            <!-- <sh-select
+                            <sh-select
                                 [options]="currentCompanyBranches"
                                 name="entity"
                                 [(ngModel)]="currentBranch.uniqueName"
@@ -24,17 +24,19 @@
                             >
                                 <ng-template #optionTemplate let-option="option">
                                     <ng-container>
-                                        <a href="javascript:void(0)" class="list-item d-flex">
+                                        <a href="javascript:;" class="list-item d-flex">
                                             <span class="entity-icon">
                                                 <i
                                                     class="icon-branch-icon pull-right"
                                                     *ngIf="!option.isCompany"
-                                                    tooltip="{{ commonLocaleData?.app_branch }}"
+                                                    [matTooltip]="commonLocaleData?.app_branch"
+                                                    matTooltipClass="tooltip-black"
                                                 ></i>
                                                 <i
                                                     class="icon-company-profile pull-right"
                                                     *ngIf="option.isCompany"
-                                                    tooltip="{{ commonLocaleData?.app_company }}"
+                                                    [matTooltip]="commonLocaleData?.app_company"
+                                                    matTooltipClass="tooltip-black"
                                                 ></i>
                                             </span>
                                             <span class="entity-details">
@@ -48,38 +50,11 @@
                                         </a>
                                     </ng-container>
                                 </ng-template>
-                            </sh-select> -->
-                            <dropdown-field
-                                class="entity-dropdown"
-                                [options]="currentCompanyBranches"
-                                [name]="'entity'"
-                                (selectedOption)="handleBranchChange($event)"
-                                [placeholder]="commonLocaleData?.app_select_entity"
-                                [label]="commonLocaleData?.app_select_entity"
-                            >
-                            </dropdown-field>
+                            </sh-select> 
                         </div>
                     </div>
                 </div>
                 <div class="mr-r15">
-                    <!-- <sh-select
-                        [options]="searchedGroups"
-                        name="groups"
-                        [(ngModel)]="groupName"
-                        [showClear]="false"
-                        [ItemHeight]="33"
-                        width="100%"
-                        (selected)="onSelectGroup($event)"
-                        [isFilterEnabled]="true"
-                        required
-                        [placeholder]="localeData?.select_groups_placeholder"
-                        autocomplete="off"
-                        [enableDynamicSearch]="true"
-                        [isPaginationEnabled]="true"
-                        (scrollEnd)="handleGroupScrollEnd()"
-                        (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
-                    >
-                    </sh-select>-->
                     <dropdown-field
                         [options]="searchedGroups"
                         [name]="'groups'"
@@ -87,6 +62,9 @@
                         [required]="true"
                         [placeholder]="localeData?.select_groups_placeholder"
                         [label]="localeData?.select_groups_label"
+                        [enableDynamicSearch]="true"
+                        (scrollEnd)="handleGroupScrollEnd()"
+                        (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
                     >
                     </dropdown-field>
                 </div>
