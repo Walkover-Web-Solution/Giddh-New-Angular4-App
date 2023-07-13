@@ -16,6 +16,7 @@
             name="companyForm"
             [selectedIndex]="selectedStep"
             (selectionChange)="onSelectedTab($event)"
+            [disableRipple]="firstStepForm.invalid"
         >
             <mat-step [stepControl]="firstStepForm">
                 <form [formGroup]="firstStepForm" name="firstStepForm" autocomplete="off" novalidate>
@@ -67,7 +68,7 @@
                                 [floatLabel]="intl?.getNumber() ? 'always' : 'auto'"
                                 (onChange)="firstStepForm.controls['mobile'].setValue(intl?.getNumber())"
                                 [showError]="
-                                    isFormSubmitted && (!firstStepForm.get('mobile')?.value || isMobileNumberInvalid)
+                                    (isFormSubmitted && !firstStepForm.get('mobile')?.value) || isMobileNumberInvalid
                                 "
                             >
                             </input-field>
