@@ -13,7 +13,7 @@
     "type": "प्रकार",
     "length": "लांबी/मर्यादा",
     "add_new_row": "नवीन पंक्ती जोडा",
-    "field_type_placeholder": "फिल्टर करण्यासाठी टाइप करा",
+    "field_type_placeholder": "प्रकार निवडा",
     "modules": {
         "account": "खाते",
         "stock": "स्टॉक",
