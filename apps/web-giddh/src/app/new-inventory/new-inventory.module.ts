@@ -78,6 +78,8 @@ import { AsideCreatGroupComponent } from "./component/aside-create-group/aside-c
 import { RecipeModule } from "./component/recipe/recipe.module";
 import { ManufacturingModule } from "../manufacturing/manufacturing.module";
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
+import { ScrollingModule } from "@angular/cdk/scrolling";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
     declarations: [
@@ -160,7 +162,9 @@ import { InventoryMasterComponent } from "./component/inventory-master/inventory
         MatGridListModule,
         MatListModule,
         RecipeModule,
-        ManufacturingModule
+        ManufacturingModule,
+        ScrollingModule,
+        FormsModule
     ],
     exports: [
         NewInventoryComponent,

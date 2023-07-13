@@ -1,13 +1,17 @@
-<div class="aside-pane">
-    <div class="header-create-unit">
-        <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
-        <div class="form-header">
-            <h3>Create Unit</h3>
+<ng-container>
+    <div class="aside-pane">
+        <div class="header-create-unit">
+            <div class="form-header">
+                <h3 mat-dialog-title>Create Unit</h3>
+                <button id="close" mat-dialog-close><i class="icon-cross"></i></button>
+            </div>
         </div>
+        <mat-dialog-content>
+            <div class="aside-body create-group-aside-body">
+                <div class="aside-pane-form">
+                    <create-unit (closeAsideEvent)="closeAsidePane($event)"></create-unit>
+                </div>
+            </div>
+        </mat-dialog-content>
     </div>
-    <div class="aside-body create-group-aside-body">
-        <div class="aside-pane-form">
-            <create-unit></create-unit>
-        </div>
-    </div>
-</div>
+</ng-container>
