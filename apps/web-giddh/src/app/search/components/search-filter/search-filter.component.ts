@@ -99,9 +99,4 @@ export class SearchFilterComponent implements OnInit {
         let arr = this.searchQueryForm.controls['searchQuery'] as FormArray;
         arr.removeAt(-1);
     }
-    
-    public check(event:any){
-        console.log( this.searchQueryForm);
-    }
-
 }

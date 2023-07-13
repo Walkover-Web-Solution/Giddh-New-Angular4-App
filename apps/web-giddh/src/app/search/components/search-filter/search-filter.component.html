@@ -47,12 +47,6 @@
                                 [label]="localeData?.is"
                             >
                             </dropdown-field>
-                            <!--================================================================================
-                                <input
-                                    decimalDigitsDirective
-                                    [DecimalPlaces]="2"
-                                /> 
-                            =================================================================================-->
                             <input-field
                                 class="width-queryDiffers mr-3"
                                 *ngIf="
@@ -67,7 +61,6 @@
                                 [customDecimalPlaces]="2"
                                 [placeholder]="commonLocaleData?.app_amount"
                                 [label]="localeData?.than"
-                                (keyup)="check($event)"
                             >
                             </input-field>
 
@@ -90,7 +83,6 @@
                                 class="position-relative form-group"
                                 *ngIf="item?.value.queryType === 'openingBalance'"
                             >
-                            <!-- ========================DEFAULT VALUE=========DR/ CR NOT SHOW================================ -->
                                 <dropdown-field
                                     class="width-balance-type"
                                     [options]="balType"
@@ -103,7 +95,6 @@
                                 class="position-relative form-group"
                                 *ngIf="item?.value.queryType === 'closingBalance'"
                             >
-                             <!-- ========================DEFAULT VALUE=========DR/ CR NOT SHOW================================ -->
                                 <dropdown-field
                                     class="width-balance-type"
                                     [options]="balType"
