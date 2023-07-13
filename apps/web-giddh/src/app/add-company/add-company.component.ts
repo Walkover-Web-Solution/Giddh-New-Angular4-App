@@ -485,7 +485,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             this.selectedStateCode = "";
             this.disabledState = false;
             this.businessTypeList = [];
-            
+
             if (!this.registeredTypeCountryList.includes(event.value)) {
                 this.isOtherCountry = true;
                 this.secondStepForm.controls['businessType'].setValue(this.businessTypes.Unregistered);
@@ -504,7 +504,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                 let input = document.getElementById('init-contact-proforma');
                 const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
                 const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
-                let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
+                let errorMap = [];
+                errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
                 if (input) {
                     if (this.intl?.isValidNumber()) {
                         validMsg?.classList?.remove("d-none");
@@ -781,7 +782,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      */
     public onSubmit(): void {
         this.isFormSubmitted = false;
-        if (this.companyForm.invalid || !this.isGstinValid) {
+        if (this.companyForm.invalid || (!this.isGstinValid && this.secondStepForm.controls['businessType'].value === BusinessTypes.Registered)) {
             this.isFormSubmitted = true;
             return;
         }
@@ -849,6 +850,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                 this.secondStepForm.get('address').setValidators(Validators.required);
             } else {
                 this.secondStepForm.get('gstin')?.setValue('');
+                this.secondStepForm.get('state').removeValidators(Validators.required);
                 this.isGstinValid = false;
                 this.disabledState = false;
             }
