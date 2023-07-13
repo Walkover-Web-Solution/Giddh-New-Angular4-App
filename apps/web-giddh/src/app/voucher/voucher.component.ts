@@ -6551,6 +6551,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
+        if (query === undefined || query === null) {
+            query = "";
+        }
         if (!this.preventDefaultScrollApiCall &&
             (query || (searchType === SEARCH_TYPE.CUSTOMER && this.defaultCustomerSuggestions?.length === 0) ||
                 (searchType === SEARCH_TYPE.ITEM && this.defaultItemSuggestions?.length === 0) || successCallback)) {
