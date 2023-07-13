@@ -1,7 +1,8 @@
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { TagRequest } from '../../models/api-models/settingsTags';
+import { MatDialog } from '@angular/material/dialog';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { cloneDeep, filter, map, orderBy } from '../../lodash-optimized';
 import { SettingsTagService } from '../../services/settings.tag.service';
@@ -17,11 +18,11 @@ export interface PeriodicElement {
 
 const ELEMENT_DATA: PeriodicElement[] = [
     {number: 1, name: '12/07/2023', description: 'LTS', action: ''},
-    {number: 1, name: '12/07/2023', description: 'LTS', action: ''},
-    {number: 1, name: '12/07/2023', description: 'LTS', action: ''},
-    {number: 1, name: '12/07/2023', description: 'LTS', action: ''},
-    {number: 1, name: '12/07/2023', description: 'LTS', action: ''},
-    {number: 1, name: '12/07/2023', description: 'LTS', action: ''},
+    {number: 2, name: '12/07/2023', description: 'LTS', action: ''},
+    {number: 3, name: '12/07/2023', description: 'LTS', action: ''},
+    {number: 4, name: '12/07/2023', description: 'LTS', action: ''},
+    {number: 5, name: '12/07/2023', description: 'LTS', action: ''},
+    {number: 6, name: '12/07/2023', description: 'LTS', action: ''},
 ]
 
 @Component({
@@ -31,7 +32,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class SettingsTagsComponent implements OnInit, OnDestroy {
 
-    @ViewChild('confirmationModal', { static: true }) public confirmationModal: ModalDirective;
+    // @ViewChild('confirmationModal', { static: true }) public confirmationModal: ModalDirective;
 
     public newTag: TagRequest = new TagRequest();
     public tags: TagRequest[] = [];
@@ -46,13 +47,17 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** directive to get reference of element */
+    @ViewChild('createTagForm', { static: true }) public createTagForm: TemplateRef<any>;
+    @ViewChild('confirmationModal', { static: true }) public confirmationModal: TemplateRef<any>;
     /*-- mat-table --*/
     displayedColumns: string[] = ['number', 'name', 'description', 'action'];
     dataSource = ELEMENT_DATA;
 
     constructor(
         private settingsTagService: SettingsTagService,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        public dialog: MatDialog,
     ) {
     }
 
@@ -91,14 +96,6 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         this.updateIndex = null;
     }
 
-    public deleteTag(tag: TagRequest) {
-        this.newTag = tag;
-        let message = this.localeData?.remove_tag;
-        message = message?.replace("[TAG_NAME]", tag.name);
-        this.confirmationMessage = message;
-        this.confirmationModal?.show();
-    }
-
     public setUpdateIndex(indx: number) {
         this.updateIndex = indx;
     }
@@ -109,7 +106,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     }
 
     public onUserConfirmation(yesOrNo: boolean) {
-        this.confirmationModal.hide();
+        // this.confirmationModal.hide();
         if (yesOrNo) {
             let data = cloneDeep(this.newTag);
             this.settingsTagService.DeleteTag(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -151,5 +148,30 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         } else {
             this.toaster.errorToast(response?.message, response?.code);
         }
+    }
+
+    public showCreateTag(): void {
+        this.dialog.open(this.createTagForm, {
+            panelClass: 'openform',
+            width: '1000px',
+            height: '100vh !important',
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+    }
+
+    
+    public deleteTag(tag: TagRequest) {
+        console.log(tag);
+        
+        // this.newTag = tag;
+        // let message = this.localeData?.remove_tag;
+        // message = message?.replace("[TAG_NAME]", tag.name);
+        // this.confirmationMessage = message;
+        this.dialog.open(this.confirmationModal, {
+            panelClass: 'modal-dialog',
+        });   
     }
 }

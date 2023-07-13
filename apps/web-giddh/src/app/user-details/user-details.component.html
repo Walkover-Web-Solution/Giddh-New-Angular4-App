@@ -566,14 +566,14 @@
             >
                 <div class="wrap-tab-content-pd-15">
                     <div class="box clearfix mt-1">
-                        <div class="max900 d-flex pd-b1 activity-title">
+                        <div class="d-flex pd-b1 activity-title">
                             <h1 class="section-head pt-0">{{ localeData?.session?.section_heading }}</h1>
                             <button mat-stroked-button class="mr-0" (click)="clearAllSession()">
                                 {{ commonLocaleData?.app_delete_all }}
                             </button>
                         </div>
-                        <p class="grey-color max900">{{ localeData?.session?.section_description }}</p>
-                        <div class="max900 mr-t15 table-responsive">
+                        <p class="grey-color">{{ localeData?.session?.section_description }}</p>
+                        <div class="mr-t15 table-responsive">
                             <!-- <table class="table table-bordered session-table basic on-mobile-view">
                                 <thead [hidden]="!userSessionList?.length">
                                     <tr>
