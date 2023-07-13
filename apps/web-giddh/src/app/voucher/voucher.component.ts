@@ -5663,7 +5663,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     private modifyStateResp(stateList: StateCode[], countryCode: string) {
         let stateListRet: IOption[] = [];
-        stateList.forEach(stateR => {
+        stateList?.forEach(stateR => {
             stateListRet.push({
                 label: stateR?.name,
                 value: stateR?.code ? stateR?.code : stateR?.stateGstCode,
