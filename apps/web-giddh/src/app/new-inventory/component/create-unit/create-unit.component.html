@@ -87,18 +87,18 @@
                         <button
                             mat-stroked-button
                             class="btn mr-0"
-                            (click)="addNewMappedUnit()"
-                            *ngIf="unitForm?.get('mappings')['controls']?.length - 1 === i"
-                        >
-                            <i class="icon-plus add-row"></i>
-                        </button>
-                        <button
-                            mat-stroked-button
-                            class="btn mr-0"
                             *ngIf="unitForm?.get('mappings')['controls']?.length > 1"
                             (click)="removeMappedUnit(i)"
                         >
                             <i class="icon-cross delete"></i>
+                        </button>
+                        <button
+                            mat-stroked-button
+                            class="btn mr-0"
+                            (click)="addNewMappedUnit()"
+                            *ngIf="unitForm?.get('mappings')['controls']?.length - 1 === i"
+                        >
+                            <i class="icon-plus add-row"></i>
                         </button>
                     </div>
                 </div>

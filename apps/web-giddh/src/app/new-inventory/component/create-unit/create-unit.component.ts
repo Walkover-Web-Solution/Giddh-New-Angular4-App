@@ -14,6 +14,7 @@ import { ToasterService } from '../../../services/toaster.service';
 export class CreateNewUnitComponent implements OnInit {
     @Input() public unitDetails: any = {};
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @Output() public formHasLoaded: EventEmitter<boolean> = new EventEmitter(true);
     public unitList: any[] = [];
     /** Form Group for unit form */
     public unitForm: FormGroup;
@@ -50,6 +51,8 @@ export class CreateNewUnitComponent implements OnInit {
             this.unitDetails.mappings?.forEach(mapping => {
                 this.addNewMappedUnit(mapping);
             });
+
+            this.formHasLoaded.emit(true);
         }
     }
 

@@ -60,9 +60,11 @@
                 <div class="custom-form">
                     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
                     <create-unit
+                        [style.visibility]="hasEditFormLoaded ? 'visible' : 'hidden'"
                         *ngIf="!isLoading && unitDetails?.uniqueName"
                         [unitDetails]="unitDetails"
                         (closeAsideEvent)="closeUpdateUnit($event)"
+                        (formHasLoaded)="formHasLoaded($event)"
                     ></create-unit>
                 </div>
                 <div class="create-btn-grp">

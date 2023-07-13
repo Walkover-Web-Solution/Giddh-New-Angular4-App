@@ -17,6 +17,7 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
     public matDialogRef: any;
     public unitDetails: any = {};
     public isLoading: boolean = false;
+    public hasEditFormLoaded: boolean = false;
 
     constructor(
         private inventoryService: InventoryService,
@@ -82,9 +83,13 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
 
     public closeUpdateUnit(event: boolean): void {
         this.unitDetails = {};
-        
+
         if (event) {
             this.getUnitMappings();
         }
+    }
+
+    public formHasLoaded(event: any): void {
+        this.hasEditFormLoaded = true;
     }
 }
