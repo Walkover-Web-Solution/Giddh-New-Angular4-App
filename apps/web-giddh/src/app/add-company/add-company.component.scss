@@ -12,7 +12,11 @@
                 position: absolute;
                 top: 15px;
                 left: 25px;
-                z-index: 9 !important;
+                z-index: 1 !important;
+                height: 100%;
+                img {
+                    height: 14px;
+                }
             }
             input {
                 height: 46px;
