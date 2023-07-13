@@ -56,7 +56,11 @@
                                         >{{ commonLocaleData?.app_saving }}
                                     </span>
                                     <span
-                                        *ngIf="isCompanyProfileUpdated && !(isUpdateCompanyInProgress$ | async)"
+                                        *ngIf="
+                                            isCompanyProfileUpdated &&
+                                            !(isUpdateCompanyInProgress$ | async) &&
+                                            snackOpen
+                                        "
                                         class="auto-save float-right"
                                     >
                                         <i class="glyphicon glyphicon-check mr-r05 font-15"></i

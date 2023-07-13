@@ -7,6 +7,23 @@ import { cloneDeep, filter, map, orderBy } from '../../lodash-optimized';
 import { SettingsTagService } from '../../services/settings.tag.service';
 import { ToasterService } from '../../services/toaster.service';
 
+
+export interface PeriodicElement {
+    number: number;
+    name: string;
+    description: string;
+    action: string;
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [
+    {number: 1, name: '12/07/2023', description: 'LTS', action: ''},
+    {number: 1, name: '12/07/2023', description: 'LTS', action: ''},
+    {number: 1, name: '12/07/2023', description: 'LTS', action: ''},
+    {number: 1, name: '12/07/2023', description: 'LTS', action: ''},
+    {number: 1, name: '12/07/2023', description: 'LTS', action: ''},
+    {number: 1, name: '12/07/2023', description: 'LTS', action: ''},
+]
+
 @Component({
     selector: 'setting-tags',
     templateUrl: './tags.component.html',
@@ -29,6 +46,9 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /*-- mat-table --*/
+    displayedColumns: string[] = ['number', 'name', 'description', 'action'];
+    dataSource = ELEMENT_DATA;
 
     constructor(
         private settingsTagService: SettingsTagService,

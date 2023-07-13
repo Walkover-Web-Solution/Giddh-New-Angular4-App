@@ -58,6 +58,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SettingCampaignComponent } from './integration/campaign/setting-campaign/setting-campaign.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -125,7 +126,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatChipsModule,
         MatAutocompleteModule,
         MatSlideToggleModule,
-        MatRadioModule
+        MatRadioModule,
+        MatTooltipModule
     ],
     providers: [
         {

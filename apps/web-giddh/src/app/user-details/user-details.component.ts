@@ -21,6 +21,24 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { API_POSTMAN_DOC_URL, BootstrapToggleSwitch } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
+export interface PeriodicElement {
+    ipaddress: string;
+    signindate: string;
+    signintime: string;
+    duration: string;
+    agent: string;
+    action: string;
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [
+    {ipaddress: '111.118.250.234', signindate: '12/07/2023', signintime: 'LTS', duration: '12/07/2023', agent: 'Safari', action: ''},
+    {ipaddress: '111.118.250.234', signindate: '12/07/2023', signintime: 'LTS', duration: '12/07/2023', agent: 'Safari', action: ''},
+    {ipaddress: '111.118.250.234', signindate: '12/07/2023', signintime: 'LTS', duration: '12/07/2023', agent: 'Safari', action: ''},
+    {ipaddress: '111.118.250.234', signindate: '12/07/2023', signintime: 'LTS', duration: '12/07/2023', agent: 'Safari', action: ''},
+    {ipaddress: '111.118.250.234', signindate: '12/07/2023', signintime: 'LTS', duration: '12/07/2023', agent: 'Safari', action: ''},
+    {ipaddress: '111.118.250.234', signindate: '12/07/2023', signintime: 'LTS', duration: '12/07/2023', agent: 'Safari', action: ''},
+]
+
 @Component({
     selector: 'user-details',
     templateUrl: './user-details.component.html',
@@ -28,6 +46,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 })
 export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
+    public isCopied: boolean = false;
     public userAuthKey: string = '';
     public expandLongCode: boolean = false;
     public twoWayAuth: boolean = false;
@@ -76,6 +95,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public commonLocaleData: any = {};
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /*-- mat-table --*/
+    displayedColumns: string[] = ['ipaddress', 'signindate', 'signintime', 'duration', 'agent', 'action'];
+    dataSource = ELEMENT_DATA;
 
     constructor(private store: Store<AppState>,
         private toasty: ToasterService,
@@ -109,6 +131,13 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 return s.session.user.user.authenticateTwoWay;
             }
         }), takeUntil(this.destroyed$));
+    }
+
+    public toggleIsCopied() {
+        this.isCopied = true;
+        setTimeout(() => {
+            this.isCopied = false;
+        }, 3000);
     }
 
     public ngOnInit() {

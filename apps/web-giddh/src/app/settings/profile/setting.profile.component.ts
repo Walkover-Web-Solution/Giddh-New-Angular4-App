@@ -119,6 +119,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public selectedState: any = '';
     public stateGstCode: any[] = [];
     public formFields: any[] = [];
+    public snackOpen : boolean = true;
 
     /** Observer to track get company profile API call in process */
     public getCompanyProfileInProgress$: Observable<boolean>;
@@ -809,6 +810,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 if (response) {
                     if (response.status === 'success') {
                         this._toasty.successToast('Profile Updated Successfully.');
+                        this.snackOpen = false; 
+                        // setTimeout(() => { 
+                        //     this.snackOpen = false;                            
+                        // },9000)
                     } else {
                         this._toasty.errorToast(response.message);
                     }

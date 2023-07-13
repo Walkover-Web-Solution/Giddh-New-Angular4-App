@@ -8,9 +8,9 @@
         <hamburger-menu *ngIf="localeData?.auth_key" [pageHeading]="getPageHeading()"></hamburger-menu>
         <!-- start of tab set -->
 
-        <tabset #staticTabs>
-            <!-- start auth tab tab -->
-            <tab
+        <!-- <tabset #staticTabs> -->
+        <!-- start auth tab tab -->
+        <!-- <tab
                 [heading]="localeData?.auth_key?.tab_heading"
                 [active]="activeTab == 'auth-key'"
                 (selectTab)="onTabChanged('auth-key')"
@@ -42,9 +42,9 @@
                         </form>
                     </div>
                 </div>
-            </tab>
-            <!-- end of auth tab tab -->
-            <tab
+            </tab> -->
+        <!-- end of auth tab tab -->
+        <!-- <tab
                 [heading]="localeData?.mobile_number?.tab_heading"
                 [active]="activeTab == 'mobile-number'"
                 (selectTab)="onTabChanged('mobile-number')"
@@ -172,7 +172,6 @@
                         </section>
 
                         <div class="mr-t2">
-                            <!--two way auth-->
                             <h1 class="section-head">
                                 <mat-slide-toggle
                                     [(ngModel)]="twoWayAuth"
@@ -189,11 +188,11 @@
                         </div>
                     </div>
                 </div>
-            </tab>
-            <!-- end of Mobile Number tab tab -->
+            </tab> -->
+        <!-- end of Mobile Number tab tab -->
 
-            <!-- start session tab tab -->
-            <tab
+        <!-- start session tab tab -->
+        <!-- <tab
                 [heading]="localeData?.session?.tab_heading"
                 [active]="activeTab == 'session'"
                 (selectTab)="onTabChanged('session')"
@@ -288,7 +287,413 @@
                     <subscription [localeData]="localeData" [commonLocaleData]="commonLocaleData"></subscription>
                 </div>
             </tab>
-        </tabset>
+        </tabset> -->
+
+        <mat-tab-group mat-align-tabs="start" animationDuration="0ms">
+            <mat-tab
+                [id]="activeTab == 'auth-key' ? 'giddh-page-heading' : ''"
+                [label]="localeData?.auth_key?.tab_heading"
+            >
+                <div class="wrap-tab-content-pd-15">
+                    <div class="box clearfix mt-1">
+                        <h1 class="section-head pt-0">{{ localeData?.auth_key?.main_auth_key }}</h1>
+                        <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
+                            <div class="form-group row">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                                    <input
+                                        #authKeyUrl
+                                        id="authKey"
+                                        class="form-control"
+                                        name="userAuthKey"
+                                        [(ngModel)]="userAuthKey"
+                                        [readonly]="true"
+                                    />
+                                    <span class="success" *ngIf="isCopied">{{ localeData?.auth_key?.copied }}</span>
+                                </div>
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    (click)="toggleIsCopied()"
+                                    [ngxClipboard]="authKeyUrl"
+                                >
+                                    Copy
+                                </button>
+                            </div>
+                            <div class="form-group clearfix mb-0">
+                                <button mat-stroked-button color="primary" (click)="regenerateKey()">
+                                    {{ localeData?.auth_key?.regenerate_auth_key }}
+                                </button>
+                                <a class="document-link" href="{{ apiPostmanDocUrl }}" target="_blank">{{
+                                    localeData?.auth_key?.documentation
+                                }}</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab
+                [label]="localeData?.mobile_number?.tab_heading"
+                [id]="activeTab == 'mobile-number' ? 'giddh-page-heading' : ''"
+            >
+                <div class="wrap-tab-content-pd-15">
+                    <div class="box clearfix mt-1">
+                        <form name="mobileForm" novalidate>
+                            <h1 class="section-head">{{ localeData?.mobile_number?.add_edit_mobile_number }}</h1>
+                            <div class="mr-t05">
+                                <input
+                                    decimalDigitsDirective
+                                    maxlength="10"
+                                    class="form-control max-width-350 pull-left"
+                                    type="text"
+                                    ng-required="true"
+                                    [placeholder]="localeData?.mobile_number?.mobile_no_example"
+                                    name="mobileForm.phoneNumber"
+                                    [(ngModel)]="phoneNumber"
+                                />
+                                <!-- <input-field
+                                    decimalDigitsDirective
+                                    [maxlength]="10"
+                                    [cssClass]="max-width-350 pull-left"
+                                    [type]="'text'"
+                                    ng-required="true"
+                                    [placeholder]="localeData?.mobile_number?.mobile_no_example"
+                                    [name]="mobileForm.phoneNumber"
+                                    [(ngModel)]="phoneNumber"
+                                ></input-field> -->
+                                <button
+                                    class="btn btn-success btn-sm mr-l1"
+                                    [ladda]="isAddNewMobileNoInProcess$ | async"
+                                    (click)="addNumber(phoneNumber)"
+                                >
+                                    {{ commonLocaleData?.app_add }}
+                                </button>
+                            </div>
+                            <p class="mr-t1">
+                                <b>{{ commonLocaleData?.app_note }}: </b
+                                >{{ localeData?.mobile_number?.mobile_number_format }}
+                            </p>
+                        </form>
+
+                        <div class="clearfix p-0" *ngIf="showVerificationBox">
+                            <hr />
+                            <h1 class="mr-t2 max-width-350">
+                                <span>{{ localeData?.mobile_number?.verification_code_label }}</span>
+                            </h1>
+                            <div class="mr-t05">
+                                <input
+                                    class="form-control max-width-350 pull-left"
+                                    type="text"
+                                    [placeholder]="localeData?.mobile_number?.verification_code_placeholder"
+                                    [(ngModel)]="oneTimePassword"
+                                />
+                                <button
+                                    class="btn btn-success mr-l1"
+                                    [ladda]="isVerifyAddNewMobileNoInProcess$ | async"
+                                    (click)="verifyNumber()"
+                                >
+                                    {{ localeData?.mobile_number?.verify }}
+                                </button>
+                            </div>
+                        </div>
+                        <section class="row mobile-tab">
+                            <div class="col-md-12 adjust-width pull-left">
+                                <div class="row">
+                                    <div class="col-sm-12 mr-t1">
+                                        <mat-accordion class="example-headers-align" multi>
+                                            <mat-expansion-panel>
+                                                <mat-expansion-panel-header>
+                                                    <mat-panel-title class="p-0">
+                                                        {{ localeData?.mobile_number?.long_code }}
+                                                    </mat-panel-title>
+                                                </mat-expansion-panel-header>
+
+                                                <div>
+                                                    <div class="long-code-details">
+                                                        <figure>
+                                                            <h1 class="section-head">
+                                                                {{ localeData?.mobile_number?.accounts }}
+                                                            </h1>
+                                                            <ul>
+                                                                <li>
+                                                                    <h2>
+                                                                        {{ localeData?.mobile_number?.accounts_case1 }}:
+                                                                    </h2>
+                                                                    <div class="cases">
+                                                                        <p>
+                                                                            {{
+                                                                                localeData?.mobile_number
+                                                                                    ?.accounts_case1_text1
+                                                                            }}
+                                                                        </p>
+                                                                        <p>
+                                                                            {{
+                                                                                localeData?.mobile_number
+                                                                                    ?.accounts_case1_text2
+                                                                            }}
+                                                                        </p>
+                                                                        <p>
+                                                                            {{
+                                                                                localeData?.mobile_number
+                                                                                    ?.accounts_case1_text3
+                                                                            }}
+                                                                        </p>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <h2>
+                                                                        {{ localeData?.mobile_number?.accounts_case2 }}:
+                                                                    </h2>
+                                                                    <div class="cases">
+                                                                        <p>
+                                                                            {{
+                                                                                localeData?.mobile_number
+                                                                                    ?.accounts_case2_text1
+                                                                            }}
+                                                                        </p>
+                                                                        <p>
+                                                                            {{
+                                                                                localeData?.mobile_number
+                                                                                    ?.accounts_case2_text2
+                                                                            }}
+                                                                        </p>
+                                                                        <p>
+                                                                            {{
+                                                                                localeData?.mobile_number
+                                                                                    ?.accounts_case2_text3
+                                                                            }}
+                                                                        </p>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </figure>
+                                                        <figure>
+                                                            <h1 class="section-head">
+                                                                {{ localeData?.mobile_number?.groups }}
+                                                            </h1>
+                                                            <ul>
+                                                                <li>
+                                                                    <h2>
+                                                                        {{ localeData?.mobile_number?.groups_case1 }}:
+                                                                    </h2>
+                                                                    <div class="cases">
+                                                                        <p>
+                                                                            {{
+                                                                                localeData?.mobile_number
+                                                                                    ?.groups_case1_text1
+                                                                            }}
+                                                                        </p>
+                                                                        <p>
+                                                                            {{
+                                                                                localeData?.mobile_number
+                                                                                    ?.groups_case1_text2
+                                                                            }}
+                                                                        </p>
+                                                                        <p>
+                                                                            {{
+                                                                                localeData?.mobile_number
+                                                                                    ?.groups_case1_text3
+                                                                            }}
+                                                                        </p>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </figure>
+                                                        <figure>
+                                                            <h1 class="section-head">
+                                                                {{ localeData?.mobile_number?.net_worth }}
+                                                            </h1>
+                                                            <ul>
+                                                                <li>
+                                                                    <h2>
+                                                                        {{
+                                                                            localeData?.mobile_number?.net_worth_case1
+                                                                        }}:
+                                                                    </h2>
+                                                                    <div class="cases">
+                                                                        <p>
+                                                                            {{
+                                                                                localeData?.mobile_number
+                                                                                    ?.net_worth_case1_text1
+                                                                            }}
+                                                                        </p>
+                                                                        <p>
+                                                                            {{
+                                                                                localeData?.mobile_number
+                                                                                    ?.net_worth_case1_text2
+                                                                            }}
+                                                                        </p>
+                                                                        <p>
+                                                                            {{
+                                                                                localeData?.mobile_number
+                                                                                    ?.net_worth_case1_text3
+                                                                            }}
+                                                                        </p>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+                                            </mat-expansion-panel>
+                                        </mat-accordion>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div class="mr-t2">
+                            <!--two way auth-->
+                            <h1 class="section-head">
+                                <mat-slide-toggle
+                                    [(ngModel)]="twoWayAuth"
+                                    name="twoWayAuth"
+                                    color="primary"
+                                    (change)="changeTwoWayAuth()"
+                                >
+                                </mat-slide-toggle>
+                                <label class="two-way-auth-label">{{
+                                    localeData?.mobile_number?.two_way_auth_label
+                                }}</label>
+                            </h1>
+                            <p class="grey" *ngIf="twoWayAuth">{{ localeData?.mobile_number?.two_way_auth_content }}</p>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab
+                [label]="localeData?.session?.tab_heading"
+                [id]="activeTab == 'session' ? 'giddh-page-heading' : ''"
+            >
+                <div class="wrap-tab-content-pd-15">
+                    <div class="box clearfix mt-1">
+                        <div class="max900 d-flex pd-b1 activity-title">
+                            <h1 class="section-head pt-0">{{ localeData?.session?.section_heading }}</h1>
+                            <button mat-stroked-button class="mr-0" (click)="clearAllSession()">
+                                {{ commonLocaleData?.app_delete_all }}
+                            </button>
+                        </div>
+                        <p class="grey-color max900">{{ localeData?.session?.section_description }}</p>
+                        <div class="max900 mr-t15 table-responsive">
+                            <!-- <table class="table table-bordered session-table basic on-mobile-view">
+                                <thead [hidden]="!userSessionList?.length">
+                                    <tr>
+                                        <th>{{ localeData?.session?.ip_address }}</th>
+                                        <th>{{ localeData?.session?.signin_date }}</th>
+                                        <th>{{ localeData?.session?.signin_time }}</th>
+                                        <th>{{ localeData?.session?.duration }}</th>
+                                        <th>{{ localeData?.session?.browser_agent }}</th>
+                                        <th class="text-center">{{ commonLocaleData?.app_action }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="userSessionList?.length">
+                                    <tr
+                                        *ngFor="
+                                            let session of userSessionList;
+                                            index as sessionIndex;
+                                            trackBy: trackBySessionId
+                                        "
+                                    >
+                                        <td [attr.data-title]="localeData?.session?.ip_address">
+                                            {{ session.ipAddress }}
+                                        </td>
+                                        <td [attr.data-title]="localeData?.session?.signin_date">
+                                            {{ session.signInDate }}
+                                        </td>
+                                        <td [attr.data-title]="localeData?.session?.signin_time">
+                                            {{ session.signInTime }}
+                                        </td>
+                                        <td [attr.data-title]="localeData?.session?.duration">
+                                            {{ session.sessionDuration }}
+                                        </td>
+                                        <td [attr.data-title]="localeData?.session?.browser_agent">
+                                            {{ session.userAgent }}
+                                        </td>
+                                        <td
+                                            [attr.data-title]="commonLocaleData?.app_action"
+                                            class="ico-btn text-center"
+                                        >
+                                            <span *ngIf="userSessionId === session.sessionId">{{
+                                                localeData?.session?.current
+                                            }}</span>
+                                            <button
+                                                type="button"
+                                                class="btn btn-xs"
+                                                (click)="deleteSession(session.sessionId, sessionIndex)"
+                                                *ngIf="userSessionId !== session.sessionId"
+                                            >
+                                                <i
+                                                    class="icon-trash"
+                                                    aria-hidden="true"
+                                                    [tooltip]="commonLocaleData?.app_delete"
+                                                ></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table> -->
+
+                            <table mat-table [dataSource]="dataSource" class="table w-100 basic giddh-table">
+                                <ng-container matColumnDef="ipaddress">
+                                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.session?.ip_address }}</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.ipaddress }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="signindate">
+                                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.session?.signin_date }}</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.signindate }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="signintime">
+                                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.session?.signin_time }}</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.signintime }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="duration">
+                                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.session?.duration }}</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.duration }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="agent">
+                                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.session?.browser_agent }}</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.agent }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_action }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let element" class="ico-btn">
+                                        <span>{{ localeData?.session?.current }}</span>
+                                        <button type="button" class="btn btn-xs">
+                                            <i
+                                                class="icon-trash"
+                                                aria-hidden="true"
+                                                [matTooltip]="commonLocaleData?.app_delete"
+                                                [matTooltipPosition]="'above'"
+                                            ></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+                        </div>
+                        <div class="no-data" *ngIf="!userSessionList?.length">
+                            <no-data
+                                [primaryMessage]="commonLocaleData?.app_no_entries_found"
+                                [secondaryMessage]="commonLocaleData?.app_search_suggestion"
+                                [secondaryMessageClass]="'p-0'"
+                            ></no-data>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab
+                [label]="localeData?.subscription?.tab_heading"
+                [id]="activeTab == 'subscription' ? 'giddh-page-heading' : ''"
+            >
+                <div class="wrap-tab-content-pd-15">
+                    <subscription [localeData]="localeData" [commonLocaleData]="commonLocaleData"></subscription>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+
         <!-- end of tab set -->
     </div>
 
