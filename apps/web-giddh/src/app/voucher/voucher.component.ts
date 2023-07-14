@@ -2872,9 +2872,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             height: '100vh !important'
         })
     }
-    
+
     /**
-     * This Function is used to close Aside Menu Sidebar 
+     * This Function is used to close Aside Menu Sidebar
      *
      * @memberof VoucherComponent
      */
@@ -3780,7 +3780,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public addBlankRow(txn: SalesTransactionItemClass) {
-        this.toggleAccountSelectionDropdown(true);
         if (!txn) {
             let entry: SalesEntryClass = new SalesEntryClass();
             if (this.isUpdateMode) {
