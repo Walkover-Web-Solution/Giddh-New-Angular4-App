@@ -1003,6 +1003,9 @@ aside-create-group {
                     color: var(--color-black);
                 }
             }
+            &.mat-left {
+                padding-left: 15px !important;
+            }
         }
     }
 
