@@ -28,42 +28,52 @@
                     <mat-list class="item-list">
                         <strong class="pb-2 list-font">{{ commonLocaleData?.app_unit }}</strong>
                         <mat-divider></mat-divider>
-                        <mat-list role="list" class="list-head">
-                            <mat-list-item class="items">
-                                <strong>{{ commonLocaleData?.app_name }}</strong>
-                            </mat-list-item>
-                            <mat-list-item class="items map-item pd-r2">
-                                <strong>{{ localeData?.mapped_unit }}</strong>
-                            </mat-list-item>
-                        </mat-list>
-                        <cdk-virtual-scroll-viewport
-                            class="virtual-group-list overflow-x-hidden"
-                            [itemSize]="38"
-                            [minBufferPx]="400"
-                            [maxBufferPx]="800"
-                        >
-                            <ng-container *cdkVirtualFor="let mapping of unitMappings">
-                                <mat-divider></mat-divider>
-                                <mat-list
-                                    role="list"
-                                    class="list-head cursor-pointer"
-                                    (click)="editUnit(mapping?.stockUnitX?.uniqueName)"
-                                >
-                                    <mat-list-item class="items">
-                                        <a href="javascript:void(0);"
-                                            >{{ mapping?.stockUnitX?.name }} ({{ mapping?.stockUnitX?.code }})</a
-                                        >
-                                    </mat-list-item>
-                                    <mat-list-item class="items map-item mat-gap">
-                                        <a href="javascript:void(0);"
-                                            >{{ mapping?.quantity }} {{ mapping?.stockUnitX?.name }} ({{
-                                                mapping?.stockUnitX?.code
-                                            }})</a
-                                        >
-                                    </mat-list-item>
-                                </mat-list>
-                            </ng-container>
-                        </cdk-virtual-scroll-viewport>
+                        <ng-container *ngIf="!unitMappings?.length">
+                            <mat-list role="list" class="list-head">
+                                <mat-list-item class="items">
+                                    <strong>{{ commonLocaleData?.app_no_result_found }}</strong>
+                                </mat-list-item>
+                            </mat-list>
+                        </ng-container>
+                        <ng-container *ngIf="unitMappings?.length">
+                            <mat-list role="list" class="list-head">
+                                <mat-list-item class="items">
+                                    <strong>{{ commonLocaleData?.app_name }}</strong>
+                                </mat-list-item>
+                                <mat-list-item class="items map-item pd-r2">
+                                    <strong>{{ localeData?.mapped_unit }}</strong>
+                                </mat-list-item>
+                            </mat-list>
+                            <cdk-virtual-scroll-viewport
+                                class="virtual-group-list overflow-x-hidden"
+                                [itemSize]="38"
+                                [minBufferPx]="400"
+                                [maxBufferPx]="800"
+                            >
+                                <ng-container *cdkVirtualFor="let mapping of unitMappings">
+                                    <mat-divider></mat-divider>
+                                    <mat-list
+                                        role="list"
+                                        class="list-head cursor-pointer"
+                                        (click)="editUnit(mapping?.stockUnitX?.uniqueName)"
+                                    >
+                                        <mat-list-item class="items">
+                                            <a href="javascript:void(0);"
+                                                >{{ mapping?.stockUnitX?.name }} ({{ mapping?.stockUnitX?.code }})</a
+                                            >
+                                        </mat-list-item>
+                                        <mat-list-item class="items map-item mat-gap">
+                                            <a href="javascript:void(0);"
+                                                >{{ mapping?.quantity }} {{ mapping?.stockUnitY?.name }}
+                                                <span *ngIf="mapping?.stockUnitY?.code"
+                                                    >({{ mapping?.stockUnitY?.code }})</span
+                                                ><span *ngIf="!mapping?.stockUnitY?.code">-</span></a
+                                            >
+                                        </mat-list-item>
+                                    </mat-list>
+                                </ng-container>
+                            </cdk-virtual-scroll-viewport>
+                        </ng-container>
                     </mat-list>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="5" class="form-btn">

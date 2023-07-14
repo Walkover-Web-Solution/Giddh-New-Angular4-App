@@ -291,7 +291,7 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
                 this.inventoryService.DeleteStockUnit(this.unitDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isLoading = false;
                     if (response?.status === "success") {
-                        this.toaster.showSnackBar("success", this.localeData?.unit_delete);
+                        this.toaster.showSnackBar("success", this.localeData?.unit_deleted);
                         this.closeAsideEvent.emit(true);
                     } else {
                         this.toaster.showSnackBar("error", response?.message);
