@@ -69,7 +69,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     /** Holds mat prefix */
     @Input() public matPrefix: any;
     /** True if field is autocomplete */
-    @Input() public autocomplete: string = 'disabled';
+    @Input() public autocomplete: string = 'off';
     /** Appearance of mat form field */
     @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
     /** Label of mat form field */
