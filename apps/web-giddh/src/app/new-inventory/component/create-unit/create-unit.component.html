@@ -108,8 +108,23 @@
             </div>
             <div class="row mt-4">
                 <div class="col-sm-4">
-                    <button mat-stroked-button color="primary" type="button" (click)="saveUnit()">
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        type="button"
+                        (click)="saveUnit()"
+                        *ngIf="!unitDetails?.uniqueName"
+                    >
                         {{ commonLocaleData?.app_save }}
+                    </button>
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        type="button"
+                        (click)="saveUnit()"
+                        *ngIf="unitDetails?.uniqueName"
+                    >
+                        {{ commonLocaleData?.app_update }}
                     </button>
                 </div>
                 <div class="col-lg-8">
