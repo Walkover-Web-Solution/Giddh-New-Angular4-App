@@ -19,7 +19,13 @@
             (keydown.enter)="$event.preventDefault()"
             matAutocompletePosition="auto"
             [required]="required"
-            [attr.aria-expanded]="readonly ? false : true"
+            (focusout)="
+                closeOnFocusOut &&
+                $event?.relatedTarget?.nodeName !== 'MAT-OPTION' &&
+                $event?.relatedTarget?.nodeName !== 'A'
+                    ? trigger.closePanel()
+                    : null
+            "
         />
         <mat-autocomplete
             autoActiveFirstOption
