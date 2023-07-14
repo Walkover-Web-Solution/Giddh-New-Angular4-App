@@ -2,7 +2,11 @@
     "unit_updated" : "युनिट यशस्वीरित्या अपडेट केले.",
     "unit_created" : "युनिट यशस्वीरित्या तयार केले.",
     "unit_deleted" : "युनिट यशस्वीरित्या हटवले.",
-    "delete_message" : "तुम्हाला युनिट हटवायचे आहे का?",
+    "unit_group_updated" : "गट यशस्वीरित्या अद्यतनित केला.",
+    "unit_group_created" : "गट यशस्वीरित्या तयार केला.",
+    "unit_group_deleted" : "गट यशस्वीरित्या हटवला.",
+    "delete_unit_message" : "तुम्हाला युनिट हटवायचे आहे का?",
+    "delete_unit_group_message" : "तुम्हाला गट हटवायचा आहे का?",
     "select_unit": "युनिट निवडा",
     "create_unit": "कस्टम युनिट तयार करण्यासाठी टाइप करा",
     "code": "कोड",
@@ -12,5 +16,8 @@
     "quantity": "प्रति युनिट प्रमाण",
     "enter_quantity": "प्रमाण प्रविष्ट करा",
     "mapped_unit": "मॅप केलेले",
-    "add_new":"+ नवीन जोडा"
+    "add_new":"+ नवीन जोडा",
+    "enter_name": "नाव प्रविष्ट करा",
+    "unit_group": "युनिट गट",
+    "select_unit_group": "युनिट गट निवडा"
 }

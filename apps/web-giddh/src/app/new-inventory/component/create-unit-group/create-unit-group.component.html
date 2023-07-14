@@ -1,0 +1,87 @@
+<ng-container
+    appTranslate
+    [file]="'inventory/unit'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+    <ng-container *ngIf="!isLoading">
+        <form autocomplete="off" novalidate name="unitGroupForm" [formGroup]="unitGroupForm">
+            <div class="row mt-3">
+                <div class="col-sm-6">
+                    <input-field
+                        [name]="'name'"
+                        [type]="'text'"
+                        [label]="commonLocaleData?.app_name + '*'"
+                        [placeholder]="localeData?.enter_name"
+                        formControlName="name"
+                        [showError]="!isValidForm && !unitGroupForm?.get('name')?.value"
+                    >
+                    </input-field>
+                </div>
+                <div class="col-sm-6">
+                    <input-field
+                        [name]="'uniqueName'"
+                        [type]="'text'"
+                        [label]="commonLocaleData?.app_unique_name"
+                        [placeholder]="commonLocaleData?.app_unique_name_placeholder"
+                        formControlName="uniqueName"
+                        [showError]="!isValidForm && !unitGroupForm?.get('uniqueName')?.value"
+                        [readonly]="unitGroupDetails?.uniqueName === 'maingroup'"
+                    >
+                    </input-field>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-sm-12">
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        type="button"
+                        (click)="saveUnitGroup()"
+                        *ngIf="!unitGroupDetails?.uniqueName"
+                    >
+                        {{ commonLocaleData?.app_save }}
+                    </button>
+                    <button
+                        mat-stroked-button
+                        type="button"
+                        class="btn-sm"
+                        (click)="resetForm()"
+                        *ngIf="!unitGroupDetails?.uniqueName"
+                    >
+                        {{ commonLocaleData?.app_clear }}
+                    </button>
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        type="button"
+                        (click)="saveUnitGroup()"
+                        *ngIf="unitGroupDetails?.uniqueName"
+                    >
+                        {{ commonLocaleData?.app_update }}
+                    </button>
+                    <button
+                        mat-stroked-button
+                        type="button"
+                        class="btn-sm"
+                        (click)="closeAsideEvent.emit({ action: 'update', data: unitGroupDetails })"
+                        *ngIf="unitGroupDetails?.uniqueName"
+                    >
+                        {{ commonLocaleData?.app_cancel }}
+                    </button>
+                    <button
+                        mat-stroked-button
+                        color="warn"
+                        type="button"
+                        class="btn-sm"
+                        (click)="deleteUnitGroup()"
+                        *ngIf="unitGroupDetails?.uniqueName"
+                    >
+                        {{ commonLocaleData?.app_delete }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+</ng-container>

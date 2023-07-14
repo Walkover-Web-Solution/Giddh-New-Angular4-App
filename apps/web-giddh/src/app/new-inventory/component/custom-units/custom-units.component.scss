@@ -22,6 +22,12 @@
                         float: right !important;
                     }
                 }
+                &.selected-unit-group {
+                    background-color: var(--color-table-secondary-heading);
+                    a {
+                        color: var(--color-white);
+                    }
+                }
             }
             .list-head {
                 display: flex;

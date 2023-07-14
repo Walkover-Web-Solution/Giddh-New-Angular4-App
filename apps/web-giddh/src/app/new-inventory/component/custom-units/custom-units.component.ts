@@ -13,6 +13,10 @@ import { ToasterService } from "../../../services/toaster.service";
 export class CustomUnitsComponent implements OnInit, OnDestroy {
     /** Instance of create unit component */
     @ViewChild("createUnit", { static: false }) public createUnit: any;
+    /** Instance of create unit group component */
+    @ViewChild("createUnitGroup", { static: false }) public createUnitGroup: any;
+    /** Holds unit groups */
+    public unitGroups: any[] = [];
     /** Holds unit mappings */
     public unitMappings: any[] = [];
     /** Modal instance */
@@ -21,14 +25,22 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
     public unitDetails: any = {};
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /** True if get all unit groups api call in progress */
+    public isGroupListLoading: boolean = false;
     /** True if get all units api call in progress */
-    public isListLoading: boolean = false;
+    public isUnitListLoading: boolean = false;
     /** Holds if edit form has data loaded */
     public hasEditFormLoaded: boolean = false;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds selected group data */
+    public selectedGroup: any = {};
+    /** Holds selected unit index */
+    public selectedUnitIndex: number = null;
+    /** Holds selected unit group index */
+    public selectedUnitGroupIndex: number = null;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -47,7 +59,7 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         document.querySelector('body').classList.add('custom-units');
-        this.getUnitMappings();
+        this.getUnitGroups();
     }
 
     /**
@@ -91,18 +103,46 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Get list of unit groups
+     *
+     * @memberof CustomUnitsComponent
+     */
+    public getUnitGroups(resetSelectedGroup: boolean = true, reloadUnitMappings: boolean = true): void {
+        this.unitGroups = [];
+        if (resetSelectedGroup) {
+            this.selectedGroup = {};
+            this.selectedUnitGroupIndex = 0;
+        }
+        this.isGroupListLoading = true;
+        this.inventoryService.getStockUnitGroups().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length) {
+                this.unitGroups = response.body;
+                if (resetSelectedGroup) {
+                    this.selectedGroup = this.unitGroups[0];
+                }
+                if (reloadUnitMappings) {
+                    this.getUnitMappings();
+                }
+            }
+            this.isGroupListLoading = false;
+        });
+    }
+
+    /**
      * Get list of unit mappings
      *
      * @memberof CustomUnitsComponent
      */
     public getUnitMappings(): void {
+        this.selectedUnitIndex = null;
+        this.unitDetails = {};
         this.unitMappings = [];
-        this.isListLoading = true;
-        this.inventoryService.getStockMappedUnit().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.isUnitListLoading = true;
+        this.inventoryService.getStockMappedUnit([this.selectedGroup?.uniqueName]).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length) {
                 this.unitMappings = response.body;
             }
-            this.isListLoading = false;
+            this.isUnitListLoading = false;
         });
     }
 
@@ -134,6 +174,7 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
      */
     public closeUpdateUnit(event: boolean): void {
         this.unitDetails = {};
+        this.selectedUnitIndex = null;
 
         if (event) {
             this.getUnitMappings();
@@ -147,5 +188,64 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
      */
     public formHasLoaded(): void {
         this.hasEditFormLoaded = true;
+    }
+
+    /**
+     * Opens create unit modal
+     *
+     * @memberof CustomUnitsComponent
+     */
+    public openCreateUnitGroupModal(): void {
+        this.matDialogRef = this.dialog.open(this.createUnitGroup, {
+            width: '760px',
+            position: {
+                right: '0',
+                top: '14px'
+            }
+        });
+    }
+
+    /**
+     * Closes create unit modal
+     *
+     * @param {*} event
+     * @memberof CustomUnitsComponent
+     */
+    public closeCreateUnitGroupModal(event: any): void {
+        this.matDialogRef?.close();
+
+        if (event) {
+            this.getUnitGroups();
+        }
+    }
+
+    /**
+     * Closes update unit group form
+     *
+     * @param {*} event
+     * @memberof CustomUnitsComponent
+     */
+    public closeUpdateUnitGroup(event: any): void {
+        if (event?.action) {
+            if (event?.action === "delete") {
+                this.getUnitGroups();
+            } else {
+                let reloadUnitMappings = this.selectedGroup?.uniqueName !== event?.data?.uniqueName;
+                this.selectedGroup = event?.data;
+                this.getUnitGroups(false, reloadUnitMappings);
+            }
+        }
+    }
+
+    /**
+     * Track by function
+     *
+     * @param {number} index
+     * @param {*} item
+     * @returns {void}
+     * @memberof CustomUnitsComponent
+     */
+    public trackByGroup(index: number, item: any): void {
+        return item?.uniqueName;
     }
 }
