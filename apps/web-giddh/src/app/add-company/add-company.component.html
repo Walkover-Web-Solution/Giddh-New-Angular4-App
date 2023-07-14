@@ -187,7 +187,7 @@
                                 "
                                 [placeholder]="localeData?.select_state"
                                 [options]="states"
-                                [showError]="isFormSubmitted && !secondStepForm.get('state')?.value"
+                                [showError]="isFormSubmitted && secondStepForm.get('state')?.invalid"
                                 [readonly]="disabledState"
                                 [defaultValue]="selectedState"
                                 (selectedOption)="selectState($event)"
