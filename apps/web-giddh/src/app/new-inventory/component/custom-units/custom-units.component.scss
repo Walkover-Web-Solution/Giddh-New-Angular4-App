@@ -28,6 +28,15 @@
                 justify-content: space-between;
                 padding-top: 0px;
                 column-gap: 10px;
+
+                &.selected-unit {
+                    background-color: var(--color-table-secondary-heading);
+                    mat-list-item {
+                        a {
+                            color: var(--color-white);
+                        }
+                    }
+                }
             }
         }
         .border-grid {

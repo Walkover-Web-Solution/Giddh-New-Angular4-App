@@ -21,6 +21,8 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
     public unitDetails: any = {};
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /** True if get all units api call in progress */
+    public isListLoading: boolean = false;
     /** Holds if edit form has data loaded */
     public hasEditFormLoaded: boolean = false;
     /* This will hold local JSON data */
@@ -95,10 +97,12 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
      */
     public getUnitMappings(): void {
         this.unitMappings = [];
+        this.isListLoading = true;
         this.inventoryService.getStockMappedUnit().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length) {
                 this.unitMappings = response.body;
             }
+            this.isListLoading = false;
         });
     }
 
