@@ -7,7 +7,13 @@
             [autoClose]="false"
             (clickOutside)="filterDropdown.hide()"
         >
-            <button type="button" mat-stroked-button color="primary" [matMenuTriggerFor]="filterByAccountMenu">
+            <button
+                type="button"
+                mat-stroked-button
+                color="primary"
+                [matMenuTriggerFor]="filterByAccountMenu"
+                #trigger="matMenuTrigger"
+            >
                 {{ localeData?.filter_by_account }} <span class="caret"></span>
             </button>
             <mat-menu #filterByAccountMenu="matMenu">
@@ -28,26 +34,35 @@
                     >
                         <div [formGroupName]="i" class="d-flex">
                             <dropdown-field
+                                (click)="$event.stopPropagation()"
                                 class="width-queryTypes mr-3"
                                 [options]="queryTypes"
                                 [required]="true"
                                 (selectedOption)="item?.get('queryType').patchValue($event.value)"
-                                [defaultValue]="item?.get('queryType').value"
+                                [defaultValue]="
+                                    resetValues
+                                        ? item?.get('queryType').value === 'closingBalance'
+                                            ? 'Closing Balance'
+                                            : ''
+                                        : ''
+                                "
                                 [placeholder]="commonLocaleData?.app_select_type"
                                 [label]="localeData?.whose"
                             >
                             </dropdown-field>
                             <dropdown-field
+                                (click)="$event.stopPropagation()"
                                 class="width-queryDiffers mr-3"
                                 [options]="queryDiffers"
                                 (selectedOption)="item?.get('queryDiffer').patchValue($event.value)"
-                                [defaultValue]="item?.get('queryDiffer').value"
+                                [defaultValue]="resetValues ? item?.get('queryDiffer').value : ''"
                                 [required]="true"
                                 [placeholder]="localeData?.select_query"
                                 [label]="localeData?.is"
                             >
                             </dropdown-field>
                             <input-field
+                                (click)="$event.stopPropagation()"
                                 class="width-queryDiffers mr-3"
                                 *ngIf="
                                     item?.value.queryDiffer === 'Less' ||
@@ -58,21 +73,21 @@
                                 formControlName="amount"
                                 [required]="true"
                                 [allowDecimalDigitsOnly]="true"
-                                [customDecimalPlaces]="2"
+                                [customDecimalPlaces]="'2'"
                                 [placeholder]="commonLocaleData?.app_amount"
                                 [label]="localeData?.than"
                             >
                             </input-field>
 
                             <input-field
+                                (click)="$event.stopPropagation()"
                                 class="width-queryDiffers mr-3"
                                 (click)="$event.stopPropagation()"
                                 *ngIf="item?.value.queryDiffer === 'Equals'"
-                                [type]="'text'"
                                 formControlName="amount"
                                 [required]="true"
                                 [allowDecimalDigitsOnly]="true"
-                                [customDecimalPlaces]="2"
+                                [customDecimalPlaces]="'2'"
                                 [placeholder]="commonLocaleData?.app_amount"
                                 [label]="localeData?.to"
                             >
@@ -84,10 +99,16 @@
                                 *ngIf="item?.value.queryType === 'openingBalance'"
                             >
                                 <dropdown-field
+                                    (click)="$event.stopPropagation()"
                                     class="width-balance-type"
                                     [options]="balType"
                                     (selectedOption)="item?.get('openingBalanceType').patchValue($event.value)"
-                                    [placeholder]=""
+                                    [defaultValue]="
+                                        item.get('queryType')?.value === 'openingBalance' ||
+                                        item.get('queryType')?.value === 'closingBalance'
+                                            ? 'DR'
+                                            : ''
+                                    "
                                 >
                                 </dropdown-field>
                             </span>
@@ -96,9 +117,16 @@
                                 *ngIf="item?.value.queryType === 'closingBalance'"
                             >
                                 <dropdown-field
+                                    (click)="$event.stopPropagation()"
                                     class="width-balance-type"
                                     [options]="balType"
                                     (selectedOption)="item?.get('closingBalanceType').patchValue($event.value)"
+                                    [defaultValue]="
+                                        item.get('queryType')?.value === 'openingBalance' ||
+                                        item.get('queryType')?.value === 'closingBalance'
+                                            ? 'DR'
+                                            : ''
+                                    "
                                 >
                                 </dropdown-field>
                             </span>
@@ -115,15 +143,11 @@
                             mat-stroked-button
                             color="primary"
                             class="pull-right"
-                            (click)="filterData(); filterDropdown.hide()"
+                            (click)="filterData(); trigger?.closeMenu()"
                         >
                             {{ commonLocaleData?.app_search }}
                         </button>
-                        <button
-                            [disabled]="searchDataSet?.controls?.length > 3 || searchQueryForm.invalid"
-                            mat-stroked-button
-                            (click)="addSearchRow()"
-                        >
+                        <button mat-stroked-button (click)="addSearchRow()">
                             {{ localeData?.add_new_query }}
                         </button>
                         <button
