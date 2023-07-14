@@ -23,7 +23,7 @@
                     name="searchQueryForm"
                     id="searchQueryForm"
                     class="form-inline flex-row flex-wrap pd-1"
-                    (click)="$event.stopPropagation()"
+                    (click)="$event.stopPropagation(); (false)"
                 >
                     <!-- repeater -->
                     <div
@@ -34,7 +34,7 @@
                     >
                         <div [formGroupName]="i" class="d-flex">
                             <dropdown-field
-                                (click)="$event.stopPropagation()"
+                                [closeOnFocusOut]="true"
                                 class="width-queryTypes mr-3"
                                 [options]="queryTypes"
                                 [required]="true"
@@ -51,7 +51,7 @@
                             >
                             </dropdown-field>
                             <dropdown-field
-                                (click)="$event.stopPropagation()"
+                                [closeOnFocusOut]="true"
                                 class="width-queryDiffers mr-3"
                                 [options]="queryDiffers"
                                 (selectedOption)="item?.get('queryDiffer').patchValue($event.value)"
@@ -62,7 +62,6 @@
                             >
                             </dropdown-field>
                             <input-field
-                                (click)="$event.stopPropagation()"
                                 class="width-queryDiffers mr-3"
                                 *ngIf="
                                     item?.value.queryDiffer === 'Less' ||
@@ -73,21 +72,19 @@
                                 formControlName="amount"
                                 [required]="true"
                                 [allowDecimalDigitsOnly]="true"
-                                [customDecimalPlaces]="'2'"
+                                [customDecimalPlaces]="2"
                                 [placeholder]="commonLocaleData?.app_amount"
                                 [label]="localeData?.than"
                             >
                             </input-field>
 
                             <input-field
-                                (click)="$event.stopPropagation()"
                                 class="width-queryDiffers mr-3"
-                                (click)="$event.stopPropagation()"
                                 *ngIf="item?.value.queryDiffer === 'Equals'"
                                 formControlName="amount"
                                 [required]="true"
                                 [allowDecimalDigitsOnly]="true"
-                                [customDecimalPlaces]="'2'"
+                                [customDecimalPlaces]="2"
                                 [placeholder]="commonLocaleData?.app_amount"
                                 [label]="localeData?.to"
                             >
@@ -99,7 +96,7 @@
                                 *ngIf="item?.value.queryType === 'openingBalance'"
                             >
                                 <dropdown-field
-                                    (click)="$event.stopPropagation()"
+                                    [closeOnFocusOut]="true"
                                     class="width-balance-type"
                                     [options]="balType"
                                     (selectedOption)="item?.get('openingBalanceType').patchValue($event.value)"
@@ -117,7 +114,7 @@
                                 *ngIf="item?.value.queryType === 'closingBalance'"
                             >
                                 <dropdown-field
-                                    (click)="$event.stopPropagation()"
+                                    [closeOnFocusOut]="true"
                                     class="width-balance-type"
                                     [options]="balType"
                                     (selectedOption)="item?.get('closingBalanceType').patchValue($event.value)"

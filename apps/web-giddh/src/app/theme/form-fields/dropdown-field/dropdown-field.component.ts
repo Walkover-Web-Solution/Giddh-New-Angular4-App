@@ -85,6 +85,9 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     @Input() public label: string;
     /** Adds red border around field if true */
     @Input() public showError: boolean = false;
+    /** Close autocomplete on foucus out if true */
+    /** Need to set closeOnFocusOut = true if parent element contains event stop propogation on click */
+    @Input() public closeOnFocusOut: boolean = false;
 
     constructor(private cdr: ChangeDetectorRef
     ) {

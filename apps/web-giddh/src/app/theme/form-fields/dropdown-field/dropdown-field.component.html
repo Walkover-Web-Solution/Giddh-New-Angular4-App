@@ -20,6 +20,13 @@
             (clickOutside)="closeDropdownPanel()"
             matAutocompletePosition="auto"
             [required]="required"
+            (focusout)="
+                closeOnFocusOut &&
+                $event?.relatedTarget?.nodeName !== 'MAT-OPTION' &&
+                $event?.relatedTarget?.nodeName !== 'A'
+                    ? trigger.closePanel()
+                    : null
+            "
         />
         <mat-autocomplete
             autoActiveFirstOption
