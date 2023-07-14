@@ -43,8 +43,8 @@
                     <div class="col-xl-5 col-lg-5 col-md-5 col-sm-6 unit-equal">
                         <dropdown-field
                             [name]="'xcode' + i"
-                            [label]="localeData?.parent_unit"
-                            [placeholder]="localeData?.select_parent_unit"
+                            [label]="localeData?.unit_name"
+                            [placeholder]="localeData?.select_unit"
                             [options]="unitList"
                             (selectedOption)="
                                 mapping?.get('stockUnitX')?.get('name').patchValue($event.label);
@@ -61,7 +61,7 @@
                             [cssClass]="'text-right'"
                             [name]="'quantity' + i"
                             [type]="'text'"
-                            [label]="commonLocaleData?.app_quantity"
+                            [label]="localeData?.quantity"
                             [placeholder]="localeData?.enter_quantity"
                             formControlName="quantity"
                             [allowDigitsOnly]="true"
@@ -72,8 +72,8 @@
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 pl-2">
                         <dropdown-field
                             [name]="'ycode' + i"
-                            [label]="localeData?.parent_unit"
-                            [placeholder]="localeData?.select_parent_unit"
+                            [label]="localeData?.mapped_unit_label"
+                            [placeholder]="localeData?.select_unit"
                             [options]="unitList"
                             (selectedOption)="
                                 mapping?.get('stockUnitY')?.get('name').patchValue($event.label);

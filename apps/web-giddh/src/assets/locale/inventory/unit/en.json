@@ -7,8 +7,9 @@
     "create_unit": "Type to create custom unit",
     "code": "Code",
     "enter_code": "Enter Code",
-    "parent_unit": "Parent Unit",
-    "select_parent_unit": "Select Parent Unit",
+    "unit_name": "Unit Name",
+    "mapped_unit_label": "Mapped Unit",
+    "quantity": "Quantity per unit",
     "enter_quantity": "Enter Quantity",
     "mapped_unit": "Mapped",
     "add_new":"+ Add New"
