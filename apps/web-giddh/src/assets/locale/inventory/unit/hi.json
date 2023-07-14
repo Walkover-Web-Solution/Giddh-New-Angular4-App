@@ -7,8 +7,9 @@
     "create_unit": "कस्टम यूनिट बनाने के लिए टाइप करें",
     "code": "कोड",
     "enter_code": "कोड दर्ज करें",
-    "parent_unit": "मूल इकाई",
-    "select_parent_unit": "मूल इकाई का चयन करें",
+    "unit_name": "इकाई का नाम",
+    "mapped_unit_label": "मैप की गई इकाई",
+    "quantity": "प्रति इकाई मात्रा",
     "enter_quantity": "मात्रा दर्ज करें",
     "mapped_unit": "मैप किए गए",
     "add_new":"+ नया जोड़ें"

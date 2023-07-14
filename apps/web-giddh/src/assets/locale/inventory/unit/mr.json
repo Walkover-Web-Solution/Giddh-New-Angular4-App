@@ -7,8 +7,9 @@
     "create_unit": "कस्टम युनिट तयार करण्यासाठी टाइप करा",
     "code": "कोड",
     "enter_code": "कोड टाका",
-    "parent_unit": "पालक युनिट",
-    "select_parent_unit": "पालक युनिट निवडा",
+    "unit_name": "युनिटचे नाव",
+    "mapped_unit_label": "मॅप केलेले युनिट",
+    "quantity": "प्रति युनिट प्रमाण",
     "enter_quantity": "प्रमाण प्रविष्ट करा",
     "mapped_unit": "मॅप केलेले",
     "add_new":"+ नवीन जोडा"
