@@ -50,7 +50,7 @@
                                         </a>
                                     </ng-container>
                                 </ng-template>
-                            </sh-select> 
+                            </sh-select>
                         </div>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                 </div>
                 <div>
                     <button
-                        [disabled]="search.invalid"
+                        [disabled]="!groupUniqueName"
                         mat-stroked-button
                         color="primary"
                         (click)="getClosingBalance(false, $event)"
@@ -90,7 +90,7 @@
                     </button>
                 </div>
                 <div>
-                    <button [disabled]="search.invalid" mat-stroked-button (click)="getClosingBalance(true, $event)">
+                    <button [disabled]="!groupUniqueName" mat-stroked-button (click)="getClosingBalance(true, $event)">
                         {{ commonLocaleData?.app_refresh }}
                     </button>
                 </div>

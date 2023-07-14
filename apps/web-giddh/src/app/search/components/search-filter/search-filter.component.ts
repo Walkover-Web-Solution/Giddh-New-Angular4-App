@@ -3,6 +3,7 @@ import { SearchDataSet } from '../../../models/api-models/Search';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../shared/helpers/customValidationHelper';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
     selector: 'search-filter',
@@ -26,6 +27,7 @@ export class SearchFilterComponent implements OnInit {
     @Output() public openEmailDialog = new EventEmitter();
     @Output() public openSmsDialog = new EventEmitter();
     @ViewChild('filterDropdown', { static: true }) public filterDropdown: BsDropdownDirective;
+    @ViewChild('trigger', { static: false, read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
     public queryTypes = [];
     // public queryTypesOptions = ['closingBalance','openingBalance','creditTotal','debitTotal'];
     public queryDiffers = [];
@@ -33,6 +35,7 @@ export class SearchFilterComponent implements OnInit {
     public searchQueryForm: FormGroup;
     public searchDataSet: FormArray;
     public toggleFilters: boolean = false;
+    public resetValues: boolean = false;
 
     /**
      * TypeScript public modifiers
@@ -50,7 +53,7 @@ export class SearchFilterComponent implements OnInit {
         this.searchDataSet = this.searchQueryForm.controls['searchQuery'] as FormArray;
     }
 
-    public ngOnInit() {        
+    public ngOnInit() {
         this.queryTypes = [
             { label: this.localeData?.query_types.closing_balance, value: 'closingBalance' },
             { label: this.localeData?.query_types.opening_balance, value: 'openingBalance' },
@@ -71,6 +74,9 @@ export class SearchFilterComponent implements OnInit {
     }
 
     public filterData() {
+        if (this.searchQueryForm.invalid) {
+            return;
+        }
         this.isFiltered.emit(true);
         this.searchQuery.emit(this.searchQueryForm?.value.searchQuery);
     }
@@ -80,6 +86,9 @@ export class SearchFilterComponent implements OnInit {
     }
 
     public addSearchRow() {
+        if (this.searchDataSet?.controls?.length > 3 || this.searchQueryForm.invalid) {
+            return;
+        }
         this.searchDataSet.push(this.fb.group({
             queryType: ['closingBalance', Validators.required],
             openingBalanceType: ['DEBIT', Validators.required],
@@ -92,6 +101,7 @@ export class SearchFilterComponent implements OnInit {
     public resetQuery() {
         this.searchDataSet.controls = [];
         this.addSearchRow();
+        this.resetValues = true;
         this.isFiltered.emit(false);
     }
 
@@ -99,4 +109,5 @@ export class SearchFilterComponent implements OnInit {
         let arr = this.searchQueryForm.controls['searchQuery'] as FormArray;
         arr.removeAt(-1);
     }
+
 }
