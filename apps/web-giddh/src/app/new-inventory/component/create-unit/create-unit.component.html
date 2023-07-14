@@ -10,7 +10,22 @@
             <div class="row mr-b15">
                 <div class="col-xl-5 col-lg-5 col-sm-5">
                     <dropdown-field
-                        [label]="commonLocaleData?.app_name"
+                        [label]="localeData?.unit_group + '*'"
+                        [placeholder]="localeData?.select_unit_group"
+                        [name]="'unitGroupName'"
+                        [options]="groupList"
+                        (selectedOption)="selectUnitGroup($event)"
+                        [defaultValue]="unitForm?.get('group')?.get('name')?.value"
+                        [showError]="!isValidForm && !unitForm?.get('group')?.get('uniqueName')?.value"
+                        [readonly]="unitDetails?.uniqueName"
+                    >
+                    </dropdown-field>
+                </div>
+            </div>
+            <div class="row mr-b15">
+                <div class="col-xl-5 col-lg-5 col-sm-5">
+                    <dropdown-field
+                        [label]="commonLocaleData?.app_name + '*'"
                         [placeholder]="localeData?.select_unit"
                         [name]="'unitName'"
                         [options]="unitList"
@@ -19,6 +34,7 @@
                         [showError]="!isValidForm && !unitForm?.get('name')?.value"
                         [allowCustomDropdownValue]="true"
                         [noResultsFoundMessage]="localeData?.create_unit"
+                        [readonly]="unitDetails?.uniqueName"
                     >
                     </dropdown-field>
                 </div>
@@ -26,10 +42,11 @@
                     <input-field
                         [name]="'code'"
                         [type]="'text'"
-                        [label]="localeData?.code"
+                        [label]="localeData?.code + '*'"
                         [placeholder]="localeData?.enter_code"
                         formControlName="code"
                         [showError]="!isValidForm && !unitForm?.get('code')?.value"
+                        [readonly]="unitDetails?.uniqueName"
                     >
                     </input-field>
                 </div>
@@ -45,11 +62,8 @@
                             [name]="'xcode' + i"
                             [label]="localeData?.unit_name"
                             [placeholder]="localeData?.select_unit"
-                            [options]="unitList"
-                            (selectedOption)="
-                                mapping?.get('stockUnitX')?.get('name').patchValue($event.label);
-                                mapping?.get('stockUnitX')?.get('code').patchValue($event.value)
-                            "
+                            [options]="mappedUnitList"
+                            (selectedOption)="selectXUnit(mapping, $event)"
                             [defaultValue]="mapping?.get('stockUnitX')?.get('name')?.value"
                             [showError]="!isValidFormMappings && !mapping?.get('stockUnitX')?.get('code')?.value"
                         >
@@ -74,11 +88,8 @@
                             [name]="'ycode' + i"
                             [label]="localeData?.mapped_unit_label"
                             [placeholder]="localeData?.select_unit"
-                            [options]="unitList"
-                            (selectedOption)="
-                                mapping?.get('stockUnitY')?.get('name').patchValue($event.label);
-                                mapping?.get('stockUnitY')?.get('code').patchValue($event.value)
-                            "
+                            [options]="mappedUnitList"
+                            (selectedOption)="selectYUnit(mapping, $event)"
                             [defaultValue]="mapping?.get('stockUnitY')?.get('name')?.value"
                             [showError]="!isValidFormMappings && !mapping?.get('stockUnitY')?.get('code')?.value"
                         >
@@ -87,11 +98,7 @@
                     <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0">
                         <div class="inc-dec">
                             <div class="plus-minus">
-                                <button
-                                    class="btn mr-0"
-                                    *ngIf="unitForm?.get('mappings')['controls']?.length > 1"
-                                    (click)="removeMappedUnit(i)"
-                                >
+                                <button class="btn mr-0" (click)="removeMappedUnit(i)">
                                     <i class="icon-trash delete"></i>
                                 </button>
                             </div>

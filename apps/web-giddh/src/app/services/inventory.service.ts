@@ -205,9 +205,9 @@ export class InventoryService {
     /**
    * This will use for get stock mapped unit
    */
-    public getStockMappedUnit(): Observable<BaseResponse<StockMappedUnitResponse[], string>> {
+    public getStockMappedUnit(unitGroupUniqueName: any[] = []): Observable<BaseResponse<StockMappedUnitResponse[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + INVENTORY_API.GET_STOCK_MAPPED_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), []).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + INVENTORY_API.GET_STOCK_MAPPED_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), unitGroupUniqueName).pipe(map((res) => {
             let data: BaseResponse<StockMappedUnitResponse[], string> = res;
             data.request = '';
             data.queryString = {};
@@ -1354,5 +1354,72 @@ export class InventoryService {
             data.queryString = {};
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<StocksResponse, string>(e, '', {})));
+    }
+
+    /**
+     * Get list of stock unit groups
+     *
+     * @returns {Observable<BaseResponse<any[], string>>}
+     * @memberof InventoryService
+     */
+    public getStockUnitGroups(): Observable<BaseResponse<any[], string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + INVENTORY_API.GET_STOCK_UNIT_GROUPS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
+    }
+
+    /**
+     * Create stock unit group
+     *
+     * @returns {Observable<BaseResponse<any[], string>>}
+     * @memberof InventoryService
+     */
+    public createStockUnitGroup(model: any): Observable<BaseResponse<any[], string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + INVENTORY_API.GET_STOCK_UNIT_GROUPS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
+    }
+
+    /**
+     * Update stock unit group
+     *
+     * @param {*} model
+     * @param {string} groupUniqueName
+     * @returns {Observable<BaseResponse<any[], string>>}
+     * @memberof InventoryService
+     */
+    public updateStockUnitGroup(model: any, groupUniqueName: string): Observable<BaseResponse<any[], string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.put(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_UNIT_GROUP?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), model).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
+    }
+
+    /**
+     * Deletes stock unit group
+     *
+     * @param {string} uniqueName
+     * @returns {Observable<BaseResponse<string, string>>}
+     * @memberof InventoryService
+     */
+    public deleteStockUnitGroup(uniqueName: string): Observable<BaseResponse<string, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.delete(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_UNIT_GROUP?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':groupUniqueName', uniqueName)).pipe(map((res) => {
+            let data: BaseResponse<string, string> = res;
+            data.request = uniqueName;
+            data.queryString = { uniqueName };
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, uniqueName, { uniqueName })));
     }
 }
