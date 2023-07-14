@@ -17,6 +17,8 @@ export interface CurrentCommonState {
     getOnboardingFormInProcess: boolean;
     isAccountUpdated: boolean;
     importBankTransactions: any;
+    hasUnsavedChanges: boolean;
+    bypassAllUnsavedChanges: boolean;
 }
 
 const initialState: CurrentCommonState = {
@@ -28,11 +30,12 @@ const initialState: CurrentCommonState = {
     partyTypes: null,
     getOnboardingFormInProcess: false,
     isAccountUpdated: false,
-    importBankTransactions: null
+    importBankTransactions: null,
+    hasUnsavedChanges: false,
+    bypassAllUnsavedChanges: false
 };
 
 export function CommonReducer(state: CurrentCommonState = initialState, action: CustomActions): CurrentCommonState {
-
     switch (action.type) {
         case CommonActions.GET_COUNTRY_RESPONSE:
             let countries: BaseResponse<CountryResponse[], string> = action.payload;
@@ -98,6 +101,14 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
 
         case CommonActions.SET_IMPORT_BANK_TRANSACTIONS_RESPONSE: {
             return Object.assign({}, state, { importBankTransactions: action.payload });
+        }
+
+        case CommonActions.HAS_UNSAVED_CHANGES: {
+            return Object.assign({}, state, { hasUnsavedChanges: action.payload });
+        }
+
+        case CommonActions.BYPASS_UNSAVED_CHANGES: {
+            return Object.assign({}, state, { bypassAllUnsavedChanges: action.payload });
         }
 
         default:

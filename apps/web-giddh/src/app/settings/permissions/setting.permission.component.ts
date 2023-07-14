@@ -190,7 +190,11 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
      */
     public updateUnsavedChanges(event: any): void {
         this.hasUnsavedChanges = event;
-        this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+        if (event) {
+            this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+        } else {
+            this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        }
         this.store.dispatch(this.settingsProfileActions.hasUnsavedChanges(event));
     }
 }

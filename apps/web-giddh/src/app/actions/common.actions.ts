@@ -32,6 +32,8 @@ export class CommonActions {
     public static SET_ACTIVE_THEME = 'SetActiveTheme';
     public static SET_FILTERS = 'SetFilters';
     public static SET_IMPORT_BANK_TRANSACTIONS_RESPONSE = 'SetImportBankTransactionsResponse';
+    public static HAS_UNSAVED_CHANGES = 'HAS_UNSAVED_CHANGES';
+    public static BYPASS_UNSAVED_CHANGES = 'BYPASS_UNSAVED_CHANGES';
 
     public getCountry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -253,10 +255,10 @@ export class CommonActions {
     }
 
     /**
-     ** This will set the bank transactions import response data
+     * This will set the bank transactions import response data
      *
      * @param {*} data
-     * @return {*}  {CustomActions}
+     * @returns {CustomActions}
      * @memberof CommonActions
      */
     public setImportBankTransactionsResponse(data: any): CustomActions {
@@ -266,4 +268,31 @@ export class CommonActions {
         }
     }
 
+    /**
+     * Maintains if any page has unsaved changes
+     *
+     * @param {boolean} data
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public hasUnsavedChanges(data: boolean): CustomActions {
+        return {
+            type: CommonActions.HAS_UNSAVED_CHANGES,
+            payload: data
+        }
+    }
+
+    /**
+     * Maintains if need to bypass unsaved changes
+     *
+     * @param {boolean} data
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public bypassUnsavedChanges(data: boolean): CustomActions {
+        return {
+            type: CommonActions.BYPASS_UNSAVED_CHANGES,
+            payload: data
+        }
+    }
 }
