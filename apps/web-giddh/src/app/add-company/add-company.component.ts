@@ -3,14 +3,13 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { Observable, of, ReplaySubject } from "rxjs";
-import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
+import { Observable, ReplaySubject } from "rxjs";
+import { take, takeUntil } from "rxjs/operators";
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { LoginActions } from "../actions/login.action";
 import { MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, BusinessTypes } from '../app.constant';
-import { isEqual } from "../lodash-optimized";
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { Addresses, CompanyCreateRequest, CompanyResponse, CreateCompanyUsersPlan, SocketNewCompanyRequest, StatesRequest, SubscriptionRequest } from "../models/api-models/Company";
 import { UserDetails } from "../models/api-models/loginModels";
@@ -500,13 +499,22 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             this.intl?.setCountry(event.value?.toLowerCase());
 
             let phoneNumber = this.intl?.getNumber();
+
             if (phoneNumber?.length) {
                 let input = document.getElementById('init-contact-proforma');
                 const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
                 const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
-                let errorMap = [];
-                errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
+                let reset = () => {
+                    input?.classList?.remove("error");
+                    if (errorMsg && validMsg) {
+                        errorMsg.innerHTML = "";
+                        errorMsg.classList.add("d-none");
+                        validMsg.classList.add("d-none");
+                    }
+                };
+               let  errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
                 if (input) {
+                    reset();
                     if (this.intl?.isValidNumber()) {
                         validMsg?.classList?.remove("d-none");
                         this.setMobileNumberValid(true);
