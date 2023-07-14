@@ -89,18 +89,38 @@
     }
 }
 /*responsive starts here*/
-.giddh-all-items-wrapper {
-    .all-item-block {
-        .main-item {
-            .sub-item-block {
-                .single-menu-item {
-                    @media (max-width: 1680px) {
+@media (max-width: 1680px) {
+    .giddh-all-items-wrapper {
+        .all-item-block {
+            .main-item {
+                .sub-item-block {
+                    .single-menu-item {
                         width: 17.6%;
                     }
-                    @media (max-width: 1380px) {
+                }
+            }
+        }
+    }
+}
+@media (max-width: 1380px) {
+    .giddh-all-items-wrapper {
+        .all-item-block {
+            .main-item {
+                .sub-item-block {
+                    .single-menu-item {
                         width: 22%;
                     }
-                    @media (max-width: 1024px) {
+                }
+            }
+        }
+    }
+}
+@media (max-width: 1024px) {
+    .giddh-all-items-wrapper {
+        .all-item-block {
+            .main-item {
+                .sub-item-block {
+                    .single-menu-item {
                         width: 30%;
                     }
                 }
