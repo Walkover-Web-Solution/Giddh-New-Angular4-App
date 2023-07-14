@@ -10,9 +10,6 @@
             .input-group-text {
                 border: none;
                 background-color: var(--color-primary-all-items-input-group-input-background);
-                height: 50px;
-                position: relative;
-                top: -1px;
             }
             input {
                 height: 50px;
@@ -43,7 +40,7 @@
                     padding: 15px;
                     white-space: normal;
                     word-break: break-word;
-                    width: 14.8%;
+                    min-height: 90px;
                     transition: all 140ms ease-in;
                     h4 {
                         font-size: var(--font-size-15);
@@ -55,7 +52,7 @@
                             font-size: 22px;
 
                             &.unit-mapping-icon {
-                                background-image: url("../../assets/images/unit-mapping.svg");
+                                background-image: url("../../images/unit-mapping.svg");
                                 width: 24px;
                                 height: 24px;
                             }
@@ -76,73 +73,5 @@
                 }
             }
         }
-    }
-    .width-inherit {
-        width: inherit;
-    }
-    .responsive-sub-items {
-        justify-content: stretch;
-        row-gap: 20px;
-        column-gap: 30px;
-        padding: 0 15px;
-        margin-bottom: 20px;
-    }
-}
-/*responsive starts here*/
-@media (max-width: 1680px) {
-    .giddh-all-items-wrapper {
-        .all-item-block {
-            .main-item {
-                .sub-item-block {
-                    .single-menu-item {
-                        width: 17.6%;
-                    }
-                }
-            }
-        }
-    }
-}
-@media (max-width: 1380px) {
-    .giddh-all-items-wrapper {
-        .all-item-block {
-            .main-item {
-                .sub-item-block {
-                    .single-menu-item {
-                        width: 22%;
-                    }
-                }
-            }
-        }
-    }
-}
-@media (max-width: 1024px) {
-    .giddh-all-items-wrapper {
-        .all-item-block {
-            .main-item {
-                .sub-item-block {
-                    .single-menu-item {
-                        width: 30%;
-                    }
-                }
-            }
-        }
-    }
-}
-@media (max-width: 768px) {
-    .giddh-all-items-wrapper {
-        .all-item-block {
-            .main-item {
-                .sub-item-block {
-                    .single-menu-item {
-                        padding: 15px 10px;
-                    }
-                }
-            }
-        }
-    }
-}
-@media (max-width: 767px) {
-    .giddh-all-items-wrapper {
-        padding-top: 15px;
     }
 }
