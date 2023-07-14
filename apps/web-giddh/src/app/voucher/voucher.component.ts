@@ -8252,10 +8252,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 separateDialCode: false,
                 initialCountry: 'auto',
                 geoIpLookup: (success, failure) => {
-                    let countryCode = 'in';
+                    let countryCode = '';
                     const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
                     fetchIPApi.subscribe(
                         (res) => {
+                            countryCode = res?.countryCode;
                             if (res?.ipAddress) {
                                 const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.ipAddress}`);
                                 fetchCountryByIpApi.subscribe(
