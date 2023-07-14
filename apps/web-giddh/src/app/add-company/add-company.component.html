@@ -143,7 +143,7 @@
                                 [label]="localeData?.business_type"
                                 [placeholder]="localeData?.select_business_type"
                                 [options]="businessTypeList"
-                                (selectedOption)="selectBusinessType($event)"
+                                (selectedOption)="selectBusinessType($event.value)"
                                 [defaultValue]="isOtherCountry ? businessTypeList[0].label : ''"
                             >
                             </dropdown-field>
@@ -259,11 +259,7 @@
                                     formControlName="address"
                                     [placeholder]="localeData?.type_your_address"
                                     [required]="
-                                        isFormSubmitted &&
-                                        (secondStepForm.controls['businessType']?.value === businessTypes.Registered &&
-                                        !secondStepForm.get('address')?.value
-                                            ? 'true'
-                                            : 'false')
+                                        secondStepForm.controls['businessType']?.value === businessTypes.Registered
                                     "
                                 ></textarea>
                             </mat-form-field>

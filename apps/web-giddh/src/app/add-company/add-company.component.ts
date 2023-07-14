@@ -490,6 +490,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isOtherCountry = true;
                 this.secondStepForm.controls['businessType'].setValue(this.businessTypes.Unregistered);
                 this.businessTypeList.push({ label: this.localeData.unregistered, value: this.businessTypes.Unregistered });
+                this.selectBusinessType(this.businessTypes.Unregistered);
             } else {
                 this.isOtherCountry = false;
                 this.businessTypeList.push({ label: this.localeData.registered, value: this.businessTypes.Registered }, { label: this.localeData.unregistered, value: this.businessTypes.Unregistered });
@@ -841,15 +842,15 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @param {*} event
      * @memberof AddCompanyComponent
      */
-    public selectBusinessType(event: any): void {
-        if (event) {
-            this.secondStepForm.controls['businessType'].setValue(event.value);
+    public selectBusinessType(value: any): void {
+        if (value) {
+            this.secondStepForm.controls['businessType'].setValue(value);
             this.secondStepForm.get('gstin').removeValidators(Validators.required);
             this.secondStepForm.get('state').removeValidators(Validators.required);
             this.secondStepForm.get('county').removeValidators(Validators.required);
             this.secondStepForm.get('address').removeValidators(Validators.required);
 
-            if (event.value === this.businessTypes.Registered) {
+            if (value === this.businessTypes.Registered) {
                 this.secondStepForm.get('gstin').setValidators(Validators.required);
                 if (this.countyList?.length) {
                     this.secondStepForm.get('county').setValidators(Validators.required);
