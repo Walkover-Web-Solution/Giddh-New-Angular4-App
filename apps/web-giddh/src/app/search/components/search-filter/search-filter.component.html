@@ -1,12 +1,5 @@
-<section class="mr-t15 mr-b15">
-    <div>
-        <div
-            class="btn-group"
-            #filterDropdown="bs-dropdown"
-            dropdown
-            [autoClose]="false"
-            (clickOutside)="filterDropdown.hide()"
-        >
+<section class="mr-t15 mr-b15">    
+        <div class="d-inline-flex">
             <button
                 type="button"
                 mat-stroked-button
@@ -35,15 +28,15 @@
                         <div [formGroupName]="i" class="d-flex">
                             <dropdown-field
                                 [closeOnFocusOut]="true"
-                                class="width-queryTypes mr-3"
+                                class="width-query-types mr-3"
                                 [options]="queryTypes"
                                 [required]="true"
                                 (selectedOption)="item?.get('queryType').patchValue($event.value)"
                                 [defaultValue]="
                                     resetValues
-                                        ? item?.get('queryType').value === 'closingBalance'
+                                        ? (item?.get('queryType').value === 'closingBalance'
                                             ? 'Closing Balance'
-                                            : ''
+                                            : '')
                                         : ''
                                 "
                                 [placeholder]="commonLocaleData?.app_select_type"
@@ -179,7 +172,6 @@
             <button type="button" mat-stroked-button color="primary" *ngIf="showDownloadCsv" (click)="createCSV()">
                 {{ commonLocaleData?.app_download_csv }}
             </button>
-        </div>
-    </div>
+        </div>    
     <!--end of query section grey bg-->
 </section>
