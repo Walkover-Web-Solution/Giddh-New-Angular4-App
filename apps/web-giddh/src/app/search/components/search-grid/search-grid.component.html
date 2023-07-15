@@ -20,52 +20,73 @@
         >
         </search-filter>
         <div class="table-responsive">
-            <table 
-            mat-table 
-            [dataSource]="dataSource"
-            class="table basic giddh-table on-mobile-view w-100"
+            <table
+                mat-table
+                [dataSource]="searchResponseFiltered$ | async"
+                class="table basic giddh-table on-mobile-view w-100"
+                matSort
+                (matSortChange)="sortChange($event)"
+                [matSortActive]="searchSortRequestObj?.sortBy"
+                [matSortDirection]="searchSortRequestObj?.sort"
             >
-
                 <!-- Checkbox Column -->
                 <ng-container matColumnDef="select">
-                  <th mat-header-cell *matHeaderCellDef [style.width.px]="25">
-                    <mat-checkbox color="primary" (change)="$event ? selectAllAccount() : null"
-                                  [checked]="selection.hasValue() && isAllSelected()"
-                                  [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                  [aria-label]="checkboxLabel()">
-                    </mat-checkbox>
-                  </th>
-                  <td mat-cell *matCellDef="let row">
-                    <mat-checkbox color="primary" (click)="$event.stopPropagation()"
-                                  (change)="$event ? selection.toggle(row) : null"
-                                  [checked]="selection.isSelected(row)"
-                                  [aria-label]="checkboxLabel(row)">
-                    </mat-checkbox>
-                  </td>
+                    <th mat-header-cell *matHeaderCellDef [style.width.px]="25">
+                        <mat-checkbox
+                            color="primary"
+                            (change)="$event ? selectAllAccount() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()"
+                            [aria-label]="checkboxLabel()"
+                        >
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                        <mat-checkbox
+                            color="primary"
+                            (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null"
+                            [checked]="selection.isSelected(row)"
+                            [aria-label]="checkboxLabel(row)"
+                        >
+                        </mat-checkbox>
+                    </td>
                 </ng-container>
-              
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
-                  <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_name }} </th>
-                  <td [attr.data-title]="commonLocaleData?.app_name" mat-cell *matCellDef="let element"> {{element.name}} </td>
-                </ng-container>
-              
-                <!-- Unique Name Column -->
-                <ng-container matColumnDef="uniqueName">
-                  <th [attr.data-title]="localeData?.unique_name" mat-header-cell *matHeaderCellDef> {{ localeData?.unique_name }} </th>
-                  <td mat-cell *matCellDef="let element"> {{element.uniqueName}} </td>
-                </ng-container>
-              
-                <!-- Parent Column -->
-                <ng-container matColumnDef="parent">
-                  <th mat-header-cell *matHeaderCellDef> {{ localeData?.parent }} </th>
-                  <td [attr.data-title]="localeData?.parent" mat-cell *matCellDef="let element"> {{element.parent}} </td>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ commonLocaleData?.app_name }}</th>
+                    <td [attr.data-title]="commonLocaleData?.app_name" mat-cell *matCellDef="let element">
+                        {{ element.name }}
+                    </td>
                 </ng-container>
 
-                 <!-- Opening Balance Column -->
-                 <ng-container matColumnDef="openingBalance">
-                    <th class="text-right" mat-header-cell *matHeaderCellDef> {{ localeData?.opening_balance }} </th>
-                    <td [attr.data-title]="localeData?.opening_balance" class="text-right" mat-cell *matCellDef="let element"> 
+                <!-- Unique Name Column -->
+                <ng-container matColumnDef="uniqueName">
+                    <th [attr.data-title]="localeData?.unique_name" mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{ localeData?.unique_name }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element.uniqueName }}</td>
+                </ng-container>
+
+                <!-- Parent Column -->
+                <ng-container matColumnDef="parent">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ localeData?.parent }}</th>
+                    <td [attr.data-title]="localeData?.parent" mat-cell *matCellDef="let element">
+                        {{ element.parent }}
+                    </td>
+                </ng-container>
+
+                <!-- Opening Balance Column -->
+                <ng-container matColumnDef="openingBalance">
+                    <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{ localeData?.opening_balance }}
+                    </th>
+                    <td
+                        [attr.data-title]="localeData?.opening_balance"
+                        class="text-right"
+                        mat-cell
+                        *matCellDef="let element"
+                    >
                         <span class="d-inline-flex">
                             <amount-field
                                 [amount]="element?.openingBalance"
@@ -75,19 +96,21 @@
                             </amount-field>
                         </span>
                         <span *ngIf="element.openingBalance > 0">
-                            <span class="text-success" *ngIf="element.openBalanceType === 'DEBIT'">{{
-                                localeData?.balance_type.dr
-                            }}</span>
-                            <span class="text-danger" *ngIf="element.openBalanceType === 'CREDIT'">{{
-                                localeData?.balance_type.cr
-                            }}</span>
+                            <span class="text-success" *ngIf="element.openBalanceType === 'DEBIT'">
+                                {{ localeData?.balance_type.dr }}</span
+                            >
+                            <span class="text-danger" *ngIf="element.openBalanceType === 'CREDIT'">
+                                {{ localeData?.balance_type.cr }}</span
+                            >
                         </span>
                     </td>
-                  </ng-container>
+                </ng-container>
 
-                 <!-- DR Total Column -->
-                <ng-container matColumnDef="drTotal">
-                    <th class="text-right" mat-header-cell *matHeaderCellDef> {{ localeData?.dr_total }} </th>
+                <!-- DR Total Column -->
+                <ng-container matColumnDef="debitTotal">
+                    <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{ localeData?.dr_total }}
+                    </th>
                     <td [attr.data-title]="localeData?.dr_total" class="text-right" mat-cell *matCellDef="let element">
                         <span class="d-inline-flex">
                             <amount-field
@@ -98,11 +121,13 @@
                             </amount-field>
                         </span>
                     </td>
-                  </ng-container>
+                </ng-container>
 
-                   <!-- CR Total Column -->
-                <ng-container matColumnDef="crTotal">
-                    <th class="text-right" mat-header-cell *matHeaderCellDef> {{ localeData?.cr_total }} </th>
+                <!-- CR Total Column -->
+                <ng-container matColumnDef="creditTotal">
+                    <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{ localeData?.cr_total }}
+                    </th>
                     <td [attr.data-title]="localeData?.cr_total" class="text-right" mat-cell *matCellDef="let element">
                         <span class="d-inline-flex">
                             <amount-field
@@ -113,28 +138,41 @@
                             </amount-field>
                         </span>
                     </td>
-                  </ng-container>
-              
+                </ng-container>
+
                 <!-- Closing Balance Column -->
                 <ng-container matColumnDef="closingBalance">
-                  <th class="text-right" mat-header-cell *matHeaderCellDef> {{ localeData?.closing_balance }} </th>
-                  <td [attr.data-title]="localeData?.closing_balance" class="text-right" mat-cell *matCellDef="let element">
-                    <span class="d-inline-flex">
-                        <amount-field
-                            [amount]="element?.closingBalance"
-                            [currencySymbol]="false"
-                            [currencyCode]="false"
-                        >
-                        </amount-field>
-                    </span>
-                  </td>
+                    <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{ localeData?.closing_balance }}
+                    </th>
+                    <td
+                        [attr.data-title]="localeData?.closing_balance"
+                        class="text-right"
+                        mat-cell
+                        *matCellDef="let element"
+                    >
+                        <span class="d-inline-flex">
+                            <amount-field
+                                [amount]="element?.closingBalance"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
+                            </amount-field>
+                        </span>
+                        <span *ngIf="element.closingBalance > 0">
+                            <span class="text-success" *ngIf="element.closeBalanceType === 'DEBIT'">
+                                {{ localeData?.balance_type.dr }}</span
+                            >
+                            <span class="text-danger" *ngIf="element.closeBalanceType === 'CREDIT'">
+                                {{ localeData?.balance_type.cr }}</span
+                            >
+                        </span>
+                    </td>
                 </ng-container>
-              
+
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-                    (click)="selection.toggle(row)">
-                </tr>
-              </table>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selection.toggle(row)"></tr>
+            </table>
         </div>
         <div
             class="d-flex align-items-center justify-content-center"
@@ -162,61 +200,65 @@
     <!-- end pd div -->
 </div>
 <!--Modal for Mail/SMS-->
-    <ng-template #mailSmsDialog>
-            <div class="modal-content">
-                <div class="border-radius-0">
-                    <div class="modal-header theme-bg pd-l2 pd-r2">
-                        <h3 class="modal-title bg" id="modal-title">{{ messageBody.header.set }}</h3>
-                        <button
-                            mat-button
-                            aria-hidden="true"
-                            class="close"
-                            [attr.aria-label]="commonLocaleData?.app_close"
-                            (click)="mailSmsDialogRef?.close()"
-                        >
-                            ×
-                        </button>
-                    </div>
-                    <div class="modal-body pd-l2 pd-r2 clearfix">
-                        <input-field
-                        *ngIf="messageBody.type == 'Email'"
-                        [type]="'text'"
-                        class="mr-b1"
-                        #subject
-                        [(ngModel)]="messageBody.subject"
-                        [placeholder]="localeData?.subject_placeholder"
-                        [label]="localeData?.subject_label"                        
-                        >
-                        </input-field>
+<ng-template #mailSmsDialog>
+    <div class="modal-content">
+        <div class="border-radius-0">
+            <div class="modal-header theme-bg pd-l2 pd-r2">
+                <h3 class="modal-title bg" id="modal-title">{{ messageBody.header.set }}</h3>
+                <button
+                    mat-button
+                    aria-hidden="true"
+                    class="close"
+                    [attr.aria-label]="commonLocaleData?.app_close"
+                    (click)="mailSmsDialogRef?.close()"
+                >
+                    ×
+                </button>
+            </div>
+            <div class="modal-body pd-l2 pd-r2 clearfix">
+                <input-field
+                    *ngIf="messageBody.type == 'Email'"
+                    [type]="'text'"
+                    class="mr-b1"
+                    #subject
+                    [(ngModel)]="messageBody.subject"
+                    [placeholder]="localeData?.subject_placeholder"
+                    [label]="localeData?.subject_label"
+                >
+                </input-field>
 
-                        <mat-form-field appearance="outline" class="w-100 mt-3">
-                            <mat-label>{{ localeData?.company_address }}</mat-label>
-                            <textarea 
-                                #messageBox
-                                matInput 
-                                rows="3"
-                                [(ngModel)]="messageBody.msg"
-                                [placeholder]="localeData?.message_body_placeholder"
+                <mat-form-field appearance="outline" class="w-100 mt-3">
+                    <mat-label>{{ localeData?.company_address }}</mat-label>
+                    <textarea
+                        #messageBox
+                        matInput
+                        rows="3"
+                        [(ngModel)]="messageBody.msg"
+                        [placeholder]="localeData?.message_body_placeholder"
+                    >
+                    </textarea>
+                </mat-form-field>
+                <small class="mr-t05 mr-b05 grey">{{ localeData?.message_body_tips }}</small>
+                <div class="row mr-t2">
+                    <div class="mx-3">
+                        <mat-chip-list>
+                            <mat-chip
+                                *ngFor="let val of dataVariables"
+                                (click)="addValueToMsg(val?.value)"
+                                class="cursor-pointer"
                             >
-                            </textarea>
-                        </mat-form-field>
-                        <small class="mr-t05 mr-b05 grey">{{ localeData?.message_body_tips }}</small>
-                        <div class="row mr-t2">
-                            <div class="mx-3">
-                                <mat-chip-list>
-                                    <mat-chip *ngFor="let val of dataVariables" (click)="addValueToMsg(val?.value)" class="cursor-pointer">
-                                        {{ val?.name }}
-                                    </mat-chip>
-                                  </mat-chip-list>
-                            </div>
-                        </div>
-                        <div class="mr-t4">
-                            <button mat-stroked-button color="primary" class="pull-right mr-l1 mr-0" (click)="send()">
-                                {{ messageBody.btn.set }}
-                            </button>
-                        </div>
+                                {{ val?.name }}
+                            </mat-chip>
+                        </mat-chip-list>
                     </div>
                 </div>
+                <div class="mr-t4">
+                    <button mat-stroked-button color="primary" class="pull-right mr-l1 mr-0" (click)="send()">
+                        {{ messageBody.btn.set }}
+                    </button>
+                </div>
             </div>
-    </ng-template>
+        </div>
+    </div>
+</ng-template>
 <!--end Modal for Mail/SMS-->
