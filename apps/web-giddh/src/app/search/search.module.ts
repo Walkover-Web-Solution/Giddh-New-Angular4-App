@@ -26,6 +26,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSortModule } from '@angular/material/sort';
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
@@ -65,7 +66,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatFormFieldModule,
         MatInputModule,
         MatChipsModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatSortModule
     ]
 })
 export class SearchModule {

@@ -19,9 +19,14 @@ export interface SearchTable {
     uniqueName: string;
     parent: string;
     openingBalance: number;
-    drTotal: number;
-    crTotal: number;
+    debitTotal: number;
+    creditTotal: number;
     closingBalance: number;
+}
+
+export interface searchSortRequest {
+    sort: string;
+    sortBy: string
 }
 @Component({
     selector: 'search-grid',
@@ -96,26 +101,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     @ViewChild('messageBox') public messageBox: ElementRef<HTMLInputElement>;
     public searchRequest$: Observable<SearchRequest>;
     public isAllChecked: boolean = false;
-    public get sortReverse(): boolean {
-        return this._sortReverse;
-    }
-
-    /**
-     * reversing sort
-     *
-     * @memberof SearchGridComponent
-     */
-    public set sortReverse(value: boolean) {
-        this._sortReverse = value;
-        this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType]?.toString().localeCompare(b[this._sortType]))));
-    }
-
     /** pagination related  */
     public page: number;
     public totalPages: number;
     public selectedItems: string[] = [];
-    private _sortReverse: boolean;
-    private _sortType: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private checkboxInfo: any = {
         selectedPage: 1
@@ -124,10 +113,13 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     /** Hold Mail/SMS Mat Dailog Reference */
     public mailSmsDialogRef: any;
     /* Holds Mat Table Configuration */
-    public displayedColumns: string[] = ['select', 'name', 'uniqueName', 'parent', 'openingBalance', 'drTotal', 'crTotal', 'closingBalance'];
-    public dataSource: any;
+    public displayedColumns: string[] = ['select', 'name', 'uniqueName', 'parent', 'openingBalance', 'debitTotal', 'creditTotal', 'closingBalance'];
     public selection = new SelectionModel<SearchTable>(true, []);
-
+    /** Search Sorting Object */
+    public searchSortRequestObj: searchSortRequest = {
+        sort: '',
+        sortBy: ''
+    };
 
     constructor(private store: Store<AppState>, private companyServices: CompanyService, private toaster: ToasterService, private generalService: GeneralService, public dialog: MatDialog) {
         this.searchResponse$ = this.store.pipe(select(p => p.search?.value), takeUntil(this.destroyed$));
@@ -140,16 +132,21 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             this.page = info.page;
             this.totalPages = info.totalPages;
         });
-        this.searchResponseFiltered$.pipe(takeUntil(this.destroyed$)).subscribe(res => this.dataSource = new MatTableDataSource<any>(res));
     }
 
-    public set sortType(value: string) {
-        this._sortType = value;
-        this.sortReverse = this._sortReverse;
+    /**
+     * This will use for sort change
+     *
+     * @param {*} event
+     * @memberof SearchGridComponent
+     */
+    public sortChange(event: any): void {
+        this.searchSortRequestObj.sort = event?.direction ? event?.direction : 'asc';
+        let value = (event?.direction === 'asc' ? true : false) || (event?.direction === 'desc' ? false : true);
+        this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[event?.active]?.toString().localeCompare(b[event?.active]))));
     }
 
     public ngOnInit() {
-        this.sortType = 'name';
         this.searchRequest$.subscribe((req) => {
             if (req && req.groupName) {
                 if (!this.checkboxInfo.selectedGroup) {
@@ -488,45 +485,44 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     /**
      * Whether the number of selected elements matches the total number of rows.
      *
-     * @return {*} 
+     * @return {*}
      * @memberof SearchGridComponent
      */
     public isAllSelected() {
-        const numSelected = this.selection.selected.length;
-        const numRows = this.dataSource.data.length;
-        return numSelected === numRows;
+        console.log(this.selection);
+        let numSelected = this.selection.selected.length;
+        this.searchResponseFiltered$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            return numSelected = response.length;
+        });
     }
 
     /**
      * Selects all rows if they are not all selected; otherwise clear selection.
      *
-     * @return {*} 
+     * @return {*}
      * @memberof SearchGridComponent
      */
-    public selectAllAccount() {
-        if (this.isAllSelected()) {
-            this.selection.clear();
-            return;
-        }
-
-        this.selection.select(...this.dataSource.data);
-
-        this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
-            let entries = cloneDeep(p);
-            this.isAllChecked = this.isAllSelected();
-
-            entries.forEach((entry) => {
-                let indexOfEntry = this.selectedItems?.indexOf(entry?.uniqueName);
-                if (this.isAllSelected()) {
-                    if (indexOfEntry === -1) {
-                        this.selectedItems.push(entry?.uniqueName);
-                    }
-                } else if (indexOfEntry > -1) {
-                    this.selectedItems.splice(indexOfEntry, 1);
-                }
-            });
-        });
-    }
+    // public selectAllAccount() {
+    //     if (this.isAllSelected()) {
+    //         this.selection.clear();
+    //         return;
+    //     }
+    //     // this.selection.select(...this.dataSource.data);
+    //     this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
+    //         let entries = cloneDeep(p);
+    //         this.isAllChecked = this.isAllSelected();
+    //         entries.forEach((entry) => {
+    //             let indexOfEntry = this.selectedItems?.indexOf(entry?.uniqueName);
+    //             if (this.isAllSelected()) {
+    //                 if (indexOfEntry === -1) {
+    //                     this.selectedItems.push(entry?.uniqueName);
+    //                 }
+    //             } else if (indexOfEntry > -1) {
+    //                 this.selectedItems.splice(indexOfEntry, 1);
+    //             }
+    //         });
+    //     });
+    // }
 
     /**
      * The label for the checkbox on the passed row
@@ -537,7 +533,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      */
     public checkboxLabel(row?: SearchTable): string {
         if (!row) {
-            return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+            // return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
         }
         return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.name + 1}`;
     }
