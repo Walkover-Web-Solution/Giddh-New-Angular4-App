@@ -21,6 +21,7 @@ export class SearchComponent implements OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private searchActions: SearchActions) {
+        document.querySelector("body")?.classList?.add("search-filter");
     }
 
     public get searchRequest(): SearchRequest {
@@ -34,6 +35,7 @@ export class SearchComponent implements OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        document.querySelector("body")?.classList?.remove("search-filter");
         this.store.dispatch(this.searchActions.ResetSearchState());
     }
 

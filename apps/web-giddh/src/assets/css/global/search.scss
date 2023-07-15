@@ -1,0 +1,74 @@
+body {
+    &.search-filter {
+        .cdk-overlay-container {
+            .cdk-overlay-connected-position-bounding-box {
+                .cdk-overlay-pane {
+                    transform: unset !important;
+                    .mat-menu-panel {
+                        max-width: 550px;
+                    }
+                }
+            }
+        }
+        .mat-chip-list-wrapper {
+            flex-wrap: wrap !important;
+        }
+        .select-entity-height {
+            input {
+                height: 48px;
+                border-radius: 0.5rem;
+            }
+        }
+        .width-queryTypes {
+            .mat-form-field {
+                width: 152px;
+            }
+        }
+        .width-queryDiffers {
+            .mat-form-field {
+                width: 92px;
+            }
+        }
+        .width-balance-type {
+            .mat-form-field {
+                width: 92px;
+            }
+        }
+        .query-list {
+            .condition_tag {
+                position: absolute;
+                top: 2px;
+                right: -48px;
+                background: var(--color-dark-fog);
+                border-radius: 100%;
+                padding: 7px 7px;
+                text-transform: uppercase;
+                font-size: var(--font-size-12);
+                line-height: 24px;
+
+                &::before {
+                    content: " ";
+                    position: absolute;
+                    height: 63px;
+                    width: 2px;
+                    background: var(--color-dark-fog);
+                    top: 29px;
+                    left: 19px;
+                }
+            }
+            &:nth-last-child(3) {
+                .condition_tag {
+                    &::after {
+                        content: " ";
+                        position: absolute;
+                        height: 2px;
+                        width: 30px;
+                        background: var(--color-dark-fog);
+                        top: 90px;
+                        left: -10px;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,6 +1,6 @@
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store';
@@ -11,7 +11,19 @@ import { ToasterService } from '../../../services/toaster.service';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../../../services/general.service';
 import { cloneDeep } from '../../../lodash-optimized';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
 
+export interface SearchTable {
+    name: string;
+    uniqueName: string;
+    parent: string;
+    openingBalance: number;
+    drTotal: number;
+    crTotal: number;
+    closingBalance: number;
+  }
 @Component({
     selector: 'search-grid',
     templateUrl: './search-grid.component.html'
@@ -25,6 +37,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    @ViewChild('mailSmsDialog') public mailSmsDialog:TemplateRef<any>;
     public dayjs = dayjs;
     public companyUniqueName: string;
     public searchResponse$: Observable<AccountFlat[]>;
@@ -81,7 +94,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         },
     ];
     @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
-    @ViewChild('messageBox', { static: true }) public messageBox: ElementRef;
+    @ViewChild('messageBox') public messageBox:  ElementRef<HTMLInputElement>;;
     public searchRequest$: Observable<SearchRequest>;
     public isAllChecked: boolean = false;
     public get sortReverse(): boolean {
@@ -109,8 +122,14 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         selectedPage: 1
     };
     private formattedQuery: any;
+    /** Hold Mail Dailog Reference */
+    public mailSmsDialogRef:any;
+    public displayedColumns: string[] = ['select', 'name', 'uniqueName', 'parent', 'openingBalance', 'drTotal', 'crTotal', 'closingBalance'];
+    public dataSource:any;
+    public selection = new SelectionModel<SearchTable>(true, []);
 
-    constructor(private store: Store<AppState>, private companyServices: CompanyService, private toaster: ToasterService, private generalService: GeneralService) {
+
+    constructor(private store: Store<AppState>, private companyServices: CompanyService, private toaster: ToasterService, private generalService: GeneralService, public dialog: MatDialog) {
         this.searchResponse$ = this.store.pipe(select(p => p.search?.value), takeUntil(this.destroyed$));
         this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
@@ -121,6 +140,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             this.page = info.page;
             this.totalPages = info.totalPages;
         });
+        this.searchResponseFiltered$.pipe(takeUntil(this.destroyed$)).subscribe(res => this.dataSource = new MatTableDataSource<any>(res));
     }
 
     public set sortType(value: string) {
@@ -196,26 +216,26 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         ];
     }
 
-    public toggleSelectAll(ev) {
-        let isAllChecked = ev.target?.checked;
-        this.checkboxInfo[this.checkboxInfo.selectedPage] = isAllChecked;
+    // public toggleSelectAll(ev) {
+    //     let isAllChecked = ev.target?.checked;
+    //     this.checkboxInfo[this.checkboxInfo.selectedPage] = isAllChecked;
 
-        this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
-            let entries = cloneDeep(p);
-            this.isAllChecked = isAllChecked;
+    //     this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
+    //         let entries = cloneDeep(p);
+    //         this.isAllChecked = isAllChecked;
 
-            entries.forEach((entry) => {
-                let indexOfEntry = this.selectedItems?.indexOf(entry?.uniqueName);
-                if (isAllChecked) {
-                    if (indexOfEntry === -1) {
-                        this.selectedItems.push(entry?.uniqueName);
-                    }
-                } else if (indexOfEntry > -1) {
-                    this.selectedItems.splice(indexOfEntry, 1);
-                }
-            });
-        });
-    }
+    //         entries.forEach((entry) => {
+    //             let indexOfEntry = this.selectedItems?.indexOf(entry?.uniqueName);
+    //             if (isAllChecked) {
+    //                 if (indexOfEntry === -1) {
+    //                     this.selectedItems.push(entry?.uniqueName);
+    //                 }
+    //             } else if (indexOfEntry > -1) {
+    //                 this.selectedItems.splice(indexOfEntry, 1);
+    //             }
+    //         });
+    //     });
+    // }
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
@@ -326,21 +346,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      * @param {*} val
      * @memberof SearchGridComponent
      */
-    public addValueToMsg(val: any): void {
-        this.typeInTextarea(val?.value);
-    }
-
-    public typeInTextarea(newText) {
-        let el: HTMLInputElement = this.messageBox?.nativeElement;
-        let start = el.selectionStart;
-        let end = el.selectionEnd;
-        let text = el?.value;
-        let before = text.substring(0, start);
-        let after = text.substring(end, (text ? text.length : 0));
-        el.value = (before + newText + after);
-        el.selectionStart = el.selectionEnd = start + (newText ? newText.length : 0);
-        el.focus();
-        this.messageBody.msg = el?.value;
+    public addValueToMsg(newText: any): void {
+       this.messageBody.msg += newText;
+        this.messageBox.nativeElement.focus();
     }
 
     /**
@@ -354,7 +362,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.messageBody.type = 'Email';
         this.messageBody.btn.set = this.messageBody.btn.email;
         this.messageBody.header.set = this.messageBody.header.email;
-        this.mailModal.show();
+        this.mailSmsDialogRef = this.dialog.open(this.mailSmsDialog, {
+            width: '630px',
+            height: '515px'
+        })
     }
 
     /**
@@ -370,17 +381,17 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.mailModal.show();
     }
 
-    public toggleSelection(ev, item: AccountFlat) {
-        let isChecked = ev.target?.checked;
-        let indexOfEntry = this.selectedItems?.indexOf(item?.uniqueName);
-        if (isChecked && indexOfEntry === -1) {
-            this.selectedItems.push(item?.uniqueName);
-        } else {
-            this.selectedItems.splice(indexOfEntry, 1);
-            this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
-            this.isAllChecked = false;
-        }
-    }
+    // public toggleSelection(ev, item: AccountFlat) {
+    //     let isChecked = ev.target?.checked;
+    //     let indexOfEntry = this.selectedItems?.indexOf(item?.uniqueName);
+    //     if (isChecked && indexOfEntry === -1) {
+    //         this.selectedItems.push(item?.uniqueName);
+    //     } else {
+    //         this.selectedItems.splice(indexOfEntry, 1);
+    //         this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
+    //         this.isAllChecked = false;
+    //     }
+    // }
 
     /**
      * Send Email/Sms for Accounts
@@ -502,5 +513,46 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             }
         });
         return queryForApi;
+    }
+
+    /** Whether the number of selected elements matches the total number of rows. */
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        const numRows = this.dataSource.data.length;
+        return numSelected === numRows;
+    }
+
+    /** Selects all rows if they are not all selected; otherwise clear selection. */
+    masterToggle() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+
+    this.selection.select(...this.dataSource.data);
+
+    this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
+        let entries = cloneDeep(p);
+        this.isAllChecked = this.isAllSelected();
+
+        entries.forEach((entry) => {
+            let indexOfEntry = this.selectedItems?.indexOf(entry?.uniqueName);
+            if (this.isAllSelected()) {
+                if (indexOfEntry === -1) {
+                    this.selectedItems.push(entry?.uniqueName);
+                }
+            } else if (indexOfEntry > -1) {
+                this.selectedItems.splice(indexOfEntry, 1);
+            }
+        });
+    });
+  }
+
+    /** The label for the checkbox on the passed row */
+    checkboxLabel(row?: SearchTable): string {
+        if (!row) {
+        return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+        }
+        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.name + 1}`;
     }
 }
