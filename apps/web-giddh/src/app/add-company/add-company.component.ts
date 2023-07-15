@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
@@ -26,7 +26,7 @@ import { IOption } from "../theme/ng-select/option.interface";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class AddCompanyComponent implements OnInit, AfterViewInit {
+export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('stepper') stepperIcon: any;
     /** Mobile Number state instance */
     @ViewChild('mobileNo', { static: false }) mobileNo: ElementRef;
@@ -209,6 +209,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      * @memberof AddCompanyComponent
      */
     public ngOnInit(): void {
+        document.querySelector('body').classList.add('create-company');
         this.initCompanyForm();
         this.getCountry();
         this.getStates();
@@ -489,6 +490,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                 this.isOtherCountry = true;
                 this.secondStepForm.controls['businessType'].setValue(this.businessTypes.Unregistered);
                 this.businessTypeList.push({ label: this.localeData.unregistered, value: this.businessTypes.Unregistered });
+                this.selectBusinessType(this.businessTypes.Unregistered);
             } else {
                 this.isOtherCountry = false;
                 this.businessTypeList.push({ label: this.localeData.registered, value: this.businessTypes.Registered }, { label: this.localeData.unregistered, value: this.businessTypes.Unregistered });
@@ -512,7 +514,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
                         validMsg.classList.add("d-none");
                     }
                 };
-               let  errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
+                let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
                 if (input) {
                     reset();
                     if (this.intl?.isValidNumber()) {
@@ -840,15 +842,15 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
      * @param {*} event
      * @memberof AddCompanyComponent
      */
-    public selectBusinessType(event: any): void {
-        if (event) {
-            this.secondStepForm.controls['businessType'].setValue(event.value);
+    public selectBusinessType(value: any): void {
+        if (value) {
+            this.secondStepForm.controls['businessType'].setValue(value);
             this.secondStepForm.get('gstin').removeValidators(Validators.required);
             this.secondStepForm.get('state').removeValidators(Validators.required);
             this.secondStepForm.get('county').removeValidators(Validators.required);
             this.secondStepForm.get('address').removeValidators(Validators.required);
 
-            if (event.value === this.businessTypes.Registered) {
+            if (value === this.businessTypes.Registered) {
                 this.secondStepForm.get('gstin').setValidators(Validators.required);
                 if (this.countyList?.length) {
                     this.secondStepForm.get('county').setValidators(Validators.required);
@@ -866,8 +868,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             this.secondStepForm.get('address')?.updateValueAndValidity();
             this.secondStepForm.get('state')?.updateValueAndValidity();
             this.secondStepForm.get('country')?.updateValueAndValidity();
-            this.changeDetection.detectChanges();
         }
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -946,5 +948,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit {
             ];
             this.changeDetection.detectChanges();
         }
+    }
+
+    /**
+     * This will call on component destroy
+     *
+     * @memberof AddCompanyComponent
+     */
+    public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('create-company');
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
