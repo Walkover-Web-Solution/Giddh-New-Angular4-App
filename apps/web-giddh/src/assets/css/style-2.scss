@@ -924,7 +924,18 @@ aside-create-group {
                 height: 100% !important;
                 &.form-btn {
                     .mat-grid-tile-content {
-                        overflow-y: scroll;
+                        overflow-y: auto;
+                    }
+                }
+            }
+            div{
+                &:first-child{
+                    .mat-grid-tile{
+                        .mat-grid-tile-content{
+                            .item-list{
+                                margin-left: 0;
+                            }
+                        }
                     }
                 }
             }
@@ -973,7 +984,7 @@ aside-create-group {
         align-items: flex-start;
 
         .mat-list-base .mat-list-item {
-            height: 38px;
+            min-height: 38px;
             &.map-item {
                 .mat-list-item-content {
                     justify-content: flex-end;

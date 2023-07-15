@@ -123,7 +123,7 @@
                 </app-cdk-scroll>
             </ng-template>
         </mat-autocomplete>
-        <div class="dropdown-bg" (click)="openDropdownPanel()">
+        <div class="dropdown-bg" (click)="!readonly ? openDropdownPanel(): $event.stopPropagation()">
             <span class="arrow-dropdown"></span>
         </div>
     </mat-form-field>
