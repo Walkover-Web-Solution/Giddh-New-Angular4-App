@@ -12,7 +12,7 @@
                 mat-stroked-button
                 color="primary"
                 [matMenuTriggerFor]="filterByAccountMenu"
-                #trigger="matMenuTrigger"
+                #filterMenu="matMenuTrigger"
             >
                 {{ localeData?.filter_by_account }} <span class="caret"></span>
             </button>
@@ -52,7 +52,7 @@
                             </dropdown-field>
                             <dropdown-field
                                 [closeOnFocusOut]="true"
-                                class="width-queryDiffers mr-3"
+                                class="width-query-differs mr-3"
                                 [options]="queryDiffers"
                                 (selectedOption)="item?.get('queryDiffer').patchValue($event.value)"
                                 [defaultValue]="resetValues ? item?.get('queryDiffer').value : ''"
@@ -62,7 +62,7 @@
                             >
                             </dropdown-field>
                             <input-field
-                                class="width-queryDiffers mr-3"
+                                class="width-query-differs mr-3"
                                 *ngIf="
                                     item?.value.queryDiffer === 'Less' ||
                                     item?.value.queryDiffer === 'Greater' ||
@@ -79,8 +79,9 @@
                             </input-field>
 
                             <input-field
-                                class="width-queryDiffers mr-3"
+                                class="width-query-differs mr-3"
                                 *ngIf="item?.value.queryDiffer === 'Equals'"
+                                [type]="'text'"
                                 formControlName="amount"
                                 [required]="true"
                                 [allowDecimalDigitsOnly]="true"
@@ -140,7 +141,7 @@
                             mat-stroked-button
                             color="primary"
                             class="pull-right"
-                            (click)="filterData(); trigger?.closeMenu()"
+                            (click)="filterData(); filterMenu?.closeMenu()"
                         >
                             {{ commonLocaleData?.app_search }}
                         </button>

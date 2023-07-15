@@ -19,13 +19,17 @@
             [showDownloadCsv]="!!(searchResponseFiltered$ | async)?.length"
         >
         </search-filter>
-        <div>
-            <table mat-table [dataSource]="dataSource" class="w-100">
+        <div class="table-responsive">
+            <table 
+            mat-table 
+            [dataSource]="dataSource"
+            class="table basic giddh-table on-mobile-view w-100"
+            >
 
                 <!-- Checkbox Column -->
                 <ng-container matColumnDef="select">
                   <th mat-header-cell *matHeaderCellDef [style.width.px]="25">
-                    <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
+                    <mat-checkbox color="primary" (change)="$event ? selectAllAccount() : null"
                                   [checked]="selection.hasValue() && isAllSelected()"
                                   [indeterminate]="selection.hasValue() && !isAllSelected()"
                                   [aria-label]="checkboxLabel()">
@@ -168,7 +172,7 @@
                             aria-hidden="true"
                             class="close"
                             [attr.aria-label]="commonLocaleData?.app_close"
-                            (click)="mailSmsDialogRef.close()"
+                            (click)="mailSmsDialogRef?.close()"
                         >
                             ×
                         </button>
@@ -186,7 +190,7 @@
                         </input-field>
 
                         <mat-form-field appearance="outline" class="w-100 mt-3">
-                            <mat-label>Company Address</mat-label>
+                            <mat-label>{{ localeData?.company_address }}</mat-label>
                             <textarea 
                                 #messageBox
                                 matInput 
@@ -200,7 +204,7 @@
                         <div class="row mr-t2">
                             <div class="mx-3">
                                 <mat-chip-list>
-                                    <mat-chip *ngFor="let val of dataVariables" (click)="addValueToMsg(val.value)" class="cursor-pointer">
+                                    <mat-chip *ngFor="let val of dataVariables" (click)="addValueToMsg(val?.value)" class="cursor-pointer">
                                         {{ val.name }}
                                     </mat-chip>
                                   </mat-chip-list>

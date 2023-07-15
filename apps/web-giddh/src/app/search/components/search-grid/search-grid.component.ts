@@ -23,7 +23,7 @@ export interface SearchTable {
     drTotal: number;
     crTotal: number;
     closingBalance: number;
-  }
+}
 @Component({
     selector: 'search-grid',
     templateUrl: './search-grid.component.html'
@@ -37,7 +37,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    @ViewChild('mailSmsDialog') public mailSmsDialog:TemplateRef<any>;
+    /** This will hold Template Reference of Mail/SMS Dialog */
+    @ViewChild('mailSmsDialog') public mailSmsDialog: TemplateRef<any>;
     public dayjs = dayjs;
     public companyUniqueName: string;
     public searchResponse$: Observable<AccountFlat[]>;
@@ -94,7 +95,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         },
     ];
     @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
-    @ViewChild('messageBox') public messageBox:  ElementRef<HTMLInputElement>;;
+    @ViewChild('messageBox') public messageBox: ElementRef<HTMLInputElement>;
     public searchRequest$: Observable<SearchRequest>;
     public isAllChecked: boolean = false;
     public get sortReverse(): boolean {
@@ -123,9 +124,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     };
     private formattedQuery: any;
     /** Hold Mail Dailog Reference */
-    public mailSmsDialogRef:any;
+    public mailSmsDialogRef: any;
     public displayedColumns: string[] = ['select', 'name', 'uniqueName', 'parent', 'openingBalance', 'drTotal', 'crTotal', 'closingBalance'];
-    public dataSource:any;
+    public dataSource: any;
     public selection = new SelectionModel<SearchTable>(true, []);
 
 
@@ -215,27 +216,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             },
         ];
     }
-
-    // public toggleSelectAll(ev) {
-    //     let isAllChecked = ev.target?.checked;
-    //     this.checkboxInfo[this.checkboxInfo.selectedPage] = isAllChecked;
-
-    //     this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
-    //         let entries = cloneDeep(p);
-    //         this.isAllChecked = isAllChecked;
-
-    //         entries.forEach((entry) => {
-    //             let indexOfEntry = this.selectedItems?.indexOf(entry?.uniqueName);
-    //             if (isAllChecked) {
-    //                 if (indexOfEntry === -1) {
-    //                     this.selectedItems.push(entry?.uniqueName);
-    //                 }
-    //             } else if (indexOfEntry > -1) {
-    //                 this.selectedItems.splice(indexOfEntry, 1);
-    //             }
-    //         });
-    //     });
-    // }
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
@@ -347,7 +327,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      * @memberof SearchGridComponent
      */
     public addValueToMsg(newText: any): void {
-       this.messageBody.msg += newText;
+        this.messageBody.msg += newText;
         this.messageBox.nativeElement.focus();
     }
 
@@ -380,18 +360,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.messageBody.header.set = this.messageBody.header.sms;
         this.mailModal.show();
     }
-
-    // public toggleSelection(ev, item: AccountFlat) {
-    //     let isChecked = ev.target?.checked;
-    //     let indexOfEntry = this.selectedItems?.indexOf(item?.uniqueName);
-    //     if (isChecked && indexOfEntry === -1) {
-    //         this.selectedItems.push(item?.uniqueName);
-    //     } else {
-    //         this.selectedItems.splice(indexOfEntry, 1);
-    //         this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
-    //         this.isAllChecked = false;
-    //     }
-    // }
 
     /**
      * Send Email/Sms for Accounts
@@ -515,43 +483,59 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         return queryForApi;
     }
 
-    /** Whether the number of selected elements matches the total number of rows. */
-    isAllSelected() {
+    /**
+     * Whether the number of selected elements matches the total number of rows.
+     *
+     * @return {*} 
+     * @memberof SearchGridComponent
+     */
+    public isAllSelected() {
         const numSelected = this.selection.selected.length;
         const numRows = this.dataSource.data.length;
         return numSelected === numRows;
     }
 
-    /** Selects all rows if they are not all selected; otherwise clear selection. */
-    masterToggle() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
+    /**
+     * Selects all rows if they are not all selected; otherwise clear selection.
+     *
+     * @return {*} 
+     * @memberof SearchGridComponent
+     */
+    public selectAllAccount() {
+        if (this.isAllSelected()) {
+            this.selection.clear();
+            return;
+        }
+
+        this.selection.select(...this.dataSource.data);
+
+        this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
+            let entries = cloneDeep(p);
+            this.isAllChecked = this.isAllSelected();
+
+            entries.forEach((entry) => {
+                let indexOfEntry = this.selectedItems?.indexOf(entry?.uniqueName);
+                if (this.isAllSelected()) {
+                    if (indexOfEntry === -1) {
+                        this.selectedItems.push(entry?.uniqueName);
+                    }
+                } else if (indexOfEntry > -1) {
+                    this.selectedItems.splice(indexOfEntry, 1);
+                }
+            });
+        });
     }
 
-    this.selection.select(...this.dataSource.data);
-
-    this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
-        let entries = cloneDeep(p);
-        this.isAllChecked = this.isAllSelected();
-
-        entries.forEach((entry) => {
-            let indexOfEntry = this.selectedItems?.indexOf(entry?.uniqueName);
-            if (this.isAllSelected()) {
-                if (indexOfEntry === -1) {
-                    this.selectedItems.push(entry?.uniqueName);
-                }
-            } else if (indexOfEntry > -1) {
-                this.selectedItems.splice(indexOfEntry, 1);
-            }
-        });
-    });
-  }
-
-    /** The label for the checkbox on the passed row */
-    checkboxLabel(row?: SearchTable): string {
+    /**
+     * The label for the checkbox on the passed row
+     *
+     * @param {SearchTable} [row]
+     * @return {*}  {string}
+     * @memberof SearchGridComponent
+     */
+    public checkboxLabel(row?: SearchTable): string {
         if (!row) {
-        return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+            return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
         }
         return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.name + 1}`;
     }
