@@ -5,7 +5,6 @@ import * as dayjs from 'dayjs';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store';
 import { saveAs } from 'file-saver';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyService } from '../../../services/company.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { map, take, takeUntil } from 'rxjs/operators';
@@ -94,7 +93,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             value: '%s_AN',
         },
     ];
-    @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
     @ViewChild('messageBox') public messageBox: ElementRef<HTMLInputElement>;
     public searchRequest$: Observable<SearchRequest>;
     public isAllChecked: boolean = false;
@@ -123,8 +121,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         selectedPage: 1
     };
     private formattedQuery: any;
-    /** Hold Mail Dailog Reference */
+    /** Hold Mail/SMS Mat Dailog Reference */
     public mailSmsDialogRef: any;
+    /* Holds Mat Table Configuration */
     public displayedColumns: string[] = ['select', 'name', 'uniqueName', 'parent', 'openingBalance', 'drTotal', 'crTotal', 'closingBalance'];
     public dataSource: any;
     public selection = new SelectionModel<SearchTable>(true, []);
@@ -358,7 +357,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.messageBody.type = 'sms';
         this.messageBody.btn.set = this.messageBody.btn.sms;
         this.messageBody.header.set = this.messageBody.header.sms;
-        this.mailModal.show();
+        this.mailSmsDialogRef = this.dialog.open(this.mailSmsDialog, {
+            width: '630px',
+            height: '515px'
+        })
     }
 
     /**
@@ -417,7 +419,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                     });
             }
         });
-        this.mailModal.hide();
+        this.mailSmsDialogRef.close();
     }
 
     public pageChanged(ev) {

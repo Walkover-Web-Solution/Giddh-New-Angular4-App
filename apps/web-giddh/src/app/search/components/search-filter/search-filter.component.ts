@@ -2,7 +2,6 @@ import { Component, EventEmitter, OnInit, Output, ViewChild, Input } from '@angu
 import { SearchDataSet } from '../../../models/api-models/Search';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../shared/helpers/customValidationHelper';
-import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
@@ -26,7 +25,7 @@ export class SearchFilterComponent implements OnInit {
     @Output() public createCsv = new EventEmitter();
     @Output() public openEmailDialog = new EventEmitter();
     @Output() public openSmsDialog = new EventEmitter();
-    @ViewChild('filterDropdown', { static: true }) public filterDropdown: BsDropdownDirective;
+    /* This will holds the Filter By Account Mat Menu Reference */
     @ViewChild('filterMenu', { static: false, read: MatAutocompleteTrigger }) filterMenu: MatAutocompleteTrigger;
     public queryTypes = [];
     public queryDiffers = [];
@@ -34,6 +33,7 @@ export class SearchFilterComponent implements OnInit {
     public searchQueryForm: FormGroup;
     public searchDataSet: FormArray;
     public toggleFilters: boolean = false;
+    /* It reset the status for Filter by Account  */
     public resetValues: boolean = false;
 
     /**
