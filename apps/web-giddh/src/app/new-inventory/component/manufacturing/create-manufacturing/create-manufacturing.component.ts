@@ -543,7 +543,18 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @memberof CreateManufacturingComponent
      */
     public addNewLinkedStock(): void {
-        this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(new ManufacturingLinkedStock());
+        this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(
+            {
+                selectedStock: { label: "", value: "", additional: { stockUnitCode: "", stockUnitUniqueName: "", unitsList: [] } },
+                stockUniqueName: "",
+                quantity: 1,
+                stockUnitUniqueName: "",
+                stockUnitCode: "",
+                rate: 0,
+                amount: 0,
+                variant: { name: '', uniqueName: '' }
+            }
+        );
         this.preventStocksApiCall = false;
         this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[(this.manufacturingObject.manufacturingDetails[0].linkedStocks?.length - 1)], 1, '', this.selectedInventoryType);
     }
