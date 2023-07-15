@@ -27,9 +27,8 @@ export class SearchFilterComponent implements OnInit {
     @Output() public openEmailDialog = new EventEmitter();
     @Output() public openSmsDialog = new EventEmitter();
     @ViewChild('filterDropdown', { static: true }) public filterDropdown: BsDropdownDirective;
-    @ViewChild('trigger', { static: false, read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
+    @ViewChild('filterMenu', { static: false, read: MatAutocompleteTrigger }) filterMenu: MatAutocompleteTrigger;
     public queryTypes = [];
-    // public queryTypesOptions = ['closingBalance','openingBalance','creditTotal','debitTotal'];
     public queryDiffers = [];
     public balType = [];
     public searchQueryForm: FormGroup;

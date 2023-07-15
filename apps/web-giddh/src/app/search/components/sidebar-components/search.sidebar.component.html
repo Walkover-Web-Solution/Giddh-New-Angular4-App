@@ -7,7 +7,6 @@
                         class="linked-entities"
                         *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
                     >
-                        <!-- <label class="d-block">{{ commonLocaleData?.app_select_entity }}</label> -->
                         <div class="form-group">
                             <sh-select
                                 [options]="currentCompanyBranches"
@@ -69,7 +68,6 @@
                     </dropdown-field>
                 </div>
                 <div class="form-group mr-r15">
-                    <!-- <label>{{ localeData?.from_to }}</label> -->
                     <div class="custom-datepicker custom-new-datepicker" (click)="showGiddhDatepicker($event)">
                         <input
                             type="text"
