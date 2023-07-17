@@ -22,6 +22,7 @@ import { Location } from '@angular/common';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CreateRecipeComponent } from "../recipe/create-recipe/create-recipe.component";
 import { GeneralService } from "../../../services/general.service";
+import { ManufacturingService } from "../../../services/manufacturing.service";
 
 @Component({
     selector: "stock-create-edit",
@@ -41,6 +42,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     /* this will store image path*/
     public imgPath: string = "";
+    /** Stock main units list */
+    public stockMainUnits: IOption[] = [];
     /** Stock units list */
     public stockUnits: IOption[] = [];
     /** Stock groups list */
@@ -234,7 +237,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         private customFieldsService: CustomFieldsService,
         private dialog: MatDialog,
         private location: Location,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private manufacturingService: ManufacturingService
     ) {
     }
 
@@ -251,7 +255,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         this.getUnitGroups();
         this.getTaxes();
-        this.getStockUnits();
         this.getWarehouses();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -327,30 +330,51 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Get stock units
+     * Get stock main units
      *
      * @memberof StockCreateEditComponent
      */
     public getStockUnits(): void {
         let groups = ["maingroup"];
 
-        if (this.stockForm.stockUnitGroup?.uniqueName && this.stockForm.stockUnitGroup?.uniqueName !== "maingroup") {
-            groups.push(this.stockForm.stockUnitGroup?.uniqueName);
+        if (this.stockForm.stockUnitGroup?.uniqueName) {
+            groups = [this.stockForm.stockUnitGroup?.uniqueName];
         }
 
-        this.stockUnits = [];
-        this.stockForm.stockUnitUniqueName = "";
-        this.stockUnitName = "";
+        this.stockMainUnits = [];
 
         this.inventoryService.getStockMappedUnit(groups).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                this.stockUnits = response?.body?.map(result => {
+                this.stockMainUnits = response?.body?.map(result => {
                     return {
                         value: result.stockUnitX?.uniqueName,
                         label: `${result.stockUnitX?.name} (${result.stockUnitX?.code})`,
                         additional: result
                     };
                 }) || [];
+            }
+        });
+    }
+
+    /**
+     * Get stock linked units
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public getStockLinkedUnits(): void {
+        this.stockUnits = [];
+
+        if (!this.stockForm.stockUnitUniqueName) {
+            return;
+        }
+
+        this.manufacturingService.loadStockUnits(this.stockForm.stockUnitUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(units => {
+            if (units?.length) {
+                units?.forEach(unit => {
+                    this.stockUnits.push({ label: unit?.code, value: unit?.uniqueName });
+                });
+
+                this.prefillUnits();
             }
         });
     }
@@ -1180,6 +1204,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.findSalesAccountName();
                 this.findFixedAssetsAccountName();
                 this.toggleLoader(false);
+                this.getStockUnits();
+                this.getStockLinkedUnits();
                 this.prefillUnits();
                 this.changeDetection.detectChanges();
 

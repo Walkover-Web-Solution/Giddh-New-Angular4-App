@@ -75,9 +75,12 @@
                                                 (selectedOption)="
                                                     stockForm.stockUnitGroup.uniqueName = $event?.value;
                                                     stockForm.stockUnitGroup.name = $event.label;
+                                                    stockForm.stockUnitUniqueName = '';
+                                                    stockUnitName = '';
                                                     getStockUnits()
                                                 "
                                                 [defaultValue]="stockForm.stockUnitGroup?.name"
+                                                [readonly]="queryParams?.stockUniqueName"
                                             >
                                             </dropdown-field>
                                         </div>
@@ -86,14 +89,15 @@
                                                 [name]="'stockUnitCode'"
                                                 [placeholder]="localeData?.select_unit"
                                                 [label]="commonLocaleData?.app_unit"
-                                                [options]="stockUnits"
+                                                [options]="stockMainUnits"
                                                 (selectedOption)="
                                                     stockForm.stockUnitUniqueName = $event?.value;
                                                     stockUnitName = $event.label;
-                                                    prefillUnits()
+                                                    getStockLinkedUnits()
                                                 "
                                                 [defaultValue]="stockUnitName"
                                                 [showError]="isFormSubmitted && !stockForm.stockUnitUniqueName"
+                                                [readonly]="queryParams?.stockUniqueName"
                                             >
                                             </dropdown-field>
                                         </div>
@@ -156,7 +160,7 @@
                                                 </mat-select>
                                             </mat-form-field>
                                             <button
-                                                *ngIf="queryParams?.stockUniqueName"
+                                                *ngIf="queryParams?.stockUniqueName && stockGroups?.length > 1"
                                                 mat-stroked-button
                                                 color="primary"
                                                 class="min-width-100 move-stock mr-0"
