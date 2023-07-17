@@ -15,13 +15,7 @@
         }"
         [class]="'drops-' + drops + '-' + opens"
     >
-        <!-- ranges container -->
-        <perfect-scrollbar
-            fxFlex="auto"
-            class="hide-horizontal-scroll ranges-perfect-scrollbar"
-            [scrollIndicators]="true"
-            [config]="{ suppressScrollX: false, suppressScrollY: false }"
-        >
+        <app-cdk-scroll>
             <div class="ranges" *ngIf="ranges?.length">
                 <!-- loop over ranges -->
                 <div class="range-container">
@@ -118,7 +112,7 @@
                 </div>
                 <!-- days up to today/ yesterday input -->
             </div>
-        </perfect-scrollbar>
+        </app-cdk-scroll>
         <!-- ranges container -->
         <!-- calender container -->
         <div class="calender-container" *ngIf="!isMobileScreen || (isMobileScreen && openMobileDatepickerPopup)">
