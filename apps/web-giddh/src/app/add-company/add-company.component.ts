@@ -530,6 +530,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                             errorMsg.classList.remove("d-none");
                         }
                     }
+                } else {
+                    this.setMobileNumberValid(true);
                 }
             }
 
@@ -653,6 +655,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public setMobileNumberValid(value: boolean): void {
         this.firstStepForm.controls['mobile'].setErrors(value ? null : { invalidMobileNumber: true });
         this.isMobileNumberInvalid = !value;
+        this.changeDetection.detectChanges();
     }
 
     /**
