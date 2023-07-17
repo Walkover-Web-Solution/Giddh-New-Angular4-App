@@ -725,7 +725,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
-        return !this.isUpdateMode && this.invFormData.voucherDetails.customerUniquename;
+        return (!this.isUpdateMode && this.invFormData.voucherDetails.customerUniquename) ? true : false;
     }
 
     /**
@@ -3745,6 +3745,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+
+        setTimeout(() => {
+            if (this.accountAsideMenuState === "out" && this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        }, 100);
     }
 
     public toggleRecurringAsidePane(toggle?: string): void {

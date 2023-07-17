@@ -1836,6 +1836,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+
+        setTimeout(() => {
+            if (this.asideMenuState === "out" && this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        }, 100);
+
         this.cdRf.detectChanges();
     }
 
