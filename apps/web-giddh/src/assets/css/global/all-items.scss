@@ -1,16 +1,6 @@
 .giddh-all-items-wrapper {
     .search-any-item {
-        max-width: 530px;
-        width: 100%;
-        margin: 10px auto;
         .input-group {
-            i {
-                font-size: var(--font-size-16);
-            }
-            .input-group-text {
-                border: none;
-                background-color: var(--color-primary-all-items-input-group-input-background);
-            }
             input {
                 height: 50px;
                 font-size: var(--font-size-15);
@@ -20,57 +10,6 @@
                 position: relative;
                 left: 1px;
                 background-color: var(--color-primary-all-items-input-group-input-background) !important;
-            }
-        }
-    }
-    .all-item-block {
-        .main-item {
-            border-bottom: 1px solid var(--color-primary-all-items-page-wrapper-block-border);
-            margin-bottom: 20px;
-            h3 {
-                color: var(--color-primary-all-items-page-heading);
-                font-family: var(--font-semibold);
-                i {
-                    font-size: 22px;
-                }
-            }
-            .sub-item-block {
-                .single-menu-item {
-                    cursor: pointer;
-                    padding: 15px;
-                    white-space: normal;
-                    word-break: break-word;
-                    min-height: 90px;
-                    transition: all 140ms ease-in;
-                    h4 {
-                        font-size: var(--font-size-15);
-                        margin-bottom: 5px;
-                        display: flex;
-                        align-items: center;
-                        color: var(--color-primary-all-items-page-single-menu-items-heading);
-                        i {
-                            font-size: 22px;
-
-                            &.unit-mapping-icon {
-                                background-image: url("../../images/unit-mapping.svg");
-                                width: 24px;
-                                height: 24px;
-                            }
-                        }
-                    }
-                    p {
-                        color: var(--color-primary-all-items-page-single-menu-items-body);
-                        font-size: var(--font-size-12);
-                    }
-                    &:hover,
-                    &.active {
-                        background-color: var(--color-giddh-blue);
-                        h4,
-                        p {
-                            color: var(--color-white);
-                        }
-                    }
-                }
             }
         }
     }
