@@ -8374,7 +8374,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             isChecked = !event?._checked;
         }
         this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
-
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: '630px',
             data: {
@@ -8383,6 +8382,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            document.querySelector('body').classList.remove('fixed');
             this.handleRcmChange(response);
         });
     }
