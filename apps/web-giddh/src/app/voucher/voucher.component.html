@@ -2938,9 +2938,12 @@
                                 <!-- endregion -->
                                 <!-- </ng-container> -->
                             </ng-template>
+
                             <!-- region add bulk items -->
                             <div class="p-1 aqua-color add-line-bulk-item width-100" *ngIf="!isEinvoiceGenerated">
-                                <a href="javascript:;" (click)="addBlankRow(null)">{{ localeData?.add_new_line }}</a>
+                                <a href="javascript:;" (click)="$event?.stopPropagation(); addBlankRow(null)">{{
+                                    localeData?.add_new_line
+                                }}</a>
                                 <span class="font-15 add-bulk-button"> | </span>
                                 <a (click)="addBulkItems()" href="javascript:;">{{ localeData?.add_bulk_entries }}</a>
                             </div>

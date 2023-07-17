@@ -3682,7 +3682,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public onSelectCustomer(item: any): void {
-        this.onlyPhoneNumber();
+        this.resetMobileNumberValidation();
         this.intl?.setNumber("");
         this.typeaheadNoResultsOfCustomer = false;
         this.referenceVouchersCurrentPage = 1;
@@ -3916,10 +3916,27 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
+    /**
+     * This will use for reset mobile number validations
+     *
+     * @memberof VoucherComponent
+     */
+    public resetMobileNumberValidation(): void {
+        let input = document.getElementById('init-contact-proforma');
+        const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
+        const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
+        input?.classList?.remove("error");
+        if (errorMsg && validMsg) {
+            errorMsg.innerHTML = "";
+            errorMsg.classList.add("d-none");
+            validMsg.classList.add("d-none");
+        }
+    }
+
     public resetCustomerName(event) {
         if (event) {
             if (!event?.value) {
-                this.onlyPhoneNumber();
+                this.resetMobileNumberValidation();
                 this.intl?.setNumber("");
                 this.invFormData.voucherDetails.customerName = null;
                 this.invFormData.voucherDetails.customerUniquename = null;
@@ -3933,7 +3950,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
         } else {
-            this.onlyPhoneNumber();
+            this.resetMobileNumberValidation();
             this.intl?.setNumber("");
             this.invFormData.voucherDetails.customerName = null;
             this.invFormData.voucherDetails.customerUniquename = null;
@@ -6534,6 +6551,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
+        if (query === undefined || query === null) {
+            query = "";
+        }
         if (!this.preventDefaultScrollApiCall &&
             (query || (searchType === SEARCH_TYPE.CUSTOMER && this.defaultCustomerSuggestions?.length === 0) ||
                 (searchType === SEARCH_TYPE.ITEM && this.defaultItemSuggestions?.length === 0) || successCallback)) {
@@ -8252,6 +8272,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     );
                 },
             });
+
             let reset = () => {
                 input?.classList?.remove("error");
                 if (errorMsg && validMsg) {
@@ -8266,6 +8287,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (input) {
                     if (phoneNumber?.length) {
                         if (this.intl?.isValidNumber()) {
+
                             validMsg?.classList?.remove("d-none");
                             this.isMobileNumberInvalid = false;
                         } else {
@@ -8311,7 +8333,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             isChecked = !event?._checked;
         }
         this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
-
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: '630px',
             data: {
@@ -8320,6 +8341,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            document.querySelector('body').classList.remove('fixed');
             this.handleRcmChange(response);
         });
     }
