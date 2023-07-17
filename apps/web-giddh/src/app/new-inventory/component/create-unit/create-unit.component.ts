@@ -180,7 +180,13 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
      * @memberof CreateNewUnitComponent
      */
     public getUnitMappings(): void {
-        this.inventoryService.getStockMappedUnit(["maingroup", this.unitForm.get('group').get('uniqueName').value]).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        let groups = ["maingroup"];
+
+        if (this.unitForm.get('group').get('uniqueName').value !== "maingroup") {
+            groups.push(this.unitForm.get('group').get('uniqueName').value);
+        }
+
+        this.inventoryService.getStockMappedUnit(groups).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length) {
                 const tempUnits = []
                 let usedMappedUnit = [];
@@ -191,7 +197,7 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
                         usedMappedUnit[unit?.stockUnitX?.code] = unit;
                         tempUnits.push(unit?.stockUnitX?.code);
 
-                        this.mappedUnitList.push({ label: unit?.stockUnitX?.name + "(" + unit?.stockUnitX?.code + ")", value: unit?.stockUnitX?.code, additional: unit });
+                        this.mappedUnitList.push({ label: unit?.stockUnitX?.name + " (" + unit?.stockUnitX?.code + ")", value: unit?.stockUnitX?.code, additional: unit });
                     }
                 });
 
@@ -203,19 +209,19 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
 
                 if (this.unitDetails?.uniqueName) {
                     if (!tempUnits[this.unitDetails?.code]) {
-                        this.unitList.push({ label: this.unitDetails?.name + "(" + this.unitDetails?.code + ")", value: this.unitDetails?.code, uniqueName: this.unitDetails?.uniqueName });
+                        this.unitList.push({ label: this.unitDetails?.name + " (" + this.unitDetails?.code + ")", value: this.unitDetails?.code, uniqueName: this.unitDetails?.uniqueName });
                     }
                 }
             } else {
                 const tempUnits = [];
                 StockUnits.forEach(unit => {
                     tempUnits[unit.value] = unit.label;
-                    this.unitList.push({ label: unit.label + "(" + unit.value + ")", value: unit.value, uniqueName: unit.uniqueName });
+                    this.unitList.push({ label: unit.label + " (" + unit.value + ")", value: unit.value, uniqueName: unit.uniqueName });
                 });
 
                 if (this.unitDetails?.uniqueName) {
                     if (!tempUnits[this.unitDetails?.code]) {
-                        this.unitList.push({ label: this.unitDetails?.name + "(" + this.unitDetails?.code + ")", value: this.unitDetails?.code, uniqueName: this.unitDetails?.uniqueName });
+                        this.unitList.push({ label: this.unitDetails?.name + " (" + this.unitDetails?.code + ")", value: this.unitDetails?.code, uniqueName: this.unitDetails?.uniqueName });
                     }
                 }
             }
@@ -298,7 +304,7 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
 
             const isUnitAvailableMappedUnit = this.mappedUnitList?.filter(unit => unit.value === event.value);
             if (!isUnitAvailableMappedUnit?.length) {
-                this.mappedUnitList.push(event);
+                this.mappedUnitList.push({ label: event.label + " (" + event.value + ")", value: event.value, additional: event });
             }
 
             this.unitForm.get('name').patchValue(event.label);
@@ -348,6 +354,7 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
     public selectUnitGroup(event: any): void {
         this.unitForm.get('group').get('name').patchValue(event.label);
         this.unitForm.get('group').get('uniqueName').patchValue(event.value);
+        this.getUnitMappings();
     }
 
     /**

@@ -929,11 +929,11 @@ aside-create-group {
                     }
                 }
             }
-            div{
-                &:first-child{
-                    .mat-grid-tile{
-                        .mat-grid-tile-content{
-                            .item-list{
+            div {
+                &:first-child {
+                    .mat-grid-tile {
+                        .mat-grid-tile-content {
+                            .item-list {
                                 margin-left: 0;
                             }
                         }
@@ -14423,5 +14423,18 @@ button {
                 }
             }
         }
+    }
+}
+
+.readonly-field {
+    .dropdown-bg {
+        display: none !important;
+    }
+    .mat-form-field-flex {
+        background-color: var(--color-primary-input-bar-background) !important;
+    }
+
+    .dropdown-bg {
+        background-color: transparent !important;
     }
 }
