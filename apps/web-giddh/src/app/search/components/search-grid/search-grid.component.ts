@@ -11,8 +11,7 @@ import { map, take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../../../services/general.service';
 import { cloneDeep } from '../../../lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
-import { SelectionModel } from '@angular/cdk/collections';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 export interface SearchTable {
     name: string;
@@ -22,12 +21,15 @@ export interface SearchTable {
     debitTotal: number;
     creditTotal: number;
     closingBalance: number;
+    isSelected: boolean
 }
 
 export interface searchSortRequest {
     sort: string;
     sortBy: string
 }
+/** Hold information of activity logs */
+const ELEMENT_DATA: SearchTable[] = [];
 @Component({
     selector: 'search-grid',
     templateUrl: './search-grid.component.html'
@@ -104,7 +106,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     /** pagination related  */
     public page: number;
     public totalPages: number;
-    public selectedItems: string[] = [];
+    public selectedItems: any[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private checkboxInfo: any = {
         selectedPage: 1
@@ -114,12 +116,16 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     public mailSmsDialogRef: any;
     /* Holds Mat Table Configuration */
     public displayedColumns: string[] = ['select', 'name', 'uniqueName', 'parent', 'openingBalance', 'debitTotal', 'creditTotal', 'closingBalance'];
-    public selection = new SelectionModel<SearchTable>(true, []);
     /** Search Sorting Object */
     public searchSortRequestObj: searchSortRequest = {
         sort: '',
         sortBy: ''
     };
+    /** True if select customer all */
+    public selectAllCustomer: boolean = false;
+    /** Hold table datal */
+    public dataSource = ELEMENT_DATA;
+
 
     constructor(private store: Store<AppState>, private companyServices: CompanyService, private toaster: ToasterService, private generalService: GeneralService, public dialog: MatDialog) {
         this.searchResponse$ = this.store.pipe(select(p => p.search?.value), takeUntil(this.destroyed$));
@@ -131,6 +137,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.search.searchPaginationInfo), takeUntil(this.destroyed$)).subscribe((info) => {
             this.page = info.page;
             this.totalPages = info.totalPages;
+        });
+        this.searchResponseFiltered$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            let newArr = response.map(v => ({ ...v, isSelected: false }))
+            this.dataSource = newArr;
         });
     }
 
@@ -483,58 +493,57 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Whether the number of selected elements matches the total number of rows.
+     * This will use for single selection customer
      *
-     * @return {*}
+     * @param {MatCheckboxChange} event
+     * @param {*} item
      * @memberof SearchGridComponent
      */
-    public isAllSelected() {
-        console.log(this.selection);
-        let numSelected = this.selection.selected.length;
-        this.searchResponseFiltered$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            return numSelected = response.length;
-        });
-    }
-
-    /**
-     * Selects all rows if they are not all selected; otherwise clear selection.
-     *
-     * @return {*}
-     * @memberof SearchGridComponent
-     */
-    // public selectAllAccount() {
-    //     if (this.isAllSelected()) {
-    //         this.selection.clear();
-    //         return;
-    //     }
-    //     // this.selection.select(...this.dataSource.data);
-    //     this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
-    //         let entries = cloneDeep(p);
-    //         this.isAllChecked = this.isAllSelected();
-    //         entries.forEach((entry) => {
-    //             let indexOfEntry = this.selectedItems?.indexOf(entry?.uniqueName);
-    //             if (this.isAllSelected()) {
-    //                 if (indexOfEntry === -1) {
-    //                     this.selectedItems.push(entry?.uniqueName);
-    //                 }
-    //             } else if (indexOfEntry > -1) {
-    //                 this.selectedItems.splice(indexOfEntry, 1);
-    //             }
-    //         });
-    //     });
-    // }
-
-    /**
-     * The label for the checkbox on the passed row
-     *
-     * @param {SearchTable} [row]
-     * @return {*}  {string}
-     * @memberof SearchGridComponent
-     */
-    public checkboxLabel(row?: SearchTable): string {
-        if (!row) {
-            // return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    public selectAccount(event: MatCheckboxChange, item: any) {
+        this.prepareSelectedCustomerList(item, event?.checked);
+        if (!event?.checked) {
+            if (this.selectedItems?.length === 0) {
+                this.selectAllCustomer = false;
+            }
         }
-        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.name + 1}`;
     }
+
+    /**
+     * This will use for prepare selected customer list
+     *
+     * @param {*} element
+     * @param {boolean} isChecked
+     * @memberof SearchGridComponent
+     */
+    public prepareSelectedCustomerList(element: any, isChecked: boolean): void {
+        let indexOfEntrySelected = this.selectedItems?.indexOf(element?.uniqueName);
+        if (indexOfEntrySelected === -1 && isChecked) {
+            this.selectedItems.push(element?.uniqueName);
+        } else if (indexOfEntrySelected > -1 && !isChecked) {
+            this.selectedItems.splice(indexOfEntrySelected, 1);
+        }
+    }
+
+    /**
+     *This will use for select all customer
+     *
+     * @param {boolean} action
+     * @memberof SearchGridComponent
+     */
+    public toggleAllSelection(action: boolean) {
+        if (action) {
+            this.dataSource = this.dataSource?.map(element => {
+                element.isSelected = action;
+                this.prepareSelectedCustomerList(element, true);
+                return element;
+            });
+        } else {
+            this.dataSource = this.dataSource?.map(element => {
+                element.isSelected = action;
+                this.prepareSelectedCustomerList(element, false);
+                return element;
+            });
+        }
+    }
+
 }
