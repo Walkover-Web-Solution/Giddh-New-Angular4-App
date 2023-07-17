@@ -17,19 +17,21 @@
 
         .back-to-main-slider {
             display: block;
-            padding: 15px 15px 3px;
+            padding: 15px 13px;
             margin-bottom: 0;
             .heading {
                 position: relative;
+                left: 21px;
                 bottom: 25px;
                 z-index: 1;
-                text-align: center;
                 font-size: var(--font-size-16);
                 font-family: var(--font-regular);
             }
             .icon-back-arrow {
                 position: relative;
                 z-index: 2;
+                top: -2px;
+                color: var(--color-giddh-blue);
             }
         }
 
@@ -89,10 +91,9 @@
                         font: normal normal 600 var(--font-size-15) / 30px var(--font-regular);
                         &:hover {
                             color: var(--color-white-tertiary);
-                            background-color: var(--color-sidebar-anchor-text-hover);
+                            background-color: var(--color-giddh-blue);
                             .sidebar-menu-icons {
-                                filter: invert(100%) sepia(1%) saturate(2%) hue-rotate(1deg) brightness(135%)
-                                    contrast(100%);
+                                filter: invert(99%) sepia(93%) saturate(24%) hue-rotate(68deg) brightness(106%) contrast(100%);
                             }
                         }
                         &.sub-option[aria-level="1"] {
@@ -103,11 +104,10 @@
                             width: 100%;
                             line-height: 15px;
                             &:hover {
-                                color: var(--color-sidebar-anchor-text-hover);
+                                color: var(--color-giddh-blue);
                                 background-color: var(--color-white);
                                 .sidebar-menu-icons {
-                                    filter: invert(52%) sepia(83%) saturate(2500%) hue-rotate(205deg) brightness(101%)
-                                        contrast(101%);
+                                    filter: brightness(0) saturate(100%) invert(15%) sepia(31%) saturate(4938%) hue-rotate(224deg) brightness(91%) contrast(104%);
                                 }
                             }
                         }
@@ -129,16 +129,15 @@
                             min-height: 37px;
                         }
                         &:hover {
-                            color: var(--color-sidebar-anchor-text-hover);
+                            color: var(--color-giddh-blue);
                             .sidebar-list-icon {
-                                color: var(--color-sidebar-anchor-text-hover);
+                                color: var(--color-giddh-blue);
                             }
                             .sidebar-menu-icons {
-                                filter: invert(52%) sepia(83%) saturate(2500%) hue-rotate(205deg) brightness(101%)
-                                    contrast(101%);
+                                filter: brightness(0) saturate(100%) invert(15%) sepia(31%) saturate(4938%) hue-rotate(224deg) brightness(91%) contrast(104%);
                             }
                             .sidebar-icon {
-                                color: var(--color-sidebar-anchor-text-hover);
+                                color: var(--color-giddh-blue);
                             }
                         }
                     }
@@ -220,13 +219,13 @@
     }
 }
 .active {
-    background-color: var(--color-sidebar-anchor-text-hover) !important;
+    background-color: var(--color-giddh-blue) !important;
     color: var(--color-white) !important;
     .sidebar-menu-icons {
-        filter: invert(1) !important;
+        filter: invert(99%) sepia(93%) saturate(24%) hue-rotate(68deg) brightness(106%) contrast(100%) !important;
     }
-    :hover {
-        background-color: var(--color-sidebar-anchor-text-hover) !important;
+    &:hover {
+        background-color: var(--color-giddh-blue) !important;
         color: var(--color-white) !important;
     }
 }
