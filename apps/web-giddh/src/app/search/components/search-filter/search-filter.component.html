@@ -1,177 +1,171 @@
-<section class="mr-t15 mr-b15">    
-        <div class="d-inline-flex">
-            <button
-                type="button"
-                mat-stroked-button
-                color="primary"
-                [matMenuTriggerFor]="filterByAccountMenu"
-                #filterMenu="matMenuTrigger"
+<section class="mr-t15 mr-b15">
+    <div class="d-inline-flex">
+        <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            [matMenuTriggerFor]="filterByAccountMenu"
+            #filterMenu="matMenuTrigger"
+        >
+            {{ localeData?.filter_by_account }} <span class="caret"></span>
+        </button>
+        <mat-menu #filterByAccountMenu="matMenu">
+            <form
+                [formGroup]="searchQueryForm"
+                novalidate
+                name="searchQueryForm"
+                id="searchQueryForm"
+                class="form-inline flex-row flex-wrap pd-1"
+                (click)="$event.stopPropagation(); (false)"
             >
-                {{ localeData?.filter_by_account }} <span class="caret"></span>
-            </button>
-            <mat-menu #filterByAccountMenu="matMenu">
-                <form
-                    [formGroup]="searchQueryForm"
-                    novalidate
-                    name="searchQueryForm"
-                    id="searchQueryForm"
-                    class="form-inline flex-row flex-wrap pd-1"
-                    (click)="$event.stopPropagation(); (false)"
+                <!-- repeater -->
+                <div
+                    class="position-relative query-list query-list d-flex"
+                    [ngClass]="{ 'mr-t2': i !== 0 }"
+                    formArrayName="searchQuery"
+                    *ngFor="let item of searchQueryForm.get('searchQuery')['controls']; let i = index; let l = last"
                 >
-                    <!-- repeater -->
-                    <div
-                        class="position-relative query-list query-list d-flex"
-                        [ngClass]="{ 'mr-t2': i !== 0 }"
-                        formArrayName="searchQuery"
-                        *ngFor="let item of searchQueryForm.get('searchQuery')['controls']; let i = index; let l = last"
-                    >
-                        <div [formGroupName]="i" class="d-flex">
+                    <div [formGroupName]="i" class="d-flex">
+                        <dropdown-field
+                            [closeOnFocusOut]="true"
+                            class="width-query-types mr-3"
+                            [options]="queryTypes"
+                            [required]="true"
+                            (selectedOption)="item?.get('queryType').patchValue($event.value)"
+                            [defaultValue]="
+                                resetValues
+                                    ? item?.get('queryType').value === 'closingBalance'
+                                        ? 'Closing Balance'
+                                        : ''
+                                    : ''
+                            "
+                            [placeholder]="commonLocaleData?.app_select_type"
+                            [label]="localeData?.whose"
+                        >
+                        </dropdown-field>
+                        <dropdown-field
+                            [closeOnFocusOut]="true"
+                            class="width-query-differs mr-3"
+                            [options]="queryDiffers"
+                            (selectedOption)="item?.get('queryDiffer').patchValue($event.value)"
+                            [defaultValue]="resetValues ? item?.get('queryDiffer').value : ''"
+                            [required]="true"
+                            [placeholder]="localeData?.select_query"
+                            [label]="localeData?.is"
+                        >
+                        </dropdown-field>
+                        <input-field
+                            class="width-query-differs mr-3"
+                            *ngIf="
+                                item?.value.queryDiffer === 'Less' ||
+                                item?.value.queryDiffer === 'Greater' ||
+                                !item?.value.queryDiffer
+                            "
+                            type="text"
+                            formControlName="amount"
+                            [required]="true"
+                            [allowDecimalDigitsOnly]="true"
+                            [customDecimalPlaces]="2"
+                            [placeholder]="commonLocaleData?.app_amount"
+                            [label]="localeData?.than"
+                        >
+                        </input-field>
+
+                        <input-field
+                            class="width-query-differs mr-3"
+                            *ngIf="item?.value.queryDiffer === 'Equals'"
+                            type="text"
+                            formControlName="amount"
+                            [required]="true"
+                            [allowDecimalDigitsOnly]="true"
+                            [customDecimalPlaces]="2"
+                            [placeholder]="commonLocaleData?.app_amount"
+                            [label]="localeData?.to"
+                        >
+                        </input-field>
+
+                        <!--By and To: Not required in paginated API -->
+                        <span class="position-relative form-group" *ngIf="item?.value.queryType === 'openingBalance'">
                             <dropdown-field
                                 [closeOnFocusOut]="true"
-                                class="width-query-types mr-3"
-                                [options]="queryTypes"
-                                [required]="true"
-                                (selectedOption)="item?.get('queryType').patchValue($event.value)"
+                                class="width-balance-type"
+                                [options]="balType"
+                                (selectedOption)="item?.get('openingBalanceType').patchValue($event.value)"
                                 [defaultValue]="
-                                    resetValues
-                                        ? (item?.get('queryType').value === 'closingBalance'
-                                            ? 'Closing Balance'
-                                            : '')
+                                    item.get('queryType')?.value === 'openingBalance' ||
+                                    item.get('queryType')?.value === 'closingBalance'
+                                        ? 'DR'
                                         : ''
                                 "
-                                [placeholder]="commonLocaleData?.app_select_type"
-                                [label]="localeData?.whose"
                             >
                             </dropdown-field>
+                        </span>
+                        <span class="position-relative form-group" *ngIf="item?.value.queryType === 'closingBalance'">
                             <dropdown-field
                                 [closeOnFocusOut]="true"
-                                class="width-query-differs mr-3"
-                                [options]="queryDiffers"
-                                (selectedOption)="item?.get('queryDiffer').patchValue($event.value)"
-                                [defaultValue]="resetValues ? item?.get('queryDiffer').value : ''"
-                                [required]="true"
-                                [placeholder]="localeData?.select_query"
-                                [label]="localeData?.is"
+                                class="width-balance-type"
+                                [options]="balType"
+                                (selectedOption)="item?.get('closingBalanceType').patchValue($event.value)"
+                                [defaultValue]="
+                                    item.get('queryType')?.value === 'openingBalance' ||
+                                    item.get('queryType')?.value === 'closingBalance'
+                                        ? 'DR'
+                                        : ''
+                                "
                             >
                             </dropdown-field>
-                            <input-field
-                                class="width-query-differs mr-3"
-                                *ngIf="
-                                    item?.value.queryDiffer === 'Less' ||
-                                    item?.value.queryDiffer === 'Greater' ||
-                                    !item?.value.queryDiffer
-                                "
-                                [type]="'text'"
-                                formControlName="amount"
-                                [required]="true"
-                                [allowDecimalDigitsOnly]="true"
-                                [customDecimalPlaces]="2"
-                                [placeholder]="commonLocaleData?.app_amount"
-                                [label]="localeData?.than"
-                            >
-                            </input-field>
-
-                            <input-field
-                                class="width-query-differs mr-3"
-                                *ngIf="item?.value.queryDiffer === 'Equals'"
-                                [type]="'text'"
-                                formControlName="amount"
-                                [required]="true"
-                                [allowDecimalDigitsOnly]="true"
-                                [customDecimalPlaces]="2"
-                                [placeholder]="commonLocaleData?.app_amount"
-                                [label]="localeData?.to"
-                            >
-                            </input-field>
-
-                            <!--By and To: Not required in paginated API -->
-                            <span
-                                class="position-relative form-group"
-                                *ngIf="item?.value.queryType === 'openingBalance'"
-                            >
-                                <dropdown-field
-                                    [closeOnFocusOut]="true"
-                                    class="width-balance-type"
-                                    [options]="balType"
-                                    (selectedOption)="item?.get('openingBalanceType').patchValue($event.value)"
-                                    [defaultValue]="
-                                        item.get('queryType')?.value === 'openingBalance' ||
-                                        item.get('queryType')?.value === 'closingBalance'
-                                            ? 'DR'
-                                            : ''
-                                    "
-                                >
-                                </dropdown-field>
-                            </span>
-                            <span
-                                class="position-relative form-group"
-                                *ngIf="item?.value.queryType === 'closingBalance'"
-                            >
-                                <dropdown-field
-                                    [closeOnFocusOut]="true"
-                                    class="width-balance-type"
-                                    [options]="balType"
-                                    (selectedOption)="item?.get('closingBalanceType').patchValue($event.value)"
-                                    [defaultValue]="
-                                        item.get('queryType')?.value === 'openingBalance' ||
-                                        item.get('queryType')?.value === 'closingBalance'
-                                            ? 'DR'
-                                            : ''
-                                    "
-                                >
-                                </dropdown-field>
-                            </span>
-                            <label *ngIf="searchDataSet?.controls?.length > 1 && !l" class="condition_tag">{{
-                                localeData?.and
-                            }}</label>
-                        </div>
+                        </span>
+                        <label *ngIf="searchDataSet?.controls?.length > 1 && !l" class="condition_tag">{{
+                            localeData?.and
+                        }}</label>
                     </div>
-                    <!--end of clearfix first row -->
-                    <!-- end repeater -->
-                    <div class="clearfix mr-t4">
-                        <button
-                            [disabled]="searchQueryForm.invalid"
-                            mat-stroked-button
-                            color="primary"
-                            class="pull-right"
-                            (click)="filterData(); filterMenu?.closeMenu()"
-                        >
-                            {{ commonLocaleData?.app_search }}
-                        </button>
-                        <button mat-stroked-button (click)="addSearchRow()">
-                            {{ localeData?.add_new_query }}
-                        </button>
-                        <button
-                            *ngIf="searchDataSet?.controls?.length > 1"
-                            mat-stroked-button
-                            class="mr-r1"
-                            (click)="removeSearchRow()"
-                        >
-                            {{ localeData?.delete_row }}
-                        </button>
-                    </div>
-                    <!-- end of second row -->
-                </form>
+                </div>
+                <!--end of clearfix first row -->
+                <!-- end repeater -->
+                <div class="clearfix mr-t4">
+                    <button
+                        [disabled]="searchQueryForm.invalid"
+                        mat-stroked-button
+                        color="primary"
+                        class="pull-right"
+                        (click)="filterData(); filterMenu?.closeMenu()"
+                    >
+                        {{ commonLocaleData?.app_search }}
+                    </button>
+                    <button mat-stroked-button (click)="addSearchRow()">
+                        {{ localeData?.add_new_query }}
+                    </button>
+                    <button
+                        *ngIf="searchDataSet?.controls?.length > 1"
+                        mat-stroked-button
+                        class="mr-r1"
+                        (click)="removeSearchRow()"
+                    >
+                        {{ localeData?.delete_row }}
+                    </button>
+                </div>
+                <!-- end of second row -->
+            </form>
+        </mat-menu>
+    </div>
+    <button *ngIf="isFiltered | async" (click)="resetQuery()" mat-stroked-button>
+        <i class="icon-refresh"></i>
+        {{ commonLocaleData?.app_reset }}
+    </button>
+    <div class="pull-right">
+        <div class="btn-group" *ngIf="showSendButton">
+            <button type="button" mat-stroked-button [matMenuTriggerFor]="sendAsMenu">
+                {{ localeData?.send_as }}
+                <span class="caret"></span>
+            </button>
+            <mat-menu #sendAsMenu="matMenu">
+                <button mat-menu-item (click)="openEmailDialog.emit()">{{ commonLocaleData?.app_email }}</button>
+                <!-- <button mat-menu-item (click)="openSmsDialog.emit()">{{ commonLocaleData?.app_sms }}</button> -->
             </mat-menu>
         </div>
-        <button *ngIf="isFiltered | async" (click)="resetQuery()" mat-stroked-button>
-            <i class="icon-refresh"></i>
-            {{ commonLocaleData?.app_reset }}
+        <button type="button" mat-stroked-button color="primary" *ngIf="showDownloadCsv" (click)="createCSV()">
+            {{ commonLocaleData?.app_download_csv }}
         </button>
-        <div class="pull-right">
-            <div class="btn-group" *ngIf="showSendButton">
-                <button type="button" mat-stroked-button [matMenuTriggerFor]="sendAsMenu">
-                    {{ localeData?.send_as }}
-                    <span class="caret"></span>
-                </button>
-                <mat-menu #sendAsMenu="matMenu">
-                    <button mat-menu-item (click)="openEmailDialog.emit()">{{ commonLocaleData?.app_email }}</button>
-                    <!-- <button mat-menu-item (click)="openSmsDialog.emit()">{{ commonLocaleData?.app_sms }}</button> -->
-                </mat-menu>
-            </div>
-            <button type="button" mat-stroked-button color="primary" *ngIf="showDownloadCsv" (click)="createCSV()">
-                {{ commonLocaleData?.app_download_csv }}
-            </button>
-        </div>    
+    </div>
     <!--end of query section grey bg-->
 </section>

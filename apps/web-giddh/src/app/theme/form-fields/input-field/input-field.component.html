@@ -30,7 +30,7 @@
         <input
             matInput
             [name]="name"
-            type="number"
+            [type]="type"
             [id]="id"
             [class]="cssClass"
             [placeholder]="placeholder"
@@ -43,7 +43,7 @@
             [attr.min]="min"
             [attr.max]="max"
             *ngIf="allowDecimalDigitsOnly && !useMask"
-            [DecimalPlaces]="customDecimalPlaces"
+            [customDecimalPlaces]="customDecimalPlaces"
             decimalDigitsDirective
             #textField
             (keydown.enter)="$event.preventDefault()"
