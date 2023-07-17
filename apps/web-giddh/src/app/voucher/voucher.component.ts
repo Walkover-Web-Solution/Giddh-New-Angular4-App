@@ -3698,7 +3698,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public onSelectCustomer(item: any): void {
-        this.onlyPhoneNumber();
+        this.resetMobileNumberValidation();
         this.intl?.setNumber("");
         this.typeaheadNoResultsOfCustomer = false;
         this.referenceVouchersCurrentPage = 1;
@@ -3932,10 +3932,27 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
+    /**
+     * This will use for reset mobile number validations
+     *
+     * @memberof VoucherComponent
+     */
+    public resetMobileNumberValidation(): void {
+        let input = document.getElementById('init-contact-proforma');
+        const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
+        const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
+        input?.classList?.remove("error");
+        if (errorMsg && validMsg) {
+            errorMsg.innerHTML = "";
+            errorMsg.classList.add("d-none");
+            validMsg.classList.add("d-none");
+        }
+    }
+
     public resetCustomerName(event) {
         if (event) {
             if (!event?.value) {
-                this.onlyPhoneNumber();
+                this.resetMobileNumberValidation();
                 this.intl?.setNumber("");
                 this.invFormData.voucherDetails.customerName = null;
                 this.invFormData.voucherDetails.customerUniquename = null;
@@ -3949,7 +3966,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
         } else {
-            this.onlyPhoneNumber();
+            this.resetMobileNumberValidation();
             this.intl?.setNumber("");
             this.invFormData.voucherDetails.customerName = null;
             this.invFormData.voucherDetails.customerUniquename = null;
@@ -8230,11 +8247,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 separateDialCode: false,
                 initialCountry: 'auto',
                 geoIpLookup: (success, failure) => {
-                    let countryCode = '';
+                    let countryCode = 'in';
                     const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
                     fetchIPApi.subscribe(
                         (res) => {
-                            countryCode = res?.countryCode;
                             if (res?.ipAddress) {
                                 const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.ipAddress}`);
                                 fetchCountryByIpApi.subscribe(
@@ -8272,6 +8288,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     );
                 },
             });
+
             let reset = () => {
                 input?.classList?.remove("error");
                 if (errorMsg && validMsg) {
@@ -8286,6 +8303,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (input) {
                     if (phoneNumber?.length) {
                         if (this.intl?.isValidNumber()) {
+
                             validMsg?.classList?.remove("d-none");
                             this.isMobileNumberInvalid = false;
                         } else {

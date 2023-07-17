@@ -27,6 +27,8 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
     public unitGroupForm: FormGroup;
     /** Holds if form is valid or not */
     public isValidForm: boolean = true;
+    /** True if need to generate unique name from name */
+    private generateUniqueName: boolean = true;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -48,7 +50,7 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
         this.initUnitGroupForm();
 
         this.unitGroupForm.get('name').valueChanges.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe(response => {
-            if (this.unitGroupDetails?.uniqueName !== "maingroup") {
+            if (this.unitGroupDetails?.uniqueName !== "maingroup" && this.generateUniqueName) {
                 if (response) {
                     const uniqueName = response.replace(/\s/g, "")?.toLowerCase();
                     this.unitGroupForm.get('uniqueName').patchValue(uniqueName);
@@ -66,8 +68,13 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnChanges(): void {
         if (this.unitGroupForm && this.unitGroupDetails?.uniqueName) {
+            this.generateUniqueName = false;
             this.unitGroupForm.get('name').patchValue(this.unitGroupDetails?.name);
             this.unitGroupForm.get('uniqueName').patchValue(this.unitGroupDetails?.uniqueName);
+
+            setTimeout(() => {
+                this.generateUniqueName = true;
+            }, 1000);
         }
     }
 
@@ -110,7 +117,7 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
             if (this.unitGroupDetails?.uniqueName) {
                 this.inventoryService.updateStockUnitGroup(this.unitGroupForm.value, this.unitGroupDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
-                        this.closeAsideEvent.emit({ action: 'update', data: this.unitGroupForm.value });
+                        this.closeAsideEvent.emit({ action: 'update', data: response.body });
                         this.toaster.showSnackBar("success", this.localeData?.unit_group_updated);
                     } else {
                         this.toaster.showSnackBar("error", response?.message);
