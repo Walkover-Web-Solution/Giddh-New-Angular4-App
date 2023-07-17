@@ -58,6 +58,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         type: null,
         name: null,
         uniqueName: null,
+        stockUnitGroup: {
+            name: null,
+            uniqueName: null
+        },
         stockUnitCode: null,
         stockUnitUniqueName: null,
         hsnNumber: null,
@@ -214,6 +218,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public optionValueTimeout: any;
     /** True if we need to show tax field. We are maintaining this because taxes are not getting reset on form reset */
     public showTaxField: boolean = true;
+    /** List of unit groups */
+    public groupList: any[] = [];
 
     constructor(
         private inventoryService: InventoryService,
@@ -243,6 +249,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         /** added parent class to body after entering new-inventory page */
         document.querySelector("body").classList.add("stock-create-edit");
 
+        this.getUnitGroups();
         this.getTaxes();
         this.getStockUnits();
         this.getWarehouses();
@@ -325,12 +332,22 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public getStockUnits(): void {
-        this.inventoryService.GetStockUnit().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        let groups = ["maingroup"];
+
+        if (this.stockForm.stockUnitGroup?.uniqueName && this.stockForm.stockUnitGroup?.uniqueName !== "maingroup") {
+            groups.push(this.stockForm.stockUnitGroup?.uniqueName);
+        }
+
+        this.stockUnits = [];
+        this.stockForm.stockUnitUniqueName = "";
+        this.stockUnitName = "";
+
+        this.inventoryService.getStockMappedUnit(groups).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.stockUnits = response?.body?.map(result => {
                     return {
-                        value: result.uniqueName,
-                        label: `${result.name} (${result.code})`,
+                        value: result.stockUnitX?.uniqueName,
+                        label: `${result.stockUnitX?.name} (${result.stockUnitX?.code})`,
                         additional: result
                     };
                 }) || [];
@@ -1085,6 +1102,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             if (response?.status === "success" && response.body) {
                 this.stockForm.name = response.body.name;
                 this.stockForm.uniqueName = response.body.uniqueName;
+                this.stockForm.stockUnitGroup = response.body.stockUnitGroup;
                 this.stockForm.stockUnitCode = response.body.stockUnit?.code;
                 this.stockForm.stockUnitUniqueName = response.body?.stockUnit?.uniqueName;
                 this.stockForm.hsnNumber = response.body.hsnNumber;
@@ -1432,6 +1450,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             type: this.stockForm.type,
             name: null,
             uniqueName: null,
+            stockUnitGroup: {
+                name: null,
+                uniqueName: null
+            },
             stockUnitCode: null,
             stockUnitUniqueName: null,
             hsnNumber: null,
@@ -1959,5 +1981,20 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
             this.changeDetection.detectChanges();
         }
+    }
+
+    /**
+     * Get list of groups
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public getUnitGroups(): void {
+        this.inventoryService.getStockUnitGroups().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length) {
+                this.groupList = response.body?.map(group => {
+                    return { label: group.name, value: group.uniqueName };
+                });
+            }
+        });
     }
 }
