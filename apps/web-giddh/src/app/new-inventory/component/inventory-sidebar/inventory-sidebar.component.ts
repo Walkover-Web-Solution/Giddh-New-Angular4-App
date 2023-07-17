@@ -249,11 +249,6 @@ export class InventorySidebarComponent implements OnDestroy {
                     ],
                 },
                 {
-                    name: this.localeData?.sidebar?.branch_transfer,
-                    icons: 'branch-transfer.svg',
-                    link: '/pages/inventory/report',
-                },
-                {
                     name: this.localeData?.sidebar?.manufacturing,
                     icons: 'manufacturing.svg',
                     children: [
@@ -263,13 +258,18 @@ export class InventorySidebarComponent implements OnDestroy {
                     ],
                 },
                 {
-                    name: this.localeData?.sidebar?.warehouse_balance,
-                    link: '/pages/inventory/v2/stock-balance',
+                    name: this.localeData?.sidebar?.custom_units,
+                    link: '/pages/inventory/v2/custom-units',
                     icons: 'warehouse-opening-balance.svg'
                 },
                 {
-                    name: this.localeData?.sidebar?.custom_units,
-                    link: '/pages/inventory/v2/custom-units',
+                    name: this.localeData?.sidebar?.branch_transfer,
+                    icons: 'branch-transfer.svg',
+                    link: '/pages/inventory/report',
+                },
+                {
+                    name: this.localeData?.sidebar?.warehouse_balance,
+                    link: '/pages/inventory/v2/stock-balance',
                     icons: 'warehouse-opening-balance.svg'
                 }
             ];

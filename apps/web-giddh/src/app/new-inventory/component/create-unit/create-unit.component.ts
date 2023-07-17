@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { take, takeUntil } from 'rxjs/operators';
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { InventoryService } from '../../../services/inventory.service';
 import { ReplaySubject } from 'rxjs';
 import { StockUnits } from '../../../inventory/components/custom-stock-components/stock-unit';
@@ -62,6 +62,21 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
         this.getUnitGroups();
         this.initUnitForm();
         this.getUnitMappings();
+
+        this.unitForm.get('code').valueChanges.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe(code => {
+            if (code) {
+                this.mappedUnitList = this.mappedUnitList?.map(mappedUnit => {
+                    const existingLabel = mappedUnit?.additional?.label;
+                    if (existingLabel?.trim() === this.unitForm?.get('name')?.value?.trim()) {
+                        mappedUnit.value = code;
+                        mappedUnit.label = this.unitForm?.get('name')?.value?.trim() + " (" + code + ")";
+                        mappedUnit.additional.label = this.unitForm?.get('name')?.value?.trim();
+                        mappedUnit.additional.value = code;
+                    }
+                    return mappedUnit;
+                });
+            }
+        });
     }
 
     /**
@@ -304,7 +319,7 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
 
             const isUnitAvailableMappedUnit = this.mappedUnitList?.filter(unit => unit.value === event.value);
             if (!isUnitAvailableMappedUnit?.length) {
-                this.mappedUnitList.push({ label: event.label + " (" + event.value + ")", value: event.value, additional: event });
+                this.mappedUnitList.push({ label: event.label + " (" + event.value + ")", value: event.value, additional: { label: event.label, value: event.value, additional: event.additional || event } });
             }
 
             this.unitForm.get('name').patchValue(event.label);
