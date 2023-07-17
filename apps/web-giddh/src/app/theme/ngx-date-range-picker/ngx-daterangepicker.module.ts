@@ -6,19 +6,19 @@ import { NgxDaterangepickerComponent } from './ngx-daterangepicker.component';
 import { NgxDaterangepickerDirective } from './ngx-daterangepicker.directive';
 import { LOCALE_CONFIG, LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
-import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TranslateDirectiveModule } from '../translate/translate.directive.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { FormFieldsModule } from "../form-fields/form-fields.module";
 
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-    suppressScrollX: false,
-    suppressScrollY: true
-};
 
 @NgModule({
     declarations: [
+        NgxDaterangepickerComponent,
+        NgxDaterangepickerDirective
+    ],
+    exports: [
         NgxDaterangepickerComponent,
         NgxDaterangepickerDirective
     ],
@@ -27,19 +27,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormsModule,
         ReactiveFormsModule,
         NgxMaskModule.forRoot(),
-        PerfectScrollbarModule,
         ModalModule,
         TranslateDirectiveModule,
         MatButtonModule,
-        MatInputModule
-    ],
-    providers: [{
-            provide: PERFECT_SCROLLBAR_CONFIG,
-            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        }],
-    exports: [
-        NgxDaterangepickerComponent,
-        NgxDaterangepickerDirective
+        MatInputModule,
+        FormFieldsModule
     ]
 })
 
