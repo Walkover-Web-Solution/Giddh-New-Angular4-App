@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="row mt-4">
-                <div class="col-sm-12">
+                <div class="col-sm-4">
                     <button
                         mat-stroked-button
                         color="primary"
@@ -45,15 +45,6 @@
                     </button>
                     <button
                         mat-stroked-button
-                        type="button"
-                        class="btn-sm"
-                        (click)="resetForm()"
-                        *ngIf="!unitGroupDetails?.uniqueName"
-                    >
-                        {{ commonLocaleData?.app_clear }}
-                    </button>
-                    <button
-                        mat-stroked-button
                         color="primary"
                         type="button"
                         (click)="saveUnitGroup()"
@@ -61,25 +52,29 @@
                     >
                         {{ commonLocaleData?.app_update }}
                     </button>
-                    <button
-                        mat-stroked-button
-                        type="button"
-                        class="btn-sm"
-                        (click)="closeAsideEvent.emit({ action: 'update', data: unitGroupDetails })"
-                        *ngIf="unitGroupDetails?.uniqueName"
-                    >
-                        {{ commonLocaleData?.app_cancel }}
-                    </button>
-                    <button
-                        mat-stroked-button
-                        color="warn"
-                        type="button"
-                        class="btn-sm"
-                        (click)="deleteUnitGroup()"
-                        *ngIf="unitGroupDetails?.uniqueName"
-                    >
-                        {{ commonLocaleData?.app_delete }}
-                    </button>
+                </div>
+                <div class="col-sm-8">
+                    <div class="pull-right">
+                        <button
+                            mat-stroked-button
+                            type="button"
+                            class="btn-sm mr-0"
+                            (click)="resetForm()"
+                            *ngIf="!unitGroupDetails?.uniqueName"
+                        >
+                            {{ commonLocaleData?.app_clear }}
+                        </button>
+                        <button
+                            mat-stroked-button
+                            color="warn"
+                            type="button"
+                            class="btn-sm mr-0"
+                            (click)="deleteUnitGroup()"
+                            *ngIf="unitGroupDetails?.uniqueName"
+                        >
+                            {{ commonLocaleData?.app_delete }}
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>

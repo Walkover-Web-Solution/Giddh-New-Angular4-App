@@ -52,7 +52,7 @@
     .form-btn {
         position: relative;
         .custom-form {
-            margin: 60px 15px 0 15px;
+            margin: 60px 0px 0 15px;
             width: 100%;
         }
         .create-btn-grp {
@@ -60,6 +60,12 @@
             right: 0;
             display: flex;
             justify-content: flex-end;
+
+            button{
+                &:last-child{
+                    margin-right: 0px !important;
+                }
+            }
         }
         .mat-grid-tile-content {
             overflow-y: scroll;
