@@ -6,9 +6,9 @@
 >
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     <ng-container *ngIf="!isLoading">
-        <form autocomplete="off" novalidate name="unitGroupForm" [formGroup]="unitGroupForm">
+        <form autocomplete="off" novalidate name="unitGroupForm" [formGroup]="unitGroupForm" class="container">
             <div class="row mt-3">
-                <div class="col-sm-6">
+                <div class="col-sm-6 pr-0">
                     <input-field
                         [name]="'name'"
                         [type]="'text'"
@@ -19,7 +19,7 @@
                     >
                     </input-field>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6 pr-0">
                     <input-field
                         [name]="'uniqueName'"
                         [type]="'text'"
@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="row mt-4">
-                <div class="col-sm-4">
+                <div class="col-sm-4 pr-0">
                     <button
                         mat-stroked-button
                         color="primary"
@@ -53,7 +53,7 @@
                         {{ commonLocaleData?.app_update }}
                     </button>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-8 pr-0">
                     <div class="pull-right">
                         <button
                             mat-stroked-button

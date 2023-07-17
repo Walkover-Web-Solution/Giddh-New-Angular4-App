@@ -985,10 +985,12 @@ aside-create-group {
         align-items: flex-start;
 
         .mat-list-base .mat-list-item {
-            min-height: 38px;
+            min-height: 48px;
+            height: auto;
             &.map-item {
                 .mat-list-item-content {
                     justify-content: flex-end;
+                    margin-left: auto;
                 }
                 &.mat-gap {
                     padding-right: 15px;
