@@ -142,6 +142,10 @@
         }
     }
 }
+/* Material Table Cell Font Size */
+.mat-cell,.mat-footer-cell {
+    font-size: var(--font-size-15) !important;
+}
 
 /* responsive */
 
