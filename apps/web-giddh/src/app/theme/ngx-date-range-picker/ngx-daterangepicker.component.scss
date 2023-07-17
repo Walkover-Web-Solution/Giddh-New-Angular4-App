@@ -642,12 +642,22 @@
                         &:hover{
                             background-color: var(--color-primary-datepicker-input-bottom-border);
                             color: var(--color-white);
+                            .available{
+                                &.prev {
+                                   filter: brightness(0) saturate(100%) invert(100%) sepia(1%) saturate(6%) hue-rotate(63deg) brightness(103%) contrast(103%);
+                                }
+                            }
                         }
                         &.active {
                             background-color: var(--color-primary-datepicker-input-bottom-border);
                             border-left: 3px solid var(--color-primary-datepicker-input-bottom-border) !important;
                             font-family: var(--font-semibold);
                             color: var(--color-white);
+                            .available{
+                                &.prev {
+                                   filter: brightness(0) saturate(100%) invert(100%) sepia(1%) saturate(6%) hue-rotate(63deg) brightness(103%) contrast(103%);
+                                }
+                            }
                         }
                         &[disabled] {
                             opacity: 0.3;
@@ -735,60 +745,6 @@
     .mat-stroked-button{
         background-color: initial;
     }
-    // button {
-    //     &:focus {
-    //         outline: none;
-    //     }
-    // }
-    // .btn {
-    //     position: relative;
-    //     overflow: hidden;
-    //     border-width: 0;
-    //     outline: none;
-    //     padding: 0px 16px;
-    //     cursor: pointer;
-    //     border-radius: 5px;
-    //     height: auto;
-    //     text-transform: capitalize;
-    //     line-height: 36px;
-    //     border: none;
-    //     font-size: var(--font-size-15);
-    // }
-    // .btn.btn-danger {
-    //     background: var(--color-dark-fog);
-    //     color: var(--color-primary-datepicker-btn-btn-danger);
-    //     border: 1px solid var(--color-dark-fog);
-    //     margin-right: 10px;
-    //     &:hover,
-    //     &:active,
-    //     &:focus,
-    //     &:active:focus {
-    //         background: var(--color-primary-cancel-button-background-hover);
-    //         color: var(--color-primary-datepicker-btn-btn-danger-hover-active-focus);
-    //         border-color: var(--color-primary-button-border-hover);
-    //         outline: none;
-    //         box-shadow: none;
-    //     }
-    //     &:disabled {
-    //         opacity: 0.5;
-    //     }
-    // }
-    // .btn.btn-success {
-    //     background: var(--color-secondary-button-background);
-    //     color: var(--color-secondary-button-text);
-    //     border: 1px solid var(--color-secondary-button-background);
-    //     &:hover,
-    //     &:active,
-    //     &:focus,
-    //     &:active:focus {
-    //         background: var(--color-primary-datepicker-btn-success-hover-active-focus);
-    //         color: var(--color-secondary-button-text);
-    //         border: 1px solid var(--color-primary-datepicker-btn-success-hover-active-focus);
-    //     }
-    //     &:disabled {
-    //         opacity: 0.5;
-    //     }
-    // }
     .clear {
         box-shadow: none;
         background-color: var(--color-white) !important;
@@ -1148,7 +1104,7 @@ td span {
     background-position: center;
     opacity: 0.8;
     transition: background-color 0.2s ease;
-    height: 17px;
+    height: 19.4px;
     width: 17px;
     cursor: pointer;
     background-color: unset !important;
@@ -1232,7 +1188,6 @@ td span {
     border-left: none;
     li {
         &:hover {
-            // background-color: var(--color-dark-fog) !important;
             button {
                 background-color: var(--color-primary-datepicker-input-bottom-border);
                 color: var(--color-white);
@@ -1519,9 +1474,6 @@ td span {
                 &[disabled] {
                     opacity: 0.3;
                 }
-                // &:active {
-                //     background: transparent;
-                // }
             }
             input {
                 width: 28px;
@@ -1540,9 +1492,6 @@ td span {
                 }
             }
         }
-        // li:hover {
-        //     background-color: var(--color-datepicker-right-side-list-secondary-text-hover);
-        // }
     }
 }
 .in-range-hovered {
