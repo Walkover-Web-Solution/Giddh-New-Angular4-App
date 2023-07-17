@@ -10,7 +10,7 @@
                 <mat-grid-tile [colspan]="2" class="border-grid">
                     <mat-list class="item-list">
                         <strong class="pb-2 list-font pd-l15">{{ commonLocaleData?.app_group }}</strong>
-                       <giddh-page-loader *ngIf="isGroupListLoading"></giddh-page-loader>
+                        <giddh-page-loader *ngIf="isGroupListLoading"></giddh-page-loader>
                         <ng-container *ngIf="!isGroupListLoading">
                             <ng-container *ngIf="!unitGroups?.length">
                                 <mat-list role="list" class="list-head">
@@ -116,7 +116,7 @@
                             (formHasLoaded)="formHasLoaded()"
                         ></create-unit>
                         <create-unit-group
-                            *ngIf="!unitDetails?.uniqueName && selectedGroup?.uniqueName"
+                            *ngIf="!selectedUnitIndex && selectedGroup?.uniqueName"
                             [unitGroupDetails]="selectedGroup"
                             (closeAsideEvent)="closeUpdateUnitGroup($event)"
                         ></create-unit-group>
