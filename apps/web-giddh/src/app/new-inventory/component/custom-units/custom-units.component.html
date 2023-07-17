@@ -116,7 +116,7 @@
                             (formHasLoaded)="formHasLoaded()"
                         ></create-unit>
                         <create-unit-group
-                            *ngIf="!selectedUnitIndex && selectedGroup?.uniqueName"
+                            *ngIf="selectedUnitIndex === null && selectedGroup?.uniqueName"
                             [unitGroupDetails]="selectedGroup"
                             (closeAsideEvent)="closeUpdateUnitGroup($event)"
                         ></create-unit-group>
