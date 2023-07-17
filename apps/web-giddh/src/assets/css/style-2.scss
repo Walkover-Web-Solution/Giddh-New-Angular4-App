@@ -14362,24 +14362,6 @@ body.hide-scroll-body.master-page {
     }
 }
 
-<<<<<<< HEAD
-/*================Material Buttons Color=======Start Here==================*/
-.mat-button,
-.mat-icon-button,
-.mat-stroked-button {
-    border-color: var(--color-secondary-input-bar-border) !important;
-    &.mat-primary {
-        color: var(--color-giddh-blue) !important;
-    }
-    .mat-button-focus-overlay {
-        background-color: var(--color-primary-header-background) !important;
-    }
-}
-/*================Material Buttons Color=======End Here==================*/
-=======
-
->>>>>>> 5252aa7563 (working on universal ngx-datepikcer)
-
 /*--- tooltip --*/
 .mat-tooltip {
     letter-spacing: 0.8px;
