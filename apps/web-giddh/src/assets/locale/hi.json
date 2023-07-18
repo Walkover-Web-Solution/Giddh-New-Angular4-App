@@ -498,6 +498,8 @@
     "app_update_account": "खाता अद्यतन करें",
     "app_add_product": "उत्पाद जोड़ें",
     "app_add_service": "सेवा जोड़ें",
+    "app_add_account": "खाता जोड़ें",
+    "app_add_fixedassets": "अचल संपत्तियां जोड़ें",
     "app_account_created": "खाता सफलतापूर्वक बनाया गया",
     "app_start_date": "आरंभ करने की तिथि",
     "app_end_date": "अंतिम तिथि",

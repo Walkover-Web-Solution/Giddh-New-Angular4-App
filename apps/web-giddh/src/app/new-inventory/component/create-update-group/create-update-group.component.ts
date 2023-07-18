@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import { takeUntil, distinctUntilChanged, take } from "rxjs/operators";
@@ -72,7 +72,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private route: ActivatedRoute,
         private changeDetection: ChangeDetectorRef,
-        private router: Router,
         private dialog: MatDialog,
         private location: Location,
     ) {

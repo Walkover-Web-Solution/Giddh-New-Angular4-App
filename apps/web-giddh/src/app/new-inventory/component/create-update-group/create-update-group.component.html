@@ -8,7 +8,7 @@
     <div class="relative">
         <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
         <hamburger-menu></hamburger-menu>
-        
+
         <ng-container *ngIf="!showLoader">
             <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">
                 <div class="container-fluid">
@@ -153,7 +153,8 @@
                                                     [placeholder]="commonLocaleData?.app_select_parent_group"
                                                     [options]="stockGroups"
                                                     (selectedOption)="
-                                                        stockGroupUniqueName = $event?.value; stockGroupName = $event?.label
+                                                        stockGroupUniqueName = $event?.value;
+                                                        stockGroupName = $event?.label
                                                     "
                                                     [defaultValue]="stockGroupName"
                                                 ></dropdown-field>
@@ -182,7 +183,7 @@
                                             >
                                                 {{ commonLocaleData?.app_clear }}
                                             </button>
-        
+
                                             <button
                                                 *ngIf="groupUniqueName"
                                                 mat-stroked-button
@@ -220,8 +221,6 @@
                             </span>
                         </div>
                     </div>
-                   
-                    
                 </div>
             </form>
         </ng-container>

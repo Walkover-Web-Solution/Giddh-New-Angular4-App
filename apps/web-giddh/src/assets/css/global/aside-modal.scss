@@ -1,0 +1,29 @@
+.aside-pane {
+    .aside-body {
+        &.flexy-child-1 {
+            height: 100%;
+            .child-wrapper {
+                background-color: var(--color-body-background);
+                height: calc( 100vh - (58.7px + 30px));
+                width: 730px;
+                overflow: auto;
+                margin: 15px 0;
+                box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
+            }
+        }
+    }
+}
+body {
+    &.ledger-aside-pane,
+    &.aside-menu-product-service-page {
+        .cdk-overlay-pane {
+            transform: unset !important;
+        }
+        .mat-dialog-container{
+            border-radius: unset !important;
+        }
+        .aside-panel-ledger{
+            height: calc(100vh - 57.8px);
+        }
+    }
+}
