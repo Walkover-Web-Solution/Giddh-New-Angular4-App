@@ -7,6 +7,17 @@
             color: var(--color-abbey);
         }
         .mobile-number {
+            position: relative;
+            .country-flag {
+                position: absolute;
+                top: 50%;
+                left: 25px;
+                z-index: 1 !important;
+                transform: translateY(-50%);
+                img {
+                    height: 14px;
+                }
+            }
             input {
                 height: 46px;
                 width: 100%;
@@ -15,10 +26,10 @@
             }
         }
         .country-space {
-            padding-right: 11px;
+            padding-right: 6px;
         }
         .currency-space {
-            padding-left: 11px;
+            padding-left: 6px;
         }
     }
 }

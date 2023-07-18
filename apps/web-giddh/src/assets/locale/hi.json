@@ -40,9 +40,9 @@
     "app_pay_now": "भुगतान करें",
     "app_add_bank_details": "बैंक विवरण जोड़ें",
     "app_advance_search": "उन्नत खोज",
-    "app_select_category": "श्रेणी चुनना",
+    "app_select_category": "श्रेणी चुनें",
     "app_amount": "राशि",
-    "app_select": "चुनना",
+    "app_select": "चुनें",
     "app_reset_filter": "फ़िल्टर रीसेट करें",
     "app_result_total": "परिणाम कुल",
     "app_upcoming": "आगामी",
@@ -701,5 +701,7 @@
         "content": "आपके पास सहेजे नहीं गए परिवर्तन हैं. क्या आप इस पृष्ठ को छोड़ना चाहते हैं?",
         "no": "कृपया यहीं रहें",
         "yes": "पेज छोड़ें"
-    }
+    },
+    "app_region": "क्षेत्र",
+    "app_select_region": "क्षेत्र चुनें"
 }

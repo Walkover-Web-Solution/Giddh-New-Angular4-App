@@ -28,8 +28,6 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 })
 
 export class OnBoardingComponent implements OnInit, OnDestroy {
-    @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
-    @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
     @ViewChild('logoutModal', { static: true }) public logoutModal: ModalDirective;
     @ViewChild('companyForm', { static: true }) public companyForm: NgForm;
     @Input() public createBranch: boolean = false;
@@ -172,22 +170,11 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             this.company.isBranch = this.createBranch;
             this._generalService.createNewCompany = this.company;
             this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
-            this.closeCompanyModal.emit({ isFirstStepCompleted: true });
         }
     }
 
     public closeModal() {
-        let companies = null;
-        this.companies$.pipe(take(1)).subscribe(c => companies = c);
-        if (companies) {
-            if (companies.length > 0) {
-                this.closeCompanyModal.emit();
-            } else {
-                this.showLogoutModal();
-            }
-        } else {
-            this.showLogoutModal();
-        }
+        this.showLogoutModal();
     }
 
     public showLogoutModal() {
@@ -201,7 +188,6 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
     public logoutUser() {
         this.store.dispatch(this.verifyActions.hideVerifyBox());
         this.hideLogoutModal();
-        this.closeCompanyModal.emit();
         if (isElectron) {
             this.store.dispatch(this._loginAction.ClearSession());
         } else {
