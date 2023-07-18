@@ -11,6 +11,7 @@ $custom-typography: mat-typography-config(
 @include angular-material-typography($custom-typography);
 @import "../css/ngx-bs-datepicker.scss";
 @import "../css/global/add-company.scss";
+@import "../css/global/aside-modal.scss";
 @import "../css/global/onboarding.scss";
 @import "../css/global/custom-fields.scss";
 @import "../css/global/inventory.scss";

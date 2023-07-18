@@ -2869,7 +2869,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 right: '0',
             },
             width: '760px',
-            height: '100vh !important'
+            height: '100vh !important',
+            disableClose: true
         });
 
         this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {

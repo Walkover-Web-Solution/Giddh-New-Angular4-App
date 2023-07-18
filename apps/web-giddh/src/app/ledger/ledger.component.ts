@@ -1843,7 +1843,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 right: '0',
             },
             width: '760px',
-            height: '100vh !important'
+            height: '100vh !important',
+            disableClose: true
         });
 
         this.ledgerAsidePaneModal.afterClosed().pipe(take(1)).subscribe(response => {
