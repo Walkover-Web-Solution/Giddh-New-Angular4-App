@@ -74,7 +74,7 @@
                         <input-field
                             class="width-query-differs mr-3"
                             *ngIf="item?.value.queryDiffer === 'Equals'"
-                            type="text"
+                            [type]="'text'"
                             formControlName="amount"
                             [required]="true"
                             [allowDecimalDigitsOnly]="true"
