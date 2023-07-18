@@ -2020,6 +2020,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.groupList = response.body?.map(group => {
                     return { label: group.name, value: group.uniqueName };
                 });
+
+                if (this.groupList?.length) {
+                    this.stockForm.stockUnitGroup.uniqueName = this.groupList[0]?.value;
+                    this.stockForm.stockUnitGroup.name = this.groupList[0].label;
+                    this.getStockUnits();
+                }
             }
         });
     }
