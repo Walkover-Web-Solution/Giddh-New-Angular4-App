@@ -83,7 +83,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 this.addressForm = this.formBuilder.group({
                     name: ['', [Validators.required, Validators.maxLength(100)]],
                     taxNumber: ['', (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
-                    state: ['', Validators.required],
+                    state: ['', !this.addressConfiguration.countyList?.length ? Validators.required: null],
+                    county: ['', this.addressConfiguration.countyList?.length ? Validators.required: null],
                     address: [''],
                     linkedEntity: [[]],
                     pincode: []
@@ -99,7 +100,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     this.addressForm = this.formBuilder.group({
                         name: [this.addressToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                         taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
-                        state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, Validators.required],
+                        state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, !this.addressConfiguration.countyList?.length ? Validators.required: null],
+                        county: [this.addressToUpdate.county?.code, this.addressConfiguration.countyList?.length ? Validators.required: null],
                         address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' ? [Validators.required] : []],
                         linkedEntity: [this.addressToUpdate.linkedEntities.map(entity => entity?.uniqueName)],
                         pincode: [this.addressToUpdate.pincode]
