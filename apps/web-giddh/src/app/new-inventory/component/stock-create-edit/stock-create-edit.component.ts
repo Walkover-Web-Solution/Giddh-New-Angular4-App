@@ -345,13 +345,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         this.inventoryService.getStockMappedUnit(groups).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                this.stockMainUnits = response?.body?.map(result => {
-                    return {
-                        value: result.stockUnitX?.uniqueName,
-                        label: `${result.stockUnitX?.name} (${result.stockUnitX?.code})`,
-                        additional: result
-                    };
-                }) || [];
+                let usedMappedUnit = [];
+                response.body?.forEach(unit => {
+                    if (!usedMappedUnit[unit?.stockUnitX?.uniqueName]) {
+                        usedMappedUnit[unit?.stockUnitX?.uniqueName] = unit;
+
+                        this.stockMainUnits.push({ label: unit?.stockUnitX?.name + " (" + unit?.stockUnitX?.code + ")", value: unit?.stockUnitX?.uniqueName, additional: unit });
+                    }
+                });
             }
         });
     }
