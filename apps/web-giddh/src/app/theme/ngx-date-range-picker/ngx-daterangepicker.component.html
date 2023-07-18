@@ -100,7 +100,7 @@
                         <li>
                             <button>
                                 <input
-                                    mat-input
+                                    matInput
                                     type="tel"
                                     (keyup)="uptoInputKeyUp($event)"
                                     (change)="uptoToday($event, $event.target?.value)"
@@ -157,7 +157,7 @@
                                 <div class="relative mr-1 d-flex date-field">
                                     <label>{{ commonLocaleData?.app_start_date }}</label>
                                     <input
-                                        mat-input
+                                        matInput
                                         type="tel"
                                         name="inlineStartDate"
                                         [value]="viewOnlyStartDate"
@@ -171,7 +171,7 @@
                                 <div class="relative d-flex date-field">
                                     <label>{{ commonLocaleData?.app_end_date }}</label>
                                     <input
-                                        mat-input
+                                        matInput
                                         type="tel"
                                         name="inlineEndDate"
                                         [value]="viewOnlyEndDate"
@@ -213,7 +213,7 @@
                                     </span>
                                     <span class="fa fa-search"></span>
                                     <input
-                                        mat-input
+                                        matInput
                                         [ngClass]="{ 'invalid-date-input': invalidStartDate, 'w-100': true }"
                                         [placeholder]="commonLocaleData?.app_start_date"
                                         #startDateElement
@@ -241,7 +241,7 @@
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
                                     </span>
                                     <input
-                                        mat-input
+                                        matInput
                                         [ngClass]="{ 'invalid-date-input': invalidEndDate, 'w-100': true }"
                                         [placeholder]="commonLocaleData?.app_end_date"
                                         #endDateElement
