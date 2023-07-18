@@ -23,11 +23,6 @@ export interface SearchTable {
     closingBalance: number;
     isSelected: boolean
 }
-
-export interface searchSortRequest {
-    sort: string;
-    sortBy: string
-}
 /** Hold information of activity logs */
 const ELEMENT_DATA: SearchTable[] = [];
 @Component({
@@ -116,7 +111,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     public mailSmsDialogRef: any;
     /* Holds Mat Table Configuration */
     public displayedColumns: string[] = ['select', 'name', 'uniqueName', 'parent', 'openingBalance', 'debitTotal', 'creditTotal', 'closingBalance'];
-/** True if select customer all */
+    /** True if select customer all */
     public selectAllCustomer: boolean = false;
     /** Hold table datal */
     public dataSource = ELEMENT_DATA;
@@ -484,10 +479,13 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      * @param {*} item
      * @memberof SearchGridComponent
      */
-    public selectAccount(event: MatCheckboxChange, item: any) {
+    public selectAccount(event: MatCheckboxChange, item: any): void {
         this.prepareSelectedCustomerList(item, event?.checked);
-        if (!event?.checked) {
-            if (this.selectedItems?.length === 0) {
+        if (event) {
+            let currentSelectedValues = this.dataSource.every(value => this.selectedItems?.includes(value?.uniqueName));
+            if (currentSelectedValues) {
+                this.selectAllCustomer = true;
+            } else {
                 this.selectAllCustomer = false;
             }
         }
@@ -515,7 +513,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      * @param {boolean} action
      * @memberof SearchGridComponent
      */
-    public toggleAllSelection(action: boolean) {
+    public toggleAllSelection(action: boolean): void {
         if (action) {
             this.dataSource = this.dataSource?.map(element => {
                 element.isSelected = action;
