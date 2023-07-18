@@ -29,7 +29,6 @@
                 <ng-container matColumnDef="select">
                     <th mat-header-cell *matHeaderCellDef [style.width.px]="25">
                         <mat-checkbox
-                            class="pos-abs"
                             color="primary"
                             [(ngModel)]="allSelectionModel"
                             (ngModelChange)="toggleAllSelection(allSelectionModel)"
