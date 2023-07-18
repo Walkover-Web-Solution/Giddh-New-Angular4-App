@@ -10147,6 +10147,12 @@ body {
             z-index: 99999 !important;
         }
     }
+
+    .cdk-overlay-container {
+        .page-leave-confirmation-modal-backdrop {
+            z-index: 99999 !important;
+        }
+    }
 }
 
 .cdk-overlay-connected-position-bounding-box {

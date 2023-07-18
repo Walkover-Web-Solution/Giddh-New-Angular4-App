@@ -1843,7 +1843,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
             },
             width: '760px',
             height: '100vh !important'
-        })
+        });
+
+        this.ledgerAsidePaneModal.afterClosed().pipe(take(1)).subscribe(response => {
+            setTimeout(() => {
+                if (this.showPageLeaveConfirmation) {
+                    this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+                }
+            }, 100);
+        });
+
         this.cdRf.detectChanges();
     }
 
