@@ -10,7 +10,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TranslateDirectiveModule } from '../translate/translate.directive.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { FormFieldsModule } from "../form-fields/form-fields.module";
+import { CdkScrollModule } from '../form-fields/cdk-scroll/cdk-scroll.module';
 
 
 @NgModule({
@@ -31,7 +31,7 @@ import { FormFieldsModule } from "../form-fields/form-fields.module";
         TranslateDirectiveModule,
         MatButtonModule,
         MatInputModule,
-        FormFieldsModule
+        CdkScrollModule
     ]
 })
 
