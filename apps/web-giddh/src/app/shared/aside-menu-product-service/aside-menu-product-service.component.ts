@@ -108,10 +108,21 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     }
 
     public closeAsidePane(event?: any): void {
-        this.hideFirstStep = false;
-        this.isAddStockOpen = false;
-        this.isAddServiceOpen = false;
-        this.closeAsideEvent.emit();
+        if (this.isAddServiceOpen && this.hasUnsavedChanges) {
+            this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                if (action) {
+                    this.hideFirstStep = false;
+                    this.isAddStockOpen = false;
+                    this.isAddServiceOpen = false;
+                    this.closeAsideEvent.emit();
+                }
+            });
+        } else {
+            this.hideFirstStep = false;
+            this.isAddStockOpen = false;
+            this.isAddServiceOpen = false;
+            this.closeAsideEvent.emit();
+        }
     }
 
     public backButtonPressed(): void {

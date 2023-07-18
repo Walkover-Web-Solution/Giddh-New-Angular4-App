@@ -2864,6 +2864,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+
+        setTimeout(() => {
+            if (this.asideMenuStateForProductService === 'out' && this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        }, 100);
     }
 
     public toggleBodyClass() {
