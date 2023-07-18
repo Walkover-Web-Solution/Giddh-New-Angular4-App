@@ -53,7 +53,7 @@ export class SendEmailComponent implements OnInit {
             if (event.checked) {
                 this.downloadCopy.push(value);
             } else {
-                this.downloadCopy = this.downloadCopy.filter(voucher => voucher !== value);
+                this.downloadCopy = this.downloadCopy?.filter(voucher => voucher !== value);
             }
         }
     }

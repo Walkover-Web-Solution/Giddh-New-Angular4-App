@@ -18,6 +18,7 @@
     "select_business_type": "Select Business Type",
     "select_business_nature": "Select Business Nature",
     "enter_tax": "Enter [TAX_NAME]",
+    "invalid_tax": "Invalid [TAX_NAME]",
     "same_as_company": "Same as Company",
     "applicable_tax": "Applicable Tax",
     "select_taxes": "Select Taxes",
@@ -49,5 +50,19 @@
     "companies": "Companies",
     "unlimited_users": "Unlimited Users",
     "unlimited_contacts": "Unlimited Customers/Vendors",
-    "desktop_mobile_app": "Desktop/Mobile App"
+    "desktop_mobile_app": "Desktop/Mobile App",
+    "registered": "Registered",
+    "unregistered": "Unregistered",
+    "food": "Food",
+    "service": "Service",
+    "manufacturing": "Manufacturing",
+    "retail": "Retail",
+    "enter_company_name":"Enter Company Name",
+    "enter_country_name":"Enter Country Name",
+    "enter_currency_name":"Enter Currency Name",
+    "enter_mobile_number" : "Enter Mobile Number",
+    "select_state" : "Select State",
+    "business_type": "Business Type",
+    "business_nature": "Business Nature",
+    "invalid_contact_number": "Invalid Contact number"
 }

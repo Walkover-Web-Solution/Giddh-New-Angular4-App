@@ -7,9 +7,9 @@ import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { AuthenticationService } from "./authentication.service";
 import { GroupService } from "./group.service";
-import { HttpWrapperService } from "./httpWrapper.service";
+import { HttpWrapperService } from "./http-wrapper.service";
 import { ToasterService } from "./toaster.service";
-import { CompanyService } from "./companyService.service";
+import { CompanyService } from "./company.service";
 import { LocationService } from "./location.service";
 import { AccountService } from "./account.service";
 import { InventoryService } from "./inventory.service";
@@ -39,9 +39,9 @@ import { RecurringVoucherService } from './recurring-voucher.service';
 import { ImportExcelService } from './import-excel.service';
 import { SettingsDiscountService } from './settings.discount.service';
 import { NewVsOldInvoicesService } from './new-vs-old-invoices.service';
-import { CompanyImportExportService } from './companyImportExportService';
+import { CompanyImportExportService } from './company-import-export-service';
 import { AgingreportingService } from './agingreporting.service';
-import { GstReconcileService } from './GstReconcile.service';
+import { GstReconcileService } from './gst-reconcile.service';
 import { ReceiptService } from './receipt.service';
 import { DbService } from './db.service';
 import { VersionCheckService } from 'apps/web-giddh/src/app/version-check.service';
@@ -59,8 +59,13 @@ import { CashFlowStatementService } from './cashflowstatement.service';
 import { PurchaseOrderService } from './purchase-order.service';
 import { BulkVoucherExportService } from './bulkvoucherexport.service';
 import { LocaleService } from './locale.service';
-import { CustomFieldsService } from "./custom-fields.service";
+import { PrinterFormatService } from "./printer.format.service";
+import { ThermalService } from "./thermal.service";
 import { ActivityLogsService } from "./activity-logs.service";
+import { DownloadsService } from "./downloads.service";
+import { CustomFieldsService } from "./custom-fields.service";
+import { ImportsService } from "./imports.service";
+import { CampaignIntegrationService } from "./campaign.integration.service";
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -99,6 +104,7 @@ export class ServiceModule {
                 ActivityLogsService,
                 TlPlService,
                 SettingsIntegrationService,
+                CampaignIntegrationService,
                 SettingsProfileService,
                 SettingsTaxesService,
                 SettingsLinkedAccountsService,
@@ -133,7 +139,11 @@ export class ServiceModule {
                 PurchaseOrderService,
                 BulkVoucherExportService,
                 LocaleService,
-                CustomFieldsService
+                DownloadsService,
+                PrinterFormatService,
+                ThermalService,
+                CustomFieldsService,
+                ImportsService
             ]
         };
     }

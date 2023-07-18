@@ -1,0 +1,26 @@
+<ng-container
+    appTranslate
+    [file]="'downloads'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <hamburger-menu class="hamburger-menu"></hamburger-menu>
+    <div class="relative">
+        <hamburger-menu></hamburger-menu>
+        <div class="clearfix petty-cash">
+            <mat-tab-group
+                animationDuration="0ms"
+                [selectedIndex]="selectedTabIndex"
+                (selectedTabChange)="tabChanged($event)"
+                [disableRipple]="true"
+            >
+                <mat-tab [label]="'Exports'">
+                    <exports *ngIf="selectedTabIndex === 0"></exports>
+                </mat-tab>
+                <mat-tab [label]="'Imports'">
+                    <imports *ngIf="selectedTabIndex === 1"></imports>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</ng-container>

@@ -9,10 +9,11 @@ import { ExpenseService } from '../../../services/expences.service';
 import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import { FormControl } from '@angular/forms';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { Lightbox } from 'ngx-lightbox';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'app-pending-list',
@@ -83,7 +84,8 @@ export class PendingListComponent implements OnInit, OnChanges {
         private toaster: ToasterService,
         private cdRef: ChangeDetectorRef,
         public dialog: MatDialog,
-        private lightbox: Lightbox
+        private lightbox: Lightbox,
+        private generalService: GeneralService
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(state => state.session.todaySelected), takeUntil(this.destroyed$));
@@ -96,8 +98,8 @@ export class PendingListComponent implements OnInit, OnChanges {
             this.todaySelected = resp[1];
             if (dateObj && !this.todaySelected) {
                 let universalDate = _.cloneDeep(dateObj);
-                let from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                let to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                let from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                let to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 if (from && to) {
                     this.pettycashRequest.from = from;
                     this.pettycashRequest.to = to;
@@ -162,7 +164,7 @@ export class PendingListComponent implements OnInit, OnChanges {
      * @memberof PendingListComponent
      */
     public async approveEntry(event: any) {
-        if (!event?.baseAccount.uniqueName) {
+        if (!event?.baseAccount?.uniqueName) {
             this.toaster.showSnackBar("error", this.localeData?.approve_entry_error);
             this.hideApproveConfirmPopup(false);
             return;
@@ -172,11 +174,11 @@ export class PendingListComponent implements OnInit, OnChanges {
         let ledgerRequest;
         let actionType: ActionPettycashRequest = {
             actionType: 'approve',
-            uniqueName: event.uniqueName,
-            accountUniqueName: event.baseAccount.uniqueName
+            uniqueName: event?.uniqueName,
+            accountUniqueName: event.baseAccount?.uniqueName
         };
         try {
-            ledgerRequest = await this.expenseService.getPettycashEntry(event.uniqueName).toPromise();
+            ledgerRequest = await this.expenseService.getPettycashEntry(event?.uniqueName).toPromise();
         } catch (e) {
             this.approveEntryRequestInProcess = false;
             this.toaster.showSnackBar("error", e);
@@ -191,10 +193,10 @@ export class PendingListComponent implements OnInit, OnChanges {
 
         this.expenseService.actionPettycashReports(actionType, { ledgerRequest: model }).subscribe((res) => {
             this.approveEntryRequestInProcess = false;
-            if (res.status === 'success') {
-                this.toaster.showSnackBar("success", res.body);
+            if (res?.status === 'success') {
+                this.toaster.showSnackBar("success", res?.body);
             } else {
-                this.toaster.showSnackBar("error", res.message);
+                this.toaster.showSnackBar("error", res?.message);
             }
             this.selectedEntryForApprove = null;
             this.getPettyCashPendingReports(this.pettycashRequest);
@@ -337,7 +339,7 @@ export class PendingListComponent implements OnInit, OnChanges {
      */
     private isCashBankAccount(particular: any): boolean {
         if (particular) {
-            return particular.parentGroups.some(parent => parent.uniqueName === 'bankaccounts' || parent.uniqueName === 'cash');
+            return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && parent?.uniqueName === 'loanandoverdraft'));
         }
         return false;
     }

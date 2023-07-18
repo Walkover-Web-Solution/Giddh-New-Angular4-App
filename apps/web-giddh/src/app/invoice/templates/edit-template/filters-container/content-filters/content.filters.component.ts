@@ -10,7 +10,7 @@ import { AppState } from '../../../../../store';
 import { Configuration } from '../../../../../app.constant';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
 import { INVOICE_API } from 'apps/web-giddh/src/app/services/apiurls/invoice';
-import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/Company/company.reducer';
+import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/company/company.reducer';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { NgForm } from '@angular/forms';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -105,7 +105,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             if (!a) {
                 return;
             }
-            this.voucherType = a.voucherType;
+            this.voucherType = a?.voucherType;
             // this.getVoucher(false);
         });
         this._invoiceUiDataService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
@@ -173,7 +173,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         //   template.sections.header.data.billingGstin.display = true;
         //   template.sections.header.data.billingState.display = true;
         // }
-        if (!template.sections.header.data.shippingAddress.display) {
+        if (!template.sections.header.data.shippingAddress?.display) {
             template.sections.header.data.shippingGstin.display = false;
             template.sections.header.data.shippingState.display = false;
 
@@ -186,7 +186,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     }
     public changeDisableBilling() {
         let template = cloneDeep(this.customTemplate);
-        if (!template.sections.header.data.billingAddress.display) {
+        if (!template.sections.header.data.billingAddress?.display) {
             template.sections.header.data.billingGstin.display = false;
             template.sections.header.data.billingState.display = false;
         } else {
@@ -226,18 +226,18 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         } else if (output.type === 'start') {
             this.isSignatureUploadInProgress = true;
         } else if (output.type === 'done') {
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 if (this._invoiceUiDataService.unusedImageSignature) {
                     this.removeFileFromServer();
                 }
-                this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
-                this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
-                this._invoiceUiDataService.unusedImageSignature = output.file.response.body.uniqueName;
+                this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body?.uniqueName;
+                this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body?.uniqueName;
+                this._invoiceUiDataService.unusedImageSignature = output.file.response.body?.uniqueName;
                 this.onChangeFieldVisibility(null, null, null);
                 this._toasty.successToast('file uploaded successfully.');
                 this.startUpload();
             } else {
-                this._toasty.errorToast(output.file.response.message, output.file.response.code);
+                this._toasty.errorToast(output.file.response?.message, output.file.response?.code);
             }
             this.isSignatureUploadInProgress = false;
             this.signatureImgAttached = true;
@@ -251,7 +251,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         this.companyUniqueName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
         const event: UploadInput = {
             type: 'uploadAll',
-            url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
+            url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
             method: 'POST',
             headers: { 'Session-Id': sessionId },
         };
@@ -326,7 +326,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public changeDisableQuantity(): void {
         let template = cloneDeep(this.customTemplate);
         if (template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.totalQuantity) {
-            if (!template.sections.table.data.quantity.display) {
+            if (!template.sections.table.data.quantity?.display) {
                 template.sections.table.data.totalQuantity.display = false;
             } else {
                 template.sections.table.data.totalQuantity.display = true;
@@ -345,14 +345,14 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public checkedTaxBifurcation(label: string, sectionType: string) {
         let template = cloneDeep(this.customTemplate);
         if (sectionType === 'table' && template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.taxBifurcation) {
-            if (template.sections.table.data.taxBifurcation.display) {
+            if (template.sections.table.data.taxBifurcation?.display) {
                 template.sections.table.data.taxBifurcation.label = label;
             } else {
                 template.sections.table.data.taxBifurcation.label = '';
             }
         } else {
             if (template && template.sections && template.sections.footer && template.sections.footer.data && template.sections.footer.data.taxBifurcation) {
-                if (template.sections.footer.data.taxBifurcation.display) {
+                if (template.sections.footer.data.taxBifurcation?.display) {
                     template.sections.footer.data.taxBifurcation.label = label;
                 } else {
                     template.sections.footer.data.taxBifurcation.label = '';

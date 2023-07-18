@@ -1,8 +1,16 @@
 <div class="container-fluid">
-    <div class="top-bar aging-top-bar d-flex justify-content-between">
+    <div
+        *ngIf="
+            (dueAmountReportData$ | async)?.results?.length ||
+            (getAgingReportRequestInProcess$ | async) ||
+            showClearFilter ||
+            isAdvanceSearchApplied
+        "
+        class="top-bar aging-top-bar d-flex justify-content-between"
+    >
         <div class="aging-form-inline">
             <div class="btn-group pull-left on-desktop-view">
-                <button mat-flat-button class="btn-sky-blue" (click)="creteNewCustomerEvent.emit(true)">
+                <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)">
                     {{ localeData?.new_customer }}
                 </button>
             </div>
@@ -51,26 +59,12 @@
                     </sh-select>
                 </div>
             </div>
-            <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative">
-                <div class="form-group mr-r15 d-flex flex-fill">
-                    <div class="form-group custom-datepicker mr-r15" (click)="showGiddhDatepicker($event)">
-                        <i class="icon-calender calendar-addon"></i>
-                        <input
-                            matInput
-                            type="text"
-                            name="selectedDateRange"
-                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker form-control date-range-picker"
-                        />
-                    </div>
-                </div>
-            </form>
         </div>
         <div
             class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
             *ngIf="showClearFilter"
         >
-            <button class="btn btn-filters mr-0" (click)="resetAdvanceSearch()">
+            <button mat-stroked-button class="mr-0" (click)="resetAdvanceSearch()">
                 <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
             </button>
         </div>
@@ -119,7 +113,7 @@
             </div>
         </div>
         <div class="btn-group mr-t15 pull-left mobile-view">
-            <button mat-raised-button class="btn-sky-blue w-100" (click)="creteNewCustomerEvent.emit(true)">
+            <button mat-stroked-button color="primary" class="w-100" (click)="createNewCustomerEvent.emit(true)">
                 {{ localeData?.new_customer }}
             </button>
         </div>
@@ -161,7 +155,7 @@
             <div *ngIf="!isMobileScreen" class="table-responsive">
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
-            <div *ngIf="isMobileScreen">
+            <div *ngIf="isMobileScreen && (dueAmountReportData$ | async)?.results?.length">
                 <div class="text-center top-aging-table-top pd-1">
                     <p (click)="openAgingDropDown()">
                         <strong>{{ localeData?.due_in_last_days }} </strong>
@@ -175,9 +169,29 @@
                 </div>
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
+            <div class="no-data">
+                <div
+                    class="align-item-center"
+                    *ngIf="
+                        !(dueAmountReportData$ | async)?.results?.length &&
+                        !(getAgingReportRequestInProcess$ | async) &&
+                        !showClearFilter &&
+                        !isAdvanceSearchApplied
+                    "
+                >
+                    <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
+                    <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)">
+                        {{ localeData?.new_customer }}
+                    </button>
+                </div>
+            </div>
             <div
                 class="no-data"
-                *ngIf="!(dueAmountReportData$ | async)?.results?.length && !(getAgingReportRequestInProcess$ | async)"
+                *ngIf="
+                    !(dueAmountReportData$ | async)?.results?.length &&
+                    !(getAgingReportRequestInProcess$ | async) &&
+                    (showClearFilter || isAdvanceSearchApplied)
+                "
             >
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>
             </div>
@@ -240,7 +254,6 @@
                 </ng-template>
             </mat-menu>
         </div>
-
         <table
             *ngIf="!(getAgingReportRequestInProcess$ | async)"
             mat-table
@@ -488,7 +501,7 @@
     </div>
 
     <div
-        *ngIf="(dueAmountReportData$ | async)?.totalItems >= 20"
+        *ngIf="(dueAmountReportData$ | async)?.totalPages > 1"
         class="pagination-wrapper"
         [hidden]="getAgingReportRequestInProcess$ | async"
     >
@@ -496,29 +509,6 @@
             <div class="text-center unbold pagination-sm">
                 <div id="pagination" element-view-container-ref #paginationChild="elementviewcontainerref"></div>
             </div>
-        </div>
-    </div>
-</ng-template>
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="selectedDate($event)"
-                (datesUpdated)="selectedDate($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

@@ -1,50 +1,64 @@
-<ul class="list-unstyled stock-grp-list clearfix">
-    <li
-        class="clearfix main-group p-0"
-        [ngClass]="{ 'isGrp': grp.childStockGroups.length > 0, 'group-open': grp.isOpen }"
-        *ngFor="let grp of Groups"
-    >
-        <div
-            class="item-group"
-            [ngClass]="{
-                'active':
-                    grp.isOpen &&
-                    activeGroup &&
-                    activeGroup.uniqueName === grp.uniqueName &&
-                    !(activeStockUniqueName$ | async)
-            }"
-        >
-            <a (click)="OpenGroup(grp, $event)" class="d-flex">
-                <a class="text-black inventory-group-name">{{ grp.name }}</a>
-                <i
-                    (click)="OpenGroup(grp, $event)"
-                    class="icon-arrow-down position-relative"
-                    [ngClass]="{ 'open': grp.isOpen }"
-                ></i>
-            </a>
-            <span class="pull-right">
-                <button
-                    class="btn btn-link btn-xs pull-right"
-                    (click)="goToManageGroup(grp)"
-                    *ngIf="
-                        grp.isOpen &&
-                        activeGroup &&
-                        activeGroup.uniqueName === grp.uniqueName &&
-                        !(activeStockUniqueName$ | async)
-                    "
+<ng-container *ngIf="Groups?.length > 0">
+    <perfect-scrollbar #perfectScrollbar (psYReachEnd)="onScrollEnd($event)">
+        <ul class="list-unstyled stock-grp-list clearfix" style="min-height: 100px">
+            <li
+                class="clearfix main-group p-0"
+                [ngClass]="{ 'isGrp': grp.childStockGroups?.length > 0, 'group-open': grp.isOpen }"
+                *ngFor="let grp of Groups"
+            >
+                <div
+                    class="item-group"
+                    [ngClass]="{
+                        'active':
+                            grp.isOpen &&
+                            activeGroup &&
+                            activeGroup?.uniqueName === grp?.uniqueName &&
+                            !(activeStockUniqueName$ | async)
+                    }"
                 >
-                    <i class="icon-edit-pencil"> </i>
-                </button>
-            </span>
-        </div>
-        <div>
-            <stock-list [Groups]="grp"> </stock-list>
-            <stockgrp-list [Groups]="grp.childStockGroups" *ngIf="grp.childStockGroups.length > 0 && grp.isOpen">
-            </stockgrp-list>
-        </div>
-    </li>
-    <li class="no-data-box text-center text-light" *ngIf="Groups && Groups.length <= 0">
-        <img src="assets/images/search-data-not-found.svg" /><br />
-        No Data Found
+                    <a (click)="OpenGroup(grp, $event)" class="d-flex">
+                        <a class="text-black inventory-group-name">{{ grp.name }}</a>
+                        <i
+                            (click)="OpenGroup(grp, $event)"
+                            class="icon-arrow-down position-relative"
+                            [ngClass]="{ 'open': grp.isOpen }"
+                        ></i>
+                    </a>
+                    <span class="pull-right">
+                        <button
+                            class="btn btn-link btn-xs pull-right"
+                            (click)="goToManageGroup(grp)"
+                            *ngIf="
+                                grp.isOpen &&
+                                activeGroup &&
+                                activeGroup?.uniqueName === grp?.uniqueName &&
+                                !(activeStockUniqueName$ | async)
+                            "
+                        >
+                            <i class="icon-edit-pencil"> </i>
+                        </button>
+                    </span>
+                </div>
+                <div>
+                    <stock-list [Groups]="grp"> </stock-list>
+                    <stockgrp-list
+                        [Groups]="grp.childStockGroups"
+                        *ngIf="grp.childStockGroups?.length > 0 && grp.isOpen"
+                    >
+                    </stockgrp-list>
+                </div>
+            </li>
+        </ul>
+    </perfect-scrollbar>
+</ng-container>
+<ul class="list-unstyled stock-grp-list clearfix" *ngIf="!Groups || Groups?.length <= 0">
+    <li class="no-data-box text-center text-light">
+        <ng-container *ngIf="getStocksInProgress">
+            <giddh-page-loader></giddh-page-loader>
+        </ng-container>
+        <ng-container *ngIf="!getStocksInProgress">
+            <img src="assets/images/search-data-not-found.svg" /><br />
+            No Data Found
+        </ng-container>
     </li>
 </ul>

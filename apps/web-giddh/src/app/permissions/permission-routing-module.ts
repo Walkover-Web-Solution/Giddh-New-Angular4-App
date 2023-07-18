@@ -8,12 +8,13 @@ import { PermissionDetailsComponent } from './components/details/permission.deta
 import { DeleteRoleConfirmationModelComponent } from './components/confirmation/confirmation.model.component';
 import { PermissionModelComponent } from './components/model/permission.model.component';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
-import { SortByPipe } from './sort.pipe';
 import { CapitalizePipe } from './capitalize.pipe';
 import { LaddaModule } from 'angular2-ladda';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from '../shared/shared.module';
+import { SortByModule } from '../shared/helpers/pipes/sort-by/sort-by.module';
+
 const PERMISSION_ROUTES: Routes = [
     { path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full' },
     {
@@ -42,17 +43,20 @@ const PERMISSION_ROUTES: Routes = [
         PermissionDetailsComponent,
         PermissionModelComponent,
         DeleteRoleConfirmationModelComponent,
-        SortByPipe,
         CapitalizePipe
     ],
     imports: [
         CommonModule,
         FormsModule,
         RouterModule.forChild(PERMISSION_ROUTES),
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ModalModule,
-        BsDropdownModule,
-        SharedModule
+        BsDropdownModule.forRoot(),
+        SharedModule,
+        SortByModule
     ],
     exports: [
         RouterModule,

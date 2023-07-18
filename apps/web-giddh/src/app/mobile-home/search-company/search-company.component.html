@@ -1,0 +1,36 @@
+<ng-container appTranslate [file]="'mobile-home'" (localeData)="localeData = $event" [requireCommonData]="false">
+    <div class="search-company-page">
+        <div class="search-company-field">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="icon-search"></i>
+                </span>
+                <div class="wrap-group-account-input">
+                    <input
+                        type="text"
+                        [(ngModel)]="searchCmp"
+                        (ngModelChange)="filterCompanyList($event)"
+                        #searchElement
+                        class="form-control"
+                        [placeholder]="localeData?.search_company"
+                    />
+                </div>
+                <span class="close-addon" *ngIf="searchCmp && searchCmp.length">
+                    <i class="icon-cross" (click)="filterCompanyList(''); searchCmp = ''"></i>
+                </span>
+            </div>
+        </div>
+        <!--
+            Hide for now, will use it on next version
+            <div class="mt-2">
+            <button href="javascript:void(0)" class="btn-link p-0 btn bold pl-0">{{localeData?.create_company}}</button>
+        </div> -->
+        <div class="all-company-list">
+            <ul>
+                <li *ngFor="let company of companyList" (click)="changeCompany(company?.uniqueName)">
+                    <a href="javascript:;">{{ company?.name }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</ng-container>

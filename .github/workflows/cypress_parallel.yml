@@ -6,7 +6,7 @@ name: Cypress parallel
 on:
     # Triggers the workflow on push or pull request events but only for the giddh-2.0 branch
     pull_request:
-        branches: [ production ]
+        branches: [production]
 
 jobs:
     install:
@@ -20,9 +20,9 @@ jobs:
             # install a specific version of Node using
             # https://github.com/actions/setup-node
             - name: Use Node.js v12
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@v3
               with:
-                  node-version: 12
+                  node-version: 16
 
             # just so we learn about available environment variables GitHub provides
             # - name: Print CI env variables
@@ -76,16 +76,16 @@ jobs:
         runs-on: windows-latest
         needs: install
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
               with:
                   ref: ${{ github.event.pull_request.head.sha }}
 
             # install a specific version of Node using
             # https://github.com/actions/setup-node
-            - name: Use Node.js v12
-              uses: actions/setup-node@v1
+            - name: Use Node.js v16
+              uses: actions/setup-node@v3
               with:
-                  node-version: 12
+                  node-version: 16
 
             # Restore just local node_modules and the Cypress binary archives.
             - name: Cache Cypress binary
@@ -113,7 +113,7 @@ jobs:
               env:
                   # place your secret record key at
                   # https://github.com/cypress-io/cypress-example-kitchensink/settings/secrets
-                 # CYPRESS_RECORD_KEY: ${{ secrets.dashboardRecordKey }}
+                  # CYPRESS_RECORD_KEY: ${{ secrets.dashboardRecordKey }}
                   TERM: xterm
 
                   # Save videos and screenshots as test artifacts
@@ -143,10 +143,10 @@ jobs:
 
             # install a specific version of Node using
             # https://github.com/actions/setup-node
-            - name: Use Node.js v12
-              uses: actions/setup-node@v1
+            - name: Use Node.js v16
+              uses: actions/setup-node@v3
               with:
-                  node-version: 12
+                  node-version: 16
 
             # Restore just local node_modules and the Cypress binary archives.
             - name: Cache Cypress binary
@@ -174,21 +174,22 @@ jobs:
               env:
                   # place your secret record key at
                   # https://github.com/cypress-io/cypress-example-kitchensink/settings/secrets
-                 # CYPRESS_RECORD_KEY: ${{ secrets.dashboardRecordKey }}
-                  TERM: xterm
+                  # CYPRESS_RECORD_KEY: ${{ secrets.dashboardRecordKey }}
+                  TERM:
+                      xterm
 
-                    # Save videos and screenshots as test artifacts
-                    # https://github.com/actions/upload-artifact
-                    # - uses: actions/upload-artifact@master
-                    # there might be no screenshots created when:
-                    # - there are no test failures
-                    # so only upload screenshots if previous step has failed
-                    #  if: failure()
-                    #with:
-                    #name: screenshots
-                    #path: cypress/screenshots
-                    # video should always be generated
-                    #  - uses: actions/upload-artifact@master
-                    #  with:
+                      # Save videos and screenshots as test artifacts
+                      # https://github.com/actions/upload-artifact
+                      # - uses: actions/upload-artifact@master
+                      # there might be no screenshots created when:
+                      # - there are no test failures
+                      # so only upload screenshots if previous step has failed
+                      #  if: failure()
+                      #with:
+                      #name: screenshots
+                      #path: cypress/screenshots
+                      # video should always be generated
+                      #  - uses: actions/upload-artifact@master
+                      #  with:
                   #  name: videos
                   #path: cypress/videos

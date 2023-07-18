@@ -11,7 +11,7 @@ import { LedgerActions } from 'apps/web-giddh/src/app/actions/ledger/ledger.acti
 import { States } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
-import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
+import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flatten-groups-accounts-detail.interface';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
 
@@ -56,9 +56,9 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngOnInit() {
         this._groupService.GetFlattenGroupsAccounts('', 1, 5000, 'true').pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result.status === 'success') {
+            if (result?.status === 'success') {
                 let groupsListArray: IOption[] = [];
-                result.body.results = this.removeFixedGroupsFromArr(result.body.results);
+                result.body.results = this.removeFixedGroupsFromArr(result.body?.results);
                 result.body.results.forEach(a => {
                     groupsListArray.push({ label: a.groupName, value: a.groupUniqueName });
                 });
@@ -71,7 +71,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             }
         });
-        
+
         this.newAccountForm = this._fb.group({
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: ['', [Validators.required]],
@@ -103,16 +103,16 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
     public generateUniqueName() {
         let control = this.newAccountForm.get('name');
         let uniqueControl = this.newAccountForm.get('uniqueName');
-        let unqName = control.value;
-        unqName = unqName.replace(/ |,|\//g, '');
-        unqName = unqName.toLowerCase();
-        if (unqName.length >= 1) {
+        let unqName = control?.value;
+        unqName = unqName?.replace(/ |,|\//g, '');
+        unqName = unqName?.toLowerCase();
+        if (unqName?.length >= 1) {
             let unq = '';
             let text = '';
             const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
             let i = 0;
             while (i < 3) {
-                text += chars.charAt(Math.floor(Math.random() * chars.length));
+                text += chars.charAt(Math.floor(Math.random() * chars?.length));
                 i++;
             }
             unq = unqName + text;
@@ -123,13 +123,13 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
-        let gstVal: string = gstForm.get('gstNumber').value;
+        let gstVal: string = gstForm.get('gstNumber')?.value;
         if (gstVal?.length >= 2) {
             this.statesSource$.pipe(take(1)).subscribe(state => {
-                let s = state.find(st => st.value === gstVal.substr(0, 2));
+                let s = state.find(st => st?.value === gstVal.substr(0, 2));
                 statesEle.disabled = true;
                 if (s) {
-                    gstForm.get('stateCode')?.patchValue(s.value);
+                    gstForm.get('stateCode')?.patchValue(s?.value);
                 } else {
                     gstForm.get('stateCode')?.patchValue(null);
                     this._toaster.clearAllToaster();
@@ -146,8 +146,8 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public checkSelectedGroup(options: IOption) {
         this.groupsArrayStream$.subscribe(data => {
-            if (data.length) {
-                let accountCategory = this.flattenGroup(data, options.value, null);
+            if (data?.length) {
+                let accountCategory = this.flattenGroup(data, options?.value, null);
                 this.showGstBox = accountCategory === 'assets' || accountCategory === 'liabilities';
             }
         });
@@ -155,7 +155,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public flattenGroup(rawList: GroupsWithAccountsResponse[], groupUniqueName: string, category: any) {
         for (let raw of rawList) {
-            if (raw.uniqueName === groupUniqueName) {
+            if (raw?.uniqueName === groupUniqueName) {
                 return raw.category;
             }
 
@@ -171,17 +171,17 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
     public removeFixedGroupsFromArr(data: IFlattenGroupsAccountsDetail[]) {
         const fixedArr = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost',
             'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
-        return data.filter(da => {
-            return !(fixedArr.indexOf(da?.groupUniqueName) > -1);
+        return data?.filter(da => {
+            return !(fixedArr?.indexOf(da?.groupUniqueName) > -1);
         });
     }
 
     public submit() {
-        let createAccountRequest: AccountRequestV2 = cloneDeep(this.newAccountForm.value);
+        let createAccountRequest: AccountRequestV2 = cloneDeep(this.newAccountForm?.value);
         if (!this.showGstBox) {
             delete createAccountRequest.addresses;
         }
-        this.store.dispatch(this.ledgerAction.createQuickAccountV2(this.newAccountForm.value?.groupUniqueName, createAccountRequest));
+        this.store.dispatch(this.ledgerAction.createQuickAccountV2(this.newAccountForm?.value?.groupUniqueName, createAccountRequest));
     }
 
     /**

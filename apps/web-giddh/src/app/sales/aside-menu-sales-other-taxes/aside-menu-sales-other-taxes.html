@@ -1,8 +1,8 @@
-<div class="aside-pane sales-aside-tax-pane text-left" [keyboardShortcut]="'esc'" (onShortcutPress)="saveTaxes()">
+<div class="aside-pane sales-aside-tax-pane text-left" [keyboardShortcut]="'esc'" (onShortcutPress)="closeTaxesModal()">
     <div class="form-header">
         <h3 class="aside-title">{{commonLocaleData?.app_tax_applicable}}</h3>
     </div>
-    <button id="close" type="button" (click)="saveTaxes()"><i class="icon-cross"></i></button>
+    <button id="close" type="button" (click)="closeTaxesModal()"><i class="icon-cross"></i></button>
     <div class="aside-body">
         <div class="aside-pane-form">
             <div class="row">

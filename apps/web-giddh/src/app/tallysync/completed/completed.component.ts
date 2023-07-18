@@ -1,6 +1,6 @@
 import { Observable, ReplaySubject } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ToasterService } from '../../services/toaster.service';
 import { takeUntil } from "rxjs/operators";
@@ -31,7 +31,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         containerClass: 'theme-green myDpClass'
     };
     public CompanyList: IOption[] = [];
-    public moment = moment;
+    public dayjs = dayjs;
     public maxDate = new Date(new Date().setDate(new Date().getDate() - 1));
     public startDate: string;
     public endDate: string;
@@ -149,15 +149,15 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.companies$.subscribe(a => {
             if (a) {
                 a.forEach((element) => {
-                    this.CompanyList.push({ value: element.uniqueName, label: element.name });
+                    this.CompanyList.push({ value: element?.uniqueName, label: element.name });
                 })
             }
         });
         // set initial Data
-        this.filterForm.get('filterDate')?.patchValue(moment(this.maxDate).format('D-MMM-YYYY'));
-        this.filterForm.get('filterTimeInterval')?.patchValue(this.timeInterval[5].value);
-        this.filter.timeRange = this.timeInterval[5].value;
-        this.filter.startDate = moment(this.maxDate).format(GIDDH_DATE_FORMAT);
+        this.filterForm.get('filterDate')?.patchValue(dayjs(this.maxDate).format('D-MMM-YYYY'));
+        this.filterForm.get('filterTimeInterval')?.patchValue(this.timeInterval[5]?.value);
+        this.filter.timeRange = this.timeInterval[5]?.value;
+        this.filter.startDate = dayjs(this.maxDate).format(GIDDH_DATE_FORMAT);
         this.getReport();
     }
 
@@ -172,7 +172,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.filter.to = this.filter.startDate + ' ' + this.filter.timeRange.split('-')[1];
         this.paginationRequest.from = this.filter.from;
         this.paginationRequest.to = this.filter.to;
-        this.paginationRequest.branchUniqueName = this.filterForm.get('branchUniqueName').value;
+        this.paginationRequest.branchUniqueName = this.filterForm.get('branchUniqueName')?.value;
         this.tallysyncService.getCompletedSync(this.paginationRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.results && res.results.length > 0) {
                 this.completedtallySyncDataResponse = res;
@@ -221,12 +221,12 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.downloadTallyErrorLogRequest.date = row['dateDDMMYY'] ? row['dateDDMMYY'] : '';
         this.downloadTallyErrorLogRequest.hour = row['hour'] ? row['hour'] : null;
         this.downloadTallyErrorLogRequest.type = row['type'];
-        this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res.status === 'success') {
+        this.tallysyncService.getErrorLog(row.company?.uniqueName, this.downloadTallyErrorLogRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res?.status === 'success') {
                 let blobData = this.generalService.base64ToBlob(res.body, 'application/xlsx', 512);
                 return saveAs(blobData, `${row.company.name}-error-log.xlsx`);
             } else {
-                this.toaster.errorToast(res.message);
+                this.toaster.errorToast(res?.message);
             }
         })
     }
@@ -265,22 +265,22 @@ export class CompletedComponent implements OnInit, OnDestroy {
 
     public getHours(dateArray: any) {
         let hour;
-        if (dateArray.length > 2) {
+        if (dateArray?.length > 2) {
             hour = dateArray[3] + 1;
         }
         return hour;
     }
 
     public onDDElementCompanySelect(event: IOption) {
-        this.filter.company = event.value;
+        this.filter.company = event?.value;
     }
 
     public onValueChange(event: Date): void {
-        this.filter.startDate = moment(event).format(GIDDH_DATE_FORMAT);
+        this.filter.startDate = dayjs(event).format(GIDDH_DATE_FORMAT);
     }
 
     public onDDElementTimeRangeSelect(event: IOption): void {
-        this.filter.timeRange = event.value;
+        this.filter.timeRange = event?.value;
     }
 
     public pageChanged(event) {
@@ -300,6 +300,6 @@ export class CompletedComponent implements OnInit, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
-        this.paginationRequest.branchUniqueName = this.filterForm.get('branchUniqueName').value;
+        this.paginationRequest.branchUniqueName = this.filterForm.get('branchUniqueName')?.value;
     }
 }

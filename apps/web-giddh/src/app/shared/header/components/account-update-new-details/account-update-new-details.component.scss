@@ -15,7 +15,7 @@
 
 .aside-pane-container {
     padding: 15px;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-nero);
 }
 
@@ -98,8 +98,13 @@ form.gstin-form {
         margin-right: 10px;
     }
 }
+/*--- custom ---*/
+.add-new-btn {
+    width: 100%;
+    max-width: 185px;
+}
 .add-address-default h3 {
-    font-size: 16px;
+    font-size: var(--font-size-15);
     color: var(--color-nero);
 }
 
@@ -115,6 +120,13 @@ form.gstin-form {
 
 .update-btn-zindex {
     z-index: 0;
+    color: var(--color-secondary-button-text) !important;
+    border-color: var(--color-secondary-button-background) !important;
+    background-color: var(--color-secondary-button-background) !important;
+    &:hover {
+        border-color: var(--color-secondary-button-background-hover) !important;
+        background-color: var(--color-secondary-button-background-hover) !important;
+    }
 }
 
 .wd100 {
@@ -152,4 +164,8 @@ form.gstin-form {
 .merge-btn,
 .save-btn {
     min-width: 100px;
+}
+.is-default-address {
+    margin-top: 5px !important;
+    height: 29px;
 }

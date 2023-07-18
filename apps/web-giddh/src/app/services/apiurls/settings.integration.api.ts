@@ -20,5 +20,21 @@ export const SETTINGS_INTEGRATION_API = {
     UPDATE_PAYOR_ACCOUNT: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor/:urn',
     UPDATE_ACCOUNT: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName',
     GET_PAYOR_REGISTRATION_STATUS: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor/:urn/status',
-    GET_BANK_ACCOUNT_PAYORS: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor?amount=:amount',
+    GET_BANK_ACCOUNT_PAYORS: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor?amount=:amount'
 };
+
+export const SETTINGS_INTEGRATION_COMMUNICATION_API = {
+    GET_PLATFORMS: COMMON + 'communication',
+    VERIFY_PLATFORM: COMMON + 'communication/platform/verify',
+    DELETE_PLATFORM: COMMON + 'communication/platform/:platformUniqueName',
+    CREATE_TRIGGERS: COMMON + 'communication/trigger',
+    UPDATE_TRIGGERS: COMMON + 'communication/trigger/:triggerUniqueName',
+    GET_TRIGGERS: COMMON + 'communication/trigger',
+    GET_TRIGGERS_BY_UNIQUENAME: COMMON + 'communication/trigger/:triggerUniqueName',
+    UPDATE_TRIGGER_STATUS: COMMON + 'communication/trigger/:triggerUniqueName',
+    DELETE_TRIGGER: COMMON + 'communication/trigger/:triggerUniqueName',
+    GET_TRIGGER_FORM: COMMON + 'communication/platform/:platform/trigger/form',
+    GET_FIELD_SUGGESTIONS: COMMON + 'communication/suggestions/:platform/:entity',
+    GET_CAMPAIGN_FIELDS: COMMON + 'communication/campaign/:slug/fields',
+    GET_CAMPAIGN_LIST: COMMON + 'communication/campaign/list'
+}

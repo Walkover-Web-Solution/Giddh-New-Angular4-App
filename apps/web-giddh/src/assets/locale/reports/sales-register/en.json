@@ -2,6 +2,21 @@
     "page_heading_single": "Report",
     "page_heading": "Sales Register",
     "quantity_rate": "Qty-Rate",
+    "search_entry_no": "Search entry number",
     "search_voucher_no": "Search voucher number",
-    "transaction_count": "Transaction count"
+    "transaction_count": "Transaction count",
+    "net_tax": "Net Tax",
+    "net_discount": "Net Discount",
+    "net_tds": "Net TDS",
+    "net_tcs": "Net TCS",
+    "voucher_type": "Voucher Type",
+    "voucher_no": "Voucher No.",
+    "qty_rate": "Qty-Rate",
+    "discount": "Discount",
+    "tax": "Tax",
+    "date": "Date",
+    "account": "Account",
+    "sales": "Sales",
+    "return": "Return",
+    "net_sales": "Net Sales"
 }

@@ -77,8 +77,8 @@ declare var enableVoucherAdjustmentMultiCurrency: boolean;
 declare var GOOGLE_CLIENT_ID: string;
 declare var GOOGLE_CLIENT_SECRET: string;
 declare var RAZORPAY_KEY: string;
-// declare var $: JQueryStatic;
-// declare var jQuery: JQueryStatic;
+declare var OTP_WIDGET_ID: string;
+declare var OTP_TOKEN_AUTH: string;
 
 interface SystemJS {
     import: (path?: string) => Promise<any>;

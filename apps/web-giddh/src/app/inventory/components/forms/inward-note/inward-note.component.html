@@ -2,7 +2,7 @@
     <div>
         <h3 class="">
             <span>Inward Note</span>
-            <span class="pull-right font-14"
+            <span class="pull-right font-15"
                 >Multiple
                 <a
                     href="javascript:void(0)"
@@ -77,18 +77,18 @@
 
             <div class="row">
                 <div class="col-4" *ngIf="mode === 'sender'">
-                    <label class="font-14">Sender <sup>*</sup></label>
+                    <label class="font-15">Sender <sup>*</sup></label>
                 </div>
                 <div class="col-4" *ngIf="mode === 'product'">
-                    <label class="font-14">Product Name <sup>*</sup></label>
+                    <label class="font-15">Product Name <sup>*</sup></label>
                 </div>
 
                 <div class="col-4">
-                    <label class="font-14">Unit<sup>*</sup></label>
+                    <label class="font-15">Unit<sup>*</sup></label>
                 </div>
 
                 <div class="col-4">
-                    <label class="font-14">Quantity <sup>*</sup></label>
+                    <label class="font-15">Quantity <sup>*</sup></label>
                 </div>
             </div>
 
@@ -175,19 +175,19 @@
                         </div>
                     </div>
 
-                    <section class="col-md-12" *ngIf="form.value.isManufactured">
+                    <section class="col-md-12" *ngIf="form?.value.isManufactured">
                         <div>
                             <h1 class="section-head bd-rb">
-                                <strong>{{ form.controls["stock"].value }} (Made with)</strong>
+                                <strong>{{ form.controls["stock"]?.value }} (Made with)</strong>
                             </h1>
 
                             <div formGroupName="manufacturingDetails">
                                 <div class="row pd-t05">
                                     <div class="col-4">
-                                        <label class="font-14">Output Qty <sup>*</sup></label>
+                                        <label class="font-15">Output Qty <sup>*</sup></label>
                                     </div>
                                     <div class="col-5">
-                                        <label class="font-14">Stock Unit <sup>*</sup></label>
+                                        <label class="font-15">Stock Unit <sup>*</sup></label>
                                     </div>
                                 </div>
 
@@ -217,15 +217,15 @@
 
                                     <div
                                         class="col-3 d-flex align-items-center height-30"
-                                        *ngIf="manufacturingDetails.controls['manufacturingQuantity'].value"
+                                        *ngIf="manufacturingDetails.controls['manufacturingQuantity']?.value"
                                     >
                                         <label>&nbsp;</label>
                                         <span class="d-block"
                                             ><strong
                                                 >= (
-                                                {{ manufacturingDetails.controls["manufacturingQuantity"].value }}
-                                                {{ manufacturingDetails.controls["manufacturingUnitCode"].value }}
-                                                {{ stock.value }} )</strong
+                                                {{ manufacturingDetails.controls["manufacturingQuantity"]?.value }}
+                                                {{ manufacturingDetails.controls["manufacturingUnitCode"]?.value }}
+                                                {{ stock?.value }} )</strong
                                             ></span
                                         >
                                     </div>

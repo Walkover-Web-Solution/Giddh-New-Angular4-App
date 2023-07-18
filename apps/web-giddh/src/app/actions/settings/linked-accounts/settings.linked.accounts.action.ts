@@ -8,7 +8,7 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { SettingsLinkedAccountsService } from '../../../services/settings.linked.accounts.service';
 import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from './settings.linked.accounts.const';
 import { IGetAllEbankAccountResponse } from '../../../models/api-models/SettingsLinkedAccounts';
-import { CustomActions } from '../../../store/customActions';
+import { CustomActions } from '../../../store/custom-actions';
 
 @Injectable()
 export class SettingsLinkedAccountsActions {
@@ -225,7 +225,7 @@ export class SettingsLinkedAccountsActions {
     }
 
     public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this.toasty.errorToast(response.message);
             }

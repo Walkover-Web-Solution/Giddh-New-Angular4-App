@@ -160,17 +160,17 @@ export class InprogressComponent implements OnInit, OnDestroy {
         this.downloadTallyErrorLogRequest.date = row['dateDDMMYY'] ? row['dateDDMMYY'] : '';
         this.downloadTallyErrorLogRequest.hour = row['hour'] ? row['hour'] : null;
         this.downloadTallyErrorLogRequest.type = row['type'];
-        this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest)
+        this.tallysyncService.getErrorLog(row.company?.uniqueName, this.downloadTallyErrorLogRequest)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
-                if (res.status === "success") {
+                if (res?.status === "success") {
                     let blobData = this.generalService.base64ToBlob(res.body, "application/xlsx", 512);
                     return saveAs(
                         blobData,
                         `${row.company.name}-error-log.xlsx`
                     );
                 } else {
-                    this.toaster.errorToast(res.message);
+                    this.toaster.errorToast(res?.message);
                 }
             });
     }
@@ -222,7 +222,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
      */
     public getHours(dateArray: any) {
         let hour;
-        if (dateArray.length > 2) {
+        if (dateArray?.length > 2) {
             hour = dateArray[3] + 1;
         }
         return hour;

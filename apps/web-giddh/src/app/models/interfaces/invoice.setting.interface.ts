@@ -79,6 +79,10 @@ export class InvoiceSettings {
         this.autoDeleteEntries = false;
         this.gstEInvoiceEnable = false;
         this.enableNarrationOnInvAndVoucher = false;
+        this.salesRoundOff = false;
+        this.purchaseRoundOff = false;
+        this.debitNoteRoundOff = false;
+        this.creditNoteRoundOff = false;
     }
     duePeriod?: any;
     autoMail: boolean;
@@ -121,4 +125,8 @@ export class InvoiceSettings {
     gstEInvoiceGstin?: string;
     gstEInvoiceUserName?: string;
     gstEInvoiceUserPassword?: string;
+    salesRoundOff: boolean;
+    purchaseRoundOff: boolean;
+    debitNoteRoundOff: boolean;
+    creditNoteRoundOff: boolean;
 }

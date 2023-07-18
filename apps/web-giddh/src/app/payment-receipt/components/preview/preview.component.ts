@@ -77,8 +77,6 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
     public imagePreviewSource: SafeUrl;
     /** Attached PDF file url created with blob */
     public attachedPdfFileUrl: any = '';
-    /* This will hold if attachment is expanded */
-    public isAttachmentExpanded: boolean = false;
     /** This will hold the attached file */
     private attachedAttachmentBlob: Blob;
     /** This will hold pdf and attachment */
@@ -191,11 +189,11 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
      * @memberof PreviewComponent
      */
     public filterVoucher(term: any): void {
-        this.filteredData = this.allVouchers.filter(item => {
-            return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
-                item.account.name.toLowerCase().includes(term.toLowerCase()) ||
+        this.filteredData = this.allVouchers?.filter(item => {
+            return item.voucherNumber?.toLowerCase().includes(term?.toLowerCase()) ||
+                item.account.name?.toLowerCase().includes(term?.toLowerCase()) ||
                 item.voucherDate.includes(term) ||
-                item.grandTotal.amountForAccount.toString().includes(term);
+                item.grandTotal.amountForAccount?.toString()?.includes(term);
         });
     }
 
@@ -207,11 +205,12 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
     public getPdf(): void {
         let model = {
             voucherType: this.voucherType,
-            uniqueName: this.params.uniqueName
+            uniqueName: this.params?.uniqueName
         };
 
-        this.selectedItem.hasAttachment = false;
-        this.isAttachmentExpanded = false;
+        if (this.selectedItem) {
+            this.selectedItem.hasAttachment = false;
+        }
         this.attachedAttachmentBlob = null;
         this.attachedDocumentType = {};
 
@@ -237,8 +236,7 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
                 if (result.body.attachments?.length > 0) {
                     /** Creating attachment start */
                     this.selectedItem.hasAttachment = true;
-                    this.isAttachmentExpanded = false;
-                    const fileExtention = result.body.attachments[0].type.toLowerCase();
+                    const fileExtention = result.body.attachments[0].type?.toLowerCase();
                     if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                         // Attached file type is image
                         this.attachedAttachmentBlob = this.generalService.base64ToBlob(result.body.attachments[0].encodedData, `image/${fileExtention}`, 512);
@@ -282,7 +280,7 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
     private getVoucherDetails(): void {
         this.store.dispatch(this.invoiceReceiptAction.getVoucherDetailsV4(this.params.accountUniqueName, {
             voucherType: this.voucherType,
-            uniqueName: this.params.uniqueName
+            uniqueName: this.params?.uniqueName
         }));
     }
 

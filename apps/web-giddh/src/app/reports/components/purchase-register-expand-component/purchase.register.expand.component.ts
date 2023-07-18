@@ -9,8 +9,12 @@ import { ReplaySubject, Observable } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { FormControl } from '@angular/forms';
 import { PAGINATION_LIMIT } from '../../../app.constant';
-import { CurrentCompanyState } from '../../../store/Company/company.reducer';
+import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { GeneralService } from '../../../services/general.service';
+import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
+import { LedgerService } from '../../../services/ledger.service';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'purchase-register-expand',
@@ -44,13 +48,17 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public imgPath: string;
     public expand: boolean = false;
     public showFieldFilter = {
-        voucherType: true,
-        voucherNo: true,
-        productService: false,
-        qtyRate: false,
+        date: false,
+        account: false,
+        voucher_type: false,
+        voucher_no: false,
+        purchase: false,
+        return: false,
+        qty_rate: false,
         value: false,
         discount: false,
-        tax: false
+        tax: false,
+        net_purchase: false
     };
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -60,8 +68,20 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
+    /* This will hold module type */
+    public moduleType = 'PURCHASE_REGISTER';
+    /** This will use for purchase register column check values */
+    public customiseColumns = [];
+    /** This will use for purchase register displayed columns */
+    public displayedColumns: any[] = [];
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver) {
+    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private ledgerService: LedgerService, private toaster: ToasterService) {
         this.purchaseRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.PurchaseRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetPurchaseDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetPurchaseDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetPurchaseDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetPurchaseDetailsSuccess), takeUntil(this.destroyed$));
@@ -72,7 +92,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedPurchaseRequestFilter.page = 1;
         this.getDetailedPurchaseRequestFilter.count = this.paginationLimit;
@@ -114,14 +135,66 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$)
         ).subscribe(s => {
             if (s !== null && s !== undefined) {
-            this.showClearFilter = true;
-            this.getDetailedPurchaseRequestFilter.sort = null;
-            this.getDetailedPurchaseRequestFilter.sortBy = null;
-            this.getDetailedPurchaseRequestFilter.q = s;
-            this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
-            this.showSearchInvoiceNo = false;
+                this.showClearFilter = true;
+                this.getDetailedPurchaseRequestFilter.sort = null;
+                this.getDetailedPurchaseRequestFilter.sortBy = null;
+                this.getDetailedPurchaseRequestFilter.q = s;
+                this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
+                this.showSearchInvoiceNo = false;
             }
         });
+        this.customiseColumns = [
+            {
+                "value": "date",
+                "label": "Date",
+                "checked": true
+            },
+            {
+                "value": "account",
+                "label": "Account",
+                "checked": true
+            },
+            {
+                "value": "voucher_type",
+                "label": "Voucher Type",
+                "checked": true
+            },
+            {
+                "value": "voucher_no",
+                "label": "Voucher No.",
+                "checked": true
+            },
+            {
+                "value": "purchase",
+                "label": "Purchase",
+                "checked": true
+            },
+            {
+                "value": "return",
+                "label": "Return",
+                "checked": true
+            },
+            {
+                "value": "qty_rate",
+                "label": "Qty-Rate",
+                "checked": true
+            },
+            {
+                "value": "discount",
+                "label": "Discount",
+                "checked": true
+            },
+            {
+                "value": "tax",
+                "label": "Tax",
+                "checked": true
+            },
+            {
+                "value": "net_purchase",
+                "label": "Net Purchase",
+                "checked": true
+            }
+        ];
     }
 
     public getDetailedPurchaseReport(PurchaseDetailedfilter) {
@@ -150,7 +223,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterExpandComponent
      */
     public gotoPurchaseRegister(): void {
-        this.router.navigate(['/pages/reports/purchase-register']);
+        this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
+            this.router.navigate(['pages', 'reports', 'purchase-register'], { queryParams: { from: params.from, to: params.to, branchUniqueName: params.branchUniqueName, interval: params.interval, selectedMonth: params.selectedMonth } });
+        });
     }
 
     /**
@@ -182,7 +257,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
     public getDateToDMY(selecteddate) {
         let date = selecteddate.split('-');
-        if (date.length === 3) {
+        if (date?.length === 3) {
+            this.translationComplete(true);
             let month = this.monthNames[parseInt(date[1]) - 1]?.substr(0, 3);
             let year = date[2]?.substr(2, 4);
             return date[0] + ' ' + month + ' ' + year;
@@ -229,7 +305,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         let startDateSplit = startDate.split('-');
         let dt = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
         // GET THE MONTH AND YEAR OF THE SELECTED DATE.
-        let month = (dt.getMonth() + 1).toString(),
+        let month = (dt.getMonth() + 1)?.toString(),
             year = dt.getFullYear();
 
         // GET THE FIRST AND LAST DATE OF THE MONTH.
@@ -272,8 +348,11 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: boolean): void {
         if (event) {
+            this.customiseColumns = this.customiseColumns?.map(column => {
+                column.label = this.localeData[column.value];
+                return column;
+            });
             this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
-
             this.getCurrentMonthYear();
         }
     }
@@ -304,4 +383,57 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
+    /**
+     * Exports purchase register detailed report
+     *
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public export(): void {
+        let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
+        exportBodyRequest.from = this.from;
+        exportBodyRequest.to = this.to;
+        exportBodyRequest.exportType = "PURCHASE_REGISTER_DETAILED_EXPORT";
+        exportBodyRequest.fileType = "CSV";
+        exportBodyRequest.isExpanded = this.expand;
+        exportBodyRequest.q = this.voucherNumberInput?.value;
+        exportBodyRequest.branchUniqueName = this.getDetailedPurchaseRequestFilter?.branchUniqueName;
+        exportBodyRequest.columnsToExport = [];
+        if (this.showFieldFilter.voucher_type) {
+            exportBodyRequest.columnsToExport.push("Voucher Type");
+        }
+        if (this.showFieldFilter.voucher_no) {
+            exportBodyRequest.columnsToExport.push("Voucher No");
+        }
+        if (this.showFieldFilter.qty_rate) {
+            exportBodyRequest.columnsToExport.push("Qty/Unit");
+        }
+        if (this.showFieldFilter.discount) {
+            exportBodyRequest.columnsToExport.push("Discount");
+        }
+        if (this.showFieldFilter.tax) {
+            exportBodyRequest.columnsToExport.push("Tax");
+        }
+        this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'success') {
+                this.toaster.showSnackBar("success", response?.body);
+                this.router.navigate(["/pages/downloads"]);
+            } else {
+                this.toaster.showSnackBar("error", response?.message);
+            }
+        });
+    }
+
+    /**
+     * This will use for show hide main table columns from customise columns
+     *
+     * @param {*} event
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public getSelectedTableColumns(event: any): void {
+        this.displayedColumns = event;
+        const displayColumnsSet = new Set(this.displayedColumns);
+        Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = displayColumnsSet.has(key));
+    }
+
 }

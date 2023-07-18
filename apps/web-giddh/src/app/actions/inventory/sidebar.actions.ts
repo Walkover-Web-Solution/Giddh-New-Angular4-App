@@ -10,7 +10,7 @@ import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { Observable } from 'rxjs';
 import { InventoryService } from '../../services/inventory.service';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 
 @Injectable()
 export class SidebarAction {
@@ -21,7 +21,7 @@ export class SidebarAction {
             tap(a => console.log('called')),
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetGroupsStock(action.payload?.groupUniqueName).pipe(shareReplay(), map(response => {
-                    if (response.status === 'error') {
+                    if (response?.status === 'error') {
                         this._toasty.errorToast(response.message, response.code);
                     } else {
                         this.store.dispatch(this.GetInventoryGroupResponse(response));
@@ -49,7 +49,7 @@ export class SidebarAction {
         .pipe(
             ofType(InventoryActionsConst.GetInventoryStockResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -73,7 +73,7 @@ export class SidebarAction {
     public GetGroupsWithStocksHierarchyMin$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMin),
-            switchMap((action: CustomActions) => this._inventoryService.GetGroupsWithStocksHierarchyMin(action.payload)),
+            switchMap((action: CustomActions) => this._inventoryService.GetGroupsWithStocksHierarchyMin(action.payload?.q, action.payload?.page, action.payload?.count)),
             map(response => {
                 return this.GetGroupsWithStocksHierarchyMinResponse(response);
             })));
@@ -82,7 +82,7 @@ export class SidebarAction {
         .pipe(
             ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -91,7 +91,7 @@ export class SidebarAction {
     public SearchGroupsWithStocks$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.SearchGroupsWithStocks),
-            switchMap((action: CustomActions) => this._inventoryService.SearchStockGroupsWithStocks(action.payload)),
+            switchMap((action: CustomActions) => this._inventoryService.SearchStockGroupsWithStocks(action.payload?.q, action.payload?.page, action.payload?.count)),
             map(response => {
                 return this.SearchGroupsWithStocksResponse(response);
             })));
@@ -100,7 +100,7 @@ export class SidebarAction {
         .pipe(
             ofType(InventoryActionsConst.SearchGroupsWithStocksResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -162,10 +162,10 @@ export class SidebarAction {
         };
     }
 
-    public GetGroupsWithStocksHierarchyMin(q?: string): CustomActions {
+    public GetGroupsWithStocksHierarchyMin(q?: string, page?: number, count?: number): CustomActions {
         return {
             type: InventoryActionsConst.GetGroupsWithStocksHierarchyMin,
-            payload: q
+            payload: { q: q, page: page, count: count }
         };
     }
 
@@ -183,10 +183,10 @@ export class SidebarAction {
         };
     }
 
-    public SearchGroupsWithStocks(q?: string): CustomActions {
+    public SearchGroupsWithStocks(q?: string, page?: number, count?: number): CustomActions {
         return {
             type: InventoryActionsConst.SearchGroupsWithStocks,
-            payload: q
+            payload: { q: q, page: page, count: count }
         };
     }
 

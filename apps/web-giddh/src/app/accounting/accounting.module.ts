@@ -57,12 +57,15 @@ import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
         ReactiveFormsModule,
         DatepickerModule,
         ModalModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         DecimalDigitsModule,
         AVShSelectModule,
         SharedModule,
         ClickOutsideModule,
-        TooltipModule,
+        TooltipModule.forRoot(),
         TypeaheadModule.forRoot(),
         TextMaskModule,
         VirtualScrollModule,

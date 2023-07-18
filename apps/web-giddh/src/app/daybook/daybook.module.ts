@@ -18,7 +18,7 @@ import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { SharedModule } from '../shared/shared.module';
 import { SalesModule } from '../sales/sales.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
-import { UpdateLedgerEntryPanelModule } from '../material-ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
+import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
 import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -37,12 +37,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         ReactiveFormsModule, DecimalDigitsModule,
         FormsModule, ModalModule,
         BsDatepickerModule,
-        PaginationModule,
+        PaginationModule.forRoot(),
         DatepickerModule,
         Daterangepicker,
         DaybookRoutingModule,
         ShSelectModule,
-        TooltipModule,
+        TooltipModule.forRoot(),
         ElementViewChildModule,
         CurrencyModule,
         SharedModule,
@@ -60,9 +60,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatRadioModule,
         MatExpansionModule,
         MatSlideToggleModule
-    ],
-    entryComponents: [
-        PaginationComponent
     ]
 })
 export class DaybookModule {

@@ -3,18 +3,21 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs';
+import { combineLatest, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OnboardingFormRequest } from '../../../models/api-models/Common';
+import { BranchFilterRequest } from '../../../models/api-models/Company';
 import { CommonService } from '../../../services/common.service';
-import { CompanyService } from '../../../services/companyService.service';
+import { CompanyService } from '../../../services/company.service';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../constants/settings.constant';
 import { SettingsUtilityService } from '../../services/settings-utility.service';
+import { WarehouseActions } from '../../warehouse/action/warehouse.action';
 @Component({
     selector: 'create-branch',
     templateUrl: './create-branch.component.html',
@@ -76,6 +79,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public profileLocaleData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if need to hide link entity */
+    public hideLinkEntity: boolean = true;
 
     constructor(
         private commonService: CommonService,
@@ -87,7 +92,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private settingsProfileService: SettingsProfileService,
         private settingsUtilityService: SettingsUtilityService,
-        private toastService: ToasterService
+        private toastService: ToasterService,
+        private warehouseActions: WarehouseActions,
+        private settingsBranchActions: SettingsBranchActions
     ) {
         this.branchForm = this.formBuilder.group({
             alias: ['', [Validators.required, Validators.maxLength(50)]],
@@ -110,7 +117,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     businessType: response.businessType,
                     country: {
                         countryName: response.countryV2 ? response.countryV2.countryName : '',
-                        countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode.toLowerCase() : '',
+                        countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode?.toLowerCase() : '',
                         currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }
@@ -185,7 +192,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     public handleFinalSelection(selectedAddresses: Array<any>): void {
         this.addresses.forEach(address => {
-            if (!selectedAddresses?.includes(address.uniqueName)) {
+            if (!selectedAddresses?.includes(address?.uniqueName)) {
                 address.isDefault = false;
             }
         });
@@ -215,7 +222,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         event.preventDefault();
         if (!option.isDefault) {
             this.addresses.forEach(address => {
-                if (address.value !== option.value) {
+                if (address?.value !== option?.value) {
                     address.isDefault = false;
                 }
             });
@@ -223,8 +230,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
             this.branchForm.get('address')?.patchValue([
-                ...(this.branchForm.get('address').value || []),
-                option.value
+                ...(this.branchForm.get('address')?.value || []),
+                option?.value
             ]);
         }
     }
@@ -236,10 +243,10 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     public handleFormSubmit(): void {
         const requestObj = {
-            name: this.branchForm.value.name,
-            alias: this.branchForm.value.alias,
-            linkAddresses: this.addresses?.filter(address => this.branchForm.value.address?.includes(address.uniqueName))?.map(filteredAddress => ({
-                uniqueName: filteredAddress.uniqueName,
+            name: this.branchForm?.value.name,
+            alias: this.branchForm?.value.alias,
+            linkAddresses: this.addresses?.filter(address => this.branchForm?.value.address?.includes(address?.uniqueName))?.map(filteredAddress => ({
+                uniqueName: filteredAddress?.uniqueName,
                 isDefault: filteredAddress.isDefault
             }))
         };
@@ -309,9 +316,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
-        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
-        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity?.includes(entity.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity.uniqueName,
+        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState?.value === addressDetails.formValue.state);
+        const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity?.includes(entity?.uniqueName))).map(filteredEntity => ({
+            uniqueName: filteredEntity?.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
         }));
@@ -326,16 +333,16 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         };
 
         this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response.status === 'success' && response.body) {
+            if (response?.status === 'success' && response?.body) {
                 this.toggleAddressAsidePane();
                 this.addresses.push({
                     ...response.body,
                     label: response.body.name,
-                    value: response.body.uniqueName
+                    value: response.body?.uniqueName
                 })
                 this.toastService.successToast(this.localeData?.address_created);
             } else {
-                this.toastService.errorToast(response.message);
+                this.toastService.errorToast(response?.message);
             }
             this.isAddressChangeInProgress = false;
         }, () => {
@@ -378,7 +385,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     ...result,
                     isDefault: false,
                     label: result.alias,
-                    value: result.uniqueName
+                    value: result?.uniqueName
                 }));
                 if (successCallback) {
                     successCallback();
@@ -418,8 +425,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                         ...address,
                         isDefault: false,
                         label: address.name,
-                        value: address.uniqueName
+                        value: address?.uniqueName
                     }));
+                this.checkLinkEntity();
             }
         });
     }
@@ -435,4 +443,30 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * Checks if we need to hide link entity
+     *
+     * @memberof CreateBranchComponent
+     */
+    public checkLinkEntity(): void {
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, query: "", count: 2 })); // count is 2 because we only have to check if there are more than 1 records
+        let branchFilterRequest = new BranchFilterRequest();
+        branchFilterRequest.from = "";
+        branchFilterRequest.to = "";
+        this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+
+        this.hideLinkEntity = true;
+
+        if (this.addresses?.length > 1) {
+            this.hideLinkEntity = false;
+        } else {
+            combineLatest([this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.branches))]).pipe(takeUntil(this.destroyed$)).subscribe((response: any[]) => {
+                if (response && response[0] && response[1]) {
+                    if (response[0]?.results?.length > 1 || response[1]?.length > 1) {
+                        this.hideLinkEntity = false;
+                    }
+                }
+            });
+        }
+    }
 }

@@ -170,7 +170,9 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
 
     set slicedCollection(value: any[]) {
         this._slicedCollection = value;
-        this.view.context.vsCollection = this._slicedCollection;
+        if (this.view) {
+            this.view.context.vsCollection = this._slicedCollection;
+        }
     }
 
     public ngOnChanges() {
@@ -261,13 +263,13 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
     }
 
     public refresh() {
-        if (!this.originalCollection || this.originalCollection.length < 1) {
+        if (!this.originalCollection || this.originalCollection?.length < 1) {
             this.slicedCollection = [];
             this.originalLength = 0;
             this.updateTotalSize(0);
             this.sizesCumulative = [0];
         } else {
-            this.originalLength = this.originalCollection.length;
+            this.originalLength = this.originalCollection?.length;
             if (typeof this.vsForSize !== 'undefined') {
                 this.sizes = this.originalCollection.map((item, index) => {
                     if (typeof this.vsForSize === 'function') {
@@ -420,13 +422,15 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
 
         if (digestRequired) {
             this.slicedCollection = this.originalCollection.slice(this.startIndex, this.endIndex);
-            this.view.context.vsStartIndex = this.startIndex;
+            if (this.view) {
+                this.view.context.vsStartIndex = this.startIndex;
+            }
 
             this._prevStartIndex = this.startIndex;
             this._prevEndIndex = this.endIndex;
 
             const o1 = this._getOffset(0);
-            const o2 = this._getOffset(this.slicedCollection.length);
+            const o2 = this._getOffset(this.slicedCollection?.length);
             const total = this.totalSize;
             const layoutProp = this.vsForHorizontal ? 'width' : 'height';
 

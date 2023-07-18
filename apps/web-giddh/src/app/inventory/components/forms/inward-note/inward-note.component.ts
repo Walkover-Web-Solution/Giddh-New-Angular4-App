@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, Simp
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
-import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
+import { IStocksItem } from '../../../../models/interfaces/stocks-item.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { StockUnitRequest } from '../../../../models/api-models/Inventory';
 import { digitsOnly, stockManufacturingDetailsValidator } from '../../../../shared/helpers';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -86,7 +86,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
 
     public initializeForm(initialRequest: boolean = false) {
         this.form = this._fb.group({
-            inventoryEntryDate: [moment().format(GIDDH_DATE_FORMAT), Validators.required],
+            inventoryEntryDate: [dayjs().format(GIDDH_DATE_FORMAT), Validators.required],
             transactions: this._fb.array([], Validators.required),
             description: [''],
             inventoryUser: [''],
@@ -120,8 +120,8 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     public modeChanged(mode: 'sender' | 'product') {
         this.mode = mode;
         this.form.reset();
-        this.inventoryEntryDate?.patchValue(moment().format(GIDDH_DATE_FORMAT));
-        this.transactions.controls = this.transactions.controls.filter(trx => false);
+        this.inventoryEntryDate?.patchValue(dayjs().format(GIDDH_DATE_FORMAT));
+        this.transactions.controls = this.transactions.controls?.filter(trx => false);
 
         if (this.mode === 'sender') {
             this.stock.setValidators(Validators.required);
@@ -137,13 +137,13 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.stockList && this.stockList) {
-            this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p.uniqueName }));
+            this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
         if (changes.stockUnits && this.stockUnits) {
             this.stockUnitsOptions = this.stockUnits.map(p => ({ label: `${p.name} (${p.code})`, value: p.code }));
         }
         if (changes.userList && this.userList) {
-            this.userListOptions = this.userList.map(p => ({ label: p.name, value: p.uniqueName }));
+            this.userListOptions = this.userList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
     }
 
@@ -154,7 +154,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         const items = this.transactions;
-        const value = items.length > 0 ? items.at(0).value : {
+        const value = items?.length > 0 ? items?.at(0)?.value : {
             type: '',
             quantity: '',
             inventoryUser: '',
@@ -179,24 +179,24 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
 
     public userChanged(option: IOption, index: number) {
         const items = this.form.get('transactions') as FormArray;
-        const user = this.userList.find(p => p.uniqueName === option.value);
-        const inventoryUser = user ? { uniqueName: user.uniqueName } : null;
+        const user = this.userList.find(p => p?.uniqueName === option?.value);
+        const inventoryUser = user ? { uniqueName: user?.uniqueName } : null;
 
         if (index >= 0) {
             const control = items.at(index);
             control?.patchValue({
-                ...control.value,
+                ...control?.value,
                 inventoryUser
             });
         } else {
-            items.controls.forEach(c => c?.patchValue({ ...c.value, inventoryUser }));
+            items.controls.forEach(c => c?.patchValue({ ...c?.value, inventoryUser }));
         }
     }
 
     public async stockChanged(option: IOption, index: number) {
         const items = this.transactions;
-        const stockItem = this.stockList.find(p => p.uniqueName === option.value);
-        const stock = stockItem ? { uniqueName: stockItem.uniqueName } : null;
+        const stockItem = this.stockList.find(p => p?.uniqueName === option?.value);
+        const stock = stockItem ? { uniqueName: stockItem?.uniqueName } : null;
         const stockUnit = stockItem ? stockItem.stockUnit.code : null;
 
         if (stockItem && this.mode === 'sender') {
@@ -234,9 +234,9 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
 
         if (index >= 0) {
             const control = items.at(index);
-            control?.patchValue({ ...control.value, stock, stockUnit });
+            control?.patchValue({ ...control?.value, stock, stockUnit });
         } else {
-            items.controls.forEach(c => c?.patchValue({ ...c.value, stock, stockUnit }));
+            items.controls.forEach(c => c?.patchValue({ ...c?.value, stock, stockUnit }));
         }
     }
 
@@ -248,7 +248,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
         let count = 0;
         _.forEach(control.controls, (o) => {
-            if (o.value.stockUniqueName === uniqueName) {
+            if (o?.value.stockUniqueName === uniqueName) {
                 count++;
             }
         });
@@ -258,7 +258,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
             this.disableStockButton = true;
             return;
         } else {
-            const stockItem = this.stockList.find(p => p.uniqueName === uniqueName);
+            const stockItem = this.stockList.find(p => p?.uniqueName === uniqueName);
             const stockUnit = stockItem ? stockItem.stockUnit.code : null;
             control.at(i).get('stockUnitCode')?.patchValue(stockUnit);
             this.disableStockButton = false;
@@ -317,8 +317,8 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
                 return rv;
             });
             let value: InventoryEntry = {
-                inventoryEntryDate: moment(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
-                description: this.description.value,
+                inventoryEntryDate: dayjs(this.inventoryEntryDate?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                description: this.description?.value,
                 transactions: rawValues,
             };
 
@@ -326,13 +326,13 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
                 value.transactions = value.transactions.map(trx => {
                     let linkedStocks: any = this.removeBlankLinkedStock(this.manufacturingDetails.controls.linkedStocks);
                     trx.manufacturingDetails = {
-                        manufacturingQuantity: this.manufacturingDetails.value.manufacturingQuantity,
-                        manufacturingUnitCode: this.manufacturingDetails.value.manufacturingUnitCode,
+                        manufacturingQuantity: this.manufacturingDetails?.value.manufacturingQuantity,
+                        manufacturingUnitCode: this.manufacturingDetails?.value.manufacturingUnitCode,
                         linkedStocks: linkedStocks.map(l => l),
                     };
                     return trx;
                 });
-                value.isManufactured = this.isManufactured.value;
+                value.isManufactured = this.isManufactured?.value;
             }
 
             this.onSave.emit({ ...value });
@@ -340,7 +340,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public async getStockDetails(stockItem: IStocksItem) {
-        return await this._inventoryService.GetStockDetails(stockItem.stockGroup.uniqueName, stockItem.uniqueName).toPromise();
+        return await this._inventoryService.GetStockDetails(stockItem.stockGroup?.uniqueName, stockItem?.uniqueName).toPromise();
     }
 
     /**

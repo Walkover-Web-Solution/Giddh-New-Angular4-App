@@ -3,9 +3,9 @@ import { IOption } from '../../theme/ng-select/ng-select';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
+import { RecurringInvoice } from '../../models/interfaces/recurring-invoice';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from "../../services/toaster.service";
@@ -58,9 +58,9 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
         });
         this.form.controls.nextCronDate.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(p => {
             this.maxEndDate = p;
-            const { cronEndDate } = this.form.value;
-            const end = moment(cronEndDate, cronEndDate instanceof Date ? null : GIDDH_DATE_FORMAT);
-            const next = moment(p);
+            const { cronEndDate } = this.form?.value;
+            const end = dayjs(cronEndDate);
+            const next = dayjs(p);
             if (end.isValid() && next.isAfter(end)) {
                 this.form.controls.cronEndDate?.patchValue('');
             }
@@ -74,9 +74,9 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
         if (this.invoice) {
             this.form?.patchValue({
                 voucherNumber: this.invoice.voucherNumber,
-                duration: this.invoice.duration.toLowerCase(),
-                nextCronDate: this.invoice.nextCronDate && moment(this.invoice.nextCronDate, GIDDH_DATE_FORMAT).toDate(),
-                cronEndDate: this.invoice.cronEndDate && moment(this.invoice.cronEndDate, GIDDH_DATE_FORMAT).toDate()
+                duration: this.invoice.duration?.toLowerCase(),
+                nextCronDate: this.invoice.nextCronDate && dayjs(this.invoice.nextCronDate, GIDDH_DATE_FORMAT).toDate(),
+                cronEndDate: this.invoice.cronEndDate && dayjs(this.invoice.cronEndDate, GIDDH_DATE_FORMAT).toDate()
             });
             if (!this.invoice.cronEndDate) {
                 this.isExpirableChanged({ checked: true });
@@ -103,7 +103,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
     public deleteInvoice() {
         this.isDeleteLoading = true;
 
-        this.recurringVoucherService.deleteRecurringVouchers(this.invoice.uniqueName).subscribe(response => {
+        this.recurringVoucherService.deleteRecurringVouchers(this.invoice?.uniqueName).subscribe(response => {
             if (response) {
                 this.isDeleteLoading = null;
                 this.closeAsidePane(null);
@@ -127,6 +127,8 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
     }
 
     public saveRecurringInvoice() {
+        let convertCronEndDate = dayjs(this.form.controls.cronEndDate?.value).format(GIDDH_DATE_FORMAT);
+        let convertNextCronDate = dayjs(this.form.controls.nextCronDate?.value).format(GIDDH_DATE_FORMAT);
         if (this.mode === 'update') {
             if (this.form.controls.cronEndDate.invalid) {
                 this._toaster.errorToast(this.localeData?.recurring_date_error);
@@ -141,9 +143,9 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 
         if (this.form.controls.cronEndDate.valid && this.form.controls.voucherNumber.valid && this.form.controls.duration.valid && !this.isLoading) {
             this.isLoading = true;
-            const cronEndDate = this.IsNotExpirable ? '' : this.getFormattedDate(this.form.value.cronEndDate);
-            const nextCronDate = this.getFormattedDate(this.form.value.nextCronDate);
-            const invoiceModel: RecurringInvoice = { ...this.invoice, ...this.form.value, cronEndDate, nextCronDate };
+            const cronEndDate = this.IsNotExpirable ? '' : convertCronEndDate;
+            const nextCronDate = convertNextCronDate;
+            const invoiceModel: RecurringInvoice = { ...this.invoice, ...this.form?.value, cronEndDate, nextCronDate };
             if (this.voucherType) {
                 invoiceModel.voucherType = this.voucherType;
             }
@@ -156,10 +158,6 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
             this._toaster.errorToast(this.localeData?.recurring_all_field_required);
         }
 
-    }
-
-    public getFormattedDate(date): string {
-        return moment(date, date instanceof Date ? null : GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
     }
 
     public ngOnDestroy() {
@@ -191,5 +189,15 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
                 { label: this.localeData?.time_options?.fifth, value: '5' },
             ];
         }
+    }
+
+    /**
+     * This will use for on select interval
+     *
+     * @param {*} duration
+     * @memberof AsideMenuRecurringEntryComponent
+     */
+    public onSelectInterval(duration: any): void {
+        this.form.controls.duration?.patchValue(duration?.value);
     }
 }

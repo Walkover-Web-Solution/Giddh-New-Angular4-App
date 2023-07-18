@@ -89,7 +89,7 @@
 
                                 <section
                                     class="periods container-fluid mr-b1"
-                                    *ngIf="permissionForm.get('periodOptions').value === 'daterange'"
+                                    *ngIf="permissionForm.get('periodOptions')?.value === 'daterange'"
                                 >
                                     <div class="row">
                                         <div class="col-sm-12">
@@ -111,7 +111,7 @@
 
                                 <section
                                     class="periods container-fluid mr-b1"
-                                    *ngIf="permissionForm.get('periodOptions').value === 'pastperiod'"
+                                    *ngIf="permissionForm.get('periodOptions')?.value === 'pastperiod'"
                                 >
                                     <label>{{ localeData?.select_past_period_label }}</label>
                                     <div class="row">
@@ -189,7 +189,7 @@
                                 <section
                                     formArrayName="allowedCidrs"
                                     class="ip-range container-fluid"
-                                    *ngIf="permissionForm.get('ipOptions').value === 'cidr_range'"
+                                    *ngIf="permissionForm.get('ipOptions')?.value === 'cidr_range'"
                                 >
                                     <div
                                         class="row mr-b1"
@@ -227,7 +227,7 @@
                                 <section
                                     formArrayName="allowedIps"
                                     class="ip-range container-fluid"
-                                    *ngIf="permissionForm.get('ipOptions').value === 'ip_address'"
+                                    *ngIf="permissionForm.get('ipOptions')?.value === 'ip_address'"
                                 >
                                     <div
                                         class="row mr-b1"

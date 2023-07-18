@@ -1,15 +1,15 @@
 import { catchError, map } from 'rxjs/operators';
-import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, IUnpaidInvoiceListResponse, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
+import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, IUnpaidInvoiceListResponse, IVariant, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
-import { BlankLedgerVM } from '../material-ledger/ledger.vm';
+import { BlankLedgerVM } from '../ledger/ledger.vm';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { DaybookQueryRequest, DayBookRequestModel } from '../models/api-models/DaybookRequest';
+import { ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { cloneDeep } from '../lodash-optimized';
@@ -35,11 +35,11 @@ export class LedgerService {
     public GetBankTransactionsForLedger(getRequest: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.GET_BANK_TRANSACTIONS;
-        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
-        url = url.replace(':accountUniqueName', encodeURIComponent(getRequest.accountUniqueName));
-        url = url.replace(':from', getRequest.from);
-        url = url.replace(':page', getRequest.page);
-        url = url.replace(':count', getRequest.count);
+        url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url?.replace(':accountUniqueName', encodeURIComponent(getRequest.accountUniqueName));
+        url = url?.replace(':from', getRequest.from);
+        url = url?.replace(':page', getRequest.page);
+        url = url?.replace(':count', getRequest.count);
 
         return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<IELedgerResponse[], string> = res;
@@ -54,7 +54,7 @@ export class LedgerService {
     */
     public MapBankTransactions(model: { uniqueName: string }, unqObj: { accountUniqueName: string, transactionId: string }): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + LEDGER_API.MAP_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(unqObj.accountUniqueName)).replace(':transactionId', unqObj.transactionId), model).pipe(
+        return this.http.put(this.config.apiUrl + LEDGER_API.MAP_BANK_TRANSACTIONS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(unqObj.accountUniqueName))?.replace(':transactionId', unqObj.transactionId), model).pipe(
             map((res) => {
                 let data: BaseResponse<string, any> = res;
                 data.request = model;
@@ -70,16 +70,16 @@ export class LedgerService {
     public GetLedgerTransactions(request: TransactionsRequest): Observable<BaseResponse<TransactionsResponse, TransactionsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        let url = this.config.apiUrl + LEDGER_API.NEW_GET_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':q', encodeURIComponent(request.q || ''))
-            .replace(':page', request.page.toString())
-            .replace(':count', encodeURIComponent(request.count.toString()))
-            .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName))
-            .replace(':from', request.from)
-            .replace(':sort', encodeURIComponent(request.sort))
-            .replace(':to', encodeURIComponent(request.to))
-            .replace(':reversePage', request.reversePage.toString())
-            .replace(':accountCurrency', request.accountCurrency.toString());
+        let url = this.config.apiUrl + LEDGER_API.NEW_GET_LEDGER?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':q', encodeURIComponent(request.q || ''))
+            ?.replace(':page', request.page?.toString())
+            ?.replace(':count', encodeURIComponent(request.count?.toString()))
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName))
+            ?.replace(':from', request.from)
+            ?.replace(':sort', encodeURIComponent(request.sort))
+            ?.replace(':to', encodeURIComponent(request.to))
+            ?.replace(':reversePage', request.reversePage?.toString())
+            ?.replace(':accountCurrency', request.accountCurrency?.toString());
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
@@ -109,8 +109,8 @@ export class LedgerService {
         delete model.baseCurrencyToDisplay;
         delete model.foreignCurrencyToDisplay;
         delete model.otherTaxModal;
-        let url = LEDGER_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        let url = LEDGER_API.CREATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
@@ -133,7 +133,7 @@ export class LedgerService {
         // Delete keys not required by API
         const keysToDelete = ['discountResources', 'warning', 'otherTaxModal', 'otherTaxesSum', 'refreshLedger', 'actualAmount', 'actualRate', 'unitRates', 'entryVoucherTotals', 'isOtherTaxesApplicable', 'tdsTcsTaxesSum'];
         keysToDelete.forEach(key => delete model[key]);
-        let url = this.config.apiUrl + LEDGER_API.UNIVERSAL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName);
+        let url = this.config.apiUrl + LEDGER_API.UNIVERSAL?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))?.replace(':entryUniqueName', entryUniqueName);
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
@@ -152,7 +152,7 @@ export class LedgerService {
     */
     public DeleteLedgerTransaction(accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + LEDGER_API.DELETE_LEDGER_ENTRY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName);
+        let url = this.config.apiUrl + LEDGER_API.DELETE_LEDGER_ENTRY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))?.replace(':entryUniqueName', entryUniqueName);
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
@@ -168,9 +168,9 @@ export class LedgerService {
     */
     public GetLedgerTransactionDetails(accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = LEDGER_API.GET_TRANSACTION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-            .replace(':entryUniqueName', entryUniqueName);
+        let url = LEDGER_API.GET_TRANSACTION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+            ?.replace(':entryUniqueName', entryUniqueName);
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
@@ -189,7 +189,7 @@ export class LedgerService {
      */
     public GetReconcile(accountUniqueName: string = '', from: string = '', to: string = '', chequeNumber: string = ''): Observable<BaseResponse<ReconcileResponse[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        const url = this.config.apiUrl + LEDGER_API.RECONCILE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':to', to).replace(':chequeNumber', chequeNumber);
+        const url = this.config.apiUrl + LEDGER_API.RECONCILE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))?.replace(':from', from)?.replace(':to', to)?.replace(':chequeNumber', chequeNumber);
         return this.http.post(url, {}).pipe(map((res) => {
             let data: BaseResponse<ReconcileResponse[], string> = res;
             data.queryString = { accountUniqueName, from, to, chequeNumber };
@@ -199,32 +199,32 @@ export class LedgerService {
 
     public DownloadAttachement(fileName: string): Observable<BaseResponse<DownloadLedgerAttachmentResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + LEDGER_API.DOWNLOAD_ATTACHMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':fileName', fileName);
+        let url = this.config.apiUrl + LEDGER_API.DOWNLOAD_ATTACHMENT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':fileName', fileName);
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
         return this.http.get(url).pipe(
-                map((res) => {
-                    let data: BaseResponse<DownloadLedgerAttachmentResponse, string> = res;
-                    data.request = fileName;
-                    data.queryString = { fileName };
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<DownloadLedgerAttachmentResponse, string>(e, fileName, { fileName })));
+            map((res) => {
+                let data: BaseResponse<DownloadLedgerAttachmentResponse, string> = res;
+                data.request = fileName;
+                data.queryString = { fileName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<DownloadLedgerAttachmentResponse, string>(e, fileName, { fileName })));
     }
 
     public DownloadInvoice(model: DownloadLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, DownloadLedgerRequest>> {
         let dataToSend = {};
-        if (model.uniqueName) {
-            dataToSend = { uniqueName: model.uniqueName, voucherType: model.voucherType };
+        if (model?.uniqueName) {
+            dataToSend = { uniqueName: model?.uniqueName, voucherType: model?.voucherType };
         } else {
-            dataToSend = { voucherNumber: model.invoiceNumber, voucherType: model.voucherType };
+            dataToSend = { voucherNumber: model?.invoiceNumber, voucherType: model?.voucherType };
         }
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = `${this.config.apiUrl}${LEDGER_API.DOWNLOAD_INVOICE}`
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
@@ -240,9 +240,9 @@ export class LedgerService {
 
     public GenerateMagicLink(model: MagicLinkRequest, accountUniqueName: string): Observable<BaseResponse<MagicLinkResponse, MagicLinkRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + LEDGER_API.MAGIC_LINK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-            .replace(':from', model.from).replace(':to', model.to);
+        let url = this.config.apiUrl + LEDGER_API.MAGIC_LINK?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+            ?.replace(':from', model.from)?.replace(':to', model.to);
         if (model.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${model.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(model.branchUniqueName) : ''}`);
         }
@@ -256,14 +256,57 @@ export class LedgerService {
             catchError((e) => this.errorHandler.HandleCatch<MagicLinkResponse, MagicLinkRequest>(e, model, { accountUniqueName })));
     }
 
-    public ExportLedger(model: ExportLedgerRequest, accountUniqueName: string, body: any, exportByInvoiceNumber?: boolean): Observable<BaseResponse<any, ExportLedgerRequest>> {
+    /**
+     * This will use for bill to bill export for v2 companies
+     *
+     * @param {ExportBodyRequest} model
+     * @param {string} accountUniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public exportBillToBillLedger(model: ExportBodyRequest, accountUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let API = exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER;
-        let url = API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-            .replace(':from', model.from).replace(':to', model.to).replace(':type', encodeURIComponent(model.type)).replace(':format', encodeURIComponent(model.format)).replace(':sort', encodeURIComponent(model.sort));
+        let url = this.config.apiUrl + LEDGER_API.EXPORT_BILL_TO_BILL?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+            ?.replace(':from', model.from)?.replace(':to', model.to);
         if (model.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${model.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(model.branchUniqueName) : ''}`);
+        }
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                data.queryString = { model };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     *This will use for ledger export
+     *
+     * @param {ExportLedgerRequest} model
+     * @param {string} accountUniqueName
+     * @param {*} body
+     * @param {boolean} [exportByInvoiceNumber]
+     * @return {*}  {Observable<BaseResponse<any, ExportLedgerRequest>>}
+     * @memberof LedgerService
+     */
+    public ExportLedger(model: ExportLedgerRequest, accountUniqueName: string, body: any, exportByInvoiceNumber?: boolean): Observable<BaseResponse<any, ExportLedgerRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let api;
+        if (body?.type === 'columnar') {
+            api = exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER;
+        } else {
+            api = this.config.apiUrl + LEDGER_API.EXPORT;
+        }
+        let url = api?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+            ?.replace(':from', model.from)?.replace(':to', model.to)?.replace(':type', encodeURIComponent(model.type))?.replace(':format', encodeURIComponent(model.format))?.replace(':sort', encodeURIComponent(model.sort));
+        if (body?.type === 'columnar') {
+            if (model.branchUniqueName) {
+                url = url.concat(`&branchUniqueName=${model.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(model.branchUniqueName) : ''}`);
+            }
         }
         return this.http.post(url, body).pipe(
             map((res) => {
@@ -300,8 +343,8 @@ export class LedgerService {
         }
         request += '&withInvoice=' + emailRequestParams.withInvoice; // emailRequestParams.withInvoice is a boolean so in case of false need to send false as well that will be default
 
-        return this.http.post(this.config.apiUrl + LEDGER_API.MAIL_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)) + request, model).pipe(
+        return this.http.post(this.config.apiUrl + LEDGER_API.MAIL_LEDGER?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)) + request, model).pipe(
                 map((res) => {
                     let data: BaseResponse<string, MailLedgerRequest> = res;
                     data.request = model;
@@ -334,8 +377,8 @@ export class LedgerService {
         if (branchUniqueName) {
             request = request.concat(`&branchUniqueName=${branchUniqueName !== this.companyUniqueName ? encodeURIComponent(branchUniqueName) : ''}`);
         }
-        return this.http.post(this.config.apiUrl + LEDGER_API.ADVANCE_SEARCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)) + request, model).pipe(
+        return this.http.post(this.config.apiUrl + LEDGER_API.ADVANCE_SEARCH?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)) + request, model).pipe(
                 map((res) => {
                     let data: BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest> = res;
                     data.request = model;
@@ -347,7 +390,7 @@ export class LedgerService {
 
     public GetReconciliation(model: any, accountUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + LEDGER_API.RECONCILIATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
+        return this.http.post(this.config.apiUrl + LEDGER_API.RECONCILIATION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
@@ -357,25 +400,30 @@ export class LedgerService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, { accountUniqueName })));
     }
 
-    public GroupExportLedger(groupUniqueName: string, queryRequest: DaybookQueryRequest): Observable<BaseResponse<any, DayBookRequestModel>> {
+    /**
+     * This will use for group ledger export
+     *
+     * @param {ExportBodyRequest} model
+     * @return {*}  {Observable<BaseResponse<any, ExportBodyRequest>>}
+     * @memberof LedgerService
+     */
+    public exportData(model: ExportBodyRequest): Observable<BaseResponse<any, ExportBodyRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + LEDGER_API.GET_GROUP_EXPORT_LEDGER
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
-            .replace(':page', queryRequest.page.toString())
-            .replace(':count', queryRequest.count.toString())
-            .replace(':from', encodeURIComponent(queryRequest.from))
-            .replace(':to', encodeURIComponent(queryRequest.to))
-            .replace(':format', queryRequest.format.toString())
-            .replace(':type', queryRequest.type.toString())
-            .replace(':sort', queryRequest.sort.toString())).pipe(
-                map((res) => {
-                    let data: BaseResponse<any, DayBookRequestModel> = res;
-                    data.queryString = queryRequest;
-                    data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<any, DayBookRequestModel>(e, null)));
+        let api = this.config.apiUrl + LEDGER_API.EXPORT;
+        let url = api?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+
+        if (model.branchUniqueName) {
+            url = url.concat(`?branchUniqueName=${model.branchUniqueName}`);
+            model.branchUniqueName = undefined;
+        }
+
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, ExportBodyRequest> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, ExportBodyRequest>(e, model)));
     }
 
     /*
@@ -383,7 +431,7 @@ export class LedgerService {
     */
     public DeleteMultipleLedgerTransaction(accountUniqueName: string, entryUniqueNamesArray: string[]): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + LEDGER_API.MULTIPLE_DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        let url = this.config.apiUrl + LEDGER_API.MULTIPLE_DELETE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
 
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
@@ -397,7 +445,7 @@ export class LedgerService {
 
     public GetCurrencyRate(fromCurrency: string, toCurrency: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + LEDGER_API.CURRENCY_CONVERTER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromCurrency', encodeURIComponent(fromCurrency)).replace(':toCurrency', encodeURIComponent(toCurrency))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + LEDGER_API.CURRENCY_CONVERTER?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':fromCurrency', encodeURIComponent(fromCurrency))?.replace(':toCurrency', encodeURIComponent(toCurrency))).pipe(map((res) => {
             let data: any = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
@@ -406,10 +454,10 @@ export class LedgerService {
     public GetCurrencyRateNewApi(fromCurrency: string, toCurrency: string, date: string) {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + LEDGER_API.GET_CURRENCY_RATE
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':from', encodeURIComponent(fromCurrency))
-            .replace(':to', encodeURIComponent(toCurrency))
-            .replace(':date', encodeURIComponent(date))
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':from', encodeURIComponent(fromCurrency))
+            ?.replace(':to', encodeURIComponent(toCurrency))
+            ?.replace(':date', encodeURIComponent(date))
         )
             .pipe(map((res) => {
                 let data: any = res;
@@ -427,7 +475,7 @@ export class LedgerService {
     */
     public DeleteBankTransaction(transactionId: string): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + LEDGER_API.DELETE_BANK_TRANSACTION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':transactionId', transactionId)).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + LEDGER_API.DELETE_BANK_TRANSACTION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':transactionId', transactionId)).pipe(map((res) => {
             let data: any = res;
             data.queryString = { transactionId };
             return data;
@@ -436,10 +484,10 @@ export class LedgerService {
 
     public GetLedgerBalance(model: TransactionsRequest): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + LEDGER_API.GET_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
-            .replace(':from', model.from).replace(':to', model.to)
-            .replace(':accountCurrency', model.accountCurrency.toString());
+        let url = this.config.apiUrl + LEDGER_API.GET_BALANCE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+            ?.replace(':from', model.from)?.replace(':to', model.to)
+            ?.replace(':accountCurrency', model.accountCurrency?.toString());
         if (model.branchUniqueName) {
             model.branchUniqueName = model.branchUniqueName !== this.companyUniqueName ? model.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${model.branchUniqueName}`);
@@ -465,11 +513,11 @@ export class LedgerService {
     public getInvoiceListsForCreditNote(model: any, date: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.GET_VOUCHER_INVOICE_LIST
-        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':voucherDate', encodeURIComponent(date))
-        .replace(':number', encodeURIComponent((model.number || "")))
-        .replace(':count', (model.count || PAGINATION_LIMIT))
-        .replace(':page', (model.page || 1));
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':voucherDate', encodeURIComponent(date))
+            ?.replace(':number', encodeURIComponent((model.number || "")))
+            ?.replace(':count', (model.count || PAGINATION_LIMIT))
+            ?.replace(':page', (model.page || 1));
 
         delete model.page;
         delete model.count;
@@ -489,9 +537,9 @@ export class LedgerService {
     public GetInvoiceList(model: any) {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + LEDGER_API.GET_UNPAID_INVOICE_LIST
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
-            .replace(':accStatus', encodeURIComponent(model.status))
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(model?.accountUniqueName))
+            ?.replace(':accStatus', encodeURIComponent(model?.status))
         ).pipe(
             map((res) => {
                 let data: BaseResponse<IUnpaidInvoiceListResponse, any> = res;
@@ -525,8 +573,8 @@ export class LedgerService {
         } else {
             url = this.config.apiUrl + LEDGER_API.GET_COLUMNAR_REPORT;
         }
-        return this.http.post(url.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-            .replace(':groupUniqueName', groupUniqueName), request
+        return this.http.post(url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            ?.replace(':groupUniqueName', groupUniqueName), request
         ).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
@@ -549,10 +597,10 @@ export class LedgerService {
      */
     public exportLedgerColumnarReportTable(model: ReportsDetailedRequestFilter, companyUniqueName: string, accountUniqueName: string, body?: any): Observable<BaseResponse<any, ReportsDetailedRequestFilter>> {
         let url = this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_COLUMNAR_REPORT_TABLE
-            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-            .replace(':from', model.from)
-            .replace(':to', model.to);
+            ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+            ?.replace(':from', model.from)
+            ?.replace(':to', model.to);
         if (model.page) {
             url = `${url}&page=${model.page}`;
         }
@@ -584,9 +632,9 @@ export class LedgerService {
      */
     public importStatement(getRequest: any, postRequest: any): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + LEDGER_API.IMPORT_STATEMENT
-            .replace(':companyUniqueName', encodeURIComponent(getRequest.companyUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(getRequest.accountUniqueName))
-            .replace(':entity', getRequest.entity);
+            ?.replace(':companyUniqueName', encodeURIComponent(getRequest.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(getRequest.accountUniqueName))
+            ?.replace(':entity', getRequest.entity);
 
         const formData: FormData = new FormData();
         formData.append('file', postRequest.file, postRequest.file.name);
@@ -606,12 +654,12 @@ export class LedgerService {
      */
     public removeAttachment(attachmentUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = `${this.config.apiUrl}${LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))}/${attachmentUniqueName}`;
+        let url = `${this.config.apiUrl}${LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))}/${attachmentUniqueName}`;
 
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
-        
+
         return this.http.delete(url).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error)));
     }
 
@@ -625,7 +673,66 @@ export class LedgerService {
      */
     public deleteBankTransactions(accountUniqueName: string, params: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        const url = `${this.config.apiUrl}${LEDGER_API.DELETE_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
+        const url = `${this.config.apiUrl}${LEDGER_API.DELETE_BANK_TRANSACTIONS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
         return this.http.deleteWithBody(url, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error)));
+    }
+
+    /**
+     * Get the list of account
+     *
+     * @param {*} accountUniqueName
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public getAccountSearchPrediction(accountUniqueName: any, model: any): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + LEDGER_API.ACCOUNT_SEARCH_PREDICTION
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+
+        return this.http.post(url, model).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * This will use for run Autopaid
+     *
+     * @param {string} accountUniqueName
+     * @param {string} [branchUniqueName]
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public runAutopaid(accountUniqueName: string, branchUniqueName?: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + LEDGER_API.RUN_AUTOPAID?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        if (branchUniqueName) {
+            url = url.concat(`?branchUniqueName=${branchUniqueName}`);
+        }
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<string, string> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
+    }
+
+    /**
+     * Loads stock variants
+     *
+     * @param {string} stockUniqueName Stock uniquename
+     * @return {Observable<Array<IVariant>>} Observable to caary out further operations
+     * @memberof LedgerService
+     */
+    public loadStockVariants(stockUniqueName: string): Observable<Array<IVariant>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + LEDGER_API.GET_STOCK_VARIANTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
+        return this.http.get(url).pipe(map((res) => res.body),catchError(e => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 }

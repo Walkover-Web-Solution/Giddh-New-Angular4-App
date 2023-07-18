@@ -1,0 +1,86 @@
+.create-custom-field-page {
+    .back-to-page {
+        position: absolute;
+        right: 23px;
+        top: 0;
+        z-index: 10;
+        padding: 0px 10px;
+        i {
+            font-size: 21px;
+            float: left;
+            margin-top: 12%;
+        }
+    }
+    .custom-field-wrapper {
+        min-height: 73vh;
+        .add-icon-delete {
+            position: relative;
+            i {
+                position: absolute;
+                right: -40px;
+                top: 0px;
+                cursor: pointer;
+                padding: 10px;
+                &.icon-plus {
+                    color: var(--color-blue);
+                }
+                &.icon-trash {
+                    color: var(--color-gray);
+                }
+            }
+        }
+        .vector-image {
+            position: absolute;
+            right: 15px;
+            top: 0;
+        }
+        .minMaxField-wrapper {
+            .minMaxField {
+                display: flex;
+                align-items: center;
+                column-gap: 15px;
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .create-custom-field-page {
+        .back-to-page {
+            top: -12px;
+            right: 0;
+        }
+        .custom-field-wrapper {
+            min-height: calc(100vh - 250px);
+            form {
+                p {
+                    margin-right: 60px !important;
+                }
+            }
+            .icon-cross {
+                position: absolute;
+                right: -20px;
+                top: -10px;
+                padding: 10px;
+            }
+            .vector-image {
+                display: none;
+            }
+        }
+    }
+}
+@media (max-width: 575px) {
+    .create-custom-field-page {
+        .custom-field-wrapper {
+            .vector-image {
+                display: none;
+            }
+            .add-icon-delete {
+                width: calc(100% - 30px);
+            }
+        }
+        .icon-cross {
+            right: 0;
+        }
+    }
+}

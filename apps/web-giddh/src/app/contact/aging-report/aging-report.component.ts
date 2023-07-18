@@ -8,7 +8,6 @@ import {
     ChangeDetectorRef,
     Input,
     OnDestroy,
-    ElementRef,
     TemplateRef,
 } from "@angular/core";
 import {
@@ -25,22 +24,20 @@ import { cloneDeep, map as lodashMap } from "../../lodash-optimized";
 import { Observable, of, ReplaySubject, Subject } from "rxjs";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
-import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { ElementViewContainerRef } from "../../shared/helpers/directives/elementViewChild/element.viewchild.directive";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
-import * as moment from "moment/moment";
+import * as dayjs from "dayjs";
 import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
 import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSearch.component";
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { GeneralService } from "../../services/general.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../app.constant";
 import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
+import { PAGINATION_LIMIT } from "../../app.constant";
 @Component({
     selector: "aging-report",
     templateUrl: "aging-report.component.html",
@@ -62,8 +59,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public dueAmountReportData$: Observable<DueAmountReportResponse>;
     public totalDueAmounts: number = 0;
     public totalFutureDueAmounts: number = 0;
-    public universalDate$: Observable<any>;
-    public moment = moment;
+    public dayjs = dayjs;
     public key: string = "name";
     public order: string = "asc";
     public filter: string = "";
@@ -71,26 +67,15 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public searchStr$ = new Subject<string>();
     public searchStr: string = "";
     public isMobileScreen: boolean = false;
-    public modalConfig: ModalOptions = {
-        animated: true,
-        keyboard: true,
-        backdrop: "static",
-        ignoreBackdropClick: true,
-    };
     public isAdvanceSearchApplied: boolean = false;
     public agingAdvanceSearchModal: AgingAdvanceSearchModal = new AgingAdvanceSearchModal();
     public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
-    // @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
     @ViewChild("advanceSearch") advanceSearchTemplate: TemplateRef<any>;
-
     @ViewChild("paginationChild", { static: false }) public paginationChild: ElementViewContainerRef;
     @ViewChild("filterDropDownList", { static: true }) public filterDropDownList: BsDropdownDirective;
     /** Advance search component instance */
-    @ViewChild("agingReportAdvanceSearch", {
-        read: ContactAdvanceSearchComponent,
-        static: true,
-    }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
-    @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
+    @ViewChild("agingReportAdvanceSearch", { read: ContactAdvanceSearchComponent, static: true }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
+    @Output() public createNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -101,20 +86,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
-    /** Stores the datepicker modal reference */
-    public modalRef: BsModalRef;
-    /** Stores the date field position in datepicker */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /** Datepicker reference */
-    @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: ElementRef;
-    /* Selected range label */
-    public selectedRangeLabel: any = "";
-    /* This will store selected date range to show on UI */
-    public selectedDateRangeUi: any;
-    /** Stores the current range of date picker */
-    public selectedDateRange: any;
-    /* This will store available date ranges */
-    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Stores the searched name value for the Name filter */
     public searchedName: FormControl = new FormControl();
     /** True, if name search field is to be shown in the filters */
@@ -132,6 +103,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
+    /** Holds images folder path */
+    public imgPath: string = "";
+    /** False for on init call */
+    public defaultLoad: boolean = true;
 
     constructor(
         public dialog: MatDialog,
@@ -141,12 +116,11 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private breakpointObserver: BreakpointObserver,
         private componentFactoryResolver: ComponentFactoryResolver,
         private settingsBranchAction: SettingsBranchActions,
-        private generalService: GeneralService,
-        private modalService: BsModalService) {
+        private generalService: GeneralService) {
         this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
+        this.dueAmountReportRequest.count = PAGINATION_LIMIT;
         this.setDueRangeOpen$ = this.store.pipe(select(s => s.agingreport.setDueRangeOpen), takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.getAgingReportRequestInProcess$ = this.store.pipe(select(s => s.agingreport.getAgingReportRequestInFlight), takeUntil(this.destroyed$));
     }
 
@@ -183,21 +157,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.getDueReport();
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.getDueAmountreportData();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
-            if (dateObj) {
-                let universalDate = cloneDeep(dateObj);
-
-                this.dueAmountReportRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.dueAmountReportRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-
-                this.getDueReport();
-            }
-        });
-
         this.store.dispatch(this.agingReportActions.GetDueRange());
         this.agingDropDownoptions$.subscribe(p => {
             this.agingDropDownoptions = cloneDeep(p);
@@ -208,11 +171,12 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(term => {
-            if (term) {
-                this.showClearFilter = true;
+            if (!this.defaultLoad) {
+                this.showClearFilter = (term) ? true : false;
                 this.dueAmountReportRequest.q = term;
                 this.getDueReport();
             }
+            this.defaultLoad = false;
         });
 
         this.breakpointObserver
@@ -267,7 +231,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        this.searchedName.valueChanges.pipe(
+        this.searchedName?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
@@ -276,10 +240,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response) {
+            if (response) {
                 this.isDueRangeRequestInProgress = true;
             } else {
-                if(this.isDueRangeRequestInProgress) {
+                if (this.isDueRangeRequestInProgress) {
                     this.isDueRangeRequestInProgress = false;
                     this.getDueReport();
                 }
@@ -310,6 +274,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             viewContainerRef.insert(componentInstanceView.hostView);
 
             let componentInstance = componentInstanceView.instance as PaginationComponent;
+            componentInstance.totalPages = s.totalPages;
             componentInstance.totalItems = s.count * s.totalPages;
             componentInstance.itemsPerPage = s.count;
             componentInstance.maxSize = 5;
@@ -326,62 +291,73 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public resetAdvanceSearch() {
-        this.searchedName?.reset();
-        this.searchStr = "";
-        this.showNameSearch = false;  
-        this.isAdvanceSearchApplied = false;
-        this.dueAmountReportRequest.q = '';
-        this.sort("name", "asc") ;
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
         if (this.agingReportAdvanceSearch) {
             this.agingReportAdvanceSearch.reset();
         }
+        this.searchStr$.next('');
+        this.searchedName?.reset();
+        this.searchStr = "";
+        this.showNameSearch = false;
+        this.isAdvanceSearchApplied = false;
+        this.dueAmountReportRequest.q = '';
+        this.sort("name", "asc");
         this.showClearFilter = false;
+        this.defaultLoad = true;
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
         this.commonRequest = request;
         this.agingAdvanceSearchModal.totalDueAmount = request.amount;
         if (request.category === "totalDue") {
-            switch (request.amountType) {
-                case "GreaterThan":
-                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
-                    this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
-                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
-                    break;
-                case "LessThan":
-                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
-                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
-                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
-                    break;
-                case "Exclude":
-                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
-                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = true;
-                    break;
-                case "Equals":
-                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = true;
-                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
-                    break;
-            }
+            this.agingAdvanceSearchModal.includeTotalDueAmount = true;
         } else {
-            // Code here for Future Due category
             this.agingAdvanceSearchModal.includeTotalDueAmount = false;
         }
+        switch (request.amountType) {
+            case "GreaterThan":
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                break;
+            case "LessThan":
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                break;
+            case "Exclude":
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = true;
+                break;
+            case "Equals":
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = true;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                break;
+
+            default:
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                break;
+        }
+
         this.isAdvanceSearchApplied = true;
+        this.showClearFilter = false;
         this.getDueReport();
     }
 
     public sort(key: string, ord: "asc" | "desc" = "asc") {
         this.showClearFilter = true;
         if (key.includes("range")) {
-            this.dueAmountReportRequest.rangeCol = parseInt(key.replace("range", ""));
+            this.dueAmountReportRequest.rangeCol = parseInt(key?.replace("range", ""));
             this.dueAmountReportRequest.sortBy = "range";
         } else {
             this.dueAmountReportRequest.rangeCol = null;
@@ -426,61 +402,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will show datepicker
-     *
-     * @param {*} element
-     * @memberof AgingReportComponent
-     */
-    public showGiddhDatepicker(element): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, {
-                class: "modal-xl giddh-datepicker-modal",
-                backdrop: false,
-                ignoreBackdropClick: this.isMobileScreen,
-            }),
-        );
-    }
-
-    /**
-     * This will hide datepicker
-     *
-     * @memberof AgingReportComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
-    }
-
-    /**
-     * Date change handler for Aging report datepicker
-     *
-     * @param {*} [value] Selected date
-     * @return {*}  {void}
-     * @memberof AgingReportComponent
-     */
-    public selectedDate(value?: any): void {
-        if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
-            return;
-        }
-        this.selectedRangeLabel = "";
-        if (value && value.name) {
-            this.selectedRangeLabel = value.name;
-        }
-        this.hideGiddhDatepicker();
-        if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.dueAmountReportRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.dueAmountReportRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.getDueReport();
-        }
-    }
-
-    /**
      * Click outside handler for Name field search
      *
      * @param {*} event Click outside event
@@ -490,9 +411,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        this.showClearFilter = false ;
         if (searchedFieldName === "name") {
-            if (this.searchedName.value) {
+            if (this.searchedName?.value) {
                 return;
             }
             if (this.generalService.childOf(event.target, element)) {
@@ -534,17 +454,17 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      *
      * @memberof AgingReportComponent
      */
-    public ngOnDestroy(): void {      
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-    
+
     /**
      * This function will use for emit after click outside on component
      *
      * @memberof AgingReportComponent
      */
-     public onCloseMenu() {
+    public onCloseMenu() {
         this.menu?.closeMenu();
     }
 

@@ -3,7 +3,7 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Report } from './apiurls/cashflowstatement.api';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { HttpWrapperService } from "./httpWrapper.service";
+import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 
@@ -22,9 +22,9 @@ export class CashFlowStatementService {
      */
     public downloadReport(request: any): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + Report;
-        url = url.replace(':companyUniqueName', request.companyUniqueName);
-        url = url.replace(':from', request.from);
-        url = url.replace(':to', request.to);
+        url = url?.replace(':companyUniqueName', request.companyUniqueName);
+        url = url?.replace(':from', request.from);
+        url = url?.replace(':to', request.to);
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;

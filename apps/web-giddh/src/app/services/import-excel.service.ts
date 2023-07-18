@@ -1,5 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
@@ -22,26 +22,33 @@ export class ImportExcelService {
     public uploadFile(entity: string, model: any) {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + IMPORT_EXCEL_API.UPLOAD_FILE
-            .replace(':companyUniqueName', companyUniqueName)
-            .replace(':entity', entity)
+            ?.replace(':companyUniqueName', companyUniqueName)
+            ?.replace(':entity', entity)
             ;
         if (model.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${encodeURIComponent(model.branchUniqueName)}`);
         }
         const formData: FormData = new FormData();
         formData.append('file', model.file, model.file.name);
+        formData.append('isHeaderProvided', model.isHeaderProvided);
+        if (model.accountUniqueName) {
+            formData.append('accountUniqueName', model.accountUniqueName);
+        }
+        if (model.sameDebitCreditAmountColumn) {
+            formData.append('sameDebitCreditAmountColumn', model.sameDebitCreditAmountColumn);
+        }
         return this.http.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(map((res) => {
             let data: BaseResponse<ImportExcelResponseData, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<ImportExcelResponseData, string>(e)));
     }
 
-    public processImport(entity: string, model: ImportExcelRequestData) {
+    public processImport(entity: string, model: any) {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + IMPORT_EXCEL_API.PROCESS_IMPORT
-            .replace(':companyUniqueName', companyUniqueName)
-            .replace(':entity', entity)
-            .replace(':isHeaderProvided', model.isHeaderProvided.toString());
+            ?.replace(':companyUniqueName', companyUniqueName)
+            ?.replace(':entity', entity)
+            ?.replace(':isHeaderProvided', model.isHeaderProvided?.toString());
         if (model.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${model.branchUniqueName}`);
         }
@@ -54,9 +61,9 @@ export class ImportExcelService {
     public importStatus(paginatedRequest: CommonPaginatedRequest): Observable<BaseResponse<ImportExcelStatusPaginatedResponse, string>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + IMPORT_EXCEL_API.IMPORT_STATUS
-            .replace(':companyUniqueName', companyUniqueName)
-            .replace(':page', paginatedRequest.page.toString())
-            .replace(':count', paginatedRequest.count.toString())
+            ?.replace(':companyUniqueName', companyUniqueName)
+            ?.replace(':page', paginatedRequest.page?.toString())
+            ?.replace(':count', paginatedRequest.count?.toString())
 
         return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<ImportExcelStatusPaginatedResponse, string> = res;

@@ -71,7 +71,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         if (this.activeBankAccount) {
-            this.paymentAlerts = this.activeBankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user.uniqueName);
+            this.paymentAlerts = this.activeBankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user?.uniqueName);
 
             this.accountForm = this.formBuilder.group({
                 accountNumber: [this.activeBankAccount?.iciciDetailsResource?.accountNumber, Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(18)])],
@@ -112,11 +112,11 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     private loadDefaultBankAccountsSuggestions(): void {
-        this.salesService.getAccountsWithCurrency('bankaccounts').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.salesService.getAccountsWithCurrency('bankaccounts,loanandoverdraft').pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.results) {
                 const bankAccounts = response.body.results.map(account => ({
                     label: account.name,
-                    value: account.uniqueName
+                    value: account?.uniqueName
                 }))
                 this.bankAccounts$ = observableOf(bankAccounts);
             }
@@ -148,7 +148,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                         index++;
                     });
 
-                    let isAllOptionsChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords); 
+                    let isAllOptionsChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
                     if((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1)) {
                         // if all options checked and select all is unchecked, we need to show select all as selected
                         this.paymentAlerts.push(this.selectAllRecords);
@@ -165,7 +165,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public saveNewAccount(): void {
         if (!this.accountForm?.invalid) {
-            this.accountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts.filter(user => user !== this.selectAllRecords));
+            this.accountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts?.filter(user => user !== this.selectAllRecords));
 
             this.settingsIntegrationService.bankAccountRegistration(this.accountForm.value).pipe(take(1)).subscribe(response => {
                 if (response?.status === "success") {
@@ -203,29 +203,29 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public selectPaymentAlertUsers(event: any): void {
         if(event) {
-            let isSelectedValueAlreadyChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser === event?.value);
+            let isSelectedValueAlreadyChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser === event?.value);
             if(event?.value === this.selectAllRecords) {
                 if(isSelectedValueAlreadyChecked?.length > 0) {
                     this.paymentAlerts = [];
                     this.forceClearPaymentUpdates$ = observableOf({ status: true });
                 } else {
-                    this.paymentAlerts = this.paymentAlertsUsersList.map(user => user.value);
+                    this.paymentAlerts = this.paymentAlertsUsersList.map(user => user?.value);
                 }
             } else {
                 if(isSelectedValueAlreadyChecked?.length > 0) {
-                    this.paymentAlerts = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== event?.value);
+                    this.paymentAlerts = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== event?.value);
                 } else {
                     this.paymentAlerts.push(event?.value);
                 }
 
-                let isAllOptionsChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords); 
-                let isSelectAllChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser === this.selectAllRecords);
+                let isAllOptionsChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
+                let isSelectAllChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser === this.selectAllRecords);
                 if((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1) && !isSelectAllChecked?.length) {
                     // if all options checked and select all is unchecked, we need to show select all as selected
                     this.paymentAlerts.push(this.selectAllRecords);
                 } else if((isAllOptionsChecked?.length < this.paymentAlertsUsersList?.length - 1) && isSelectAllChecked) {
                     // if all options are not checked and select all is checked, we need to show select all as unchecked
-                    this.paymentAlerts = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
+                    this.paymentAlerts = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
                 }
             }
         }
@@ -239,8 +239,8 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public clearSingleItem(event: any): void {
         if(event) {
-            this.paymentAlerts = event?.map(user => user.value);
-            this.paymentAlerts = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
+            this.paymentAlerts = event?.map(user => user?.value);
+            this.paymentAlerts = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
         }
     }
 
@@ -267,7 +267,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public updateAccount(): void {
         if (!this.accountForm?.invalid) {
-            this.accountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts.filter(user => user !== this.selectAllRecords));
+            this.accountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts?.filter(user => user !== this.selectAllRecords));
 
             if (!this.accountForm.get('maxAmount')?.value) {
                 this.accountForm.get('duration')?.patchValue(UNLIMITED_LIMIT);

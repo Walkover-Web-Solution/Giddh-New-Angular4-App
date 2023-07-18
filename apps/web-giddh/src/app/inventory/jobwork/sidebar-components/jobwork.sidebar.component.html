@@ -24,7 +24,7 @@
             <ul *ngIf="reportType === 'stock' && stocksList" class="list-unstyled stock-grp-list clearfix">
                 <li
                     *ngFor="let s of stocksList"
-                    [ngClass]="{ 'active': uniqueName === s.uniqueName }"
+                    [ngClass]="{ 'active': uniqueName === s?.uniqueName }"
                     (click)="showReport(s)"
                 >
                     <a href="javascript:void(0);">{{ s.name }}</a>
@@ -37,7 +37,7 @@
             <ul *ngIf="reportType === 'person' && inventoryUsers" class="list-unstyled stock-grp-list clearfix">
                 <li
                     *ngFor="let p of inventoryUsers"
-                    [ngClass]="{ 'active': uniqueName === p.uniqueName }"
+                    [ngClass]="{ 'active': uniqueName === p?.uniqueName }"
                     (click)="showReport(p)"
                 >
                     <a href="javascript:void(0);">{{ p.name }}</a>

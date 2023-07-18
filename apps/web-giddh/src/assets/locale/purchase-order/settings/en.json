@@ -20,5 +20,8 @@
     "bill_lock_date": "Bill Lock Date",
     "show_narration_ledger": "Show narration to ledger",
     "invalid_email": "Invalid Email Address.",
-    "gmail_account_added": "Gmail account added successfully."
+    "gmail_account_added": "Gmail account added successfully.",
+    "enable_voucher_download": "Enable Voucher Download",
+    "apply_purchase_round_off": "Apply round off on purchase voucher",
+    "apply_debit_note_round_off": "Apply round off on debit note voucher"
 }

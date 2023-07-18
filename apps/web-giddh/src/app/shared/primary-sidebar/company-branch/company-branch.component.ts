@@ -10,11 +10,12 @@ import { LoginActions } from '../../../actions/login.action';
 import { orderBy } from '../../../lodash-optimized';
 import { BranchFilterRequest, CompanyResponse, Organization, OrganizationDetails } from '../../../models/api-models/Company';
 import { OrganizationType } from '../../../models/user-login-state';
-import { CompanyService } from '../../../services/companyService.service';
+import { CompanyService } from '../../../services/company.service';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchService } from '../../../services/settings.branch.service';
 import { AppState } from '../../../store';
 import { AuthService } from '../../../theme/ng-social-login-module';
+import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
 
 @Component({
     selector: 'company-branch',
@@ -29,8 +30,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    /** Event to carry out new company onboarding */
-    @Output() public createNewCompany: EventEmitter<void> = new EventEmitter();
     /** Stores the list of all the companies for a user */
     public companies$: Observable<CompanyResponse[]>;
     /** Stores the total company list */
@@ -78,7 +77,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         private changeDetectorRef: ChangeDetectorRef,
         private companyService: CompanyService,
         private router: Router,
-        private invoiceAction: InvoiceActions
+        private invoiceAction: InvoiceActions,
+        private warehouseAction: WarehouseActions
     ) {
 
     }
@@ -170,9 +170,9 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
         this.companyListForFilter = companies?.filter((cmp) => {
             if (!cmp?.alias) {
-                return cmp?.name.toLowerCase().includes(event.toLowerCase());
+                return cmp?.name?.toLowerCase().includes(event?.toLowerCase());
             } else {
-                return cmp?.name.toLowerCase().includes(event.toLowerCase()) || cmp?.alias.toLowerCase().includes(event.toLowerCase());
+                return cmp?.name?.toLowerCase().includes(event?.toLowerCase()) || cmp?.alias?.toLowerCase().includes(event?.toLowerCase());
             }
         });
     }
@@ -186,6 +186,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      */
     public changeCompany(company: any, selectBranchUniqueName: string, fetchLastState?: boolean) {
         this.store.dispatch(this.companyActions.resetActiveCompanyData());
+        this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
         this.generalService.companyUniqueName = company?.uniqueName;
         this.generalService.voucherApiVersion = company?.voucherVersion;
         const details = {
@@ -231,15 +232,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         event.preventDefault();
         this.companyListForFilter = [];
         this.store.dispatch(this.companyActions.RefreshCompanies());
-    }
-
-    /**
-     * Opens new company modal
-     *
-     * @memberof CompanyBranchComponent
-     */
-    public openModalCreateNewCompany(): void {
-        this.createNewCompany.emit();
     }
 
     /**
@@ -289,7 +281,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         if (!company.branches || reloadBranches) {
             company.branches = [];
             this.branchRefreshInProcess = true;
-            let branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company.uniqueName };
+            let branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company?.uniqueName };
             this.settingsBranchService.GetAllBranches(branchFilterRequest).subscribe(response => {
                 if (response?.status === "success") {
                     let unarchivedBranches = response?.body?.filter(branch => branch.isArchived === false);
@@ -380,9 +372,9 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         if(this.companyBranches) {
             this.companyBranches.branches = this.branchList?.filter((branch) => {
                 if (!branch.alias) {
-                    return branch.name.toLowerCase().includes(event.toLowerCase());
+                    return branch.name?.toLowerCase().includes(event?.toLowerCase());
                 } else {
-                    return branch.name.toLowerCase().includes(event.toLowerCase()) || branch.alias.toLowerCase().includes(event.toLowerCase());
+                    return branch.name?.toLowerCase().includes(event?.toLowerCase()) || branch.alias?.toLowerCase().includes(event?.toLowerCase());
                 }
             });
             this.changeDetectorRef.detectChanges();
@@ -400,6 +392,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         event.stopPropagation();
         event.preventDefault();
 
+        this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
+
         if (this.activeCompany?.uniqueName !== company?.uniqueName) {
             this.changeCompany(company, branchUniqueName, false);
         } else if(branchUniqueName !== this.generalService.currentBranchUniqueName) {
@@ -408,6 +402,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                     uniqueName: branchUniqueName
                 }
             };
+            this.generalService.currentBranchUniqueName = branchUniqueName;
             this.setOrganizationDetails(OrganizationType.Branch, details);
             this.store.dispatch(this.invoiceAction.getInvoiceSetting());
             this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(take(1)).subscribe(response => {

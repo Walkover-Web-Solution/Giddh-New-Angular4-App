@@ -11,9 +11,9 @@ import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
 import { AccountService } from '../services/account.service';
 import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
-import { IGroupsWithAccounts } from '../models/interfaces/groupsWithAccounts.interface';
+import { IGroupsWithAccounts } from '../models/interfaces/groups-with-accounts.interface';
 import { GeneralActions } from './general/general.actions';
-import { CustomActions } from '../store/customActions';
+import { CustomActions } from '../store/custom-actions';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { LocaleService } from '../services/locale.service';
@@ -61,6 +61,9 @@ export class GroupWithAccountsAction {
     public static OPEN_ADD_AND_MANAGE_FROM_OUTSIDE = 'OPEN_ADD_AND_MANAGE_FROM_OUTSIDE';
     public static HIDE_ADD_AND_MANAGE_FROM_OUTSIDE = 'HIDE_ADD_AND_MANAGE_FROM_OUTSIDE';
     public static UPDATE_ACTIVE_TAB_ADD_AND_MANAGE = 'UPDATE_ACTIVE_TAB_ADD_AND_MANAGE';
+    public static RESET_EDIT_GROUP = 'ResetEditGroup';
+    public static GET_ACCOUNT_GROUP_DETAILS = 'GetAccountGroupDetails';
+    public static GET_ACCOUNT_GROUP_DETAILS_RESPONSE = 'GetAccountGroupDetailsResponse';
 
     public ApplyGroupTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -74,15 +77,15 @@ export class GroupWithAccountsAction {
         .pipe(
             ofType(GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
                 }
-                this._toasty.successToast(action.payload.body, action.payload.status);
+                this._toasty.successToast(action.payload.body, action.payload?.status);
                 let grouName = null;
                 this.store.pipe(take(1)).subscribe((s) => {
                     if (s.groupwithaccounts.activeGroup) {
-                        grouName = s.groupwithaccounts.activeGroup.uniqueName;
+                        grouName = s.groupwithaccounts.activeGroup?.uniqueName;
                     }
                 });
                 return this.getTaxHierarchy(grouName);
@@ -116,7 +119,7 @@ export class GroupWithAccountsAction {
         .pipe(
             ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return {
@@ -136,7 +139,7 @@ export class GroupWithAccountsAction {
         .pipe(
             ofType(GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return {
@@ -156,7 +159,7 @@ export class GroupWithAccountsAction {
         .pipe(
             ofType(GroupWithAccountsAction.CREATE_GROUP_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
                     this._generalService.eventHandler.next({ name: eventsConst.groupAdded, payload: action.payload });
@@ -184,7 +187,7 @@ export class GroupWithAccountsAction {
         .pipe(
             ofType(GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
                     this._toasty.successToast(action.payload.body, '');
@@ -206,7 +209,7 @@ export class GroupWithAccountsAction {
         .pipe(
             ofType(GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return {
@@ -231,14 +234,10 @@ export class GroupWithAccountsAction {
         .pipe(
             ofType(GroupWithAccountsAction.MOVE_GROUP_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    let data = action.payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
-
-                    this._generalService.eventHandler.next({ name: eventsConst.groupMoved, payload: data });
                     this._toasty.successToast(this.localeService.translate("app_messages.group_moved"), '');
-                    return this.getGroupDetails(data.request.parentGroupUniqueName);
                 }
                 return {
                     type: 'EmptyAction'
@@ -257,7 +256,7 @@ export class GroupWithAccountsAction {
         .pipe(
             ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return {
@@ -277,7 +276,7 @@ export class GroupWithAccountsAction {
         .pipe(
             ofType(GroupWithAccountsAction.UPDATE_GROUP_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
                     this._generalService.eventHandler.next({ name: eventsConst.groupUpdated, payload: action.payload });
@@ -294,11 +293,6 @@ export class GroupWithAccountsAction {
             ofType(GroupWithAccountsAction.DELETE_GROUP),
             switchMap((action: CustomActions) => this._groupService.DeleteGroup(action.payload)),
             map(response => {
-                let activeGrp: IGroupsWithAccounts;
-                this.store.pipe(select(s => s.groupwithaccounts.groupswithaccounts), take(1)).subscribe(a => {
-                    activeGrp = this.findMyParent(a, response.queryString?.groupUniqueName, null);
-                });
-                response.queryString = { groupUniqueName: response.queryString?.groupUniqueName, parentUniqueName: activeGrp.uniqueName };
                 return this.deleteGroupResponse(response);
             })));
 
@@ -306,14 +300,30 @@ export class GroupWithAccountsAction {
         .pipe(
             ofType(GroupWithAccountsAction.DELETE_GROUP_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this._generalService.eventHandler.next({ name: eventsConst.groupDeleted, payload: action.payload });
                     this._toasty.successToast(action.payload.body, '');
-                    if (action.payload.queryString.parentUniqueName) {
-                        this.store.dispatch(this.getGroupDetails(action.payload.queryString.parentUniqueName));
-                    }
+                }
+                return {
+                    type: GroupWithAccountsAction.DELETE_GROUP_RESPONSE
+                };
+            })));
+
+    public getAccountGroupsDetails$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(GroupWithAccountsAction.GET_ACCOUNT_GROUP_DETAILS),
+            switchMap((action: CustomActions) => this._groupService.GetGroupDetails(action.payload)),
+            map((response) => {
+                return this.getAccountGroupDetailsResponse(response);
+            })));
+
+    public getAccountGroupDetailsResponse$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(GroupWithAccountsAction.GET_ACCOUNT_GROUP_DETAILS_RESPONSE),
+            map((action: CustomActions) => {
+                if (action.payload?.status === 'error') {
+                    this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return {
                     type: 'EmptyAction'
@@ -328,7 +338,7 @@ export class GroupWithAccountsAction {
         private _generalActions: GeneralActions,
         private _generalService: GeneralService,
         private localeService: LocaleService) {
-        
+
     }
 
     public SetActiveGroup(uniqueName: string): CustomActions {
@@ -522,7 +532,7 @@ export class GroupWithAccountsAction {
         };
     }
 
-    public deleteGroupResponse(value: BaseResponse<string, string>): CustomActions {
+    public deleteGroupResponse(value: BaseResponse<any, string>): CustomActions {
         return {
             type: GroupWithAccountsAction.DELETE_GROUP_RESPONSE,
             payload: value
@@ -557,7 +567,7 @@ export class GroupWithAccountsAction {
     public findMyParent(groups: IGroupsWithAccounts[], uniqueName: string, parent: IGroupsWithAccounts): IGroupsWithAccounts {
         if (groups && groups.length > 0) {
             for (let grp of groups) {
-                if (grp.uniqueName === uniqueName) {
+                if (grp?.uniqueName === uniqueName) {
                     return Object.assign({}, parent);
                 }
                 if (grp.groups) {
@@ -587,6 +597,34 @@ export class GroupWithAccountsAction {
     public updateActiveTabOpenAddAndManage(value: number) {
         return {
             type: GroupWithAccountsAction.UPDATE_ACTIVE_TAB_ADD_AND_MANAGE,
+            payload: value
+        };
+    }
+
+    /**
+     * Gets account group details
+     *
+     * @param {string} value
+     * @returns {CustomActions}
+     * @memberof GroupWithAccountsAction
+     */
+    public getAccountGroupDetails(value: string): CustomActions {
+        return {
+            type: GroupWithAccountsAction.GET_ACCOUNT_GROUP_DETAILS,
+            payload: value
+        };
+    }
+
+    /**
+     * Handles account group details
+     *
+     * @param {BaseResponse<GroupResponse, string>} value
+     * @returns {CustomActions}
+     * @memberof GroupWithAccountsAction
+     */
+    public getAccountGroupDetailsResponse(value: BaseResponse<GroupResponse, string>): CustomActions {
+        return {
+            type: GroupWithAccountsAction.GET_ACCOUNT_GROUP_DETAILS_RESPONSE,
             payload: value
         };
     }

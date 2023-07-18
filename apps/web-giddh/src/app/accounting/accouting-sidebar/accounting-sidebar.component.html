@@ -4,8 +4,8 @@
             class="cp"
             (click)="setSelectedPage(accountingVouchers.CONTRA, 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': selectedVoucher === accountingVouchers.CONTRA }"
-            >{{ commonLocaleData?.app_keys?.f4 }}: {{ commonLocaleData?.app_voucher_types?.contra }}</a
-        >
+            >{{ commonLocaleData?.app_keys?.f4 }}: {{ commonLocaleData?.app_voucher_types?.contra }}
+        </a>
     </li>
 
     <!--
@@ -17,8 +17,8 @@
             class="cp"
             (click)="setSelectedPage(accountingVouchers.RECEIPT, 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': selectedVoucher === accountingVouchers.RECEIPT }"
-            >{{ commonLocaleData?.app_keys?.f6 }}: {{ commonLocaleData?.app_voucher_types?.receipt }}</a
-        >
+            >{{ commonLocaleData?.app_keys?.f6 }}: {{ commonLocaleData?.app_voucher_types?.receipt }}
+        </a>
     </li>
 
     <!--    "isHidden" class  if user is not able to access the module

@@ -16,7 +16,7 @@
     line-height: 24px;
 }
 
-:host .disabled-label {
+.disabled-label {
     cursor: not-allowed;
     opacity: 0.5;
 }
@@ -29,7 +29,7 @@
     display: block !important;
 }
 sup.mandatory-asterisk {
-    font-size: 14px;
+    font-size: var(--font-size-15);
     top: 0;
     color: var(--color-danger);
 }

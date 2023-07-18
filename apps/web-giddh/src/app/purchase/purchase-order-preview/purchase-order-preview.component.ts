@@ -92,10 +92,12 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public sanitizedPdfFileUrl: any = '';
     /** PDF src */
     public pdfFileURL: any = '';
-    /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
     /** True if left sidebar is expanded */
     private isSidebarExpanded: boolean = false;
+    /** This will hold po for bulk convert */
+    public selectedPurchaseOrders: any[] = [];
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private store: Store<AppState>,
@@ -109,7 +111,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         private domSanitizer: DomSanitizer,
         private generalService: GeneralService
     ) {
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
+
     }
 
     /**
@@ -118,7 +120,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public ngOnInit(): void {
-        if(document.getElementsByClassName("sidebar-collapse")?.length > 0) {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        if (document.getElementsByClassName("sidebar-collapse")?.length > 0) {
             this.isSidebarExpanded = false;
         } else {
             this.isSidebarExpanded = true;
@@ -197,7 +200,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             this.scrollToActiveItem();
         }
 
-        if (changes.purchaseOrderUniqueName && changes.purchaseOrderUniqueName.currentValue && changes.purchaseOrderUniqueName.currentValue !== this.purchaseOrder.uniqueName) {
+        if (changes.purchaseOrderUniqueName && changes.purchaseOrderUniqueName.currentValue && changes.purchaseOrderUniqueName.currentValue !== this.purchaseOrder?.uniqueName) {
             this.purchaseOrderUniqueName = changes.purchaseOrderUniqueName.currentValue;
             this.getPurchaseOrder();
         }
@@ -214,7 +217,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             .pipe(
                 debounceTime(500),
                 distinctUntilChanged(),
-                map((event: any) => event.target.value),
+                map((event: any) => event.target?.value),
                 takeUntil(this.destroyed$)
             )
             .subscribe((term => {
@@ -244,10 +247,12 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 if (response.status === "success") {
                     this.purchaseOrder = response.body;
 
+                    this.selectedPurchaseOrders = [{ poUniqueName: this.purchaseOrder?.uniqueName, vendorUniqueName: this.purchaseOrder?.account?.uniqueName, orderNumber: this.purchaseOrder?.number }];
+
                     this.getPdf();
 
-                    if (this.purchaseOrder && this.purchaseOrder.account && this.purchaseOrder.account.billingDetails.country) {
-                        this.showGstAndTrnUsingCountry(this.purchaseOrder.account.billingDetails.country.countryCode, this.purchaseOrder.account.billingDetails.country.countryName);
+                    if (this.purchaseOrder && this.purchaseOrder.account && this.purchaseOrder.account.billingDetails?.country) {
+                        this.showGstAndTrnUsingCountry(this.purchaseOrder.account.billingDetails?.country.countryCode, this.purchaseOrder.account.billingDetails?.country.countryName);
                     } else {
                         this.showGstAndTrnUsingCountry('', '');
                     }
@@ -295,8 +300,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      */
     public openSendMailModal(template: TemplateRef<any>): void {
         this.sendEmailRequest.email = this.purchaseOrder.account.email;
-        this.sendEmailRequest.uniqueName = this.purchaseOrder.uniqueName;
-        this.sendEmailRequest.accountUniqueName = this.purchaseOrder.account.uniqueName;
+        this.sendEmailRequest.uniqueName = this.purchaseOrder?.uniqueName;
+        this.sendEmailRequest.accountUniqueName = this.purchaseOrder.account?.uniqueName;
         this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
         this.modalRef = this.modalService.show(template);
     }
@@ -338,7 +343,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public deleteItem(): void {
-        let getRequest = { companyUniqueName: this.companyUniqueName, poUniqueName: this.purchaseOrder.uniqueName };
+        let getRequest = { companyUniqueName: this.companyUniqueName, poUniqueName: this.purchaseOrder?.uniqueName };
 
         this.purchaseOrderService.delete(getRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
@@ -360,7 +365,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public confirmDelete(): void {
-        this.poConfirmationModel.show();
+        this.poConfirmationModel?.show();
     }
 
     /**
@@ -371,7 +376,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      */
     public statusUpdate(action: any): void {
         if (this.purchaseOrder && this.purchaseOrder.number) {
-            let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.purchaseOrder.account.uniqueName };
+            let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.purchaseOrder.account?.uniqueName };
             let postRequest = { purchaseNumber: this.purchaseOrder.number, action: action };
 
             this.purchaseOrderService.statusUpdate(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -408,7 +413,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public ngOnDestroy() {
-        if(this.isSidebarExpanded) {
+        if (this.isSidebarExpanded) {
             this.isSidebarExpanded = false;
             this.generalService.expandSidebar();
         }
@@ -426,7 +431,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     private showGstAndTrnUsingCountry(code: string, name: string): void {
-        if (this.selectedCompany.country === name) {
+        if (this.selectedCompany?.country === name) {
             if (name === 'India') {
                 this.showGSTINNo = true;
                 this.showTRNNo = false;
@@ -460,7 +465,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      */
     public convertToBill(): void {
         let purchaseNumbers = [this.purchaseOrder.number];
-        let bulkUpdateGetParams = { action: "create_purchase_bill", companyUniqueName: this.purchaseOrder.company.uniqueName };
+        let bulkUpdateGetParams = { action: "create_purchase_bill", companyUniqueName: this.purchaseOrder.company?.uniqueName };
         let bulkUpdatePostParams = { purchaseNumbers: purchaseNumbers };
 
         this.purchaseOrderService.bulkUpdate(bulkUpdateGetParams, bulkUpdatePostParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -480,7 +485,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public getPdf(): void {
-        let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.purchaseOrder.account.uniqueName, poUniqueName: this.purchaseOrderUniqueName };
+        let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.purchaseOrder.account?.uniqueName, poUniqueName: this.purchaseOrderUniqueName };
 
         this.purchaseOrderService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
@@ -550,11 +555,11 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      */
     public filterPo(term): void {
         this.poSearch = term;
-        this.filteredData = this.purchaseOrders.items.filter(item => {
-            return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
-                item.vendor.name.toLowerCase().includes(term.toLowerCase()) ||
+        this.filteredData = this.purchaseOrders.items?.filter(item => {
+            return item.voucherNumber?.toLowerCase().includes(term?.toLowerCase()) ||
+                item.vendor.name?.toLowerCase().includes(term?.toLowerCase()) ||
                 item.voucherDate.includes(term) ||
-                item.grandTotal.amountForAccount.toString().includes(term);
+                item.grandTotal.amountForAccount?.toString()?.includes(term);
         });
     }
 
@@ -568,5 +573,31 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         setTimeout(() => {
             this.perfectScrollbar?.directiveRef?.scrollToElement(".single-invoice-detail.activeItem");
         }, 200);
+    }
+
+    /**
+     * Opens the bulk convert popup
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public openBulkConvert(template: TemplateRef<any>): void {
+        this.modalRef = this.modalService.show(
+            template,
+            Object.assign({}, { class: 'modal-sm' })
+        );
+    }
+
+    /**
+     * Closes the bulk convert popup and refreshes po list if found true in event
+     *
+     * @param {*} event
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public closeBulkConvertPopup(event: any): void {
+        this.modalRef?.hide();
+        if (event) {
+            this.getPurchaseOrder();
+        }
     }
 }

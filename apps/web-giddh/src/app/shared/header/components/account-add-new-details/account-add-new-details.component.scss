@@ -15,7 +15,7 @@
 
 .aside-pane-container {
     padding: 15px;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-nero);
 }
 
@@ -97,7 +97,7 @@ form.gstin-form {
     }
 }
 .add-address-default h3 {
-    font-size: 16px;
+    font-size: var(--font-size-15);
     color: var(--color-common-primary-text);
 }
 
@@ -144,9 +144,17 @@ a.btn-remove {
         white-space: normal;
     }
 }
-
 @media (max-width: 767px) {
     .upper-form .select-group {
         margin-bottom: 15px;
+    }
+}
+.is-default-address {
+    margin-top: 5px !important;
+    height: 29px;
+}
+.remove-radio-btn {
+    span {
+        margin-top: 3px;
     }
 }

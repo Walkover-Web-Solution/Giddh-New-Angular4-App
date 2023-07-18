@@ -1,0 +1,64 @@
+<div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
+    <inventory-sidebar class="inventory-sidebar"></inventory-sidebar>
+</div>
+<hamburger-menu></hamburger-menu>
+<!-- *ngIf="asideSettingMenuState === 'in'" -->
+
+<div class="relative new-inventory-page">
+    <div class="container-fluid breadcrumbs">
+        <div class="inventory-card">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+
+<!-- Aside pane code -->
+<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
+
+<!-- create new aside pane  -->
+<!-- <aside-create-new-inventory *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"></aside-create-new-inventory> -->
+
+<!-- create new group aside pane -->
+<aside-create-new-group
+    *ngIf="asideMenuState === 'in'"
+    (closeAsideEvent)="createGroupToggleAsidePane()"
+></aside-create-new-group>
+
+<!-- create new item(product/service) aside pane -->
+<!-- <aside-create-new-item *ngIf="asideMenuState === 'in'" (closeAsideEvent)="createItemToggleAsidePane()"></aside-create-new-item> -->
+
+<!-- create new unit aside pane -->
+<!-- <aside-create-new-unit *ngIf="asideMenuState === 'in'" (closeAsideEvent)="createUnitToggleAsidePane()"></aside-create-new-unit> -->
+
+<!-- create new combo asie pane -->
+<!-- <aside-create-combo *ngIf="asideMenuState === 'in'" (closeAsideEvent)="createComboToggleAsidePane()"></aside-create-combo> -->
+
+<!-- inventory advance search  -->
+<ng-template #inventoryAdvanceSearch>
+    <new-inventory-advance-search></new-inventory-advance-search>
+</ng-template>
+
+<!-- datepicker template -->
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

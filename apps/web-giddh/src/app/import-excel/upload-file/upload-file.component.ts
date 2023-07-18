@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
 import { Observable, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { SAMPLE_FILES_URL } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -45,13 +46,15 @@ export class UploadFileComponent implements OnInit, OnDestroy {
 
     /** Subject to unsubscribe all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public isHeaderProvided: boolean = true;
 
     constructor(
         private toasterService: ToasterService,
         private activatedRoute: ActivatedRoute,
         private settingsBranchAction: SettingsBranchActions,
         private store: Store<AppState>,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private router: Router
     ) {
 
     }
@@ -77,7 +80,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     }
 
     public async downloadSampleFile(entity: string, isCsv: boolean = false) {
-        const fileUrl = `assets/sample-files/${entity}-sample.${isCsv ? 'csv' : 'xlsx'}`;
+        const fileUrl = SAMPLE_FILES_URL + `${entity}.${isCsv ? 'csv' : 'xlsx'}`;
         const fileName = `${entity}-sample.${isCsv ? 'csv' : 'xlsx'}`;
         try {
             let blob = await fetch(fileUrl).then(r => r.blob());
@@ -103,6 +106,10 @@ export class UploadFileComponent implements OnInit, OnDestroy {
             if (data) {
                 this.entity = data.type;
                 this.setTitle();
+
+                if(this.entity === "banktransactions") {
+                    this.router.navigate(['/pages/import/select-type']);
+                }
             }
         });
         this.setTitle();
@@ -116,17 +123,17 @@ export class UploadFileComponent implements OnInit, OnDestroy {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
                 const hoBranch = response.find(branch => !branch.parentBranch);
-                const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
+                const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch?.uniqueName : '';
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                     if (this.currentBranch) {
                         this.currentBranch.name = (this.currentBranch ? this.currentBranch.name : '') + (this.currentBranch?.alias ? ` (${this.currentBranch.alias})` : '');
                     }
@@ -187,7 +194,8 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     public handleFileUpload(file: File): void {
         this.onFileUpload.emit({
             file,
-            branchUniqueName: this.entity === 'entries' && this.currentBranch ? this.currentBranch.uniqueName : ''
+            branchUniqueName: this.entity === 'entries' && this.currentBranch ? this.currentBranch?.uniqueName : '',
+            isHeaderProvided: this.isHeaderProvided
         });
     }
 }

@@ -5,7 +5,7 @@
     display: flex;
     align-items: center;
     label {
-        font-size: 14px;
+        font-size: var(--font-size-15);
         padding-bottom: 5px;
     }
     .form-field {

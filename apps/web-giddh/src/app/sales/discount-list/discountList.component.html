@@ -33,7 +33,7 @@
                         decimalDigitsDirective
                         [DecimalPlaces]="2"
                         [(ngModel)]="discountPercentageModal"
-                        (blur)="discountFromInput('PERCENTAGE', $event.target.value); discountInputBlur($event)"
+                        (blur)="discountFromInput('PERCENTAGE', $event.target?.value); discountInputBlur($event)"
                         name="discountFromPer"
                     />
                     <i class="fa fa-percent pos-abs"></i>
@@ -49,17 +49,17 @@
                     decimalDigitsDirective
                     [DecimalPlaces]="2"
                     [(ngModel)]="discountFixedValueModal"
-                    (blur)="discountFromInput('FIX_AMOUNT', $event.target.value)"
+                    (blur)="discountFromInput('FIX_AMOUNT', $event.target?.value)"
                     name="discountFromVal"
                 />
             </div>
         </div>
 
-        <div class="d-flex flex-col justify-content-center" *ngIf="discountAccountsDetails.length > 1">
+        <div class="d-flex flex-col justify-content-center" *ngIf="discountAccountsDetails?.length > 1">
             <span class="or-line">AND</span>
         </div>
 
-        <div *ngIf="discountAccountsDetails.length > 1">
+        <div *ngIf="discountAccountsDetails?.length > 1">
             <ul class="discount-name-detail">
                 <ng-container *ngFor="let discount of discountAccountsDetails; trackBy: trackByFn; let idx = index">
                     <li *ngIf="idx > 0" class="custom-item cp">

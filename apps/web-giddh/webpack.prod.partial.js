@@ -24,6 +24,8 @@ module.exports = {
             'LINKEDIN_CLIENT_ID': JSON.stringify(process.env.LINKEDIN_CLIENT_ID_PROD),
             'LINKEDIN_SECRET_KEY': JSON.stringify(process.env.LINKEDIN_SECRET_KEY_PROD),
             'RAZORPAY_KEY': JSON.stringify(process.env.RAZORPAY_KEY_PROD),
+            'OTP_WIDGET_ID': JSON.stringify(process.env.OTP_WIDGET_ID),
+            'OTP_TOKEN_AUTH': JSON.stringify(process.env.OTP_TOKEN_AUTH),
             'process.env.enableVoucherAdjustmentMultiCurrency': JSON.stringify(true),
             'process.env.GOOGLE_CLIENT_ID': JSON.stringify(process.env.GOOGLE_CLIENT_ID_PROD),
             'process.env.GOOGLE_CLIENT_SECRET': JSON.stringify(process.env.GOOGLE_CLIENT_SECRET_PROD),
@@ -32,6 +34,8 @@ module.exports = {
             'process.env.LINKEDIN_CLIENT_ID': JSON.stringify(process.env.LINKEDIN_CLIENT_ID_PROD),
             'process.env.LINKEDIN_SECRET_KEY': JSON.stringify(process.env.LINKEDIN_SECRET_KEY_PROD),
             'process.env.RAZORPAY_KEY': JSON.stringify(process.env.RAZORPAY_KEY_PROD),
+            'process.env.OTP_WIDGET_ID': JSON.stringify(process.env.OTP_WIDGET_ID),
+            'process.env.OTP_TOKEN_AUTH': JSON.stringify(process.env.OTP_TOKEN_AUTH),
             'process.env.ENV': JSON.stringify('production'),
             'process.env.NODE_ENV': JSON.stringify('production'),
             'process.env.isElectron': JSON.stringify(false),
@@ -41,11 +45,10 @@ module.exports = {
             'process.env.ApiUrl': JSON.stringify('https://api.giddh.com/'),
             'process.env.APP_FOLDER': JSON.stringify('')
         }),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         new CompressionPlugin({
             filename: "[path][base].br",
             algorithm: "brotliCompress",
-            test: /\.(js|css|html|svg)$/,
+            test: /\.(js|css|html|svg|json)$/,
             compressionOptions: {
                 params: {
                     [zlib.constants.BROTLI_PARAM_QUALITY]: 11,

@@ -51,8 +51,10 @@
             "zip"
         ],
         "icon": "icon.ico",
+        "signingHashAlgorithms": [
+            "sha256"
+        ],
         "publisherName": "Walkover Technologies Pvt Ltd",
-        "certificateSubjectName": "Walkover Technologies Pvt Ltd",
         "legalTrademarks": "Walkover Technologies Pvt Ltd"
     },
     "nsis": {

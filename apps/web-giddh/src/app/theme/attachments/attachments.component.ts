@@ -150,6 +150,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         });
 
         this.getFiles();
+        document.querySelector('body')?.classList?.add('ledger-attachments-popup');
     }
 
     /**
@@ -160,6 +161,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body')?.classList?.remove('ledger-attachments-popup');
     }
 
     /**
@@ -171,7 +173,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     private getFiles(): void {
         let getRequest = {
             voucherType: (this.selectedItem.voucherGeneratedType) ? this.selectedItem.voucherGeneratedType : undefined,
-            entryUniqueName: this.selectedItem.voucherUniqueName ?? this.selectedItem.entryUniqueName ?? this.selectedItem.uniqueName,
+            entryUniqueName: this.selectedItem.voucherUniqueName ?? this.selectedItem.entryUniqueName ?? this.selectedItem?.uniqueName,
             uniqueName: (this.selectedItem.voucherUniqueName) ? this.selectedItem.voucherUniqueName : undefined
         };
 
@@ -182,7 +184,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
 
                     this.attachments = this.attachments?.map(attachment => {
                         let fileExtention = attachment?.type?.toLowerCase();
-                        let objectURL
+                        let objectURL;
                         let fileSource;
 
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
@@ -198,7 +200,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                             fileExtention = "unsupported";
                         }
 
-                        return { name: attachment.name, uniqueName: attachment.uniqueName, type: fileExtention, src: fileSource, originalSrc: objectURL, encodedData: attachment.encodedData, isChecked: false, originalFileExtension: attachment?.type?.toLowerCase() };
+                        return { name: attachment.name, uniqueName: attachment?.uniqueName, type: fileExtention, src: fileSource, originalSrc: objectURL, encodedData: attachment.encodedData, isChecked: false, originalFileExtension: attachment?.type?.toLowerCase() };
                     });
                 }
 
@@ -281,7 +283,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         let file = new Image();
         file.src = this.previewedFile.originalSrc;
         let windowObject = window.open("");
-        windowObject.document.write(file.outerHTML);
+        if (windowObject?.document) {
+            windowObject.document.write(file.outerHTML);
+        }
     }
 
     /**
@@ -307,16 +311,16 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         } else if (output.type === 'start') {
             this.isFileUploading = true;
         } else if (output.type === 'done') {
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this.isFileUploading = false;
-                this.selectedItem.attachedFiles = [output.file.response.body?.uniqueName];
+                this.selectedItem.attachedFiles = [output.file.response?.body?.uniqueName];
                 this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
 
                 //this.store.dispatch(this.ledgerAction.updateTxnEntry(this.selectedItem, this.selectedItem.particular?.uniqueName, this.selectedItem.entryUniqueName));
             } else {
                 this.isFileUploading = false;
                 this.selectedItem.attachedFiles = [];
-                this.toaster.showSnackBar("error", output.file.response.message);
+                this.toaster.showSnackBar("error", output.file.response?.message);
             }
         }
     }
@@ -400,7 +404,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             if (response) {
                 this.ledgerService.removeAttachment(this.attachments[index]?.uniqueName).subscribe((response) => {
                     if (response?.status === 'success') {
-                        let updatedAttachments = this.attachments.filter(attachment => attachment.uniqueName !== this.attachments[index]?.uniqueName);
+                        let updatedAttachments = this.attachments?.filter(attachment => attachment?.uniqueName !== this.attachments[index]?.uniqueName);
                         this.attachments = updatedAttachments;
                         this.refreshAfterClose = true;
 

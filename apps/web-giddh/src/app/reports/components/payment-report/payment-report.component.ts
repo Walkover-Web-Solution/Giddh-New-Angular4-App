@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { fromEvent, merge, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil, take } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import { ReceiptService } from '../../../services/receipt.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { AppState } from '../../../store'; 
+import { AppState } from '../../../store';
 import { PAYMENT_REPORT_FILTERS, PaymentAdvanceSearchModel } from '../../constants/reports.constant';
 import { PaymentAdvanceSearchComponent } from '../payment-advance-search/payment-advance-search.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -42,8 +42,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     @ViewChild('paymentSearchModalContainer', { static: false }) public paymentSearchModalContainer: ModalDirective;
     /** Instance of receipt confirmation modal */
     @ViewChild('paymentConfirmationModel', { static: false }) public paymentConfirmationModel: ModalDirective;
-    /** Moment method */
-    public moment = moment;
+    /** dayjs method */
+    public dayjs = dayjs;
     /** Modal reference */
     public modalRef: BsModalRef;
     /** Stores the list of all payments */
@@ -147,6 +147,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public hoveredPaymentTable: boolean = false;
     /** Holds currency */
     public baseCurrency: string = '';
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     /** @ignore */
     constructor(
@@ -174,6 +176,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
                 this.baseCurrency = profile.baseCurrency;
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
     }
@@ -192,10 +195,10 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             if (applicationDate) {
                 this.universalDate = applicationDate;
                 let universalDate = _.cloneDeep(applicationDate);
-                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                this.selectedDateRangeUi = moment(applicationDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(applicationDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+                this.selectedDateRangeUi = dayjs(applicationDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(applicationDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
             this.fetchPaymentsData();
         });
@@ -207,7 +210,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
@@ -217,14 +220,14 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
                 });
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -355,10 +358,10 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      */
     public resetAdvanceSearch(): void {
         this.showClearFilter = false;
-        this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-        this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-        this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-        this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+        this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
 
         this.searchQueryParams = {
             receiptTypes: [],
@@ -456,7 +459,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 balanceDue: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
             sort: this.searchQueryParams.sort,
             sortBy: this.searchQueryParams.sortBy,
-            branchUniqueName: this.currentBranch.uniqueName
+            branchUniqueName: this.currentBranch?.uniqueName
         };
 
         requestObject.balanceMoreThan = false;
@@ -499,7 +502,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         const optionalParams = cloneDeep(additionalRequestParameters);
         if (optionalParams) {
             for (let key in optionalParams) {
-                if ((optionalParams[key] === undefined || optionalParams[key] === null) || (optionalParams[key] && isArray(optionalParams[key]) && !optionalParams[key].length)) {
+                if ((optionalParams[key] === undefined || optionalParams[key] === null) || (optionalParams[key] && isArray(optionalParams[key]) && !optionalParams[key]?.length)) {
                     // Delete empty keys or keys with empty arrays as values
                     delete optionalParams[key]; // Delete falsy values
                 }
@@ -529,7 +532,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 companyUniqueName: this.activeCompanyUniqueName,
                 from: this.fromDate,
                 to: this.toDate,
-                branchUniqueName: this.currentBranch.uniqueName
+                branchUniqueName: this.currentBranch?.uniqueName
             };
             return this.receiptService.fetchSummary(requestObject);
         }
@@ -557,7 +560,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                     if (isSeleted) {
                         payment.isSelected = true;
                     }
-                    payment = this.generalService.addToolTipText("payment", this.baseCurrency, payment, this.localeData, this.commonLocaleData);
+                    payment = this.generalService.addToolTipText("payment", this.baseCurrency, payment, this.localeData, this.commonLocaleData, this.giddhBalanceDecimalPlaces);
                 });
 
                 this.changeDetectorRef.detectChanges();
@@ -628,10 +631,10 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.showClearFilter = true;
             this.fetchPaymentsData();
         }
@@ -686,7 +689,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      */
     public togglePayment(payment: any): void {
         if (payment.isSelected) {
-            this.selectedPayments = this.selectedPayments.filter(selectedPayment => selectedPayment !== payment?.uniqueName);
+            this.selectedPayments = this.selectedPayments?.filter(selectedPayment => selectedPayment !== payment?.uniqueName);
             this.allPaymentsSelected = false;
         } else {
             this.selectedPayments.push(payment?.uniqueName);

@@ -17,16 +17,15 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
 import { saveAs } from "file-saver";
-import * as moment from "moment/moment";
+import * as dayjs from "dayjs";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
-import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
-import { cloneDeep, find, isEqual, map as lodashMap, uniq } from "../../app/lodash-optimized";
+import { cloneDeep, find, map as lodashMap, uniq } from "../../app/lodash-optimized";
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
-import { GroupWithAccountsAction } from "../actions/groupwithaccounts.actions";
 import { SettingsProfileActions } from "../actions/settings/profile/settings.profile.action";
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
@@ -39,8 +38,8 @@ import {
 } from "../models/api-models/Contact";
 import { BulkEmailRequest } from "../models/api-models/Search";
 import { CashfreeClass } from "../models/api-models/SettingsIntegraion";
-import { IFlattenAccountsResultItem } from "../models/interfaces/flattenAccountsResultItem.interface";
-import { CompanyService } from "../services/companyService.service";
+import { IFlattenAccountsResultItem } from "../models/interfaces/flatten-accounts-result-item.interface";
+import { CompanyService } from "../services/company.service";
 import { ContactService } from "../services/contact.service";
 import { GeneralService } from "../services/general.service";
 import { ToasterService } from "../services/toaster.service";
@@ -58,6 +57,7 @@ import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { CustomFieldsService } from "../services/custom-fields.service";
+import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
 
 @Component({
     selector: "contact-detail",
@@ -99,7 +99,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public payoutForm: CashfreeClass;
     public payoutObj: CashfreeClass = new CashfreeClass();
     public dueAmountReportData$: Observable<DueAmountReportResponse>;
-    public moment = moment;
+    public dayjs = dayjs;
     public toDate: string;
     public fromDate: string;
     public selectAllVendor: boolean = false;
@@ -115,12 +115,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** sorting */
     public key: string = "name"; // set default
     public order: string = "asc";
-    public showFieldFilter: {
-        [columnname: string]: {
-            displayName: string;
-            visibility: boolean
-        }
-    } = {};
     public updateCommentIdx: number = null;
     public searchStr$ = new Subject<string>();
     public searchStr: string = "";
@@ -188,10 +182,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isGetAccountsInProcess: boolean = false;
     /** This will hold the current page number */
     public currentPage: number = 1;
-    /** company custom fields list */
-    public companyCustomFields$: Observable<any[]>;
-    /** Column span length */
-    public colspanLength: number = 11;
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -234,32 +224,24 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("mailModal") public mailModalComponent: TemplateRef<any>;
     /** Instance of bulk payment modal */
     @ViewChild("template") public bulkPaymentModalRef: TemplateRef<any>;
-    public displayColumns: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
-    public displayColumns$: Observable<string[]> = this.displayColumns.asObservable().pipe(takeUntil(this.destroyed$), distinctUntilChanged(isEqual));
-    public customerColumns: string[] = ["customerName", "sales", "receipt", "closing"];
-    public vendorColumns: string[] = ["vendorName", "purchase", "payment", "closing"];
-    /** True/false if select all is checked */
-    public selectAll: boolean = false;
-    /** Holds count of available columns on the page */
-    public availableColumnsCount: any[] = [];
+
     /** True if we should select all checkbox */
     public showSelectAll: boolean = false;
-    /** True if custom fields finished loading */
-    public customFieldsLoaded: boolean = false;
-    /** Custom fields request */
-    public customFieldsRequest: any = {
-        page: 0,
-        count: 0,
-        moduleUniqueName: 'account'
-    };
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
+    /** True if it's default load */
+    public defaultLoad: boolean = true;
+    /** This will use for displayed table columns */
+    public displayedColumns: any[] = [];
+    /** This will use for customise column check values */
+    public customiseColumns = [];
+    /** Holds inventory type module  */
+    public moduleType: string = '';
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
-        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
-        private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
+        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox ,private renderer: Renderer2, private customFieldsService: CustomFieldsService) {
+        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -288,20 +270,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.renderer.addClass(document.body, 'contact-body');
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.store.dispatch(this.companyActions.getAllRegistrations());
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
-        // localStorage supported
-        if (window.localStorage) {
-            let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"]));
-            if (showColumnObj) {
-                if (showColumnObj.closingBalance !== undefined) {
-                    delete showColumnObj.closingBalance;
-                }
-                this.showFieldFilter = showColumnObj;
-                this.setTableColspan();
-            }
-        }
 
         this.breakPointObservar.observe([
             "(max-width: 1023px)",
@@ -314,6 +284,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         combineLatest([this.route.params, this.route.queryParams]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
+            let lastTabType = this.moduleType;
+            this.moduleType = (params.type)?.toUpperCase();
 
             if (params) {
                 if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
@@ -322,7 +294,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                         this.setActiveTab("customer");
                     }
                     if (activeTab === "vendor" && this.localeData?.page_heading) {
-                        this.availableColumnsCount = [];
                         this.showNameSearch = false;
                         this.searchedName?.reset();
                         this.translationComplete(true);
@@ -333,17 +304,90 @@ export class ContactComponent implements OnInit, OnDestroy {
                         this.setActiveTab("vendor");
                     }
                     if (activeTab === "customer" && this.localeData?.page_heading) {
-                        this.availableColumnsCount = [];
                         this.showNameSearch = false;
                         this.searchedName?.reset();
-                        this.translationComplete(true);                        
+                        this.translationComplete(true);
                     }
                 } else {
                     this.setActiveTab("aging-report");
                 }
-                this.setDisplayColumns();
+                this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
+
+                if (this.activeTab === ContactsTab.customer.toLowerCase()) {
+                    this.customiseColumns.splice(0, 0,
+                        {
+                            "value": "customer_name",
+                            "label": "Customer Name",
+                            "checked": true
+                        },
+                        {
+                            "value": "parent_group",
+                            "label": "Parent Group",
+                            "checked": true
+                        },
+                        {
+                            "value": "opening",
+                            "label": "Opening",
+                            "checked": true
+                        },
+                        {
+                            "value": "sales",
+                            "label": "Sales",
+                            "checked": true
+                        },
+                        {
+                            "value": "receipt",
+                            "label": "Receipt",
+                            "checked": true
+                        }
+                    );
+                    this.moduleType = ContactsTab.customer;
+                    this.displayedColumns = [];
+                }
+                if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+                    this.customiseColumns.splice(0, 0,
+                        {
+                            "value": "vendor_name",
+                            "label": "Vendor Name",
+                            "checked": true
+                        },
+                        {
+                            "value": "parent_group",
+                            "label": "Parent Group",
+                            "checked": true
+                        },
+                        {
+                            "value": "opening",
+                            "label": "Opening",
+                            "checked": true
+                        },
+                        {
+                            "value": "purchase",
+                            "label": "Purchase",
+                            "checked": true
+                        },
+                        {
+                            "value": "payment",
+                            "label": "Payment",
+                            "checked": true
+                        }
+                    );
+                    this.customiseColumns.push(
+                        {
+                            value: "action",
+                            label: "Action",
+                            checked: true
+                        })
+                    this.moduleType = ContactsTab.vendor;
+                    this.displayedColumns = [];
+                }
+                if (lastTabType) {
+                    this.translationComplete(true);
+                }
             }
+
         });
+
 
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
@@ -355,13 +399,13 @@ export class ContactComponent implements OnInit, OnDestroy {
                         this.todaySelected = response;
 
                         if (this.universalDate && !this.todaySelected) {
-                            this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                            this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                            this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                             this.selectedDateRange = {
-                                startDate: moment(this.universalDate[0]),
-                                endDate: moment(this.universalDate[1]),
+                                startDate: dayjs(this.universalDate[0]),
+                                endDate: dayjs(this.universalDate[1]),
                             };
-                            this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                         } else {
                             this.universalDate = [];
                             this.fromDate = "";
@@ -384,7 +428,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response) {
+            if (response) {
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
@@ -393,8 +437,11 @@ export class ContactComponent implements OnInit, OnDestroy {
             debounceTime(1000),
             distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((term: any) => {
-                this.searchStr = term;
-                this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                if (!this.defaultLoad) {
+                    this.searchStr = term;
+                    this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                }
+                this.defaultLoad = false;
             });
 
         if (this.activeCompany && this.activeCompany.countryV2) {
@@ -402,10 +449,14 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
 
         this.store.pipe(select(store => store.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.balanceDecimalPlaces) {
-                this.giddhDecimalPlaces = response.balanceDecimalPlaces;
+            if (response) {
+                if (response.balanceDecimalPlaces) {
+                    this.giddhDecimalPlaces = response.balanceDecimalPlaces;
+                } else {
+                    this.giddhDecimalPlaces = 2;
+                }
             } else {
-                this.giddhDecimalPlaces = 2;
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
 
@@ -458,12 +509,12 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.searchedName.valueChanges.pipe(
+        this.searchedName?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined ) {
+            if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.searchStr$.next(searchedText);
             }
@@ -488,11 +539,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     public performActions(type: number, account: any, event?: any) {
         switch (type) {
-            case 0: // go to add and manage
-                this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(account.name));
-                this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(account.name));
-                break;
-
             case 1: // go to ledger
                 this.goToRoute("ledger", `/${this.fromDate}/${this.toDate}`, account?.uniqueName);
                 break;
@@ -525,17 +571,16 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string) {
         let url = location.href + `?returnUrl=${part}/${accUniqueName}`;
-
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
-
         if (isElectron) {
-            url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
+            this.router.navigate([`/pages/${part}/${accUniqueName}`]);
         } else {
             (window as any).open(url);
         }
     }
+
 
     public tabSelected(tabName: "customer" | "aging-report" | "vendor") {
         if (!this.searchStr) {
@@ -554,7 +599,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.currentBranch.alias = this.currentBranchData.alias;
             } else {
                 this.currentBranch.name = this.activeCompany.name;
-                this.currentBranch.uniqueName = this.activeCompany.uniqueName;
+                this.currentBranch.uniqueName = this.activeCompany?.uniqueName;
                 this.currentBranch.alias = this.activeCompany.nameAlias ? this.activeCompany.nameAlias : this.activeCompany.name;
             }
         }
@@ -569,12 +614,12 @@ export class ContactComponent implements OnInit, OnDestroy {
 
             if (this.universalDate && this.universalDate[0] && this.universalDate[1] && !this.todaySelected) {
                 this.selectedDateRange = {
-                    startDate: moment(this.universalDate[0]),
-                    endDate: moment(this.universalDate[1]),
+                    startDate: dayjs(this.universalDate[0]),
+                    endDate: dayjs(this.universalDate[1]),
                 };
-                this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
             } else {
                 this.fromDate = "";
                 this.toDate = "";
@@ -592,14 +637,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     public setActiveTab(tabName: "customer" | "aging-report" | "vendor") {
         this.searchStr = "";
         this.tabSelected(tabName);
-        this.showFieldFilter = {};
         let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"]));
         if (showColumnObj) {
             if (showColumnObj.closingBalance !== undefined) {
                 delete showColumnObj.closingBalance;
             }
-            this.showFieldFilter = showColumnObj;
-            this.setTableColspan();
         }
 
         if (tabName === "vendor") {
@@ -713,7 +755,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public deleteComment(accountUniqueName) {
         setTimeout(() => {
             this.contactService.deleteComment(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                if (res.status === "success") {
+                if (res?.status === "success") {
                     this.updateCommentIdx = null;
                 }
             });
@@ -776,9 +818,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     public addComment(account) {
         setTimeout(() => {
             this.contactService.addComment(account?.comment, account?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this.updateCommentIdx = null;
-                    account.comment = cloneDeep(res.body.description);
+                    account.comment = cloneDeep(res.body?.description);
                 }
             });
         }, 500);
@@ -791,20 +833,20 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public addValueToMsg(val: any) {
-        this.typeInTextarea(val.value);
+        this.typeInTextarea(val?.value);
     }
 
     public typeInTextarea(newText) {
         let el: HTMLInputElement = this.messageBox?.nativeElement;
         let start = el.selectionStart;
         let end = el.selectionEnd;
-        let text = el.value;
+        let text = el?.value;
         let before = text.substring(0, start);
         let after = text.substring(end, text?.length);
         el.value = (before + newText + after);
         el.selectionStart = el.selectionEnd = start + newText?.length;
         el.focus();
-        this.messageBody.msg = el.value;
+        this.messageBody.msg = el?.value;
     }
 
     /**
@@ -871,7 +913,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
             return this.companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
-                    r.status === "success" ? this.toaster.showSnackBar("success", r.body) : this.toaster.showSnackBar("error", r.message);
+                    r?.status === "success" ? this.toaster.showSnackBar("success", r?.body) : this.toaster.showSnackBar("error", r?.message);
                     this.checkboxInfo = {
                         selectedPage: 1,
                     };
@@ -883,7 +925,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             delete temp.data["subject"];
             return this.companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
-                    r.status === "success" ? this.toaster.showSnackBar("success", r.body) : this.toaster.showSnackBar("error", r.message);
+                    r?.status === "success" ? this.toaster.showSnackBar("success", r?.body) : this.toaster.showSnackBar("error", r?.message);
                     this.checkboxInfo = {
                         selectedPage: 1,
                     };
@@ -912,6 +954,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             viewContainerRef.insert(componentInstanceView.hostView);
 
             let componentInstance = componentInstanceView.instance as PaginationComponent;
+            componentInstance.totalPages = s.totalPages;
             componentInstance.totalItems = s.count * s.totalPages;
             componentInstance.itemsPerPage = this.paginationLimit;
             componentInstance.maxSize = 5;
@@ -942,10 +985,10 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         if (value && value.startDate && value.endDate) {
             this.todaySelected = false;
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             this.detectChanges();
         }
@@ -991,8 +1034,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public selectAccount(ev: MatCheckboxChange, item: any) {
-        this.prepareSelectedContactsList(item, ev.checked);
-        if (!ev.checked) {
+        this.prepareSelectedContactsList(item, ev?.checked);
+        if (!ev?.checked) {
             this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
             this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
             if (this.selectedCheckedContacts?.length === 0) {
@@ -1010,11 +1053,13 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.isAdvanceSearchApplied = false;
         this.key = (this.activeTab === "vendor") ? "amountDue" : "name";
         this.order = (this.activeTab === "vendor") ? "desc" : "asc";
-        this.getAccounts(this.fromDate, this.toDate,
-            null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+        if (!this.searchedName?.value) {
+            this.getAccounts(this.fromDate, this.toDate,
+                null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+        }
         this.searchedName?.reset();
         this.searchStr = "";
-        this.showNameSearch = false;    
+        this.showNameSearch = false;
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -1106,8 +1151,8 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.searchLoader$ = observableOf(false);
-            if (res.status === "success") {
-                let blobData = this.generalService.base64ToBlob(res.body, "text/csv", 512);
+            if (res?.status === "success") {
+                let blobData = this.generalService.base64ToBlob(res?.body, "text/csv", 512);
                 return saveAs(blobData, `${this.groupUniqueName}.csv`);
             }
         });
@@ -1140,7 +1185,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.currentPage = pageNumber;
         let groupUniqueName = (this.activeTab === "customer") ? "sundrydebtors" : "sundrycreditors";
 
-        if (this.activeTab === "aging-report") {
+        if (this.activeTab === "aging-report" || (!this.todaySelected && (!fromDate || !toDate))) {
             return;
         }
 
@@ -1185,15 +1230,15 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryDebtorsAccounts = cloneDeep(res.body.results);
                     this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
-                        let customFields = [];
-                        element.customFields?.forEach(field => {
-                            customFields[field?.uniqueName] = [];
-                            customFields[field?.uniqueName] = field;
-                        });
+                        // let customFields = [];
+                        // element.customFields?.forEach(field => {
+                        //     customFields[field?.uniqueName] = [];
+                        //     customFields[field?.uniqueName] = field;
+                        // });
 
-                        element.customFields = customFields;
+                        // element.customFields = customFields;
 
-                        let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
+                        let indexOfItem = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
                         } else {
@@ -1213,15 +1258,15 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryCreditorsAccounts = cloneDeep(res.body.results);
                     this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
-                        let customFields = [];
-                        element.customFields?.forEach(field => {
-                            customFields[field?.uniqueName] = [];
-                            customFields[field?.uniqueName] = field;
-                        });
+                        // let customFields = [];
+                        // element.customFields?.forEach(field => {
+                        //     customFields[field?.uniqueName] = [];
+                        //     customFields[field?.uniqueName] = field;
+                        // });
 
-                        element.customFields = customFields;
+                        // element.customFields = customFields;
 
-                        let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
+                        let indexOfItem = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
                         } else {
@@ -1233,10 +1278,10 @@ export class ContactComponent implements OnInit, OnDestroy {
 
                 if (this.todaySelected) {
                     this.selectedDateRange = {
-                        startDate: moment(res.body.fromDate, GIDDH_DATE_FORMAT),
-                        endDate: moment(res.body.toDate, GIDDH_DATE_FORMAT),
+                        startDate: dayjs(res.body.fromDate, GIDDH_DATE_FORMAT),
+                        endDate: dayjs(res.body.toDate, GIDDH_DATE_FORMAT),
                     };
-                    this.selectedDateRangeUi = moment(res.body.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(res.body.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.selectedDateRangeUi = dayjs(res.body.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(res.body.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
 
                 this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
@@ -1244,20 +1289,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
             this.isGetAccountsInProcess = false;
         });
-    }
-
-    public columnFilter(event: boolean, column: string) {
-        if (this.showFieldFilter[column]) {
-            this.showFieldFilter[column].visibility = event;
-        }
-        this.setTableColspan();
-
-        this.selectAll = Object.keys(this.showFieldFilter).every(filterName => this.showFieldFilter[filterName].visibility);
-
-        if (window.localStorage) {
-            localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"], JSON.stringify(this.showFieldFilter));
-        }
-        this.setDisplayColumns();
     }
 
     /**
@@ -1293,12 +1324,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
     }
 
-    private setTableColspan() {
-        let balancesColsArr = ['openingBalance'];
-        let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f))?.length;
-        this.tableColsPan = length > 0 ? 4 : 3;
-    }
-
     /**
      * To close bulk payment model
      *
@@ -1332,20 +1357,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * This will toggle all columns
-     *
-     * @param {boolean} event
-     * @memberof ContactComponent
-     */
-    public selectAllColumns(event: boolean): void {
-        Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key].visibility = event);
-        this.setTableColspan();
-        if (window.localStorage) {
-            localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"], JSON.stringify(this.showFieldFilter));
-        }
-        this.setDisplayColumns();
-    }
 
     /**
      * This will show datepicker
@@ -1385,14 +1396,14 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public prepareSelectedContactsList(element: any, isChecked: boolean): void {
         // selected accounts or creditors list for bulk payment
-        let accountExists = this.selectedAccountsList?.filter(account => account.uniqueName === element?.uniqueName);
+        let accountExists = this.selectedAccountsList?.filter(account => account?.uniqueName === element?.uniqueName);
         if (!accountExists?.length && isChecked) {
             this.selectedAccountsList.push(element);
         } else if (accountExists?.length > 0 && !isChecked) {
-            this.selectedAccountsList = this.selectedAccountsList?.filter(account => account.uniqueName !== element?.uniqueName);
+            this.selectedAccountsList = this.selectedAccountsList?.filter(account => account?.uniqueName !== element?.uniqueName);
         }
         // selected contacts list
-        let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element?.uniqueName);
+        let indexOfEntrySelected = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
         if (indexOfEntrySelected === -1 && isChecked) {
             this.selectedCheckedContacts.push(element?.uniqueName);
         } else if (indexOfEntrySelected > -1 && !isChecked) {
@@ -1426,82 +1437,18 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * API call to get custom field data
+     * This will use for show hide main table headers from customise columns
      *
-     * @memberof ContactComponent
+     * @param {*} event
+     * @memberof PurchaseRegisterExpandComponent
      */
-    public getCompanyCustomField(): void {
-        this.customFieldsService.list(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.status === "success") {
-                if (response.body?.results?.length) {
-                    let customFields = response.body.results?.map(field => {
-                        return {
-                            key: field.fieldName,
-                            uniqueName: field.uniqueName
-                        }
-                    });
-
-                    this.colspanLength = 11 + customFields?.length;
-                    this.addNewFieldFilters(customFields);
-                    this.companyCustomFields$ = observableOf(customFields);
-                }
-            } else {
-                this.toaster.showSnackBar("error", response.message);
-            }
-            this.customFieldsLoaded = true;
-            this.cdRef.detectChanges();
-        });
+    public showSelectedHeaderColumns(columns: string[]): void {
+        if (columns) {
+            this.displayedColumns = columns;
+        }
+        this.cdRef.detectChanges();
     }
 
-    /**
-     * To add new properties in showFieldFilter object
-     *
-     * @param {*} field
-     * @memberof ContactComponent
-     */
-    public addNewFieldFilters(field: any): void {
-        for (let key of field) {
-            if (key?.uniqueName) {
-                let index = Object.keys(this.showFieldFilter).length;
-                if (!this.showFieldFilter[key.uniqueName]) {
-                    this.showFieldFilter[key.uniqueName] = {
-                        visibility: false,
-                        displayName: key.key,
-                    };
-                }
-
-                let isColumnAvailable = this.availableColumnsCount.filter(column => column.value === key.uniqueName);
-                if(!isColumnAvailable?.length) {
-                    this.availableColumnsCount.push({ key: index, value: key.uniqueName });
-                }
-            }
-        }
-        this.setDisplayColumns();
-
-        this.selectAll = Object.keys(this.showFieldFilter).every(filterName => this.showFieldFilter[filterName].visibility);
-    }
-
-    /**
-     * To add new properties in showFieldFilter object
-     *
-     * @memberof ContactComponent
-     */
-    public setDisplayColumns(): void {
-        const defaultColumms: string[] = this.activeTab === "customer" ? this.customerColumns : this.vendorColumns;
-        let computedColumns: string[] = [...defaultColumms, ...Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility)];
-        if (this.activeTab === "vendor" && computedColumns?.length) {
-            computedColumns?.push("action");
-        }
-        if (computedColumns.findIndex(s => s === "openingBalance") > -1) {
-            computedColumns = computedColumns.filter(s => s !== "openingBalance");
-            computedColumns.splice(1, 0, "openingBalance");
-        }
-        if (computedColumns.findIndex(s => s === "parentGroup") > -1) {
-            computedColumns = computedColumns.filter(s => s !== "parentGroup");
-            computedColumns.splice(1, 0, "parentGroup");
-        }
-        this.displayColumns.next(computedColumns);
-    }
 
     /**
      * Branch change handler
@@ -1576,38 +1523,10 @@ export class ContactComponent implements OnInit, OnDestroy {
                     value: "%s_AN",
                 },
             ];
-
-            const availableColumns = [
-                {
-                    key: this.commonLocaleData?.app_parent_group,
-                    uniqueName: 'parentGroup'
-                },
-                {
-                    key: this.localeData?.opening,
-                    uniqueName: 'openingBalance'
-                },
-                {
-                    key: this.localeData?.contacts,
-                    uniqueName: 'contact'
-                },
-                {
-                    key: this.commonLocaleData?.app_state,
-                    uniqueName: 'state'
-                },
-                {
-                    key: this.commonLocaleData?.app_tax_number,
-                    uniqueName: 'gstin'
-                },
-                {
-                    key: this.localeData?.comment,
-                    uniqueName: 'comment'
-                }
-            ];
-
-            this.addNewFieldFilters(availableColumns);
-            this.setTableColspan();
-
-            this.getCompanyCustomField();
+            this.customiseColumns = this.customiseColumns?.map(column => {
+                column.label = this.localeData[column.value];
+                return column;
+            });
         }
     }
 
@@ -1623,7 +1542,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
         this.showClearFilter = false;
         if (searchedFieldName === "name") {
-            if (this.searchedName.value) {
+            if (this.searchedName?.value) {
                 return;
             }
             if (this.generalService.childOf(event.target, element)) {
@@ -1673,7 +1592,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 return itemObject?.bankPaymentDetails === true;
             });
             this.selectedAccountsList = this.selectedAccountsList.filter((data, index) => {
-                return this.selectedAccountsList.indexOf(data) === index;
+                return this.selectedAccountsList?.indexOf(data) === index;
             });
         }
         if (!this.selectedAccountsList?.length && item) {
@@ -1683,21 +1602,17 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
         if (this.selectedAccountsList?.length < this.selectedCheckedContacts?.length) {
             let message = this.localeData?.bank_transactions_message;
-            message = message.replace("[SUCCESS]", this.selectedCheckedContacts.length - this.selectedAccountsList.length);
-            message = message.replace("[TOTAL]", this.selectedCheckedContacts.length);
+            message = message?.replace("[SUCCESS]", this.selectedCheckedContacts?.length - this.selectedAccountsList?.length);
+            message = message?.replace("[TOTAL]", this.selectedCheckedContacts?.length);
 
             this.toaster.showSnackBar("info", message);
             return;
         }
-        if (this.selectedAccountsList?.length > 1) {
-            this.toaster.showSnackBar("warning", this.localeData?.bulk_payment_unsupported_error);
-        } else {
-            if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
-                this.dialog.open(this.bulkPaymentModalRef, {
-                    width: '980px',
-                    panelClass: 'contact-modal'
-                });
-            }
+        if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
+            this.dialog.open(this.bulkPaymentModalRef, {
+                width: '980px',
+                panelClass: 'contact-modal'
+            });
         }
     }
 
@@ -1760,8 +1675,6 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     private resetColumns(): void {
-        this.availableColumnsCount = [];
-        this.showFieldFilter = {};
         this.translationComplete(true);
     }
 }

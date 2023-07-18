@@ -34,7 +34,7 @@ export class TallysyncComponent implements OnInit, OnDestroy {
     }
 
     public pageChanged(page: string) {
-        this.showInvoiceNav = ['completed', 'inprogress'].indexOf(page) > -1;
+        this.showInvoiceNav = ['completed', 'inprogress']?.indexOf(page) > -1;
     }
 
     public tabChanged(tab: string) {

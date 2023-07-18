@@ -42,12 +42,15 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CommonModule,
         FormsModule,
         ImportExcelRoutingModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ShSelectModule,
-        TooltipModule,
-        BsDropdownModule,
+        TooltipModule.forRoot(),
+        BsDropdownModule.forRoot(),
         PerfectScrollbarModule,
-        PaginationModule,
+        PaginationModule.forRoot(),
         SharedModule
     ],
 })

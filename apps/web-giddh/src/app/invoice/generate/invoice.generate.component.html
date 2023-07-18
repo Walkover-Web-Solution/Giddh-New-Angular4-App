@@ -58,7 +58,6 @@
                             <div class="form-group date-advance-search pending-advance-search flex-fill">
                                 <div class="input-group mr-r1 mb-0" id="dp-parent">
                                     <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                        <i class="icon-calender calendar-addon"></i>
                                         <input
                                             type="text"
                                             name="selectedDateRange"
@@ -83,7 +82,7 @@
                                 <span>
                                     <button
                                         *ngIf="!isCompany"
-                                        [hidden]="selectedLedgerItems.length === 0"
+                                        [hidden]="selectedLedgerItems?.length === 0"
                                         class="btn btn-primary"
                                         (click)="generateBulkInvoice(false)"
                                     >
@@ -91,7 +90,7 @@
                                     </button>
                                     <button
                                         *ngIf="!isCompany"
-                                        [hidden]="selectedLedgerItems.length === 0"
+                                        [hidden]="selectedLedgerItems?.length === 0"
                                         class="btn btn-primary"
                                         (click)="generateBulkInvoice(true)"
                                     >
@@ -102,7 +101,7 @@
                                         *ngIf="!isCompany && !isMobileView"
                                         placement="top"
                                         [tooltip]="localeData?.works_for_single_entry"
-                                        [hidden]="selectedLedgerItems.length === 0 || !togglePrevGenBtn"
+                                        [hidden]="selectedLedgerItems?.length === 0 || !togglePrevGenBtn"
                                         class="btn btn-primary"
                                         (click)="previewInvoice()"
                                     >
@@ -114,7 +113,7 @@
                         <div class="align-items-center d-flex justify-content-center filter-width">
                             <div
                                 class="clear-filter"
-                                [ngClass]="{ 'width-auto': selectedLedgerItems.length === 0 }"
+                                [ngClass]="{ 'width-auto': selectedLedgerItems?.length === 0 }"
                                 *ngIf="customDateSelected && !isMobileView"
                                 (click)="resetDateSearch()"
                             >
@@ -130,7 +129,7 @@
                     <table class="table basic giddh-table pending-table on-mobile-view">
                         <thead class="thead-background1">
                             <tr>
-                                <th width="4%" *ngIf="selectedInvoices.length > 0">
+                                <th width="4%" *ngIf="selectedInvoices?.length > 0">
                                     <div class="check-image d-flex justify-content-center">
                                         <img
                                             src="assets/images/unchecked.png"
@@ -145,7 +144,7 @@
                                     </div>
                                 </th>
 
-                                <th *ngIf="selectedInvoices.length === 0" width="4%">
+                                <th *ngIf="selectedInvoices?.length === 0" width="4%">
                                     <div class="check-image d-flex justify-content-center">#</div>
                                 </th>
 
@@ -231,7 +230,7 @@
                                     *ngIf="
                                         hoveredItemForAction === item?.uniqueName ||
                                         item.isSelected ||
-                                        selectedInvoices.length > 0
+                                        selectedInvoices?.length > 0
                                     "
                                 >
                                     <div class="check-image d-flex justify-content-center" data-title="#">
@@ -255,7 +254,7 @@
                                     *ngIf="
                                         !item.isSelected &&
                                         hoveredItemForAction !== item?.uniqueName &&
-                                        selectedInvoices.length === 0
+                                        selectedInvoices?.length === 0
                                     "
                                     data-title="#"
                                 >
@@ -287,7 +286,7 @@
                                                     <amount-field
                                                         [amount]="transaction.amount"
                                                         [currencySymbol]="item.accountCurrencySymbol"
-                                                        [currencyCode]="activeCompany.baseCurrency"
+                                                        [currencyCode]="activeCompany?.baseCurrency"
                                                     >
                                                     </amount-field>
                                                 </span>
@@ -313,7 +312,7 @@
                                                     <amount-field
                                                         [amount]="transaction.amount"
                                                         [currencySymbol]="item.accountCurrencySymbol"
-                                                        [currencyCode]="activeCompany.baseCurrency"
+                                                        [currencyCode]="activeCompany?.baseCurrency"
                                                     >
                                                     </amount-field>
                                                 </span>
@@ -325,7 +324,6 @@
                                 <td
                                     (dblclick)="modalUniqueName = item?.uniqueName"
                                     class="cp no-dbl-click-select"
-                                    (clickOutside)="modalUniqueName = ''"
                                     [attr.data-title]="commonLocaleData?.app_account"
                                 >
                                     {{ item?.account?.name }}
@@ -337,6 +335,7 @@
                                         [to]="ledgerSearchRequest.to"
                                         [isModalOpen]="modalUniqueName === item?.uniqueName"
                                         [voucherType]="selectedVoucher"
+                                        (modalClosed)="modalUniqueName = ''"
                                     ></div>
                                 </td>
 
@@ -349,7 +348,7 @@
                                         <amount-field
                                             [amount]="item.total.amount"
                                             [currencySymbol]="item.accountCurrencySymbol"
-                                            [currencyCode]="activeCompany.baseCurrency"
+                                            [currencyCode]="activeCompany?.baseCurrency"
                                         >
                                         </amount-field>
                                     </span>
@@ -420,7 +419,7 @@
                     <img src="assets/images/multiply.svg " />
                 </span>
                 <div class="invoice-edit-body">
-                    <proforma-invoice-component
+                    <voucher-component
                         [accountUniqueName]="selectedAccountUniqueName"
                         [selectedItem]="selectedItem"
                         [invoiceNo]="
@@ -430,7 +429,7 @@
                         [callFromOutside]="false"
                         (cancelVoucherUpdate)="closeModel()"
                     >
-                    </proforma-invoice-component>
+                    </voucher-component>
                 </div>
             </div>
         </div>

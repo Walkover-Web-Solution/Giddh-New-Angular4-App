@@ -19,7 +19,7 @@ export class Option {
     }
 
     get value(): string {
-        return this.wrappedOption.value;
+        return this.wrappedOption?.value;
     }
 
     get label(): string {

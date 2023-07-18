@@ -41,6 +41,7 @@
                 [placeholder]="selectedValues?.length > 0 ? filter : placeholder"
                 [(ngModel)]="filter"
                 (ngModelChange)="handleInputChange($event)"
+                [ngClass]="cssClass"
             />
         </div>
         <!--endregion-->
@@ -61,6 +62,7 @@
             [placeholder]="placeholder"
             [(ngModel)]="filter"
             (ngModelChange)="handleInputChange($event)"
+            (change)="!filter ? clear() : ''"
         />
 
         <div (click)="showSearchSuggestion ? show($event) : ''" *ngIf="(!isOpen || !isFilterEnabled) && !multiple">
@@ -73,6 +75,7 @@
                         value="{{ selectedValues[0]?.label }}"
                         class="form-control selected-val cp"
                         [attr.style]="borderConfiguration?.style"
+                        [ngClass]="cssClass"
                     />
                 </div>
             </ng-container>
@@ -86,6 +89,8 @@
                     [placeholder]="placeholder"
                     [disabled]="disabled"
                     [value]="filter"
+                    (change)="!filter ? clear() : ''"
+                    [ngClass]="cssClass"
                 />
             </ng-container>
         </div>

@@ -1,9 +1,9 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AppState } from '../../../store/roots';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { SearchRequest } from '../../../models/api-models/Search';
 import { SearchActions } from '../../../actions/search.actions';
 import { GeneralService } from '../../../services/general.service';
@@ -37,7 +37,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     public showToDatePicker: boolean;
     public toDate: string;
     public fromDate: string;
-    public moment = moment;
+    public dayjs = dayjs;
     public groupName: string;
     public groupUniqueName: string;
     public dataSource = [];
@@ -104,18 +104,18 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnInit() {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.fromDate = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
-        this.toDate = moment().format(GIDDH_DATE_FORMAT);
+        this.fromDate = dayjs().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+        this.toDate = dayjs().format(GIDDH_DATE_FORMAT);
         this.loadDefaultGroupsSuggestions();
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
         this.store.pipe(
@@ -128,7 +128,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
@@ -207,12 +207,12 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
     public onSelectGroup(group: IOption) {
         this.groupName = group.label;
-        this.groupUniqueName = group.value;
+        this.groupUniqueName = group?.value;
     }
 
     public selectedDate(value: any) {
-        this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
-        this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
+        this.fromDate = dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        this.toDate = dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT);
     }
 
     /**
@@ -258,10 +258,10 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 
@@ -272,7 +272,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
-        this.currentBranchChanged.emit(selectedEntity.value);
+        this.currentBranchChanged.emit(selectedEntity?.value);
         this.loadDefaultGroupsSuggestions();
     }
 

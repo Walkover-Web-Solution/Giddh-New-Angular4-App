@@ -19,7 +19,7 @@
             </ul>
         </div>
     </div>
-    <div class="container-fluid font-14 mr-t1">
+    <div class="container-fluid font-15 mr-t1">
         <div class="select-financial-year mr-b15">
             <div
                 *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
@@ -42,19 +42,19 @@
                                 <span class="entity-icon">
                                     <i
                                         class="icon-branch-icon pull-right"
-                                        *ngIf="!option.isCompany"
+                                        *ngIf="!option?.isCompany"
                                         [tooltip]="commonLocaleData?.app_branch"
                                     ></i>
                                     <i
                                         class="icon-company-profile pull-right"
-                                        *ngIf="option.isCompany"
+                                        *ngIf="option?.isCompany"
                                         [tooltip]="commonLocaleData?.app_company"
                                     ></i>
                                 </span>
                                 <span class="entity-details">
-                                    <div class="item giddh-limit single-line-clamp">{{ option.label || "-" }}</div>
+                                    <div class="item giddh-limit single-line-clamp">{{ option?.label || "-" }}</div>
                                     <div class="item-unique giddh-limit single-line-clamp">
-                                        {{ option.name || "-" }}
+                                        {{ option?.name || "-" }}
                                     </div>
                                 </span>
                             </a>
@@ -72,6 +72,8 @@
                     [showClear]="false"
                     (selected)="selectFinancialYearOption($event)"
                     [ItemHeight]="33"
+                    [defaultValue]="activeFinacialYr?.uniqueName"
+                    [isRequired]="true"
                 ></sh-select>
             </div>
             <div class="inner-button xs-mb-1 pr-5 xs-pr-0" dropdown placement="bottom left">
@@ -122,6 +124,11 @@
                         </li>
                     </ul>
                 </div>
+            </div>
+            <div class="xs-mb-1 position-absolute dropdown-left">
+                <button type="button" class="btn btn-sky-blue" (click)="export()">
+                    {{ commonLocaleData?.app_export }}
+                </button>
             </div>
         </div>
         <reports-table-component

@@ -28,10 +28,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CommandKComponent,
         ScrollComponent
     ],
-    entryComponents: [
-        CommandKComponent,
-        ScrollComponent
-    ],
     providers: [
         CommandKService,
         {

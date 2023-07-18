@@ -31,7 +31,7 @@
                         >
                             <div
                                 *ngIf="companyName"
-                                class="font-14 mr-b15"
+                                class="font-15 mr-b15"
                                 [innerHTML]="getInformationSaveText(companyName)"
                             ></div>
                             <div class="form-bg-aside clearfix">
@@ -84,7 +84,7 @@
                                             [attr.placeholder]="getEnterTaxText(addressConfiguration?.tax?.name)"
                                         />
                                     </div>
-                                    <div class="col-sm-4 form-group">
+                                    <div class="col-sm-4 form-group" *ngIf="addressConfiguration.stateList?.length">
                                         <label>{{ commonLocaleData?.app_state }} <sup>*</sup></label>
                                         <sh-select
                                             #states
@@ -99,6 +99,21 @@
                                             [isRequired]="true"
                                             [isFilterEnabled]="true"
                                             formControlName="state"
+                                            class="w-100"
+                                            [useInBuiltFilterForIOptionTypeItems]="true"
+                                            [forceClearReactive]="forceClear$ | async"
+                                        >
+                                        </sh-select>
+                                    </div>
+                                    <div class="col-sm-4 form-group" *ngIf="addressConfiguration.countyList?.length">
+                                        <label>{{ commonLocaleData?.app_region }} <sup>*</sup></label>
+                                        <sh-select
+                                            #states
+                                            [options]="addressConfiguration.countyList"
+                                            required
+                                            [isRequired]="true"
+                                            [isFilterEnabled]="true"
+                                            formControlName="county"
                                             class="w-100"
                                             [useInBuiltFilterForIOptionTypeItems]="true"
                                             [forceClearReactive]="forceClear$ | async"
@@ -172,7 +187,11 @@
                                     </div>
                                 </div>
 
-                                <div *ngIf="addressConfiguration.type !== 'createBranchAddress'" class="row">
+                                <div
+                                    *ngIf="addressConfiguration.type !== 'createBranchAddress'"
+                                    [hidden]="hideLinkEntity"
+                                    class="row"
+                                >
                                     <div class="col-sm-12 form-group linked-entities">
                                         <label>{{ localeData?.link_entity }}</label>
                                         <div class="form-group">
@@ -198,9 +217,9 @@
                                                                     [checked]="
                                                                         addressForm
                                                                             ?.get('linkedEntity')
-                                                                            ?.value?.includes(option.value)
+                                                                            ?.value?.includes(option?.value)
                                                                     "
-                                                                    [value]="option.value" /></span
+                                                                    [value]="option?.value" /></span
                                                             >&nbsp;
                                                             <span class="entity-icon">
                                                                 <i
@@ -325,9 +344,9 @@
                                                                     [checked]="
                                                                         addressForm
                                                                             ?.get('linkedEntity')
-                                                                            ?.value?.includes(option.value)
+                                                                            ?.value?.includes(option?.value)
                                                                     "
-                                                                    [value]="option.value" /></span
+                                                                    [value]="option?.value" /></span
                                                             >&nbsp;
                                                             <span class="entity-details">
                                                                 <div class="item giddh-limit single-line-clamp">
@@ -360,7 +379,7 @@
                                 </div>
                             </div>
                             <br />
-                            <div *ngIf="companyName" class="font-14" [innerHTML]="getBranchOfText(companyName)"></div>
+                            <div *ngIf="companyName" class="font-15" [innerHTML]="getBranchOfText(companyName)"></div>
                         </section>
 
                         <section
@@ -431,7 +450,7 @@
                                 </div>
                             </div>
                             <br />
-                            <div *ngIf="companyName" class="font-14">
+                            <div *ngIf="companyName" class="font-15">
                                 <!-- Headquarter name -->
                                 {{ getBranchOfText(companyName) }}
                             </div>

@@ -1,6 +1,6 @@
 import { Optional, Inject, Injectable } from '@angular/core';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { GeneralService } from './general.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -25,7 +25,7 @@ export class EcommerceService {
      */
     public isShopifyConnected(model: any, ecommerceUniqueName: string): any {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + ECOMMERCE_API.SHOPIFY_VERIFY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':ecommerceUniqueName', ecommerceUniqueName), model).pipe(
+        return this.http.post(this.config.apiUrl + ECOMMERCE_API.SHOPIFY_VERIFY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':ecommerceUniqueName', ecommerceUniqueName), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
@@ -43,7 +43,7 @@ export class EcommerceService {
      */
     public sendEmail(model: any): any {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + ECOMMERCE_API.SEND_EMAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+        return this.http.post(this.config.apiUrl + ECOMMERCE_API.SEND_EMAIL?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;

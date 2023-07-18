@@ -1,11 +1,11 @@
-import { ICreateGroup } from '../interfaces/groupCreate.interface';
+import { ICreateGroup } from '../interfaces/group-create.interface';
 import { INameUniqueName } from './Inventory';
-import { IUserInfo } from '../interfaces/userInfo.interface';
+import { IUserInfo } from '../interfaces/user-info.interface';
 import { IGroup } from '../interfaces/group.interface';
-import { IAccountsInfo } from '../interfaces/accountInfo.interface';
-import { IFlattenGroupsAccountsDetail } from '../interfaces/flattenGroupsAccountsDetail.interface';
-import { IInheritedTaxes } from '../interfaces/inheritedTaxes.interface';
-import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
+import { IAccountsInfo } from '../interfaces/account-info.interface';
+import { IFlattenGroupsAccountsDetail } from '../interfaces/flatten-groups-accounts-detail.interface';
+import { IInheritedTaxes } from '../interfaces/inherited-taxes.interface';
+import { IPaginatedResponse } from '../interfaces/paginated-response.interface';
 
 /**
  * Model for create group api response

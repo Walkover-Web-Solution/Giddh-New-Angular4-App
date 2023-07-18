@@ -3,77 +3,125 @@
     [file]="'activity-logs'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="activity-container">
         <div class="activity-filter-wrap">
-            <div class="mr-t15 mr-b15 custom-datepicker-wrapper">
-                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                    <i class="icon-calender calendar-addon"></i>
-                    <input
-                        type="text"
-                        name="selectedDateRange"
-                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker"
-                    />
+            <div *ngFor="let selectedField of selectedFields; let i = index" class="filter-wrapper">
+                <div class="mr-l05">
+                    <select-field
+                        [cssClass]="'form-control mat-field-border'"
+                        [name]="'fields'"
+                        [placeholder]="localeData?.select_field"
+                        [options]="fields"
+                        (selectedOption)="selectField(i, $event)"
+                        [defaultValue]="selectedField?.label"
+                    >
+                    </select-field>
                 </div>
+                <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'LOG_DATE'">
+                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <input
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                        />
+                    </div>
+                </div>
+                <div class="entity-wrapper mr-l1" *ngIf="selectedField?.value === 'ENTITY'">
+                    <select-field
+                        [cssClass]="'form-control mat-field-border'"
+                        [name]="'entity'"
+                        [placeholder]="commonLocaleData?.app_entity"
+                        [options]="entities"
+                        (selectedOption)="activityObj.entity = $event?.value; activityObjLabels.entity = $event.label"
+                        [defaultValue]="activityObjLabels?.entity"
+                        (onClear)="resetEntity($event)"
+                        [allowValueReset]="true"
+                    >
+                    </select-field>
+                </div>
+                <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'ENTRY_DATE'">
+                    <div class="custom-datepicker" (click)="showEntryGiddhDatepicker($event)">
+                        <input
+                            type="text"
+                            name="selectedEntryDateRange"
+                            [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                        />
+                    </div>
+                </div>
+                <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'VOUCHER_DATE'">
+                    <div class="custom-datepicker" (click)="showVoucherGiddhDatepicker($event)">
+                        <input
+                            type="text"
+                            name="selectedVoucherDateRange"
+                            [value]="selectedVoucherDateRangeUi ? selectedVoucherDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                        />
+                    </div>
+                </div>
+                <div class="operation-wrapper mr-l1" *ngIf="selectedField?.value === 'OPERATION'">
+                    <select-field
+                        [cssClass]="'form-control mat-field-border'"
+                        [name]="'operation'"
+                        [placeholder]="localeData?.operation"
+                        [options]="activityOperations"
+                        (selectedOption)="
+                            activityObj.operation = $event?.value; activityObjLabels.operation = $event.label
+                        "
+                        [defaultValue]="activityObjLabels?.operation"
+                        (onClear)="resetOperation($event)"
+                        [allowValueReset]="true"
+                    >
+                    </select-field>
+                </div>
+                <div class="user-wrapper mr-l1" *ngIf="selectedField?.value === 'USERS'">
+                    <select-field
+                        [cssClass]="'form-control mat-field-border'"
+                        [name]="'user'"
+                        [placeholder]="localeData?.user"
+                        [options]="users"
+                        (selectedOption)="selecteUserType($event); activityObjLabels.user = $event.label"
+                        [defaultValue]="activityObjLabels?.user"
+                        (onClear)="resetUser($event)"
+                        [allowValueReset]="true"
+                    >
+                    </select-field>
+                </div>
+                <div class="user-wrapper mr-l1" *ngIf="selectedField?.value === 'ACCOUNTS'">
+                    <select-field
+                        [cssClass]="'form-control mat-field-border'"
+                        [name]="'accounts'"
+                        [placeholder]="commonLocaleData?.app_import_type?.base_accounts"
+                        [options]="accounts"
+                        (selectedOption)="selecteAccountType($event); activityObjLabels.accounts = $event.label"
+                        [defaultValue]="activityObjLabels?.accounts"
+                        (onClear)="resetAccounts($event)"
+                        [allowValueReset]="true"
+                        (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                        [enableDynamicSearch]="true"
+                        [isPaginationEnabled]="true"
+                        (scrollEnd)="handleScrollEnd()"
+                    >
+                    </select-field>
+                </div>
+                <span class="delete-row" *ngIf="selectedFields?.length > 1">
+                    <a href="javascript:;" (click)="removeFilter(selectedField, i)" class="remove-filter"
+                        ><i class="icon-trash"></i
+                    ></a>
+                </span>
+                <span class="and-text" *ngIf="i < selectedFields?.length - 1">&</span>
             </div>
-            <div class="entity-wrapper mr-l1 filter-button">
-                <select-field
-                    [cssClass]="'form-control mat-field-border'"
-                    [name]="'entity'"
-                    [placeholder]="commonLocaleData?.app_entity"
-                    [options]="entities"
-                    (selectedOption)="
-                        activityObj.entity = $event.value;
-                        activityObjLabels.entity = $event.label;
-                        activityObj.operation = '';
-                        activityObjLabels.operation = ''
-                    "
-                    [defaultValue]="activityObjLabels?.entity"
-                >
-                </select-field>
-            </div>
-            <div class="operation-wrapper mr-l1 filter-button">
-                <select-field
-                    [cssClass]="'form-control mat-field-border'"
-                    [name]="'operation'"
-                    [placeholder]="localeData?.operation"
-                    [options]="filters[activityObj.entity ? activityObj.entity : '']"
-                    (selectedOption)="activityObj.operation = $event.value; activityObjLabels.operation = $event.label"
-                    [defaultValue]="activityObjLabels?.operation"
-                >
-                </select-field>
-            </div>
-            <div class="user-wrapper mr-l1 filter-button">
-                <select-field
-                    [cssClass]="'form-control mat-field-border'"
-                    [name]="'user'"
-                    [placeholder]="localeData?.user"
-                    [options]="users"
-                    (selectedOption)="selecteUserType($event); activityObjLabels.user = $event.label"
-                    [defaultValue]="activityObjLabels?.user"
-                >
-                </select-field>
-            </div>
-
-            <div
-                class="clear-filter form-group mb-0"
-                *ngIf="
-                    showDateReport ||
-                    activityObj.entity ||
-                    activityObj.operation ||
-                    activityObj.userUniqueNames?.length > 0
-                "
-            >
-                <button mat-raised-button class="btn-success min-width-100 mr-l1" (click)="resetFilter()">
-                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
-                </button>
-            </div>
+            <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
         </div>
-        <button mat-raised-button class="btn-success min160 mr-l1" (click)="getActivityLogs(true)">
-            {{ localeData?.get_logs }}
-        </button>
+        <div class="button-wrapper">
+            <button mat-stroked-button class="min160 mr-l1" (click)="getActivityLogs(true)">
+                {{ localeData?.get_logs }}
+            </button>
+        </div>
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
@@ -83,12 +131,17 @@
                 [dataSource]="dataSource"
                 multiTemplateDataRows
                 *ngIf="dataSource?.length"
-                class="giddh-table table activity-table position-relative"
+                class="giddh-table table activity-table"
             >
                 <!-- UserName Column -->
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
-                    <td class="activity-td" mat-cell *matCellDef="let element">
+                    <td
+                        class="activity-td"
+                        mat-cell
+                        *matCellDef="let element"
+                        (click)="getLogsDetails($event, element)"
+                    >
                         <span [matTooltip]="element.user.email" matTooltipPosition="above">{{
                             element.user.name
                         }}</span>
@@ -97,24 +150,48 @@
                 <!-- Date Column -->
                 <ng-container matColumnDef="time">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.date }}</th>
-                    <td class="activity-td" mat-cell *matCellDef="let element">
+                    <td
+                        class="activity-td"
+                        mat-cell
+                        *matCellDef="let element"
+                        (click)="getLogsDetails($event, element)"
+                    >
                         <span [matTooltip]="element.timeonly" matTooltipPosition="above"> {{ element.time }}</span>
                     </td>
                 </ng-container>
                 <!-- IP Column -->
                 <ng-container matColumnDef="ip">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.ip }}</th>
-                    <td class="activity-td" mat-cell *matCellDef="let element">{{ element.ip }}</td>
+                    <td
+                        class="activity-td"
+                        mat-cell
+                        *matCellDef="let element"
+                        (click)="getLogsDetails($event, element)"
+                    >
+                        {{ element.ip }}
+                    </td>
                 </ng-container>
                 <!-- Entity Column -->
                 <ng-container matColumnDef="entity">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_entity }}</th>
-                    <td class="activity-td" mat-cell *matCellDef="let element">{{ element.entity }}</td>
+                    <td
+                        class="activity-td"
+                        mat-cell
+                        *matCellDef="let element"
+                        (click)="getLogsDetails($event, element)"
+                    >
+                        {{ element.entity }}
+                    </td>
                 </ng-container>
                 <!-- Operation Column -->
                 <ng-container matColumnDef="operation">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.operation }}</th>
-                    <td mat-cell *matCellDef="let element" class="position-relative">
+                    <td
+                        mat-cell
+                        *matCellDef="let element"
+                        class="position-relative"
+                        (click)="getLogsDetails($event, element)"
+                    >
                         {{ element.operation }}
                     </td>
                 </ng-container>
@@ -132,7 +209,7 @@
                             (click)="getHistory($event, element)"
                             class="history-icon"
                         >
-                            <i class="icon-history-icon font-18 pr-1 cursor-pointer"></i>
+                            <i class="icon-history-icon font-16 pr-1 cursor-pointer"></i>
                         </a>
                     </td>
                 </ng-container>
@@ -159,6 +236,7 @@
                                             class="activity-td activity-history-td child-td-name"
                                             mat-cell
                                             *matCellDef="let details"
+                                            (click)="getLogsDetails($event, rowHistory)"
                                         >
                                             <span [matTooltip]="details.user.email" matTooltipPosition="above">{{
                                                 details.user.name
@@ -168,7 +246,12 @@
                                     <!-- Date Column -->
                                     <ng-container matColumnDef="time">
                                         <th mat-header-cell *matHeaderCellDef></th>
-                                        <td class="activity-td activity-history-td" mat-cell *matCellDef="let details">
+                                        <td
+                                            class="activity-td activity-history-td"
+                                            mat-cell
+                                            *matCellDef="let details"
+                                            (click)="getLogsDetails($event, rowHistory)"
+                                        >
                                             <span [matTooltip]="details.timeonly" matTooltipPosition="above">
                                                 {{ details.time }}</span
                                             >
@@ -177,21 +260,36 @@
                                     <!-- IP Column -->
                                     <ng-container matColumnDef="ip">
                                         <th mat-header-cell *matHeaderCellDef></th>
-                                        <td class="activity-td activity-history-td" mat-cell *matCellDef="let details">
+                                        <td
+                                            class="activity-td activity-history-td"
+                                            mat-cell
+                                            *matCellDef="let details"
+                                            (click)="getLogsDetails($event, rowHistory)"
+                                        >
                                             {{ details.ip }}
                                         </td>
                                     </ng-container>
                                     <!-- Entity Column -->
                                     <ng-container matColumnDef="entity">
                                         <th mat-header-cell *matHeaderCellDef></th>
-                                        <td class="activity-td activity-history-td" mat-cell *matCellDef="let details">
+                                        <td
+                                            class="activity-td activity-history-td"
+                                            mat-cell
+                                            *matCellDef="let details"
+                                            (click)="getLogsDetails($event, rowHistory)"
+                                        >
                                             {{ details.entity }}
                                         </td>
                                     </ng-container>
                                     <!-- Operation Column -->
                                     <ng-container matColumnDef="operation">
                                         <th mat-header-cell *matHeaderCellDef></th>
-                                        <td class="activity-td activity-history-td" mat-cell *matCellDef="let details">
+                                        <td
+                                            class="activity-td activity-history-td"
+                                            mat-cell
+                                            *matCellDef="let details"
+                                            (click)="getLogsDetails($event, rowHistory)"
+                                        >
                                             {{ details.operation }}
                                         </td>
                                     </ng-container>
@@ -216,7 +314,6 @@
                                     </ng-container>
                                     <tr
                                         class="history-child-row"
-                                        (click)="getLogsDetails($event, rowHistory)"
                                         mat-row
                                         *matRowDef="let rowHistory; columns: displayedColumns"
                                     ></tr>
@@ -225,13 +322,8 @@
                         </div>
                     </td>
                 </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr
-                    class="cursor-pointer"
-                    mat-row
-                    *matRowDef="let row; columns: displayedColumns"
-                    (click)="getLogsDetails($event, row)"
-                ></tr>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr class="cursor-pointer" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 <tr
                     mat-row
                     *matRowDef="let row; columns: ['expandedDetail']"
@@ -280,6 +372,54 @@
                 [locale]="{ applyLabel: commonLocaleData?.app_done }"
                 (rangeClicked)="dateSelectedCallback($event)"
                 (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
+<ng-template #datepickerEntryTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedEntryDateRange?.startDate"
+                [inputEndDate]="selectedEntryDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="entryDatePickerOptions"
+                [selectedRangeLabel]="selectedEntryRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                [locale]="{ applyLabel: commonLocaleData?.app_done }"
+                (rangeClicked)="entryDateSelectedCallback($event)"
+                (datesUpdated)="entryDateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
+<ng-template #datepickerVoucherTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedVoucherDateRange?.startDate"
+                [inputEndDate]="selectedVoucherDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="voucherDatePickerOptions"
+                [selectedRangeLabel]="selectedVoucherRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                [locale]="{ applyLabel: commonLocaleData?.app_done }"
+                (rangeClicked)="voucherDateSelectedCallback($event)"
+                (datesUpdated)="voucherDateSelectedCallback($event)"
                 [keepCalendarOpeningWithRange]="false"
                 [showRangeLabelOnInput]="false"
                 [dateFieldPosition]="dateFieldPosition"

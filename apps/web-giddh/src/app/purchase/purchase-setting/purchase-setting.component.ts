@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
@@ -22,7 +22,7 @@ import { AppState } from '../../store';
 
 export class PurchaseSettingComponent implements OnInit, OnDestroy {
     /* This will hold the invoice settings */
-    public invoiceSettings: any = { purchaseBillSettings: {sendThroughGmail: false,changePOStatusOnExpiry: false,useCustomPONumber:false,enableNarration:false} };
+    public invoiceSettings: any = { purchaseBillSettings: { sendThroughGmail: false, changePOStatusOnExpiry: false, useCustomPONumber: false, enableNarration: false, enableVoucherDownload: false }, invoiceSettings: { purchaseRoundOff: false, debitNoteRoundOff: false } };
     /* This will hold the PB lock date */
     public lockDate: Date = new Date();
     /* This will hold if email updated */
@@ -49,11 +49,13 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(private store: Store<AppState>, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions, private invoiceService: InvoiceService, public purchaseOrderService: PurchaseOrderService, private generalService: GeneralService, public authenticationService: AuthenticationService, private route: ActivatedRoute) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
 
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl()).replace(':client_id', GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl())?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     }
 
@@ -63,6 +65,8 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      * @memberof PurchaseSettingComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        
         this.activeCompanyUniqueName$.subscribe(response => {
             this.companyUniqueName = response;
         });
@@ -97,10 +101,22 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
             if (response && response.status === "success" && response.body) {
                 this.invoiceSettings = _.cloneDeep(response.body);
 
+                if (!this.invoiceSettings.purchaseBillSettings.enableVoucherDownload) {
+                    this.invoiceSettings.purchaseBillSettings.enableVoucherDownload = false;
+                }
+
+                if (!this.invoiceSettings.invoiceSettings.purchaseRoundOff) {
+                    this.invoiceSettings.invoiceSettings.purchaseRoundOff = false;
+                }
+
+                if (!this.invoiceSettings.invoiceSettings.debitNoteRoundOff) {
+                    this.invoiceSettings.invoiceSettings.debitNoteRoundOff = false;
+                }
+
                 this.originalEmail = _.cloneDeep(this.invoiceSettings.purchaseBillSettings.email);
 
                 if (this.invoiceSettings.purchaseBillSettings.lockDate) {
-                    this.lockDate = moment(this.invoiceSettings.purchaseBillSettings.lockDate, GIDDH_DATE_FORMAT).toDate();
+                    this.lockDate = dayjs(this.invoiceSettings.purchaseBillSettings.lockDate, GIDDH_DATE_FORMAT).toDate();
                 }
             }
         });
@@ -128,7 +144,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
         let formToSave = _.cloneDeep(this.invoiceSettings);
 
         if (formToSave.purchaseBillSettings.lockDate instanceof Date) {
-            formToSave.purchaseBillSettings.lockDate = moment(formToSave.purchaseBillSettings.lockDate).format(GIDDH_DATE_FORMAT);
+            formToSave.purchaseBillSettings.lockDate = dayjs(formToSave.purchaseBillSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
 
         this.invoiceService.UpdateInvoiceSetting(formToSave).pipe(takeUntil(this.destroyed$)).subscribe(response => {

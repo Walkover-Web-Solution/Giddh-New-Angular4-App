@@ -107,13 +107,13 @@ export class DiscountComponent implements OnInit, OnDestroy {
         this.createRequest.type = data.discountType;
         this.createRequest.name = data.name;
         this.createRequest.discountValue = data.discountValue;
-        this.createRequest.accountUniqueName = data.linkAccount.uniqueName;
+        this.createRequest.accountUniqueName = data.linkAccount?.uniqueName;
         this.createRequest.discountUniqueName = data.uniqueName;
     }
 
     public showDeleteDiscountModal(uniqueName: string) {
         this.deleteRequest = uniqueName;
-        this.discountConfirmationModel.show();
+        this.discountConfirmationModel?.show();
     }
 
     public hideDeleteDiscountModal() {
@@ -139,7 +139,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
         this.salesService.getAccountsWithCurrency('discount').pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.results) {
                 this.accounts = response.body.results.map(discount => {
-                    return { label: discount.name, value: discount.uniqueName };
+                    return { label: discount.name, value: discount?.uniqueName };
                 });
             } else {
                 this.accounts = [];

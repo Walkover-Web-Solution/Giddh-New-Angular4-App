@@ -1,5 +1,6 @@
-import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
-import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStockReport, IStockReportItem, IStocksItem, IStockTransaction, IStockUnit, IStockUnitItem, IStockUnitResponse } from '../interfaces/stocksItem.interface';
+import { API_COUNT_LIMIT, PAGINATION_LIMIT } from '../../app.constant';
+import { IPaginatedResponse } from '../interfaces/paginated-response.interface';
+import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStockReport, IStockReportItem, IStocksItem, IStockTransaction, IStockUnit, IStockUnitItem, IStockUnitResponse } from '../interfaces/stocks-item.interface';
 
 export interface INameUniqueName {
     email?: any;
@@ -26,6 +27,7 @@ export class StockGroupRequest implements INameUniqueName {
     public parentStockGroupUniqueName?: string;
     public isSubGroup?: boolean;
     public taxes?: any;
+    public type?: any;
 }
 
 /**
@@ -80,8 +82,17 @@ export class StockUnitResponse implements IStockUnitResponse {
     public parentStockUnit?: IStockItem;
     public quantityPerUnit: number;
     public displayQuantityPerUnit?: number;
+    public uniqueName: string;
 }
 
+/**
+ * Response will be a array of StockMappedUnitResponse
+ */
+export class StockMappedUnitResponse {
+    public quantity?: number;
+    public stockUnitX?: IStockItem;
+    public stockUnitY?: IStockItem;
+}
 /**
  * Model for stock-report api response
  * GET call
@@ -109,8 +120,9 @@ export class StockReportResponse implements IStockReport {
     public totalPages: number;
     public transactions: IStockTransaction[];
     public profit: number;
+    public fromDate?: string = '';
+    public toDate?: string = '';
 }
-
 export class StockReportRequest {
     public stockGroupUniqueName: string;
     public stockUniqueName: string;
@@ -133,13 +145,122 @@ export class StockReportRequest {
     public branchUniqueName?: string;
 }
 
+export class StockTransactionReportRequest {
+    public from: string = '';
+    public to: string = '';
+    public count: number;
+    public page: number;
+    public sort: string;
+    public sortBy: string;
+    public totalItems?: number;
+    public totalPages?: number;
+    public stockGroupUniqueNames: any[];
+    public stockUniqueNames: any[];
+    public transactionType: string;
+    public accountName: string;
+    public voucherTypes?: any[];
+    public param?: string;
+    public expression?: string;
+    public val?: number;
+    public warehouseUniqueNames?: any[];
+    public branchUniqueNames?: any[];
+    public variantUniqueNames?: any[];
+    public stockGroups?: any[];
+    public stocks?: any[];
+    public variants?: any[];
+    public inventoryType?: string;
+    constructor() {
+        this.count = PAGINATION_LIMIT;
+        this.page = 1;
+        this.stockGroupUniqueNames = [];
+        this.stockUniqueNames = [];
+        this.accountName = "";
+        this.param = null;
+        this.expression = null;
+        this.val = 0;
+        this.warehouseUniqueNames = [];
+        this.branchUniqueNames = [];
+        this.variantUniqueNames = [];
+        this.voucherTypes = [];
+    }
+}
+
+
+export class SearchStockTransactionReportRequest {
+    public stockGroupUniqueNames: any[];
+    public variantUniqueNames: any[];
+    public stockUniqueNames: any[];
+    public q: any;
+    public count: number;
+    public page: number;
+    public totalItems?: number;
+    public totalPages?: number;
+    public searchPage?: string;
+    public inventoryType?: string;
+    constructor() {
+        this.count = API_COUNT_LIMIT;
+        this.page = 1;
+        this.stockGroupUniqueNames = [];
+        this.stockUniqueNames = [];
+        this.variantUniqueNames = [];
+        this.searchPage = "";
+    }
+}
+
+export class BalanceStockTransactionReportRequest {
+    public stockGroupUniqueNames: any[];
+    public stockUniqueNames: any[];
+    public transactionType: string;
+    public accountName: string;
+    public voucherTypes?: any[];
+    public param?: string;
+    public expression?: string;
+    public val?: number;
+    public warehouseUniqueNames?: any[];
+    public branchUniqueNames?: any[];
+    public variantUniqueNames?: any[];
+    public from: string = '';
+    public to: string = '';
+    constructor() {
+        this.stockGroupUniqueNames = [];
+        this.stockUniqueNames = [];
+        this.accountName = "";
+        this.param = null;
+        this.expression = null;
+        this.val = 0;
+        this.warehouseUniqueNames = [];
+        this.branchUniqueNames = [];
+        this.variantUniqueNames = [];
+        this.voucherTypes = [];
+    }
+}
+
+export class StockReportRequestTransactionParams {
+    public from: string = '';
+    public to: string = '';
+    public count: number;
+    public page: number;
+    public sort: string;
+    public sortBy: string;
+}
+
+export class InventoryReportBalanceResponse {
+    public profit?: number;
+    public opening?: any;
+    public closing?: any;
+    public inwards?: any;
+    public outwards?: any;
+}
+
 export class GroupStockReportRequest {
     public stockGroupUniqueName: string;
     public stockUniqueName: string;
     public from: string = '';
     public to: string = '';
-    public count: number = 20;
-    public page: number = 1;
+    public count: number = PAGINATION_LIMIT;
+    public page: number;
+    public totalItems: number;
+    public totalPages: number;
     public entity: string;
     public value: string;
     public condition: string;
@@ -209,6 +330,7 @@ export class CreateStockRequest {
     public purchaseAccountDetails: IAccountDetails;
     public salesAccountDetails: IAccountDetails;
     public stockUnitCode: string;
+    public stockUnitUniqueName: string;
     public uniqueName: string;
     public hsnNumber?: number;
     public sacNumber?: number;
@@ -220,6 +342,7 @@ export class CreateStockRequest {
     public customField1Value?: string;
     public customField2Heading?: string;
     public customField2Value?: string;
+    public variants?: any[] = [];
 
 }
 
@@ -230,13 +353,11 @@ export class CreateStockRequest {
  * used to create custom stock units
  * its response will be hash as StockUnitResponse
  */
-export class StockUnitRequest implements IStockUnit {
-    public parentStockUnit: IStockItem;
-    public quantityPerUnit: number;
+export class StockUnitRequest {
     public name: string;
     public code: string;
-    public parentStockUnitCode?: string;
-    public displayQuantityPerUnit?: number;
+    public uniqueName?: string;
+    public mappings: any[] = [];
 }
 
 /*
@@ -263,6 +384,7 @@ export class GroupStockReportResponse {
     public profit?: number;
     public from?: any;
     public to?: any;
+    public stockGroupName?: any;
 }
 
 interface IGroupStockReport {
@@ -290,4 +412,79 @@ export class InventoryDownloadRequest {
     public sortBy?: string;
     public warehouseUniqueName?: string;
     public branchUniqueName?: string;
+}
+
+export class InventoryReportRequest {
+    public totalItems?: number;
+    public totalPages?: number;
+    public param?: string;
+    public expression?: string;
+    public val?: number;
+    public stockGroupUniqueNames?: any[];
+    public stockUniqueNames?: any[];
+    public warehouseUniqueNames?: any[];
+    public branchUniqueNames?: any[];
+    public variantUniqueNames?: any[];
+    public from: string = '';
+    public to: string = '';
+    public count: number;
+    public page: number;
+    public sort: string;
+    public sortBy: string;
+    constructor() {
+        this.param = null;
+        this.expression = null;
+        this.val = 0;
+        this.count = PAGINATION_LIMIT;
+        this.page = 1;
+        this.stockGroupUniqueNames = [];
+        this.stockUniqueNames = [];
+        this.warehouseUniqueNames = [];
+        this.branchUniqueNames = [];
+        this.variantUniqueNames = [];
+    }
+}
+
+export class InventoryReportResponse {
+    public count: number;
+    public page: number;
+    public totalItems: number;
+    public totalPages: number;
+    public results: IReportTransaction[];
+    public size: number;
+    public openingBalance: IInventoryBalance;
+    public closingBalance: IInventoryBalance;
+    public debitTotal: number;
+    public creditTotal: number;
+    public fromDate?: string = '';
+    public toDate?: string = '';
+}
+
+export class IReportTransaction {
+    public opening: IInventoryQtyAmt;
+    public inwards: IInventoryQtyAmt;
+    public outwards: IInventoryQtyAmt;
+    public closing: IInventoryQtyAmt;
+    public profile: number;
+    public stock: IGroupWiseStock;
+    public stockGroup: IGroupWiseStock;
+    public stockUnit: IGroupWiseStockUnit;
+    public stockGroupHasChild: boolean;
+}
+
+export class IInventoryQtyAmt {
+    public quantity: number;
+    public amount: number;
+}
+export class IGroupWiseStock {
+    public name: string;
+    public uniqueName: string;
+}
+export class IGroupWiseStockUnit {
+    public name: string;
+    public code: string;
+}
+export class IInventoryBalance {
+    public amount: number;
+    public type: string;
 }

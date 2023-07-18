@@ -18,10 +18,10 @@ import {
 } from '../models/api-models/Company';
 import { IRegistration } from '../models/interfaces/registration.interface';
 import { OrganizationType } from '../models/user-login-state';
-import { CompanyService } from '../services/companyService.service';
+import { CompanyService } from '../services/company.service';
 import { LocaleService } from '../services/locale.service';
 import { ToasterService } from '../services/toaster.service';
-import { CustomActions } from '../store/customActions';
+import { CustomActions } from '../store/custom-actions';
 import { AppState } from '../store/roots';
 import { COMMON_ACTIONS } from './common.const';
 
@@ -89,7 +89,7 @@ export class CompanyActions {
             ofType(CompanyActions.CREATE_COMPANY_RESPONSE),
             map((action: CustomActions) => {
                 let response = action.payload as BaseResponse<CompanyResponse, CompanyRequest>;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -97,7 +97,7 @@ export class CompanyActions {
 
                 if (response.request.isBranch) {
                     let branchUniqueName: any[] = [];
-                    branchUniqueName.push(response.request.uniqueName);
+                    branchUniqueName.push(response.request?.uniqueName);
                     let dataToSend = { childCompanyUniqueNames: branchUniqueName };
                     this.store.dispatch({
                         type: 'CREATE_BRANCHES',
@@ -123,7 +123,7 @@ export class CompanyActions {
                 }
 
                 let stateDetailsObj = new StateDetailsRequest();
-                stateDetailsObj.companyUniqueName = response.request.uniqueName;
+                stateDetailsObj.companyUniqueName = response.request?.uniqueName;
                 if (!response.request.isBranch) {
                     /**
                      * if user is signed up on their own take him to sales module
@@ -148,7 +148,7 @@ export class CompanyActions {
             ofType(CompanyActions.CREATE_NEW_COMPANY_RESPONSE),
             map((action: CustomActions) => {
                 let response = action.payload as BaseResponse<CompanyResponse, CompanyCreateRequest>;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -161,7 +161,7 @@ export class CompanyActions {
                 if (response.request.isBranch) {
                     this.store.dispatch(this.userStoreCreateBranch(null));
                     let branchUniqueName: any[] = [];
-                    branchUniqueName.push(response.request.uniqueName);
+                    branchUniqueName.push(response.request?.uniqueName);
                     let dataToSend = { childCompanyUniqueNames: branchUniqueName };
                     this.store.dispatch({
                         type: 'CREATE_BRANCHES',
@@ -187,7 +187,7 @@ export class CompanyActions {
                 }
 
                 let stateDetailsObj = new StateDetailsRequest();
-                stateDetailsObj.companyUniqueName = response.request.uniqueName;
+                stateDetailsObj.companyUniqueName = response.request?.uniqueName;
                 if (!response.request.isBranch) {
                     /**
                      * if user is signed up on their own take him to sales module
@@ -211,7 +211,7 @@ export class CompanyActions {
             ofType(CompanyActions.REFRESH_COMPANIES),
             switchMap((action: CustomActions) => this._companyService.CompanyList()),
             map(response => {
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -222,7 +222,7 @@ export class CompanyActions {
         .pipe(
             ofType(CompanyActions.REFRESH_COMPANIES_RESPONSE),
             map((action: CustomActions) => {
-                let response: BaseResponse<CompanyResponse[], string> = action.payload;
+                let response: BaseResponse<CompanyResponse[], string> = action?.payload;
                 if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
@@ -235,7 +235,7 @@ export class CompanyActions {
                     this.store.pipe(select(s => s.session.totalNumberOfcompanies), take(1)).subscribe(res => totalCompany = res);
 
                     if (activeCompanyName) {
-                        let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);
+                        let companyIndex = response.body?.findIndex(cmp => cmp?.uniqueName === activeCompanyName);
                         if (companyIndex > -1) {
                             // if active company find no action needed
                             if (response.body.length === totalCompany) { // if company created success then only change to new created company otherwise refresh Api call will return null action
@@ -247,14 +247,14 @@ export class CompanyActions {
                             // if no active company active next company from companies list
                             return {
                                 type: 'CHANGE_COMPANY',
-                                payload: response.body[0].uniqueName
+                                payload: response.body[0]?.uniqueName
                             };
                         }
                     } else {
                         // if no active company active next company from companies list
                         return {
                             type: 'CHANGE_COMPANY',
-                            payload: response.body[0].uniqueName
+                            payload: response.body[0]?.uniqueName
                         };
                     }
                 } else {
@@ -295,10 +295,10 @@ export class CompanyActions {
             ofType(CompanyActions.SET_APPLICATION_DATE),
             switchMap((action: CustomActions) => this._companyService.setApplicationDate(action.payload)),
             map(response => {
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
-                } else if (response.status === 'success') {
+                } else if (response?.status === 'success') {
                     this._toasty.successToast(this.localeService.translate("app_messages.universal_date_updated"), this.localeService.translate("app_success"));
                     return this.SeApplicationDateResponse(response);
                 }
@@ -316,7 +316,7 @@ export class CompanyActions {
         .pipe(
             ofType(CompanyActions.GET_TAX_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -334,7 +334,7 @@ export class CompanyActions {
         .pipe(
             ofType(CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -352,7 +352,7 @@ export class CompanyActions {
         .pipe(
             ofType(CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -370,7 +370,7 @@ export class CompanyActions {
         .pipe(
             ofType(CompanyActions.GET_COMPANY_USER_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };

@@ -13,15 +13,15 @@ class LoginPage {
     }
 
     enterEmailId() {
-        return cy.get('#email');
+        return cy.xpath('//form[@id=\'demo\']//input[@placeholder=\'Email Id\']');
     }
 
     enterPassword() {
-        return cy.xpath('//input[@placeholder=\'Password\']');
+        return cy.xpath('//form[@id=\'demo\']//input[@placeholder=\'Password\']');
     }
 
     clickLoginButton() {
-        return cy.get('#demo > .btn')
+        return cy.xpath('//form[@id=\'demo\']//button[@type=\'submit\']');
     }
 
 }

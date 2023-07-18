@@ -21,7 +21,7 @@
         </div>
 
         <div class="clearfix" *ngIf="![receiptVoucherType, paymentVoucherType].includes(voucherType)">
-            <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
+            <h3 class="font-15 mr-b05">{{ localeData?.invoice_copy }}</h3>
             <hr />
             <div class="checkbox">
                 <mat-checkbox
@@ -61,8 +61,8 @@
                 <div class="btn-group" role="group">
                     <button
                         type="button"
-                        class="btn btn-success"
-                        mat-raised-button
+                        mat-stroked-button
+                        color="primary"
                         [disabled]="!emailAddresses || !downloadCopy?.length"
                         (click)="sendEmail()"
                         mat-dialog-close
@@ -70,7 +70,7 @@
                         {{ commonLocaleData?.app_send }}
                     </button>
 
-                    <button type="button" class="btn btn-danger" mat-raised-button mat-dialog-close>
+                    <button type="button" mat-stroked-button mat-dialog-close>
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

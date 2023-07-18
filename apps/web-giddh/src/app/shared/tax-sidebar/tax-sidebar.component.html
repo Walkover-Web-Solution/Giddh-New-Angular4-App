@@ -12,8 +12,8 @@
                         <a
                             class="d-block clearfix"
                             routerLinkActive
-                            #rla="routerLinkActive"
-                            [class.active]="rla.isActive"
+                            #gstdashboard="routerLinkActive"
+                            [class.active]="gstdashboard.isActive"
                             [routerLinkActiveOptions]="{ exact: true }"
                             [routerLink]="['/pages/gstfiling']"
                         >
@@ -86,6 +86,9 @@
                             href="javascript:void(0);"
                             [routerLink]="['/pages/invoice/ewaybill']"
                             class="d-block clearfix"
+                            routerLinkActive
+                            #ewaybill="routerLinkActive"
+                            [class.active]="ewaybill.isActive"
                         >
                             <span><i class="icon-eway-bill-new"></i></span>
                             <span>{{ localeData?.eway_bill }}</span>
@@ -96,21 +99,59 @@
                             href="javascript:void(0);"
                             [routerLink]="['/pages/reports/reverse-charge']"
                             class="d-block clearfix"
+                            routerLinkActive
+                            #reversecharge="routerLinkActive"
+                            [class.active]="reversecharge.isActive"
                         >
                             <span><i class="icon-reverse-charge"></i></span>
                             <span>{{ localeData?.reverse_charge }}</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="d-block clearfix" [routerLink]="['/pages/settings/taxes']">
+                        <a
+                            href="javascript:void(0);"
+                            class="d-block clearfix"
+                            [routerLink]="['/pages/settings/taxes']"
+                            routerLinkActive
+                            #taxes="routerLinkActive"
+                            [class.active]="taxes.isActive"
+                        >
                             <span><i class="icon-settings-cog"></i></span>
                             <span>{{ localeData?.setting }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="javascript:void(0);"
+                            class="d-block clearfix"
+                            routerLinkActive
+                            #unitMapping="routerLinkActive"
+                            [class.active]="unitMapping.isActive"
+                            [routerLink]="['/pages/gstfiling/unit-mapping']"
+                        >
+                            <span
+                                ><img src="{{ imgPath }}unit-mapping.svg" alt="unit-mapping" class="unit-mapping-icon"
+                            /></span>
+                            <span>{{ localeData?.unit_mapping }}</span>
                         </a>
                     </li>
                     <li *ngIf="showVatMenus">
                         <a href="javascript:void(0);" class="d-block clearfix" [routerLink]="['/pages/vat-report']">
                             <span><i class="icon-vat1"></i></span>
                             <span>{{ localeData?.vat_report }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="javascript:void(0);"
+                            class="d-block clearfix"
+                            [routerLink]="['/pages/settings/addresses']"
+                            routerLinkActive
+                            #addaddress="routerLinkActive"
+                            [class.active]="addaddress.isActive"
+                        >
+                            <span><i class="icon-warehouse1"></i></span>
+                            <span>{{ showVatMenus ? localeData?.add_trn : localeData?.add_gst }}</span>
                         </a>
                     </li>
                 </ul>

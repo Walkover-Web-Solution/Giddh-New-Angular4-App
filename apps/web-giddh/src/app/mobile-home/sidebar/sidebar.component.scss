@@ -1,0 +1,65 @@
+.mobile-home-sidebar-wrapper {
+    max-width: 280px;
+    width: 100%;
+    background-color: var(--color-white);
+    color: var(--color-nero);
+    height: 100vh;
+    letter-spacing: 0;
+    .sidebar-header {
+        background-color: var(--color-giddh-blue);
+        color: var(--color-white);
+        padding: 15px;
+        position: relative;
+        .company-name-alice {
+            width: 45px;
+            height: 45px;
+            background: var(--color-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-15);
+            border-radius: 50%;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        .close-btn {
+            position: absolute;
+            top: 4px;
+            right: 5px;
+            padding: 8px 10px;
+            font-size: var(--font-size-16);
+            background-color: transparent;
+        }
+        .company-details {
+            p.company-name {
+                white-space: normal;
+                word-break: break-word;
+                font-size: var(--font-size-15);
+            }
+            p {
+                line-height: 18px;
+            }
+            small {
+                font-size: var(--font-size-12);
+            }
+        }
+    }
+    .sidebar-body {
+        padding: 15px 0;
+        ul {
+            list-style: none;
+            li {
+                a {
+                    padding: 10px 15px;
+                    color: var(--color-nero);
+                    font-family: var(--font-semibold);
+                    display: flex;
+                    font-size: var(--font-size-15);
+                    &:hover {
+                        background-color: var(--color-dark-fog);
+                    }
+                }
+            }
+        }
+    }
+}

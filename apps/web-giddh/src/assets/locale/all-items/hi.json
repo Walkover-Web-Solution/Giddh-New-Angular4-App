@@ -65,7 +65,10 @@
                     "label": "बिक्री रजिस्टर",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
-                    "description": "शुद्ध और संचयी बिक्री"
+                    "description": "शुद्ध और संचयी बिक्री",
+                    "additionalRoutes":[
+                        "/pages/reports/sales-detailed-expand"
+                    ]
                 },
                 {
                     "label": "टेम्पलेट",
@@ -108,7 +111,10 @@
                     "label": "खरीद रजिस्टर",
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",
-                    "description": "शुद्ध और संचयी खरीदारी"
+                    "description": "शुद्ध और संचयी खरीदारी",
+                    "additionalRoutes":[
+                        "/pages/reports/purchase-detailed-expand"
+                    ]
                 },
                 {
                     "label": "विक्रेता",
@@ -198,6 +204,17 @@
                     "icon": "icon-settings-cog",
                     "description": "कर सेटिंग्स",
                     "hide": "sidebar"
+                },
+                {
+                    "label": "यूनिट मैपिंग",
+                    "link": "/pages/gstfiling/unit-mapping",
+                    "icon": "unit-mapping-icon",
+                    "description": "यूनिट मैपिंग",
+                    "alwaysPresent": true,
+                    "hide": "sidebar",
+                    "additional": {
+                        "countrySpecific": ["IN"]
+                    }
                 }
             ]
         },
@@ -256,48 +273,6 @@
             ]
         },
         {
-            "label": "आयात",
-            "icon": "icon-import",
-            "items": [
-                {
-                    "label": "खाता आयात",
-                    "link": "/pages/import/account",
-                    "icon": "icon-proft-loss-new",
-                    "description": "एक्सेल और सीएसवी आयात करें और मौजूदा अपडेट करें"
-                },
-                {
-                    "label": "कंपनी आयात",
-                    "link": "/pages/company-import-export",
-                    "icon": "icon-company-impex",
-                    "description": "कंपनी आयात और निर्यात"
-                },
-                {
-                    "label": "प्रविष्टियां",
-                    "link": "/pages/import/entries",
-                    "icon": "icon-invoice-new",
-                    "description": "बहुमुद्रा, आवर्ती चालान, नकद चालान"
-                },
-                {
-                    "label": "समूह",
-                    "link": "/pages/import/group",
-                    "icon": "icon-group-new",
-                    "description": "एक्सेल और सीएसवी आयात करें और मौजूदा अपडेट करें"
-                },
-                {
-                    "label": "इन्वेंटरी",
-                    "link": "/pages/import/stock",
-                    "icon": "icon-inventory",
-                    "description": "स्टॉक, समूह और इकाई आयात/बनाएं"
-                },
-                {
-                    "label": "संतुलन परीक्षण",
-                    "link": "/pages/import/trial-balance",
-                    "icon": "icon-trial-balance-new",
-                    "description": "सभी क्रेडिट और डेबिट शेष आयात करें"
-                }
-            ]
-        },
-        {
             "label": "इन्वेंटरी",
             "icon": "icon-inventory",
             "items": [
@@ -332,7 +307,7 @@
             "icon": "icon-other",
             "items": [
                 {
-                    "label": "ऑडिट लॉग नया",
+                    "label": "लेखापरीक्षा",
                     "link": "/pages/audit-logs/new",
                     "icon": "icon-audit-log",
                     "description": "प्रविष्टियों का कालानुक्रमिक डेटा",
@@ -341,7 +316,7 @@
                     }
                 },
                 {
-                    "label": "गतिविधि लॉग",
+                    "label": "लेखापरीक्षा",
                     "link": "/pages/activity-logs",
                     "icon": "icon-audit-log",
                     "description": "प्रविष्टियों का कालानुक्रमिक डेटा",
@@ -388,6 +363,21 @@
                     "link": "/pages/search",
                     "icon": "icon-search",
                     "description": "समूह का चयन करें और समय अवधि खोजें"
+                },
+                {
+                    "label": "डाउनलोड",
+                    "link": "/pages/downloads",
+                    "icon": "icon-download-circle"
+                },
+                {
+                    "label": "तटकर क्षेत्र",
+                    "link": "/pages/custom-fields/list",
+                    "icon": "icon-custom-field"
+                },
+                {
+                    "label": "आयात",
+                    "link": "/pages/import/select-type",
+                    "icon": "icon-tally-import1"
                 }
             ]
         }

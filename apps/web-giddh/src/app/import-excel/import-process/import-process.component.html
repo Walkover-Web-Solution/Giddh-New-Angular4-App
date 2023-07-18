@@ -12,7 +12,20 @@
         <table class="table basic table-bordered mr-t1">
             <thead>
                 <tr>
-                    <th *ngFor="let col of userHeader">{{ col }}</th>
+                    <th *ngFor="let col of sheetHeaders; let i = index">
+                        <sh-select
+                            [options]="giddhHeaders"
+                            name="giddhHeaders_{{ i }}"
+                            [defaultValue]="mappings[i]?.mappedColumn || unmapHeader"
+                            [(ngModel)]="mappings[i].mappedColumn"
+                        >
+                        </sh-select>
+                    </th>
+                </tr>
+                <tr>
+                    <th *ngFor="let col of sheetHeaders; let i = index">
+                        {{ col }}
+                    </th>
                 </tr>
             </thead>
             <tbody>

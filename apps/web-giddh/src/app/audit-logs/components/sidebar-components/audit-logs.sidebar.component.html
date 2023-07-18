@@ -6,6 +6,8 @@
         [isFilterEnabled]="true"
         [placeholder]="commonLocaleData?.app_select_option"
         [(ngModel)]="vm.selectedDateOption"
+        [forceClearReactive]="forceClearFilterBy$ | async"
+        (onClear)="resetFilterBy()"
     ></sh-select>
 </div>
 <div class="clearfix mr-t15" *ngIf="vm.selectedDateOption == '1'">
@@ -68,6 +70,8 @@
         [options]="vm.filters"
         [placeholder]="commonLocaleData?.app_select_option"
         [(ngModel)]="vm.selectedOperation"
+        [forceClearReactive]="forceClearOperations$ | async"
+        (onClear)="resetOperation()"
     ></sh-select>
 </div>
 
@@ -78,6 +82,8 @@
         [isFilterEnabled]="true"
         [placeholder]="commonLocaleData?.app_select_option"
         [(ngModel)]="vm.selectedEntity"
+        [forceClearReactive]="forceClearEntity$ | async"
+        (onClear)="resetEntity()"
     ></sh-select>
 </div>
 
@@ -92,6 +98,8 @@
         [isPaginationEnabled]="true"
         (scrollEnd)="handleScrollEnd()"
         (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+        [forceClearReactive]="forceClearAccount$ | async"
+        (onClear)="resetAccount()"
     ></sh-select>
 </div>
 
@@ -106,6 +114,8 @@
         [isPaginationEnabled]="true"
         (scrollEnd)="handleGroupScrollEnd()"
         (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
+        [forceClearReactive]="forceClearGroup$ | async"
+        (onClear)="resetGroup()"
     ></sh-select>
 </div>
 <div class="clearfix mr-t15">
@@ -116,6 +126,8 @@
         [isFilterEnabled]="true"
         [placeholder]="commonLocaleData?.app_select_option"
         [(ngModel)]="vm.selectedUserUnq"
+        [forceClearReactive]="forceClearUser$ | async"
+        (onClear)="resetUser()"
     ></sh-select>
 </div>
 <button class="btn btn-success pull-left mr-t15" [ladda]="vm.getLogsInprocess$ | async" (click)="getLogfilters()">

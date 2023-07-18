@@ -11,7 +11,7 @@ import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { LoginActions } from '../../actions/login.action';
-import { VerifyMobileActions } from '../../actions/verifyMobile.actions';
+import { VerifyMobileActions } from '../../actions/verify-mobile.actions';
 import { CountryRequest } from '../../models/api-models/Common';
 import { CompanyCreateRequest, CompanyResponse } from '../../models/api-models/Company';
 import { userLoginStateEnum } from '../../models/user-login-state';
@@ -28,8 +28,6 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 })
 
 export class OnBoardingComponent implements OnInit, OnDestroy {
-    @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
-    @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
     @ViewChild('logoutModal', { static: true }) public logoutModal: ModalDirective;
     @ViewChild('companyForm', { static: true }) public companyForm: NgForm;
     @Input() public createBranch: boolean = false;
@@ -114,7 +112,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
-            if (this.company.contactNo.toString().includes('-')) {
+            if (this.company.contactNo?.toString()?.includes('-')) {
                 let contact = this.company.contactNo.split('-');
                 this.company.contactNo = contact[1];
             }
@@ -133,10 +131,10 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     prevTab = se;
                 });
-                this._generalService.companyUniqueName = this.company.uniqueName;
+                this._generalService.companyUniqueName = this.company?.uniqueName;
                 setTimeout(() => {
                     if (prevTab !== 'user-details') {
-                        this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
+                        this.store.dispatch(this._loginAction.ChangeCompany(this.company?.uniqueName));
                         this._route.navigate([this.isNewUser ? 'welcome' : 'onboarding']);
                     }
                     this.closeModal();
@@ -144,8 +142,8 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a && a !== '' && this.company.uniqueName) {
-                if (a.includes(this.company.uniqueName.substring(0, 8))) {
+            if (a && a !== '' && this.company?.uniqueName) {
+                if (a.includes(this.company?.uniqueName?.substring(0, 8))) {
                     this.company.name = '';
                     this.company.country = '';
                     this.company.baseCurrency = '';
@@ -172,36 +170,24 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             this.company.isBranch = this.createBranch;
             this._generalService.createNewCompany = this.company;
             this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
-            this.closeCompanyModal.emit({ isFirstStepCompleted: true });
         }
     }
 
     public closeModal() {
-        let companies = null;
-        this.companies$.pipe(take(1)).subscribe(c => companies = c);
-        if (companies) {
-            if (companies.length > 0) {
-                this.closeCompanyModal.emit();
-            } else {
-                this.showLogoutModal();
-            }
-        } else {
-            this.showLogoutModal();
-        }
+        this.showLogoutModal();
     }
 
     public showLogoutModal() {
-        this.logoutModal.show();
+        this.logoutModal?.show();
     }
 
     public hideLogoutModal() {
-        this.logoutModal.hide();
+        this.logoutModal?.hide();
     }
 
     public logoutUser() {
         this.store.dispatch(this.verifyActions.hideVerifyBox());
         this.hideLogoutModal();
-        this.closeCompanyModal.emit();
         if (isElectron) {
             this.store.dispatch(this._loginAction.ClearSession());
         } else {
@@ -230,14 +216,14 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
     }
 
     public isValidMobileNumber(ele: HTMLInputElement) {
-        if (ele.value) {
+        if (ele?.value) {
             this.checkMobileNo(ele);
         }
     }
 
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = parsePhoneNumberFromString('+' + this.company.phoneCode + ele.value, this.company.country as CountryCode);
+            let parsedNumber = parsePhoneNumberFromString('+' + this.company.phoneCode + ele?.value, this.company.country as CountryCode);
             if (parsedNumber.isValid()) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
@@ -267,7 +253,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         comnanyName = this.removeSpecialCharacters(comnanyName);
         city = this.removeSpecialCharacters(city);
         d = new Date();
-        dateString = d.getTime().toString();
+        dateString = d.getTime()?.toString();
         randomGenerate = this.getSixCharRandom();
         strings = [comnanyName, city, dateString, randomGenerate];
         return strings.join('');
@@ -275,12 +261,12 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
 
     private removeSpecialCharacters(str) {
         let finalString;
-        finalString = str.replace(/[^a-zA-Z0-9]/g, '');
-        return finalString.substr(0, 6).toLowerCase();
+        finalString = str?.replace(/[^a-zA-Z0-9]/g, '');
+        return finalString.substr(0, 6)?.toLowerCase();
     }
 
     private getSixCharRandom() {
-        return Math.random().toString(36).replace(/[^a-zA-Z0-9]+/g, '').substr(0, 6);
+        return Math.random()?.toString(36)?.replace(/[^a-zA-Z0-9]+/g, '').substr(0, 6);
     }
 
     public getCountry() {

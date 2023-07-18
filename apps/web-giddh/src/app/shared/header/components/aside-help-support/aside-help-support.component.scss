@@ -55,8 +55,8 @@
         top: 0;
         background-color: inherit;
         h2 {
-            font-family: "opensans-semibold";
-            font-size: 18px;
+            font-family: var(--font-semibold);
+            font-size: var(--font-size-16);
             color: var(--color-giddh-blue);
         }
     }
@@ -69,11 +69,11 @@
                 color: var(--color-nero);
 
                 p {
-                    font-size: 14px;
-                    font-family: "opensans-semibold";
+                    font-size: var(--font-size-15);
+                    font-family: var(--font-semibold);
                 }
                 small {
-                    font-size: 12px;
+                    font-size: var(--font-size-12);
                 }
             }
         }
@@ -83,8 +83,8 @@
             ul {
                 list-style: none;
                 li {
-                    font-size: 14px;
-                    font-family: "opensans-semibold";
+                    font-size: var(--font-size-15);
+                    font-family: var(--font-semibold);
                     margin-bottom: 10px;
                     a {
                         color: var(--color-nero);
@@ -99,8 +99,8 @@
             border-bottom: 1px solid var(--color-common-secondary-border);
             h4 {
                 padding-bottom: 15px;
-                font-size: 14px;
-                font-family: "opensans-semibold";
+                font-size: var(--font-size-15);
+                font-family: var(--font-semibold);
             }
             ul {
                 list-style: none;
@@ -111,7 +111,7 @@
                     a {
                         color: var(--color-nero);
                         padding-bottom: 15px;
-                        font-size: 14px;
+                        font-size: var(--font-size-15);
                     }
                 }
             }
@@ -125,13 +125,13 @@
                 max-width: 100px;
             }
             p {
-                font-size: 14px;
+                font-size: var(--font-size-15);
                 margin-bottom: 5px;
             }
         }
         .contact-block {
             text-align: center;
-            font-size: 20px;
+            font-size: var(--font-size-16);
             line-height: 1.5;
             p {
                 a {
@@ -156,7 +156,7 @@
         .help-aside-body {
             padding-bottom: 0;
             .contact-block {
-                font-size: 16px;
+                font-size: var(--font-size-15);
             }
         }
     }
@@ -166,7 +166,7 @@
         .help-aside-body {
             padding-bottom: 25%;
             .contact-block {
-                font-size: 16px;
+                font-size: var(--font-size-16);
             }
         }
     }

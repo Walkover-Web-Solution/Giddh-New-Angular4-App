@@ -1,7 +1,7 @@
 <div>
     <div class="modal-header">
         <h3>{{ localeData?.perform_payment_action }}</h3>
-        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
+        <button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
     </div>
 
     <div class="modal-body clearfix" id="export-body" autocomplete="off">
@@ -59,7 +59,7 @@
                         <ng-template #optionTemplate1 let-option="option">
                             <a href="javascript:void(0)" class="list-item bd-rb">
                                 <div class="item">{{ option.label }}</div>
-                                <div class="item-unique">{{ option.value }}</div>
+                                <div class="item-unique">{{ option?.value }}</div>
                             </a>
                         </ng-template>
                     </sh-select>

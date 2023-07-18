@@ -114,7 +114,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             val = [val];
         }
         if (val.length > 0 && this.rows) {
-            this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
+            this._selectedValues = this.rows.filter((f: any) => val?.findIndex(p => p === f.label || p === f?.value) !== -1);
         } else {
             this._selectedValues = val;
         }
@@ -151,29 +151,29 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
         filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
 
-        startsWithArr = filteredArr.filter(function (item) {
-            if (startsWith(item.label.toLocaleLowerCase(), term) || startsWith(item.value.toLocaleLowerCase(), term)) {
+        startsWithArr = filteredArr?.filter(function (item) {
+            if (startsWith(item.label.toLocaleLowerCase(), term) || startsWith(item?.value.toLocaleLowerCase(), term)) {
                 return item;
             } else {
                 includesArr.push(item);
             }
         });
-        startsWithArr = startsWithArr.sort((a, b) => a.label.length - b.label.length);
-        includesArr = includesArr.sort((a, b) => a.label.length - b.label.length);
+        startsWithArr = startsWithArr.sort((a, b) => a.label?.length - b.label?.length);
+        includesArr = includesArr.sort((a, b) => a.label?.length - b.label?.length);
 
         return concat(startsWithArr, includesArr);
     }
 
     public getFilteredArrOfIOptionItems(array: IOption[], term: string, action: string) {
         if (action === FLATTEN_SEARCH_TERM) {
-            return array.filter((item) => {
+            return array?.filter((item) => {
                 let mergedAccounts = item.additional && item.additional.mergedAccounts ?
                     _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase())) : '';
-                return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term);
+                return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional?.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term);
             });
         } else {
-            return array.filter((item: IOption) => {
-                return includes(item.label.toLocaleLowerCase(), term) || includes(item.value.toLocaleLowerCase(), term);
+            return array?.filter((item: IOption) => {
+                return includes(item.label.toLocaleLowerCase(), term) || includes(item?.value.toLocaleLowerCase(), term);
             });
         }
     }
@@ -189,16 +189,16 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
                 if (this.customFilter) {
                     return this.customFilter(lowercaseFilter, item);
                 }
-                return !lowercaseFilter || (item.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
+                return !lowercaseFilter || (item.label).toLocaleLowerCase()?.indexOf(lowercaseFilter) !== -1;
             }) : [];
 
             if (this.customSorting) {
                 this.filteredData = filteredData.sort(this.customSorting);
             } else {
-                this.filteredData = filteredData.sort((a, b) => a.label.length - b.label.length);
+                this.filteredData = filteredData.sort((a, b) => a.label?.length - b.label?.length);
             }
         }
-        if (this.filteredData.length === 0) {
+        if (this.filteredData?.length === 0) {
             // this.noOptionsFound.emit(true);
             this.updateRows([{
                 label: this.commonLocaleData?.app_create_new,
@@ -249,16 +249,16 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     }
 
     public selectSingle(item) {
-        this._selectedValues.splice(0, this.rows.length);
+        this._selectedValues.splice(0, this.rows?.length);
         this._selectedValues.push(item);
         this.hide();
     }
 
     public selectMultiple(item) {
-        if (this.selectedValues.indexOf(item) === -1) {
+        if (this.selectedValues?.indexOf(item) === -1) {
             this.selectedValues.push(item);
         } else {
-            this.selectedValues.splice(this.selectedValues.indexOf(item), 1);
+            this.selectedValues.splice(this.selectedValues?.indexOf(item), 1);
         }
     }
 
@@ -280,7 +280,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         // this.focusFilter();
         this.onShow.emit();
         if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-            let item = this.rows.find(p => p?.value === (this._selectedValues.length > 0 ? this._selectedValues[0] : (this.rows.length > 0 ? this.rows[0].value : null)));
+            let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0]?.value : null)));
             if (item !== null) {
                 this.menuEle.virtualScrollElm.scrollInto(item);
             }
@@ -407,7 +407,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     public ngOnChanges(changes: SimpleChanges): void {
         if ('forceClearReactive' in changes && !changes.forceClearReactive.firstChange) {
-            if (this.forceClearReactive.status) {
+            if (this.forceClearReactive?.status) {
                 this.filter = '';
                 this.clear();
             }
@@ -448,7 +448,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     public clearSingleSelection(event, option: IOption) {
         event.stopPropagation();
-        this.selectedValues = this.selectedValues.filter(f => f?.value !== option?.value).map(p => p?.value);
+        this.selectedValues = this.selectedValues?.filter(f => f?.value !== option?.value).map(p => p?.value);
         this.onChange();
     }
 
@@ -460,7 +460,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             this.selected.emit(this._selectedValues);
         } else {
             let newValue: IOption;
-            if (this.selectedValues.length > 0) {
+            if (this.selectedValues?.length > 0) {
                 newValue = this.selectedValues[0];
             }
             if (!newValue) {

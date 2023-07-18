@@ -48,7 +48,7 @@
                                                 [disabled]="!emailVerifyForm.controls['email'].valid"
                                                 [ladda]="isLoginWithEmailInProcess$ | async"
                                                 class="btn btn-blue btn-block btn-lg"
-                                                (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)"
+                                                (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                                             >
                                                 Submit
                                             </button>
@@ -68,8 +68,8 @@
                                                     [ladda]="isVerifyEmailInProcess$ | async"
                                                     (click)="
                                                         VerifyEmail(
-                                                            emailVerifyForm.controls['email'].value,
-                                                            emailVerifyForm.controls['token'].value
+                                                            emailVerifyForm.controls['email']?.value,
+                                                            emailVerifyForm.controls['token']?.value
                                                         )
                                                     "
                                                 >
@@ -77,7 +77,7 @@
                                                 </button>
                                                 <a
                                                     class="btn btn-link cp pull-right"
-                                                    (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)"
+                                                    (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                                                     >Resend code</a
                                                 >
                                             </div>
@@ -117,7 +117,7 @@
                                                 type="submit"
                                                 [disabled]="
                                                     !signUpWithPasswdForm.controls['email'].valid ||
-                                                    !signUpWithPasswdForm.controls['password'].value
+                                                    !signUpWithPasswdForm.controls['password']?.value
                                                 "
                                             >
                                                 Signup
@@ -146,8 +146,8 @@
                                                     class="btn btn-blue btn-block btn-lg"
                                                     (click)="
                                                         VerifyEmail(
-                                                            signupVerifyForm.controls['email'].value,
-                                                            signupVerifyForm.controls['verificationCode'].value
+                                                            signupVerifyForm.controls['email']?.value,
+                                                            signupVerifyForm.controls['verificationCode']?.value
                                                         )
                                                     "
                                                 >
@@ -155,7 +155,7 @@
                                                 </button>
                                                 <a
                                                     class="btn btn-link cp pull-right"
-                                                    (click)="LoginWithEmail(signupVerifyForm.controls['email'].value)"
+                                                    (click)="LoginWithEmail(signupVerifyForm.controls['email']?.value)"
                                                     >Resend code</a
                                                 >
                                             </div>
@@ -171,12 +171,16 @@
                                         >
                                     </li>
                                 </ul>
-                                <div class="login-with" *ngIf="loginUsing !== 'userName'">
-                                    Signup with
-                                    <a class="bold" href="javascript:void(0);" (click)="loginUsing = 'userName'">
-                                        email and password</a
-                                    >
-                                </div>
+                                <ul class="social-login">
+                                    <li class="google-ico msg91-ico">
+                                        <a href="javascript:void(0);" (click)="signUpWithOtp()">
+                                            <i class="ico-google ico-msg91">
+                                                <img src="./assets/images/msg91-icon-blue.svg" />
+                                            </i>
+                                            <span>Signup with OTP</span></a
+                                        >
+                                    </li>
+                                </ul>
                                 <div class="d-flex align-items-center account mt-1">
                                     <p class="mb-0 mr-2 bold text-light-2">Already have an account?</p>
                                     <a routerLink="/login" class="btn btn-sm btn-secondary">Login</a>
@@ -197,7 +201,7 @@
             <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideEmailModal()">×</span>
+                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="hideEmailModal()">×</button>
                 </div>
                 <div class="modal-body clearfix">
                     <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
@@ -213,7 +217,7 @@
                                 [disabled]="!emailVerifyForm.controls['email'].valid"
                                 [ladda]="isLoginWithEmailInProcess$ | async"
                                 class="btn sharp btn-block btn-blue btn-lg mr-t1"
-                                (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)"
+                                (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                             >
                                 Submit
                             </button>
@@ -233,8 +237,8 @@
                                 [ladda]="isVerifyEmailInProcess$ | async"
                                 (click)="
                                     VerifyEmail(
-                                        emailVerifyForm.controls['email'].value,
-                                        emailVerifyForm.controls['token'].value
+                                        emailVerifyForm.controls['email']?.value,
+                                        emailVerifyForm.controls['token']?.value
                                     )
                                 "
                             >
@@ -242,7 +246,7 @@
                             </button>
                             <a
                                 class="btn btn-link cp pull-right"
-                                (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)"
+                                (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                                 >Resend code</a
                             >
                         </div>
@@ -261,7 +265,7 @@
             <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</span>
+                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</button>
                 </div>
                 <div class="modal-body clearfix">
                     <form
@@ -293,8 +297,8 @@
                             class="btn sharp btn-block btn-blue btn-lg mr-t1"
                             (click)="
                                 getOtp(
-                                    mobileVerifyForm.controls['mobileNumber'].value,
-                                    mobileVerifyForm.controls['country'].value
+                                    mobileVerifyForm.controls['mobileNumber']?.value,
+                                    mobileVerifyForm.controls['country']?.value
                                 )
                             "
                             [ladda]="isLoginWithMobileInProcess$ | async"
@@ -311,8 +315,8 @@
                                 [ladda]="isVerifyMobileInProcess$ | async"
                                 (click)="
                                     VerifyCode(
-                                        mobileVerifyForm.controls['mobileNumber'].value,
-                                        mobileVerifyForm.controls['otp'].value
+                                        mobileVerifyForm.controls['mobileNumber']?.value,
+                                        mobileVerifyForm.controls['otp']?.value
                                     )
                                 "
                                 [disabled]="!mobileVerifyForm.controls['otp'].valid"
@@ -335,9 +339,9 @@
             <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="resetTwoWayAuthModal()"
-                        >×</span
-                    >
+                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="resetTwoWayAuthModal()">
+                        ×
+                    </button>
                 </div>
                 <div class="modal-body clearfix">
                     <form

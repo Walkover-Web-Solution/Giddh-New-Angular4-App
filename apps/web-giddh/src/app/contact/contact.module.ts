@@ -9,17 +9,15 @@ import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { AsideMenuAccountInContactComponent } from './aside-menu-account/aside.menu.account.component';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { Ng2OrderModule } from 'ng2-order-pipe';
 import { ContactAdvanceSearchComponent } from './advanceSearch/contactAdvanceSearch.component';
 import { AgingReportComponent } from './aging-report/aging-report.component';
 import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component'; // importing the module for table column sort
@@ -41,6 +39,9 @@ import { MatTableModule } from "@angular/material/table";
 import { MatInputModule } from "@angular/material/input";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatDialogModule } from "@angular/material/dialog";
+import { AccountUpdateNewDetailsModule } from '../shared/header/components/account-update-new-details/account-update-new-details.module';
+import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
+import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -50,36 +51,37 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
     declarations: [
         ContactComponent,
-        AsideMenuAccountInContactComponent,
         ContactAdvanceSearchComponent,
         AgingReportComponent,
         AgingDropdownComponent,
         PaymentAsideComponent
     ],
     exports: [
-        AsideMenuAccountInContactComponent, CurrencyModule
+        CurrencyModule
     ],
     imports: [
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
         ContactRoutingModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ShSelectModule,
         TabsModule,
-        BsDropdownModule,
-        TooltipModule,
+        BsDropdownModule.forRoot(),
+        TooltipModule.forRoot(),
         SharedModule,
         SelectModule.forRoot(),
         TabsModule.forRoot(),
         ModalModule.forRoot(),
-        PaginationModule,
+        PaginationModule.forRoot(),
         ClickOutsideModule,
         DigitsOnlyModule,
         ElementViewChildModule,
         CurrencyModule,
         Daterangepicker,
-        Ng2OrderModule,
         PerfectScrollbarModule,
         NgxDaterangepickerMd.forRoot(),
         TextMaskModule,
@@ -96,10 +98,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatTableModule,
         MatInputModule,
         MatTooltipModule,
-        MatDialogModule
-    ],
-    entryComponents: [
-        PaginationComponent
+        MatDialogModule,
+        AccountUpdateNewDetailsModule,
+        AsideMenuAccountModule,
+        SelectTableColumnModule
     ],
     providers: [
         {

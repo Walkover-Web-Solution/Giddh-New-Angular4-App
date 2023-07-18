@@ -1,12 +1,12 @@
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store';
 import { saveAs } from 'file-saver';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { CompanyService } from '../../../services/companyService.service';
+import { CompanyService } from '../../../services/company.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../../../services/general.service';
@@ -25,7 +25,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    public moment = moment;
+    public dayjs = dayjs;
     public companyUniqueName: string;
     public searchResponse$: Observable<AccountFlat[]>;
     public searchResponseFiltered$: Observable<AccountFlat[]>;
@@ -95,7 +95,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      */
     public set sortReverse(value: boolean) {
         this._sortReverse = value;
-        this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType]))));
+        this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType]?.toString().localeCompare(b[this._sortType]))));
     }
 
     /** pagination related  */
@@ -111,7 +111,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     private formattedQuery: any;
 
     constructor(private store: Store<AppState>, private companyServices: CompanyService, private toaster: ToasterService, private generalService: GeneralService) {
-        this.searchResponse$ = this.store.pipe(select(p => p.search.value), takeUntil(this.destroyed$));
+        this.searchResponse$ = this.store.pipe(select(p => p.search?.value), takeUntil(this.destroyed$));
         this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.search$ = this.store.pipe(select(p => p.search.search), takeUntil(this.destroyed$));
@@ -197,7 +197,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     }
 
     public toggleSelectAll(ev) {
-        let isAllChecked = ev.target.checked;
+        let isAllChecked = ev.target?.checked;
         this.checkboxInfo[this.checkboxInfo.selectedPage] = isAllChecked;
 
         this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
@@ -205,7 +205,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             this.isAllChecked = isAllChecked;
 
             entries.forEach((entry) => {
-                let indexOfEntry = this.selectedItems.indexOf(entry?.uniqueName);
+                let indexOfEntry = this.selectedItems?.indexOf(entry?.uniqueName);
                 if (isAllChecked) {
                     if (indexOfEntry === -1) {
                         this.selectedItems.push(entry?.uniqueName);
@@ -311,8 +311,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
             this.companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.searchLoader$ = of(false);
-                if (res.status === 'success') {
-                    let blobData = this.generalService.base64ToBlob(res.body, 'text/csv', 512);
+                if (res?.status === 'success') {
+                    let blobData = this.generalService.base64ToBlob(res?.body, 'text/csv', 512);
                     return saveAs(blobData, `${p.groupName}.csv`);
                 }
             });
@@ -327,20 +327,20 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      * @memberof SearchGridComponent
      */
     public addValueToMsg(val: any): void {
-        this.typeInTextarea(val.value);
+        this.typeInTextarea(val?.value);
     }
 
     public typeInTextarea(newText) {
         let el: HTMLInputElement = this.messageBox?.nativeElement;
         let start = el.selectionStart;
         let end = el.selectionEnd;
-        let text = el.value;
+        let text = el?.value;
         let before = text.substring(0, start);
         let after = text.substring(end, (text ? text.length : 0));
         el.value = (before + newText + after);
         el.selectionStart = el.selectionEnd = start + (newText ? newText.length : 0);
         el.focus();
-        this.messageBody.msg = el.value;
+        this.messageBody.msg = el?.value;
     }
 
     /**
@@ -371,8 +371,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     }
 
     public toggleSelection(ev, item: AccountFlat) {
-        let isChecked = ev.target.checked;
-        let indexOfEntry = this.selectedItems.indexOf(item?.uniqueName);
+        let isChecked = ev.target?.checked;
+        let indexOfEntry = this.selectedItems?.indexOf(item?.uniqueName);
         if (isChecked && indexOfEntry === -1) {
             this.selectedItems.push(item?.uniqueName);
         } else {
@@ -421,7 +421,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
                 return this.companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                     .subscribe((r) => {
-                        r.status === 'success' ? this.toaster.successToast(r.body) : this.toaster.errorToast(r.message);
+                        r?.status === 'success' ? this.toaster.successToast(r?.body) : this.toaster.errorToast(r?.message);
                         this.checkboxInfo = {
                             selectedPage: 1
                         };
@@ -431,7 +431,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                 delete temp.data['subject'];
                 return this.companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
                     .subscribe((r) => {
-                        r.status === 'success' ? this.toaster.successToast(r.body) : this.toaster.errorToast(r.message);
+                        r?.status === 'success' ? this.toaster.successToast(r?.body) : this.toaster.errorToast(r?.message);
                         this.checkboxInfo = {
                             selectedPage: 1
                         };

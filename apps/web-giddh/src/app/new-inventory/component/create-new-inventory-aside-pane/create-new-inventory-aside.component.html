@@ -1,0 +1,42 @@
+<ng-container
+    appTranslate
+    [file]="'inventory'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="aside-pane">
+        <div class="header-create-new">
+            <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+            <div class="form-header">
+                <h3>{{ commonLocaleData?.app_create_new }}</h3>
+            </div>
+        </div>
+        <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" vr-item>
+            <ng-container *ngIf="moduleType === 'branchtransfer'">
+                <div class="pb-3">
+                    <button mat-stroked-button color="primary" (click)="openCreateBranchTransfer('receipt-note')">
+                        Receipt Note
+                    </button>
+                </div>
+                <div>
+                    <button color="primary" mat-stroked-button (click)="openCreateBranchTransfer('delivery-challan')">
+                        Delivery Challan
+                    </button>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="moduleType !== 'branchtransfer'">
+                <div class="pb-3">
+                    <button mat-stroked-button color="primary" (click)="createNewByAsidePanel('stock')">
+                        {{ commonLocaleData?.app_create_stock }}
+                    </button>
+                </div>
+                <div>
+                    <button mat-stroked-button color="primary" (click)="createNewByAsidePanel('group')">
+                        {{ commonLocaleData?.app_create_group }}
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</ng-container>

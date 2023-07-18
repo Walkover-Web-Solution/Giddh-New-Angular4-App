@@ -1,0 +1,80 @@
+.create-group-page {
+    margin-top: 20px;
+    padding: 0 15px 0 0;
+
+    .toggle-childgroup {
+        display: flex;
+        column-gap: 30px;
+    }
+
+    .image-group {
+        padding-top: 35px;
+
+        .group-vector {
+            position: absolute;
+            right: 15px;
+            top: 60px;
+        }
+    }
+    .input-width {
+        width: auto;
+        min-width: 530px;
+        display: inline-block;
+    }
+    .inline-multiple-input-width {
+        width: 530px;
+        min-height: 48px;
+        .input-min-width {
+            min-width: 50%;
+        }
+    }
+}
+
+.create-inventory-btn {
+    height: 36px;
+    color: var(--color-nonary-button-text);
+    background-color: var(--color-nonary-button-background);
+    margin-right: 15px;
+
+    &:disabled {
+        background-color: var(--color-success-disable);
+    }
+}
+
+.new-inventory-page-header {
+    padding: 0 15px 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--color-gray);
+    align-items: center;
+
+    .inventory-header-right {
+        display: flex;
+    }
+}
+.footer-wrapper {
+    margin-top: 45px;
+    max-width: 560px;
+
+    .right-aligned-buttons {
+        .mat-stroked-button {
+            margin-right: 0 !important;
+            margin-left: 15px;
+        }
+    }
+}
+
+.page-title-inventory {
+    font-weight: bold;
+    color: var(--color-giddh-blue);
+    font-size: var(--font-size-15);
+}
+
+.mat-select {
+    min-width: unset !important;
+}
+
+.back-left {
+    line-height: 32px;
+}
