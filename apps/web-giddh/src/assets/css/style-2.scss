@@ -14362,10 +14362,8 @@ body.hide-scroll-body.master-page {
     }
 }
 
-/*--- tooltip --*/
-.mat-tooltip {
-    letter-spacing: 0.8px;
-}
+
+
 /*--- voucher-datepicker ---*/
 voucher-component {
     .mat-datepicker-input {
@@ -14375,6 +14373,11 @@ voucher-component {
         }
     }
 }
+/*--- tooltip --*/
+.mat-tooltip {
+    letter-spacing: 0.8px;
+}
+
 /*--- manufacturing-list-table ---*/
 .list-table-wrapper {
     th.mat-header-cell {
