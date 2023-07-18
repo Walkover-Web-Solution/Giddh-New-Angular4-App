@@ -116,12 +116,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     public mailSmsDialogRef: any;
     /* Holds Mat Table Configuration */
     public displayedColumns: string[] = ['select', 'name', 'uniqueName', 'parent', 'openingBalance', 'debitTotal', 'creditTotal', 'closingBalance'];
-    /** Search Sorting Object */
-    public searchSortRequestObj: searchSortRequest = {
-        sort: '',
-        sortBy: ''
-    };
-    /** True if select customer all */
+/** True if select customer all */
     public selectAllCustomer: boolean = false;
     /** Hold table datal */
     public dataSource = ELEMENT_DATA;
@@ -142,18 +137,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             let newArr = response.map(v => ({ ...v, isSelected: false }))
             this.dataSource = newArr;
         });
-    }
-
-    /**
-     * This will use for sort change
-     *
-     * @param {*} event
-     * @memberof SearchGridComponent
-     */
-    public sortChange(event: any): void {
-        this.searchSortRequestObj.sort = event?.direction ? event?.direction : 'asc';
-        let value = (event?.direction === 'asc' ? true : false) || (event?.direction === 'desc' ? false : true);
-        this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[event?.active]?.toString().localeCompare(b[event?.active]))));
     }
 
     public ngOnInit() {
@@ -238,6 +221,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         let queryForApi = this.createSearchQueryReqObj();
         let formattedQuery = this.formatQuery(queryForApi, searchQuery);
         this.formattedQuery = formattedQuery;
+        this.selectAllCustomer = false;
         this.FilterByAPIEvent.emit(formattedQuery);
     }
 
@@ -252,6 +236,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             this.searchResponseFiltered$ = this.searchResponse$;
             this.FilterByAPIEvent.emit(null);
             this.pageChangeEvent.emit(1);
+            this.selectAllCustomer = false;
         }
     }
 
@@ -303,7 +288,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                 data: {
                     subject: this.messageBody.subject,
                     message: this.messageBody.msg,
-                    accounts: [],
+                    accounts: this.selectedItems,
                 },
                 params: {
                     from: p.fromDate,

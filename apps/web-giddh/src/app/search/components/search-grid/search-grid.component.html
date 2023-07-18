@@ -20,25 +20,20 @@
         >
         </search-filter>
         <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" class="table basic giddh-table on-mobile-view w-100">
-                <!-- matSort
-            (matSortChange)="sortChange($event)"
-            [matSortActive]="searchSortRequestObj?.sortBy"
-            [matSortDirection]="searchSortRequestObj?.sort" -->
+            <table mat-table [dataSource]="dataSource" class="table basic giddh-table on-mobile-view w-100">          
                 <!-- Checkbox Column -->
                 <ng-container matColumnDef="select">
                     <th mat-header-cell *matHeaderCellDef [style.width.px]="25">
                         <mat-checkbox
                             color="primary"
-                            [(ngModel)]="allSelectionModel"
-                            (ngModelChange)="toggleAllSelection(allSelectionModel)"
+                            [(ngModel)]="selectAllCustomer"
+                            (ngModelChange)="toggleAllSelection(selectAllCustomer)"
                         ></mat-checkbox>
                     </th>
                     <td mat-cell *matCellDef="let row">
                         <mat-checkbox
                             color="primary"
-                            class="mr-2 checkbox-left-side-in-table"
-                            type="checkbox"
+                            class="mr-2"
                             [(ngModel)]="row.isSelected"
                             (change)="selectAccount($event, row)"
                         >
