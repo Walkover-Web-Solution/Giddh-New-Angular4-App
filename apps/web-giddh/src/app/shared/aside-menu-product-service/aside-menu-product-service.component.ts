@@ -1,10 +1,15 @@
-import { Component, EventEmitter, Output, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { AddAccountRequest } from '../../models/api-models/Account';
 import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../../store';
+import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
+import { AccountsAction } from '../../actions/accounts.actions';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'aside-menu-product-service',
@@ -23,9 +28,7 @@ import { ToasterService } from '../../services/toaster.service';
         ]),
     ]
 })
-
 export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
-
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Input() public selectedVoucherType: string;
     public autoFocusInChild: boolean = true;
@@ -38,45 +41,37 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if account has unsaved changes */
+    public hasUnsavedChanges: boolean = false;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
+    /** This will hold stock type */
+    public stockType: string = '';
 
     constructor(
         private accountService: AccountService,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private store: Store<AppState>,
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private accountsAction: AccountsAction,
+        private changeDetectionRef: ChangeDetectorRef,
+        private generalService: GeneralService
     ) {
 
     }
 
-    public toggleStockPane() {
-        this.hideFirstStep = true;
-        this.isAddServiceOpen = false;
-        this.isAddStockOpen = !this.isAddStockOpen;
-    }
-
-    public toggleServicePane() {
-        this.hideFirstStep = true;
-        this.isAddStockOpen = false;
-        this.isAddServiceOpen = !this.isAddServiceOpen;
-    }
-
-    public closeAsidePane(e?: any) {
-        this.hideFirstStep = false;
-        this.isAddStockOpen = false;
-        this.isAddServiceOpen = false;
-        this.closeAsideEvent.emit();
-    }
-
-    public backButtonPressed() {
-        this.hideFirstStep = false;
-        this.isAddStockOpen = false;
-        this.isAddServiceOpen = false;
-    }
     /**
      * Lifecycle hook runs on component initialization
      *
      * @memberof AsideMenuProductServiceComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector('body')?.classList?.add('aside-menu-product-service-page');
+
+        this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasUnsavedChanges = response;
+        });
     }
 
     /**
@@ -105,5 +100,69 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body')?.classList?.remove('aside-menu-product-service-page');
+    }
+
+    public toggleStockPane(type?: string): void {
+        this.hideFirstStep = true;
+        this.isAddServiceOpen = false;
+        this.stockType = type;
+        this.isAddStockOpen = !this.isAddStockOpen;
+    }
+
+    public toggleServicePane(): void {
+        this.hideFirstStep = true;
+        this.isAddStockOpen = false;
+        this.isAddServiceOpen = !this.isAddServiceOpen;
+    }
+
+    public closeAsidePane(event?: any): void {
+        if (this.isAddServiceOpen && this.hasUnsavedChanges) {
+            this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                if (action) {
+                    this.stockType = '';
+                    this.hideFirstStep = false;
+                    this.isAddStockOpen = false;
+                    this.isAddServiceOpen = false;
+                    this.closeAsideEvent.emit();
+                }
+            });
+        } else {
+            this.stockType = '';
+            this.hideFirstStep = false;
+            this.isAddStockOpen = false;
+            this.isAddServiceOpen = false;
+            this.closeAsideEvent.emit();
+        }
+    }
+
+    public backButtonPressed(): void {
+        if (this.isAddServiceOpen && this.hasUnsavedChanges) {
+            this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                if (action) {
+                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                    this.stockType = '';
+                    this.hideFirstStep = false;
+                    this.isAddStockOpen = false;
+                    this.isAddServiceOpen = false;
+                    this.changeDetectionRef.detectChanges();
+                }
+            });
+        } else {
+            this.stockType = '';
+            this.hideFirstStep = false;
+            this.isAddStockOpen = false;
+            this.isAddServiceOpen = false;
+        }
+    }
+
+    /**
+     * This will use for toggle account pane
+     *
+     * @memberof AsideMenuProductServiceComponent
+     */
+    public toggleAccountPane() {
+        this.hideFirstStep = true;
+        this.isAddStockOpen = false;
+        this.isAddServiceOpen = !this.isAddServiceOpen;
     }
 }

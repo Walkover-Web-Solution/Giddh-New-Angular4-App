@@ -187,6 +187,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public registeredTypeCountryList: any[] = ["IN", "GB", "AE"];
     /** This will hold disable State */
     public disabledState: boolean = false;
+    /** Returns true if form is dirty else false */
+    public get showPageLeaveConfirmation(): boolean {
+        return this.firstStepForm?.dirty;
+    }
 
     constructor(
         private formBuilder: FormBuilder,

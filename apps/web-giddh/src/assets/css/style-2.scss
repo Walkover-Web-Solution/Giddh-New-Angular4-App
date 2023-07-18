@@ -10,11 +10,13 @@ $custom-typography: mat-typography-config(
 );
 @include angular-material-typography($custom-typography);
 @import "../css/ngx-bs-datepicker.scss";
-@import "./global//add-company.scss";
+@import "../css/global/add-company.scss";
+@import "../css/global/aside-modal.scss";
 @import "../css/global/onboarding.scss";
 @import "../css/global/custom-fields.scss";
 @import "../css/global/inventory.scss";
 @import "../css/global/search.scss";
+@import "../css/global/all-items.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -894,7 +896,7 @@ aside-create-group {
 
         .mat-grid-tile {
             height: 100%;
-            min-height: 670px;
+            min-height: calc(100vh - 115px);
         }
         .inventory-sub-sideabar {
             .item-list {
@@ -921,10 +923,30 @@ aside-create-group {
             }
         }
         mat-grid-list {
-            height: calc(100vh - 120px) !important;
+            height: 100% !important;
             mat-grid-tile {
                 height: 100% !important;
+                &.form-btn {
+                    .mat-grid-tile-content {
+                        overflow-y: auto;
+                    }
+                }
             }
+            div {
+                &:first-child {
+                    .mat-grid-tile {
+                        .mat-grid-tile-content {
+                            .item-list {
+                                margin-left: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .cdk-virtual-scroll-viewport {
+            height: 100% !important;
+            min-height: calc(100vh - 188px);
         }
     }
 
@@ -966,10 +988,15 @@ aside-create-group {
         align-items: flex-start;
 
         .mat-list-base .mat-list-item {
-            height: 38px;
+            min-height: 48px;
+            height: auto;
             &.map-item {
                 .mat-list-item-content {
                     justify-content: flex-end;
+                    margin-left: auto;
+                }
+                &.mat-gap {
+                    padding-right: 15px;
                 }
             }
 
@@ -978,6 +1005,9 @@ aside-create-group {
                 a {
                     color: var(--color-black);
                 }
+            }
+            &.mat-left {
+                padding-left: 15px !important;
             }
         }
     }
@@ -1311,7 +1341,6 @@ input {
 
 // Mat Divider
 .mat-divider {
-    border-top-width: 2px !important;
     border-top-color: var(--color-primary-mat-divider);
 }
 
@@ -9883,9 +9912,11 @@ giddh-datepicker {
 }
 
 .ledger-body {
-    .cdk-overlay-container,
-    .cdk-global-overlay-wrapper {
-        z-index: 1000 !important;
+    &:not(.page-leave-confirmation-modal-wrapper) {
+        .cdk-overlay-container,
+        .cdk-global-overlay-wrapper {
+            z-index: 1000 !important;
+        }
     }
 
     overflow-y: auto !important;
@@ -10029,6 +10060,21 @@ giddh-datepicker {
 .cdk-overlay-container,
 .cdk-global-overlay-wrapper {
     z-index: 9999;
+}
+
+body {
+    &.page-leave-confirmation-modal-wrapper {
+        .cdk-overlay-container,
+        .cdk-global-overlay-wrapper {
+            z-index: 99999 !important;
+        }
+    }
+
+    .cdk-overlay-container {
+        .page-leave-confirmation-modal-backdrop {
+            z-index: 99999 !important;
+        }
+    }
 }
 
 .cdk-overlay-connected-position-bounding-box {
@@ -14363,5 +14409,18 @@ button {
                 }
             }
         }
+    }
+}
+
+.readonly-field {
+    .dropdown-bg {
+        display: none !important;
+    }
+    .mat-form-field-flex {
+        background-color: var(--color-primary-input-bar-background) !important;
+    }
+
+    .dropdown-bg {
+        background-color: transparent !important;
     }
 }
