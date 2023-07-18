@@ -10,16 +10,9 @@
             .input-group-text {
                 border: none;
                 background-color: var(--color-primary-all-items-input-group-input-background);
-            }
-            input {
                 height: 50px;
-                font-size: var(--font-size-15);
-                border: none;
-                border-top-left-radius: 0px !important;
-                border-bottom-left-radius: 0px !important;
                 position: relative;
-                left: 1px;
-                background-color: var(--color-primary-all-items-input-group-input-background) !important;
+                top: -1px;
             }
         }
     }
@@ -40,7 +33,9 @@
                     padding: 15px;
                     white-space: normal;
                     word-break: break-word;
+                    width: 14.8%;
                     min-height: 90px;
+                    transition: all 140ms ease-in;
                     h4 {
                         font-size: var(--font-size-15);
                         margin-bottom: 5px;
@@ -63,7 +58,7 @@
                     }
                     &:hover,
                     &.active {
-                        background-color: var(--color-primary-all-items-page-single-menu-items-hover-active);
+                        background-color: var(--color-giddh-blue);
                         h4,
                         p {
                             color: var(--color-white);
@@ -73,15 +68,51 @@
             }
         }
     }
+    .width-inherit {
+        width: inherit;
+    }
+    .responsive-sub-items {
+        justify-content: stretch;
+        row-gap: 20px;
+        column-gap: 30px;
+        padding: 0 15px;
+        margin-bottom: 20px;
+    }
 }
 /*responsive starts here*/
-@media (max-width: 1440px) {
+@media (max-width: 1680px) {
     .giddh-all-items-wrapper {
         .all-item-block {
             .main-item {
                 .sub-item-block {
                     .single-menu-item {
-                        min-height: 100px;
+                        width: 17.6%;
+                    }
+                }
+            }
+        }
+    }
+}
+@media (max-width: 1380px) {
+    .giddh-all-items-wrapper {
+        .all-item-block {
+            .main-item {
+                .sub-item-block {
+                    .single-menu-item {
+                        width: 22%;
+                    }
+                }
+            }
+        }
+    }
+}
+@media (max-width: 1024px) {
+    .giddh-all-items-wrapper {
+        .all-item-block {
+            .main-item {
+                .sub-item-block {
+                    .single-menu-item {
+                        width: 30%;
                     }
                 }
             }
