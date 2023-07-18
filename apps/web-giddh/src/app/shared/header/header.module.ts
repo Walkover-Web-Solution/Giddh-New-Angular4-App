@@ -16,13 +16,11 @@ import { ElementViewChildModule } from "../helpers/directives/elementViewChild/e
 import { PrimarySidebarModule } from "../primary-sidebar/primary-sidebar.module";
 import { AsideHelpSupportComponent } from "./components/aside-help-support/aside-help-support.component";
 import { AsideSettingComponent } from "./components/aside-setting/aside-setting.component";
-import { CompanyAddNewUiComponent } from "./components/company-add-new-ui/company-add-new-ui.component";
 import { HeaderComponent } from "./header.component";
 
 @NgModule({
     declarations: [
         HeaderComponent,
-        CompanyAddNewUiComponent,
         AsideSettingComponent,
         AsideHelpSupportComponent
     ],
@@ -49,7 +47,6 @@ import { HeaderComponent } from "./header.component";
     ],
     exports: [
         HeaderComponent,
-        CompanyAddNewUiComponent,
         AsideSettingComponent
     ]
 })

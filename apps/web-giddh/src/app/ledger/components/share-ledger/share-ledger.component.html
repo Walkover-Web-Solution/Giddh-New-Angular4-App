@@ -44,11 +44,7 @@
                                             <button
                                                 mat-stroked-button
                                                 color="primary"
-                                                class="
-                                                    share-ledger-button
-                                                    d-flex
-                                                    align-items-center
-                                                "
+                                                class="share-ledger-button d-flex align-items-center"
                                                 type="submit"
                                                 [disabled]="shareAccountForm.invalid"
                                                 (click)="shareAccount()"
@@ -110,11 +106,7 @@
                                         mat-stroked-button
                                         color="primary"
                                         [disabled]="!magicLink ? 'disabled' : null"
-                                        class="
-                                            share-ledger-button
-                                            d-flex
-                                            align-items-center
-                                        "
+                                        class="share-ledger-button d-flex align-items-center"
                                         (click)="toggleIsCopied()"
                                         [ngxClipboard]="magicLinkInput"
                                     >

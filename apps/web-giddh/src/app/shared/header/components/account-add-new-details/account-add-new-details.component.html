@@ -295,7 +295,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <div class="form-group">
+                                        <div class="form-group" *ngIf="(statesSource$ | async)?.length">
                                             <label
                                                 >{{ commonLocaleData?.app_state }}
                                                 <sup class="text-danger" *ngIf="isStateRequired">*</sup>
@@ -308,6 +308,27 @@
                                                     (selected)="selectedState(gst, $event)"
                                                     [forceClearReactive]="forceClear$ | async"
                                                     formControlName="stateCode"
+                                                    class="w-100"
+                                                    [useInBuiltFilterForIOptionTypeItems]="true"
+                                                    [attr.required]="isStateRequired"
+                                                    [isRequired]="isStateRequired"
+                                                >
+                                                </sh-select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" *ngIf="countyList?.length">
+                                            <label
+                                                >{{ commonLocaleData?.app_region }}
+                                                <sup class="text-danger" *ngIf="isStateRequired">*</sup>
+                                            </label>
+                                            <div>
+                                                <sh-select
+                                                    #states
+                                                    [options]="countyList"
+                                                    [isFilterEnabled]="true"
+                                                    (selected)="selectedCounty(gst, $event)"
+                                                    [forceClearReactive]="forceClear$ | async"
+                                                    formControlName="countyCode"
                                                     class="w-100"
                                                     [useInBuiltFilterForIOptionTypeItems]="true"
                                                     [attr.required]="isStateRequired"
