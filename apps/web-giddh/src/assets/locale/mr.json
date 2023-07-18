@@ -698,5 +698,7 @@
         "product": "उत्पादन",
         "service": "सेवा",
         "fixed_assets": "स्थिर मालमत्ता"
-    }
+    },
+    "app_region": "क्षेत्र",
+    "app_select_region": "क्षेत्र निवडा"
 }
