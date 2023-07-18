@@ -1,9 +1,8 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
@@ -11,6 +10,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { NewRoleClass } from '../../permission.utility';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     templateUrl: './permission-list.html',
@@ -19,8 +19,8 @@ import { GeneralService } from '../../../services/general.service';
 export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
-    @ViewChild('permissionModel', { static: true }) public permissionModel: ModalDirective;
-    @ViewChild('permissionConfirmationModel', { static: true }) public permissionConfirmationModel: ModalDirective;
+    @ViewChild('permissionModel', { static: true }) public permissionModel: TemplateRef<any>;
+    @ViewChild('permissionConfirmationModel', { static: true }) public permissionConfirmationModel: TemplateRef<any>;
 
     public localState: any;
     public allRoles: IRoleCommonResponseAndRequest[] = [];
@@ -42,7 +42,8 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         private router: Router,
         private permissionActions: PermissionActions,
         private _toasty: ToasterService,
-        private _generalService: GeneralService
+        private _generalService: GeneralService,
+        public dialog: MatDialog
     ) {
     }
 
@@ -106,7 +107,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
 
     public closePopupEvent(userAction) {
         this.showPopup = false;
-        this.permissionModel.hide();
+        // this.permissionModel.hide();
         if (userAction === 'save') {
             this.router.navigate(['/pages', 'permissions', 'details']);
         }
@@ -118,25 +119,38 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         this.router.navigate(['/pages/permissions/details']);
     }
 
-    public deleteRole(role: IRoleCommonResponseAndRequest) {
-        this.selectedRoleForDelete = role;
-        this.permissionConfirmationModel?.show();
+    // public deleteRole(role: IRoleCommonResponseAndRequest) {
+    //     this.selectedRoleForDelete = role;
+    //     this.permissionConfirmationModel?.show();
+    // }
+
+    public deleteRole(): void {
+        this.dialog.open(this.permissionConfirmationModel, {
+            panelClass: 'modal-dialog',
+            width: '650px'
+        });
     }
 
-    public deleteConfirmedRole() {
-        this.permissionConfirmationModel.hide();
-        this.store.dispatch(this.permissionActions.DeleteRole(this.selectedRoleForDelete?.uniqueName));
-    }
+    // public deleteConfirmedRole() {
+    //     this.permissionConfirmationModel.hide();
+    //     this.store.dispatch(this.permissionActions.DeleteRole(this.selectedRoleForDelete?.uniqueName));
+    // }
 
-    public closeConfirmationPopup() {
-        this.permissionConfirmationModel.hide();
-    }
+    // public closeConfirmationPopup() {
+    //     this.permissionConfirmationModel.hide();
+    // }
 
-    public openPermissionModal() {
-        this.permissionModel?.show();
+    // public openPermissionModal() {
+    //     this.permissionModel?.show();
+    // }
+    public openPermissionModal(): void {
+        this.dialog.open(this.permissionModel, {
+            panelClass: '"modal-dialog',
+            width: '650px'
+        });
     }
 
     public hidePermissionModel() {
-        this.permissionModel.hide();
+        // this.permissionModel.hide();
     }
 }

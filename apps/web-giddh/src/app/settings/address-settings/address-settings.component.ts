@@ -1,8 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest, of, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
@@ -12,6 +12,22 @@ import { OrganizationType } from '../../models/user-login-state';
 import { AppState } from '../../store';
 import { OrganizationProfile, SettingsAsideFormType } from '../constants/settings.constant';
 import { WarehouseActions } from '../warehouse/action/warehouse.action';
+
+
+export interface PeriodicElement {
+    no: number;
+    name: string;
+    address: string;
+    gstin: string;
+    state: string;
+    linked: string;
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [
+    {no: 1, name: '12/07/2023', address: 'Testing PIN: 452001', gstin: '544545', state: 'MP - Madhya Pradesh', linked: 'AAAA Dv ShriDefault Ke Alawa Ek Or Warehouse Sfrtt'},
+    {no: 1, name: '12/07/2023', address: 'LTS', gstin: '544545', state: 'MP - Madhya Pradesh', linked: 'AAAA Dv ShriDefault Ke Alawa Ek Or Warehouse Sfrtt'},
+    {no: 1, name: '12/07/2023', address: 'LTS', gstin: '544545', state: 'MP - Madhya Pradesh', linked: 'AAAA Dv ShriDefault Ke Alawa Ek Or Warehouse Sfrtt'},
+]
 
 @Component({
     selector: 'address-settings',
@@ -31,8 +47,9 @@ import { WarehouseActions } from '../warehouse/action/warehouse.action';
     ]
 })
 export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
-    /** Stores the confirmation modal instance */
-    @ViewChild('deleteAddressConfirmationModal', { static: true }) public deleteAddressConfirmationModal: ModalDirective;
+    /*--- mat-dialog ---*/
+    @ViewChild("asideAccountAsidePane") public asideAccountAsidePane: TemplateRef<any>;
+    @ViewChild("deleteAddressConfirmationModal") public deleteAddressConfirmationModal: TemplateRef<any>;
     /** True if we need to show manage address section only */
     @Input() public addressOnly: boolean = false;
     /** Tax type (gst/trn) */
@@ -131,12 +148,16 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public hideLinkEntity: boolean = true;
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /*-- mat-table --*/
+    displayedColumns: string[] = ['no', 'name', 'address', 'gstin', 'state', 'linked'];
+    dataSource = ELEMENT_DATA;
 
     /** @ignore */
     constructor(
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
-        private settingsBranchActions: SettingsBranchActions
+        private settingsBranchActions: SettingsBranchActions,
+        public dialog: MatDialog
     ) { }
 
     /**
@@ -252,9 +273,19 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof AddressSettingsComponent
      */
-    public openAddAndManage(): void {
-        this.toggleAccountAsidePane();
-    }
+    // public openAddAndManage(): void {
+    //     this.toggleAccountAsidePane();
+    // }
+    public openAddAndManage() {
+        this.dialog.open(this.asideAccountAsidePane, {
+            width: '1000px',
+            height: '100vh !important',
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+     }
 
     /**
      * Toggles the aside menu
@@ -329,7 +360,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public handleUpdateAddress(address: any): void {
         this.addressConfiguration.type = SettingsAsideFormType.EditAddress;
         this.addressToUpdate = address;
-        this.openAddAndManage();
     }
 
     /**
@@ -458,10 +488,17 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} address Selected address
      * @memberof AddressSettingsComponent
      */
-    public showConfirmationModal(address: any): void {
-        this.selectedAddress = address;
-        this.deleteAddressConfirmationModal?.show();
-    }
+    // public showConfirmationModal(address: any): void {
+    //     this.selectedAddress = address;
+    //     this.deleteAddressConfirmationModal?.show();
+    // }
+
+    public showConfirmationModal() {
+        this.dialog.open(this.deleteAddressConfirmationModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px',
+        });
+     }
 
     /**
      * Handles the confirmation of the operation
@@ -474,7 +511,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.handleDeleteAddress(this.selectedAddress);
         }
-        this.deleteAddressConfirmationModal.hide();
+        // this.deleteAddressConfirmationModal.hide();
     }
 
     /**
@@ -483,7 +520,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public onCancel(): void {
-        this.deleteAddressConfirmationModal.hide();
+        // this.deleteAddressConfirmationModal.hide();
     }
 
     /**

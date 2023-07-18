@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
@@ -46,11 +47,13 @@ import { SettingsUtilityService } from '../services/settings-utility.service';
 })
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Change status modal instance */
-    @ViewChild('statusModal', { static: true }) public statusModal: ModalDirective;
     @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal', { static: false }) public addCompanyModal: ModalDirective;
+    // @ViewChild('addCompanyModal', { static: false }) public addCompanyModal: ModalDirective;
+    // @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
     @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
     @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
+    @ViewChild('statusModal', { static: true }) public statusModal: any;
+    @ViewChild('addCompanyModal', { static: true }) public addCompanyModal: any;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
         dateInputFormat: GIDDH_DATE_FORMAT,
@@ -117,7 +120,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private _generalService: GeneralService,
         private settingsUtilityService: SettingsUtilityService,
         private toasterService: ToasterService,
-        private settingsBranchService: SettingsBranchService
+        private settingsBranchService: SettingsBranchService,
+        public dialog: MatDialog,
     ) {
 
     }
@@ -220,12 +224,19 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    public openCreateCompanyModal(isUpdateMode?: boolean): void {
-        this.loadAddCompanyComponent(isUpdateMode);
-        this.hideAddBranchModal();
-        this.addCompanyModal?.show();
-    }
+    // public openCreateCompanyModal(isUpdateMode?: boolean): void {
+    //     this.loadAddCompanyComponent(isUpdateMode);
+    //     this.hideAddBranchModal();
+    //     this.addCompanyModal?.show();
+    // }
 
+
+    public openCreateCompanyModal() {
+        this.dialog.open(this.addCompanyModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px',
+        });  
+    }
     /**
      * Handles update branch operation
      *
@@ -580,15 +591,24 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @param {*} branch
      * @memberof BranchComponent
      */
-    public confirmStatusUpdate(branch: any): void {
-        const unarchivedBranches = this.unFilteredBranchList?.filter(currentBranch => !currentBranch?.isArchived);
-        if (unarchivedBranches?.length > 1 || branch?.isArchived) {
-            this.branchStatusToUpdate = branch;
-            this.statusModal?.show();
-        } else {
-            this.toasterService.warningToast(this.localeData?.archive_notallowed);
-        }
+    // public confirmStatusUpdate(branch: any): void {
+    //     const unarchivedBranches = this.unFilteredBranchList?.filter(currentBranch => !currentBranch?.isArchived);
+    //     if (unarchivedBranches?.length > 1 || branch?.isArchived) {
+    //         this.branchStatusToUpdate = branch;
+    //         this.statusModal?.show();
+    //     } else {
+    //         this.toasterService.warningToast(this.localeData?.archive_notallowed);
+    //     }
 
+    // }
+
+    public confirmStatusUpdate() {
+        console.log("called");
+        
+        this.dialog.open(this.statusModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px',
+        });  
     }
 
     /**

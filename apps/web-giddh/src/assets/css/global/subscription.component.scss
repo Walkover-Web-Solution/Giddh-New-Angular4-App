@@ -1,0 +1,36 @@
+.ipad-responsive {
+    dropdown-field {
+        .dropdown-bg {
+            background-color: var(--color-primary-subscription-plans-top-bar-background);
+        }
+    }
+}
+.expand-button {
+    .mat-button-focus-overlay {
+        background: transparent !important;
+    }
+}
+.main-tabs-content {
+    .mat-tab-labels {
+        background-color: var(--color-dark-fog);
+    }
+}
+
+/*============Mat Range Date Picker Default CSS Overide =====Start===================*/
+.mat-datepicker-toggle {
+    color: var(--color-nero) !important;
+}
+.mat-form-field-flex {
+    align-items: center !important;
+}
+.mat-calendar-header {
+    background-color: var(--color-primary-header-background) !important;
+}
+.mat-form-field-type-mat-date-range-input {
+    .mat-form-field-infix {
+        width: 206px !important;
+    }
+}
+.mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+}

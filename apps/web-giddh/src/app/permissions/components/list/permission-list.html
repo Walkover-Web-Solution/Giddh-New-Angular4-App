@@ -6,26 +6,43 @@
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid clearfix" *ngIf="allRoles?.length > 0">
-        <a
-            href="javascript:void(0)"
-            *ngIf="showBackButton"
-            class="btn btn-sky-blue pull-right mr-t1 mr-b1"
-            [routerLink]="['/pages/settings/permission']"
-            >{{commonLocaleData?.app_back}}</a
-        >
-        <div class="col-sm-12 mr-t15 p-0 role clearfix" *ngFor="let role of allRoles">
+        <div class="col-sm-12 mr-t2 mr-b2 d-flex justify-content-end">
+            <button mat-stroked-button color="primary" (click)="openPermissionModal()">
+                {{localeData?.add_new_role}}
+            </button>
+            <button
+                mat-stroked-button
+                *ngIf="showBackButton"
+                class="btn custom-btn"
+                [routerLink]="['/pages/settings/permission']"
+            >
+                {{commonLocaleData?.app_back}}
+            </button>
+        </div>
+        <div class="col-sm-12 mr-t15 p-0 role clearfix btn-show" *ngFor="let role of allRoles">
             <div class="row mr-0 ml-0">
                 <div class="col-md-3 col-sm-3 col-12 p-0 role-head cp">
                     <span class="vertical-center">
                         <h1>{{role.name}}</h1>
                         <div class="text-center mr-t2 on-hover">
-                            <button *ngIf="!role.isFixed" class="btn btn-sm btn-primary" (click)="updateRole(role);">
+                            <button
+                                mat-stroked-button
+                                *ngIf="!role.isFixed"
+                                class="btn custom-btn"
+                                (click)="updateRole(role);"
+                            >
                                 {{commonLocaleData?.app_edit}}
                             </button>
-                            <button *ngIf="!role.isFixed" class="btn btn-sm btn-danger" (click)="deleteRole(role);">
+                            <button
+                                mat-stroked-button
+                                color="warn"
+                                *ngIf="!role.isFixed"
+                                class="btn"
+                                (click)="deleteRole(role);"
+                            >
                                 {{commonLocaleData?.app_delete}}
                             </button>
-                            <button *ngIf="role.isFixed" class="btn btn-sm btn-primary" (click)="updateRole(role);">
+                            <button mat-stroked-button color="primary" class="btn" (click)="updateRole(role);">
                                 {{commonLocaleData?.app_view}}
                             </button>
                         </div>
@@ -38,32 +55,96 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-sm-12 mr-t2 mr-b2 role text-center clearfix pd-4 new-box">
-            <h1 class="inline-block cursor-pointer" (click)="openPermissionModal()">{{localeData?.add_new_role}}</h1>
-        </div>
     </div>
 
+    <!-- mat-card -->
+    <!-- <div class="container-fluid" *ngIf="allRoles?.length > 0">
+        <div class="row">
+            <div class="col-lg-12 mr-t2 mr-b2 d-flex justify-content-end">
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    (click)="openPermissionModal()"
+                >{{localeData?.add_new_role}}
+                </button>
+                <button
+                    mat-stroked-button
+                    *ngIf="showBackButton"
+                    class="btn custom-btn"
+                    [routerLink]="['/pages/settings/permission']"
+                    >{{commonLocaleData?.app_back}}
+                </button>
+            </div>
+            <div class="col-lg-12" *ngFor="let role of allRoles">
+                <mat-card class="view-card mt-4">
+                    <div class="view-card-header">
+                        <mat-card-title>{{role.name}}</mat-card-title>
+                        <mat-card-actions class="m-0 p-0">
+                            <button mat-stroked-button class="btn custom-btn ml-0" *ngIf="!role.isFixed">Edit</button>
+                            <button mat-stroked-button class="btn ml-0" color="primary">View</button>
+                            <button mat-stroked-button class="btn ml-0" color="warn" *ngIf="!role.isFixed">Delete</button>
+                            <a href="javascript:;"
+                                [matTooltip]="'Edit'"
+                                [matTooltipPosition]="'above'">
+                                <i class="icon-edit-pencil"></i>
+                            </a>
+                            <a href="javascript:;"
+                                [matTooltip]="'View'"
+                                [matTooltipPosition]="'above'">
+                                <i class="icon-eye"></i>
+                            </a>
+                            <a href="javascript:;"
+                                [matTooltip]="'Delete'"
+                                [matTooltipPosition]="'above'">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </mat-card-actions>
+                    </div>
+                    <mat-card-content class="d-flex w-100">
+                        <mat-list role="list" class="w-25">
+                            <mat-list-item role="listitem" *ngFor="let item of role?.scopes">{{ item.name | capitalize }}</mat-list-item>
+                            <mat-list-item role="listitem">Invoice</mat-list-item>
+                            <mat-list-item role="listitem">Recurring_entry</mat-list-item>
+                        </mat-list>
+                        <mat-list role="list" class="w-25">
+                            <mat-list-item role="listitem">Audit_logs</mat-list-item>
+                            <mat-list-item role="listitem">Invoice</mat-list-item>
+                            <mat-list-item role="listitem">Recurring_entry</mat-list-item>
+                        </mat-list>
+                        <mat-list role="list" class="w-25">
+                            <mat-list-item role="listitem">Audit_logs</mat-list-item>
+                            <mat-list-item role="listitem">Invoice</mat-list-item>
+                            <mat-list-item role="listitem">Recurring_entry</mat-list-item>
+                        </mat-list>
+                        <mat-list role="list" class="w-25">
+                            <mat-list-item role="listitem">Audit_logs</mat-list-item>
+                            <mat-list-item role="listitem">Invoice</mat-list-item>
+                            <mat-list-item role="listitem">Recurring_entry</mat-list-item>
+                        </mat-list>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div> -->
+
     <!--add and manage role model -->
-    <div bsModal #permissionModel="bs-modal" class="modal fade" role="dialog">
+    <ng-template #permissionModel>
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <permission-model
-                    *ngIf="permissionModel.isShown && localeData?.page_heading"
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
                     (closeEvent)="closePopupEvent($event)"
                 ></permission-model>
             </div>
         </div>
-    </div>
+    </ng-template>
 
     <!--delete role confirmation model -->
-    <div bsModal #permissionConfirmationModel="bs-modal" class="modal fade" role="dialog">
+    <ng-template #permissionConfirmationModel>
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <delete-role-confirmation-model
-                    *ngIf="permissionConfirmationModel.isShown"
                     [selectedRoleForDelete]="selectedRoleForDelete"
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
@@ -73,5 +154,5 @@
                 </delete-role-confirmation-model>
             </div>
         </div>
-    </div>
+    </ng-template>
 </ng-container>

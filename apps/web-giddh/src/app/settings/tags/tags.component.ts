@@ -172,6 +172,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         // this.confirmationMessage = message;
         this.dialog.open(this.confirmationModal, {
             panelClass: 'modal-dialog',
+            width: '1000px',
         });   
     }
 }

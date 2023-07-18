@@ -1,14 +1,21 @@
 <div class="add-new-role-modal">
     <div class="modal-header d-flex justify-content-between">
         <h3>{{ localeData?.add_role }}</h3>
-        <button aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopupEvent()">×</button>
+        <button class="close" mat-button mat-dialog-close (click)="closePopupEvent()">×</button>
     </div>
     <div class="modal-body clearfix" id="export-body">
         <form #newRoleForm="ngForm" (submit)="addNewRole()" autocomplete="off">
             <div>
                 <div class="form-group">
-                    <label>{{ localeData?.role_name_label }}</label>
-                    <input
+                    <input-field
+                        [label]="localeData?.role_name_label"
+                        [type]="'text'"
+                        [required]="true"
+                        [name]="'name'"
+                        [(ngModel)]="newRoleObj.name"
+                        [placeholder]="localeData?.role_name_label"
+                    ></input-field>
+                    <!-- <input
                         type="text"
                         required
                         name="name"
@@ -16,10 +23,10 @@
                         [(ngModel)]="newRoleObj.name"
                         [placeholder]="localeData?.role_name_label"
                         #name="ngModel"
-                    />
+                    /> -->
                 </div>
                 <div class="form-group custom-select position-relative">
-                    <label>{{ localeData?.role_type_label }}</label>
+                    <!-- <label>{{ localeData?.role_type_label }}</label>
                     <select
                         class="form-control"
                         required
@@ -29,8 +36,14 @@
                     >
                         <option [ngValue]="true">{{ localeData?.fresh_start }}</option>
                         <option [ngValue]="false">{{ localeData?.copy_other_role }}</option>
-                    </select>
-                    <span class="select-drop"><i class="fa fa-caret-down"></i></span>
+                    </select> -->
+                    <dropdown-field
+                        [label]="localeData?.role_type_label"
+                        [required]="true"
+                        (selectedOption)="(newRoleObj.isFresh)"
+                        [name]="'isFresh'"
+                        [options]=""
+                    ></dropdown-field>
                 </div>
                 <div class="form-group select-page position-relative" *ngIf="newRoleObj.isFresh">
                     <div
@@ -70,6 +83,23 @@
                                 </label>
                             </li>
                         </ul>
+                        <!-- <mat-form-field class="w-100" appearance="outline">
+                            <mat-select
+                            >
+                                <div class="select-quantity-option">
+                                    <ng-container>
+                                        <mat-option
+                                            [value]="group?.value"
+                                        >
+                                            {{ group.label }}
+                                        </mat-option>
+                                    </ng-container>
+                                    <mat-option>
+                                        {{ commonLocaleData?.app_no_result_found }}
+                                    </mat-option>
+                                </div>
+                            </mat-select>
+                        </mat-form-field> -->
                     </div>
                 </div>
                 <div class="form-group custom-select position-relative" *ngIf="!newRoleObj.isFresh">
@@ -79,12 +109,18 @@
                         <option *ngFor="let role of allRoles" [ngValue]="role?.uniqueName">{{ role?.name }}</option>
                     </select>
                     <span class="select-drop"><i class="fa fa-caret-down"></i></span>
+                    <!-- <dropdown-field
+                        [label]="localeData?.copy_permission"
+                        [name]="'somename'"
+                        (selectedOption)="newRoleObj.uniqueName"
+                        [options]=""
+                    ></dropdown-field> -->
                 </div>
                 <div class="clearfix text-right mr-t4">
-                    <button type="submit" class="btn btn-sm btn-success" [disabled]="!isFormValid">
+                    <button mat-stroked-button color="primary" type="submit" class="btn" [disabled]="!isFormValid">
                         {{ commonLocaleData?.app_next }}
                     </button>
-                    <button type="button" class="btn btn-sm btn-danger" (click)="closePopupEvent()">
+                    <button mat-stroked-button mat-dialog-close class="btn custom-btn" (click)="closePopupEvent()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

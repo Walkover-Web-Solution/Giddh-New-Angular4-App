@@ -13,6 +13,9 @@ $custom-typography: mat-typography-config(
 @import "../css/global/onboarding.scss";
 @import "../css/global/setting.profile.scss";
 @import "../css/global/user-details.scss";
+@import "../css/global/permission-list.scss";
+@import "../css/global/aside-menu-account.scss";
+@import "../css/global/subscription.component.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -4980,11 +4983,6 @@ label {
     background: var(--color-iron);
     color: var(--color-white);
     border-radius: 0;
-}
-
-#single-role tbody tr td:first-child,
-#single-role thead tr th:first-child {
-    border-right: 1px solid var(--color-iron);
 }
 
 #single-role .lead {
@@ -13136,6 +13134,11 @@ body.prevent-body-scroll {
         }
     }
 }
+.custom-btn:disabled {
+    .ladda-label {
+        color: var(--color-giddh-blue) !important;
+    }
+}
 
 .giddh-no-permissions {
     display: none !important;
@@ -14433,4 +14436,8 @@ button {
             }
         }
     }
+}
+
+.custom-btn {
+    color: var(--color-black);
 }

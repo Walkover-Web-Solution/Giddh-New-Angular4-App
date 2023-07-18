@@ -1,15 +1,3 @@
-.menu-one-button {
-    position: absolute;
-    z-index: 9;
-    top: 4px;
-    left: 23.3%;
-    width: 75.9%;
-    button {
-        float: right;
-        font-weight: 500;
-    }
-}
-
 .mat-option {
     color: var(--color-primary-subscription-dropdown-text);
 }
@@ -59,13 +47,20 @@
     color: var(--color-gray);
 }
 
-.menu-two-list {
+.head-dropdown {
+    display: flex;
+    background-color: var(--color-primary-subscription-plans-top-bar-background);
+    padding-left: 15px;
+    align-items: center;
     width: 100%;
     height: inherit;
+}
+
+.menu-two-list {
+    width: 100%;
     display: flex;
-    justify-content: space-around;
+    column-gap: 25px;
     align-items: center;
-    background-color: var(--color-primary-subscription-plans-top-bar-background);
     .menu-two-list-items {
         .select-subscription {
             width: 5rem;
@@ -91,7 +86,6 @@
 }
 
 .menu-two-button {
-    width: 14%;
     height: inherit;
     background-color: var(--color-primary-subscription-plans-top-bar-background);
     a {
@@ -524,9 +518,8 @@
     }
     .expand-button {
         position: absolute;
-        width: 21%;
-        left: 77%;
-        top: 31%;
+        right: 18px;
+        top: 0;
         z-index: 2;
         button {
             float: right;
@@ -624,24 +617,21 @@
     background: var(--color-solitude-light);
 }
 .main-content-subscription {
+    position: relative;
     float: left;
     width: 100%;
-    .full-subscription-wrapper {
-        float: left;
-        width: 100%;
-    }
 }
 .no-data {
     top: 19% !important;
     position: absolute;
     width: 100%;
 }
+.link-color {
+    color: var(--color-giddh-blue) !important;
+}
 @media screen and (max-width: 1024px) and (orientation: landscape) {
     .no-data {
         top: 11% !important;
-    }
-    .menu-one-button {
-        left: 22.5%;
     }
     .menu-two {
         padding-left: 9px;
@@ -781,9 +771,6 @@
             }
         }
         .expand-button {
-            top: 30.5%;
-            left: 60%;
-            width: 40%;
             button {
                 border-bottom: none;
                 padding-left: 0 !important;
@@ -844,9 +831,6 @@
     .expand-button {
         top: 35% !important;
         float: left !important;
-    }
-    .menu-one-button {
-        width: 74.3%;
     }
     .menu-two {
         img {

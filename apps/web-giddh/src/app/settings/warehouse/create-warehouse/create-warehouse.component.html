@@ -46,23 +46,13 @@
             <form [formGroup]="warehouseForm" novalidate (ngSubmit)="handleFormSubmit()">
                 <div class="warehouse-form">
                     <div class="warehouse-form-field">
-                        <label> {{ localeData?.warehouse_name }} <span class="red-text">*</span> </label>
-                        <input
-                            [class.error-box]="
-                                warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.invalid
-                            "
-                            type="text"
-                            maxlength="100"
-                            required
+                        <input-field
+                            [label]="localeData?.warehouse_name"
+                            [type]="'text'"
+                            [maxlength]="100"
+                            [required]="true"
                             formControlName="name"
-                            class="form-control"
-                        />
-                        <span
-                            class="danger pl-1"
-                            *ngIf="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.errors?.maxlength"
-                        >
-                            {{ commonLocaleData?.app_max_100_characters_allowed_limit }}
-                        </span>
+                        ></input-field>
                     </div>
                     <div class="warehouse-form-field">
                         <label>
@@ -112,15 +102,28 @@
                                     </a>
                                 </ng-template>
                             </sales-sh-select>
+                            <!-- <dropdown-field
+                                [label]="localeData?.addresses"
+                                [options]="'addresses'"
+                                [name]="'particulars'"
+                                [placeholder]="localeData?.select_address"
+                                [cssClass]="'linked-add create'"
+                            ></dropdown-field> -->
                         </div>
                     </div>
                 </div>
                 <div class="footer-btn row">
                     <div class="button-group">
-                        <button type="reset" (click)="handleFormClear()" class="btn btn-primary mr-r15">
+                        <button mat-stroked-button type="reset" (click)="handleFormClear()" class="btn custom-btn">
                             {{ commonLocaleData?.app_clear }}
                         </button>
-                        <button type="submit" [disabled]="warehouseForm?.invalid" class="btn btn-success">
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            type="submit"
+                            [disabled]="warehouseForm?.invalid"
+                            class="btn"
+                        >
                             {{ localeData?.create_warehouse }}
                         </button>
                     </div>
@@ -129,30 +132,29 @@
         </div>
     </div>
     <!-- aside pane for create address -->
-    <div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'"></div>
-    <ng-container
-        appTranslate
-        [file]="'settings/profile'"
-        (localeData)="profileLocaleData = $event"
-        [requireCommonData]="false"
-        *ngIf="addressAsideMenuState === 'in'"
-    >
-        <create-address
-            [class]="addressAsideMenuState"
-            [@slideInOut]="addressAsideMenuState"
-            [keyboardShortcut]="'esc'"
-            (onShortcutPress)="toggleAddressAsidePane()"
-            [addressConfiguration]="addressConfiguration"
-            [companyName]="companyDetails?.name"
-            [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-            (saveAddress)="createNewAddress($event)"
-            [localeData]="profileLocaleData"
-            [commonLocaleData]="commonLocaleData"
-            [showLoader]="isAddressChangeInProgress"
-            (closeAsideEvent)="toggleAddressAsidePane($event)"
-            *ngIf="addressAsideMenuState === 'in'"
-            [hideLinkEntity]="addresses?.length <= 0 && hideLinkEntity"
-        ></create-address>
-        <!-- aside pane for create address end -->
-    </ng-container>
+    <ng-template #asideAccountAsidePane>
+        <ng-container
+            appTranslate
+            [file]="'settings/profile'"
+            (localeData)="profileLocaleData = $event"
+            [requireCommonData]="false"
+        >
+            <create-address
+                [class]="addressAsideMenuState"
+                [@slideInOut]="addressAsideMenuState"
+                [keyboardShortcut]="'esc'"
+                (onShortcutPress)="toggleAddressAsidePane()"
+                [addressConfiguration]="addressConfiguration"
+                [companyName]="companyDetails?.name"
+                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                (saveAddress)="createNewAddress($event)"
+                [localeData]="profileLocaleData"
+                [commonLocaleData]="commonLocaleData"
+                [showLoader]="isAddressChangeInProgress"
+                (closeAsideEvent)="toggleAddressAsidePane($event)"
+                [hideLinkEntity]="addresses?.length <= 0 && hideLinkEntity"
+            ></create-address>
+            <!-- aside pane for create address end -->
+        </ng-container>
+    </ng-template>
 </ng-container>

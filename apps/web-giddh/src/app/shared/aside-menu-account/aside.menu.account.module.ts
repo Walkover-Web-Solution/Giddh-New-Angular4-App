@@ -5,6 +5,7 @@ import { AccountUpdateNewDetailsModule } from "../header/components/account-upda
 import { ConfirmModalModule } from "../../theme/confirm-modal/confirm-modal.module";
 import { AsideMenuAccountInContactComponent } from "./aside.menu.account.component";
 import { ModalModule } from "ngx-bootstrap/modal";
+import { MatDialogModule } from "@angular/material/dialog";
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import { ModalModule } from "ngx-bootstrap/modal";
         AccountAddNewDetailsModule,
         AccountUpdateNewDetailsModule,
         ConfirmModalModule,
-        ModalModule.forRoot()
+        ModalModule.forRoot(),
+        MatDialogModule
     ],
     exports: [
         AsideMenuAccountInContactComponent

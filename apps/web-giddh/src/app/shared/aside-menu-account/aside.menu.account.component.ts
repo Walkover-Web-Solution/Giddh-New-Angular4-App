@@ -10,6 +10,7 @@ import { GroupResponse } from '../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AccountAddNewDetailsComponent } from '../header/components';
 import { AccountService } from '../../services/account.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'aside-menu-account',
@@ -26,7 +27,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public getUpdateList: EventEmitter<string> = new EventEmitter();
-    @ViewChild('deleteAccountModal', { static: true }) public deleteAccountModal: ModalDirective;
+    @ViewChild('deleteAccountModal', { static: true }) public deleteAccountModal: any;
     @ViewChild('addAccountNewComponent', { static: true }) public addAccountNewComponent: AccountAddNewDetailsComponent;
 
     public flatGroupsOptions: IOption[];
@@ -53,7 +54,8 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     constructor(
         private accountService: AccountService,
         private store: Store<AppState>,
-        private accountsAction: AccountsAction
+        private accountsAction: AccountsAction,
+        public dialog: MatDialog
     ) {
         // account-add component's property
         this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
@@ -132,8 +134,10 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.closeAsideEvent.emit(event);
     }
 
-    public showDeleteAccountModal() {
-        this.deleteAccountModal?.show();
+    public showDeleteAccountModal(): void {
+        this.dialog.open(this.deleteAccountModal, {
+            panelClass: 'modal-dialog',
+        });
     }
 
     public hideDeleteAccountModal() {

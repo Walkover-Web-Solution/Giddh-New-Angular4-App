@@ -26,6 +26,8 @@ import { SalesService } from '../../services/sales.service';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { MatTabGroup } from '@angular/material/tabs';
+import { MatDialog } from '@angular/material/dialog';
+import { ShareLedgerComponent } from '../../ledger/components/share-ledger/share-ledger.component';
 
 @Component({
     selector: 'setting-integration',
@@ -155,7 +157,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private settingsIntegrationService: SettingsIntegrationService,
         private searchService: SearchService,
         private salesService: SalesService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        public dialog: MatDialog,
 
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
@@ -821,8 +824,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      *
      * @memberof SettingIntegrationComponent
      */
-    public openCreateNewAccountModal(): void {
-        this.createNewAccountModal?.show();
+    // public openCreateNewAccountModal(): void {
+    //     this.createNewAccountModal?.show();
+    // }
+    public openCreateNewAccountModal() {
+        this.dialog.open(ShareLedgerComponent, {
+            width: '630px'
+        });
     }
 
     /**

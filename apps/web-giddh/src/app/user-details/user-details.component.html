@@ -337,13 +337,12 @@
             >
                 <div class="wrap-tab-content-pd-15">
                     <div class="box clearfix mt-1">
-                        <form name="mobileForm" novalidate>
-                            <h1 class="section-head">{{ localeData?.mobile_number?.add_edit_mobile_number }}</h1>
-                            <div class="mr-t05">
+                        <form class="row" name="mobileForm" novalidate>
+                            <div class="col-lg-3 pd-r05">
                                 <input
                                     decimalDigitsDirective
                                     maxlength="10"
-                                    class="form-control max-width-350 pull-left"
+                                    class="form-control pull-left"
                                     type="text"
                                     ng-required="true"
                                     [placeholder]="localeData?.mobile_number?.mobile_no_example"
@@ -351,43 +350,56 @@
                                     [(ngModel)]="phoneNumber"
                                 />
                                 <!-- <input-field
+                                    [label]="localeData?.mobile_number?.add_edit_mobile_number"
                                     decimalDigitsDirective
                                     [maxlength]="10"
-                                    [cssClass]="max-width-350 pull-left"
+                                    [cssClass]="'max-width-350 pull-left'"
                                     [type]="'text'"
                                     ng-required="true"
                                     [placeholder]="localeData?.mobile_number?.mobile_no_example"
                                     [name]="mobileForm.phoneNumber"
                                     [(ngModel)]="phoneNumber"
                                 ></input-field> -->
+                                <p class="mr-t1">
+                                    <b>{{ commonLocaleData?.app_note }}: </b
+                                    >{{ localeData?.mobile_number?.mobile_number_format }}
+                                </p>
+                            </div>
+                            <div class="col-lg-4 pd-l05">
                                 <button
-                                    class="btn btn-success btn-sm mr-l1"
+                                    mat-stroked-button
+                                    color="primary"
+                                    class="btn mr-l1"
                                     [ladda]="isAddNewMobileNoInProcess$ | async"
                                     (click)="addNumber(phoneNumber)"
                                 >
                                     {{ commonLocaleData?.app_add }}
                                 </button>
                             </div>
-                            <p class="mr-t1">
-                                <b>{{ commonLocaleData?.app_note }}: </b
-                                >{{ localeData?.mobile_number?.mobile_number_format }}
-                            </p>
                         </form>
-
-                        <div class="clearfix p-0" *ngIf="showVerificationBox">
-                            <hr />
-                            <h1 class="mr-t2 max-width-350">
-                                <span>{{ localeData?.mobile_number?.verification_code_label }}</span>
-                            </h1>
-                            <div class="mr-t05">
-                                <input
-                                    class="form-control max-width-350 pull-left"
-                                    type="text"
-                                    [placeholder]="localeData?.mobile_number?.verification_code_placeholder"
-                                    [(ngModel)]="oneTimePassword"
-                                />
+                        <div class="row mr-t05 align-items-center" *ngIf="showVerificationBox">
+                            <div class="col-lg-3 pd-r05">
+                                <div class="mr-t05">
+                                    <!-- <input
+                                        class="form-control max-width-350 pull-left"
+                                        type="text"
+                                        [placeholder]="localeData?.mobile_number?.verification_code_placeholder"
+                                        [(ngModel)]="oneTimePassword"
+                                    /> -->
+                                    <input-field
+                                        [label]="localeData?.mobile_number?.verification_code_label"
+                                        class="max-width-350"
+                                        [type]="'text'"
+                                        [placeholder]="localeData?.mobile_number?.verification_code_placeholder"
+                                        [(ngModel)]="oneTimePassword"
+                                    ></input-field>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 pd-l05">
                                 <button
-                                    class="btn btn-success mr-l1"
+                                    mat-stroked-button
+                                    color="primary"
+                                    class="btn mr-l1"
                                     [ladda]="isVerifyAddNewMobileNoInProcess$ | async"
                                     (click)="verifyNumber()"
                                 >
@@ -549,11 +561,8 @@
                                     name="twoWayAuth"
                                     color="primary"
                                     (change)="changeTwoWayAuth()"
-                                >
+                                    >{{ localeData?.mobile_number?.two_way_auth_label }}
                                 </mat-slide-toggle>
-                                <label class="two-way-auth-label">{{
-                                    localeData?.mobile_number?.two_way_auth_label
-                                }}</label>
                             </h1>
                             <p class="grey" *ngIf="twoWayAuth">{{ localeData?.mobile_number?.two_way_auth_content }}</p>
                         </div>

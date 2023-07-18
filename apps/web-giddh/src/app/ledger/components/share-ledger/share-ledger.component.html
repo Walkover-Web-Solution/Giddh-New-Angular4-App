@@ -10,7 +10,6 @@
                 <button
                     aria-hidden="true"
                     class="close"
-                    mat-button
                     mat-dialog-close
                     [attr.aria-label]="commonLocaleData?.app_close"
                 >
@@ -27,7 +26,7 @@
                                 <!--share account from-->
                                 <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" autocomplete="off">
                                     <div class="input-group d-flex justify-content-between">
-                                        <mat-form-field appearance="fill">
+                                        <!-- <mat-form-field appearance="fill">
                                             <input
                                                 matInput
                                                 name="userEmail"
@@ -39,16 +38,20 @@
                                                 class="form-control mat-field-border mt-0"
                                                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,5}$"
                                             />
-                                        </mat-form-field>
+                                        </mat-form-field> -->
+                                        <input-field
+                                            [name]="'userEmail'"
+                                            [type]="'email'"
+                                            [(ngModel)]="email"
+                                            [required]="true"
+                                            [placeholder]="commonLocaleData?.app_email_id"
+                                            [cssClass]="'mt-0'"
+                                        ></input-field>
                                         <span class="input-group-btn mr-l1">
                                             <button
                                                 mat-stroked-button
                                                 color="primary"
-                                                class="
-                                                    share-ledger-button
-                                                    d-flex
-                                                    align-items-center
-                                                "
+                                                class="share-ledger-button d-flex align-items-center"
                                                 type="submit"
                                                 [disabled]="shareAccountForm.invalid"
                                                 (click)="shareAccount()"
@@ -110,11 +113,7 @@
                                         mat-stroked-button
                                         color="primary"
                                         [disabled]="!magicLink ? 'disabled' : null"
-                                        class="
-                                            share-ledger-button
-                                            d-flex
-                                            align-items-center
-                                        "
+                                        class="share-ledger-button d-flex align-items-center"
                                         (click)="toggleIsCopied()"
                                         [ngxClipboard]="magicLinkInput"
                                     >

@@ -11,6 +11,19 @@ import { IPage, IPageStr, NewPermissionObj, NewRoleClass } from '../../permissio
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { cloneDeep, concat, filter, find, findIndex, forEach, isEmpty, map, remove } from '../../../lodash-optimized';
 
+
+export interface PeriodicElement {
+    admin: string;
+    adminicon: string;
+    view: string;
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [
+    {admin: '12/07/2023', adminicon: '', view: ''},
+    {admin: '12/07/2023', adminicon: '', view: ''},
+    {admin: '12/07/2023', adminicon: '', view: ''}
+]
+
 @Component({
     templateUrl: './permission.details.html',
     styleUrls: [`./permission.details.scss`]
@@ -33,6 +46,9 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /*-- mat-table --*/
+    displayedColumns: string[] = ['admin', 'adminicon', 'view'];
+    dataSource = ELEMENT_DATA;
 
     constructor(private router: Router,
         private store: Store<AppState>,

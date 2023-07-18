@@ -42,6 +42,7 @@ import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-lo
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ClipboardModule } from 'ngx-clipboard';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -100,7 +101,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NoDataModule,
         MatSlideToggleModule,
         ClipboardModule,
-        MatTooltipModule
+        MatTooltipModule,
+        FormFieldsModule
     ],
     providers: [
 

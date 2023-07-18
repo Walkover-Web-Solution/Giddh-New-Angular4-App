@@ -3,7 +3,7 @@ import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import * as isCidr from 'is-cidr';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ShareRequestForm } from '../../../models/api-models/Permission';
@@ -29,6 +29,8 @@ const CIDR_RANGE = 'cidr_range';
     styleUrls: ['./form.component.scss']
 })
 export class SettingPermissionFormComponent implements OnInit, OnDestroy {
+    campaignOne: FormGroup;
+    campaignTwo: FormGroup;
 
     @Input() public userdata: ShareRequestForm;
     @Input() public isHorizntl: boolean;
@@ -79,6 +81,19 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     ) {
         this.createPermissionInProcess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionInProcess), takeUntil(this.destroyed$));
         this.createPermissionSuccess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionSuccess), takeUntil(this.destroyed$));
+        const today = new Date();
+        const month = today.getMonth();
+        const year = today.getFullYear();
+    
+        this.campaignOne = new FormGroup({
+          start: new FormControl(new Date(year, month, 13)),
+          end: new FormControl(new Date(year, month, 16)),
+        });
+    
+        this.campaignTwo = new FormGroup({
+          start: new FormControl(new Date(year, month, 15)),
+          end: new FormControl(new Date(year, month, 19)),
+        });
     }
 
     public ngOnDestroy() {

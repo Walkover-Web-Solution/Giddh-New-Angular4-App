@@ -14,18 +14,18 @@
                         <div class="col-xl-12 col-md-12 col-xs-12">
                             <div class="financial-year-field row pt-1">
                                 <div class="form-group mt-1 col-xl-4 col-lg-8 col-md-12 col-sm-12 clearfix">
-                                    <label>{{ localeData?.add_financial_year }}</label>
-                                    <div class="row">
-                                        <span class="col-sm-7 col-xs-12">
+                                    <div class="row align-items-center">
+                                        <span class="col-sm-7 col-xs-12 pd-r05">
                                             <dropdown-field
+                                                [label]="localeData?.add_financial_year"
                                                 [placeholder]="localeData?.select_financial_year"
                                                 [options]="yearOptions"
                                                 (selected)="selectYear($event)"
                                             >
                                             </dropdown-field>
                                         </span>
-                                        <div class="col-sm-4 col-xs-12">
-                                            <button class="btn btn-success btn-sm" (click)="addFY()">
+                                        <div class="col-sm-4 col-xs-12 pd-l1">
+                                            <button mat-stroked-button color="primary" (click)="addFY()">
                                                 {{ commonLocaleData?.app_save }}
                                             </button>
                                         </div>
@@ -33,10 +33,10 @@
                                 </div>
 
                                 <div class="form-group mt-1 col-xl-4 col-lg-8 col-md-12 col-sm-12 clearfix">
-                                    <label>{{ localeData?.financial_year_period }}</label>
-                                    <div class="row">
-                                        <span class="col-sm-7 col-xs-12">
+                                    <div class="row align-items-center">
+                                        <span class="col-sm-7 col-xs-12 pd-r05">
                                             <dropdown-field
+                                                [label]="localeData?.financial_year_period"
                                                 [name]="'selectedFYPeriod'"
                                                 [placeholder]="localeData?.financial_year_period"
                                                 (selected)="selectedFYPeriod = $event.value; selectFYPeriod($event)"
@@ -44,8 +44,8 @@
                                             >
                                             </dropdown-field>
                                         </span>
-                                        <div class="col-sm-4 col-xs-12">
-                                            <button class="btn btn-success btn-sm" (click)="updateFYPeriod()">
+                                        <div class="col-sm-4 col-xs-12 pd-l1">
+                                            <button mat-stroked-button color="primary" (click)="updateFYPeriod()">
                                                 {{ commonLocaleData?.app_save }}
                                             </button>
                                         </div>
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table-bordered basic table financial-year on-mobile-view">
+                                <!-- <table class="table-bordered basic table financial-year on-mobile-view">
                                     <thead [hidden]="!financialYearObj?.financialYears?.length">
                                         <tr>
                                             <th>{{ localeData?.sr_no }}</th>
@@ -89,6 +89,47 @@
                                             </td>
                                         </tr>
                                     </tbody>
+                                </table> -->
+
+                                <table
+                                    mat-table
+                                    [dataSource]="dataSource"
+                                    class="table-bordered basic table financial-year on-mobile-view"
+                                >
+                                    <ng-container matColumnDef="number">
+                                        <th mat-header-cell *matHeaderCellDef width="25%">{{ localeData?.sr_no }}</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.number }}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="from">
+                                        <th mat-header-cell *matHeaderCellDef width="25%">
+                                            {{ commonLocaleData?.app_from }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">{{ element.from }}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="to">
+                                        <th mat-header-cell *matHeaderCellDef width="25%">
+                                            {{ commonLocaleData?.app_to }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">{{ element.to }}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="status">
+                                        <th mat-header-cell *matHeaderCellDef width="25%">
+                                            {{ localeData?.lock_status }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <mat-slide-toggle
+                                                [color]="'primary'"
+                                                [name]="'lockedUnlockedFinancial'"
+                                                [(ngModel)]="lockedUnlockedFinancial"
+                                            >
+                                                {{
+                                                    lockedUnlockedFinancial ? localeData?.locked : localeData?.unlocked
+                                                }}
+                                            </mat-slide-toggle>
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
                             </div>
                             <div class="no-data" *ngIf="!financialYearObj || !financialYearObj?.financialYears?.length">

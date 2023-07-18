@@ -1,4 +1,4 @@
-:host {
+.aside-pane {
     position: fixed;
     left: auto;
     top: 0;
@@ -6,13 +6,13 @@
     bottom: 0;
     max-width: 760px;
     width: 100%;
-    z-index: 99999999;
+    z-index: 99999;
 }
 .aside-pane {
     padding: 0 !important;
 }
 
-:host.in #close {
+#close {
     display: block;
     position: absolute;
     right: 12px;
@@ -22,16 +22,6 @@
     border-radius: 0;
     background: transparent;
     color: var(--color-primary-right-side-popup-header-text);
-}
-
-:host .container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-:host .aside-pane {
-    max-width: 760px;
-    width: 100%;
 }
 .aside-body {
     padding: 0 15px;
@@ -69,31 +59,6 @@
                 color: var(--color-blue);
             }
         }
-    }
-}
-
-@media (max-width: 575px) {
-    :host {
-        max-width: 370px;
-    }
-    :host .aside-pane {
-        max-width: 370px;
-    }
-}
-@media (max-width: 375px) {
-    :host {
-        max-width: 310px;
-    }
-    :host .aside-pane {
-        max-width: 310px;
-    }
-}
-@media (max-width: 320px) {
-    :host {
-        max-width: 280px;
-    }
-    :host .aside-pane {
-        max-width: 280px;
     }
 }
 

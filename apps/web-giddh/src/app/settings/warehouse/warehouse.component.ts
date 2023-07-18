@@ -9,6 +9,7 @@ import {
     TemplateRef,
     ViewChild,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
@@ -90,17 +91,20 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public currentOrganizationUniqueName: string;
     public imgPath2: string = '';
     /** Change status modal instance */
-    @ViewChild('statusModal', { static: true }) public statusModal: ModalDirective;
+    // @ViewChild('statusModal', { static: true }) public statusModal: ModalDirective;
     /** View container to carry out on boarding */
     @ViewChild('onBoardingContainer', { static: true }) public onBoardingContainer: ElementViewContainerRef;
-    /** Warehouse on boarding modal viewchild */
-    @ViewChild('warehouseOnBoardingModal', { static: true }) public warehouseOnBoardingModal: ModalDirective;
     /** Welcome component template ref for second step of warehouse on boarding */
     @ViewChild('welcomeComponent', { static: true }) public welcomeComponentTemplate: TemplateRef<any>;
     /** Warehouse pagination instance */
     @ViewChild('warehousePagination', { static: true }) warehousePagination: PaginationComponent;
     /** Warehouse search field instance */
     @ViewChild('searchWarehouse', { static: false }) public searchWarehouse: ElementRef;
+    /*-- mat-dialog --*/
+    @ViewChild('asideAccountAsidePane', { static: true }) public asideAccountAsidePane: any;
+    /** Warehouse on boarding modal viewchild */
+    @ViewChild('warehouseOnBoardingModal', { static: true }) public warehouseOnBoardingModal: any;
+    @ViewChild('statusModal', { static: true }) public statusModal: any;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: Subject<boolean> = new Subject();
     /** Stores the current visible on boarding modal instance */
@@ -136,7 +140,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         private settingsProfileService: SettingsProfileService,
         private toasterService: ToasterService,
         private warehouseActions: WarehouseActions,
-        private settingsWarehouseService: SettingsWarehouseService
+        private settingsWarehouseService: SettingsWarehouseService,
+        public dialog: MatDialog,
     ) { }
 
     /**
@@ -181,10 +186,13 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      *
      * @memberof WarehouseComponent
      */
-    public openCreateWarehouseModal(): void {
+
+    public openCreateWarehouseModal() {
         this.startOnBoarding();
         this.createNewWarehouseModal();
-        this.warehouseOnBoardingModal?.show();
+        this.dialog.open(this.warehouseOnBoardingModal, {
+            panelClass: 'modal-dialog',
+        });
     }
 
     /**
@@ -270,16 +278,27 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {*} warehouse Warehouse to update
      * @memberof WarehouseComponent
      */
-    public editWarehouse(warehouse: any): void {
-        this.selectedWarehouse = warehouse;
+    // public editWarehouse(warehouse: any): void {
+    //     this.selectedWarehouse = warehouse;
 
-        this.loadAddresses('GET', () => {
-            this.warehouseToUpdate = {
-                name: warehouse.name,
-                // address: warehouse.address,
-                linkedEntities: warehouse.addresses || []
-            };
-            this.toggleAsidePane();
+    //     this.loadAddresses('GET', () => {
+    //         this.warehouseToUpdate = {
+    //             name: warehouse.name,
+    //             // address: warehouse.address,
+    //             linkedEntities: warehouse.addresses || []
+    //         };
+    //         this.toggleAsidePane();
+    //     });
+    // }
+
+    public editWarehouse() {
+        this.dialog.open(this.asideAccountAsidePane, {
+            width: '760px',
+            height: '100vh !important',
+            position: {
+                right: '0',
+                top: '0'
+            }
         });
     }
 
@@ -595,13 +614,22 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {*} warehouse
      * @memberof WarehouseComponent
      */
-    public confirmStatusUpdate(warehouse: any): void {
-        if (!warehouse?.isDefault || warehouse?.isArchived) {
-            this.warehouseStatusToUpdate = warehouse;
-            this.statusModal?.show();
-        } else {
-            this.toasterService.warningToast(this.localeData?.archive_notallowed);
-        }
+    // public confirmStatusUpdate(warehouse: any): void {
+    //     if (!warehouse?.isDefault || warehouse?.isArchived) {
+    //         this.warehouseStatusToUpdate = warehouse;
+    //         this.statusModal?.show();
+    //     } else {
+    //         this.toasterService.warningToast(this.localeData?.archive_notallowed);
+    //     }
+    // }
+
+    public confirmStatusUpdate() {
+        console.log("called");
+        
+        this.dialog.open(this.statusModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px',
+        });  
     }
 
     /**

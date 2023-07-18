@@ -16,11 +16,10 @@
                         <h3 *ngIf="addressConfiguration.type === 'editAddress'">{{ localeData?.update_address }}</h3>
                         <h3 *ngIf="addressConfiguration.type === 'editBranch'">{{ localeData?.edit_branch }}</h3>
                         <h3 *ngIf="addressConfiguration.type === 'editWarehouse'">{{ localeData?.edit_warehouse }}</h3>
+                        <button id="close" mat-dialog-close (click)="closeAsidePane($event)">
+                            <i class="icon-cross"></i>
+                        </button>
                     </div>
-                    <button id="close" mat-dialog-close (click)="closeAsidePane($event)">
-                        <i class="icon-cross"></i>
-                    </button>
-
                     <mat-dialog-content>
                         <div class="aside-body">
                             <div
@@ -90,6 +89,12 @@
                                                     </sh-select> -->
                                                 <dropdown-field
                                                     [label]="commonLocaleData?.app_state"
+                                                    [disabled]="
+                                                        addressConfiguration?.type === 'editAddress' &&
+                                                        addressToUpdate?.taxNumber &&
+                                                        addressConfiguration?.tax?.name &&
+                                                        addressConfiguration?.tax?.name === 'GSTIN'
+                                                    "
                                                     [options]="addressConfiguration.stateList"
                                                     [cssClass]="w - 100"
                                                     [required]="'true'"
@@ -285,17 +290,18 @@
                                             <!-- DO NOT REMOVE THIS HIDDEN FIELD -->
                                             <div hidden class="form-group col-12">
                                                 <label>{{ localeData?.branch_name }} <sup>*</sup></label>
-                                                <input
-                                                    maxlength="100"
+                                                <input-field
+                                                    [label]="localeData?.branch_name"
+                                                    [maxlength]="100"
                                                     [class.error-box]="
                                                         addressForm?.get('name')?.touched &&
                                                         addressForm?.get('name')?.invalid
                                                     "
-                                                    type="text"
+                                                    [type]="'text'"
                                                     formControlName="name"
-                                                    class="form-control"
                                                     [placeholder]="localeData?.enter"
-                                                />
+                                                >
+                                                </input-field>
                                                 <span
                                                     class="danger"
                                                     *ngIf="
@@ -310,18 +316,17 @@
 
                                         <div class="row">
                                             <div class="col-sm-12 form-group">
-                                                <label>{{ localeData?.branch_name }} <sup>*</sup></label>
-                                                <input
-                                                    maxlength="50"
+                                                <input-field
+                                                    [label]="localeData?.branch_name"
+                                                    [maxlength]="50"
                                                     [class.error-box]="
                                                         addressForm?.get('alias')?.touched &&
                                                         addressForm?.get('alias')?.invalid
                                                     "
-                                                    type="text"
+                                                    [type]="'text'"
                                                     formControlName="alias"
-                                                    class="form-control"
                                                     [placeholder]="localeData?.enter_alias"
-                                                />
+                                                ></input-field>
                                                 <span
                                                     class="danger"
                                                     *ngIf="
@@ -397,6 +402,19 @@
                                                             </ng-container>
                                                         </ng-template>
                                                     </sh-select>
+
+                                                    <!-- <dropdown-field
+                                                        [label]="localeData?.linked_addresses"
+                                                        [cssClass]="'linked-address'"
+                                                        [options]="addressConfiguration?.linkedEntities"
+                                                        [name]="'linkedEntities'"
+                                                        formControlName="linkedEntity"
+                                                        (clearSingleItem)="handleFinalSelection($event)"
+                                                        [ItemHeight]="200"
+                                                        [isFilterEnabled]="true"
+                                                        [multiple]="true"
+                                                        [placeholder]="commonLocaleData?.app_select_entity"
+                                                    ></dropdown-field> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -416,28 +434,19 @@
                                     <div class="clearfix">
                                         <div class="row">
                                             <div class="form-group col-12">
-                                                <label>{{ commonLocaleData?.app_name }} <sup>*</sup></label>
-                                                <input
-                                                    maxlength="100"
+                                                <input-field
+                                                    [label]="commonLocaleData?.app_name"
+                                                    [maxlength]="100"
                                                     [class.error-box]="
                                                         addressForm?.get('name')?.touched &&
                                                         addressForm?.get('name')?.invalid
                                                     "
-                                                    type="text"
+                                                    [type]="'text'"
                                                     formControlName="name"
-                                                    class="form-control"
                                                     [placeholder]="localeData?.enter_name"
-                                                    required
-                                                />
-                                                <span
-                                                    class="danger"
-                                                    *ngIf="
-                                                        addressForm?.get('name')?.touched &&
-                                                        addressForm?.get('name')?.errors?.maxlength
-                                                    "
+                                                    [required]="true"
                                                 >
-                                                    {{ commonLocaleData?.app_max_100_characters_allowed_limit }}
-                                                </span>
+                                                </input-field>
                                             </div>
                                         </div>
 
@@ -478,6 +487,15 @@
                                                             </ng-container>
                                                         </ng-template>
                                                     </sh-select>
+
+                                                    <!-- <dropdown-field
+                                                        [label]="localeData?.addresses"
+                                                        [options]="addressConfiguration?.linkedEntities"
+                                                        [name]="'linkedEntities'"
+                                                        formControlName="linkedEntity"
+                                                        [isFilterEnabled]="true"
+                                                        [placeholder]="localeData?.select_address"
+                                                    ></dropdown-field> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -493,10 +511,12 @@
                                     <div class="col-xs-12 col-sm-12 text-left">
                                         <div class="mt-5">
                                             <button
+                                                mat-stroked-button
+                                                color="primary"
                                                 [ladda]="showLoader"
                                                 [disabled]="addressForm?.invalid"
                                                 type="submit"
-                                                class="btn btn-success"
+                                                class="btn custom-btn"
                                             >
                                                 <ng-container
                                                     *ngIf="
@@ -516,7 +536,7 @@
                                                     {{ commonLocaleData?.app_update }}</ng-container
                                                 >
                                             </button>
-                                            <button type="reset" class="btn btn-danger">
+                                            <button mat-stroked-button type="reset" class="btn custom-btn">
                                                 {{ commonLocaleData?.app_clear }}
                                             </button>
                                         </div>

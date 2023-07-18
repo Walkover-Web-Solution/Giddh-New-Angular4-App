@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { combineLatest, ReplaySubject } from 'rxjs';
@@ -82,6 +83,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if need to hide link entity */
     public hideLinkEntity: boolean = true;
+    /*-- mat-dialog --*/
+    @ViewChild('asideAccountAsidePane', { static: true }) public asideAccountAsidePane: any;
 
     constructor(
         private commonService: CommonService,
@@ -94,7 +97,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         private settingsUtilityService: SettingsUtilityService,
         private toastService: ToasterService,
         private warehouseActions: WarehouseActions,
-        private settingsBranchActions: SettingsBranchActions
+        private settingsBranchActions: SettingsBranchActions,
+        public dialog: MatDialog,
     ) {
         this.warehouseForm = this.formBuilder.group({
             name: ['', Validators.required],
@@ -384,14 +388,25 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      *
      * @memberof CreateWarehouseComponent
      */
-    public handleShortcutPress(): void {
-        if (this.addressAsideMenuState === 'out') {
-            this.loadLinkedEntities(() => {
-                this.toggleAsidePane();
-            });
-        } else {
-            this.toggleAsidePane();
-        }
+    // public handleShortcutPress(): void {
+    //     if (this.addressAsideMenuState === 'out') {
+    //         this.loadLinkedEntities(() => {
+    //             this.toggleAsidePane();
+    //         });
+    //     } else {
+    //         this.toggleAsidePane();
+    //     }
+    // }
+
+    public handleShortcutPress() {
+        this.dialog.open(this.asideAccountAsidePane, {
+            width: '760px',
+            height: '100vh !important',
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
     }
 
     /**

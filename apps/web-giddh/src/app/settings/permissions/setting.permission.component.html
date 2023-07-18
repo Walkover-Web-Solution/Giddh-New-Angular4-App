@@ -4,7 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="pd-b2" *ngIf="localeData?.give_permission">
+    <div class="pd-b2 mt-2" *ngIf="localeData?.give_permission">
         <h3 class="mr-b1">
             <strong>{{ localeData?.give_permission }}:</strong>
         </h3>
@@ -118,36 +118,24 @@
 
     <!-- create Ac modal -->
 
-    <div
-        bsModal
-        #editUserModal="bs-modal"
-        class="modal fade"
-        role="dialog"
-        [config]="modalConfig"
-        *ngIf="showEditUserModal"
-    >
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header d-flex justify-content-between">
-                    <h3 class="modal-title bg" id="modal-title">{{ localeData?.create_user_permission }}</h3>
-                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="closeEditUserModal()">
-                        ×
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <setting-permission-form
-                        *ngIf="showEditUserModal"
-                        [isOpenedInModal]="true"
-                        [userdata]="selectedUser"
-                        [isLblShow]="true"
-                        [isUpdtCase]="selectedUser ? true : false"
-                        [isHorizntl]="false"
-                        [localeData]="localeData"
-                        [commonLocaleData]="commonLocaleData"
-                        (onSubmitForm)="submitPermissionForm($event)"
-                    ></setting-permission-form>
-                </div>
+    <ng-template #editUserModal>
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between">
+                <h3 mat-dialog-title>{{ localeData?.create_user_permission }}</h3>
+                <button mat-dialog-close class="close">×</button>
+            </div>
+            <div class="modal-body">
+                <setting-permission-form
+                    [isOpenedInModal]="true"
+                    [userdata]="selectedUser"
+                    [isLblShow]="true"
+                    [isUpdtCase]="selectedUser ? true : false"
+                    [isHorizntl]="false"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    (onSubmitForm)="submitPermissionForm($event)"
+                ></setting-permission-form>
             </div>
         </div>
-    </div>
+    </ng-template>
 </ng-container>

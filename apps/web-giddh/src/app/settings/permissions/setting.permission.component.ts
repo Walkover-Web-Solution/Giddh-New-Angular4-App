@@ -4,12 +4,12 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { PermissionActions } from '../../actions/permission/permission.action';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { select, Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs';
 import { ShareRequestForm } from '../../models/api-models/Permission';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'setting-permission',
@@ -17,8 +17,7 @@ import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
     styleUrls: ['./setting.permission.component.scss']
 })
 export class SettingPermissionComponent implements OnInit, OnDestroy {
-
-    @ViewChild('editUserModal', { static: false }) public editUserModal: ModalDirective;
+    @ViewChild('editUserModal', { static: true }) public editUserModal: TemplateRef<any>;
 
     public sharedWith: object[] = [];
     public usersList: any;
@@ -47,7 +46,8 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         private _permissionActions: PermissionActions,
         private _accountsAction: AccountsAction,
         private store: Store<AppState>,
-        private _generalService: GeneralService
+        private _generalService: GeneralService,
+        public dialog: MatDialog
     ) {
         this.store.pipe(select(s => s.session.user), take(1)).subscribe(result => {
             if (result && result.user) {
@@ -103,9 +103,9 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     }
 
     public submitPermissionForm(e: { action: string, data: ShareRequestForm }) {
-        if (e.action === 'update') {
-            this.closeEditUserModal();
-        }
+        // if (e.action === 'update') {
+        //     this.closeEditUserModal();
+        // }
         this.waitAndReloadCompany();
     }
 
@@ -116,16 +116,23 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         }
     }
 
-    public showModalForEdit(user?: any) {
-        this.selectedUser = user ? user : '';
-        this.showEditUserModal = true;
-        setTimeout(() => this.editUserModal?.show(), 700);
+    // public showModalForEdit(user?: any) {
+    //     this.selectedUser = user ? user : '';
+    //     this.showEditUserModal = true;
+    //     setTimeout(() => this.editUserModal?.show(), 700);
+    // }
+
+    public showModalForEdit(): void {
+        this.dialog.open(this.editUserModal, {
+            width: '1000px',
+            panelClass: 'modal-content'
+        });
     }
 
-    public closeEditUserModal() {
-        this.editUserModal.hide();
-        setTimeout(() => this.showEditUserModal = false, 700);
-    }
+    // public closeEditUserModal() {
+    //     this.editUserModal.hide();
+    //     setTimeout(() => this.showEditUserModal = false, 700);
+    // }
 
     public waitAndReloadCompany() {
         setTimeout(() => {

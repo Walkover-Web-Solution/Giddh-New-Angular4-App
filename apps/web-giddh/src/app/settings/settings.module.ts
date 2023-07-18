@@ -59,6 +59,7 @@ import { SettingCampaignComponent } from './integration/campaign/setting-campaig
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -127,7 +128,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatAutocompleteModule,
         MatSlideToggleModule,
         MatRadioModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatMenuModule,
+        MatDatepickerModule
     ],
     providers: [
         {

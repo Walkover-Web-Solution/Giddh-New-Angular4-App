@@ -16,7 +16,7 @@
                     <i aria-hidden="true" class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
                 </a>
             </div>
-            <button type="button" class="btn btn-sky-blue mr-0" (click)="openAddAndManage()">
+            <button mat-stroked-button color="primary" type="button" class="mr-0" (click)="openAddAndManage()">
                 {{ localeData?.add_address }}
             </button>
         </div>
@@ -26,7 +26,7 @@
             class="w-100 d-flex justify-content-between mb-4 align-items-center address-list-top"
         >
             <div class="font-15">{{ localeData?.address_list }}</div>
-            <button type="button" class="btn btn-sky-blue mr-0" (click)="openAddAndManage()">
+            <button mat-stroked-button color="primary" type="button" class="mr-0" (click)="openAddAndManage()">
                 {{ localeData?.add_address }}
             </button>
         </div>
@@ -222,6 +222,66 @@
                 <div class="no-data" *ngIf="addresses?.length === 0 && !shouldShowLoader">
                     <h1>{{ localeData?.no_address_found }}</h1>
                 </div>
+
+                <!-- mat-table -->
+                <table mat-table [dataSource]="dataSource" class="w-100 table basic giddh-table on-mobile-view">
+                    <ng-container matColumnDef="no">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element">#</td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="address">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_address }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.address }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="gstin">
+                        <th mat-header-cell *matHeaderCellDef>{{ taxType }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.gstin }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="state">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_state }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.state }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="linked">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.linked_with }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="d-flex wrap-linked-company">
+                                <div class="d-flex flex-column linked-with w-100">
+                                    {{ element?.linked }}
+                                    <span *ngFor="let entity of element.address.linkedEntities" class="pb-1">
+                                        <i
+                                            [tooltip]="commonLocaleData?.app_branch"
+                                            *ngIf="entity.isBranch"
+                                            class="icon-branch-icon"
+                                        ></i>
+                                        <i
+                                            [tooltip]="commonLocaleData?.app_warehouse"
+                                            *ngIf="entity.isWarehouse"
+                                            class="icon-warehouse-icon"
+                                        ></i>
+                                        <span class="entity-alias"> {{ entity.alias || entity.name }} </span>
+                                    </span>
+                                </div>
+
+                                <div class="ml-auto">
+                                    <div class="action-icon">
+                                        <a href="javascript:void(0);" (click)="handleUpdateAddress(address)">
+                                            <span class="icon-edit"></span
+                                        ></a>
+                                        <a href="javascript:void(0);" (click)="showConfirmationModal(address)">
+                                            <span class="icon-trash"></span
+                                        ></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
             </div>
         </div>
         <!-- branch profile element start -->
@@ -300,7 +360,7 @@
 </div>
 
 <!-- Create address part of Address Tab -->
-<div
+<!-- <div
     *ngIf="accountAsideMenuState === 'in' && !closeSidePane"
     [keyboardShortcut]="'esc'"
     (onShortcutPress)="toggleAccountAsidePane()"
@@ -324,7 +384,30 @@
         "
     >
     </create-address>
+</div> -->
+<div [keyboardShortcut]="'esc'" (onShortcutPress)="toggleAccountAsidePane()">
+    <ng-template #asideAccountAsidePane>
+        <create-address
+            class="account-aside-menu-state transform-inherit"
+            [@slideInOut]="accountAsideMenuState"
+            [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''"
+            [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+            [showLoader]="isAddressChangeInProgress"
+            (saveAddress)="saveAddress($event)"
+            (updateAddress)="updateAddress($event)"
+            [addressToUpdate]="addressToUpdate"
+            (closeAsideEvent)="toggleAccountAsidePane()"
+            [addressConfiguration]="addressConfiguration"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            [hideLinkEntity]="
+                (addressToUpdate && hideLinkEntity) || (!addressToUpdate && addresses?.length <= 0 && hideLinkEntity)
+            "
+        >
+        </create-address>
+    </ng-template>
 </div>
+
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
     <div [hidden]="show">
         <span> {{ title }}</span>
@@ -340,20 +423,16 @@
         />
     </div>
 </ng-template>
-<div
-    bsModal
-    #deleteAddressConfirmationModal="bs-modal"
-    class="modal fade"
-    role="dialog"
-    [config]="{ keyboard: true }"
-    tabindex="-1"
->
+
+<ng-template #deleteAddressConfirmationModal>
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div>
                 <div class="modal-header theme-bg pd-2 pl-2 pr-2 clearfix">
-                    <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_confirmation }}</h3>
-                    <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i>
+                    <h3 mat-dialog-title class="modal-title bg" id="modal-title">
+                        {{ commonLocaleData?.app_confirmation }}
+                    </h3>
+                    <i mat-dialog-close class="icon-cross text-right close-modal"></i>
                 </div>
                 <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
                     <form name="newRole" novalidate class="" autocomplete="off">
@@ -361,10 +440,10 @@
                             <h3>{{ localeData?.want_to_continue }}</h3>
                         </div>
                         <div class="d-flex justify-content-start">
-                            <button type="submit" class="btn btn-md btn-success mr-r1" (click)="onConfirmation()">
+                            <button mat-stroked-button color="primary" type="submit" (click)="onConfirmation()">
                                 {{ commonLocaleData?.app_yes }}
                             </button>
-                            <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()">
+                            <button mat-dialog-close mat-stroked-button type="submit" class="btn custom-btn">
                                 {{ commonLocaleData?.app_no }}
                             </button>
                         </div>
@@ -373,4 +452,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-template>

@@ -1,15 +1,28 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SalesService } from '../../services/sales.service';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
 import { ToasterService } from '../../services/toaster.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AsideMenuAccountInContactComponent } from '../../shared/aside-menu-account/aside.menu.account.component';
+
+export interface PeriodicElement {
+    number: number;
+    name: string;
+    action: string
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [
+    {number: 1, name: '10', action: ''},
+    {number: 2, name: '20', action: ''},
+    {number: 3, name: '30', action: ''}
+]
 
 @Component({
     selector: 'setting-discount',
@@ -30,7 +43,8 @@ import { ToasterService } from '../../services/toaster.service';
 })
 
 export class DiscountComponent implements OnInit, OnDestroy {
-    @ViewChild('discountConfirmationModel', { static: true }) public discountConfirmationModel: ModalDirective;
+    @ViewChild('discountConfirmationModel', { static: true }) public discountConfirmationModel: TemplateRef<any>;
+    @ViewChild('createNew', { static: true }) public createNew: TemplateRef<any>;
     public discountTypeList: IOption[] = []
     public accounts: IOption[];
     public createRequest: CreateDiscountRequest = new CreateDiscountRequest();
@@ -47,12 +61,16 @@ export class DiscountComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if get all discounts api call in progress */
     public isLoading: boolean = false;
+    /*-- mat-table --*/
+    displayedColumns: string[] = ['number', 'name', 'action'];
+    dataSource = ELEMENT_DATA;
 
     constructor(
         private salesService: SalesService,
         private store: Store<AppState>,
         private settingsDiscountService: SettingsDiscountService,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        public dialog: MatDialog
     ) {
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
@@ -71,12 +89,22 @@ export class DiscountComponent implements OnInit, OnDestroy {
         });
     }
 
-    public toggleAccountAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+    // public toggleAccountAsidePane(event?): void {
+    //     if (event) {
+    //         event.preventDefault();
+    //     }
+    //     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+    //     this.toggleBodyClass();
+    // }
+
+    public toggleAccountAsidePane(): void {
+        this.dialog.open(AsideMenuAccountInContactComponent, {
+            width: '768px',
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
     }
 
     public toggleBodyClass() {
@@ -111,15 +139,21 @@ export class DiscountComponent implements OnInit, OnDestroy {
         this.createRequest.discountUniqueName = data.uniqueName;
     }
 
-    public showDeleteDiscountModal(uniqueName: string) {
-        this.deleteRequest = uniqueName;
-        this.discountConfirmationModel?.show();
+    // public showDeleteDiscountModal(uniqueName: string) {
+    //     this.deleteRequest = uniqueName;
+    //     this.discountConfirmationModel?.show();
+    // }
+
+    public showDeleteDiscountModal(): void {
+        this.dialog.open(this.discountConfirmationModel, {
+            panelClass: 'modal-dialog',
+        });
     }
 
-    public hideDeleteDiscountModal() {
-        this.deleteRequest = null;
-        this.discountConfirmationModel.hide();
-    }
+    // public hideDeleteDiscountModal() {
+    //     this.deleteRequest = null;
+    //     this.discountConfirmationModel.hide();
+    // }
 
     public delete() {
         this.isLoading$ = of(true);
@@ -127,7 +161,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
             this.showToaster(this.commonLocaleData?.app_messages?.discount_deleted, response);
             this.isLoading$ = of(false);
         });
-        this.hideDeleteDiscountModal();
+        // this.hideDeleteDiscountModal();
     }
 
     /**
