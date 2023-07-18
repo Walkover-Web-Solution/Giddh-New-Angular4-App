@@ -208,8 +208,8 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
                 this.mappedUnitList = [];
 
                 response.body?.forEach(unit => {
-                    if (!usedMappedUnit[unit?.stockUnitX?.code]) {
-                        usedMappedUnit[unit?.stockUnitX?.code] = unit;
+                    if (!usedMappedUnit[unit?.stockUnitX?.uniqueName]) {
+                        usedMappedUnit[unit?.stockUnitX?.uniqueName] = unit;
                         tempUnits.push(unit?.stockUnitX?.code);
 
                         this.mappedUnitList.push({ label: unit?.stockUnitX?.name + " (" + unit?.stockUnitX?.code + ")", value: unit?.stockUnitX?.code, additional: unit });

@@ -33,6 +33,7 @@ export class PageLeaveUtilityService {
                 permanentlyDeleteMessage: ' '
             },
             panelClass: 'page-leave-confirmation-modal',
+            backdropClass: ['page-leave-confirmation-modal-backdrop', 'cdk-overlay-dark-backdrop'],
             width: '585px'
         });
 

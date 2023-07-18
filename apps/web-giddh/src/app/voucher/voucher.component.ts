@@ -727,7 +727,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
-        return !this.isUpdateMode && this.invFormData.voucherDetails.customerUniquename;
+        return (!this.isUpdateMode && this.invFormData.voucherDetails.customerUniquename) ? true : false;
     }
 
     /**
@@ -2866,7 +2866,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, {
             position: {
-                right : '0',
+                right: '0',
             },
             width: '760px',
             height: '100vh !important'
@@ -2880,6 +2880,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public closeAsideMenuProductServiceModal(): void {
         this.asideMenuStateForProductService?.close();
+
+        setTimeout(() => {
+            if (this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        }, 100);
     }
 
     public toggleBodyClass() {
@@ -3761,6 +3767,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+
+        setTimeout(() => {
+            if (this.accountAsideMenuState === "out" && this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        }, 100);
     }
 
     public toggleRecurringAsidePane(toggle?: string): void {
