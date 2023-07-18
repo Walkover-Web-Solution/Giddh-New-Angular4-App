@@ -107,6 +107,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     private createAccountIsSuccess$: Observable<boolean>;
     /* This will hold the active route url */
     public isActiveRoute: string;
+    /** True if account has unsaved changes */
+    public hasUnsavedChanges: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -147,6 +149,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasUnsavedChanges = response;
+        });
     }
 
     /**

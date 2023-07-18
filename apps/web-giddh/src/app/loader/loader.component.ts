@@ -1,10 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    OnDestroy,
-    OnInit
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationCancel, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -19,10 +13,8 @@ import { LoaderService } from './loader.service';
 })
 
 export class LoaderComponent implements OnInit, OnDestroy {
-
     public showLoader: boolean = false;
     public navigationEnd$: Observable<boolean> = of(true);
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
@@ -41,16 +33,17 @@ export class LoaderComponent implements OnInit, OnDestroy {
             this.cdref.detectChanges();
         });
 
-        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            if (a instanceof NavigationStart) {
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            if (event instanceof NavigationStart) {
                 this.navigationEnd$ = of(false);
                 this.cdref.detectChanges();
-            } else if (a instanceof NavigationEnd || a instanceof RouteConfigLoadEnd) {
+            } else if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
                 this.navigationEnd$ = of(true);
                 this.cdref.detectChanges();
             }
-            if (a instanceof NavigationCancel) {
-                return this.navigationEnd$ = of(true);
+            if (event instanceof NavigationCancel) {
+                this.navigationEnd$ = of(true);
+                this.cdref.detectChanges();
             }
         });
     }

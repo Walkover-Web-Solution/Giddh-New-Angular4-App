@@ -3855,7 +3855,7 @@
         [@slideInOut]="accountAsideMenuState"
         (closeAsideEvent)="toggleAccountAsidePane($event)"
         [selectedGrpUniqueName]="selectedGrpUniqueNameForAddEditAccountModal"
-        [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
+        [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' && !hasUnsavedChanges }"
         *ngIf="accountAsideMenuState === 'in'"
         [selectedAccountUniqueName]="selectedCustomerForDetails"
         (onShortcutPress)="toggleAccountAsidePane()"

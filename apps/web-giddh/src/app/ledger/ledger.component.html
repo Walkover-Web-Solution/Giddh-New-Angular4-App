@@ -745,6 +745,7 @@
                                                                         "
                                                                         [enableDynamicSearch]="true"
                                                                         (selected)="
+                                                                            addBrowserConfirmation();
                                                                             selectAccount($event, txn, false, true)
                                                                         "
                                                                         (onClear)="
@@ -1028,6 +1029,7 @@
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         (selected)="
+                                                                            addBrowserConfirmation();
                                                                             selectAccount($event, txn, false, true)
                                                                         "
                                                                         (onClear)="
@@ -1772,7 +1774,9 @@
                                                             (onShow)="isSelectOpen = true"
                                                             (onHide)="onSelectHide()"
                                                             (selected)="
-                                                                selectAccount($event, txn); showNewLedgerEntryPopup(txn)
+                                                                addBrowserConfirmation();
+                                                                selectAccount($event, txn);
+                                                                showNewLedgerEntryPopup(txn)
                                                             "
                                                             (onClear)="selectAccount($event, txn, true)"
                                                             (keydown)="keydownPressed($event)"
@@ -2224,7 +2228,9 @@
                                                             (onHide)="onSelectHide()"
                                                             [(ngModel)]="txn.particular"
                                                             (selected)="
-                                                                selectAccount($event, txn); showNewLedgerEntryPopup(txn)
+                                                                addBrowserConfirmation();
+                                                                selectAccount($event, txn);
+                                                                showNewLedgerEntryPopup(txn)
                                                             "
                                                             (onClear)="selectAccount($event, txn, true)"
                                                             [showClear]="false"

@@ -701,6 +701,12 @@
         "service": "SERVICE",
         "fixed_assets": "FIXED ASSETS"
     },
+    "app_unsaved_changes": {
+        "title": "Leave page with unsaved changes?",
+        "content": "You have unsaved changes. Do you want to leave this page?",
+        "no": "Stay",
+        "yes": "Leave page"
+    },
     "app_region": "Region",
     "app_select_region": "Select Region"
 }
