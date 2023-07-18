@@ -14285,15 +14285,7 @@ voucher-component {
 .mat-tooltip {
     letter-spacing: 0.8px;
 }
-/*--- voucher-datepicker ---*/
-voucher-component {
-    .mat-datepicker-input {
-        &:disabled {
-            background-color: transparent !important;
-            cursor: not-allowed;
-        }
-    }
-}
+
 /*--- manufacturing-list-table ---*/
 .list-table-wrapper {
     th.mat-header-cell {
