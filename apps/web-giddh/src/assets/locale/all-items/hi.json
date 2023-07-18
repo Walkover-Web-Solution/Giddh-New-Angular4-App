@@ -286,13 +286,37 @@
                     "label": "इन्वेंटरी",
                     "link": "/pages/inventory",
                     "icon": "icon-inventory",
-                    "description": "स्टॉक, समूह और इकाई आयात/बनाएं"
+                    "description": "स्टॉक, समूह और इकाई आयात/बनाएं",
+                    "additional": {
+                        "voucherVersion": 1
+                    }
                 },
                 {
                     "label": "विनिर्माण",
                     "link": "/pages/inventory/manufacturing",
                     "icon": "icon-manufacturing1",
-                    "description": "एमएफजी खोजें। माल सूची स्थिति"
+                    "description": "एमएफजी खोजें। माल सूची स्थिति",
+                    "additional": {
+                        "voucherVersion": 1
+                    }
+                }, 
+                {
+                    "label": "इन्वेंटरी",
+                    "link": "/pages/inventory/v2/reports/product/stock",
+                    "icon": "icon-inventory",
+                    "description": "स्टॉक, समूह और इकाई आयात/बनाएं",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
+                },
+                {
+                    "label": "विनिर्माण",
+                    "link": "/pages/inventory/v2/manufacturing/list",
+                    "icon": "icon-manufacturing1",
+                    "description": "एमएफजी खोजें। माल सूची स्थिति",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
                 },
                 {
                     "label": "गोदाम",

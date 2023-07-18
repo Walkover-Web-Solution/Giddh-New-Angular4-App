@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ClipboardModule } from 'ngx-clipboard';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { InventoryAddStockModule } from '../inventory/components/add-stock-components/inventory.addstock.module';
@@ -58,6 +58,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AttachmentsModule } from '../theme/attachments/attachments.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { StockCreateEditModule } from '../new-inventory/component/stock-create-edit/stock-create-edit.module';
 
 @NgModule({
     declarations: [
@@ -129,7 +130,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         MatGridListModule,
         MatExpansionModule,
         AttachmentsModule,
-        FormFieldsModule
+        FormFieldsModule,
+        StockCreateEditModule
     ]
 })
 export class LedgerModule {

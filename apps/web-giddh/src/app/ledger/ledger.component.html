@@ -490,7 +490,7 @@
                                         [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
-                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0"
+                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0 && lc.showEledger"
                                     >
                                         <i class="icon-trash lh-0"></i>
                                     </a>
@@ -745,6 +745,7 @@
                                                                         "
                                                                         [enableDynamicSearch]="true"
                                                                         (selected)="
+                                                                            addBrowserConfirmation();
                                                                             selectAccount($event, txn, false, true)
                                                                         "
                                                                         (onClear)="
@@ -1028,6 +1029,7 @@
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         (selected)="
+                                                                            addBrowserConfirmation();
                                                                             selectAccount($event, txn, false, true)
                                                                         "
                                                                         (onClear)="
@@ -1772,7 +1774,9 @@
                                                             (onShow)="isSelectOpen = true"
                                                             (onHide)="onSelectHide()"
                                                             (selected)="
-                                                                selectAccount($event, txn); showNewLedgerEntryPopup(txn)
+                                                                addBrowserConfirmation();
+                                                                selectAccount($event, txn);
+                                                                showNewLedgerEntryPopup(txn)
                                                             "
                                                             (onClear)="selectAccount($event, txn, true)"
                                                             (keydown)="keydownPressed($event)"
@@ -2224,7 +2228,9 @@
                                                             (onHide)="onSelectHide()"
                                                             [(ngModel)]="txn.particular"
                                                             (selected)="
-                                                                selectAccount($event, txn); showNewLedgerEntryPopup(txn)
+                                                                addBrowserConfirmation();
+                                                                selectAccount($event, txn);
+                                                                showNewLedgerEntryPopup(txn)
                                                             "
                                                             (onClear)="selectAccount($event, txn, true)"
                                                             [showClear]="false"
@@ -2903,18 +2909,16 @@
                 </ledger-columnar-report-table>
             </div>
             <!-- aside menu section -->
-            <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-            <ledger-aside-pane
-                [class]="asideMenuState"
-                *ngIf="asideMenuState === 'in'"
-                [@slideInOut]="asideMenuState"
-                [keyboardShortcut]="'esc'"
-                [localeData]="localeData"
-                [commonLocaleData]="commonLocaleData"
-                (onShortcutPress)="toggleAsidePane()"
-                (closeAsideEvent)="toggleAsidePane()"
-            >
-            </ledger-aside-pane>
+            <ng-template #ledgerAsidePane>
+                <ledger-aside-pane
+                    [keyboardShortcut]="'esc'"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    (onShortcutPress)="ledgerAsidePaneModal?.close()"
+                    (closeAsideEvent)="ledgerAsidePaneModal?.close()"
+                >
+                </ledger-aside-pane>
+            </ng-template>
             <!-- aside menu section -->
             <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
             <app-aside-menu-sales-other-taxes

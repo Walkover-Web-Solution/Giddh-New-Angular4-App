@@ -16,14 +16,14 @@
             <h3 class="modal-title">
                 {{ activePayorAccount ? localeData?.payment?.edit_user : localeData?.payment?.add_user }}
             </h3>
-            <button
+            <a
                 data-dismiss="modal"
                 [attr.aria-label]="commonLocaleData?.app_close"
                 class="close hover-orange"
                 (click)="closeAccountUserModal()"
             >
                 ×
-            </button>
+            </a>
         </div>
         <div class="modal-body icici-payor-account-create-edit">
             <ng-container *ngIf="localeData?.payment">

@@ -67,6 +67,7 @@ export class AccountsAction {
     public static ASSIGN_DISCOUNT_TO_ACCOUNT = 'ASSIGN_DISCOUNT_TO_ACCOUNT';
     public static RESET_SHARE_ENTITY = 'RESET_SHARE_ENTITY';
     public static RESET_UPDATE_ACCOUNTV2 = 'RESET_UPDATE_ACCOUNTV2';
+    public static ACCOUNT_HAS_UNSAVED_CHANGES = 'ACCOUNT_HAS_UNSAVED_CHANGES';
 
     public ApplyAccountTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -99,6 +100,7 @@ export class AccountsAction {
             switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName)),
             map(response => {
                 if (response?.status === 'success') {
+                    this.store.dispatch(this.hasUnsavedChanges(false));
                     this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
                 }
                 return this.createAccountResponseV2(response);
@@ -190,6 +192,7 @@ export class AccountsAction {
             switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.account, action.payload?.value)),
             map(response => {
                 if (response?.status === 'success') {
+                    this.store.dispatch(this.hasUnsavedChanges(false));
                     this.store.dispatch(this.commonActions.accountUpdated(true));
                     this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
                     const updateIndexDb: IUpdateDbRequest = {
@@ -850,6 +853,20 @@ export class AccountsAction {
     public resetShareEntity(): CustomActions {
         return {
             type: AccountsAction.RESET_SHARE_ENTITY
+        }
+    }
+
+    /**
+     * This will hold if account/group has unsaved changes
+     *
+     * @param {boolean} value
+     * @returns {CustomActions}
+     * @memberof AccountsAction
+     */
+    public hasUnsavedChanges(value: boolean): CustomActions {
+        return {
+            type: AccountsAction.ACCOUNT_HAS_UNSAVED_CHANGES,
+            payload: value
         }
     }
 }

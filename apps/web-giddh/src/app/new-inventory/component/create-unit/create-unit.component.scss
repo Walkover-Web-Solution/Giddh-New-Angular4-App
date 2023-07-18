@@ -74,13 +74,23 @@
         height: 100%;
         .plus-minus {
             display: flex;
-            position: absolute;
-            bottom: 5px;
-            right: -5px;
+            justify-content: center;
             button {
                 min-width: 14px;
                 padding: 0 5px;
+                &:focus {
+                    box-shadow: none !important;
+                }
+                i {
+                    color: var(--color-tertiary-button-text);
+                }
             }
+        }
+    }
+    .add-new {
+        color: var(--color-ledger-heading) !important;
+        &:focus {
+            box-shadow: none !important;
         }
     }
 }

@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { CreateUpdateGroupComponent } from "./create-update-group.component";
 import { MainGroupComponent } from "./main-group.component";
+import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confirmation-guard";
 
 const routes: Routes = [
     {
@@ -11,12 +12,14 @@ const routes: Routes = [
             {
                 path: ":type/create",
                 component: CreateUpdateGroupComponent,
-                pathMatch: 'full'
+                pathMatch: 'full',
+                canDeactivate: [PageLeaveConfirmationGuard]
             },
             {
                 path: ":type/edit/:groupUniqueName",
                 component: CreateUpdateGroupComponent,
-                pathMatch: 'full'
+                pathMatch: 'full',
+                canDeactivate: [PageLeaveConfirmationGuard]
             }
         ]
     }

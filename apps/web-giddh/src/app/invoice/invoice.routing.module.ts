@@ -7,6 +7,7 @@ import { EWayBillCreateComponent } from './eWayBill/create/eWayBill.create.compo
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 
 const INVOICE_ROUTES: Routes = [
+
     {
         path: '',
         canActivate: [NeedsAuthentication],
@@ -17,6 +18,7 @@ const INVOICE_ROUTES: Routes = [
             { path: 'preview/:voucherType/:selectedType', component: InvoiceComponent },
             { path: 'preview/:voucherType/:voucherNoForDetail/:voucherAction', component: InvoiceComponent },
             { path: 'ewaybill/create', component: EWayBillCreateComponent },
+
         ]
     },
     { path: 'ewaybill', canActivate: [NeedsAuthentication], component: EWayBillComponent },

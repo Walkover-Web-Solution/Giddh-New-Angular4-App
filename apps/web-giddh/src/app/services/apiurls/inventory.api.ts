@@ -41,6 +41,8 @@ export const INVENTORY_API = {
     GET_STOCK_WITH_UNIQUENAME: 'company/:companyUniqueName/stock/:stockUniqueName', // GET call
     GET_STOCK_UNIT_WITH_NAME: 'company/:companyUniqueName/stock-unit/:uName', // GET call
     GET_STOCK_MAPPED_UNIT: 'company/:companyUniqueName/stock-unit/mappings', // get call
+    GET_STOCK_UNIT_GROUPS: 'company/:companyUniqueName/stock-unit-group', // get call
+    UPDATE_STOCK_UNIT_GROUP: 'company/:companyUniqueName/stock-unit-group/:groupUniqueName', // get call
     MOVE_STOCK: 'company/:companyUniqueName/stock/:stockUniqueName/move', // PUT call
     DOWNLOAD_INVENTORY_GROUP_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniquename/download-inventory-report-v2?format=:format&from=:from&to=:to&sortBy=:sortBy&sort=:sort',
     DOWNLOAD_INVENTORY_STOCK_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/download-stock-inventory-report-v3?from=:from&to=:to&page=:page&count=:count&format=:format&sortBy=:sortBy&sort=:sort',

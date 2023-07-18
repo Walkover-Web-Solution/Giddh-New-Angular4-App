@@ -67,17 +67,19 @@ import { ReportFiltersComponent } from "./component/report-filters/report-filter
 import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
 import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
+import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatListModule } from "@angular/material/list";
 import { MatDivider } from "@angular/material/divider";
 import { AsideCreateNewUnitComponent } from "./component/aside-create-unit/aside-create-unit.component";
-import { CreateGroupComponent } from "./component/create-group/create-group.component";
-import { AsideCreatGroupComponent } from "./component/aside-create-group/aside-create-group.component";
+import { CreateUnitGroupComponent } from "./component/create-unit-group/create-unit-group.component";
+import { AsideCreateUnitGroupComponent } from "./component/aside-create-unit-group/aside-create-unit-group.component";
 import { RecipeModule } from "./component/recipe/recipe.module";
 import { ManufacturingModule } from "../manufacturing/manufacturing.module";
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
-import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
+import { ScrollingModule } from "@angular/cdk/scrolling";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
     declarations: [
@@ -120,8 +122,8 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         ReportFiltersComponent,
         ReportsComponent,
         AsideCreateNewUnitComponent,
-        CreateGroupComponent,
-        AsideCreatGroupComponent,
+        CreateUnitGroupComponent,
+        AsideCreateUnitGroupComponent,
         CustomUnitsComponent,
         InventoryMasterComponent
     ],
@@ -156,11 +158,13 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         MatDialogModule,
         MatAutocompleteModule,
         MatTooltipModule,
+        SelectTableColumnModule,
         MatGridListModule,
         MatListModule,
         RecipeModule,
         ManufacturingModule,
-        SelectTableColumnModule
+        ScrollingModule,
+        FormsModule
     ],
     exports: [
         NewInventoryComponent,
