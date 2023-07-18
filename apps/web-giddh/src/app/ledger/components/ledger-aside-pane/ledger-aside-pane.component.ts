@@ -6,6 +6,7 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AccountsAction } from '../../../actions/accounts.actions';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'ledger-aside-pane',
@@ -25,6 +26,10 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
     public createStockSuccess$: Observable<boolean>;
     public createAccountIsSuccess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
+    /** This will hold stock type */
+    public stockType: string = '';
     /** True if account has unsaved changes */
     private hasUnsavedChanges: boolean = false;
 
@@ -33,13 +38,16 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
         private inventorySidebarAction: SidebarAction,
         private accountsAction: AccountsAction,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private changeDetectionRef: ChangeDetectorRef
+        private changeDetectionRef: ChangeDetectorRef, 
+        private generalService: GeneralService
     ) {
         this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        document.querySelector('body').classList.add('ledger-aside-pane');
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.inventorySidebarAction.GetGroupsWithStocksHierarchyMin());
         // subscribe createStockSuccess for resting form
         this.createStockSuccess$.subscribe(s => {
@@ -66,9 +74,10 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
         });
     }
 
-    public toggleStockPane() {
+    public toggleStockPane(type?: string) {
         this.hideFirstScreen = true;
         this.isAddAccountOpen = false;
+        this.stockType = type;
         this.isAddStockOpen = !this.isAddStockOpen;
     }
 
@@ -78,6 +87,11 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
         this.isAddAccountOpen = !this.isAddAccountOpen;
     }
 
+    /**
+     * This will use for back button step
+     *
+     * @memberof LedgerAsidePaneComponent
+     */
     public backButtonPressed() {
         if (this.hasUnsavedChanges && this.isAddAccountOpen) {
             this.confirmPageLeave(() => {
@@ -88,6 +102,12 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     *This will use for close aside pane
+     *
+     * @param {*} [e]
+     * @memberof LedgerAsidePaneComponent
+     */
     public closeAsidePane(e?: any) {
         if (this.hasUnsavedChanges && this.isAddAccountOpen) {
             this.confirmPageLeave(() => {
@@ -107,6 +127,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
      */
     private closeAddAccount(event?: any): void {
         this.store.dispatch(this.accountsAction.resetActiveGroup());
+        this.stockType = '';
         this.hideFirstScreen = false;
         this.isAddStockOpen = false;
         this.isAddAccountOpen = false;
@@ -117,6 +138,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        document.querySelector('body').classList.remove('ledger-aside-pane');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

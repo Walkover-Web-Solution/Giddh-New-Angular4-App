@@ -9,6 +9,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { AccountsAction } from '../../actions/accounts.actions';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'aside-menu-product-service',
@@ -42,6 +43,10 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if account has unsaved changes */
     public hasUnsavedChanges: boolean = false;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
+    /** This will hold stock type */
+    public stockType: string = '';
 
     constructor(
         private accountService: AccountService,
@@ -49,7 +54,8 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private accountsAction: AccountsAction,
-        private changeDetectionRef: ChangeDetectorRef
+        private changeDetectionRef: ChangeDetectorRef,
+        private generalService: GeneralService
     ) {
 
     }
@@ -60,6 +66,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
      * @memberof AsideMenuProductServiceComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector('body')?.classList?.add('aside-menu-product-service-page');
 
         this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
@@ -95,9 +102,10 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         document.querySelector('body')?.classList?.remove('aside-menu-product-service-page');
     }
 
-    public toggleStockPane(): void {
+    public toggleStockPane(type?: string): void {
         this.hideFirstStep = true;
         this.isAddServiceOpen = false;
+        this.stockType = type;
         this.isAddStockOpen = !this.isAddStockOpen;
     }
 
@@ -111,6 +119,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         if (this.isAddServiceOpen && this.hasUnsavedChanges) {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 if (action) {
+                    this.stockType = '';
                     this.hideFirstStep = false;
                     this.isAddStockOpen = false;
                     this.isAddServiceOpen = false;
@@ -118,6 +127,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
+            this.stockType = '';
             this.hideFirstStep = false;
             this.isAddStockOpen = false;
             this.isAddServiceOpen = false;
@@ -130,6 +140,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 if (action) {
                     this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                    this.stockType = '';
                     this.hideFirstStep = false;
                     this.isAddStockOpen = false;
                     this.isAddServiceOpen = false;
@@ -137,9 +148,21 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
+            this.stockType = '';
             this.hideFirstStep = false;
             this.isAddStockOpen = false;
             this.isAddServiceOpen = false;
         }
+    }
+
+    /**
+     * This will use for toggle account pane
+     *
+     * @memberof AsideMenuProductServiceComponent
+     */
+    public toggleAccountPane() {
+        this.hideFirstStep = true;
+        this.isAddStockOpen = false;
+        this.isAddServiceOpen = !this.isAddServiceOpen;
     }
 }

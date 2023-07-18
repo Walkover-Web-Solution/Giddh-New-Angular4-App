@@ -105,7 +105,11 @@
                                                                 linkedStock.stockName = $event.label;
                                                                 linkedStock.stockUniqueName = $event.value;
                                                                 getStockVariants(linkedStock, $event);
-                                                                getStockUnits(linkedStock, $event.value, false)
+                                                                getStockUnits(
+                                                                    linkedStock,
+                                                                    $event.additional?.stockUnitUniqueName,
+                                                                    false
+                                                                )
                                                             "
                                                             [defaultValue]="linkedStock.stockName"
                                                             [enableDynamicSearch]="true"

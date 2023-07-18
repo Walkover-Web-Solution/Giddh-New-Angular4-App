@@ -16,7 +16,7 @@ export class ImportsResponse {
 }
 export interface ImportsData {
     date?: string;
-    efsPath?: string;
+    path?: string;
     expireAt?: any;
     metaData?: any;
     importFiile?: any;

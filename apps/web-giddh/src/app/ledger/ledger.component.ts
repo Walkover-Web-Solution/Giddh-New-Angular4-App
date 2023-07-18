@@ -90,6 +90,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
     /** Instance of entry confirmation modal */
     @ViewChild('entryConfirmModal', { static: false }) public entryConfirmModal: any;
+    /** Instance of ledger aside pane modal */
+    @ViewChild("ledgerAsidePane") public ledgerAsidePane: TemplateRef<any>;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
     public searchTermStream: Subject<string> = new Subject();
@@ -271,6 +273,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private accountPredictionSubject: Subject<boolean> = new Subject();
     /** Holds if we need bank ledger popup to be hidden */
     private isHideBankLedgerPopup: boolean = false;
+    /** Ledger aside pan modal */
+    private ledgerAsidePaneModal: any;
     /** Total pages for reference vouchers */
     public referenceVouchersTotalPages: number = 1;
     /** Returns true if account is selected else false */
@@ -1834,14 +1838,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (shSelectElement) {
             this.closeActiveEntry(shSelectElement);
         }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+        this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, {
+            position: {
+                right: '0',
+            },
+            width: '760px',
+            height: '100vh !important'
+        });
 
-        setTimeout(() => {
-            if (this.asideMenuState === "out" && this.showPageLeaveConfirmation) {
-                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
-            }
-        }, 100);
+        this.ledgerAsidePaneModal.afterClosed().pipe(take(1)).subscribe(response => {
+            setTimeout(() => {
+                if (this.showPageLeaveConfirmation) {
+                    this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+                }
+            }, 100);
+        });
 
         this.cdRf.detectChanges();
     }

@@ -1,13 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
-    selector: 'aside-create-unit',
-    templateUrl: './aside-create-unit.component.html',
-    styleUrls: ['./aside-create-unit.component.scss']
+    selector: 'aside-create-unit-group',
+    templateUrl: './aside-create-unit-group.component.html',
+    styleUrls: ['./aside-create-unit-group.component.scss']
 })
-export class AsideCreateNewUnitComponent {
-    /** Holds unit group details */
-    @Input() public unitGroupDetails: any = {};
+export class AsideCreateUnitGroupComponent {
     /* Aside pane state*/
     public asideMenuState: string = 'out';
     /* This will hold common JSON data */
@@ -19,7 +17,7 @@ export class AsideCreateNewUnitComponent {
      * Closes aside pane
      *
      * @param {*} event
-     * @memberof AsideCreateNewUnitComponent
+     * @memberof AsideCreateUnitGroupComponent
      */
     public closeAsidePane(event: any) {
         this.closeAsideEvent.emit(event);
