@@ -612,6 +612,7 @@
                         border-left: 3px solid transparent !important;
                         font-family: var(--font-regular) !important;
                         transition: all 100ms ease;
+                        outline: none;
                         .available.prev {
                             transform: rotate(180deg);
                         }
@@ -753,6 +754,20 @@
             fill: currentColor;
         }
     }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+        background-color: transparent;
+    }
+    ::-webkit-scrollbar-track {
+        border-radius: 4px;
+        background-color: var(--color-scrollbar-primary-track-background);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background-color: var(--color-scrollbar-primary-thumb-background);
+    }
 }
 .md-drppicker td.in-range.in-range-start::before {
     border-radius: 50% 0 0 50% !important;
@@ -822,6 +837,10 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
 }
 .md-drppicker.inline {
     width: 100%;
+}
+
+#scrollableWrapper {
+    overflow-x: hidden !important;
 }
 @media (min-width: 564px) {
     .md-drppicker {
@@ -934,16 +953,16 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
             }
             // Datepicker Scrollbar
             .ranges::-webkit-scrollbar {
-                width: 12px;
+                width: 6px;
                 background-color: transparent;
             }
             .ranges::-webkit-scrollbar-track {
-                border-radius: 10px;
+                border-radius: 4px;
                 background-color: var(--color-scrollbar-primary-track-background);
             }
 
             .ranges::-webkit-scrollbar-thumb {
-                border-radius: 10px;
+                border-radius: 4px;
                 background-color: var(--color-scrollbar-primary-thumb-background);
             }
         }
@@ -1224,12 +1243,12 @@ td span {
         background-color: transparent;
     }
     .date-picker-scroll::-webkit-scrollbar-track {
-        border-radius: 10px;
+        border-radius: 4px;
         background-color: var(--color-scrollbar-primary-track-background);
     }
 
     .date-picker-scroll::-webkit-scrollbar-thumb {
-        border-radius: 10px;
+        border-radius: 4px;
         background-color: var(--color-scrollbar-primary-thumb-background);
     }
 }
@@ -1524,19 +1543,25 @@ tr:first-child.in-range-hovered.available {
 cdk-virtual-scroll-viewport {
     height: 250px;
 }
-cdk-virtual-scroll-viewport::-webkit-scrollbar {
-    width: 5px;
+cdk-virtual-scroll-viewport{
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
 }
 
 /* Track */
-cdk-virtual-scroll-viewport::-webkit-scrollbar-track {
-    border-radius: 10px;
+cdk-virtual-scroll-viewport{
+    ::-webkit-scrollbar-track {
+        border-radius: 4px;
+    }
 }
 
 /* Handle */
-cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
-    background: var(--color-gray);
-    border-radius: 10px;
+cdk-virtual-scroll-viewport{
+    ::-webkit-scrollbar-thumb {
+        background: var(--color-gray);
+        border-radius: 4px;
+    }
 }
 .calendar-d-flex {
     display: flex;
