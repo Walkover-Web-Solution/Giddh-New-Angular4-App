@@ -22,7 +22,6 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -63,7 +62,6 @@ import { MatSortModule } from '@angular/material/sort';
         MatMenuModule,
         MatTableModule,
         MatCheckboxModule,
-        MatFormFieldModule,
         MatInputModule,
         MatChipsModule,
         MatTooltipModule,
