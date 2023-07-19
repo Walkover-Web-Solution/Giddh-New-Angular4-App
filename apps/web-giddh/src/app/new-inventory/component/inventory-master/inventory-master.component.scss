@@ -59,7 +59,6 @@
             }
             .inventory-modal {
                 width: 100%;
-                // overflow: auto;
             }
             .pd-l15 {
                 padding-left: 15px !important;
@@ -81,28 +80,23 @@
                     }
                 }
             }
+            .searchbar {
+                padding-left: 25px;
+            }
         }
         .item-list {
             width: 205px;
-            // margin: 0 0 0 15px;
-            // padding-right: 15px;
             height: 100%;
             float: left;
             position: relative;
-            overflow-y: auto;
             a {
                 display: block;
                 height: 28px;
                 line-height: 20px;
                 color: var(--color-black);
-                &.account-name {
-                    .mat-list-item-content {
-                        color: var(--color-master-page-sidebar-primary-group);
-                    }
-                }
             }
             .create-head {
-                color: var(--color-master-page-text-secondary-hover);
+                color: var(--color-giddh-blue);
                 font-size: var(--font-size-15);
                 background-color: var(--color-master-page-main-content-primary-background);
                 width: 100%;

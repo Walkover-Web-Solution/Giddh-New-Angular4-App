@@ -900,15 +900,19 @@ aside-create-group {
         .inventory-sub-sideabar {
             .item-list {
                 a {
-                    &.account-name {
+                    &.group-name {
                         .mat-list-item-content {
                             color: var(--color-master-page-sidebar-primary-group);
                         }
                     }
                     &.isActive {
+                        background-color: var(--color-primary-header-background);
                         .mat-list-item-content {
                             color: var(--color-white);
                         }
+                    }
+                    mat-list-item {
+                        height: 100% !important;
                     }
                 }
                 .mat-list-item-content {
@@ -14367,7 +14371,13 @@ voucher-component {
         .form-control {
             height: 42px;
             width: 430px;
-            box-shadow: var(--color-search-box-shadow) 0px 48px 100px 0px;
+            background-color: var(--color-black) !important;
+            /*  box-shadow: var(--color-search-box-shadow) 0px 48px 100px 0px; */
+            /*  box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px; */
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 0 28px, rgba(0, 0, 0, 0.22) 0px 4px 10px;
+            &:focus {
+                border-color: var(--color-black) !important;
+            }
         }
     }
 }
