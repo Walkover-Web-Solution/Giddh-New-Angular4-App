@@ -23,7 +23,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
     public topLevelGroups: any = { page: 1, results: [] };
     public masterColumnsData: any[] = [];
     public breadcrumbs: any[] = [];
-    public showCreateButtons: boolean = true;
+    public showCreateButtons: boolean = false;
     public createUpdateGroup: boolean = false;
     public createUpdateStock: boolean = false;
     public isTopLevel: boolean = true;
@@ -66,7 +66,6 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                     } else if (this.topLevelGroups?.page < this.topLevelGroups?.totalPages) {
                         this.loadMoreInProgress = true;
                         this.topLevelGroups.page++;
-
                         this.getTopLevelGroups();
                     }
                 }
@@ -74,11 +73,17 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         });
 
         this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            const wasSearching = cloneDeep(this.isSearching);
             this.isSearching = (String(search)?.trim()) ? true : false;
 
             if (this.isSearching) {
                 this.searchInventory(search);
             } else {
+                if (wasSearching) {
+                    this.breadcrumbs = [];
+                    this.resetCurrentStockAndGroup();
+                    this.showCreateButtons = false;
+                }
                 this.masterColumnsData = [];
             }
         });
@@ -145,7 +150,8 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.breadcrumbs = [];
         this.masterColumnsData = [];
         this.resetCurrentStockAndGroup();
-        
+        this.showCreateButtons = false;
+
         this.inventoryService.searchInventory(this.inventoryType, search).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 let masterColumnsData = [];
