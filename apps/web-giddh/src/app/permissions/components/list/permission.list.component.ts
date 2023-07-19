@@ -149,8 +149,4 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
             width: '650px'
         });
     }
-
-    public hidePermissionModel() {
-        // this.permissionModel.hide();
-    }
 }

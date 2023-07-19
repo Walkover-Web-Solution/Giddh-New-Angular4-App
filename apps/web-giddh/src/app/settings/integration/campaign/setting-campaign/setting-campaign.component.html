@@ -57,30 +57,18 @@
         </button>
         <div class="d-flex align-items-center verify-form mr-t1">
             <div class="input-field">
-                <!-- <p class="label auth-label">
-                    {{ communicationPlatforms?.MSG91?.fields?.auth_key?.label
-                    }}<span class="mandatory-label" *ngIf="communicationPlatforms?.MSG91?.fields?.auth_key?.mandatory"
-                        >*</span
-                    >
-                </p> -->
-                <!-- <text-field
-                    [type]="'text'"
-                    [cssClass]="'form-control mat-field-border auth_key_input '"
-                    [name]="'title'"
-                    [placeholder]="localeData?.communication?.auth_key"
-                    [(ngModel)]="communicationPlatformAuthModel.authFields[0].value"
-                    [ngClass]="{ 'fields-error': mandatoryFields.authKey }"
-                >
-                </text-field> -->
                 <input-field
-                    [label]="communicationPlatforms?.MSG91?.fields?.auth_key?.label"
+                    [label]="
+                        communicationPlatforms?.MSG91?.fields?.auth_key?.mandatory
+                            ? communicationPlatforms?.MSG91?.fields?.auth_key?.label
+                            : communicationPlatforms?.MSG91?.fields?.auth_key?.label
+                    "
                     [type]="'text'"
                     [cssClass]="'auth_key_input'"
                     [name]="'title'"
                     [placeholder]="localeData?.communication?.auth_key"
                     [(ngModel)]="communicationPlatformAuthModel.authFields[0].value"
-                    [ngClass]="{ 'fields-error': mandatoryFields.authKey }"
-                    [required]="true"
+                    [required]="mandatoryFields.authKey ? true : false"
                 ></input-field>
             </div>
             <button

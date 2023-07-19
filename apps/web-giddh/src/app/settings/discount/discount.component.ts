@@ -161,7 +161,6 @@ export class DiscountComponent implements OnInit, OnDestroy {
             this.showToaster(this.commonLocaleData?.app_messages?.discount_deleted, response);
             this.isLoading$ = of(false);
         });
-        // this.hideDeleteDiscountModal();
     }
 
     /**

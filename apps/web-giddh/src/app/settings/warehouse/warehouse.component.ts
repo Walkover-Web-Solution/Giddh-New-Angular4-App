@@ -90,8 +90,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
     public imgPath2: string = '';
-    /** Change status modal instance */
-    // @ViewChild('statusModal', { static: true }) public statusModal: ModalDirective;
     /** View container to carry out on boarding */
     @ViewChild('onBoardingContainer', { static: true }) public onBoardingContainer: ElementViewContainerRef;
     /** Welcome component template ref for second step of warehouse on boarding */

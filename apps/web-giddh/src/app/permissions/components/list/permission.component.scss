@@ -180,23 +180,6 @@
         float: none;
     }
 }
-
-.view-card {
-    .view-card-header {
-        display: flex;
-        justify-content: space-between;
-        padding: 0 16px;
-        mat-card-actions {
-            display: flex;
-            column-gap: 15px;
-            a {
-                i {
-                    color: var(--color-tertiary-button-text);
-                }
-            }
-        }
-    }
-}
 .on-hover {
     visibility: hidden;
     opacity: 0;

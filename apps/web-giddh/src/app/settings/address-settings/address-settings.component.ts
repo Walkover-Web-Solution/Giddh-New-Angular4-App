@@ -519,9 +519,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof AddressSettingsComponent
      */
-    public onCancel(): void {
-        // this.deleteAddressConfirmationModal.hide();
-    }
 
     /**
      * Returns the search field text

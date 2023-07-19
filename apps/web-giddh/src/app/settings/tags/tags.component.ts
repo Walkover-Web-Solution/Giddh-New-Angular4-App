@@ -31,9 +31,6 @@ const ELEMENT_DATA: PeriodicElement[] = [
     styleUrls: ['./tags.component.scss'],
 })
 export class SettingsTagsComponent implements OnInit, OnDestroy {
-
-    // @ViewChild('confirmationModal', { static: true }) public confirmationModal: ModalDirective;
-
     public newTag: TagRequest = new TagRequest();
     public tags: TagRequest[] = [];
     public tagsBackup: TagRequest[];

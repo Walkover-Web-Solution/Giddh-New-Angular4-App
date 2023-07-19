@@ -48,8 +48,6 @@ import { SettingsUtilityService } from '../services/settings-utility.service';
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Change status modal instance */
     @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
-    // @ViewChild('addCompanyModal', { static: false }) public addCompanyModal: ModalDirective;
-    // @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
     @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
     @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
     @ViewChild('statusModal', { static: true }) public statusModal: any;

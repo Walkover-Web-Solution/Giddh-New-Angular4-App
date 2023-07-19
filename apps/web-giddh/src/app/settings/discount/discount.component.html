@@ -18,7 +18,7 @@
                             [options]="discountTypeList"
                             [name]="'type'"
                             [placeholder]="localeData?.discount_type_placeholder"
-                            (selectedOption)="createRequest.type = $event.value"
+                            (selectedOption)="(createRequest.type)"
                         ></dropdown-field>
                     </div>
                 </div>
@@ -43,7 +43,6 @@
                 </div>
 
                 <div class="col-xl-2 col-md-6 col-xs-12" *ngIf="createRequest.type">
-                    <!-- <label>{{ localeData?.linked_accounts_label }}</label> -->
                     <!-- <sh-select
                         [isFilterEnabled]="true"
                         [notFoundLink]="true"
