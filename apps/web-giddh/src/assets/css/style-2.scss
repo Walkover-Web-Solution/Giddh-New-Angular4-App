@@ -947,9 +947,21 @@ aside-create-group {
                 }
             }
         }
-        .cdk-virtual-scroll-viewport {
-            height: 100% !important;
-            min-height: calc(100vh - 188px);
+        mat-list {
+            .cdk-virtual-scroll-viewport {
+                height: 100% !important;
+                min-height: calc(100vh - 188px);
+            }
+        }
+        &.horizontal-scroll {
+            .viewport {
+                width: 100% !important;
+                height: 100%;
+                .cdk-virtual-scroll-content-wrapper {
+                    overflow-x: auto;
+                    overflow-y: hidden;
+                }
+            }
         }
     }
 
@@ -14372,11 +14384,13 @@ voucher-component {
             height: 42px;
             width: 430px;
             background-color: var(--color-black) !important;
-            /*  box-shadow: var(--color-search-box-shadow) 0px 48px 100px 0px; */
-            /*  box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px; */
             box-shadow: rgba(0, 0, 0, 0.25) 0px 0 28px, rgba(0, 0, 0, 0.22) 0px 4px 10px;
+            color: var(--color-white) !important;
             &:focus {
                 border-color: var(--color-black) !important;
+            }
+            &::placeholder {
+                color: var(--color-white);
             }
         }
     }
