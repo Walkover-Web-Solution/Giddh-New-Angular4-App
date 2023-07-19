@@ -46,7 +46,7 @@
                             <a
                                 href="javascript:;"
                                 class="create-head d-inline-block"
-                                (click)="showCreateButtons = true; activeIndex = 0; isTopLevel = true"
+                                (click)="showCreateButtons = true; activeIndex = i; isTopLevel = false"
                                 >Create new</a
                             >
                             <cdk-virtual-scroll-viewport
@@ -54,21 +54,15 @@
                                 [itemSize]="37"
                                 [minBufferPx]="400"
                                 [maxBufferPx]="800"
-                                id="0"
+                                [id]="i + 1"
                             >
                                 <ng-container
-                                    *cdkVirtualFor="let topLevelGroup of topLevelGroups?.results; let i = index"
+                                    *cdkVirtualFor="let masterData of masterColumnData?.results; let j = index"
                                 >
                                     <a
                                         href="javascript:;"
-                                        [matTooltip]="topLevelGroup?.name"
+                                        [matTooltip]="masterData?.name"
                                         [matTooltipPosition]="'above'"
-                                        [ngClass]="{
-                                            'group-name': masterData.entity === 'STOCK_GROUP',
-                                            'isActive':
-                                                this.currentGroup?.uniqueName === masterData?.uniqueName ||
-                                                this.currentStock?.uniqueName === masterData?.uniqueName
-                                        }"
                                         (click)="
                                             activeIndex = i;
                                             isTopLevel = false;
@@ -76,48 +70,18 @@
                                                 ? getMasters(masterData, i)
                                                 : editStock(masterData)
                                         "
+                                        [ngClass]="{
+                                            'group-name': masterData.entity === 'STOCK_GROUP',
+                                            'isActive':
+                                                this.currentGroup?.uniqueName === masterData?.uniqueName ||
+                                                this.currentStock?.uniqueName === masterData?.uniqueName
+                                        }"
                                     >
-                                        <mat-list-item class="items">{{ topLevelGroup?.name }}</mat-list-item>
+                                        <mat-list-item class="items">{{ masterData?.name }}</mat-list-item>
                                     </a>
                                 </ng-container>
                             </cdk-virtual-scroll-viewport>
                         </mat-list>
-                        <ng-container *ngFor="let masterColumnData of masterColumnsData; let i = index">
-                            <mat-list class="item-list border-grid pt-0">
-                                <a
-                                    href="javascript:;"
-                                    class="create-head d-inline-block"
-                                    (click)="showCreateButtons = true; activeIndex = i; isTopLevel = false"
-                                    >Create new</a
-                                >
-                                <cdk-virtual-scroll-viewport
-                                    class="virtual-group-list overflow-x-hidden"
-                                    [itemSize]="37"
-                                    [minBufferPx]="400"
-                                    [maxBufferPx]="800"
-                                    [id]="i + 1"
-                                >
-                                    <ng-container
-                                        *cdkVirtualFor="let masterData of masterColumnData?.results; let j = index"
-                                    >
-                                        <a
-                                            href="javascript:;"
-                                            [matTooltip]="masterData?.name"
-                                            [matTooltipPosition]="'above'"
-                                            (click)="
-                                                activeIndex = i;
-                                                isTopLevel = false;
-                                                masterData.entity === 'STOCK_GROUP'
-                                                    ? getMasters(masterData, i)
-                                                    : editStock(masterData)
-                                            "
-                                        >
-                                            <mat-list-item class="items">{{ masterData?.name }}</mat-list-item>
-                                        </a>
-                                    </ng-container>
-                                </cdk-virtual-scroll-viewport>
-                            </mat-list>
-                        </ng-container>
                     </ng-container>
                 </div>
             </div>
