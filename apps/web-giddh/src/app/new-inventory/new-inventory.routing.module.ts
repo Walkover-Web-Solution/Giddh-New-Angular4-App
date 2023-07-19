@@ -25,7 +25,7 @@ const routes: Routes = [
     {
         path: "", component: NewInventoryComponent,
         children: [
-            { path: "", redirectTo: "stock/master", pathMatch: "full" },
+            { path: "", redirectTo: "product/master", pathMatch: "full" },
 
             {
                 path: "stock-group/list-group",
