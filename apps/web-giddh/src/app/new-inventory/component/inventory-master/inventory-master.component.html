@@ -7,43 +7,15 @@
             [formControl]="searchFormControl"
         ></text-field>
     </div>
-    <div class="mat-list-wrap">
-        <div class="inventory-sideabar border-grid">
-            <div class="inventory-sub-sideabar">
-                <mat-list class="item-list border-grid pt-0" *ngIf="!isSearching">
-                    <a
-                        href="javascript:;"
-                        class="create-head d-inline-block"
-                        (click)="showCreateButtons = true; activeIndex = 0; isTopLevel = true"
-                        >Create new</a
-                    >
-                    <cdk-virtual-scroll-viewport
-                        class="virtual-group-list overflow-x-hidden"
-                        [itemSize]="37"
-                        [minBufferPx]="400"
-                        [maxBufferPx]="800"
-                        id="0"
-                    >
-                        <ng-container *cdkVirtualFor="let topLevelGroup of topLevelGroups?.results; let i = index">
-                            <a
-                                href="javascript:;"
-                                [matTooltip]="topLevelGroup?.name"
-                                [matTooltipPosition]="'above'"
-                                (click)="activeIndex = 0; isTopLevel = true; getMasters(topLevelGroup, -1)"
-                                class="group-name"
-                                [ngClass]="{ 'isActive': this.currentGroup?.uniqueName === topLevelGroup?.uniqueName }"
-                            >
-                                <mat-list-item class="items">{{ topLevelGroup?.name }}</mat-list-item>
-                            </a>
-                        </ng-container>
-                    </cdk-virtual-scroll-viewport>
-                </mat-list>
-                <ng-container *ngFor="let masterColumnData of masterColumnsData; let i = index">
-                    <mat-list class="item-list border-grid pt-0">
+    <div class="mat-list-wrap horizontal-scroll">
+        <cdk-virtual-scroll-viewport [itemSize]="5" orientation="horizontal" class="viewport">
+            <div class="inventory-sideabar border-grid">
+                <div class="inventory-sub-sideabar">
+                    <mat-list class="item-list border-grid pt-0" *ngIf="!isSearching">
                         <a
                             href="javascript:;"
                             class="create-head d-inline-block"
-                            (click)="showCreateButtons = true; activeIndex = i; isTopLevel = false"
+                            (click)="showCreateButtons = true; activeIndex = 0; isTopLevel = true"
                             >Create new</a
                         >
                         <cdk-virtual-scroll-viewport
@@ -51,35 +23,105 @@
                             [itemSize]="37"
                             [minBufferPx]="400"
                             [maxBufferPx]="800"
-                            [id]="i + 1"
+                            id="0"
                         >
-                            <ng-container *cdkVirtualFor="let masterData of masterColumnData?.results; let j = index">
+                            <ng-container *cdkVirtualFor="let topLevelGroup of topLevelGroups?.results; let i = index">
                                 <a
                                     href="javascript:;"
-                                    [matTooltip]="masterData?.name"
+                                    [matTooltip]="topLevelGroup?.name"
                                     [matTooltipPosition]="'above'"
+                                    (click)="activeIndex = 0; isTopLevel = true; getMasters(topLevelGroup, -1)"
+                                    class="group-name"
                                     [ngClass]="{
-                                        'group-name': masterData.entity === 'STOCK_GROUP',
-                                        'isActive':
-                                            this.currentGroup?.uniqueName === masterData?.uniqueName ||
-                                            this.currentStock?.uniqueName === masterData?.uniqueName
+                                        'isActive': this.currentGroup?.uniqueName === topLevelGroup?.uniqueName
                                     }"
-                                    (click)="
-                                        activeIndex = i;
-                                        isTopLevel = false;
-                                        masterData.entity === 'STOCK_GROUP'
-                                            ? getMasters(masterData, i)
-                                            : editStock(masterData)
-                                    "
                                 >
-                                    <mat-list-item class="items">{{ masterData?.name }}</mat-list-item>
+                                    <mat-list-item class="items">{{ topLevelGroup?.name }}</mat-list-item>
                                 </a>
                             </ng-container>
                         </cdk-virtual-scroll-viewport>
                     </mat-list>
-                </ng-container>
+                    <ng-container *ngFor="let masterColumnData of masterColumnsData; let i = index">
+                        <mat-list class="item-list border-grid pt-0">
+                            <a
+                                href="javascript:;"
+                                class="create-head d-inline-block"
+                                (click)="showCreateButtons = true; activeIndex = 0; isTopLevel = true"
+                                >Create new</a
+                            >
+                            <cdk-virtual-scroll-viewport
+                                class="virtual-group-list overflow-x-hidden"
+                                [itemSize]="37"
+                                [minBufferPx]="400"
+                                [maxBufferPx]="800"
+                                id="0"
+                            >
+                                <ng-container
+                                    *cdkVirtualFor="let topLevelGroup of topLevelGroups?.results; let i = index"
+                                >
+                                    <a
+                                        href="javascript:;"
+                                        [matTooltip]="topLevelGroup?.name"
+                                        [matTooltipPosition]="'above'"
+                                        [ngClass]="{
+                                            'group-name': masterData.entity === 'STOCK_GROUP',
+                                            'isActive':
+                                                this.currentGroup?.uniqueName === masterData?.uniqueName ||
+                                                this.currentStock?.uniqueName === masterData?.uniqueName
+                                        }"
+                                        (click)="
+                                            activeIndex = i;
+                                            isTopLevel = false;
+                                            masterData.entity === 'STOCK_GROUP'
+                                                ? getMasters(masterData, i)
+                                                : editStock(masterData)
+                                        "
+                                    >
+                                        <mat-list-item class="items">{{ topLevelGroup?.name }}</mat-list-item>
+                                    </a>
+                                </ng-container>
+                            </cdk-virtual-scroll-viewport>
+                        </mat-list>
+                        <ng-container *ngFor="let masterColumnData of masterColumnsData; let i = index">
+                            <mat-list class="item-list border-grid pt-0">
+                                <a
+                                    href="javascript:;"
+                                    class="create-head d-inline-block"
+                                    (click)="showCreateButtons = true; activeIndex = i; isTopLevel = false"
+                                    >Create new</a
+                                >
+                                <cdk-virtual-scroll-viewport
+                                    class="virtual-group-list overflow-x-hidden"
+                                    [itemSize]="37"
+                                    [minBufferPx]="400"
+                                    [maxBufferPx]="800"
+                                    [id]="i + 1"
+                                >
+                                    <ng-container
+                                        *cdkVirtualFor="let masterData of masterColumnData?.results; let j = index"
+                                    >
+                                        <a
+                                            href="javascript:;"
+                                            [matTooltip]="masterData?.name"
+                                            [matTooltipPosition]="'above'"
+                                            (click)="
+                                                activeIndex = i;
+                                                isTopLevel = false;
+                                                masterData.entity === 'STOCK_GROUP'
+                                                    ? getMasters(masterData, i)
+                                                    : editStock(masterData)
+                                            "
+                                        >
+                                            <mat-list-item class="items">{{ masterData?.name }}</mat-list-item>
+                                        </a>
+                                    </ng-container>
+                                </cdk-virtual-scroll-viewport>
+                            </mat-list>
+                        </ng-container>
+                    </ng-container>
+                </div>
             </div>
-        </div>
+        </cdk-virtual-scroll-viewport>
         <div class="inventory-btnside">
             <div class="searchbar d-flex justify-content-between align-items-center py-2" *ngIf="breadcrumbs?.length">
                 <div>

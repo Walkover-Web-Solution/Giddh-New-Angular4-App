@@ -22,8 +22,8 @@
         display: flex;
         height: 100%;
         .inventory-sideabar {
-            max-width: 49.66%;
-            float: left;
+            // max-width: 49.66%;
+            // float: left;
             .inventory-sub-sideabar {
                 display: inline-flex;
                 float: left;
@@ -125,9 +125,6 @@
                 display: flex;
                 justify-content: space-between;
                 padding-top: 0px;
-            }
-            &:last-child {
-                border: 0px !important;
             }
         }
         .border-grid {
