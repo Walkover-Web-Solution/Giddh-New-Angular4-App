@@ -248,13 +248,6 @@ export class InventorySidebarComponent implements OnDestroy {
                         //{ name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/fixedassets/master' }
                     ],
                 },
-                // {
-                //     name: this.localeData?.sidebar?.branch_transfer,
-                //     icons: 'branch-transfer.svg',
-                //     children: [
-                //         { name: this.localeData?.sidebar?.create_branch_transfer, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'branchtransfer' },
-                //         { name: this.localeData?.sidebar?.report, icons: 'group-wise.svg', link: '/pages/inventory/v2/branch-transfer/list' }],
-                // },
                 {
                     name: this.localeData?.sidebar?.manufacturing,
                     icons: 'manufacturing.svg',
@@ -265,15 +258,20 @@ export class InventorySidebarComponent implements OnDestroy {
                     ],
                 },
                 {
+                    name: this.localeData?.sidebar?.custom_units,
+                    link: '/pages/inventory/v2/custom-units',
+                    icons: 'warehouse-opening-balance.svg'
+                },
+                {
+                    name: this.localeData?.sidebar?.branch_transfer,
+                    icons: 'branch-transfer.svg',
+                    link: '/pages/inventory/report',
+                },
+                {
                     name: this.localeData?.sidebar?.warehouse_balance,
                     link: '/pages/inventory/v2/stock-balance',
                     icons: 'warehouse-opening-balance.svg'
-                },
-                // {
-                //     name: this.localeData?.sidebar?.custom_units,
-                //     link: '/pages/inventory/v2/custom-units',
-                //     icons: 'warehouse-opening-balance.svg'
-                // },
+                }
             ];
             this.dataSource.data = this.dataList;
 

@@ -96,6 +96,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public totalSelectedLength: number;
     /** bulk payment form */
     public addAccountBulkPaymentForm: FormGroup;
+    /** Holds image root path */
     public imgPath: string = '';
     /** Payment request id for OTP confirmation */
     public paymentRequestId: string = '';

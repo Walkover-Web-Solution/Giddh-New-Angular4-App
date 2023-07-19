@@ -56,6 +56,7 @@ export enum SettingsAsideFormType {
 export interface SettingsAsideConfiguration {
     type: SettingsAsideFormType;
     stateList?: Array<any>;
+    countyList?: Array<any>;
     tax?: {
         name: string,
         validation: Array<any>

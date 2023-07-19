@@ -23,7 +23,6 @@
                                             [placeholder]="localeData?.enter_group"
                                             [type]="'text'"
                                             formControlName="name"
-                                            [required]="true"
                                             (change)="!groupUniqueName ? generateUniqueName() : ''"
                                             [showError]="isFormSubmitted && !groupForm.get('name')?.value"
                                         >
@@ -36,7 +35,6 @@
                                             [placeholder]="commonLocaleData?.app_unique_name_placeholder"
                                             formControlName="uniqueName"
                                             [type]="'text'"
-                                            [required]="true"
                                             [showError]="isFormSubmitted && !groupForm.get('uniqueName')?.value"
                                         >
                                         </input-field>
@@ -180,6 +178,7 @@
                                                 *ngIf="!groupUniqueName"
                                                 mat-stroked-button
                                                 (click)="resetGroupForm()"
+                                                type="button"
                                             >
                                                 {{ commonLocaleData?.app_clear }}
                                             </button>

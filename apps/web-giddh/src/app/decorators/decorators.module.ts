@@ -3,6 +3,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { NeedsAuthentication } from './needsAuthentication';
 import { UserAuthenticated } from './UserAuthenticated';
 import { NewUserAuthGuard } from './newUserGuard';
+import { PageLeaveConfirmationGuard } from './page-leave-confirmation-guard';
 
 @NgModule({
     imports: [],
@@ -16,7 +17,8 @@ export class DecoratorsModule {
                 NeedsAuthentication,
                 UserAuthenticated,
                 NewUserAuthGuard,
-                NeedsAuthorization
+                NeedsAuthorization,
+                PageLeaveConfirmationGuard
             ]
         };
     }

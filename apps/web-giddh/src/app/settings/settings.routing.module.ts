@@ -6,6 +6,7 @@ import { SettingsDeactivateGuard } from './routing-guards/settings-deactivate.gu
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
 import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-warehouse.component';
 import { NeedsAuthorization } from '../decorators/needAuthorization';
+import { PageLeaveConfirmationGuard } from '../decorators/page-leave-confirmation-guard';
 
 @NgModule({
     imports: [
@@ -14,16 +15,16 @@ import { NeedsAuthorization } from '../decorators/needAuthorization';
                 path: '', component: SettingsComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard], pathMatch: 'full'
             },
             {
-                path: 'create-branch', component: CreateBranchComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard]
+                path: 'create-branch', component: CreateBranchComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard, PageLeaveConfirmationGuard]
             },
             {
-                path: 'create-warehouse', component: CreateWarehouseComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard]
+                path: 'create-warehouse', component: CreateWarehouseComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard, PageLeaveConfirmationGuard]
             },
             {
-                path: ':type', component: SettingsComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard]
+                path: ':type', component: SettingsComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard, PageLeaveConfirmationGuard]
             },
             {
-                path: ':type/:referrer', component: SettingsComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard]
+                path: ':type/:referrer', component: SettingsComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard, PageLeaveConfirmationGuard]
             }
         ])
     ],
