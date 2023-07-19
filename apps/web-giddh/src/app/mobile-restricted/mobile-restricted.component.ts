@@ -15,11 +15,11 @@ export class MobileRestrictedComponent {
     public imgPath: string = "";
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private breakpointObserver: BreakpointObserver, private router: Router) { 
+    constructor(private breakpointObserver: BreakpointObserver, private router: Router) {
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
 
         this.breakpointObserver.observe([
-            '(min-width: 480px)'
+            '(min-width: 481px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result.matches) {
                 this.router.navigate(['/home'])
