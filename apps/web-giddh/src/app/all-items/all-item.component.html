@@ -26,6 +26,7 @@
                         [(ngModel)]="search"
                         (click)="menuIndex = -1; itemIndex = -1"
                         (ngModelChange)="searchAllItems($event)"
+                        [autoFocus]="true"
                     >
                     </text-field>
                 </div>
