@@ -116,7 +116,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 this.getGroupDetails();
             } else if (this.addGroup && this.groupUniqueName) {
                 this.getGroupDetails();
-            } else {
+            } else if (!this.addGroup) {
                 this.stockGroupUniqueName = "";
             }
 
@@ -151,11 +151,16 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             showCodeType: ['hsn'],
             hsnNumber: [''],
             sacNumber: [''],
-            parentStockGroupUniqueName: [''],
-            isSubGroup: [false],
+            parentStockGroupUniqueName: [!this.groupUniqueName && this.activeGroup?.uniqueName ? this.activeGroup?.uniqueName : ''],
+            isSubGroup: [!this.groupUniqueName && this.activeGroup?.uniqueName ? true : false],
             taxes: null,
             type: null
         });
+
+        if (!this.groupUniqueName && this.activeGroup?.name) {
+            this.stockGroupUniqueName = this.activeGroup?.uniqueName;
+            this.stockGroupName = this.activeGroup?.name;
+        }
 
         this.groupForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (this.showPageLeaveConfirmation) {
@@ -309,6 +314,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                         this.getStockGroups();
                         this.backClicked();
                     } else {
+                        this.resetGroupForm();
                         this.closeAsideEvent.emit();
                     }
                 } else {
@@ -330,6 +336,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                         this.resetTaxes();
                         this.resetGroupForm();
                     } else {
+                        this.resetGroupForm();
                         this.closeAsideEvent.emit();
                     }
                 } else {
@@ -410,6 +417,11 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.groupForm?.patchValue({ showCodeType: "hsn" });
         this.stockGroupName = '';
         this.stockGroupUniqueName = '';
+        if (!this.groupUniqueName && this.activeGroup?.name) {
+            this.stockGroupUniqueName = this.activeGroup?.uniqueName;
+            this.stockGroupName = this.activeGroup?.name;
+            this.groupForm?.patchValue({ parentStockGroupUniqueName: this.activeGroup?.uniqueName, isSubGroup: true });
+        }
         this.selectedTaxes = [];
         this.processedTaxes = [];
         this.changeDetection.detectChanges();
@@ -534,7 +546,11 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     this.toggleLoader(false);
                     if (response?.status === "success") {
                         this.toaster.showSnackBar("success", this.localeData?.group_delete);
-                        this.cancelEdit();
+                        if (this.addGroup) {
+                            this.closeAsideEvent.emit();
+                        } else {
+                            this.cancelEdit();
+                        }
                     } else {
                         this.toaster.showSnackBar("error", response?.message);
                     }

@@ -25,6 +25,7 @@
                                             formControlName="name"
                                             (change)="!groupUniqueName ? generateUniqueName() : ''"
                                             [showError]="isFormSubmitted && !groupForm.get('name')?.value"
+                                            [autoFocus]="addGroup && !groupUniqueName"
                                         >
                                         </input-field>
                                     </div>

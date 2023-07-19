@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
 import { ReplaySubject } from "rxjs";
 import { InventoryService } from "../../../services/inventory.service";
-import { takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
-import { E } from "@angular/cdk/keycodes";
+import { FormControl } from "@angular/forms";
 import { cloneDeep } from "../../../lodash-optimized";
 
 @Component({
@@ -30,6 +30,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
     public currentGroup: any = {};
     public currentStock: any = {};
     public activeIndex: number = 0;
+    public isSearching: boolean = false;
+    /** Search field form control */
+    public searchFormControl = new FormControl();
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -50,9 +53,18 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         });
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            console.log(event);
-            if (event && event?.getDataLength() - event?.getRenderedRange().end < 50) {
+            if (!this.isSearching && event && event?.getDataLength() - event?.getRenderedRange().end < 50) {
+                console.log(event);
+            }
+        });
 
+        this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            this.isSearching = (String(search)?.trim()) ? true : false;
+
+            if (this.isSearching) {
+                this.searchInventory(search);
+            } else {
+                this.masterColumnsData = [];
             }
         });
     }
@@ -100,7 +112,48 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
             }
             this.createBreadcrumbs();
         });
-        this.editGroup(stockGroup);
+
+        this.createUpdateGroup = false;
+        setTimeout(() => {
+            this.editGroup(stockGroup);
+        }, 50);
+    }
+
+    public searchInventory(search: string): void {
+        this.breadcrumbs = [];
+        this.inventoryService.searchInventory(this.inventoryType, search).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                let masterColumnsData = [];
+                if (response?.body?.length > 0) {
+                    masterColumnsData = this.mapNestedGroupsStocks(response?.body, 0, masterColumnsData);
+                    masterColumnsData?.map(columnData => {
+                        columnData.results = columnData?.results.sort((a, b) => b.entity.localeCompare(a.entity));
+                        return columnData;
+                    });
+                }
+                this.masterColumnsData = cloneDeep(masterColumnsData);
+            }
+        });
+    }
+
+    public mapNestedGroupsStocks(master: any, index: number, masterColumnsData: any): any {
+        master?.forEach(data => {
+            if (masterColumnsData[index]) {
+                masterColumnsData[index].results.push({ name: data?.name, entity: data?.entity, uniqueName: data?.uniqueName });
+            } else {
+                masterColumnsData[index] = { results: [{ name: data?.name, entity: data?.entity, uniqueName: data?.uniqueName }], page: 1, totalPages: 1, stockGroup: {} };
+            }
+
+            if (data?.stockGroups?.length) {
+                masterColumnsData = this.mapNestedGroupsStocks(data?.stockGroups, (index + 1), masterColumnsData);
+            }
+
+            if (data?.stocks?.length) {
+                masterColumnsData = this.mapNestedGroupsStocks(data?.stocks, (index + 1), masterColumnsData);
+            }
+        });
+
+        return masterColumnsData;
     }
 
     public createBreadcrumbs(): void {
@@ -156,7 +209,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
 
         if (!event) {
             if (this.isTopLevel) {
+                this.breadcrumbs = [];
                 this.getTopLevelGroups();
+                this.masterColumnsData = [];
             } else {
                 this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex - 1);
             }
@@ -171,7 +226,12 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.showCreateButtons = false;
         this.createUpdateStock = false;
         this.createUpdateGroup = true;
-        this.createBreadcrumbs();
+
+        if (this.isTopLevel) {
+            this.breadcrumbs = [];
+        } else {
+            this.createBreadcrumbs();
+        }
     }
 
     public showCreateStock(): void {

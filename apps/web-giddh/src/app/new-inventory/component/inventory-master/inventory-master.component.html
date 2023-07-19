@@ -3,15 +3,16 @@
         <text-field
             [type]="'text'"
             [cssClass]="'form-control mat-field-border cash-invoice-input'"
-            [placeholder]="'Search Accounts'"
+            [placeholder]="'Search'"
+            [formControl]="searchFormControl"
         ></text-field>
     </div>
     <div class="mat-list-wrap">
         <div class="inventory-sideabar border-grid">
             <div class="inventory-sub-sideabar">
-                <mat-list class="item-list border-grid pt-0">
+                <mat-list class="item-list border-grid pt-0" *ngIf="!isSearching">
                     <a
-                        href="javascript:void(0);"
+                        href="javascript:;"
                         class="create-head d-inline-block"
                         (click)="showCreateButtons = true; activeIndex = 0; isTopLevel = true"
                         >Create new</a
@@ -25,7 +26,7 @@
                     >
                         <ng-container *cdkVirtualFor="let topLevelGroup of topLevelGroups?.results; let i = index">
                             <a
-                                href="javascript:void(0);"
+                                href="javascript:;"
                                 [matTooltip]="topLevelGroup?.name"
                                 (click)="activeIndex = 0; isTopLevel = true; getMasters(topLevelGroup, -1)"
                             >
@@ -37,7 +38,7 @@
                 <ng-container *ngFor="let masterColumnData of masterColumnsData; let i = index">
                     <mat-list class="item-list border-grid pt-0">
                         <a
-                            href="javascript:void(0);"
+                            href="javascript:;"
                             class="create-head d-inline-block"
                             (click)="showCreateButtons = true; activeIndex = i; isTopLevel = false"
                             >Create new</a
@@ -51,7 +52,7 @@
                         >
                             <ng-container *cdkVirtualFor="let masterData of masterColumnData?.results; let j = index">
                                 <a
-                                    href="javascript:void(0);"
+                                    href="javascript:;"
                                     [matTooltip]="masterData?.name"
                                     (click)="
                                         activeIndex = i;
@@ -74,7 +75,7 @@
                 <div>
                     <ol class="breadcrumb row pd-l15">
                         <li *ngFor="let breadcrumb of breadcrumbs">
-                            <a href="javascript:void(0)">{{ breadcrumb }}</a>
+                            <a href="javascript:;">{{ breadcrumb }}</a>
                         </li>
                     </ol>
                 </div>
@@ -94,7 +95,7 @@
                         [addGroup]="true"
                         [stockType]="inventoryType"
                         [groupUniqueName]="currentGroup?.uniqueName"
-                        [activeGroup]="masterColumnsData[activeIndex]?.stockGroup"
+                        [activeGroup]="!isTopLevel ? masterColumnsData[activeIndex]?.stockGroup : null"
                         (closeAsideEvent)="closeGroup($event)"
                     ></create-update-group>
                     <stock-create-edit

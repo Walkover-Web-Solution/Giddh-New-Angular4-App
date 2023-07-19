@@ -1638,7 +1638,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     this.toggleLoader(false);
                     if (response?.status === "success") {
                         this.toaster.showSnackBar("success", this.localeData?.stock_delete_succesfully);
-                        this.backClicked();
+                        if (this.addStock) {
+                            this.closeAsideEvent.emit();
+                        } else {
+                            this.backClicked();
+                        }
                     } else {
                         this.toaster.showSnackBar("error", response?.message);
                     }
