@@ -50,6 +50,7 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { AppState } from '../../../../store';
 import { ProformaListComponent } from '../../../proforma/proforma-list.component';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'invoice-preview-details-component',
@@ -59,7 +60,7 @@ import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.a
 })
 export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     @ViewChild('searchElement', { static: true }) public searchElement: ElementRef;
-    @ViewChild('showEmailSendModal', { static: true }) public showEmailSendModal: ModalDirective;
+    // @ViewChild('showEmailSendModal', { static: true }) public showEmailSendModal: ModalDirective;
     @ViewChild('downloadVoucherModal', { static: true }) public downloadVoucherModal: ModalDirective;
     @ViewChild('invoiceDetailWrapper', { static: true }) invoiceDetailWrapperView: ElementRef;
     @ViewChild('invoicedetail', { static: true }) invoiceDetailView: ElementRef;
@@ -95,6 +96,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Output() public refreshDataAfterVoucherUpdate: EventEmitter<boolean> = new EventEmitter();
     /** Event emmiter when advance receipt action selected */
     @Output() public onOpenAdvanceReceiptModal: EventEmitter<any> = new EventEmitter();
+    @ViewChild('revisionHistoryAsideState', { static: true }) public revisionHistoryAsideState: TemplateRef<any>;
+    @ViewChild('showEmailSendModal', { static: true }) public showEmailSendModal: TemplateRef<any>;
     modalRef: BsModalRef;
     public filteredData: InvoicePreviewDetailsVm[] = [];
     public showEditMode: boolean = false;
@@ -128,8 +131,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public proformaListComponent: ProformaListComponent;
     /** To check is selected account/customer have advance receipts */
     public isAccountHaveAdvanceReceipts: boolean = false;
-    /* This will hold revision history aside popup state */
-    public revisionHistoryAsideState: string = 'out';
     /* This will hold company unique name */
     public companyUniqueName: string = '';
     /* This will hold PO numbers */
@@ -185,6 +186,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private domSanitizer: DomSanitizer,
         private commonService: CommonService,
         private thermalService: ThermalService,
+        public dialog: MatDialog,
         private invoiceAction: InvoiceActions) {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
@@ -333,7 +335,16 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if (event) {
             event.preventDefault();
         }
-        this.revisionHistoryAsideState = this.revisionHistoryAsideState === 'out' ? 'in' : 'out';
+        // this.revisionHistoryAsideState = this.revisionHistoryAsideState === 'out' ? 'in' : 'out';
+        this.dialog.open(this.revisionHistoryAsideState, {
+            panelClass: 'openform',
+            width: '1000px',
+            height: '100vh !important',
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
         this.toggleBodyClass();
     }
 
@@ -358,7 +369,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public toggleBodyClass() {
-        if (!this.showEditMode || this.revisionHistoryAsideState === 'in') {
+        if (!this.showEditMode) {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');

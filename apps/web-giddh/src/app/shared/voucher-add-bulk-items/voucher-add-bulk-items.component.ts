@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { fromEvent, ReplaySubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { SalesAddBulkStockItems, VoucherTypeEnum } from '../../models/api-models/Sales';
@@ -8,6 +8,7 @@ import { LedgerService } from '../../services/ledger.service';
 import { IVariant } from '../../models/api-models/Ledger';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GeneralService } from '../../services/general.service';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
     selector: 'voucher-add-bulk-items-component',
@@ -22,6 +23,8 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     @ViewChild('searchElement', { static: false }) public searchElement: ElementRef;
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public saveItemsEvent: EventEmitter<SalesAddBulkStockItems[]> = new EventEmitter();
+    /** Instance of cdk virtual scroller */
+    @ViewChildren(CdkVirtualScrollViewport) virtualScroll: QueryList<CdkVirtualScrollViewport>;
 
     public normalData: SalesAddBulkStockItems[] = [];
     public filteredData: SalesAddBulkStockItems[] = [];

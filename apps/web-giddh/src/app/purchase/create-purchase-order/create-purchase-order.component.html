@@ -3428,7 +3428,7 @@
     </section>
 
     <!-- endregion -->
-    <div
+    <!-- <div
         class="aside-overlay"
         *ngIf="
             accountAsideMenuState === 'in' ||
@@ -3436,29 +3436,32 @@
             asideMenuStateForOtherTaxes === 'in'
         "
         (click)="closeAsideMenuStateForOtherTaxes()"
-    ></div>
-    <generic-aside-menu-account
-        [class]="accountAsideMenuState"
-        [@slideInOut]="accountAsideMenuState"
-        (closeAsideEvent)="toggleAccountAsidePane($event)"
-        [selectedGrpUniqueName]="selectedGroupUniqueNameForAddEditAccountModal"
-        [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
-        *ngIf="accountAsideMenuState === 'in'"
-        [selectedAccountUniqueName]="selectedVendorForDetails"
-        (onShortcutPress)="toggleAccountAsidePane()"
-        (addEvent)="addNewSidebarAccount($event)"
-        (updateEvent)="updateSidebarAccount($event)"
-    >
-    </generic-aside-menu-account>
+    ></div> -->
 
-    <aside-menu-product-service
-        *ngIf="asideMenuStateForProductService === 'in'"
-        [class]="asideMenuStateForProductService"
-        [selectedVoucherType]="'purchase'"
-        [@slideInOut]="asideMenuStateForProductService"
-        (closeAsideEvent)="onNoResultsClicked()"
-    >
-    </aside-menu-product-service>
+    <ng-template #genericmenuModal>
+        <generic-aside-menu-account
+            [class]="accountAsideMenuState"
+            [@slideInOut]="accountAsideMenuState"
+            (closeAsideEvent)="toggleAccountAsidePane($event)"
+            [selectedGrpUniqueName]="selectedGroupUniqueNameForAddEditAccountModal"
+            [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
+            [selectedAccountUniqueName]="selectedVendorForDetails"
+            (onShortcutPress)="toggleAccountAsidePane()"
+            (addEvent)="addNewSidebarAccount($event)"
+            (updateEvent)="updateSidebarAccount($event)"
+        >
+        </generic-aside-menu-account>
+    </ng-template>
+
+    <ng-template #asideMenuStateForProductService>
+        <aside-menu-product-service
+            [class]="asideMenuStateForProductService"
+            [selectedVoucherType]="'purchase'"
+            [@slideInOut]="asideMenuStateForProductService"
+            (closeAsideEvent)="onNoResultsClicked()"
+        >
+        </aside-menu-product-service>
+    </ng-template>
 
     <!-- region bulk items -->
     <ng-template #bulkItemsModal>

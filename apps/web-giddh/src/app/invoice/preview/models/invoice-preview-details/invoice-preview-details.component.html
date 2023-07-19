@@ -331,8 +331,8 @@
                                                 <span *ngIf="!isCompany">
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_edit"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_edit"
+                                                        [matTooltipPosition]="'above'"
                                                         (click)="isCompany ? '' : toggleEditMode()"
                                                         ><i class="icon-edit-pencil"></i
                                                     ></a>
@@ -341,8 +341,8 @@
                                                 <span *ngIf="selectedItem?.voucherType !== 'purchase'">
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_send_email"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_send_email"
+                                                        [matTooltipPosition]="'above'"
                                                         (click)="showEmailSendModal.toggle()"
                                                         ><i class="icon-envelope font-12"></i
                                                     ></a>
@@ -351,8 +351,8 @@
                                                 <span *ngIf="selectedItem?.voucherType === 'purchase'">
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_send_email"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_send_email"
+                                                        [matTooltipPosition]="'above'"
                                                         (click)="openSendMailModal(sendEmailModal)"
                                                         ><i class="icon-envelope font-12"></i
                                                     ></a>
@@ -372,8 +372,8 @@
                                                 >
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_print"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_print"
+                                                        [matTooltipPosition]="'above'"
                                                         (click)="printVoucher()"
                                                         ><i class="fa fa-print"></i
                                                     ></a>
@@ -394,8 +394,8 @@
                                                 >
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_download_pdf"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_download_pdf"
+                                                        [matTooltipPosition]="'above'"
                                                         (click)="downloadPurchaseBillPDF()"
                                                         ><i class="icon-file"></i
                                                     ></a>
@@ -413,8 +413,8 @@
                                                 >
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_download_pdf"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_download_pdf"
+                                                        [matTooltipPosition]="'above'"
                                                         (click)="downloadPdf()"
                                                         ><i class="icon-file"></i
                                                     ></a>
@@ -436,8 +436,8 @@
                                                 >
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="localeData?.download_attachment"
-                                                        placement="top"
+                                                        [matTooltip]="localeData?.download_attachment"
+                                                        [matTooltipPosition]="'above'"
                                                         (click)="downloadFile()"
                                                         ><i class="icon-download-circle"></i
                                                     ></a>
@@ -446,8 +446,8 @@
                                                 <span *ngIf="!isCompany">
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_delete"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_delete"
+                                                        [matTooltipPosition]="'above'"
                                                         (click)="deleteConfirmationModel.toggle()"
                                                         ><i class="icon-trash"></i
                                                     ></a>
@@ -750,14 +750,23 @@
     </div>
     <!-- endregion -->
 </div>
-<div class="aside-overlay" *ngIf="revisionHistoryAsideState === 'in'"></div>
-<div *ngIf="revisionHistoryAsideState === 'in'">
+
+<ng-template #revisionHistoryAsideState>
     <aside-revision-history
         (closeAsideEvent)="toggleActivityHistoryAsidePane()"
         [companyUniqueName]="companyUniqueName"
         [selectedVoucher]="selectedItem"
-    ></aside-revision-history>
-</div>
+    >
+    </aside-revision-history>
+</ng-template>
+<!-- <div *ngIf="revisionHistoryAsideState === 'in'">
+    <aside-revision-history
+        (closeAsideEvent)="toggleActivityHistoryAsidePane()"
+        [companyUniqueName]="companyUniqueName"
+        [selectedVoucher]="selectedItem"
+    >
+    </aside-revision-history>
+</div> -->
 
 <ng-template #template>
     <div class="relative header-close-btn">

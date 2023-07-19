@@ -7,22 +7,21 @@
 <div class="modal-body">
     <div class="row mr-b1">
         <div class="col-sm-12">
-            <input
-                type="text"
-                class="form-control"
+            <input-field
+                [type]="'text'"
                 [placeholder]="commonLocaleData?.app_enter_email"
                 [(ngModel)]="emailId"
-            />
+            ></input-field>
         </div>
     </div>
     <!-- region buttons -->
     <div class="row mr-t2 mr-b1">
         <div class="col-sm-12">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-success" (click)="sendEmail()">
+                <button mat-stroked-button color="primary" type="button" (click)="sendEmail()">
                     {{ commonLocaleData?.app_send }}
                 </button>
-                <button type="button" class="btn btn-danger" (click)="hideModal()">
+                <button mat-stroked-button type="button" class="btn custom-btn" (click)="hideModal()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

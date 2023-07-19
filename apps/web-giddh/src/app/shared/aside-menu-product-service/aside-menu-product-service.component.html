@@ -1,12 +1,12 @@
 <div class="clearfix" appTranslate (commonLocaleData)="commonLocaleData = $event">
     <div class="form-header">
-        <h3>
+        <h3 mat-dialog-title>
             {{ commonLocaleData?.app_add }}
             <span *ngIf="voucherApiVersion === 2">{{
                 stockType !== "fixed_assets" ? (stockType | titlecase) : "Fixed Assets"
             }}</span>
         </h3>
-        <button id="close" (click)="closeAsidePane()">
+        <button mat-button mat-dialog-close id="close" (click)="closeAsidePane()">
             <i class="icon-cross"></i>
         </button>
         <button mat-stroked-button *ngIf="hideFirstStep" (click)="backButtonPressed()" id="back">

@@ -8,10 +8,10 @@
         <div>
             <h3>
                 <span>{{ actionAccount }}</span>
+                <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
             </h3>
         </div>
     </div>
-    <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
     <div class="aside-body">
         <div class="aside-pane-form">
             <ng-container *ngIf="!selectedAccountUniqueName && activeGroupUniqueName && !createAccountFromCommandK">

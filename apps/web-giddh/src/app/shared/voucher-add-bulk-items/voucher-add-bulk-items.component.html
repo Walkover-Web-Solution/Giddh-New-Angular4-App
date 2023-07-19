@@ -36,28 +36,36 @@
                             </div>
 
                             <div class="product-list">
-                                <perfect-scrollbar (psYReachEnd)="onScrollEnd()">
-                                    <ng-container *ngFor="let item of filteredData">
-                                        <button
-                                            mat-button
-                                            class="single-product-wrapper cp w-100"
-                                            [class.mb-20]="!item.variants?.length || item.variants?.length === 1"
-                                            (click)="addItemToSelectedArr(item)"
-                                        >
-                                            <h5>{{ item?.name }}</h5>
-                                        </button>
-                                        <ng-container *ngIf="item.variants?.length > 1">
+                                <app-cdk-scroll (fetchNextPage)="onScrollEnd()" [scrollableElementId]="'filter-data'">
+                                    <cdk-virtual-scroll-viewport
+                                        class="virtual-group-list overflow-x-hidden"
+                                        [itemSize]="37"
+                                        [minBufferPx]="400"
+                                        [maxBufferPx]="800"
+                                        [id]="'filter-data'"
+                                    >
+                                        <ng-container *cdkVirtualFor="let item of filteredData">
                                             <button
-                                                *ngFor="let variant of item.variants"
                                                 mat-button
-                                                class="product-variant text-left cp w-100 pl-4"
-                                                (click)="variantChanged(item, variant)"
+                                                class="single-product-wrapper cp w-100"
+                                                [class.mb-20]="!item.variants?.length || item.variants?.length === 1"
+                                                (click)="addItemToSelectedArr(item)"
                                             >
-                                                <h5>{{ variant?.label }}</h5>
+                                                <h5>{{ item?.name }}</h5>
                                             </button>
+                                            <ng-container *ngIf="item.variants?.length > 1">
+                                                <button
+                                                    *ngFor="let variant of item.variants"
+                                                    mat-button
+                                                    class="product-variant text-left cp w-100 pl-4"
+                                                    (click)="variantChanged(item, variant)"
+                                                >
+                                                    <h5>{{ variant?.label }}</h5>
+                                                </button>
+                                            </ng-container>
                                         </ng-container>
-                                    </ng-container>
-                                </perfect-scrollbar>
+                                    </cdk-virtual-scroll-viewport>
+                                </app-cdk-scroll>
                             </div>
                         </div>
                     </div>

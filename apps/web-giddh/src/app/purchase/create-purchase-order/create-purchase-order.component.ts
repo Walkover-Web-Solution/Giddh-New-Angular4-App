@@ -112,6 +112,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     @ViewChild('entry', { read: TemplateRef, static: false }) template: TemplateRef<any>;
     /* Selector for bulk items  modal */
     @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: any;
+    @ViewChild('genericmenuModal', { static: true }) public genericmenuModal: any;
+    @ViewChild('asideMenuStateForProductService', { static: true }) public asideMenuStateForProductService: TemplateRef<any>;
     /* Modal instance */
     public modalRef: BsModalRef;
     /* This will hold if it's multi currency account */
@@ -152,8 +154,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public vendorNotFoundText: string = '';
     /* This will hold state of account aside popup */
     public accountAsideMenuState: string = 'out';
-    /* This will hold state of product/service aside popup */
-    public asideMenuStateForProductService: string = 'out';
     /* This will hold state of account aside popup */
     public asideMenuStateForOtherTaxes: string = 'out';
     /* Variable for checking do we really need to show loader, issue ref :- when we open aside pan loader is displayed unnecessary */
@@ -1147,6 +1147,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.selectedVendorForDetails = null;
         this.isVendorSelected = false;
         this.toggleAccountAsidePane();
+        this.dialog.open(this.genericmenuModal, {
+            position: {
+                top: '0',
+                right: '0',
+            },
+            width: '760px',
+            height: '100vh !important',
+        });
     }
 
     /**
@@ -1169,7 +1177,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public toggleBodyClass(): void {
-        if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
+        if (this.accountAsideMenuState === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
             // don't show loader when aside menu is opened
             this.shouldShowLoader = false;
 
@@ -2039,8 +2047,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public getVendorDetails(): void {
-        this.selectedVendorForDetails = this.purchaseOrder.accountDetails.uniqueName;
-        this.toggleAccountAsidePane();
+        // this.selectedVendorForDetails = this.purchaseOrder.accountDetails.uniqueName;
+        // this.toggleAccountAsidePane();
+        this.dialog.open(this.genericmenuModal, {
+            position: {
+                top: '0',
+                right: '0',
+            },
+            width: '760px',
+            height: '100vh !important',
+        });
     }
 
     /**
@@ -3058,7 +3074,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (!_.isUndefined(index)) {
             this.innerEntryIndex = index;
         }
-        this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
+        // this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
+        this.dialog.open(this.asideMenuStateForProductService, {
+            panelClass: 'openform',
+            width: '1000px',
+            height: '100vh !important',
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
         this.toggleBodyClass();
     }
 

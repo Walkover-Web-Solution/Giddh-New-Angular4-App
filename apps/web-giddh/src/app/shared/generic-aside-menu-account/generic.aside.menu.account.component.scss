@@ -1,4 +1,4 @@
-:host {
+.aside-pane {
     position: fixed;
     left: auto;
     top: 0;
@@ -16,7 +16,7 @@
     padding: 0 !important;
 }
 
-:host.in #close {
+.aside-pane #close {
     display: block;
     position: absolute;
     right: 10px;
@@ -27,16 +27,6 @@
     background: transparent;
     color: var(--color-popup-list-head-text);
     font-size: 17px;
-}
-
-:host .container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-:host .aside-pane {
-    max-width: 760px;
-    width: 100%;
 }
 .aside-body {
     padding: 0 15px;
