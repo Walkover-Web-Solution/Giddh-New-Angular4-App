@@ -1423,4 +1423,34 @@ export class InventoryService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, uniqueName, { uniqueName })));
     }
+
+    public getTopLevelGroups(inventoryType: string, page: string = '1'): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + INVENTORY_API.MASTER.TOP_INVENTORY_GROUPS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':inventoryType', encodeURIComponent(inventoryType))?.replace(':page', encodeURIComponent(page))).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
+    }
+
+    public getMasters(stockGroupUniqueName: string, page: string = '1'): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + INVENTORY_API.MASTER.GET_MASTER?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName))?.replace(':page', encodeURIComponent(page))).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
+    }
+
+    public searchInventory(inventoryType: string, q: string = ''): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + INVENTORY_API.MASTER.SEARCH?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':inventoryType', encodeURIComponent(inventoryType))?.replace(':q', encodeURIComponent(q))).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
+    }
 }

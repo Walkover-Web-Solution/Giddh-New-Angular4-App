@@ -36,8 +36,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     @ViewChild('createRecipe', { static: false }) public createRecipe: CreateRecipeComponent;
     /* This will hold add stock value from aside menu */
     @Input() public addStock: boolean = false;
-    /* This will hold  stock type from aside menu */
+    /* This will hold stock type from aside menu */
     @Input() public stockType: string;
+    /** Holds stock unique name to edit */
+    @Input() public stockUniqueName: string;
+    /** Holds active group to create stock under */
+    @Input() public activeGroup: any;
     /* This will emit close aside menu event */
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     /* this will store image path*/
@@ -272,6 +276,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     if (!["PRODUCT", "SERVICE", "FIXEDASSETS"].includes(params?.type?.toUpperCase())) {
                         this.router.navigate(['/pages/inventory/v2']);
                     }
+                } else {
+                    if (this.stockUniqueName) {
+                        this.queryParams = { stockUniqueName: this.stockUniqueName };
+                        this.getStockDetails();
+                    }
                 }
             }
             if (this.stockForm.type === 'PRODUCT' || this.stockForm.type === 'SERVICE') {
@@ -394,7 +403,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 let stockGroups: IOption[] = [];
                 this.arrangeStockGroups(response.body?.results, stockGroups);
                 this.stockGroups = stockGroups;
-                this.stockGroupUniqueName = this.stockGroups?.length ? this.stockGroups[0]?.value : '';
+                this.stockGroupUniqueName = this.activeGroup?.uniqueName ? this.activeGroup?.uniqueName : this.stockGroups?.length ? this.stockGroups[0]?.value : '';
             }
         });
         this.changeDetection.detectChanges();
@@ -988,7 +997,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     }
                     this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
                     if (this.addStock) {
-                        this.closeAsideEvent.emit();
+                        this.closeAsideEvent.emit(false);
                     }
                 } else {
                     if (this.addStock) {
@@ -1588,10 +1597,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             customFields: []
         };
         this.isFormSubmitted = false;
-        this.stockGroupUniqueName = this.stockGroups?.length ? this.stockGroups[0]?.value : '';
+        this.stockGroupUniqueName = this.activeGroup?.uniqueName ? this.activeGroup?.uniqueName : this.stockGroups?.length ? this.stockGroups[0]?.value : '';
         this.isVariantAvailable = false;
         this.stockUnitName = "";
-        this.stockGroupName = "";
+        this.stockGroupName = this.activeGroup?.name ? this.activeGroup?.name : "";
         this.purchaseAccountName = "";
         this.fixedAssetsAccountName = "";
         this.salesAccountName = "";
@@ -1812,9 +1821,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      *
      * @memberof StockCreateEditComponent
      */
-    public backClicked(): void {
+    public backClicked(isClose: boolean = false): void {
         if (this.addStock) {
-            this.closeAsideEvent.emit();
+            this.closeAsideEvent.emit(isClose);
         } else {
             this.location.back();
         }
