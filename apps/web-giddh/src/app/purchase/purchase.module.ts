@@ -46,9 +46,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -112,10 +109,7 @@ import { MatTabsModule } from '@angular/material/tabs';
         GenericAsideMenuAccountModule,
         AsideMenuOtherTaxesModule,
         AsideMenuProductServiceModule,
-        FormsModule,
         MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
         MatCheckboxModule,
         FormFieldsModule,
         MatListModule,

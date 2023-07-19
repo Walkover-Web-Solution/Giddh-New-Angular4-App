@@ -32,7 +32,7 @@
                                 [name]="'grandTotal'"
                                 [options]="filtersForAmount"
                                 [defaultValue]="selectedGrandTotalOperator"
-                                (selected)="purchaseOrderPostRequest.grandTotalOperation = $event.value"
+                                (selectedOption)="(purchaseOrderPostRequest.grandTotalOperation)"
                             >
                             </dropdown-field>
                         </div>
@@ -56,7 +56,7 @@
                                 [placeholder]="localeData?.select_status"
                                 [name]="'statuses'"
                                 [options]="filtersForStatus"
-                                (selected)="purchaseOrderPostRequest.statuses = $event.value"
+                                (selectedOption)="(purchaseOrderPostRequest.statuses)"
                             >
                             </dropdown-field>
                         </div>

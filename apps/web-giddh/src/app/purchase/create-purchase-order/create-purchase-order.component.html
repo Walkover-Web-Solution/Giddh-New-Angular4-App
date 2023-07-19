@@ -860,7 +860,7 @@
                                                                     <select-field
                                                                         [placeholder]="commonLocaleData?.app_state"
                                                                         [cssClass]="'select-border-bottom disabled'"
-                                                                        (selected)="
+                                                                        (selectedOption)="
                                                                             purchaseOrder.company.shippingDetails.state.code =
                                                                                 $event.value;
                                                                             fillShippingBillingDetails(
