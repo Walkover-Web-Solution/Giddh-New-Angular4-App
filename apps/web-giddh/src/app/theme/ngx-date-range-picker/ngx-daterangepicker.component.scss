@@ -643,9 +643,10 @@
                         &:hover {
                             background-color: var(--color-primary-datepicker-input-bottom-border);
                             color: var(--color-white);
-                            .available{
+                            .available {
                                 &.prev {
-                                   filter: brightness(0) saturate(100%) invert(100%) sepia(1%) saturate(6%) hue-rotate(63deg) brightness(103%) contrast(103%);
+                                    filter: brightness(0) saturate(100%) invert(100%) sepia(1%) saturate(6%)
+                                        hue-rotate(63deg) brightness(103%) contrast(103%);
                                 }
                             }
                         }
@@ -654,9 +655,10 @@
                             border-left: 3px solid var(--color-primary-datepicker-input-bottom-border) !important;
                             font-family: var(--font-semibold);
                             color: var(--color-white);
-                            .available{
+                            .available {
                                 &.prev {
-                                   filter: brightness(0) saturate(100%) invert(100%) sepia(1%) saturate(6%) hue-rotate(63deg) brightness(103%) contrast(103%);
+                                    filter: brightness(0) saturate(100%) invert(100%) sepia(1%) saturate(6%)
+                                        hue-rotate(63deg) brightness(103%) contrast(103%);
                                 }
                             }
                         }
@@ -1543,21 +1545,21 @@ tr:first-child.in-range-hovered.available {
 cdk-virtual-scroll-viewport {
     height: 250px;
 }
-cdk-virtual-scroll-viewport{
+cdk-virtual-scroll-viewport {
     ::-webkit-scrollbar {
         width: 6px;
     }
 }
 
 /* Track */
-cdk-virtual-scroll-viewport{
+cdk-virtual-scroll-viewport {
     ::-webkit-scrollbar-track {
         border-radius: 4px;
     }
 }
 
 /* Handle */
-cdk-virtual-scroll-viewport{
+cdk-virtual-scroll-viewport {
     ::-webkit-scrollbar-thumb {
         background: var(--color-gray);
         border-radius: 4px;

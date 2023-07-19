@@ -5,6 +5,7 @@ import { UserAuthenticated } from './decorators/UserAuthenticated';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { AppLoginSuccessComponent } from "./app-login-success/app-login-success";
 import { PageComponent } from './page/page.component';
+import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
 
 export const ROUTES: Routes = [
     { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
@@ -41,6 +42,8 @@ export const ROUTES: Routes = [
     { path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full' },
     { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
     { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
+    { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
+    { path: 'mobile-restricted', component: MobileRestrictedComponent },
     {
         path: 'pages', component: PageComponent,
         children: [
