@@ -28,6 +28,9 @@
                 display: inline-flex;
                 float: left;
                 height: 100%;
+                &:last-child {
+                    border: 0;
+                }
             }
         }
         .inventory-btnside {
