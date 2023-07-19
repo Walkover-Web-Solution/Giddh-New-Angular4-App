@@ -64,8 +64,7 @@ import { MatSortModule } from '@angular/material/sort';
         MatCheckboxModule,
         MatInputModule,
         MatChipsModule,
-        MatTooltipModule,
-        MatSortModule
+        MatTooltipModule
     ]
 })
 export class SearchModule {

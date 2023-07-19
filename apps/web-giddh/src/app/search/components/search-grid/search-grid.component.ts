@@ -514,19 +514,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      * @memberof SearchGridComponent
      */
     public toggleAllSelection(action: boolean): void {
-        if (action) {
-            this.dataSource = this.dataSource?.map(element => {
-                element.isSelected = action;
-                this.prepareSelectedCustomerList(element, true);
-                return element;
-            });
-        } else {
-            this.dataSource = this.dataSource?.map(element => {
-                element.isSelected = action;
-                this.prepareSelectedCustomerList(element, false);
-                return element;
-            });
-        }
+        this.dataSource = this.dataSource?.map(element => {
+            element.isSelected = action;
+            this.prepareSelectedCustomerList(element, action);
+            return element;
+        });
     }
-
 }
