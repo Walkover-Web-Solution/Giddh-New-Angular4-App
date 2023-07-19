@@ -31,6 +31,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
     public currentStock: any = {};
     public activeIndex: number = 0;
     public isSearching: boolean = false;
+    public loadMoreInProgress: boolean = false;
     /** Search field form control */
     public searchFormControl = new FormControl();
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -54,7 +55,21 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (!this.isSearching && event && event?.getDataLength() - event?.getRenderedRange().end < 50) {
-                console.log(event);
+                if (!this.loadMoreInProgress) {
+                    let elementId = event?.elementRef?.nativeElement?.id;
+                    if (elementId > 0) {
+                        elementId = elementId - 1; // since 2nd level of inventory start from 0, so we are decreasing count by 1
+                        if (this.masterColumnsData[elementId]?.page < this.masterColumnsData[elementId]?.totalPages) {
+                            this.loadMoreInProgress = true;
+                            this.getMasters(this.masterColumnsData[elementId]?.stockGroup, elementId, false, true);
+                        }
+                    } else if (this.topLevelGroups?.page < this.topLevelGroups?.totalPages) {
+                        this.loadMoreInProgress = true;
+                        this.topLevelGroups.page++;
+
+                        this.getTopLevelGroups();
+                    }
+                }
             }
         });
 
@@ -79,10 +94,12 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
             this.topLevelGroups = { page: 1, results: [] };
         }
         this.resetCurrentStockAndGroup();
-        this.inventoryService.getTopLevelGroups(this.inventoryType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.inventoryService.getTopLevelGroups(this.inventoryType, String(this.topLevelGroups?.page)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                this.topLevelGroups = response.body;
+                this.topLevelGroups.totalPages = response?.body?.totalPages;
+                this.topLevelGroups.results = this.topLevelGroups.results.concat(response.body?.results);
             }
+            this.loadMoreInProgress = false;
         });
     }
 
@@ -90,7 +107,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         if (!stockGroup) {
             return;
         }
-        this.resetCurrentStockAndGroup();
+        if (!isLoadMore) {
+            this.resetCurrentStockAndGroup();
+        }
         const page = (isLoadMore) ? (Number(this.masterColumnsData[currentIndex]?.page) + 1) : 1;
         this.inventoryService.getMasters(stockGroup?.uniqueName, String(page)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
@@ -110,17 +129,23 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                     this.masterColumnsData[currentIndex].results = this.masterColumnsData[currentIndex].results.concat(response?.body?.results);
                 }
             }
+            this.loadMoreInProgress = false;
             this.createBreadcrumbs();
         });
 
-        this.createUpdateGroup = false;
-        setTimeout(() => {
-            this.editGroup(stockGroup);
-        }, 50);
+        if (!isLoadMore) {
+            this.createUpdateGroup = false;
+            setTimeout(() => {
+                this.editGroup(stockGroup);
+            }, 50);
+        }
     }
 
     public searchInventory(search: string): void {
         this.breadcrumbs = [];
+        this.masterColumnsData = [];
+        this.resetCurrentStockAndGroup();
+        
         this.inventoryService.searchInventory(this.inventoryType, search).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 let masterColumnsData = [];
@@ -160,7 +185,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.breadcrumbs = [];
 
         this.masterColumnsData?.forEach(data => {
-            this.breadcrumbs.push(data?.stockGroup?.name);
+            if (data?.stockGroup?.name) {
+                this.breadcrumbs.push(data?.stockGroup?.name);
+            }
         });
 
         if (this.currentStock?.name) {

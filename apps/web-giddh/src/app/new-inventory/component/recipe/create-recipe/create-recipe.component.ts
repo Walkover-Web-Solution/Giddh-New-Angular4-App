@@ -535,7 +535,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             return;
         }
 
-        this.manufacturingService.saveRecipe(this.stock.uniqueName, recipeObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.manufacturingService.saveRecipe(this.stock.uniqueName, recipeObject).subscribe(response => {
             if (response?.status === "success") {
                 this.toasterService.showSnackBar("success", this.localeData?.recipe_saved);
             } else {

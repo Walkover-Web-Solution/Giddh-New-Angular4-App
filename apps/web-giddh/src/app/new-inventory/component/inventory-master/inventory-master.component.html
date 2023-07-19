@@ -30,6 +30,8 @@
                                 [matTooltip]="topLevelGroup?.name"
                                 [matTooltipPosition]="'above'"
                                 (click)="activeIndex = 0; isTopLevel = true; getMasters(topLevelGroup, -1)"
+                                class="group-name"
+                                [ngClass]="{ 'isActive': this.currentGroup?.uniqueName === topLevelGroup?.uniqueName }"
                             >
                                 <mat-list-item class="items">{{ topLevelGroup?.name }}</mat-list-item>
                             </a>
@@ -56,6 +58,12 @@
                                     href="javascript:;"
                                     [matTooltip]="masterData?.name"
                                     [matTooltipPosition]="'above'"
+                                    [ngClass]="{
+                                        'group-name': masterData.entity === 'STOCK_GROUP',
+                                        'isActive':
+                                            this.currentGroup?.uniqueName === masterData?.uniqueName ||
+                                            this.currentStock?.uniqueName === masterData?.uniqueName
+                                    }"
                                     (click)="
                                         activeIndex = i;
                                         isTopLevel = false;
