@@ -27,6 +27,7 @@
                             <a
                                 href="javascript:void(0);"
                                 [matTooltip]="topLevelGroup?.name"
+                                [matTooltipPosition]="'above'"
                                 (click)="activeIndex = 0; isTopLevel = true; getMasters(topLevelGroup, -1)"
                             >
                                 <mat-list-item class="items">{{ topLevelGroup?.name }}</mat-list-item>
@@ -53,6 +54,7 @@
                                 <a
                                     href="javascript:void(0);"
                                     [matTooltip]="masterData?.name"
+                                    [matTooltipPosition]="'above'"
                                     (click)="
                                         activeIndex = i;
                                         isTopLevel = false;
@@ -70,7 +72,7 @@
             </div>
         </div>
         <div class="inventory-btnside">
-            <div class="searchbar d-flex justify-content-between align-items-center pt-2" *ngIf="breadcrumbs?.length">
+            <div class="searchbar d-flex justify-content-between align-items-center py-2" *ngIf="breadcrumbs?.length">
                 <div>
                     <ol class="breadcrumb row pd-l15">
                         <li *ngFor="let breadcrumb of breadcrumbs">
