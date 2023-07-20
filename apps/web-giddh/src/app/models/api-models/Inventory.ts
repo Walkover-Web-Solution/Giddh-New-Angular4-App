@@ -92,6 +92,8 @@ export class StockMappedUnitResponse {
     public quantity?: number;
     public stockUnitX?: IStockItem;
     public stockUnitY?: IStockItem;
+    public stockUnitXGroup?: any;
+    public stockUnitYGroup?: any;
 }
 /**
  * Model for stock-report api response
