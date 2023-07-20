@@ -1,0 +1,38 @@
+body {
+    &.search-filter {
+        .cdk-overlay-container {
+            .cdk-overlay-connected-position-bounding-box {
+                .cdk-overlay-pane {
+                    transform: unset !important;
+                    .mat-menu-panel {
+                        max-width: 550px;
+                    }
+                }
+            }
+        }
+        .mat-chip-list-wrapper {
+            flex-wrap: wrap !important;
+        }
+        .select-entity-height {
+            input {
+                height: 48px;
+                border-radius: 0.5rem;
+            }
+        }
+        .width-query-types {
+            .mat-form-field {
+                width: 152px;
+            }
+        }
+        .width-query-differs {
+            .mat-form-field {
+                width: 92px;
+            }
+        }
+        .width-balance-type {
+            .mat-form-field {
+                width: 92px;
+            }
+        }
+    }
+}
