@@ -7,6 +7,10 @@
     max-width: 760px;
     width: 100%;
     z-index: 99999;
+
+    &.page-leave-confirmation-showing {
+        z-index: 9999 !important;
+    }
 }
 .aside-pane {
     padding: 0 !important;
@@ -15,13 +19,14 @@
 :host.in #close {
     display: block;
     position: absolute;
-    right: 0;
-    top: 16px;
+    right: 10px;
+    top: 18px;
     z-index: 5;
     border: 0;
     border-radius: 0;
     background: transparent;
     color: var(--color-popup-list-head-text);
+    font-size: 17px;
 }
 
 :host .container-fluid {

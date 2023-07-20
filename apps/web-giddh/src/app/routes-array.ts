@@ -22,8 +22,7 @@ export const ROUTES: Routes = [
     { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full' },
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
     { path: 'proforma-invoice' },
-    { path: 'new-user', loadChildren: () => import('./new-user/new-user.module').then(module => module.NewUserModule) },
-    { path: 'welcome', loadChildren: () => import('./welcome/welcome.module').then(module => module.WelcomeModule) },
+    { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
     { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnboardingModule) },
     { path: 'social-login-callback' },
     { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
@@ -43,6 +42,7 @@ export const ROUTES: Routes = [
     { path: 'reports', redirectTo: 'pages/reports' },
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
     { path: 'select-plan' },
+    { path: 'mobile-restricted', redirectTo: 'mobile-restricted', pathMatch: 'full' },
     {
         path: 'pages',
         children: [

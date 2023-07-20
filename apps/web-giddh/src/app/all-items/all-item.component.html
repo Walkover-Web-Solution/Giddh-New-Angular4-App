@@ -15,9 +15,10 @@
                             <i class="icon-search"></i>
                         </span>
                     </div>
-                    <input
-                        type="text"
-                        class="form-control"
+                    <text-field
+                        class="width-inherit"
+                        [type]="'text'"
+                        [cssClass]="'form-control'"
                         [placeholder]="commonLocaleData?.app_search"
                         [attr.aria-label]="commonLocaleData?.app_search"
                         aria-describedby="addon-wrapping"
@@ -25,47 +26,54 @@
                         [(ngModel)]="search"
                         (click)="menuIndex = -1; itemIndex = -1"
                         (ngModelChange)="searchAllItems($event)"
-                    />
+                        [autoFocus]="true"
+                    >
+                    </text-field>
                 </div>
             </div>
             <div class="all-item-block">
                 <div class="main-item" *ngFor="let item of filteredItems$ | async; index as filteredMenuIndex">
-                    <h3 *ngIf="!item?.link" class="mr-b1 d-flex align-items-center">
+                    <h3 *ngIf="!item?.link" class="mr-b2 d-flex align-items-center">
                         <i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}
                     </h3>
                     <h3
                         *ngIf="item?.link"
                         [routerLink]="[item?.link]"
-                        class="cursor-pointer mr-b1 d-flex align-items-center"
+                        class="cursor-pointer mr-b2 d-flex align-items-center"
                     >
                         <i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}
                     </h3>
                     <div class="sub-item-block">
-                        <div class="row">
-                            <div
-                                class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-12"
-                                *ngFor="let subItem of item?.items; index as subItemIndex"
-                            >
-                                <div
+                        <div class="row responsive-sub-items">
+                            <ng-container *ngFor="let subItem of item?.items; index as subItemIndex">
+                                <mat-card
                                     *ngIf="subItem.link"
-                                    class="single-menu-item mr-b1"
+                                    class="single-menu-item"
                                     [routerLink]="[subItem?.link]"
                                     [queryParams]="subItem?.additional"
                                     [class.active]="menuIndex === filteredMenuIndex && itemIndex === subItemIndex"
                                 >
-                                    <h4><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</h4>
-                                    <p>{{ subItem?.description }}</p>
-                                </div>
-                                <div
+                                    <mat-card-title>
+                                        <h4><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</h4>
+                                    </mat-card-title>
+                                    <mat-card-content>
+                                        <p>{{ subItem?.description }}</p>
+                                    </mat-card-content>
+                                </mat-card>
+                                <mat-card
                                     *ngIf="!subItem.link"
-                                    class="single-menu-item mr-b1"
+                                    class="single-menu-item"
                                     [class.active]="menuIndex === filteredMenuIndex && itemIndex === subItemIndex"
                                     (click)="handleItemClick(subItem)"
                                 >
-                                    <h4><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</h4>
-                                    <p>{{ subItem?.description }}</p>
-                                </div>
-                            </div>
+                                    <mat-card-title>
+                                        <h4><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</h4>
+                                    </mat-card-title>
+                                    <mat-card-content>
+                                        <p>{{ subItem?.description }}</p>
+                                    </mat-card-content>
+                                </mat-card>
+                            </ng-container>
                         </div>
                     </div>
                 </div>

@@ -47,6 +47,7 @@ import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-serv
 import { VoucherModule } from '../voucher/voucher.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     declarations: [
@@ -128,7 +129,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         AsideMenuProductServiceModule,
         VoucherModule,
         FormFieldsModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        MatDialogModule
     ]
 })
 export class InventoryModule { }

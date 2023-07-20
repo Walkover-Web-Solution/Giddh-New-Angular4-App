@@ -17,7 +17,6 @@ export class UserAuthenticated implements CanActivate {
         }), map(p => {
             if (p.userLoginState === userLoginStateEnum.userLoggedIn) {
                 if (ROUTES.findIndex(q => q.path.split('/')[0] === p.lastState.split('/')[0]) > -1) {
-                    console.log('UserAuthenticated');
                     let lastStateHaveParams: boolean = p.lastState.includes('?');
                     if (lastStateHaveParams) {
                         let tempParams = p.lastState.substr(p.lastState.lastIndexOf('?'));
@@ -40,7 +39,7 @@ export class UserAuthenticated implements CanActivate {
             }
             if (p.userLoginState === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
-                    this.router.navigate(['/new-user']);
+                    this.router.navigate(['/new-company']);
                 });
             }
             return !(p.userLoginState === userLoginStateEnum.userLoggedIn || p.userLoginState === userLoginStateEnum.newUserLoggedIn);

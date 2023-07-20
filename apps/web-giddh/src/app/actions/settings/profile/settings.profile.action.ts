@@ -259,4 +259,18 @@ export class SettingsProfileActions {
             payload: response
         }
     }
+
+    /**
+     * This will hold if form has unsaved changes
+     *
+     * @param {boolean} value
+     * @returns {CustomActions}
+     * @memberof SettingsProfileActions
+     */
+    public hasUnsavedChanges(value: boolean): CustomActions {
+        return {
+            type: SETTINGS_PROFILE_ACTIONS.HAS_UNSAVED_CHANGES,
+            payload: value
+        }
+    }
 }
