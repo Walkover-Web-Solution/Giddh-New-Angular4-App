@@ -160,7 +160,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
                         this.filterOptions(changes?.defaultValue.currentValue);
                     }
                 }
-            }, 500);
+            }, 250);
         }
     }
 
