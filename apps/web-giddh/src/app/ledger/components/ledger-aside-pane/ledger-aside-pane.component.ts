@@ -5,8 +5,8 @@ import { Store, select } from '@ngrx/store';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AccountsAction } from '../../../actions/accounts.actions';
-import { GeneralService } from '../../../services/general.service';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'ledger-aside-pane',
@@ -38,7 +38,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
         private inventorySidebarAction: SidebarAction,
         private accountsAction: AccountsAction,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private changeDetectionRef: ChangeDetectorRef,
+        private changeDetectionRef: ChangeDetectorRef, 
         private generalService: GeneralService
     ) {
         this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
