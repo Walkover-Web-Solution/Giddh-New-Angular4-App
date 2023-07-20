@@ -8,8 +8,7 @@
     .inventory-search {
         position: absolute;
         bottom: 10%;
-        left: 50%;
-        transform: translateX(-50%);
+        left: 32%;
         z-index: 99;
         text-field {
             .form-control {
@@ -19,7 +18,7 @@
     }
     .mat-list-wrap {
         overflow-x: auto;
-        display: flex;
+        // display: flex;
         height: 100%;
         .inventory-sideabar {
             // max-width: 49.66%;
@@ -36,7 +35,8 @@
         .inventory-btnside {
             position: relative;
             overflow-x: scroll;
-            width: 100%;
+            // width: 100%;
+            height: 100%;
             padding-left: 15px;
             .create-btn-grp {
                 display: flex;

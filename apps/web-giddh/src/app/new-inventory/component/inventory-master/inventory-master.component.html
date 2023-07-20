@@ -7,8 +7,8 @@
             [formControl]="searchFormControl"
         ></text-field>
     </div>
-    <div class="mat-list-wrap horizontal-scroll">
-        <cdk-virtual-scroll-viewport [itemSize]="5" orientation="horizontal" class="viewport">
+    <div class="mat-list-wrap">
+        <div class="horizontal-scroll">
             <div class="inventory-sideabar border-grid">
                 <div class="inventory-sub-sideabar">
                     <mat-list class="item-list border-grid pt-0" *ngIf="!isSearching">
@@ -85,7 +85,7 @@
                     </ng-container>
                 </div>
             </div>
-        </cdk-virtual-scroll-viewport>
+        </div>
         <div class="inventory-btnside">
             <div class="searchbar d-flex justify-content-between align-items-center py-2" *ngIf="breadcrumbs?.length">
                 <div>
