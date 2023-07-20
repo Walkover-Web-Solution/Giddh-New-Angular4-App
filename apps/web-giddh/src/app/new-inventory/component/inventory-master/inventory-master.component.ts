@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
 import { ReplaySubject } from "rxjs";
 import { InventoryService } from "../../../services/inventory.service";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
@@ -14,23 +13,35 @@ import { cloneDeep } from "../../../lodash-optimized";
     styleUrls: ["./inventory-master.component.scss"]
 })
 export class InventoryMasterComponent implements OnInit, OnDestroy {
-    public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Inventory type */
     public inventoryType: string = '';
+    /** Holds top level groups */
     public topLevelGroups: any = { page: 1, results: [] };
+    /** Holds master columns data */
     public masterColumnsData: any[] = [];
+    /** Holds breadcrumbs */
     public breadcrumbs: any[] = [];
+    /** True if we need to show create stock/group buttons */
     public showCreateButtons: boolean = false;
+    /** True if we need to show create/update group component */
     public createUpdateGroup: boolean = false;
+    /** True if we need to show create/update stock component */
     public createUpdateStock: boolean = false;
+    /** True if clicked group is of top level */
     public isTopLevel: boolean = true;
+    /** Holds current group object */
     public currentGroup: any = {};
+    /** Holds current stock object */
     public currentStock: any = {};
+    /** Holds active index */
     public activeIndex: number = 0;
+    /** True if search in progress */
     public isSearching: boolean = false;
+    /** True if load more in progress */
     public loadMoreInProgress: boolean = false;
     /** Search field form control */
     public searchFormControl = new FormControl();
@@ -45,6 +56,11 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * Lifecycle hook for init component
+     *
+     * @memberof InventoryMasterComponent
+     */
     public ngOnInit(): void {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (this.inventoryType !== params.type) {
@@ -89,16 +105,26 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Lifecycle hook for destroy component
+     *
+     * @memberof InventoryMasterComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Get top level groups
+     *
+     * @memberof InventoryMasterComponent
+     */
     public getTopLevelGroups(): void {
         if (this.topLevelGroups?.page === 1) {
             this.topLevelGroups = { page: 1, results: [] };
+            this.resetCurrentStockAndGroup();
         }
-        this.resetCurrentStockAndGroup();
         this.inventoryService.getTopLevelGroups(this.inventoryType, String(this.topLevelGroups?.page)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.topLevelGroups.totalPages = response?.body?.totalPages;
@@ -108,6 +134,16 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Get master stocks/groups
+     *
+     * @param {*} stockGroup
+     * @param {number} currentIndex
+     * @param {boolean} [isRefresh=false]
+     * @param {boolean} [isLoadMore=false]
+     * @returns {void}
+     * @memberof InventoryMasterComponent
+     */
     public getMasters(stockGroup: any, currentIndex: number, isRefresh: boolean = false, isLoadMore: boolean = false): void {
         if (!stockGroup) {
             return;
@@ -146,6 +182,12 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Search inventory
+     *
+     * @param {string} search
+     * @memberof InventoryMasterComponent
+     */
     public searchInventory(search: string): void {
         this.breadcrumbs = [];
         this.masterColumnsData = [];
@@ -167,6 +209,15 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Maps search inventory response and converts into master column data
+     *
+     * @param {*} master
+     * @param {number} index
+     * @param {*} masterColumnsData
+     * @returns {*}
+     * @memberof InventoryMasterComponent
+     */
     public mapNestedGroupsStocks(master: any, index: number, masterColumnsData: any): any {
         master?.forEach(data => {
             if (masterColumnsData[index]) {
@@ -187,6 +238,11 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         return masterColumnsData;
     }
 
+    /**
+     * Creats breadcrumb
+     *
+     * @memberof InventoryMasterComponent
+     */
     public createBreadcrumbs(): void {
         this.breadcrumbs = [];
 
@@ -199,8 +255,21 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         if (this.currentStock?.name) {
             this.breadcrumbs.push(this.currentStock?.name);
         }
+
+        if (this.createUpdateGroup && !this.currentGroup?.uniqueName) {
+            this.breadcrumbs.push("Create Group");
+        }
+
+        if (this.createUpdateStock && !this.currentStock?.uniqueName) {
+            this.breadcrumbs.push("Create Stock");
+        }
     }
 
+    /**
+     * Resets current stock/group
+     *
+     * @memberof InventoryMasterComponent
+     */
     public resetCurrentStockAndGroup(): void {
         this.currentGroup = {};
         this.currentStock = {};
@@ -208,6 +277,12 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.createUpdateGroup = false;
     }
 
+    /**
+     * Opens edit stock
+     *
+     * @param {*} masterData
+     * @memberof InventoryMasterComponent
+     */
     public editStock(masterData: any): void {
         this.resetCurrentStockAndGroup();
         this.currentStock = masterData;
@@ -216,6 +291,12 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.createBreadcrumbs();
     }
 
+    /**
+     * Opens edit group
+     *
+     * @param {*} masterData
+     * @memberof InventoryMasterComponent
+     */
     public editGroup(masterData: any): void {
         this.resetCurrentStockAndGroup();
         this.currentGroup = masterData;
@@ -224,6 +305,12 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.createBreadcrumbs();
     }
 
+    /**
+     * Closes stock create/edit
+     *
+     * @param {*} event
+     * @memberof InventoryMasterComponent
+     */
     public closeStock(event: any): void {
         this.showCreateButtons = false;
         this.createUpdateStock = false;
@@ -236,6 +323,12 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Closes group create/edit
+     *
+     * @param {*} event
+     * @memberof InventoryMasterComponent
+     */
     public closeGroup(event: any): void {
         this.showCreateButtons = false;
         this.createUpdateGroup = false;
@@ -254,6 +347,11 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Shows create group
+     *
+     * @memberof InventoryMasterComponent
+     */
     public showCreateGroup(): void {
         this.resetCurrentStockAndGroup();
         this.showCreateButtons = false;
@@ -267,6 +365,11 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Shows create stock
+     *
+     * @memberof InventoryMasterComponent
+     */
     public showCreateStock(): void {
         this.resetCurrentStockAndGroup();
         this.showCreateButtons = false;
