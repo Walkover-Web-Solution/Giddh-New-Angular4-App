@@ -15,6 +15,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/onboarding.scss";
 @import "../css/global/custom-fields.scss";
 @import "../css/global/inventory.scss";
+@import "../css/global/mat-button.scss";
 @import "../css/global/search.scss";
 @import "../css/global/all-items.scss";
 
@@ -14198,22 +14199,10 @@ body.hide-scroll-body.master-page {
     transform: unset !important;
 }
 
-/*==========  Material Button Default Font Size Start Here =============*/
-.mat-button,
-.mat-raised-button,
-.mat-icon-button,
-.mat-stroked-button,
-.mat-flat-button,
-.mat-fab,
-.mat-mini-fab {
-    font-size: var(--font-size-15);
-}
-
 .mat-tab-label {
     font-size: var(--font-size-16);
 }
 
-/*==========  Material Button Default Font Size End Here ===============*/
 /*-- mat-stepper --*/
 .mat-step-header {
     background-color: transparent !important;
@@ -14255,27 +14244,6 @@ body.hide-scroll-body.master-page {
     }
 }
 
-/*================Material Buttons Color=======Start Here==================*/
-.mat-button,
-.mat-icon-button,
-.mat-stroked-button {
-    border-color: var(--color-secondary-input-bar-border) !important;
-    &.mat-primary {
-        color: var(--color-giddh-blue) !important;
-    }
-    /*--- common-btn ---*/
-    .mat-button.mat-primary,
-    .mat-icon-button.mat-primary,
-    .mat-stroked-button.mat-primary {
-        color: var(--color-primary-header-background);
-
-        .mat-button-focus-overlay {
-            background-color: var(--color-primary-header-background) !important;
-        }
-    }
-}
-/*================Material Buttons Color=======End Here==================*/
-
 /*--- voucher-datepicker ---*/
 voucher-component {
     .mat-datepicker-input {
@@ -14289,6 +14257,7 @@ voucher-component {
 .mat-tooltip {
     letter-spacing: 0.8px;
 }
+
 /*--- manufacturing-list-table ---*/
 .list-table-wrapper {
     th.mat-header-cell {
@@ -14336,63 +14305,6 @@ voucher-component {
         }
     }
 }
-
-/* ======Ladda  Button Color in Material Stroked Button====Start Here=========== */
-button {
-    &.mat-stroked-button {
-        &.mat-primary {
-            &:disabled {
-                .ladda-label {
-                    color: transparent;
-                }
-            }
-            &.ladda-button {
-                &:not(:disabled) {
-                    .ladda-label {
-                        color: var(--color-giddh-blue) !important;
-                        display: contents;
-                        width: auto;
-                        height: auto;
-                    }
-                }
-                .ladda-spinner {
-                    div {
-                        div {
-                            div {
-                                background: var(--color-giddh-blue) !important;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-/* This class is used to ladda button text color which is conditionally disabled*/
-.disabled-ladda-btn {
-    &.mat-stroked-button {
-        &.mat-primary {
-            &:disabled {
-                .ladda-label {
-                    color: var(--color-giddh-blue) !important;
-                }
-            }
-        }
-    }
-}
-
-/* ======Ladda  Button Color in Material Stroked Button====End Here=========== */
-
-/*============Material Button Disabled Cursor======Start===========*/
-button {
-    &.mat-button-disabled {
-        &:hover {
-            cursor: not-allowed !important;
-        }
-    }
-}
-/*============Material Button Disabled Cursor======End===========*/
 
 .ledger-date {
     .input-wrapper {

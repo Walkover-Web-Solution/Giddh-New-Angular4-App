@@ -5,12 +5,12 @@
 .entity-dropdown {
     width: 200px;
 }
-.custom-datepicker{
+.custom-datepicker {
     &.custom-new-datepicker {
         input {
             height: 48px;
-            border-radius: .5rem
-        }   
+            border-radius: 0.5rem;
+        }
     }
 }
 @media (min-width: 1020px) and (max-width: 1099px) {
