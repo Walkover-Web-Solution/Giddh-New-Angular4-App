@@ -316,13 +316,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 addresses?.get('stateCode')?.patchValue(this.activeCompany.state);
             }, 500);
         } else {
-            let stateCode;
-            let isDefaultAddress;
-            this.activeCompany.addresses?.forEach((address: any) => {
-                stateCode = address?.stateCode;
-                isDefaultAddress = address?.branches?.filter(branch => branch?.isDefault);
-            });
-            if (isDefaultAddress) {
                 if (this.activeCompany?.addresses[0].stateCode) {
                     setTimeout(() => {
                         let addresses = (this.addAccountForm.get('addresses') as FormArray).at(0);
@@ -331,7 +324,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     }, 500);
                 }
             }
-        }
     }
 
     public ngAfterViewInit() {
