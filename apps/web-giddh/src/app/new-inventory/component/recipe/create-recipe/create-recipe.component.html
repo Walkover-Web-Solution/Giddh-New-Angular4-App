@@ -117,7 +117,10 @@
                                                             (dynamicSearchedQuery)="getStocks(1, $event)"
                                                             (scrollEnd)="stockScrollEnd(linkedStock)"
                                                             [allowValueReset]="true"
-                                                            (onClear)="resetStocks(linkedStock)"
+                                                            (onClear)="
+                                                                linkedStock.stockName = '';
+                                                                linkedStock.stockUniqueName = ''
+                                                            "
                                                         >
                                                         </select-field>
                                                     </div>
