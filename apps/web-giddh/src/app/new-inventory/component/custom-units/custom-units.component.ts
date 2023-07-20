@@ -83,7 +83,7 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
             width: '1000px',
             position: {
                 right: '0',
-                top: '14px'
+                top: '0'
             }
         });
     }
@@ -200,7 +200,7 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
             width: '760px',
             position: {
                 right: '0',
-                top: '14px'
+                top: '0'
             }
         });
     }
