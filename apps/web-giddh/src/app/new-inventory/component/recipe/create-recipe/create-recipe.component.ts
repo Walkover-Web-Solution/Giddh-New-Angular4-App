@@ -116,6 +116,11 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             isEdit: true
         });
 
+        if (this.variantsList?.length === 1) {
+            this.recipeObject.manufacturingDetails[0].variant.name = this.variantsList[0].label;
+            this.recipeObject.manufacturingDetails[0].variant.uniqueName = this.variantsList[0].value;
+        }
+
         this.getStocks(this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1].linkedStocks[0], 1, "");
 
         if (!this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1]?.units?.length) {

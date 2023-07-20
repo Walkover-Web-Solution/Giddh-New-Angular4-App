@@ -257,7 +257,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         /** added parent class to body after entering new-inventory page */
         document.querySelector("body").classList.add("stock-create-edit");
 
-        this.getUnitGroups();
         this.getTaxes();
         this.getWarehouses();
 
@@ -266,6 +265,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.type = this.addStock ? this.stockType.toUpperCase() : params?.type?.toUpperCase();
                 this.resetForm(this.stockCreateEditForm);
                 this.getStockGroups();
+                this.getUnitGroups();
                 this.changeDetection.detectChanges();
             }
             if (params?.stockUniqueName) {
@@ -1173,8 +1173,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 if (response.body.salesAccountUniqueNames?.length) {
                     this.stockForm.salesAccountDetails = { accountUniqueName: response.body.salesAccountUniqueNames[0] };
                 }
-                if (response.body.fixedAssetAccountUniqueNames?.length) {
-                    this.stockForm.fixedAssetAccountDetails = { accountUniqueName: response.body.fixedAssetAccountUniqueNames[0] };
+                if (response.body.fixedAssetsAccountUniqueNames?.length) {
+                    this.stockForm.fixedAssetAccountDetails = { accountUniqueName: response.body.fixedAssetsAccountUniqueNames[0] };
                 }
                 const unitRateObj = {
                     rate: null,
@@ -2035,11 +2035,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     return { label: group.name, value: group.uniqueName };
                 });
 
-                if (this.groupList?.length) {
+                if (this.groupList?.length && !this.queryParams?.stockUniqueName) {
                     this.stockForm.stockUnitGroup.uniqueName = this.groupList[0]?.value;
                     this.stockForm.stockUnitGroup.name = this.groupList[0].label;
-                    this.getStockUnits();
                 }
+
+                this.getStockUnits();
             }
         });
     }

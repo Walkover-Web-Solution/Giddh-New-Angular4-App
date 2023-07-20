@@ -727,7 +727,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
-        return (!this.isUpdateMode && this.invFormData.voucherDetails.customerUniquename) ? true : false;
+        return (!this.isUpdateMode && (this.invFormData.voucherDetails.customerUniquename || this.invFormData.voucherDetails.customerName)) ? true : false;
     }
 
     /**
@@ -5795,6 +5795,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // Input is cleared reset to default warehouse
             this.selectedWarehouse = String(this.defaultWarehouse);
             this.selectedWarehouseName = String(this.defaultWarehouseName);
+        }
+
+        if (this.showPageLeaveConfirmation) {
+            this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+        } else {
+            this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         }
     }
 
