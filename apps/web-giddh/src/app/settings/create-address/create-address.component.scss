@@ -7,6 +7,10 @@
     max-width: 760px;
     width: 100%;
     z-index: 99999;
+
+    &.page-leave-confirmation-showing {
+        z-index: 9999 !important;
+    }
 }
 .aside-pane {
     padding: 0 !important;

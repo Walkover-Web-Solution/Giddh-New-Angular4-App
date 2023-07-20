@@ -33,6 +33,7 @@ import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarModule } from './theme/snackbar/snackbar.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
 import { LoaderModule } from './loader/loader.module';
 import { PageModule } from './page/page.module';
 
@@ -64,7 +65,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     bootstrap: [AppComponent],
     declarations: [
         AppComponent,
-        AppLoginSuccessComponent
+        AppLoginSuccessComponent,
+        MobileRestrictedComponent
     ],
     /**
      * Import Angular's modules.

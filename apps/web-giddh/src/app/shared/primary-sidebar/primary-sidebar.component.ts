@@ -83,8 +83,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isOpen: boolean = false;
     /** API menu items, required to show permissible items only in the menu */
     @Input() public apiMenuItems: Array<any> = [];
-    /** Event to carry out new company onboarding */
-    @Output() public newCompany: EventEmitter<void> = new EventEmitter();
     /** Stores the instance of CMD+K dropdown */
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Stores the instance of company detail dropdown */
@@ -109,6 +107,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     private createAccountIsSuccess$: Observable<boolean>;
     /* This will hold the active route url */
     public isActiveRoute: string;
+    /** True if account has unsaved changes */
+    public hasUnsavedChanges: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -149,6 +149,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasUnsavedChanges = response;
+        });
     }
 
     /**
@@ -526,15 +530,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         if (item?.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
         }
-    }
-
-    /**
-     * Opens new company modal
-     *
-     * @memberof PrimarySidebarComponent
-     */
-    public createNewCompany(): void {
-        this.newCompany.emit();
     }
 
     /**

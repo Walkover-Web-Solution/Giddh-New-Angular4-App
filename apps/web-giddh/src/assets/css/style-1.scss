@@ -3442,6 +3442,7 @@ input-field {
         }
     }
 }
+add-company,
 voucher-component {
     .mobile-number {
         .mat-form-field-appearance-outline {
@@ -3466,6 +3467,15 @@ voucher-component {
         .mat-focused {
             .mat-form-field-flex {
                 border: 0 !important;
+            }
+        }
+    }
+}
+add-company {
+    .fill-form {
+        input {
+            &::placeholder {
+                color: var(--color-popup-list-input-text) !important;
             }
         }
     }

@@ -8,6 +8,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { GroupCreateRequest } from '../../../../models/api-models/Group';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 import { digitsOnly } from '../../../helpers';
+import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 
 @Component({
     selector: 'group-add',
@@ -29,7 +30,12 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
+    constructor(
+        private _fb: FormBuilder, 
+        private store: Store<AppState>, 
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private accountsAction: AccountsAction
+    ) {
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.showAddNewGroup$ = this.store.pipe(select(state => state.groupwithaccounts.showAddNewGroup), takeUntil(this.destroyed$));
         this.isCreateGroupInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.isCreateGroupInProcess), takeUntil(this.destroyed$));
@@ -45,9 +51,15 @@ export class GroupAddComponent implements OnInit, OnDestroy {
             closingBalanceTriggerAmountType: ['CREDIT']
         });
 
+        this.groupDetailForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.groupDetailForm.dirty));
+        });
+
         this.isCreateGroupSuccess$.subscribe(a => {
             if (a) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 this.groupDetailForm.reset();
+                this.groupDetailForm?.markAsPristine();
             }
         });
 

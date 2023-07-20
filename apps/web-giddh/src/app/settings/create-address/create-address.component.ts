@@ -7,6 +7,7 @@ import { IForceClear } from '../../models/api-models/Sales';
 import { ToasterService } from '../../services/toaster.service';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { SettingsAsideConfiguration } from '../constants/settings.constant';
+import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
     return (field: FormControl): { [key: string]: any } => {
@@ -24,22 +25,18 @@ function validateFieldWithPatterns(patterns: Array<string>) {
     styleUrls: ['./create-address.component.scss'],
 })
 export class CreateAddressComponent implements OnInit, OnDestroy {
-
     /** Emits when aside menu is closed */
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     /** Emits when save operation is performed */
     @Output() public saveAddress: EventEmitter<any> = new EventEmitter();
     /** Emits when update operation is performed */
     @Output() public updateAddress: EventEmitter<any> = new EventEmitter();
-
     /** Address form */
     public addressForm: FormGroup;
     /** Force clears the sh-select dropdown */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-
     /** Unsubscribes from the subscribers */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
     /** Address configuration */
     @Input() public addressConfiguration: SettingsAsideConfiguration;
     /** Stores the address to be updated */
@@ -66,7 +63,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
 
     constructor(
         private formBuilder: FormBuilder,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
     }
 
@@ -83,7 +81,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 this.addressForm = this.formBuilder.group({
                     name: ['', [Validators.required, Validators.maxLength(100)]],
                     taxNumber: ['', (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
-                    state: ['', Validators.required],
+                    state: ['', !this.addressConfiguration.countyList?.length ? Validators.required: null],
+                    county: ['', this.addressConfiguration.countyList?.length ? Validators.required: null],
                     address: [''],
                     linkedEntity: [[]],
                     pincode: []
@@ -99,7 +98,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     this.addressForm = this.formBuilder.group({
                         name: [this.addressToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                         taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
-                        state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, Validators.required],
+                        state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, !this.addressConfiguration.countyList?.length ? Validators.required: null],
+                        county: [this.addressToUpdate.county?.code, this.addressConfiguration.countyList?.length ? Validators.required: null],
                         address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' ? [Validators.required] : []],
                         linkedEntity: [this.addressToUpdate.linkedEntities.map(entity => entity?.uniqueName)],
                         pincode: [this.addressToUpdate.pincode]
@@ -170,6 +170,12 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 this.addressForm.get('address').updateValueAndValidity();
             });
         }
+
+        this.addressForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (this.addressForm?.dirty) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        });
     }
 
     /**
@@ -178,8 +184,19 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof CreateAddressComponent
      */
-    public closeAsidePane(event): void {
-        this.closeAsideEvent.emit(event);
+    public closeAsidePane(event: any): void {
+        if (this.addressForm?.dirty) {
+            document.querySelector("create-address")?.classList?.add("page-leave-confirmation-showing");
+            this.pageLeaveUtilityService.confirmPageLeave((action) => {
+                document.querySelector("create-address")?.classList?.remove("page-leave-confirmation-showing");
+                if (action) {
+                    this.closeAsideEvent.emit(event);
+                }
+            });
+            return;
+        } else {
+            this.closeAsideEvent.emit(event);
+        }
     }
 
     /**
@@ -190,6 +207,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         document.querySelector('body').classList.remove('fixed');
     }
 
@@ -360,5 +378,17 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         let text = this.localeData?.branch_of_company;
         text = text?.replace("[COMPANY_NAME]", companyName);
         return text;
+    }
+
+    /**
+     * Removes browser confirmation dialog and set form has undirty on clear in create mode
+     *
+     * @memberof CreateAddressComponent
+     */
+    public clearForm(): void {
+        if (this.addressConfiguration.type === 'createAddress' || this.addressConfiguration.type === 'createBranchAddress') {
+            this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+            this.addressForm.markAsPristine();
+        }
     }
 }

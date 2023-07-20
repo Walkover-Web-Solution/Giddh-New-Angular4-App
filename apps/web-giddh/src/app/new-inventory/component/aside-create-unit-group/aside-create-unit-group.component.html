@@ -1,0 +1,17 @@
+<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+    <div class="aside-pane">
+        <div class="header-create-unit">
+            <div class="form-header">
+                <h3 mat-dialog-title>{{ commonLocaleData?.app_create_group }}</h3>
+                <button id="close" mat-dialog-close><i class="icon-cross"></i></button>
+            </div>
+        </div>
+        <mat-dialog-content>
+            <div class="aside-body create-group-aside-body">
+                <div class="aside-pane-form">
+                    <create-unit-group (closeAsideEvent)="closeAsidePane($event)"></create-unit-group>
+                </div>
+            </div>
+        </mat-dialog-content>
+    </div>
+</ng-container>

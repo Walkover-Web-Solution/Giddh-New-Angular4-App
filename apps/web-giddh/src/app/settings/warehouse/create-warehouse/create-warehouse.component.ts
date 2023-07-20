@@ -18,6 +18,7 @@ import { AppState } from '../../../store';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../constants/settings.constant';
 import { SettingsUtilityService } from '../../services/settings-utility.service';
 import { WarehouseActions } from '../action/warehouse.action';
+import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 
 @Component({
     selector: 'create-warehouse',
@@ -38,7 +39,6 @@ import { WarehouseActions } from '../action/warehouse.action';
 })
 
 export class CreateWarehouseComponent implements OnInit, OnDestroy {
-
     /** Address aside menu state */
     public addressAsideMenuState: string = 'out';
     /** Stores the comapny details */
@@ -70,9 +70,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     public isAddressChangeInProgress: boolean = false;
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
-
+    /** Holds image root path */
     public imgPath: string = '';
-
     /** Unsubscribe from listener */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -85,6 +84,10 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     public hideLinkEntity: boolean = true;
     /*-- mat-dialog --*/
     @ViewChild('asideAccountAsidePane', { static: true }) public asideAccountAsidePane: any;
+    /** Returns true if form is dirty else false */
+    public get showPageLeaveConfirmation(): boolean {
+        return this.warehouseForm?.dirty;
+    }
 
     constructor(
         private commonService: CommonService,
@@ -99,6 +102,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         private warehouseActions: WarehouseActions,
         private settingsBranchActions: SettingsBranchActions,
         public dialog: MatDialog,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.warehouseForm = this.formBuilder.group({
             name: ['', Validators.required],
@@ -162,6 +166,12 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         });
 
         this.imgPath = isElectron ? 'assets/images/warehouse-image.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-image.svg';
+
+        this.warehouseForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        });
     }
 
     /**
@@ -263,6 +273,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                 address.isDefault = false;
             }
         });
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        this.warehouseForm.markAsPristine();
     }
 
     /**
@@ -285,14 +297,24 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
-                Object.keys(result.stateList).forEach(key => {
-                    this.addressConfiguration.stateList.push({
-                        label: result.stateList[key].code + ' - ' + result.stateList[key].name,
-                        value: result.stateList[key].code,
-                        code: result.stateList[key].stateGstCode,
-                        stateName: result.stateList[key].name
+                this.addressConfiguration.countyList = [];
+
+                if (result.stateList) {
+                    Object.keys(result.stateList).forEach(key => {
+                        this.addressConfiguration.stateList.push({
+                            label: result.stateList[key].code + ' - ' + result.stateList[key].name,
+                            value: result.stateList[key].code,
+                            code: result.stateList[key].stateGstCode,
+                            stateName: result.stateList[key].name
+                        });
                     });
-                });
+                }
+
+                if (result.countyList) {
+                    this.addressConfiguration.countyList = result.countyList?.map(county => {
+                        return { label: county.name, value: county.code };
+                    });
+                }
             }
         });
     }
@@ -490,6 +512,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.remove('setting-sidebar-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
     }
 
     /**

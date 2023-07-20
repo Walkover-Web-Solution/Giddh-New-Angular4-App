@@ -140,6 +140,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public addressConfiguration: SettingsAsideConfiguration = {
         type: SettingsAsideFormType.CreateAddress,
         stateList: [],
+        countyList: [],
         tax: {
             name: '',
             validation: []
@@ -705,22 +706,25 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.states = [];
                 this.statesInBackground = [];
                 this.statesSourceCompany = [];
+                this.statesSource$ = observableOf([]);
 
-                Object.keys(res.stateList).forEach(key => {
-                    this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
-                    this.statesInBackground.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
-                    this.statesSourceCompany.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+                if (res.stateList) {
+                    Object.keys(res.stateList).forEach(key => {
+                        this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+                        this.statesInBackground.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+                        this.statesSourceCompany.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
 
-                    if (this.companyProfileObj.state === res.stateList[key].code) {
-                        this.selectedState = res.stateList[key].code + ' - ' + res.stateList[key].name;
-                    }
+                        if (this.companyProfileObj.state === res.stateList[key].code) {
+                            this.selectedState = res.stateList[key].code + ' - ' + res.stateList[key].name;
+                        }
 
-                    if (res.stateList[key].stateGstCode !== null) {
-                        this.stateGstCode[res.stateList[key].stateGstCode] = [];
-                        this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
-                    }
-                });
-                this.statesSource$ = observableOf(this.states);
+                        if (res.stateList[key].stateGstCode !== null) {
+                            this.stateGstCode[res.stateList[key].stateGstCode] = [];
+                            this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
+                        }
+                    });
+                    this.statesSource$ = observableOf(this.states);
+                }
             } else {
                 let statesRequest = new StatesRequest();
                 statesRequest.country = countryCode;
@@ -870,14 +874,24 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
-                Object.keys(result.stateList).forEach(key => {
-                    this.addressConfiguration.stateList.push({
-                        label: result.stateList[key].code + ' - ' + result.stateList[key].name,
-                        value: result.stateList[key].code,
-                        code: result.stateList[key].stateGstCode,
-                        stateName: result.stateList[key].name
+                this.addressConfiguration.countyList = [];
+
+                if (result.stateList) {
+                    Object.keys(result.stateList).forEach(key => {
+                        this.addressConfiguration.stateList.push({
+                            label: result.stateList[key].code + ' - ' + result.stateList[key].name,
+                            value: result.stateList[key].code,
+                            code: result.stateList[key].stateGstCode,
+                            stateName: result.stateList[key].name
+                        });
                     });
-                });
+                }
+
+                if (result.countyList) {
+                    this.addressConfiguration.countyList = result.countyList?.map(county => {
+                        return { label: county.name, value: county.code };
+                    });
+                }
             }
         });
     }
@@ -957,6 +971,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             address: addressDetails.formValue.address,
             name: addressDetails.formValue.name,
             pincode: addressDetails.formValue.pincode,
+            county: { code: addressDetails.formValue.county },
             linkEntity
         };
 
@@ -1002,6 +1017,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             name: addressDetails.formValue.name,
             pincode: addressDetails.formValue.pincode,
             uniqueName: addressDetails.formValue?.uniqueName,
+            county: { code: addressDetails.formValue.county },
             linkEntity
         };
         this.settingsProfileService.updateAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1215,7 +1231,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
                 if (organization) {
                     if (organization.type === OrganizationType.Branch) {
@@ -1286,7 +1302,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @param {boolean} event
      * @memberof SettingProfileComponent
      */
-     public getPageHeading(): void {
+    public getPageHeading(): void {
         let pageHeading = "";
 
         if (this.isMobileScreen) {

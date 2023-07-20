@@ -105,3 +105,10 @@ input.focusBorder[type="checkbox"]:focus:after {
     padding: 2px;
     top: 0;
 }
+:host {
+    position: fixed;
+    width: 760px;
+    padding: 0 15px;
+    right: 0;
+    top: 0;
+}

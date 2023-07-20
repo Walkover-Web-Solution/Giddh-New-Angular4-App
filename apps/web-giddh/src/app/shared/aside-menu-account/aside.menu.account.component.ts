@@ -11,6 +11,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AccountAddNewDetailsComponent } from '../header/components';
 import { AccountService } from '../../services/account.service';
 import { MatDialog } from '@angular/material/dialog';
+import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 
 @Component({
     selector: 'aside-menu-account',
@@ -20,16 +21,13 @@ import { MatDialog } from '@angular/material/dialog';
 export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     @Input() public activeGroupUniqueName: string;
     @Input() public isUpdateAccount: boolean;
     @Input() public activeAccountDetails: any;
-
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public getUpdateList: EventEmitter<string> = new EventEmitter();
     @ViewChild('deleteAccountModal', { static: true }) public deleteAccountModal: any;
     @ViewChild('addAccountNewComponent', { static: true }) public addAccountNewComponent: AccountAddNewDetailsComponent;
-
     public flatGroupsOptions: IOption[];
     public isGstEnabledAcc: boolean = true; // true only for groups will not under other
     public isHsnSacEnabledAcc: boolean = false; // true only for groups under revenuefromoperations || otherincome || operatingcost || indirectexpenses
@@ -50,16 +48,18 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     private isMasterOpen: boolean = false;
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if account has unsaved changes */
+    private hasUnsavedChanges: boolean = false;
 
     constructor(
         private accountService: AccountService,
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         // account-add component's property
         this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
-
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.virtualAccountEnable$ = this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$));
@@ -74,7 +74,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
         }
 
-        if(this.accountDetails) {
+        if (this.accountDetails) {
             this.shouldShowBankDetail(this.accountDetails.uniqueName);
         }
 
@@ -104,12 +104,23 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
-            if(activeTab === 1) {
+            if (activeTab === 1) {
                 this.isMasterOpen = true;
             } else {
-                if(this.isMasterOpen) {
+                if (this.isMasterOpen) {
                     this.isMasterOpen = false;
                 }
+            }
+        });
+
+        this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            if (this.hasUnsavedChanges && !response) {
+                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+            }
+
+            this.hasUnsavedChanges = response;
+            if (this.hasUnsavedChanges) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
         });
     }
@@ -130,8 +141,15 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     }
 
     public closeAsidePane(event) {
-        this.ngOnDestroy();
-        this.closeAsideEvent.emit(event);
+        if (this.hasUnsavedChanges) {
+            this.confirmPageLeave(() => {
+                this.ngOnDestroy();
+                this.closeAsideEvent.emit(event);
+            });
+        } else {
+            this.ngOnDestroy();
+            this.closeAsideEvent.emit(event);
+        }
     }
 
     public showDeleteAccountModal(): void {
@@ -213,6 +231,24 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                 this.showBankDetail = accountDetails?.parentGroups.some(parent => parent?.uniqueName === 'sundrycreditors');
             } else {
                 this.showBankDetail = false;
+            }
+        });
+    }
+
+    /**
+     * Shows page leave confirmation
+     *
+     * @private
+     * @param {Function} callback
+     * @memberof AsideMenuAccountInContactComponent
+     */
+    private confirmPageLeave(callback: Function): void {
+        document.querySelector("aside-menu-account")?.classList?.add("page-leave-confirmation-showing");
+        this.pageLeaveUtilityService.confirmPageLeave(action => {
+            document.querySelector("aside-menu-account")?.classList?.remove("page-leave-confirmation-showing");
+            if (action) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                callback();
             }
         });
     }

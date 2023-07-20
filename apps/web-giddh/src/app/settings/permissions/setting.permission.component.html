@@ -16,6 +16,7 @@
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
             (onSubmitForm)="submitPermissionForm($event)"
+            (hasUnsavedChanges)="updateUnsavedChanges($event)"
         ></setting-permission-form>
     </div>
 

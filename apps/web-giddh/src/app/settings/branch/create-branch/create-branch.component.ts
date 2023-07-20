@@ -19,6 +19,8 @@ import { AppState } from '../../../store';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../constants/settings.constant';
 import { SettingsUtilityService } from '../../services/settings-utility.service';
 import { WarehouseActions } from '../../warehouse/action/warehouse.action';
+import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
+
 @Component({
     selector: 'create-branch',
     templateUrl: './create-branch.component.html',
@@ -36,7 +38,6 @@ import { WarehouseActions } from '../../warehouse/action/warehouse.action';
         ]),
     ]
 })
-
 export class CreateBranchComponent implements OnInit, OnDestroy {
     /** Aside menu pane status */
     public addressAsideMenuState: string = 'out';
@@ -69,9 +70,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public isAddressChangeInProgress: boolean = false;
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
-
+    /** Holds image root path */
     public imgPath: string = '';
-
     /** Unsubscribes from all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -84,6 +84,10 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public hideLinkEntity: boolean = true;
     /** directive to get reference of element */
     @ViewChild('asideAccountAsidePane', { static: true }) public asideAccountAsidePane: any;
+    /** Returns true if form is dirty else false */
+    public get showPageLeaveConfirmation(): boolean {
+        return this.branchForm?.dirty;
+    }
 
     constructor(
         private commonService: CommonService,
@@ -99,6 +103,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         private warehouseActions: WarehouseActions,
         private settingsBranchActions: SettingsBranchActions,
         public dialog: MatDialog,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.branchForm = this.formBuilder.group({
             alias: ['', [Validators.required, Validators.maxLength(50)]],
@@ -139,6 +144,12 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/branch'));
 
         this.imgPath = isElectron ? 'assets/images/branch-image.svg' : AppUrl + APP_FOLDER + 'assets/images/branch-image.svg';
+
+        this.branchForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        });
     }
 
     /**
@@ -278,6 +289,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                 address.isDefault = false;
             }
         });
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        this.branchForm.markAsPristine();
     }
 
     /**
@@ -445,6 +458,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.remove('setting-sidebar-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
     }
 
     /**
