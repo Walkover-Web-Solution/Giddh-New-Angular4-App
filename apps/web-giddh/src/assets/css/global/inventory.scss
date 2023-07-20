@@ -7,3 +7,26 @@
         padding-top: 10px !important;
     }
 }
+.stock-create-edit,
+.custom-units {
+    .options-line-value {
+        padding: 10px;
+        vertical-align: middle;
+        min-height: 50px !important;
+
+        .option-label {
+            color: var(--color-common-primary-text);
+        }
+
+        .option-value {
+            float: left !important;
+            width: 100% !important;
+            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
+            font-size: var(--font-size-14);
+        }
+
+        .mat-option-text {
+            line-height: 16px;
+        }
+    }
+}
