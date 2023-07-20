@@ -25,6 +25,7 @@
         .text-content-wrapper {
             .mobile-heading {
                 font-size: var(--font-size-24);
+                margin-bottom: 10px;
             }
 
             .button-wrapper {
@@ -36,7 +37,7 @@
                 .store-button {
                     img {
                         height: auto;
-                        margin-top: 5px;
+                        margin-top: 10px;
                         width: 12rem;
                     }
                 }
