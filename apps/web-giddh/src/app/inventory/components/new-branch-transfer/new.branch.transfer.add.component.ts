@@ -1333,22 +1333,29 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             }
         }
     }
-    
+
     public onProductNoResultsClicked(idx?: number): void {
         this.innerEntryIndex = idx;
 
-        this.asideMenuStateForProductService =  this.dialog.open(this.asideMenuProductService,{
+        document.querySelector("body").classList.add("new-branch-transfer-page");
+
+        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, {
             position: {
-                right : '0',
+                right: '0',
             },
             width: '760px',
             height: '100vh !important'
-        })
+        });
+
+        this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
+            document.querySelector("body").classList.remove("new-branch-transfer-page");
+        });
+
         if (!idx) {
             this.getStock();
         }
     }
-        
+
     /**
      * This Function is used to close Aside Menu Sidebar
      *
