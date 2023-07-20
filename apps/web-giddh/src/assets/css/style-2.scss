@@ -14427,3 +14427,9 @@ voucher-component {
         background-color: transparent !important;
     }
 }
+
+.new-branch-transfer-page {
+    .cdk-overlay-container {
+        z-index: 99999 !important;
+    }
+}
