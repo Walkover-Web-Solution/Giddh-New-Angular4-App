@@ -15,7 +15,8 @@
 }
 body {
     &.ledger-aside-pane,
-    &.aside-menu-product-service-page {
+    &.aside-menu-product-service-page,
+    &.custom-units {
         .cdk-overlay-pane {
             transform: unset !important;
         }
@@ -24,6 +25,14 @@ body {
         }
         .aside-panel-ledger {
             height: calc(100vh - 57.8px);
+        }
+    }
+}
+/*--- sales voucher page aside menu ---*/
+body {
+    &.aside-menu-product-service-page {
+        .cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
+            z-index: 9999;
         }
     }
 }
