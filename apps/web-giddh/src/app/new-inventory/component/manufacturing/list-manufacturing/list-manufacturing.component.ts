@@ -259,6 +259,8 @@ export class ListManufacturingComponent implements OnInit {
                 });
             }
         });
+
+        this.showHideClearFilterButton();
     }
 
     /**
@@ -455,7 +457,7 @@ export class ListManufacturingComponent implements OnInit {
         this.manufacturingSearchRequest.branchUniqueName = selectedEntity?.value;
         this.manufacturingSearchRequest.warehouseUniqueName = "";
         this.selectedWarehouseName = "";
-        if (this.currentOrganizationType === OrganizationType.Company) {
+        if (this.currentOrganizationType === OrganizationType.Company && this.allWarehouses?.length) {
             this.warehouses = this.allWarehouses[selectedEntity?.value];
         }
     }

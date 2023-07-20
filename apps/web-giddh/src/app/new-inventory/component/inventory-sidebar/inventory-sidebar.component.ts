@@ -11,6 +11,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
 import { AppState } from '../../../store';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { Location } from '@angular/common';
 
 /**
  * Data with nested structure.
@@ -113,7 +114,8 @@ export class InventorySidebarComponent implements OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
         private store: Store<AppState>,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private location: Location
     ) {
         this.breakPointObserver.observe([
             '(max-width: 767px)'
@@ -187,7 +189,7 @@ export class InventorySidebarComponent implements OnDestroy {
      * @memberof InventorySidebarComponent
      */
     public goToPreviousPage(): void {
-        this.router.navigate(['/pages/inventory/v2']);
+        this.location.back();
     }
 
     /**
