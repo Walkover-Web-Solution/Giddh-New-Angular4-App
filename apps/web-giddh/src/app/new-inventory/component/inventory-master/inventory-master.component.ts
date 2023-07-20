@@ -65,6 +65,10 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (this.inventoryType !== params.type) {
                 this.inventoryType = params.type?.toUpperCase();
+                if (this.inventoryType === 'FIXEDASSETS') {
+                    this.inventoryType = 'FIXED_ASSETS';
+                }
+
                 this.getTopLevelGroups();
             }
         });
@@ -287,8 +291,11 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.resetCurrentStockAndGroup();
         this.currentStock = masterData;
         this.showCreateButtons = false;
-        this.createUpdateStock = true;
+        this.createUpdateStock = false;
         this.createBreadcrumbs();
+        setTimeout(() => {
+            this.createUpdateStock = true;
+        });
     }
 
     /**

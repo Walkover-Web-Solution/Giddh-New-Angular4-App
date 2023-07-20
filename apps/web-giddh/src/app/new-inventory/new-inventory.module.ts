@@ -80,6 +80,7 @@ import { InventoryMasterComponent } from "./component/inventory-master/inventory
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { FormsModule } from "@angular/forms";
+import { NoDataModule } from "../shared/no-data/no-data.module";
 
 @NgModule({
     declarations: [
@@ -164,7 +165,8 @@ import { FormsModule } from "@angular/forms";
         ManufacturingModule,
         SelectTableColumnModule,
         ScrollingModule,
-        FormsModule
+        FormsModule,
+        NoDataModule
     ],
     exports: [
         NewInventoryComponent,

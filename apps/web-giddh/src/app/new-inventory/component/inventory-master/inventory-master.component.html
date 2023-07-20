@@ -1,4 +1,9 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'inventory/master'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
     <div class="mat-grid-wrapper">
         <div class="d-flex inventory-search">
             <text-field
@@ -9,6 +14,13 @@
             ></text-field>
         </div>
         <div class="mat-list-wrap">
+            <div class="no-data" *ngIf="isSearching && !masterColumnsData?.length">
+                <no-data
+                    [secondaryMessageClass]="'p-0'"
+                    [primaryMessage]="localeData?.no_inventory_found_primary_message"
+                    [secondaryMessage]="localeData?.no_inventory_found_secondary_message"
+                ></no-data>
+            </div>
             <div class="horizontal-scroll">
                 <div class="inventory-sideabar border-grid">
                     <div class="inventory-sub-sideabar">
