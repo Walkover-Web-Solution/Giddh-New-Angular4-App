@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChanges, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChanges, ChangeDetectorRef, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import {
     CompanyResponse
@@ -33,6 +33,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep, isEmpty } from '../../../lodash-optimized';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'new-branch-transfer',
@@ -75,6 +76,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('destinationQuantity', { static: false }) public destinationQuantity;
     @ViewChild('senderGstNumberField', { static: false }) public senderGstNumberField: HTMLInputElement;
     @ViewChild('receiverGstNumberField', { static: false }) public receiverGstNumberField: HTMLInputElement;
+    @ViewChild("asideMenuProductService") public asideMenuProductService: TemplateRef<any>;
 
     public hsnPopupShow: boolean = false;
     public skuNumberPopupShow: boolean = false;
@@ -151,8 +153,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     private isDefaultLoad: boolean = false;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Hold aside menu state for product service  */
+    public asideMenuStateForProductService: any;
 
-    constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig) {
+    constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig, public dialog: MatDialog) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.getInventorySettings();
         this.initFormFields();
@@ -1333,12 +1337,32 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public onProductNoResultsClicked(idx?: number): void {
         this.innerEntryIndex = idx;
 
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+        document.querySelector("body").classList.add("new-branch-transfer-page");
+
+        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, {
+            position: {
+                right: '0',
+            },
+            width: '760px',
+            height: '100vh !important'
+        });
+
+        this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
+            document.querySelector("body").classList.remove("new-branch-transfer-page");
+        });
 
         if (!idx) {
             this.getStock();
         }
+    }
+
+    /**
+     * This Function is used to close Aside Menu Sidebar
+     *
+     * @memberof NewBranchTransferAddComponent
+     */
+    public closeAsideMenuProductServiceModal(): void {
+        this.asideMenuStateForProductService?.close();
     }
 
     public clearTransportForm(): void {

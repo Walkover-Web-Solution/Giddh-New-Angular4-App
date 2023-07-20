@@ -172,12 +172,14 @@ export class IAccountAddress {
     public gstNumber: string;
     public address: string;
     public state: StateList;
-    public stateCode: string;
+    public stateCode?: string;
     public isDefault: boolean;
     public isComposite: boolean;
     public partyType: string;
     public stateCodeName: string;
     public pincode?: string;
+    public countyCode?: string;
+    public county?: any;
 }
 export class AccountRequestV2 {
     public addresses: IAccountAddress[];

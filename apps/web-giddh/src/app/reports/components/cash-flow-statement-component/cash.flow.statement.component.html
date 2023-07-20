@@ -11,7 +11,7 @@
             <h5 class="bold mb-2">{{ localeData?.cashflow_statement }}</h5>
             <div class="d-flex align-items-center justify-content-center mb-2">
                 <label class="mr-r05 font-15">{{ localeData?.as_on }}</label>
-                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                <div class="custom-datepicker custom-new-datepicker" (click)="showGiddhDatepicker($event)">
                     <input
                         type="text"
                         name="selectedDateRange"
@@ -22,7 +22,9 @@
             </div>
             <button
                 type="button"
-                class="btn btn-sky-blue mr-0"
+                mat-stroked-button
+                color="primary"
+                class="mr-0"
                 (click)="downloadReport()"
                 [disabled]="isLoading || !fromDate || !toDate || !downloadRequest.companyUniqueName"
             >

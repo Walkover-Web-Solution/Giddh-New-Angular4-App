@@ -10,5 +10,5 @@ export const MANUFACTURING_API = {
     CREATE_V2: 'v2/' + COMMON_URL,
     CREATE_RECIPE: 'company/:companyUniqueName/stock/:stockUniqueName/recipe',
     GET_MANUFACTURING: 'v2/company/:companyUniqueName/manufacture/:manufactureUniqueName',
-    GET_STOCK_UNITS: 'v2/company/:companyUniqueName/stock/:stockUniqueName/linked-stock-units'
+    GET_STOCK_UNITS: 'company/:companyUniqueName/stock-unit/:stockUnitUniqueName/linked-stock-units'
 };

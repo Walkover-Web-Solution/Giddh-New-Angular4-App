@@ -286,13 +286,37 @@
                     "label": "यादी",
                     "link": "/pages/inventory",
                     "icon": "icon-inventory",
-                    "description": "स्टॉक / गट आणि युनिट आयात / तयार करा"
+                    "description": "स्टॉक / गट आणि युनिट आयात / तयार करा",
+                    "additional": {
+                        "voucherVersion": 1
+                    }
                 },
                 {
                     "label": "उत्पादन",
                     "link": "/pages/inventory/manufacturing",
                     "icon": "icon-manufacturing1",
-                    "description": "उत्पादन यादीची स्थिती शोधा"
+                    "description": "उत्पादन यादीची स्थिती शोधा",
+                    "additional": {
+                        "voucherVersion": 1
+                    }
+                },
+                {
+                    "label": "यादी",
+                    "link": "/pages/inventory/v2/reports/product/stock",
+                    "icon": "icon-inventory",
+                    "description": "स्टॉक / गट आणि युनिट आयात / तयार करा",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
+                },
+                {
+                    "label": "उत्पादन",
+                    "link": "/pages/inventory/v2/manufacturing/list",
+                    "icon": "icon-manufacturing1",
+                    "description": "उत्पादन यादीची स्थिती शोधा",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
                 },
                 {
                     "label": "कोठार",

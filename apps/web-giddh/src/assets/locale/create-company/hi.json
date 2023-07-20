@@ -18,6 +18,7 @@
 	"select_business_type": "व्यवसाय का प्रकार चुनें",
 	"select_business_nature": "व्यवसाय प्रकृति का चयन करें",
 	"enter_tax": "[TAX_NAME] दर्ज करें",
+    "invalid_tax": "अमान्य [TAX_NAME]",
 	"same_as_company": "कंपनी के समान",
 	"applicable_tax": "लागू कर",
 	"select_taxes": "करों का चयन करें",
@@ -49,5 +50,19 @@
 	"companies": "कंपनिया",
 	"unlimited_users": "असीमित उपयोगकर्ता",
 	"unlimited_contacts": "असीमित ग्राहक/विक्रेता",
-	"desktop_mobile_app": "डेस्कटॉप/मोबाइल ऐप"
+	"desktop_mobile_app": "डेस्कटॉप/मोबाइल ऐप",
+    "invalid_contact_number": "अमान्य संपर्क नंबर",
+    "registered": "दर्ज कराई",
+    "unregistered": "अपंजीकृत",
+    "food": "खाना",
+    "service": "सेवा",
+    "manufacturing": "उत्पादन",
+    "retail": "खुदरा",
+    "enter_company_name":"कंपनी का नाम दर्ज करें",
+    "enter_country_name":"देश का नाम दर्ज करें",
+    "enter_currency_name":"मुद्रा का नाम दर्ज करें",
+    "enter_mobile_number" : "मोबाइल नंबर दर्ज करेंr",
+    "select_state" : "राज्य चुनें",
+    "business_type": "व्यापार के प्रकार",
+    "business_nature": "व्यापार की प्रकृति"
 }
