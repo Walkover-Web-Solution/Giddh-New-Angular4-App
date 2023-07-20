@@ -287,7 +287,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.companyCurrency = clone(this.activeCompany?.baseCurrency);
             }
         });
-
         this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
 
         if (this.autoFocus !== undefined) {
@@ -309,6 +308,21 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.addAccountForm?.markAsPristine();
             }
         });
+
+        if (this.activeCompany.state) {
+            setTimeout(() => {
+                let addresses = (this.addAccountForm.get('addresses') as FormArray).at(0);
+                addresses?.get('stateCode')?.patchValue(this.activeCompany.state);
+            }, 500);
+        } else {
+                if (this.activeCompany?.addresses[0].stateCode) {
+                    setTimeout(() => {
+                        let addresses = (this.addAccountForm.get('addresses') as FormArray).at(0);
+                        addresses?.get('stateCode')?.patchValue(this.activeCompany?.addresses[0].stateCode);
+                        addresses?.get('state').get('code')?.patchValue(this.activeCompany?.addresses[0].stateCode);
+                    }, 500);
+                }
+            }
     }
 
     public ngAfterViewInit() {
