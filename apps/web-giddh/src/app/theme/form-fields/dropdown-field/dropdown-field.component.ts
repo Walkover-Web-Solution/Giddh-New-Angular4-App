@@ -89,7 +89,9 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-
+    /** Close autocomplete on foucus out if true */
+    /** Need to set closeOnFocusOut = true if parent element contains event stop propogation on click */
+    @Input() public closeOnFocusOut: boolean = false;
     constructor(private cdr: ChangeDetectorRef
     ) {
     }
