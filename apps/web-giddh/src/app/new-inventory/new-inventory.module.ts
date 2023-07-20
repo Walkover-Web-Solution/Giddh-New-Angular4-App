@@ -80,6 +80,7 @@ import { ManufacturingModule } from "../manufacturing/manufacturing.module";
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { FormsModule } from "@angular/forms";
+import { NoDataModule } from "../shared/no-data/no-data.module";
 
 @NgModule({
     declarations: [
@@ -164,7 +165,8 @@ import { FormsModule } from "@angular/forms";
         RecipeModule,
         ManufacturingModule,
         ScrollingModule,
-        FormsModule
+        FormsModule,
+        NoDataModule
     ],
     exports: [
         NewInventoryComponent,
