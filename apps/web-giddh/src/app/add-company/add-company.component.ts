@@ -19,6 +19,7 @@ import { ToasterService } from "../services/toaster.service";
 import { AppState } from "../store";
 import { ItemOnBoardingState } from "../store/item-on-boarding/item-on-boarding.reducer";
 import { IOption } from "../theme/ng-select/option.interface";
+import { PageLeaveUtilityService } from "../services/page-leave-utility.service";
 @Component({
     selector: 'add-company',
     templateUrl: './add-company.component.html',
@@ -204,7 +205,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private generalActions: GeneralActions,
         private companyActions: CompanyActions,
         private route: Router,
-        private loginAction: LoginActions
+        private loginAction: LoginActions,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) { }
 
     /**
@@ -282,9 +284,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             pincode: [''],
             address: [''],
         });
+
         this.companyForm = this.formBuilder.group({
             firstStepForm: this.firstStepForm,
             secondStepForm: this.secondStepForm
+        });
+
+        this.firstStepForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
         });
     }
 
@@ -834,6 +843,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.isCompanyCreated$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.firstStepForm.reset();
+                this.secondStepForm.reset();
+                this.companyForm.reset();
+                this.firstStepForm.markAsPristine();
                 this.generalService.companyUniqueName = this.company?.uniqueName;
                 setTimeout(() => {
                     this.store.dispatch(this.loginAction.ChangeCompany(this.company?.uniqueName));

@@ -147,7 +147,9 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
-            this.fieldFilteredOptions = changes.options.currentValue;
+            setTimeout(() => { // added timeout because options.currentValue was taking time
+                this.fieldFilteredOptions = changes.options.currentValue;
+            }, 200);
         }
         if (changes?.defaultValue) {
             setTimeout(() => {
