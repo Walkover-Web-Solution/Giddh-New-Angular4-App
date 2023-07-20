@@ -1424,6 +1424,14 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, uniqueName, { uniqueName })));
     }
 
+    /**
+     * Get top level groups of inventory
+     *
+     * @param {string} inventoryType
+     * @param {string} [page='1']
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof InventoryService
+     */
     public getTopLevelGroups(inventoryType: string, page: string = '1'): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + INVENTORY_API.MASTER.TOP_INVENTORY_GROUPS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':inventoryType', encodeURIComponent(inventoryType))?.replace(':page', encodeURIComponent(page))).pipe(map((res) => {
@@ -1434,6 +1442,14 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
     }
 
+    /**
+     * Get stock/groups by group unique name
+     *
+     * @param {string} stockGroupUniqueName
+     * @param {string} [page='1']
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof InventoryService
+     */
     public getMasters(stockGroupUniqueName: string, page: string = '1'): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + INVENTORY_API.MASTER.GET_MASTER?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName))?.replace(':page', encodeURIComponent(page))).pipe(map((res) => {
@@ -1444,6 +1460,14 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
     }
 
+    /**
+     * Search inventory
+     *
+     * @param {string} inventoryType
+     * @param {string} [q='']
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof InventoryService
+     */
     public searchInventory(inventoryType: string, q: string = ''): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + INVENTORY_API.MASTER.SEARCH?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':inventoryType', encodeURIComponent(inventoryType))?.replace(':q', encodeURIComponent(q))).pipe(map((res) => {
