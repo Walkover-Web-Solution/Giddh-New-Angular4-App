@@ -352,6 +352,38 @@ export class SettingsIntegrationService {
     }
 
     /**
+     * Get plaid link token
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getlPlaidLinkToken(): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_PLAID_LINK_TOKEN?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * Get publiic access token
+     *
+     * @param {string} key
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public plaidAccessToken(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.PLAID_ACCESS_TOKEN?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
      * Delete the bank account payor
      *
      * @param {*} model
