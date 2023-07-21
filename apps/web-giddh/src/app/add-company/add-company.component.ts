@@ -845,6 +845,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.isCompanyCreated$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                 this.isCompanyCreated = true;
                 this.firstStepForm.markAsPristine();
                 this.generalService.companyUniqueName = this.company?.uniqueName;
