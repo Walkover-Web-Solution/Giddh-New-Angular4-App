@@ -37,8 +37,8 @@
                         [options]=""
                     ></dropdown-field>
                 </div>
-                <div class="form-group select-page position-relative" *ngIf="newRoleObj.isFresh">
-                    <div
+                <div class="form-group select-page position-relative">
+                    <!-- <div
                         class="btn-group btn-block"
                         dropdown
                         (onShown)="onDDShown()"
@@ -46,8 +46,8 @@
                         #permissionDropDown="bs-dropdown"
                         [attachOutsideOnClick]="true"
                         (clickOutside)="permissionDropDown?.hide()"
-                    >
-                        <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
+                    > -->
+                    <!-- <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
                             {{ dropdownHeading }}
                             <span class="select-drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
                         </button>
@@ -74,25 +74,29 @@
                                     {{ item.name | capitalize }}
                                 </label>
                             </li>
-                        </ul>
-                        <!-- <mat-form-field class="w-100" appearance="outline">
-                            <mat-select
-                            >
-                                <div class="select-quantity-option">
-                                    <ng-container>
-                                        <mat-option
-                                            [value]="group?.value"
-                                        >
-                                            {{ group.label }}
-                                        </mat-option>
-                                    </ng-container>
-                                    <mat-option>
-                                        {{ commonLocaleData?.app_no_result_found }}
-                                    </mat-option>
-                                </div>
+                        </ul> -->
+                    <mat-form-field class="w-100" appearance="outline">
+                        <mat-label>{{ dropdownHeading }}</mat-label>
+                        <mat-select>
+                            <div class="select-quantity-option">
+                                <ng-container>
+                                    <mat-option> </mat-option>
+                                </ng-container>
+                                <mat-option *ngFor="let item of newRoleObj.pageList; let i = index">
+                                    fdgdfxhxdfh
+                                </mat-option>
+                            </div>
+                        </mat-select>
+                    </mat-form-field>
+                    <!-- <mat-form-field appearance="outline">
+                            <mat-label>Choose an option</mat-label>
+                            <mat-select>
+                              <mat-option value="option1">Option 1</mat-option>
+                              <mat-option value="option2">Option 2</mat-option>
+                              <mat-option value="option3">Option 3</mat-option>
                             </mat-select>
                         </mat-form-field> -->
-                    </div>
+                    <!-- </div> -->
                 </div>
                 <div class="form-group custom-select position-relative" *ngIf="!newRoleObj.isFresh">
                     <label>{{ localeData?.copy_permission }}</label>

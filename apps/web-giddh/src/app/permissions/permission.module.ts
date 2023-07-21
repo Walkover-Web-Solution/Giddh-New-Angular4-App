@@ -5,6 +5,7 @@ import { PermissionRoutingModule } from './permission-routing-module';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     imports: [
@@ -13,7 +14,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         PermissionRoutingModule,
         BsDropdownModule.forRoot(),
         MatTooltipModule,
-        FormFieldsModule
+        FormFieldsModule,
+        MatSelectModule
     ]
 })
 export class PermissionModule {

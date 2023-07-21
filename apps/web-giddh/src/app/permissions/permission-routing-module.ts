@@ -22,6 +22,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
 
 const PERMISSION_ROUTES: Routes = [
     { path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full' },
@@ -72,7 +73,8 @@ const PERMISSION_ROUTES: Routes = [
         MatTooltipModule,
         MatTableModule,
         MatCheckboxModule,
-        MatDialogModule
+        MatDialogModule,
+        MatSelectModule
     ],
     exports: [
         RouterModule,

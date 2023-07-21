@@ -32,4 +32,10 @@ body {
             overflow: inherit;
         }
     }
+    icici-account-create-edit,
+    icici-payor-account-create-edit {
+        .mat-dialog-content {
+            margin: 0 !important;
+        }
+    }
 }

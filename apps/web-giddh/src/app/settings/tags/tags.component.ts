@@ -3,7 +3,6 @@ import { takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { TagRequest } from '../../models/api-models/settingsTags';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { cloneDeep, filter, map, orderBy } from '../../lodash-optimized';
 import { SettingsTagService } from '../../services/settings.tag.service';
 import { ToasterService } from '../../services/toaster.service';

@@ -296,11 +296,11 @@
             >
                 <div class="wrap-tab-content-pd-15">
                     <div class="box clearfix mt-1">
-                        <h1 class="section-head pt-0">{{ localeData?.auth_key?.main_auth_key }}</h1>
+                        <!-- <h1 class="section-head pt-0">{{ localeData?.auth_key?.main_auth_key }}</h1> -->
                         <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
-                            <div class="form-group row">
+                            <div class="form-group row align-items-center">
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-                                    <input
+                                    <!-- <input
                                         #authKeyUrl
                                         id="authKey"
                                         class="form-control"
@@ -308,6 +308,15 @@
                                         [(ngModel)]="userAuthKey"
                                         [readonly]="true"
                                     />
+                                    <span class="success" *ngIf="isCopied">{{ localeData?.auth_key?.copied }}</span> -->
+                                    <input-field
+                                        [label]="localeData?.auth_key?.main_auth_key"
+                                        #authKeyUrl
+                                        [id]="authKey"
+                                        [name]="'userAuthKey'"
+                                        [(ngModel)]="userAuthKey"
+                                        [readonly]="true"
+                                    ></input-field>
                                     <span class="success" *ngIf="isCopied">{{ localeData?.auth_key?.copied }}</span>
                                 </div>
                                 <button

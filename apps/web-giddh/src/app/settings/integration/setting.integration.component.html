@@ -84,8 +84,10 @@
                             {{ localeData?.email?.gmail_connected }}
                         </h4>
                         <button
+                            mat-stroked-button
+                            color="warn"
                             *ngIf="isGmailIntegrated$ | async"
-                            class="btn btn-danger mr-l2"
+                            class="btn mr-l2"
                             (click)="removegmailintegration.toggle()"
                         >
                             {{ localeData?.email?.remove_account }}
@@ -523,7 +525,7 @@
         </mat-tab-group>
     </div>
     <!--remove account integration confirmation modal-->
-    <div bsModal #removegmailintegration="bs-modal" class="modal fade" role="dialog">
+    <ng-template #removegmailintegration>
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <confirm-modal
@@ -535,9 +537,9 @@
                 </confirm-modal>
             </div>
         </div>
-    </div>
-    <div bsModal #createNewAccountModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
-        <div class="modal-dialog account-modal" *ngIf="createNewAccountModal?.isShown">
+    </ng-template>
+    <ng-template #createNewAccountModal>
+        <div class="modal-dialog account-modal">
             <div class="modal-content">
                 <icici-account-create-edit
                     [commonLocaleData]="commonLocaleData"
@@ -547,22 +549,21 @@
                 </icici-account-create-edit>
             </div>
         </div>
-    </div>
-    <div bsModal #editAccountModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
-        <div class="modal-dialog account-modal" *ngIf="editAccountModal?.isShown">
+    </ng-template>
+    <ng-template #editAccountModal>
+        <div class="modal-dialog account-modal">
             <div class="modal-content">
                 <icici-account-create-edit
                     [commonLocaleData]="commonLocaleData"
                     [activeBankAccount]="activeBankAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
-                    (closeModalEvent)="closeEditAccountModal()"
                 >
                 </icici-account-create-edit>
             </div>
         </div>
-    </div>
-    <div bsModal #createNewAccountUserModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
-        <div class="modal-dialog user-modal" *ngIf="createNewAccountUserModal?.isShown">
+    </ng-template>
+    <ng-template #createNewAccountUserModal>
+        <div class="modal-dialog user-modal">
             <div class="modal-content">
                 <icici-payor-account-create-edit
                     [commonLocaleData]="commonLocaleData"
@@ -572,29 +573,24 @@
                 ></icici-payor-account-create-edit>
             </div>
         </div>
-    </div>
-    <div bsModal #editAccountUserModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
-        <div class="modal-dialog user-modal" *ngIf="editAccountUserModal?.isShown">
+    </ng-template>
+
+    <ng-template #editAccountUserModal>
+        <div class="modal-dialog user-modal">
             <div class="modal-content">
                 <icici-payor-account-create-edit
                     [commonLocaleData]="commonLocaleData"
                     [activeBankAccount]="activeBankAccount"
                     [activePayorAccount]="activePayorAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
-                    (closeModalEvent)="closeEditAccountUserModal()"
                 >
                 </icici-payor-account-create-edit>
             </div>
         </div>
-    </div>
-    <div
-        bsModal
-        #confirmationModal="bs-modal"
-        [config]="{ backdrop: 'static', keyboard: false }"
-        class="modal fade"
-        role="dialog"
-    >
-        <div class="modal-dialog modal-md" *ngIf="confirmationModal?.isShown">
+    </ng-template>
+
+    <ng-template #confirmationModal>
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <confirm-modal
                     [body]="localeData?.payment?.delete_login | replace: '[LOGIN_ID]':activeBankAccount?.loginId"
@@ -604,5 +600,5 @@
                 </confirm-modal>
             </div>
         </div>
-    </div>
+    </ng-template>
 </ng-container>
