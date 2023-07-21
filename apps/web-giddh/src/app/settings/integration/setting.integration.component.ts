@@ -27,6 +27,11 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { MatTabGroup } from '@angular/material/tabs';
+import {
+    PlaidConfig,
+    NgxPlaidLinkService,
+    PlaidLinkHandler
+} from "ngx-plaid-link";
 
 @Component({
     selector: 'setting-integration',
@@ -153,7 +158,23 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    private plaidLinkHandler: PlaidLinkHandler;
+    private plainConfig = {
+        clientID: '',
+        env: "sandbox",
+        token: null,
+        product: ['auth', 'transactions'],
+        countryCodes: ['US'],
+        key: "",
+        plaidVersion: '2020-09-14', // Update to the latest Plaid API version
+        clientName: 'Plaid Quickstart',
+        webhook: 'https://requestb.in',
+        language: 'en',
+    }
 
+    /** List of icici bank supported countries */
+    public icicBankSupportedCountryList: any[] = ["IN", "NPR", "BT"];
+    public isOtherCountry: boolean = false;
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -168,7 +189,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private settingsIntegrationService: SettingsIntegrationService,
         private searchService: SearchService,
         private salesService: SalesService,
-        private route: ActivatedRoute
+        private plaidLinkService: NgxPlaidLinkService
 
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
@@ -271,9 +292,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                this.isIndianCompany = profile.countryV2.alpha2CountryCode === 'IN' ? true : false;
-                if (!this.isIndianCompany && this.selectedTabParent === 3) {
-                    this.selectedTabParent = 0;
+                if (!this.icicBankSupportedCountryList.includes(profile.countryV2.alpha2CountryCode)) {
+                    this.isOtherCountry = true;
+                } else {
+                    this.isOtherCountry = false;
                 }
             }
         });
@@ -836,6 +858,59 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public openCreateNewAccountModal(): void {
         this.createNewAccountModal?.show();
+    }
+
+    /**
+     * This will open create new account modal
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public getPlaidLinkToken(): void {
+        this.settingsIntegrationService.getlPlaidLinkToken().pipe(take(1)).subscribe(response => {
+            if (response?.status === "success" && response?.body) {
+                this.plainConfig.token = response.body?.link_token;
+                this.plainConfig.key = response.body?.link_token;
+                this.plaidLinkService
+                    .createPlaid(
+                        Object.assign({}, this.plainConfig, {
+                            onSuccess: (token, metadata) => this.getPlaidSuccessPublicToken(token, metadata),
+                            onExit: (error, metadata) => this.onExit(error, metadata),
+                            onEvent: (eventName, metadata) => this.onEvent(eventName, metadata)
+                        })
+                    )
+                    .then((handler: PlaidLinkHandler) => {
+                        this.plaidLinkHandler = handler;
+                        this.plaidLinkHandler.open();
+                    });
+            }
+        });
+    }
+
+    public getPlaidSuccessPublicToken(token, metadata) {
+        console.log(metadata);
+        const updatedData = metadata?.accounts.map(obj => {
+            const { id, ...rest } = obj;
+            return { ...rest, account_id: id };
+        });
+
+        let data = {
+            public_token: token,
+            institution: metadata?.institution,
+            accounts: updatedData
+        }
+        this.settingsIntegrationService.plaidAccessToken(data).pipe(take(1)).subscribe(response => {
+            this.loadPaymentData();
+        });
+    }
+
+    onEvent(eventName, metadata) {
+        // console.log("We got an event:", eventName);
+        // console.log("We got metadata:", metadata);
+    }
+
+    onExit(error, metadata) {
+        console.log("We exited:", error);
+        console.log("We got metadata:", metadata);
     }
 
     /**
