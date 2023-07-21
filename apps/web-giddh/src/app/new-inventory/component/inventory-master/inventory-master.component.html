@@ -6,11 +6,15 @@
 >
     <div class="mat-grid-wrapper">
         <div class="d-flex inventory-search">
+            <span class="search-icon">
+                <i class="icon-search"></i>
+            </span>
             <text-field
                 [type]="'text'"
                 [cssClass]="'form-control mat-field-border cash-invoice-input'"
                 [placeholder]="commonLocaleData?.app_search"
                 [formControl]="searchFormControl"
+                [autoFocus]="true"
             ></text-field>
         </div>
         <div class="mat-list-wrap">
@@ -103,7 +107,7 @@
             </div>
             <div class="inventory-btnside">
                 <div
-                    class="searchbar d-flex justify-content-between align-items-center py-2"
+                    class="searchbar d-flex justify-content-between align-items-center pt-2 pb-1"
                     *ngIf="breadcrumbs?.length"
                 >
                     <div>
@@ -125,7 +129,7 @@
                         *ngIf="!isTopLevel"
                         (click)="showCreateStock()"
                     >
-                        {{ commonLocaleData?.app_update_stock }}
+                        {{ commonLocaleData?.app_create_stock }}
                     </button>
                 </div>
                 <div>

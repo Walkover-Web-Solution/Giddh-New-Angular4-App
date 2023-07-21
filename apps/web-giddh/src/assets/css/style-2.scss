@@ -954,13 +954,6 @@ aside-create-group {
                 min-height: calc(100vh - 150px);
             }
         }
-        .horizontal-scroll {
-            height: 100%;
-            overflow-x: auto;
-            max-width: 821px;
-            min-width: 205px;
-            float: left;
-        }
     }
 
     .inventory-master {
@@ -10895,6 +10888,13 @@ inventory-master {
     .mat-tooltip {
         margin-bottom: 40px !important;
     }
+    .inventory-search {
+        text-field {
+            .form-control {
+                width: 500px;
+            }
+        }
+    }
 }
 
 @media (max-width: 1366px) {
@@ -14343,17 +14343,22 @@ voucher-component {
 .inventory-search {
     text-field {
         .form-control {
-            height: 42px;
-            width: 430px;
-            background-color: var(--color-black) !important;
-            box-shadow: var(--color-search-box-shadow) 0px 14px 28px, var(--color-drag-bottom-shadow) 0px 10px 10px;
+            height: 50px;
+            width: 628px;
+            background-color: #212528b8 !important;
+            // box-shadow: var(--color-search-box-shadow) 0px 14px 28px, var(--color-drag-bottom-shadow) 0px 10px 10px;
+            box-shadow: 0 25px 60px 10px rgba(0, 0, 0, 0.3);
             color: var(--color-white) !important;
-            border-color: var(--color-black) !important;
+            border-color: #212528b8 !important;
+            padding-left: 50px !important;
+            padding-right: 38px !important;
+            font-size: var(--font-size-24) !important;
+            caret-color: #212528b8;
             &:focus {
                 border-color: var(--color-black) !important;
             }
             &::placeholder {
-                color: var(--color-white);
+                color: #2c353e;
             }
         }
     }
