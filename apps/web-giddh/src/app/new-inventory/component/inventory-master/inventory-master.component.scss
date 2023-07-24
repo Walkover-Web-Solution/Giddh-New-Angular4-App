@@ -90,7 +90,7 @@
             }
         }
         .item-list {
-            width: 205px;
+            width: 254px;
             height: 100%;
             float: left;
             position: relative;
@@ -142,26 +142,6 @@
             max-width: 40%;
             min-width: 205px;
             float: left;
-        }
-    }
-}
-
-@media screen and (max-width: 1440px) {
-    .mat-grid-wrapper {
-        .mat-list-wrap {
-            .horizontal-scroll {
-                max-width: 616px;
-            }
-        }
-    }
-}
-
-@media screen and (max-width: 1366px) {
-    .mat-grid-wrapper {
-        .mat-list-wrap {
-            .horizontal-scroll {
-                max-width: 410px;
-            }
         }
     }
 }
