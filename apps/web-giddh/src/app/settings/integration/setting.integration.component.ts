@@ -146,18 +146,19 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     private plaidLinkHandler: PlaidLinkHandler;
-    private plainConfig = {
-        clientID: '',
+    private plaidConfig: PlaidConfig = {
+        apiVersion: "v2",
         env: "sandbox",
+        institution: null,
+        selectAccount: false,
         token: null,
-        product: ['auth', 'transactions'],
-        countryCodes: ['US'],
+        webhook: "",
+        product: ["auth"],
+        countryCodes: ['GB'],
         key: "",
-        plaidVersion: '2020-09-14', // Update to the latest Plaid API version
-        clientName: 'Plaid Quickstart',
-        webhook: 'https://requestb.in',
-        language: 'en',
-    }
+        onSuccess: undefined,
+        onExit: undefined
+    };
 
     /** List of icici bank supported countries */
     public icicBankSupportedCountryList: any[] = ["IN", "NPR", "BT"];
@@ -855,11 +856,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public getPlaidLinkToken(): void {
         this.settingsIntegrationService.getlPlaidLinkToken().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body) {
-                this.plainConfig.token = response.body?.link_token;
-                this.plainConfig.key = response.body?.link_token;
+                this.plaidConfig.token = response.body?.link_token;
+                this.plaidConfig.key = response.body?.link_token;
                 this.plaidLinkService
                     .createPlaid(
-                        Object.assign({}, this.plainConfig, {
+                        Object.assign({}, this.plaidConfig, {
                             onSuccess: (token, metadata) => this.getPlaidSuccessPublicToken(token, metadata),
                             onExit: (error, metadata) => this.onExit(error, metadata),
                             onEvent: (eventName, metadata) => this.onEvent(eventName, metadata)
