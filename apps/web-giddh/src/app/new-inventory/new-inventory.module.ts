@@ -81,6 +81,7 @@ import { InventoryMasterComponent } from "./component/inventory-master/inventory
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { FormsModule } from "@angular/forms";
 import { NoDataModule } from "../shared/no-data/no-data.module";
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 @NgModule({
     declarations: [
@@ -166,7 +167,8 @@ import { NoDataModule } from "../shared/no-data/no-data.module";
         ManufacturingModule,
         ScrollingModule,
         FormsModule,
-        NoDataModule
+        NoDataModule,
+        DragDropModule
     ],
     exports: [
         NewInventoryComponent,

@@ -5,24 +5,27 @@
     background-color: var(--color-white);
     height: calc(100vh - 90px);
     position: relative;
+    margin-left: -15px;
     .inventory-search {
-        position: absolute;
+        position: fixed;
         bottom: 10%;
-        left: 32%;
-        z-index: 99;
-        text-field {
-            .form-control {
-                height: 42px;
+        left: 50%;
+        z-index: 9999;
+        transform: translateX(-50%);
+        .search-icon {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            i {
+                color: var(--color-master-page-sidebar-primary-group);
+                font-size: 21px;
             }
         }
     }
     .mat-list-wrap {
         overflow-x: auto;
-        // display: flex;
         height: 100%;
         .inventory-sideabar {
-            // max-width: 49.66%;
-            // float: left;
             .inventory-sub-sideabar {
                 display: inline-flex;
                 float: left;
@@ -35,9 +38,7 @@
         .inventory-btnside {
             position: relative;
             overflow-x: scroll;
-            // width: 100%;
             height: 100%;
-            padding-left: 15px;
             .create-btn-grp {
                 display: flex;
                 flex-direction: column;
@@ -85,6 +86,7 @@
             }
             .searchbar {
                 padding-left: 25px;
+                border-bottom: 1px solid var(--color-iron);
             }
         }
         .item-list {
@@ -133,6 +135,33 @@
         }
         .border-grid {
             border-right: 1px solid var(--color-iron);
+        }
+        .horizontal-scroll {
+            height: 100%;
+            overflow-x: auto;
+            max-width: 40%;
+            min-width: 205px;
+            float: left;
+        }
+    }
+}
+
+@media screen and (max-width: 1440px) {
+    .mat-grid-wrapper {
+        .mat-list-wrap {
+            .horizontal-scroll {
+                max-width: 616px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1366px) {
+    .mat-grid-wrapper {
+        .mat-list-wrap {
+            .horizontal-scroll {
+                max-width: 410px;
+            }
         }
     }
 }
