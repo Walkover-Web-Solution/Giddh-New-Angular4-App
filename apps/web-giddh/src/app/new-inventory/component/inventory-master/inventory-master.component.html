@@ -5,12 +5,16 @@
     (localeData)="localeData = $event"
 >
     <div class="mat-grid-wrapper">
-        <div class="d-flex inventory-search">
+        <div class="d-flex inventory-search" cdkDrag>
+            <span class="search-icon">
+                <i class="icon-search"></i>
+            </span>
             <text-field
                 [type]="'text'"
                 [cssClass]="'form-control mat-field-border cash-invoice-input'"
                 [placeholder]="commonLocaleData?.app_search"
                 [formControl]="searchFormControl"
+                [autoFocus]="true"
             ></text-field>
         </div>
         <div class="mat-list-wrap">
@@ -21,7 +25,7 @@
                     [secondaryMessage]="localeData?.no_inventory_found_secondary_message"
                 ></no-data>
             </div>
-            <div class="horizontal-scroll">
+            <div class="horizontal-scroll" id="horizontal-scroll">
                 <div class="inventory-sideabar border-grid">
                     <div class="inventory-sub-sideabar">
                         <mat-list class="item-list border-grid pt-0" *ngIf="!isSearching">
@@ -48,7 +52,12 @@
                                         (click)="activeIndex = 0; isTopLevel = true; getMasters(topLevelGroup, -1)"
                                         class="group-name"
                                         [ngClass]="{
-                                            'isActive': this.currentGroup?.uniqueName === topLevelGroup?.uniqueName
+                                            'isActive':
+                                                currentGroup?.uniqueName === topLevelGroup?.uniqueName ||
+                                                (createUpdateGroup &&
+                                                    masterColumnsData[activeIndex]?.stockGroup?.uniqueName ===
+                                                        topLevelGroup?.uniqueName &&
+                                                    !currentGroup?.uniqueName)
                                         }"
                                     >
                                         <mat-list-item class="items">{{ topLevelGroup?.name }}</mat-list-item>
@@ -83,13 +92,17 @@
                                                 isTopLevel = false;
                                                 masterData.entity === 'STOCK_GROUP'
                                                     ? getMasters(masterData, i)
-                                                    : editStock(masterData)
+                                                    : editStock(masterData, i)
                                             "
                                             [ngClass]="{
                                                 'group-name': masterData.entity === 'STOCK_GROUP',
                                                 'isActive':
-                                                    this.currentGroup?.uniqueName === masterData?.uniqueName ||
-                                                    this.currentStock?.uniqueName === masterData?.uniqueName
+                                                    currentGroup?.uniqueName === masterData?.uniqueName ||
+                                                    currentStock?.uniqueName === masterData?.uniqueName ||
+                                                    (createUpdateGroup &&
+                                                        masterColumnsData[activeIndex]?.stockGroup?.uniqueName ===
+                                                            masterData?.uniqueName &&
+                                                        !currentGroup?.uniqueName)
                                             }"
                                         >
                                             <mat-list-item class="items">{{ masterData?.name }}</mat-list-item>
@@ -103,7 +116,7 @@
             </div>
             <div class="inventory-btnside">
                 <div
-                    class="searchbar d-flex justify-content-between align-items-center py-2"
+                    class="searchbar d-flex justify-content-between align-items-center pt-2 pb-1"
                     *ngIf="breadcrumbs?.length"
                 >
                     <div>
@@ -125,7 +138,7 @@
                         *ngIf="!isTopLevel"
                         (click)="showCreateStock()"
                     >
-                        {{ commonLocaleData?.app_update_stock }}
+                        {{ commonLocaleData?.app_create_stock }}
                     </button>
                 </div>
                 <div>

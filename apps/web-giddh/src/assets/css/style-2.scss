@@ -15,7 +15,6 @@ $custom-typography: mat-typography-config(
 @import "../css/global/onboarding.scss";
 @import "../css/global/custom-fields.scss";
 @import "../css/global/inventory.scss";
-@import "../css/global/add-company.scss";
 @import "../css/global/all-items.scss";
 @import "../css/global/search.scss";
 @import "../css/global/mat-button.scss";
@@ -967,13 +966,6 @@ aside-create-group {
                 height: 100% !important;
                 min-height: calc(100vh - 150px);
             }
-        }
-        .horizontal-scroll {
-            height: 100%;
-            overflow-x: auto;
-            max-width: 821px;
-            min-width: 205px;
-            float: left;
         }
     }
 
@@ -10985,6 +10977,13 @@ inventory-master {
     .mat-tooltip {
         margin-bottom: 40px !important;
     }
+    .inventory-search {
+        text-field {
+            .form-control {
+                width: 500px;
+            }
+        }
+    }
 }
 
 @media (max-width: 1366px) {
@@ -14401,17 +14400,22 @@ voucher-component {
 .inventory-search {
     text-field {
         .form-control {
-            height: 42px;
-            width: 430px;
-            background-color: var(--color-black) !important;
-            box-shadow: var(--color-search-box-shadow) 0px 14px 28px, var(--color-drag-bottom-shadow) 0px 10px 10px;
+            height: 53px;
+            width: 674px;
+            background-color: var(--color-apple-search-background) !important;
+            box-shadow: 0 7px 32px 13px rgba(0, 0, 0, 0.3);
             color: var(--color-white) !important;
-            border-color: var(--color-black) !important;
+            border-color: var(--color-apple-search-background) !important;
+            padding-left: 43px !important;
+            padding-right: 38px !important;
+            font-size: var(--font-size-24) !important;
+            caret-color: var(--color-master-page-sidebar-primary-group);
+            border-radius: 10px !important;
             &:focus {
                 border-color: var(--color-black) !important;
             }
             &::placeholder {
-                color: var(--color-white);
+                color: var(--color-master-page-sidebar-primary-group);
             }
         }
     }
