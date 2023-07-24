@@ -70,6 +70,10 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                 }
 
                 this.getTopLevelGroups();
+                this.masterColumnsData = [];
+                this.breadcrumbs = [];
+                this.resetCurrentStockAndGroup();
+                this.showCreateButtons = false;
             }
         });
 
@@ -162,26 +166,34 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                     if (!isRefresh) {
                         let newIndex = Number(currentIndex) + 1;
                         this.masterColumnsData = this.masterColumnsData.slice(0, newIndex);
-                        this.masterColumnsData[newIndex] = { results: response?.body?.results, page: response?.body?.page, totalPages: response?.body?.totalPages, stockGroup: stockGroup };
+                        this.masterColumnsData[newIndex] = { results: response?.body?.results, page: response?.body?.page, totalPages: response?.body?.totalPages, stockGroup: stockGroup, parentName: stockGroup?.name, parentUniqueName: stockGroup?.uniqueName };
                     } else {
                         this.masterColumnsData[currentIndex].page = response?.body?.page;
                         this.masterColumnsData[currentIndex].totalPages = response?.body?.totalPages;
                         this.masterColumnsData[currentIndex].stockGroup = stockGroup;
                         this.masterColumnsData[currentIndex].results = response?.body?.results;
+                        this.masterColumnsData[currentIndex].parentName = stockGroup?.name;
+                        this.masterColumnsData[currentIndex].parentUniqueName = stockGroup?.uniqueName;
                     }
+
+                    setTimeout(() => {
+                        this.scrollToRight();
+                    });
                 } else {
                     this.masterColumnsData[currentIndex].page = response?.body?.page;
                     this.masterColumnsData[currentIndex].results = this.masterColumnsData[currentIndex].results.concat(response?.body?.results);
                 }
             }
             this.loadMoreInProgress = false;
-            this.createBreadcrumbs();
+            if (!this.isSearching) {
+                this.createBreadcrumbs();
+            }
         });
 
         if (!isLoadMore) {
             this.createUpdateGroup = false;
             setTimeout(() => {
-                this.editGroup(stockGroup);
+                this.editGroup(stockGroup, currentIndex);
             }, 50);
         }
     }
@@ -209,33 +221,83 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                     });
                 }
                 this.masterColumnsData = cloneDeep(masterColumnsData);
+                if (this.masterColumnsData?.length && this.masterColumnsData[this.masterColumnsData.length - 1] && this.masterColumnsData[this.masterColumnsData.length - 1]?.results?.length) {
+                    if (this.masterColumnsData[this.masterColumnsData.length - 1]?.results[0]?.entity === "STOCK") {
+                        this.currentStock = this.masterColumnsData[this.masterColumnsData.length - 1]?.results[0];
+                    } else {
+                        this.currentGroup = this.masterColumnsData[this.masterColumnsData.length - 1]?.results[0];
+                    }
+                    setTimeout(() => {
+                        this.scrollToRight();
+                    });
+                }
             }
         });
+    }
+
+    /**
+     * Scrolls to the rightmost column after searching to show highlighted element
+     *
+     * @private
+     * @memberof InventoryMasterComponent
+     */
+    private scrollToRight(): void {
+        let element = document.querySelector('#horizontal-scroll');
+        if (element) {
+            element.scrollLeft = element.scrollWidth;
+        }
     }
 
     /**
      * Maps search inventory response and converts into master column data
      *
      * @param {*} master
-     * @param {number} index
+     * @param {*} index
      * @param {*} masterColumnsData
-     * @returns {*}
+     * @param {*} [parentName=null]
+     * @param {*} [parentUniqueName=null]
+     * @returns
      * @memberof InventoryMasterComponent
      */
-    public mapNestedGroupsStocks(master: any, index: number, masterColumnsData: any): any {
+    public mapNestedGroupsStocks(master, index, masterColumnsData, parentName = null, parentUniqueName = null) {
         master?.forEach(data => {
+            const item = {
+                name: data?.name,
+                entity: data?.entity,
+                uniqueName: data?.uniqueName,
+                parentName: parentName,
+                parentUniqueName: parentUniqueName
+            };
+
             if (masterColumnsData[index]) {
-                masterColumnsData[index].results.push({ name: data?.name, entity: data?.entity, uniqueName: data?.uniqueName });
+                masterColumnsData[index].results.push(item);
             } else {
-                masterColumnsData[index] = { results: [{ name: data?.name, entity: data?.entity, uniqueName: data?.uniqueName }], page: 1, totalPages: 1, stockGroup: {} };
+                masterColumnsData[index] = {
+                    results: [item],
+                    page: 1,
+                    totalPages: 1,
+                    stockGroup: {},
+                };
             }
 
             if (data?.stockGroups?.length) {
-                masterColumnsData = this.mapNestedGroupsStocks(data?.stockGroups, (index + 1), masterColumnsData);
+                this.mapNestedGroupsStocks(
+                    data?.stockGroups,
+                    index + 1,
+                    masterColumnsData,
+                    data?.name,
+                    data?.uniqueName
+                );
             }
 
             if (data?.stocks?.length) {
-                masterColumnsData = this.mapNestedGroupsStocks(data?.stocks, (index + 1), masterColumnsData);
+                this.mapNestedGroupsStocks(
+                    data?.stocks,
+                    index + 1,
+                    masterColumnsData,
+                    data?.name,
+                    data?.uniqueName
+                );
             }
         });
 
@@ -287,12 +349,16 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @param {*} masterData
      * @memberof InventoryMasterComponent
      */
-    public editStock(masterData: any): void {
+    public editStock(masterData: any, index: number): void {
         this.resetCurrentStockAndGroup();
         this.currentStock = masterData;
         this.showCreateButtons = false;
         this.createUpdateStock = false;
-        this.createBreadcrumbs();
+        if (this.isSearching) {
+            this.createBreadcrumbFromParentGroups(masterData, index);
+        } else {
+            this.createBreadcrumbs();
+        }
         setTimeout(() => {
             this.createUpdateStock = true;
         });
@@ -304,12 +370,16 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @param {*} masterData
      * @memberof InventoryMasterComponent
      */
-    public editGroup(masterData: any): void {
+    public editGroup(masterData: any, index): void {
         this.resetCurrentStockAndGroup();
         this.currentGroup = masterData;
         this.showCreateButtons = false;
         this.createUpdateGroup = true;
-        this.createBreadcrumbs();
+        if (this.isSearching) {
+            this.createBreadcrumbFromParentGroups(masterData, index);
+        } else {
+            this.createBreadcrumbs();
+        }
     }
 
     /**
@@ -347,6 +417,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                 this.masterColumnsData = [];
             } else {
                 this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex - 1);
+                if (this.activeIndex <= 1) {
+                    this.getTopLevelGroups();
+                }
             }
         } else {
             this.resetCurrentStockAndGroup();
@@ -383,5 +456,38 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.createUpdateGroup = false;
         this.createUpdateStock = true;
         this.createBreadcrumbs();
+    }
+
+    /**
+     * Creates breadcrumb when searching
+     *
+     * @param {*} masterData
+     * @param {number} index
+     * @memberof InventoryMasterComponent
+     */
+    public createBreadcrumbFromParentGroups(masterData: any, index: number): void {
+        if (!masterData?.parentUniqueName) {
+            masterData.parentName = this.masterColumnsData[index].parentName;
+            masterData.parentUniqueName = this.masterColumnsData[index].parentUniqueName;
+        }
+        if (masterData?.parentUniqueName) {
+            let breadcrumbs = [];
+            breadcrumbs.push(masterData?.name);
+
+            for (let i = index - 1; i >= 0; i--) {
+                let parentGroup = this.masterColumnsData[i]?.results?.filter(parent => parent.uniqueName === masterData?.parentUniqueName);
+                if (parentGroup?.length) {
+                    breadcrumbs.push(parentGroup[0]?.name);
+                    masterData = parentGroup[0];
+                }
+            }
+
+            breadcrumbs.reverse();
+            this.breadcrumbs = breadcrumbs;
+        } else {
+            let breadcrumbs = [];
+            breadcrumbs.push(masterData?.name);
+            this.breadcrumbs = breadcrumbs;
+        }
     }
 }

@@ -7,10 +7,10 @@
     position: relative;
     margin-left: -15px;
     .inventory-search {
-        position: absolute;
+        position: fixed;
         bottom: 10%;
-        left: 45%;
-        z-index: 99;
+        left: 50%;
+        z-index: 9999;
         transform: translateX(-50%);
         .search-icon {
             position: absolute;
@@ -24,11 +24,8 @@
     }
     .mat-list-wrap {
         overflow-x: auto;
-        // display: flex;
         height: 100%;
         .inventory-sideabar {
-            // max-width: 49.66%;
-            // float: left;
             .inventory-sub-sideabar {
                 display: inline-flex;
                 float: left;
@@ -41,7 +38,6 @@
         .inventory-btnside {
             position: relative;
             overflow-x: scroll;
-            // width: 100%;
             height: 100%;
             .create-btn-grp {
                 display: flex;
@@ -142,7 +138,7 @@
         .horizontal-scroll {
             height: 100%;
             overflow-x: auto;
-            max-width: 821px;
+            max-width: 40%;
             min-width: 205px;
             float: left;
         }
