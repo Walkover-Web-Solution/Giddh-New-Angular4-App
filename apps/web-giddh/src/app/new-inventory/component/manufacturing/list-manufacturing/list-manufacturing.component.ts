@@ -259,6 +259,8 @@ export class ListManufacturingComponent implements OnInit {
                 });
             }
         });
+
+        this.showHideClearFilterButton();
     }
 
     /**
@@ -336,7 +338,7 @@ export class ListManufacturingComponent implements OnInit {
         this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.manufacturingSearchRequest.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
         this.manufacturingSearchRequest.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-        
+
         this.handleBranchChange({ label: this.currentBranch.alias, value: this.currentBranch.uniqueName });
         this.getReport();
     }
@@ -455,7 +457,9 @@ export class ListManufacturingComponent implements OnInit {
         this.manufacturingSearchRequest.branchUniqueName = selectedEntity?.value;
         this.manufacturingSearchRequest.warehouseUniqueName = "";
         this.selectedWarehouseName = "";
-        this.warehouses = this.allWarehouses[selectedEntity?.value];
+        if (this.currentOrganizationType === OrganizationType.Company && this.allWarehouses?.length) {
+            this.warehouses = this.allWarehouses[selectedEntity?.value];
+        }
     }
 
     /**
@@ -524,7 +528,7 @@ export class ListManufacturingComponent implements OnInit {
     public showHideClearFilterButton(): void {
         this.showClearButton = false;
 
-        if ((this.universalDate && (this.manufacturingSearchRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.manufacturingSearchRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))) || this.manufacturingSearchRequest.product || this.manufacturingSearchRequest.productVariant || this.manufacturingSearchRequest.branchUniqueName || this.manufacturingSearchRequest.warehouseUniqueName || this.manufacturingSearchRequest.inventoryType || this.manufacturingSearchRequest.searchBy || this.manufacturingSearchRequest.searchOperation || this.manufacturingSearchRequest.searchValue) {
+        if ((this.universalDate && (this.manufacturingSearchRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.manufacturingSearchRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))) || this.manufacturingSearchRequest.product || this.manufacturingSearchRequest.productVariant || (this.currentOrganizationType === OrganizationType.Company && this.manufacturingSearchRequest.branchUniqueName && this.manufacturingSearchRequest.branchUniqueName !== this.currentBranch.uniqueName) || this.manufacturingSearchRequest.warehouseUniqueName || this.manufacturingSearchRequest.inventoryType || this.manufacturingSearchRequest.searchBy || this.manufacturingSearchRequest.searchOperation || this.manufacturingSearchRequest.searchValue) {
             this.showClearButton = true;
         }
 

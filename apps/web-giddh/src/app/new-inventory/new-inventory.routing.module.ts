@@ -14,12 +14,10 @@ import { DashboardSellingReport } from "./component/inventory-dashboard/dashboar
 import { ProductServiceListComponent } from "./component/inventory-product-service-list/inventory-product-service-list.component";
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
 import { ListGroupComponent } from "./component/stock-group/list-group/list-group.component";
-import { StockCreateEditModule } from "./component/stock-create-edit/stock-create-edit.module";
 import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
 import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.component";
 import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
 import { ReportsComponent } from "./component/reports/reports.component";
-import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component"
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 
@@ -27,7 +25,7 @@ const routes: Routes = [
     {
         path: "", component: NewInventoryComponent,
         children: [
-            { path: "", redirectTo: "stock-group/list-group", pathMatch: "full" },
+            { path: "", redirectTo: "reports/product/stock", pathMatch: "full" },
 
             {
                 path: "stock-group/list-group",

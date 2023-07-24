@@ -49,5 +49,6 @@
     "select_groups_placeholder": "समूह खोजें",
     "from_to": "कब से कब तक",
     "select_item": "वस्तु चुनें",
-    "select_query": "क्वेरी का चयन करें"
+    "select_query": "क्वेरी का चयन करें",
+    "company_address": "कम्पनी का पता"
 }

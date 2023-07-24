@@ -12,12 +12,7 @@
         (clickOutside)="closeSidebarMobile($event)"
     >
         <div class="menu-wrapper">
-            <primary-sidebar
-                [isOpen]="sideMenu?.isopen"
-                [apiMenuItems]="apiMenuItems"
-                (newCompany)="createNewCompany()"
-            >
-            </primary-sidebar>
+            <primary-sidebar [isOpen]="sideMenu?.isopen" [apiMenuItems]="apiMenuItems"> </primary-sidebar>
         </div>
         <div class="mobile-menu-icon" (click)="sideBarStateChange((sideMenu.isopen = !sideMenu.isopen))">
             <span
@@ -148,7 +143,7 @@
     <div
         bsModal
         #manageGroupsAccountsModal="bs-modal"
-        [config]="{ keyboard: true }"
+        [config]="{ keyboard: false }"
         class="modal fade full-screen-modal manage-account-popup add-manage-group-acc"
         role="dialog"
     >

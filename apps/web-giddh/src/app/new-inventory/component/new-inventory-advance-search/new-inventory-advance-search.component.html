@@ -14,7 +14,7 @@
         </div>
         <div class="modal-body">
             <form>
-                <div class="row mr-b15">                    
+                <div class="row mr-b15">
                     <div class="col-lg-12">
                         <div class="custom-datepicker-wrapper">
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -28,11 +28,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">                   
+                <div class="row">
                     <div class="col-lg-12">
                         <div class="row">
                             <div class="col-lg-6 col-sm-6 col-12 mr-b15 pr-2">
-                                <ng-container *ngIf="reportType === 'TRANSACTION'">                                  
+                                <ng-container *ngIf="reportType === 'TRANSACTION'">
                                     <dropdown-field
                                         [placeholder]="localeData?.advance_search_filter?.select_category"
                                         [options]="advanceSearchCategoryTransaction"

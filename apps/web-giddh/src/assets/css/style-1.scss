@@ -2598,17 +2598,6 @@ giddh-datepicker {
         }
     }
 }
-.mat-button,
-.mat-raised-button,
-.mat-stroked-button {
-    margin-right: 15px !important;
-    height: 36px;
-    box-shadow: none !important;
-}
-
-.mat-raised-button:focus {
-    box-shadow: none !important;
-}
 
 .search-ledger-field {
     .btn-danger,
@@ -2881,10 +2870,7 @@ td.mat-footer-cell {
 .mat-expansion-indicator::after {
     color: var(--color-primary-checkbox-and-expansion-panel-arrow) !important;
 }
-.mat-icon-button i,
-.mat-icon-button .mat-icon {
-    color: var(--color-primary-icon);
-}
+
 .other-tax {
     .mat-checkbox-layout {
         .mat-checkbox-label {
@@ -3445,6 +3431,7 @@ input-field {
         }
     }
 }
+add-company,
 voucher-component {
     .mobile-number {
         .mat-form-field-appearance-outline {
@@ -3469,6 +3456,15 @@ voucher-component {
         .mat-focused {
             .mat-form-field-flex {
                 border: 0 !important;
+            }
+        }
+    }
+}
+add-company {
+    .fill-form {
+        input {
+            &::placeholder {
+                color: var(--color-popup-list-input-text) !important;
             }
         }
     }

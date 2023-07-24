@@ -1,65 +1,212 @@
-<form>
-    <div class="row mr-b15">
-        <div class="col-xl-5 col-lg-5 col-sm-5">
-            <dropdown-field [placeholder]="'Select Unit Group'" [required]="true"> </dropdown-field>
-        </div>
-    </div>
-    <div class="row mr-b15">
-        <div class="col-xl-5 col-lg-5 col-sm-5">
-            <dropdown-field [placeholder]="'Select Unit Name'" [required]="true"> </dropdown-field>
-        </div>
-        <div class="col-xl-7 col-lg-7 col-sm-7">
-            <input-field
-                [name]="'hsnNumber'"
-                [type]="'text'"
-                [placeholder]="'Unique Name'"
-                [id]="'item-unit-code'"
-                [required]="true"
-            >
-            </input-field>
-        </div>
-    </div>
-    <!-- section-repeat -->
-    <div class="unit-quantity">
-        <div class="row mr-b15">
-            <div class="col-xl-5 col-lg-5 col-md-5 col-sm-6 unit-equal">
-                <dropdown-field
-                    [id]="'item-parent-unit'"
-                    [name]="''"
-                    [placeholder]="'Choose a Parent Unit'"
-                    [required]="true"
+<ng-container
+    appTranslate
+    [file]="'inventory/unit'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+    <ng-container *ngIf="!isLoading">
+        <form autocomplete="off" novalidate name="unitForm" [formGroup]="unitForm" class="container">
+            <div class="row mr-b15">
+                <div class="col-xl-5 col-lg-5 col-sm-5">
+                    <dropdown-field
+                        [label]="localeData?.unit_group + '*'"
+                        [placeholder]="localeData?.select_unit_group"
+                        [name]="'unitGroupName'"
+                        [options]="groupList"
+                        (selectedOption)="selectUnitGroup($event)"
+                        [defaultValue]="unitForm?.get('group')?.get('name')?.value"
+                        [showError]="!isValidForm && !unitForm?.get('group')?.get('uniqueName')?.value"
+                        [readonly]="unitDetails?.uniqueName"
+                    >
+                    </dropdown-field>
+                </div>
+            </div>
+            <div class="row mr-b15">
+                <div class="col-xl-5 col-lg-5 col-sm-5">
+                    <dropdown-field
+                        [label]="commonLocaleData?.app_name + '*'"
+                        [placeholder]="localeData?.select_unit"
+                        [name]="'unitName'"
+                        [options]="unitList"
+                        (selectedOption)="selectUnit($event)"
+                        [defaultValue]="unitForm.get('name')?.value"
+                        [showError]="!isValidForm && !unitForm?.get('name')?.value"
+                        [allowCustomDropdownValue]="true"
+                        [noResultsFoundMessage]="localeData?.create_unit"
+                        [readonly]="unitDetails?.uniqueName"
+                    >
+                    </dropdown-field>
+                </div>
+                <div class="col-xl-7 col-lg-7 col-sm-7">
+                    <input-field
+                        [name]="'code'"
+                        [type]="'text'"
+                        [label]="localeData?.code + '*'"
+                        [placeholder]="localeData?.enter_code"
+                        formControlName="code"
+                        [showError]="!isValidForm && !unitForm?.get('code')?.value"
+                        [readonly]="unitDetails?.uniqueName"
+                    >
+                    </input-field>
+                </div>
+            </div>
+            <div class="unit-quantity" formArrayName="mappings">
+                <div
+                    class="row mr-b15 align-items-center"
+                    *ngFor="let mapping of unitForm?.get('mappings')['controls']; let i = index"
+                    [formGroupName]="i"
                 >
-                </dropdown-field>
-                <span class="equal-sign">=</span>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-2 pr-0 unit-responsive">
-                <input-field
-                    [cssClass]="'text-right'"
-                    [name]="'hsnNumber'"
-                    [type]="'number'"
-                    [placeholder]="'Quanitity'"
-                    [id]="'quantity-per-unit'"
-                    [required]="true"
-                >
-                </input-field>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 pl-2">
-                <dropdown-field [placeholder]="'Choose unit'" [required]="true"> </dropdown-field>
-            </div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0">
-                <div class="inc-dec">
-                    <div class="plus-minus">
-                        <button mat-stroked-button class="btn mr-0"><i class="icon-plus add-row"></i></button>
-                        <button mat-stroked-button class="btn mr-0"><i class="icon-cross delete"></i></button>
+                    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-6 unit-equal">
+                        <dropdown-field
+                            [name]="'xcode' + i"
+                            [label]="localeData?.unit_name"
+                            [placeholder]="localeData?.select_unit"
+                            [options]="mappedUnitList"
+                            (selectedOption)="selectXUnit(mapping, $event)"
+                            [defaultValue]="mapping?.get('stockUnitX')?.get('name')?.value"
+                            [showError]="!isValidFormMappings && !mapping?.get('stockUnitX')?.get('code')?.value"
+                            [hasMoreValue]="true"
+                        >
+                            <ng-template #optionTemplate let-option="option">
+                                <ng-container>
+                                    <a href="javascript:void(0)" class="flex-column">
+                                        <div class="option-label">{{ option?.label }}</div>
+                                        <div class="option-value" *ngIf="option.additional?.stockUnitXGroup?.name">
+                                            {{ option.additional?.stockUnitXGroup?.name }}
+                                        </div>
+                                        <div
+                                            class="option-value"
+                                            *ngIf="
+                                                !option.additional?.stockUnitXGroup?.name &&
+                                                unitForm?.get('group')?.get('name')?.value
+                                            "
+                                        >
+                                            {{ unitForm?.get("group")?.get("name")?.value }}
+                                        </div>
+                                    </a>
+                                </ng-container>
+                            </ng-template>
+                        </dropdown-field>
+                        <span class="equal-sign">=</span>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-2 pr-0 unit-responsive">
+                        <input-field
+                            [cssClass]="'text-right'"
+                            [name]="'quantity' + i"
+                            [type]="'text'"
+                            [label]="localeData?.quantity"
+                            [placeholder]="localeData?.enter_quantity"
+                            formControlName="quantity"
+                            [allowDigitsOnly]="true"
+                            [showError]="!isValidFormMappings && !mapping?.get('quantity')?.value"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 pr-0">
+                        <dropdown-field
+                            [name]="'ycode' + i"
+                            [label]="localeData?.mapped_unit_label"
+                            [placeholder]="localeData?.select_unit"
+                            [options]="mappedUnitList"
+                            (selectedOption)="selectYUnit(mapping, $event)"
+                            [defaultValue]="mapping?.get('stockUnitY')?.get('name')?.value"
+                            [showError]="!isValidFormMappings && !mapping?.get('stockUnitY')?.get('code')?.value"
+                            [hasMoreValue]="true"
+                        >
+                            <ng-template #optionTemplate let-option="option">
+                                <ng-container>
+                                    <a href="javascript:void(0)" class="flex-column">
+                                        <div class="option-label">{{ option?.label }}</div>
+                                        <div class="option-value" *ngIf="option.additional?.stockUnitXGroup?.name">
+                                            {{ option.additional?.stockUnitXGroup?.name }}
+                                        </div>
+                                        <div
+                                            class="option-value"
+                                            *ngIf="
+                                                !option.additional?.stockUnitXGroup?.name &&
+                                                unitForm?.get('group')?.get('name')?.value
+                                            "
+                                        >
+                                            {{ unitForm?.get("group")?.get("name")?.value }}
+                                        </div>
+                                    </a>
+                                </ng-container>
+                            </ng-template>
+                        </dropdown-field>
+                    </div>
+                    <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0">
+                        <div class="inc-dec">
+                            <div class="plus-minus">
+                                <button class="btn mr-0" (click)="removeMappedUnit(i)">
+                                    <i class="icon-trash delete"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <button class="btn mr-0 add-new" (click)="addNewMappedUnit()">
+                            {{ localeData?.add_new }}
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col-sm-12">
-            <button mat-stroked-button color="primary" type="submit">Save</button>
-            <button mat-stroked-button type="submit" class="btn-sm">Clear</button>
-        </div>
-    </div>
-</form>
+            <div class="row mt-4">
+                <div class="col-sm-4 pr-0">
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        type="button"
+                        (click)="saveUnit()"
+                        *ngIf="!unitDetails?.uniqueName"
+                    >
+                        {{ commonLocaleData?.app_save }}
+                    </button>
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        type="button"
+                        (click)="saveUnit()"
+                        *ngIf="unitDetails?.uniqueName"
+                    >
+                        {{ commonLocaleData?.app_update }}
+                    </button>
+                </div>
+                <div class="col-lg-8">
+                    <div class="pull-right">
+                        <button
+                            mat-stroked-button
+                            type="button"
+                            class="btn-sm mr-0"
+                            (click)="resetForm()"
+                            *ngIf="!unitDetails?.uniqueName"
+                        >
+                            {{ commonLocaleData?.app_clear }}
+                        </button>
+                        <button
+                            mat-stroked-button
+                            type="button"
+                            class="btn-sm"
+                            (click)="closeAsideEvent.emit(false)"
+                            *ngIf="unitDetails?.uniqueName"
+                        >
+                            {{ commonLocaleData?.app_close }}
+                        </button>
+                        <button
+                            mat-stroked-button
+                            color="warn"
+                            type="button"
+                            class="btn-sm mr-0"
+                            (click)="deleteUnit()"
+                            *ngIf="unitDetails?.uniqueName"
+                        >
+                            {{ commonLocaleData?.app_delete }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+</ng-container>
