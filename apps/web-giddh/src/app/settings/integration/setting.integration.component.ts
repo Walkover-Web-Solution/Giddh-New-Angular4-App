@@ -145,7 +145,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** This will hold plaid link handler */
     private plaidLinkHandler: PlaidLinkHandler;
+    /** This will hold plaid configuration */
     private plaidConfig: PlaidConfig = {
         apiVersion: "v2",
         env: "sandbox",
@@ -159,10 +161,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         onSuccess: undefined,
         onExit: undefined
     };
-
     /** List of icici bank supported countries */
     public icicBankSupportedCountryList: any[] = ["IN", "NPR", "BT"];
+    /** True, if is other country in payment integration */
     public isOtherCountry: boolean = false;
+
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -861,9 +864,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.plaidLinkService
                     .createPlaid(
                         Object.assign({}, this.plaidConfig, {
-                            onSuccess: (token, metadata) => this.getPlaidSuccessPublicToken(token, metadata),
-                            onExit: (error, metadata) => this.onExit(error, metadata),
-                            onEvent: (eventName, metadata) => this.onEvent(eventName, metadata)
+                            onSuccess: (token, metadata) => this.getPlaidSuccessPublicToken(token, metadata)
                         })
                     )
                     .then((handler: PlaidLinkHandler) => {
@@ -874,8 +875,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
+    /**
+     *This will use for get plaid success public token
+     *
+     * @param {*} token
+     * @param {*} metadata
+     * @memberof SettingIntegrationComponent
+     */
     public getPlaidSuccessPublicToken(token, metadata) {
-        console.log(metadata);
         const updatedData = metadata?.accounts.map(obj => {
             const { id, ...rest } = obj;
             return { ...rest, account_id: id };
@@ -889,16 +896,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.settingsIntegrationService.plaidAccessToken(data).pipe(take(1)).subscribe(response => {
             this.loadPaymentData();
         });
-    }
-
-    onEvent(eventName, metadata) {
-        // console.log("We got an event:", eventName);
-        // console.log("We got metadata:", metadata);
-    }
-
-    onExit(error, metadata) {
-        console.log("We exited:", error);
-        console.log("We got metadata:", metadata);
     }
 
     /**
