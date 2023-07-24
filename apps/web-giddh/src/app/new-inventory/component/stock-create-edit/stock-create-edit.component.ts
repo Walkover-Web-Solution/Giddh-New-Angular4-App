@@ -998,6 +998,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
                     if (this.addStock) {
                         this.closeAsideEvent.emit(false);
+                    } else {
+                        if (this.groupList?.length) {
+                            this.stockForm.stockUnitGroup.uniqueName = this.groupList[0]?.value;
+                            this.stockForm.stockUnitGroup.name = this.groupList[0].label;
+                        }
                     }
                 } else {
                     if (this.addStock) {

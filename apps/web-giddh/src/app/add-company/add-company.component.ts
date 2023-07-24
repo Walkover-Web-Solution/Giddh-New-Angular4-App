@@ -185,12 +185,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** List of counties of country */
     public countyList: IOption[] = [];
     /** List of registered business type countries */
-    public registeredTypeCountryList: any[] = ["IN", "GB", "AE"];
+    public registeredTypeCountryList: any[] = ["IN", "AE"];
     /** This will hold disable State */
     public disabledState: boolean = false;
+    /** Returns true if company created */
+    public isCompanyCreated: boolean = false;
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
-        return this.firstStepForm?.dirty;
+        return !this.isCompanyCreated && this.firstStepForm?.dirty;
     }
 
     constructor(
@@ -843,9 +845,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.isCompanyCreated$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.firstStepForm.reset();
-                this.secondStepForm.reset();
-                this.companyForm.reset();
+                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                this.isCompanyCreated = true;
                 this.firstStepForm.markAsPristine();
                 this.generalService.companyUniqueName = this.company?.uniqueName;
                 setTimeout(() => {

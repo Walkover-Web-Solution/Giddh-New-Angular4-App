@@ -114,7 +114,7 @@
                                                             [defaultValue]="linkedStock.stockName"
                                                             [enableDynamicSearch]="true"
                                                             [isPaginationEnabled]="true"
-                                                            (dynamicSearchedQuery)="getStocks(1, $event)"
+                                                            (dynamicSearchedQuery)="getStocks(linkedStock, 1, $event)"
                                                             (scrollEnd)="stockScrollEnd(linkedStock)"
                                                             [allowValueReset]="true"
                                                             (onClear)="

@@ -42,6 +42,7 @@ export const ROUTES: Routes = [
     { path: 'reports', redirectTo: 'pages/reports' },
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
     { path: 'select-plan' },
+    { path: 'mobile-restricted', redirectTo: 'mobile-restricted', pathMatch: 'full' },
     {
         path: 'pages',
         children: [
