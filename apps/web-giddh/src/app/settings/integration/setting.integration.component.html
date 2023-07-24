@@ -318,7 +318,7 @@
                             >
                                 <div class="account-info-background width-100 font-15 row">
                                     <div class="col-md-4">
-                                        <span class="field-label">{{ bankAccount?.bankName }}</span
+                                        <span class="field-label">{{ bankAccount?.account?.name }}</span
                                         ><br />
                                         <span class="account-number mt-2 font-15 inline"
                                             ><b>{{ bankAccount?.iciciDetailsResource?.accountNumber }}</b></span
@@ -331,9 +331,17 @@
                                             bankAccount?.account?.name
                                         }}</span>
                                     </div>
+                                    <span class="mr-l1 action-div action-top" *ngIf="isOtherCountry">
+                                        <a
+                                            href="javascript:;"
+                                            class="icon-edit-pencil"
+                                            (click)="openEditAccountModal(bankAccount)"
+                                        ></a>
+                                    </span>
                                     <div class="col-md-4" *ngIf="!isOtherCountry">
-                                        <span class="field-label">{{ localeData?.payment?.payment_updates }}</span
-                                        ><br />
+                                        <span class="field-label"
+                                            >{{ localeData?.payment?.payment_updates }}<br
+                                        /></span>
                                         <span
                                             class="payment-updates view-only-field inline"
                                             *ngIf="bankAccount?.iciciDetailsResource?.paymentAlerts?.length > 0"
@@ -455,7 +463,7 @@
                                     </ng-container>
                                     <button
                                         type="button"
-                                        class="btn btn-light-blue bold font-15 mt-2 mr-l15"
+                                        class="btn btn-light-blue bold font-15 mt-2"
                                         (click)="openCreateNewAccountUserModal(bankAccount)"
                                     >
                                         {{ localeData?.payment?.add_more_users }}
@@ -561,6 +569,7 @@
                 <icici-payor-account-create-edit
                     [commonLocaleData]="commonLocaleData"
                     [activeBankAccount]="activeBankAccount"
+                    [isOtherCountry]="isOtherCountry"
                     (getAllBankAccounts)="getAllBankAccounts()"
                     (closeModalEvent)="closeCreateNewAccountUserModal()"
                 ></icici-payor-account-create-edit>
@@ -573,6 +582,7 @@
                 <icici-payor-account-create-edit
                     [commonLocaleData]="commonLocaleData"
                     [activeBankAccount]="activeBankAccount"
+                    [isOtherCountry]="isOtherCountry"
                     [activePayorAccount]="activePayorAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
                     (closeModalEvent)="closeEditAccountUserModal()"
