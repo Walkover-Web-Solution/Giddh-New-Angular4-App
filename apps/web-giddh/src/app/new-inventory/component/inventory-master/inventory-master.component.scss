@@ -14,11 +14,11 @@
         transform: translateX(-50%);
         .search-icon {
             position: absolute;
-            top: 12px;
+            top: 15px;
             left: 15px;
             i {
-                color: #212528b8;
-                font-size: var(--font-size-24);
+                color: var(--color-master-page-sidebar-primary-group);
+                font-size: 21px;
             }
         }
     }

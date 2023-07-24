@@ -14343,22 +14343,22 @@ voucher-component {
 .inventory-search {
     text-field {
         .form-control {
-            height: 50px;
-            width: 628px;
-            background-color: #212528b8 !important;
-            // box-shadow: var(--color-search-box-shadow) 0px 14px 28px, var(--color-drag-bottom-shadow) 0px 10px 10px;
-            box-shadow: 0 25px 60px 10px rgba(0, 0, 0, 0.3);
+            height: 53px;
+            width: 674px;
+            background-color: var(--color-apple-search-background) !important;
+            box-shadow: 0 7px 32px 13px rgba(0, 0, 0, 0.3);
             color: var(--color-white) !important;
-            border-color: #212528b8 !important;
-            padding-left: 50px !important;
+            border-color: var(--color-apple-search-background) !important;
+            padding-left: 43px !important;
             padding-right: 38px !important;
             font-size: var(--font-size-24) !important;
-            caret-color: #212528b8;
+            caret-color: var(--color-master-page-sidebar-primary-group);
+            border-radius: 10px !important;
             &:focus {
                 border-color: var(--color-black) !important;
             }
             &::placeholder {
-                color: #2c353e;
+                color: var(--color-master-page-sidebar-primary-group);
             }
         }
     }
