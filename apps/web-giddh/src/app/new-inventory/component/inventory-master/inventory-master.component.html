@@ -148,7 +148,7 @@
                             [addGroup]="true"
                             [stockType]="inventoryType"
                             [groupUniqueName]="currentGroup?.uniqueName"
-                            [activeGroup]="!isTopLevel ? masterColumnsData[activeIndex]?.stockGroup : null"
+                            [activeGroup]="parentGroup"
                             (closeAsideEvent)="closeGroup($event)"
                         ></create-update-group>
                         <stock-create-edit
@@ -156,7 +156,7 @@
                             [addStock]="true"
                             [stockType]="inventoryType"
                             [stockUniqueName]="currentStock?.uniqueName"
-                            [activeGroup]="masterColumnsData[activeIndex]?.stockGroup"
+                            [activeGroup]="parentGroup"
                             (closeAsideEvent)="closeStock($event)"
                         ></stock-create-edit>
                     </div>

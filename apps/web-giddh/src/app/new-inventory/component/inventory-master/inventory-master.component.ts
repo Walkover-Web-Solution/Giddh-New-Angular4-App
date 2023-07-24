@@ -45,6 +45,8 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
     public loadMoreInProgress: boolean = false;
     /** Search field form control */
     public searchFormControl = new FormControl();
+    /** Holds active parent group */
+    public parentGroup: any = {};
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -227,10 +229,11 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                     } else {
                         this.currentGroup = this.masterColumnsData[this.masterColumnsData.length - 1]?.results[0];
                     }
-                    setTimeout(() => {
-                        this.scrollToRight();
-                    });
                 }
+
+                setTimeout(() => {
+                    this.scrollToRight();
+                });
             }
         });
     }
@@ -323,11 +326,11 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         }
 
         if (this.createUpdateGroup && !this.currentGroup?.uniqueName) {
-            this.breadcrumbs.push("Create Group");
+            this.breadcrumbs.push(this.commonLocaleData?.app_create_group);
         }
 
         if (this.createUpdateStock && !this.currentStock?.uniqueName) {
-            this.breadcrumbs.push("Create Stock");
+            this.breadcrumbs.push(this.commonLocaleData?.app_create_stock);
         }
     }
 
@@ -439,8 +442,14 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.createUpdateGroup = true;
 
         if (this.isTopLevel) {
+            this.parentGroup = {};
             this.breadcrumbs = [];
+        } else if (this.isSearching && this.masterColumnsData[this.activeIndex - 1] && this.masterColumnsData[this.activeIndex - 1]?.results?.length === 1) {
+            this.createBreadcrumbFromParentGroups(this.masterColumnsData[this.activeIndex - 1]?.results[0], this.activeIndex - 1);
+            this.breadcrumbs.push(this.commonLocaleData?.app_create_group);
+            this.parentGroup = { name: this.masterColumnsData[this.activeIndex - 1]?.results[0].name, uniqueName: this.masterColumnsData[this.activeIndex - 1]?.results[0].uniqueName };
         } else {
+            this.parentGroup = (!this.isTopLevel) ? this.masterColumnsData[this.activeIndex]?.stockGroup : null;
             this.createBreadcrumbs();
         }
     }
@@ -455,7 +464,15 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.showCreateButtons = false;
         this.createUpdateGroup = false;
         this.createUpdateStock = true;
-        this.createBreadcrumbs();
+
+        if (this.isSearching && this.masterColumnsData[this.activeIndex - 1] && this.masterColumnsData[this.activeIndex - 1]?.results?.length === 1) {
+            this.createBreadcrumbFromParentGroups(this.masterColumnsData[this.activeIndex - 1]?.results[0], this.activeIndex - 1);
+            this.breadcrumbs.push(this.commonLocaleData?.app_create_stock);
+            this.parentGroup = { name: this.masterColumnsData[this.activeIndex - 1]?.results[0].name, uniqueName: this.masterColumnsData[this.activeIndex - 1]?.results[0].uniqueName };
+        } else {
+            this.parentGroup = this.masterColumnsData[this.activeIndex]?.stockGroup;
+            this.createBreadcrumbs();
+        }
     }
 
     /**
