@@ -290,9 +290,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                 if (!this.iciciBankSupportedCountryList.includes(profile.countryV2.alpha2CountryCode)) {
-                    this.isIciciBankSupportedCountry = true;
-                } else {
                     this.isIciciBankSupportedCountry = false;
+                } else {
+                    this.isIciciBankSupportedCountry = true;
                 }
             }
         });
@@ -887,14 +887,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {*} metadata
      * @memberof SettingIntegrationComponent
      */
-    public getPlaidSuccessPublicToken(token: string, metadata: any) {
+    public getPlaidSuccessPublicToken(token: string, metadata: any): void {
         let data = {
             public_token: token,
             institution: metadata?.institution,
-            accounts: metadata
+            accounts: metadata?.accounts
         }
         this.settingsIntegrationService.savePlaidAccessToken(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.loadPaymentData();
+            if (response?.status === "success" && response?.body) {
+                this.loadPaymentData();
+            }
         });
     }
 

@@ -6,7 +6,7 @@
 >
     <div class="clearfix">
         <mat-tab-group
-            [ngClass]="{ 'tab-integration': true, 'hide-payment-tab': !isIciciBankSupportedCountry }"
+            [ngClass]="{ 'tab-integration': true, 'hide-payment-tab': isIciciBankSupportedCountry }"
             id="tab-integration"
             animationDuration="0ms"
             [selectedIndex]="selectedTabParent"
@@ -256,9 +256,9 @@
                 </div>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.payment?.tab_heading" [hidden]="!isIciciBankSupportedCountry">
+            <mat-tab [label]="localeData?.payment?.tab_heading" [hidden]="isIciciBankSupportedCountry">
                 <div class="clearfix box">
-                    <ng-container *ngIf="!isIciciBankSupportedCountry">
+                    <ng-container *ngIf="isIciciBankSupportedCountry">
                         <ng-template>
                             <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
                         </ng-template>
@@ -298,7 +298,7 @@
                             </div>
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="isIciciBankSupportedCountry">
+                    <ng-container *ngIf="!isIciciBankSupportedCountry">
                         <div class="form-group">
                             <button mat-stroked-button class="mr-r2" color="primary" (click)="getPlaidLinkToken()">
                                 {{ localeData?.payment?.connect_bank }}
@@ -328,12 +328,12 @@
                                         <span class="field-label">{{ localeData?.payment?.linked_account }}</span
                                         ><br />
                                         <span
-                                            *ngIf="!isIciciBankSupportedCountry"
+                                            *ngIf="isIciciBankSupportedCountry"
                                             class="width-100 view-only-field inline"
                                             >{{ bankAccount?.account?.name }}</span
                                         >
                                         <sh-select
-                                            *ngIf="isIciciBankSupportedCountry"
+                                            *ngIf="!isIciciBankSupportedCountry"
                                             class="linked-account"
                                             name="bankAccountUniqueName"
                                             [placeholder]="localeData?.payment?.link_account_placeholder"
@@ -343,14 +343,14 @@
                                         >
                                         </sh-select>
                                     </div>
-                                    <span class="mr-l1 action-div mr-t3" *ngIf="isIciciBankSupportedCountry">
+                                    <span class="mr-l1 action-div mr-t3" *ngIf="!isIciciBankSupportedCountry">
                                         <a
                                             href="javascript:;"
                                             class="icon-edit-pencil"
                                             (click)="openEditAccountModal(bankAccount)"
                                         ></a>
                                     </span>
-                                    <div class="col-md-4" *ngIf="!isIciciBankSupportedCountry">
+                                    <div class="col-md-4" *ngIf="isIciciBankSupportedCountry">
                                         <span class="field-label"
                                             >{{ localeData?.payment?.payment_updates }}<br
                                         /></span>
