@@ -59,6 +59,7 @@
         margin-left: 3px;
         margin-top: 5px;
         margin-right: 0 !important;
+        padding-bottom: 4px;
     }
 
     .entity-wrapper {
@@ -81,6 +82,11 @@
         display: flex;
         flex-wrap: wrap;
         padding-left: 9px;
+        .custom-datepicker {
+            input {
+                height: 36px;
+            }
+        }
     }
 
     .filter-button {
