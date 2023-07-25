@@ -216,7 +216,7 @@
                                     (click)="onOpenAdvanceSearch()"
                                     class="advance-icon d-flex advance-search-filter icon-button-width pointer"
                                     [matTooltip]="commonLocaleData?.app_advance_search"
-                                    [matTooltipPosition]="'below'"
+                                    [matTooltipPosition]="'above'"
                                     matTooltipClass="tooltip-black"
                                     [ngStyle]="{ 'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px' : '0px' }"
                                 >
@@ -229,7 +229,7 @@
                                     href="javascript:;"
                                     (click)="resetAdvanceSearch()"
                                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
-                                    [matTooltipPosition]="'below'"
+                                    [matTooltipPosition]="'above'"
                                     matTooltipClass="tooltip-black"
                                 >
                                     <i aria-hidden="true" class="icon-refresh"></i>
@@ -247,7 +247,7 @@
                                         id="delete-ledger"
                                         (click)="performBulkAction('delete')"
                                         [matTooltip]="commonLocaleData?.app_delete"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-trash"></i>
@@ -262,7 +262,7 @@
                                         class="d-flex align-items-center justify-content-center icon-button-width"
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-generate-invoice"></i>
@@ -277,7 +277,7 @@
                                         id="attach-file"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-file-path"></i>
@@ -451,7 +451,7 @@
                                         id="upload"
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.import_statement"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showUploadBankStatementModal()"
                                     >
@@ -463,7 +463,7 @@
                                         id="share"
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.share_ledger"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showShareLedgerModal()"
                                     >
@@ -475,7 +475,7 @@
                                         id="export-ledger"
                                         href="javascript:void(0)"
                                         [matTooltip]="commonLocaleData?.app_export"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showExportLedgerModal()"
                                     >
@@ -487,7 +487,7 @@
                                         id="delete-bank-transaction"
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.delete_bank_transactions"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
                                         *ngIf="entryUniqueNamesForBulkAction?.length > 0"
@@ -504,7 +504,7 @@
                                         "
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.reload_bank_transactions"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="getBankTransactions()"
                                     >
@@ -518,7 +518,7 @@
                                         id="autopaid"
                                         href="javascript:void(0)"
                                         [matTooltip]="this.localeData?.autopaid_title"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showAutopaidModal()"
                                     >
