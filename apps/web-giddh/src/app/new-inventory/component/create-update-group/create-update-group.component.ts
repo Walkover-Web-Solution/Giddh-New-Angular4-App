@@ -309,6 +309,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             this.inventoryService.UpdateStockGroup(this.groupForm?.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
+                    this.groupForm.markAsPristine();
+                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_update);
                     if (!this.addGroup) {
                         this.getStockGroups();
