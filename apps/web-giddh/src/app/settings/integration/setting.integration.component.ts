@@ -893,7 +893,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.settingsIntegrationService.savePlaidAccessToken(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body) {
                 this.loadPaymentData();
-            }
+            } else {
+            this.toasty.clearAllToaster();
+            this.toasty.errorToast(response?.message);
+        }
         });
     }
 
