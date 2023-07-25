@@ -4807,10 +4807,10 @@
                     {{ commonLocaleData?.app_create }}
                 </button>
                 <button
-                    *ngIf="queryParams?.stockUniqueName"
+                    *ngIf="queryParams?.stockUniqueName && !activeGroup?.uniqueName"
                     mat-stroked-button
                     class="min-width-100"
-                    (click)="backClicked()"
+                    (click)="backClicked(true)"
                 >
                     {{ commonLocaleData?.app_close }}
                 </button>
