@@ -74,22 +74,19 @@
                                     </div>
                                 </div>
                                 <div *ngIf="taxes?.length" class="row mb-3 mt-2">
-                                    <div class="tax-heading col-md-3 col-sm-3 col-12">
+                                    <!-- <div class="tax-heading col-md-3 col-sm-3 col-12">
                                         <label>{{ commonLocaleData?.app_trn }}:</label>
-                                    </div>
-                                    <div class="tax-dropdown col-md-9 col-sm-9 col-12 linked-entities">
-                                        <sh-select
-                                            [options]="taxes"
-                                            [(ngModel)]="taxNumber"
-                                            (selected)="getVatReport()"
-                                            [defaultValue]="taxNumber"
-                                            [placeholder]="localeData?.select_trn"
-                                            [showClear]="false"
-                                            [multiple]="false"
-                                            [ItemHeight]="67"
-                                            [isRequired]="true"
-                                        >
-                                        </sh-select>
+                                    </div> -->
+                                    <div class="tax-dropdown col-md-12 col-sm-12 col-12 linked-entities">
+                                        <div>
+                                            <dropdown-field
+                                                [label]="commonLocaleData?.app_trn"
+                                                [options]="taxes"
+                                                (selectedOption)="taxNumber = $event.value; getVatReport()"
+                                                [placeholder]="localeData?.select_trn"
+                                                [required]="true"
+                                            ></dropdown-field>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="navbar-header mb-3 mt-3">
@@ -187,6 +184,7 @@
                                                                 </li>
                                                             </ul>
                                                         </li>
+                                                        <li>Cuatom Date</li>
 
                                                         <!-- <li role="menuitem">
                                                             <a
@@ -219,14 +217,62 @@
                                                             </a>
                                                         </li> -->
                                                     </ul>
+
+                                                    <button
+                                                        mat-button
+                                                        [matMenuTriggerFor]="menu"
+                                                        class="datepicker-border"
+                                                    >
+                                                        <ng-container *ngIf="isMonthSelected">
+                                                            {{ dayjs(selectedMonth).format("MMMM YYYY") }}
+                                                        </ng-container>
+                                                        <ng-container *ngIf="!isMonthSelected">
+                                                            {{
+                                                                dayjs(currentPeriod?.from, giddhDateFormat).format(
+                                                                    "DD MMM YYYY"
+                                                                )
+                                                            }}
+                                                            -
+                                                            {{
+                                                                dayjs(currentPeriod?.to, giddhDateFormat).format(
+                                                                    "DD MMM YYYY"
+                                                                )
+                                                            }}
+                                                        </ng-container>
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <mat-menu #menu="matMenu">
+                                                        <button mat-menu-item>
+                                                            {{ commonLocaleData?.app_duration?.quarterly }}
+                                                        </button>
+                                                        <button mat-menu-item>
+                                                            {{ commonLocaleData?.app_duration?.monthly }}
+                                                        </button>
+                                                        <button mat-menu-item>
+                                                            {{ commonLocaleData?.app_duration?.monthly }}
+                                                        </button>
+                                                    </mat-menu>
                                                 </div>
                                             </span>
                                         </div>
+                                        <div>
+                                            <div
+                                                class="input-group custom-datepicker custom-new-datepicker"
+                                                (click)="showGiddhDatepicker($event)"
+                                            >
+                                                <input
+                                                    type="text"
+                                                    name="selectedDateRange"
+                                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                                    class="giddh-datepicker date-range-picker border-radius-2"
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="clearfix" *ngIf="taxNumber">
-                                        <button type="button" class="btn btn-default" (click)="downloadVatReport()">
+                                        <button mat-stroked-button color="primary" (click)="downloadVatReport()">
                                             <i class="icon-download1"></i>
-                                            {{ commonLocaleData?.app_download }}
+                                            {{ commonLocaleData?.app_export }}
                                         </button>
                                     </div>
                                 </div>
@@ -236,7 +282,7 @@
                                             <strong>{{ report.section }}</strong>
                                         </p>
                                         <div class="table-responsive">
-                                            <table class="table basic table-border-bottom mr-t2 on-mobile-view">
+                                            <!-- <table class="table basic table-border-bottom mr-t2 on-mobile-view">
                                                 <thead>
                                                     <tr>
                                                         <th width="5%"></th>
@@ -337,6 +383,88 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
+                                            </table> -->
+
+                                            <!-- mat-table -->
+                                            <table
+                                                mat-table
+                                                [dataSource]="dataSource"
+                                                class="table basic mr-t2 on-mobile-view vat-report-table"
+                                            >
+                                                <ng-container matColumnDef="number">
+                                                    <th mat-header-cell *matHeaderCellDef></th>
+                                                    <td mat-cell *matCellDef="let element">{{ element.number }}</td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="name">
+                                                    <th mat-header-cell *matHeaderCellDef></th>
+                                                    <td mat-cell *matCellDef="let element">
+                                                        <a href="javascript:;">{{ element.name }}</a>
+                                                    </td>
+                                                    <td mat-footer-cell *matFooterCellDef>Total</td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="description">
+                                                    <th mat-header-cell *matHeaderCellDef></th>
+                                                    <td mat-cell *matCellDef="let element">
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            class="text-light invoice-preview"
+                                                            [matTooltip]="'fgxdgndfjng'"
+                                                            [matTooltipPosition]="'above'"
+                                                        >
+                                                            <span class="icon-info text-light"></span>
+                                                        </a>
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="aed_amt">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                                        {{ commonLocaleData?.app_amount }}
+                                                        ({{ activeCompany?.baseCurrency }})
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element" class="text-right">
+                                                        {{ element.aed_amt }}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="vat_amt">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                                        {{ localeData?.vat_amount }}
+                                                        ({{ activeCompany?.baseCurrency }})
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element" class="text-right">
+                                                        {{ element.vat_amt }}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="adjustment">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                                        {{ localeData?.adjustment }}
+                                                        ({{ activeCompany?.baseCurrency }})
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element" class="text-right">
+                                                        {{ element.adjustment }}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="disclaimer">
+                                                    <td mat-footer-cell *matFooterCellDef colspan="2">
+                                                        Please note that the cost of items displayed are completely and
+                                                        totally made up.
+                                                    </td>
+                                                </ng-container>
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                                                <tr
+                                                    mat-footer-row
+                                                    *matFooterRowDef="displayedColumns"
+                                                    class="example-first-footer-row"
+                                                >
+                                                    srfdsg
+                                                </tr>
+                                                <tr
+                                                    mat-footer-row
+                                                    *matFooterRowDef="['disclaimer']"
+                                                    class="example-second-footer-row"
+                                                >
+                                                    dftrwea
+                                                </tr>
                                             </table>
                                         </div>
                                     </div>
@@ -385,3 +513,28 @@
         </div>
     </nav>
 </section>
+
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                [locale]="{ applyLabel: commonLocaleData?.app_done }"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

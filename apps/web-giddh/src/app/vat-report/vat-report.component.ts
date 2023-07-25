@@ -1,6 +1,6 @@
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, } from '@angular/core';
 import { Router } from '@angular/router';
 import { VatReportRequest } from '../models/api-models/Vat';
 import { Store, select } from '@ngrx/store';
@@ -9,7 +9,7 @@ import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
 import { VatService } from "../services/vat.service";
 import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT } from "../shared/helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/defaultDateFormat";
 import { saveAs } from "file-saver";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { IOption } from '../theme/ng-select/ng-select';
@@ -18,6 +18,25 @@ import { SettingsBranchActions } from '../actions/settings/branch/settings.branc
 import { OrganizationType } from '../models/user-login-state';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { cloneDeep } from '../lodash-optimized';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+
+export interface PeriodicElement {
+    number: string;
+    name: string;
+    description: string;
+    aed_amt: string;
+    vat_amt: string;
+    adjustment: string;
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [
+    {number: '1a', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
+    {number: '1b', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
+    {number: '1c', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
+    {number: '1d', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
+    {number: '1e', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
+    {number: '', name: 'Total', description: '', aed_amt: '0.00', vat_amt: 'A=0.00', adjustment: 'B=0.00'},
+]
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
@@ -66,6 +85,36 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public asideGstSidebarMenuState: string = 'in';
     /** this will check mobile screen size */
     public isMobileScreen: boolean = false;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /** Datepicker modal reference */
+    public modalRef: BsModalRef;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerEntryTemplate') public datepickerEntryTemplate: ElementRef;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerVoucherTemplate') public datepickerVoucherTemplate: ElementRef;
+    /** This will store universalDate */
+    public universalDate: any;
+    /** Universal date observer */
+    public universalDate$: Observable<any>;
+    /** This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /** This will store selected date range to use in api */
+    public selectedEntryDateRange: any;
+    /** This will store selected entry date range to show on UI */
+    public selectedEntryDateRangeUi: any;
+    /** This will store selected date range to use in api */
+    public selectedVoucherDateRange: any;
+    /** This will store selected entry date range to show on UI */
+    public selectedVoucherDateRangeUi: any;
+    /*-- mat-table --*/
+    displayedColumns: string[] = ['number', 'name', 'description', 'aed_amt', 'vat_amt', 'adjustment'];
+    dataSource = ELEMENT_DATA;
+
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -76,7 +125,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private cdRef: ChangeDetectorRef,
         private route: Router,
         private settingsBranchAction: SettingsBranchActions,
-        private breakpointObserver: BreakpointObserver
+        private breakpointObserver: BreakpointObserver,
+        private modalService: BsModalService,
     ) {
 
     }
@@ -166,6 +216,14 @@ export class VatReportComponent implements OnInit, OnDestroy {
         if (this.taxNumber) {
             this.getVatReport();
         }
+        /** Universal date observer */
+        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
+            if (dateObj) {
+                this.universalDate = _.cloneDeep(dateObj);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            }
+        });
     }
 
     public ngOnDestroy() {
@@ -338,5 +396,39 @@ export class VatReportComponent implements OnInit, OnDestroy {
      */
     public handleNavigation(): void {
         this.route.navigate(['pages', 'gstfiling']);
+    }
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+    public hideGiddhDatepicker(): void {
+        this.modalRef?.hide();
+    }
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+        }
+    }
+    public entryDateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedEntryDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedEntryDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+        }
     }
 }

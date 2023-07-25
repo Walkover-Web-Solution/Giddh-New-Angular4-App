@@ -14340,3 +14340,29 @@ voucher-component {
         z-index: 99999 !important;
     }
 }
+
+.vat-report {
+    .vat-report-table {
+        tbody {
+            tr {
+                &:last-child {
+                    border-bottom: 0px !important;
+                    td {
+                        background-color: var(--color-wild-sand) !important;
+                        padding: 14px 10px;
+                        font-weight: bold;
+                        border-bottom: 0px !important;
+                        a {
+                            color: var(--color-black) !important;
+                        }
+                        &:hover {
+                        }
+                    }
+                }
+            }
+        }
+        tfoot {
+            display: block !important;
+        }
+    }
+}
