@@ -6,7 +6,7 @@
 >
     <div class="clearfix">
         <mat-tab-group
-            [ngClass]="{ 'tab-integration': true, 'hide-payment-tab': isIciciBankSupportedCountry }"
+            [ngClass]="{ 'tab-integration': true }"
             id="tab-integration"
             animationDuration="0ms"
             [selectedIndex]="selectedTabParent"
@@ -256,7 +256,7 @@
                 </div>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.payment?.tab_heading" [hidden]="isIciciBankSupportedCountry">
+            <mat-tab [label]="localeData?.payment?.tab_heading" *ngIf="isPaymentOptionCountrySupported">
                 <div class="clearfix box">
                     <ng-container *ngIf="isIciciBankSupportedCountry">
                         <ng-template>
