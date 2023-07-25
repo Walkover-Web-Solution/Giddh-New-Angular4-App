@@ -1,9 +1,9 @@
-import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { AmazonSellerClass, CashfreeClass, EmailKeyClass, PaymentClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
@@ -64,8 +64,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     private isSellerUpdate: Observable<boolean> = observableOf(false);
     /** Input mast for number format */
     public inputMaskFormat: string = '';
-    /** To check company country */
-    public isIndianCompany: boolean = true;
     /**This will use for select tab index */
     @Input() public selectedTabParent: number;
     @ViewChild('removegmailintegration', { static: true }) public removegmailintegration: ModalDirective;
@@ -149,14 +147,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     private plaidLinkHandler: PlaidLinkHandler;
     /** This will hold plaid configuration */
     private plaidConfig: PlaidConfig = {
-        apiVersion: "v2",
         env: "sandbox",
-        institution: null,
-        selectAccount: false,
         token: null,
-        webhook: "",
         product: ["auth"],
-        countryCodes: ['GB'],
+        countryCodes: ['US'],
         key: "",
         onSuccess: undefined,
         onExit: undefined
@@ -883,19 +877,44 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public getPlaidSuccessPublicToken(token, metadata) {
-        const updatedData = metadata?.accounts.map(obj => {
-            const { id, ...rest } = obj;
-            return { ...rest, account_id: id };
-        });
-
         let data = {
             public_token: token,
             institution: metadata?.institution,
-            accounts: updatedData
+            accounts: metadata
         }
         this.settingsIntegrationService.plaidAccessToken(data).pipe(take(1)).subscribe(response => {
             this.loadPaymentData();
         });
+    }
+
+    /**
+     * This will use for select bank account only for plaid integration
+     *
+     * @param {*} event
+     * @param {*} bank
+     * @memberof SettingIntegrationComponent
+     */
+    public selectBankAccount(event: any, bank: any): void {
+        if (event) {
+            let request = { bankAccountUniqueName: bank?.iciciDetailsResource?.uniqueName };
+            let accountForm = {
+                accountNumber: bank?.iciciDetailsResource?.accountNumber,
+                accountUniqueName: event?.value,
+                paymentAlerts: [],
+                bankName: 'plaid'
+            };
+            this.settingsIntegrationService.updateAccount(accountForm, request).pipe(take(1)).subscribe(response => {
+                if (response?.status === "success") {
+                    if (response?.body?.message) {
+                        this.toasty.clearAllToaster();
+                        this.toasty.successToast(response?.body?.message);
+                    }
+                } else {
+                    this.toasty.clearAllToaster();
+                    this.toasty.errorToast(response?.message);
+                }
+            });
+        }
     }
 
     /**

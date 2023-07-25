@@ -318,7 +318,7 @@
                             >
                                 <div class="account-info-background width-100 font-15 row">
                                     <div class="col-md-4">
-                                        <span class="field-label">{{ bankAccount?.account?.name }}</span
+                                        <span class="field-label">{{ bankAccount?.bankName }}</span
                                         ><br />
                                         <span class="account-number mt-2 font-15 inline"
                                             ><b>{{ bankAccount?.iciciDetailsResource?.accountNumber }}</b></span
@@ -327,9 +327,21 @@
                                     <div class="col-md-4">
                                         <span class="field-label">{{ localeData?.payment?.linked_account }}</span
                                         ><br />
-                                        <span class="width-100 view-only-field inline">{{
+                                        <span *ngIf="!isOtherCountry" class="width-100 view-only-field inline">{{
                                             bankAccount?.account?.name
                                         }}</span>
+                                        <sh-select
+                                            *ngIf="isOtherCountry"
+                                            class="linked-account"
+                                            name="bankAccountUniqueName"
+                                            [placeholder]="localeData?.payment?.link_account_placeholder"
+                                            [options]="bankAccounts$ | async"
+                                            (selected)="selectBankAccount($event, bankAccount)"
+                                            [(ngModel)]="bankAccount?.account.uniqueName"
+                                            [fixedValue]="bankAccount?.account?.name"
+                                            [defaultValue]="bankAccount?.account?.name"
+                                        >
+                                        </sh-select>
                                     </div>
                                     <span class="mr-l1 action-div action-top" *ngIf="isOtherCountry">
                                         <a
@@ -460,14 +472,14 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <button
+                                            type="button"
+                                            class="btn btn-light-blue bold font-15 mt-2 mr-l15"
+                                            (click)="openCreateNewAccountUserModal(bankAccount)"
+                                        >
+                                            {{ localeData?.payment?.add_more_users }}
+                                        </button>
                                     </ng-container>
-                                    <button
-                                        type="button"
-                                        class="btn btn-light-blue bold font-15 mt-2"
-                                        (click)="openCreateNewAccountUserModal(bankAccount)"
-                                    >
-                                        {{ localeData?.payment?.add_more_users }}
-                                    </button>
                                 </div>
                             </div>
                         </ng-container>

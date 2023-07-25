@@ -23,7 +23,7 @@ import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-le
 export class AccountCreateEditComponent implements OnInit, OnDestroy {
     /** This holds bank account details, If this is passed, it means we are in edit mode */
     @Input() public activeBankAccount: any;
-    /** This will holds other country  */
+    /** This willholds other country  */
     @Input() public isOtherCountry: any;
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
@@ -74,6 +74,8 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public ngOnInit(): void {
+        console.log(this.activeBankAccount);
+
         if (this.activeBankAccount) {
             this.paymentAlerts = this.activeBankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user?.uniqueName);
 
