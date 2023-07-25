@@ -150,14 +150,18 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         env: "sandbox",
         token: null,
         product: ["auth"],
-        countryCodes: ['US'],
+        countryCodes: ['GB'],
         onSuccess: undefined,
         onExit: undefined
     };
     /** List of icici bank supported countries */
-    public iciciBankSupportedCountryList: any[] = ["IN", "NPR", "BT"];
+    public iciciBankSupportedCountryList: any[] = ["IN", "NP", "BT"];
     /** True, if is other country in payment integration */
     public isIciciBankSupportedCountry: boolean = false;
+    /** List of icici bank supported countries */
+    public isCountryPaymentOptionSupported: any[] = ["IN", "NP", "BT", "GB"];
+    /** True, if is other country in payment integration */
+    public isPaymentOptionCountrySupported: boolean = false;
 
     constructor(
         private router: Router,
@@ -276,10 +280,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                if (!this.iciciBankSupportedCountryList.includes(profile.countryV2.alpha2CountryCode)) {
-                    this.isIciciBankSupportedCountry = false;
+                if (this.isCountryPaymentOptionSupported.includes(profile.countryV2.alpha2CountryCode)) {
+                    this.isPaymentOptionCountrySupported = true;
+                    if (this.iciciBankSupportedCountryList.includes(profile.countryV2.alpha2CountryCode)) {
+                        this.isIciciBankSupportedCountry = true;
+                    } else {
+                        this.isIciciBankSupportedCountry = false;
+                    }
                 } else {
-                    this.isIciciBankSupportedCountry = true;
+                    this.isPaymentOptionCountrySupported = false;
+                    this.isIciciBankSupportedCountry = false;
                 }
             }
         });
