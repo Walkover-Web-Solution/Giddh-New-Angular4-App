@@ -3,10 +3,15 @@ import { NgModule } from '@angular/core';
 
 import { ConfirmModalComponent } from './confirm-modal.component';
 import { MatButtonModule } from "@angular/material/button";
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     declarations: [ConfirmModalComponent],
-    imports: [CommonModule, MatButtonModule],
+    imports: [
+        CommonModule, 
+        MatButtonModule,
+        MatDialogModule
+    ],
     exports: [
         ConfirmModalComponent
     ],
