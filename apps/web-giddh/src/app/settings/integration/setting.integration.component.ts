@@ -164,14 +164,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         token: null,
         product: ["auth"],
         countryCodes: ['US'],
-        key: "",
         onSuccess: undefined,
         onExit: undefined
     };
     /** List of icici bank supported countries */
-    public icicBankSupportedCountryList: any[] = ["IN", "NPR", "BT"];
+    public iciciBankSupportedCountryList: any[] = ["IN", "NPR", "BT"];
     /** True, if is other country in payment integration */
-    public isOtherCountry: boolean = false;
+    public isIciciBankSupportedCountry: boolean = false;
 
     constructor(
         private router: Router,
@@ -290,10 +289,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                if (!this.icicBankSupportedCountryList.includes(profile.countryV2.alpha2CountryCode)) {
-                    this.isOtherCountry = true;
+                if (!this.iciciBankSupportedCountryList.includes(profile.countryV2.alpha2CountryCode)) {
+                    this.isIciciBankSupportedCountry = true;
                 } else {
-                    this.isOtherCountry = false;
+                    this.isIciciBankSupportedCountry = false;
                 }
             }
         });
@@ -864,10 +863,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public getPlaidLinkToken(): void {
-        this.settingsIntegrationService.getlPlaidLinkToken().pipe(take(1)).subscribe(response => {
+        this.settingsIntegrationService.getPlaidLinkToken().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body) {
                 this.plaidConfig.token = response.body?.link_token;
-                this.plaidConfig.key = response.body?.link_token;
                 this.plaidLinkService
                     .createPlaid(
                         Object.assign({}, this.plaidConfig, {
@@ -889,13 +887,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {*} metadata
      * @memberof SettingIntegrationComponent
      */
-    public getPlaidSuccessPublicToken(token, metadata) {
+    public getPlaidSuccessPublicToken(token: string, metadata: any) {
         let data = {
             public_token: token,
             institution: metadata?.institution,
             accounts: metadata
         }
-        this.settingsIntegrationService.plaidAccessToken(data).pipe(take(1)).subscribe(response => {
+        this.settingsIntegrationService.savePlaidAccessToken(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.loadPaymentData();
         });
     }
@@ -916,7 +914,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 paymentAlerts: [],
                 bankName: 'plaid'
             };
-            this.settingsIntegrationService.updateAccount(accountForm, request).pipe(take(1)).subscribe(response => {
+            this.settingsIntegrationService.updateAccount(accountForm, request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     if (response?.body?.message) {
                         this.toasty.clearAllToaster();
