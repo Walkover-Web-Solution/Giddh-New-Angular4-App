@@ -352,7 +352,7 @@ export class SettingsIntegrationService {
     }
 
     /**
-     * his will use for get plaid token
+     * This will use for get plaid token
      *
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SettingsIntegrationService
