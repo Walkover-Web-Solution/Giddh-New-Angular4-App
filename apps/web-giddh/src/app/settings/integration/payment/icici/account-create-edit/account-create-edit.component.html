@@ -76,7 +76,7 @@
                         required
                     ></sh-select>
                 </div>
-                <div class="clearfix mr-t1">
+                <div class="clearfix mr-t1" *ngIf="activeBankAccount?.bank !== 'plaid'">
                     <label>{{ localeData?.payment?.payment_updates }}</label>
                     <sh-select
                         formControlName="paymentAlerts"
