@@ -74,8 +74,6 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public ngOnInit(): void {
-        console.log(this.activeBankAccount);
-
         if (this.activeBankAccount) {
             this.paymentAlerts = this.activeBankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user?.uniqueName);
 
