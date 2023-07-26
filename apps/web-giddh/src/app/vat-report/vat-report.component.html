@@ -257,17 +257,17 @@
                                     <!-- mat-table -->
                                     <table
                                         mat-table
-                                        [dataSource]="dataSource"
+                                        [dataSource]="report.sections"
                                         class="table basic mr-t2 on-mobile-view vat-report-table"
                                     >
                                         <ng-container matColumnDef="number">
                                             <th mat-header-cell *matHeaderCellDef></th>
-                                            <td mat-cell *matCellDef="let element">{{ element.number }}</td>
+                                            <td mat-cell *matCellDef="let element">{{ element.section }}</td>
                                         </ng-container>
                                         <ng-container matColumnDef="name">
                                             <th mat-header-cell *matHeaderCellDef></th>
                                             <td mat-cell *matCellDef="let element">
-                                                <a href="javascript:;">{{ element.name }}</a>
+                                                <a href="javascript:;">{{ element.description }}</a>
                                             </td>
                                         </ng-container>
                                         <ng-container matColumnDef="description">
@@ -289,7 +289,8 @@
                                                 ({{ activeCompany?.baseCurrency }})
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-right">
-                                                {{ element.aed_amt }}
+                                                {{ activeCompany.baseCurrencySymbol }}
+                                                {{ element.amount | giddhCurrency }}
                                             </td>
                                         </ng-container>
                                         <ng-container matColumnDef="vat_amt">
@@ -298,7 +299,10 @@
                                                 ({{ activeCompany?.baseCurrency }})
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-right">
-                                                {{ element.vat_amt }}
+                                                <span *ngIf="i === 0">{{ localeData?.a }}</span
+                                                ><span *ngIf="i === 1">{{ localeData?.c }}</span>
+                                                {{ activeCompany.baseCurrencySymbol }}
+                                                {{ element.totalVatAmount | giddhCurrency }}
                                             </td>
                                         </ng-container>
                                         <ng-container matColumnDef="adjustment">
@@ -307,7 +311,8 @@
                                                 ({{ activeCompany?.baseCurrency }})
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-right">
-                                                {{ element.adjustment }}
+                                                {{ activeCompany.baseCurrencySymbol }}
+                                                {{ element.adjustmentAmount | giddhCurrency }}
                                             </td>
                                         </ng-container>
                                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -354,21 +359,21 @@
                                     </table> -->
                                     <table
                                         mat-table
-                                        [netVat]="netVat"
+                                        [netVat]="report.sections"
                                         class="table basic mr-t2 on-mobile-view vat-report-table"
                                     >
                                         <ng-container matColumnDef="number">
-                                            <td mat-cell *matCellDef="let element">{{ reportSections.section }}</td>
+                                            <td mat-cell *matCellDef="let element">{{ element.section }}</td>
                                         </ng-container>
                                         <ng-container matColumnDef="name">
-                                            <td mat-cell *matCellDef="let element">{{ reportSections.description }}</td>
+                                            <td mat-cell *matCellDef="let element">{{ element.description }}</td>
                                         </ng-container>
                                         <ng-container matColumnDef="weight">
                                             <td mat-cell *matCellDef="let element">
-                                                <span class="pr-1">{{ reportSections.toolTip }}</span>
+                                                <span class="pr-1">{{ element.toolTip }}</span>
                                                 <strong
                                                     >{{ activeCompany.baseCurrencySymbol }}
-                                                    {{ reportSections.amount | giddhCurrency }}</strong
+                                                    {{ element.amount | giddhCurrency }}</strong
                                                 >
                                             </td>
                                         </ng-container>
