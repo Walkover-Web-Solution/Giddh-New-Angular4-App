@@ -6,6 +6,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatStepperModule } from '@angular/material/stepper';
+import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/hamburger-menu.module";
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
@@ -28,7 +29,8 @@ import { AddCompanyRoutingModule } from "./add-company.routing.module";
         MatSelectModule,
         FormFieldsModule,
         HamburgerMenuModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        GiddhPageLoaderModule
     ],
     providers: [
 
