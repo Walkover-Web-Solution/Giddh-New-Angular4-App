@@ -390,21 +390,38 @@ a[vr-item]:focus {
         margin-right: 0 !important;
     }
 }
-.universal-date li {
-    display: inline-block;
-    position: relative;
-    border: 1px solid var(--color-white);
-    border-radius: 20px;
-    padding: 0 7px;
-    i {
-        vertical-align: bottom;
+.universal-date {
+    li {
         display: inline-block;
         position: relative;
-        left: 16px;
-        padding: 0 20px;
-        color: var(--color-white);
-        font-size: 20px;
+        border: 1px solid var(--color-white);
+        border-radius: 20px;
+        padding: 0 7px;
+        i {
+            vertical-align: bottom;
+            display: inline-block;
+            position: relative;
+            left: 16px;
+            padding: 0 20px;
+            color: var(--color-white);
+            font-size: 20px;
+        }
     }
+}
+.mega-menu {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 15px;
+    button {
+        color: var(--color-primary-credit) !important;
+    }
+    .create-txt {
+        color: var(--color-abbey);
+    }
+}
+.mat-menu-item {
+    height: 40px !important;
+    line-height: 40px !important;
 }
 
 .universal-date li input {

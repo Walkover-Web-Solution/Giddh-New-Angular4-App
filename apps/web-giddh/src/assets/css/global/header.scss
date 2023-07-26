@@ -1,0 +1,21 @@
+.universal-date {
+    .mat-icon-button {
+        margin: 0 !important;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 15px 0 0 !important;
+        span {
+            color: var(--color-white) !important;
+        }
+        .mat-button-ripple {
+            display: none;
+        }
+    }
+}
+.mat-menu-panel {
+    max-width: 340px !important;
+}
+.mat-menu-content {
+    width: 220px;
+}

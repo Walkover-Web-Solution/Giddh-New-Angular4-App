@@ -57,6 +57,106 @@
                     />
                 </div>
                 <ul class="nav universal-date mr-r1" *ngIf="selectedCompany | async">
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                        <i class="icon-plus"></i>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <span mat-menu-item class="create-txt font-12">Create New</span>
+                        <!-- <button mat-menu-item class="font-weight-bold">Credit</button>
+                        <div class="mega-menu">
+                            <div>
+                                <button mat-menu-item>Invoice</button>
+                                <button mat-menu-item>Bill</button>
+                            </div>
+                            <div>
+                                <button mat-menu-item>Credit Note</button>
+                                <button mat-menu-item>Debit Note</button>
+                            </div>
+                        </div>
+                        <button mat-menu-item class="font-weight-bold">Cash</button>
+                        <div class="mega-menu">
+                            <div>
+                                <button mat-menu-item>Invoice</button>
+                                <button mat-menu-item>Bill</button>
+                            </div>
+                            <div>
+                                <button mat-menu-item>Credit Note</button>
+                                <button mat-menu-item>Debit Note</button>
+                            </div>
+                        </div>
+                        <button mat-menu-item class="font-weight-bold">{{ localeData?.branch_transfer }}</button>
+                        <div class="mega-menu">
+                            <div>
+                                <button mat-menu-item>{{ localeData?.receipt_note }}</button>
+                            </div>
+                            <div>
+                                <button mat-menu-item>{{ localeData?.delivery_challan }}</button>
+                            </div>
+                        </div>
+                        <button mat-menu-item class="font-weight-bold">{{ localeData?.stock }}</button>
+                        <div class="mega-menu">
+                            <div>
+                                <button mat-menu-item>{{ localeData?.product }}</button>
+                                <button mat-menu-item>{{ localeData?.service }}</button>
+                            </div>
+                            <div>
+                                <button mat-menu-item>{{ localeData?.fixed_assets }}</button>
+                            </div>
+                        </div> -->
+                        <!-- <button mat-menu-item [matMenuTriggerFor]="cashinvoice">Cash</button> -->
+                        <!-- <button mat-menu-item>{{ localeData?.bill }}</button> -->
+                        <!-- <button mat-menu-item>{{ localeData?.credit_note }}</button>
+                        <button mat-menu-item>{{ localeData?.debit_note }}</button> -->
+                        <button mat-menu-item [matMenuTriggerFor]="cashinvoice">Credit</button>
+                        <button mat-menu-item [matMenuTriggerFor]="cash">Cash</button>
+                        <button mat-menu-item [matMenuTriggerFor]="cash">Branch Transfer</button>
+                        <button mat-menu-item [matMenuTriggerFor]="stock">Stock</button>
+                        <button mat-menu-item>{{ localeData?.estimate }}</button>
+                        <button mat-menu-item>{{ localeData?.proforma }}</button>
+                        <button mat-menu-item>{{ localeData?.purchase_order }}</button>
+                        <!-- <button mat-menu-item [matMenuTriggerFor]="branch">{{ localeData?.branch_transfer }}</button> -->
+                        <button mat-menu-item>{{ localeData?.manufacturing }}</button>
+                        <!-- <button mat-menu-item [matMenuTriggerFor]="stock">{{ localeData?.stock }}</button> -->
+                    </mat-menu>
+
+                    <mat-menu #cashinvoice="matMenu">
+                        <button mat-menu-item>Invoice</button>
+                        <button mat-menu-item>Bill</button>
+                        <button mat-menu-item>Credit Note</button>
+                        <button mat-menu-item>Debit Note</button>
+                    </mat-menu>
+                    <mat-menu #cash="matMenu">
+                        <button mat-menu-item>Invoice</button>
+                        <button mat-menu-item>Bill</button>
+                        <button mat-menu-item>Credit Note</button>
+                        <button mat-menu-item>Debit Note</button>
+                    </mat-menu>
+                    <mat-menu #branch="matMenu">
+                        <button mat-menu-item>Receipt Note</button>
+                        <button mat-menu-item>Delivery Challan</button>
+                    </mat-menu>
+                    <mat-menu #stock="matMenu">
+                        <button mat-menu-item>Product</button>
+                        <button mat-menu-item>Service</button>
+                        <button mat-menu-item>Fixed Assets</button>
+                    </mat-menu>
+
+                    <!-- <mat-menu #cashinvoice="matMenu">
+                        <button mat-menu-item>Invoice</button>
+                        <button mat-menu-item>{{ localeData?.bill }}</button>
+                        <button mat-menu-item>{{ localeData?.credit_note }}</button>
+                        <button mat-menu-item>{{ localeData?.debit_note }}</button>
+                    </mat-menu>
+                    <mat-menu #branch="matMenu">
+                        <button mat-menu-item>{{ localeData?.receipt_note }}</button>
+                        <button mat-menu-item>{{ localeData?.delivery_challan }}</button>
+                    </mat-menu>
+                    <mat-menu #stock="matMenu">
+                        <button mat-menu-item>{{ localeData?.product }}</button>
+                        <button mat-menu-item>{{ localeData?.service }}</button>
+                        <button mat-menu-item>{{ localeData?.fixed_assets }}</button>
+                    </mat-menu> -->
+
                     <li class="border-none pd-r15 notification" [ngClass]="{ 'mr-0': isTodaysDateSelected }">
                         <i class="icon-bell-new"></i>
                     </li>
