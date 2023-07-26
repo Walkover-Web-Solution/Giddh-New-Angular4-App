@@ -28,14 +28,26 @@ export interface PeriodicElement {
     vat_amt: string;
     adjustment: string;
 }
+export interface NetVatElement {
+    number: string;
+    name: string;
+    description: string;
+    aed_amt: string;
+    vat_amt: string;
+    adjustment: string;
+}
 
 const ELEMENT_DATA: PeriodicElement[] = [
     {number: '1a', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
     {number: '1b', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
     {number: '1c', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
     {number: '1d', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
-    {number: '1e', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
-    {number: '', name: 'Total', description: '', aed_amt: '0.00', vat_amt: 'A=0.00', adjustment: 'B=0.00'},
+    {number: '1e', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'}
+]
+const NET_ELEMENT_DATA: NetVatElement[] = [
+    {number: '1a', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
+    {number: '1b', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
+    {number: '1c', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'}
 ]
 @Component({
     selector: 'app-vat-report',
@@ -56,6 +68,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     @ViewChild('monthWise', { static: true }) public monthWise: BsDropdownDirective;
     @ViewChild('periodDropdown', { static: true }) public periodDropdown;
+    public from: string = dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT);
+    public to: string = dayjs().format(GIDDH_DATE_FORMAT);
     public isMonthSelected: boolean = true;
     public selectedMonth: any = null;
     public currentPeriod: any = {};
@@ -111,9 +125,13 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public selectedVoucherDateRange: any;
     /** This will store selected entry date range to show on UI */
     public selectedVoucherDateRangeUi: any;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
     /*-- mat-table --*/
     displayedColumns: string[] = ['number', 'name', 'description', 'aed_amt', 'vat_amt', 'adjustment'];
     dataSource = ELEMENT_DATA;
+    netdisplayedColumns: string[] = ['number', 'name', 'description', 'aed_amt', 'vat_amt', 'adjustment'];
+    netVat = NET_ELEMENT_DATA;
 
 
     constructor(
@@ -414,21 +432,17 @@ export class VatReportComponent implements OnInit, OnDestroy {
             this.hideGiddhDatepicker();
             return;
         }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-        }
-    }
-    public entryDateSelectedCallback(value?: any): void {
-        if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
-            return;
-        }
-        this.hideGiddhDatepicker();
-        if (value && value.startDate && value.endDate) {
-            this.selectedEntryDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            this.selectedEntryDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 }

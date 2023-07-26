@@ -20,493 +20,370 @@
             </div>
             <div class="invoice-control w-100">
                 <div class="row mr-0 ml-0">
-                    <div class="vat-report w-100" id="setting-tab">
-                        <tabset #staticTabs>
-                            <tab heading="{{ commonLocaleData?.tab_heading }}">
-                                <div
-                                    *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
-                                    class="row mb-3 mt-3"
-                                >
-                                    <div class="tax-heading col-md-3 col-sm-3 col-12">
-                                        <label>{{ commonLocaleData?.app_entity }}:</label>
-                                    </div>
-                                    <div class="tax-dropdown col-md-9 col-sm-9 col-12 linked-entities">
-                                        <div class="form-group">
-                                            <sh-select
-                                                [options]="currentCompanyBranches"
-                                                [(ngModel)]="currentBranch.uniqueName"
-                                                [showClear]="false"
-                                                [ItemHeight]="33"
-                                                width="100%"
-                                                (selected)="handleBranchChange($event)"
-                                                [isFilterEnabled]="true"
-                                                [placeholder]="localeData?.select_entity"
-                                                [fixedValue]="currentBranch?.alias"
-                                            >
-                                                <ng-template #optionTemplate let-option="option">
-                                                    <ng-container>
-                                                        <a href="javascript:void(0)" class="list-item d-flex">
-                                                            <span class="entity-icon">
-                                                                <i
-                                                                    class="icon-branch-icon pull-right"
-                                                                    *ngIf="!option.isCompany"
-                                                                    [tooltip]="commonLocaleData?.app_branch"
-                                                                ></i>
-                                                                <i
-                                                                    class="icon-company-profile pull-right"
-                                                                    *ngIf="option.isCompany"
-                                                                    [tooltip]="commonLocaleData?.app_company"
-                                                                ></i>
-                                                            </span>
-                                                            <span class="entity-details">
-                                                                <div class="item giddh-limit single-line-clamp">
-                                                                    {{ option.label || "-" }}
-                                                                </div>
-                                                                <div class="item-unique giddh-limit single-line-clamp">
-                                                                    {{ option.name || "-" }}
-                                                                </div>
-                                                            </span>
-                                                        </a>
-                                                    </ng-container>
-                                                </ng-template>
-                                            </sh-select>
+                    <div class="vat-report w-100 pd-l15 pd-r15" id="setting-tab">
+                        <div
+                            *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                            class="row mb-3 mt-3"
+                        >
+                            <div class="tax-heading col-md-3 col-sm-3 col-12">
+                                <label>{{ commonLocaleData?.app_entity }}:</label>
+                            </div>
+                            <div class="tax-dropdown col-md-9 col-sm-9 col-12 linked-entities">
+                                <div class="form-group">
+                                    <sh-select
+                                        [options]="currentCompanyBranches"
+                                        [(ngModel)]="currentBranch.uniqueName"
+                                        [showClear]="false"
+                                        [ItemHeight]="33"
+                                        width="100%"
+                                        (selected)="handleBranchChange($event)"
+                                        [isFilterEnabled]="true"
+                                        [placeholder]="localeData?.select_entity"
+                                        [fixedValue]="currentBranch?.alias"
+                                    >
+                                        <ng-template #optionTemplate let-option="option">
+                                            <ng-container>
+                                                <a href="javascript:void(0)" class="list-item d-flex">
+                                                    <span class="entity-icon">
+                                                        <i
+                                                            class="icon-branch-icon pull-right"
+                                                            *ngIf="!option.isCompany"
+                                                            [tooltip]="commonLocaleData?.app_branch"
+                                                        ></i>
+                                                        <i
+                                                            class="icon-company-profile pull-right"
+                                                            *ngIf="option.isCompany"
+                                                            [tooltip]="commonLocaleData?.app_company"
+                                                        ></i>
+                                                    </span>
+                                                    <span class="entity-details">
+                                                        <div class="item giddh-limit single-line-clamp">
+                                                            {{ option.label || "-" }}
+                                                        </div>
+                                                        <div class="item-unique giddh-limit single-line-clamp">
+                                                            {{ option.name || "-" }}
+                                                        </div>
+                                                    </span>
+                                                </a>
+                                            </ng-container>
+                                        </ng-template>
+                                    </sh-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3 mt-3">
+                            <div class="col-lg-10">
+                                <div class="advance-search-by-date date-advance-search">
+                                    <span class="input-wrapper">
+                                        <div
+                                            class="btn-group dropdown"
+                                            dropdown
+                                            [autoClose]="false"
+                                            (isOpenChange)="onOpenChange($event)"
+                                            #periodDropdown="bs-dropdown"
+                                            (clickOutside)="checkIfDatepickerVisible()"
+                                            [attachOutsideOnClick]="true"
+                                        >
+                                            <button mat-button [matMenuTriggerFor]="menu" class="datepicker-border">
+                                                <ng-container *ngIf="isMonthSelected">
+                                                    {{ dayjs(selectedMonth).format("MMMM YYYY") }}
+                                                </ng-container>
+                                                <ng-container *ngIf="!isMonthSelected">
+                                                    {{
+                                                        dayjs(currentPeriod?.from, giddhDateFormat).format(
+                                                            "DD MMM YYYY"
+                                                        )
+                                                    }}
+                                                    -
+                                                    {{
+                                                        dayjs(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY")
+                                                    }}
+                                                </ng-container>
+                                                <span class="caret"></span>
+                                            </button>
+                                            <mat-menu #menu="matMenu">
+                                                <button mat-menu-item>
+                                                    {{ commonLocaleData?.app_duration?.quarterly }}
+                                                </button>
+                                                <button mat-menu-item>
+                                                    {{ commonLocaleData?.app_duration?.monthly }}
+                                                </button>
+                                                <button mat-menu-item>
+                                                    {{ commonLocaleData?.app_duration?.monthly }}
+                                                </button>
+                                            </mat-menu>
                                         </div>
+                                    </span>
+                                    <div
+                                        class="input-group custom-datepicker custom-new-datepicker w-auto"
+                                        (click)="showGiddhDatepicker($event)"
+                                    >
+                                        <input
+                                            type="text"
+                                            name="selectedDateRange"
+                                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                            class="giddh-datepicker date-range-picker border-radius-2"
+                                        />
+                                    </div>
+                                    <div *ngIf="taxes?.length" class="trn-width">
+                                        <dropdown-field
+                                            [label]="commonLocaleData?.app_trn"
+                                            [options]="taxes"
+                                            (selectedOption)="taxNumber = $event.value; getVatReport()"
+                                            [placeholder]="localeData?.select_trn"
+                                            [required]="true"
+                                        ></dropdown-field>
                                     </div>
                                 </div>
-                                <div *ngIf="taxes?.length" class="row mb-3 mt-2">
-                                    <!-- <div class="tax-heading col-md-3 col-sm-3 col-12">
-                                        <label>{{ commonLocaleData?.app_trn }}:</label>
-                                    </div> -->
-                                    <div class="tax-dropdown col-md-12 col-sm-12 col-12 linked-entities">
-                                        <div>
-                                            <dropdown-field
-                                                [label]="commonLocaleData?.app_trn"
-                                                [options]="taxes"
-                                                (selectedOption)="taxNumber = $event.value; getVatReport()"
-                                                [placeholder]="localeData?.select_trn"
-                                                [required]="true"
-                                            ></dropdown-field>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div *ngIf="taxNumber" class="export-btn">
+                                    <button mat-stroked-button color="primary" (click)="downloadVatReport()">
+                                        <i class="icon-download1"></i>
+                                        {{ commonLocaleData?.app_export }}
+                                    </button>
                                 </div>
-                                <div class="navbar-header mb-3 mt-3">
-                                    <div class="d-flex align-items-center tax-engine">
-                                        <span class="d-inline-block mr-2">{{ localeData?.vat_report_period }}</span>
-
-                                        <div class="advance-search-by-date date-advance-search">
-                                            <span class="input-wrapper">
-                                                <div
-                                                    class="btn-group dropdown"
-                                                    dropdown
-                                                    [autoClose]="false"
-                                                    (isOpenChange)="onOpenChange($event)"
-                                                    #periodDropdown="bs-dropdown"
-                                                    (clickOutside)="checkIfDatepickerVisible()"
-                                                    [attachOutsideOnClick]="true"
-                                                >
-                                                    <button
-                                                        id="button-nested"
-                                                        dropdownToggle
-                                                        type="button"
-                                                        class="
-                                                            dropdown
-                                                            clearfix
-                                                            list-title
-                                                            filter-by
-                                                            return-sel
-                                                            font-large
-                                                            dropdown-toggle
-                                                            pull-left
+                            </div>
+                        </div>
+                        <div *ngFor="let report of vatReport; let i = index">
+                            <div class="white-box" *ngIf="i < 2">
+                                <p class="font-15 text-black">
+                                    <strong>{{ report.section }}</strong>
+                                </p>
+                                <div class="table-responsive">
+                                    <!-- <table class="table basic table-border-bottom mr-t2 on-mobile-view">
+                                        <thead>
+                                            <tr>
+                                                <th width="5%"></th>
+                                                <th width="40%"></th>
+                                                <th width="10%"></th>
+                                                <th width="15%" class="text-right">
+                                                    {{ commonLocaleData?.app_amount }}
+                                                    ({{ activeCompany?.baseCurrency }})
+                                                </th>
+                                                <th width="15%" class="text-right">
+                                                    {{ localeData?.vat_amount }} ({{
+                                                        activeCompany?.baseCurrency
+                                                    }})
+                                                </th>
+                                                <th width="15%" class="text-right">
+                                                    {{ localeData?.adjustment }} ({{
+                                                        activeCompany?.baseCurrency
+                                                    }})
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let reportSections of report.sections; let i = index">
+                                                <td>{{ reportSections.section }}</td>
+                                                <td>
+                                                    <a
+                                                        href="javascript:;"
+                                                        (click)="
+                                                            viewVatReportTransactions(reportSections.section)
                                                         "
-                                                        aria-controls="dropdown-nested"
+                                                        >{{ reportSections.description }}</a
                                                     >
-                                                        <ng-container *ngIf="isMonthSelected">
-                                                            {{ dayjs(selectedMonth).format("MMMM YYYY") }}
-                                                        </ng-container>
-                                                        <ng-container *ngIf="!isMonthSelected">
-                                                            {{
-                                                                dayjs(currentPeriod?.from, giddhDateFormat).format(
-                                                                    "DD MMM YYYY"
-                                                                )
-                                                            }}
-                                                            -
-                                                            {{
-                                                                dayjs(currentPeriod?.to, giddhDateFormat).format(
-                                                                    "DD MMM YYYY"
-                                                                )
-                                                            }}
-                                                        </ng-container>
-                                                        <span class="caret"></span>
-                                                    </button>
-                                                    <ul
-                                                        id="dropdown-nested"
-                                                        *dropdownMenu
-                                                        class="dropdown-menu"
-                                                        role="menu"
-                                                        aria-labelledby="button-nested"
-                                                    >
-                                                        <li
-                                                            role="menuitem"
-                                                            dropdown
-                                                            placement="right"
-                                                            [autoClose]="false"
-                                                            #monthWise="bs-dropdown"
-                                                        >
-                                                            <a dropdownToggle class="dropdown-item dropdown-toggle cp">
-                                                                {{ commonLocaleData?.app_month_wise }}
-                                                                <div class="pull-right">
-                                                                    <span class="caret rotate-90"></span>
-                                                                </div>
-                                                            </a>
-                                                            <ul
-                                                                *dropdownMenu
-                                                                class="dropdown-menu month-picker"
-                                                                role="menu"
-                                                                id="monthPicker"
-                                                            >
-                                                                <li role="menuitem">
-                                                                    <a class="dropdown-item" href="javascript:void(0)">
-                                                                        <datepicker
-                                                                            [datepickerMode]="'month'"
-                                                                            name="fromDate"
-                                                                            (click)="$event.stopPropagation()"
-                                                                            [showWeeks]="false"
-                                                                            [minMode]="'month'"
-                                                                            (selectionDone)="
-                                                                                periodChanged($event);
-                                                                                monthWise.hide();
-                                                                                updateDatepickerVisibility('hidden')
-                                                                            "
-                                                                            [ngModel]="selectedMonth"
-                                                                        >
-                                                                        </datepicker>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </li>
-                                                        <li>Cuatom Date</li>
-
-                                                        <!-- <li role="menuitem">
-                                                            <a
-                                                                class="dropdown-item"
-                                                                href="javascript:void(0)"
-                                                                (click)="
-                                                                    updateDatepickerVisibility('visible');
-                                                                    monthWise.hide()
-                                                                "
-                                                            >
-                                                                <label for="daterangeInput" class="d-block cp"
-                                                                    >{{ commonLocaleData?.app_custom_range }}
-                                                                    <div class="pull-right">
-                                                                        <span class="caret rotate-90"></span>
-                                                                    </div>
-                                                                </label>
-                                                                <input
-                                                                    id="daterangeInput"
-                                                                    type="text"
-                                                                    name="daterangeInput"
-                                                                    [options]="{ 'autoApply': true }"
-                                                                    #dateRangePickerCmp
-                                                                    daterangepicker
-                                                                    class="form-control daterangePicker"
-                                                                    (applyDaterangepicker)="periodChanged($event)"
-                                                                    (hideDaterangepicker)="
-                                                                        updateDatepickerVisibility('hidden')
-                                                                    "
-                                                                />
-                                                            </a>
-                                                        </li> -->
-                                                    </ul>
-
-                                                    <button
-                                                        mat-button
-                                                        [matMenuTriggerFor]="menu"
-                                                        class="datepicker-border"
-                                                    >
-                                                        <ng-container *ngIf="isMonthSelected">
-                                                            {{ dayjs(selectedMonth).format("MMMM YYYY") }}
-                                                        </ng-container>
-                                                        <ng-container *ngIf="!isMonthSelected">
-                                                            {{
-                                                                dayjs(currentPeriod?.from, giddhDateFormat).format(
-                                                                    "DD MMM YYYY"
-                                                                )
-                                                            }}
-                                                            -
-                                                            {{
-                                                                dayjs(currentPeriod?.to, giddhDateFormat).format(
-                                                                    "DD MMM YYYY"
-                                                                )
-                                                            }}
-                                                        </ng-container>
-                                                        <span class="caret"></span>
-                                                    </button>
-                                                    <mat-menu #menu="matMenu">
-                                                        <button mat-menu-item>
-                                                            {{ commonLocaleData?.app_duration?.quarterly }}
-                                                        </button>
-                                                        <button mat-menu-item>
-                                                            {{ commonLocaleData?.app_duration?.monthly }}
-                                                        </button>
-                                                        <button mat-menu-item>
-                                                            {{ commonLocaleData?.app_duration?.monthly }}
-                                                        </button>
-                                                    </mat-menu>
-                                                </div>
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <div
-                                                class="input-group custom-datepicker custom-new-datepicker"
-                                                (click)="showGiddhDatepicker($event)"
-                                            >
-                                                <input
-                                                    type="text"
-                                                    name="selectedDateRange"
-                                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                                    class="giddh-datepicker date-range-picker border-radius-2"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix" *ngIf="taxNumber">
-                                        <button mat-stroked-button color="primary" (click)="downloadVatReport()">
-                                            <i class="icon-download1"></i>
-                                            {{ commonLocaleData?.app_export }}
-                                        </button>
-                                    </div>
-                                </div>
-                                <div *ngFor="let report of vatReport; let i = index">
-                                    <div class="white-box" *ngIf="i < 2">
-                                        <p class="font-15 text-black">
-                                            <strong>{{ report.section }}</strong>
-                                        </p>
-                                        <div class="table-responsive">
-                                            <!-- <table class="table basic table-border-bottom mr-t2 on-mobile-view">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="5%"></th>
-                                                        <th width="40%"></th>
-                                                        <th width="10%"></th>
-                                                        <th width="15%" class="text-right">
-                                                            {{ commonLocaleData?.app_amount }}
-                                                            ({{ activeCompany?.baseCurrency }})
-                                                        </th>
-                                                        <th width="15%" class="text-right">
-                                                            {{ localeData?.vat_amount }} ({{
-                                                                activeCompany?.baseCurrency
-                                                            }})
-                                                        </th>
-                                                        <th width="15%" class="text-right">
-                                                            {{ localeData?.adjustment }} ({{
-                                                                activeCompany?.baseCurrency
-                                                            }})
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr *ngFor="let reportSections of report.sections; let i = index">
-                                                        <td>{{ reportSections.section }}</td>
-                                                        <td>
-                                                            <a
-                                                                href="javascript:;"
-                                                                (click)="
-                                                                    viewVatReportTransactions(reportSections.section)
-                                                                "
-                                                                >{{ reportSections.description }}</a
-                                                            >
-                                                        </td>
-                                                        <td class="invoice-preview">
-                                                            <a
-                                                                href="javascript:void(0)"
-                                                                class="text-light invoice-preview"
-                                                                *ngIf="reportSections.toolTip"
-                                                                tooltip="{{ reportSections.toolTip }}"
-                                                                ><span class="icon-info text-light"></span
-                                                            ></a>
-                                                        </td>
-                                                        <td
-                                                            data-title="{{ commonLocaleData?.app_amount }} ({{
-                                                                activeCompany.baseCurrencySymbol
-                                                            }})"
-                                                            class="text-right"
-                                                        >
-                                                            {{ activeCompany.baseCurrencySymbol }}
-                                                            {{ reportSections.amount | giddhCurrency }}
-                                                        </td>
-                                                        <td
-                                                            data-title="{{ localeData?.vat_amount }} ({{
-                                                                activeCompany.baseCurrencySymbol
-                                                            }})"
-                                                            class="text-right"
-                                                        >
-                                                            {{ activeCompany.baseCurrencySymbol }}
-                                                            {{ reportSections.vatAmount | giddhCurrency }}
-                                                        </td>
-                                                        <td
-                                                            data-title="{{ localeData?.adjustment }} ({{
-                                                                activeCompany.baseCurrencySymbol
-                                                            }})"
-                                                            class="text-right"
-                                                        >
-                                                            {{ activeCompany.baseCurrencySymbol }}
-                                                            {{ reportSections.adjustmentAmount | giddhCurrency }}
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="last-row">
-                                                        <td>&nbsp;</td>
-                                                        <td>{{ commonLocaleData?.app_total }}</td>
-                                                        <td>
-                                                            <a
-                                                                href="javascript:void(0)"
-                                                                class="text-light"
-                                                                *ngIf="report.toolTip"
-                                                                tooltip="{{ report.toolTip }}"
-                                                                ><span class="icon-info text-light"></span
-                                                            ></a>
-                                                        </td>
-                                                        <td class="text-right">
-                                                            {{ activeCompany.baseCurrencySymbol }}
-                                                            {{ report.totalAmount | giddhCurrency }}
-                                                        </td>
-                                                        <td class="text-right">
-                                                            <span *ngIf="i === 0">{{ localeData?.a }}</span
-                                                            ><span *ngIf="i === 1">{{ localeData?.c }}</span>
-                                                            {{ activeCompany.baseCurrencySymbol }}
-                                                            {{ report.totalVatAmount | giddhCurrency }}
-                                                        </td>
-                                                        <td class="text-right">
-                                                            <span *ngIf="i === 0">{{ localeData?.b }}</span
-                                                            ><span *ngIf="i === 1">{{ localeData?.d }}</span>
-                                                            {{ activeCompany.baseCurrencySymbol }}
-                                                            {{ report.totalAdjustmentAmount | giddhCurrency }}
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table> -->
-
-                                            <!-- mat-table -->
-                                            <table
-                                                mat-table
-                                                [dataSource]="dataSource"
-                                                class="table basic mr-t2 on-mobile-view vat-report-table"
-                                            >
-                                                <ng-container matColumnDef="number">
-                                                    <th mat-header-cell *matHeaderCellDef></th>
-                                                    <td mat-cell *matCellDef="let element">{{ element.number }}</td>
-                                                </ng-container>
-                                                <ng-container matColumnDef="name">
-                                                    <th mat-header-cell *matHeaderCellDef></th>
-                                                    <td mat-cell *matCellDef="let element">
-                                                        <a href="javascript:;">{{ element.name }}</a>
-                                                    </td>
-                                                    <td mat-footer-cell *matFooterCellDef>Total</td>
-                                                </ng-container>
-                                                <ng-container matColumnDef="description">
-                                                    <th mat-header-cell *matHeaderCellDef></th>
-                                                    <td mat-cell *matCellDef="let element">
-                                                        <a
-                                                            href="javascript:void(0)"
-                                                            class="text-light invoice-preview"
-                                                            [matTooltip]="'fgxdgndfjng'"
-                                                            [matTooltipPosition]="'above'"
-                                                        >
-                                                            <span class="icon-info text-light"></span>
-                                                        </a>
-                                                    </td>
-                                                </ng-container>
-                                                <ng-container matColumnDef="aed_amt">
-                                                    <th mat-header-cell *matHeaderCellDef class="text-right">
-                                                        {{ commonLocaleData?.app_amount }}
-                                                        ({{ activeCompany?.baseCurrency }})
-                                                    </th>
-                                                    <td mat-cell *matCellDef="let element" class="text-right">
-                                                        {{ element.aed_amt }}
-                                                    </td>
-                                                </ng-container>
-                                                <ng-container matColumnDef="vat_amt">
-                                                    <th mat-header-cell *matHeaderCellDef class="text-right">
-                                                        {{ localeData?.vat_amount }}
-                                                        ({{ activeCompany?.baseCurrency }})
-                                                    </th>
-                                                    <td mat-cell *matCellDef="let element" class="text-right">
-                                                        {{ element.vat_amt }}
-                                                    </td>
-                                                </ng-container>
-                                                <ng-container matColumnDef="adjustment">
-                                                    <th mat-header-cell *matHeaderCellDef class="text-right">
-                                                        {{ localeData?.adjustment }}
-                                                        ({{ activeCompany?.baseCurrency }})
-                                                    </th>
-                                                    <td mat-cell *matCellDef="let element" class="text-right">
-                                                        {{ element.adjustment }}
-                                                    </td>
-                                                </ng-container>
-                                                <ng-container matColumnDef="disclaimer">
-                                                    <td mat-footer-cell *matFooterCellDef colspan="2">
-                                                        Please note that the cost of items displayed are completely and
-                                                        totally made up.
-                                                    </td>
-                                                </ng-container>
-                                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-                                                <tr
-                                                    mat-footer-row
-                                                    *matFooterRowDef="displayedColumns"
-                                                    class="example-first-footer-row"
+                                                </td>
+                                                <td class="invoice-preview">
+                                                    <a
+                                                        href="javascript:void(0)"
+                                                        class="text-light invoice-preview"
+                                                        *ngIf="reportSections.toolTip"
+                                                        tooltip="{{ reportSections.toolTip }}"
+                                                        ><span class="icon-info text-light"></span
+                                                    ></a>
+                                                </td>
+                                                <td
+                                                    data-title="{{ commonLocaleData?.app_amount }} ({{
+                                                        activeCompany.baseCurrencySymbol
+                                                    }})"
+                                                    class="text-right"
                                                 >
-                                                    srfdsg
-                                                </tr>
-                                                <tr
-                                                    mat-footer-row
-                                                    *matFooterRowDef="['disclaimer']"
-                                                    class="example-second-footer-row"
+                                                    {{ activeCompany.baseCurrencySymbol }}
+                                                    {{ reportSections.amount | giddhCurrency }}
+                                                </td>
+                                                <td
+                                                    data-title="{{ localeData?.vat_amount }} ({{
+                                                        activeCompany.baseCurrencySymbol
+                                                    }})"
+                                                    class="text-right"
                                                 >
-                                                    dftrwea
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="white-box" *ngIf="i == 2">
-                                        <p class="font-15 text-black">
-                                            <strong>{{ report.section }}</strong>
-                                        </p>
-                                        <div class="table-responsive">
-                                            <table
-                                                class="
-                                                    table-hide-title table
-                                                    basic
-                                                    table-border-bottom
-                                                    mr-t2
-                                                    on-mobile-view
-                                                "
-                                            >
-                                                <tbody>
-                                                    <tr *ngFor="let reportSections of report.sections; let i = index">
-                                                        <td width="5%">{{ reportSections.section }}</td>
-                                                        <td width="50%">{{ reportSections.description }}</td>
-                                                        <td width="45%">
-                                                            <span class="pr-1">{{ reportSections.toolTip }}</span>
-                                                            <strong
-                                                                >{{ activeCompany.baseCurrencySymbol }}
-                                                                {{ reportSections.amount | giddhCurrency }}</strong
-                                                            >
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                                                    {{ activeCompany.baseCurrencySymbol }}
+                                                    {{ reportSections.vatAmount | giddhCurrency }}
+                                                </td>
+                                                <td
+                                                    data-title="{{ localeData?.adjustment }} ({{
+                                                        activeCompany.baseCurrencySymbol
+                                                    }})"
+                                                    class="text-right"
+                                                >
+                                                    {{ activeCompany.baseCurrencySymbol }}
+                                                    {{ reportSections.adjustmentAmount | giddhCurrency }}
+                                                </td>
+                                            </tr>
+                                            <tr class="last-row">
+                                                <td>&nbsp;</td>
+                                                <td>{{ commonLocaleData?.app_total }}</td>
+                                                <td>
+                                                    <a
+                                                        href="javascript:void(0)"
+                                                        class="text-light"
+                                                        *ngIf="report.toolTip"
+                                                        tooltip="{{ report.toolTip }}"
+                                                        ><span class="icon-info text-light"></span
+                                                    ></a>
+                                                </td>
+                                                <td class="text-right">
+                                                    {{ activeCompany.baseCurrencySymbol }}
+                                                    {{ report.totalAmount | giddhCurrency }}
+                                                </td>
+                                                <td class="text-right">
+                                                    <span *ngIf="i === 0">{{ localeData?.a }}</span
+                                                    ><span *ngIf="i === 1">{{ localeData?.c }}</span>
+                                                    {{ activeCompany.baseCurrencySymbol }}
+                                                    {{ report.totalVatAmount | giddhCurrency }}
+                                                </td>
+                                                <td class="text-right">
+                                                    <span *ngIf="i === 0">{{ localeData?.b }}</span
+                                                    ><span *ngIf="i === 1">{{ localeData?.d }}</span>
+                                                    {{ activeCompany.baseCurrencySymbol }}
+                                                    {{ report.totalAdjustmentAmount | giddhCurrency }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table> -->
+
+                                    <!-- mat-table -->
+                                    <table
+                                        mat-table
+                                        [dataSource]="dataSource"
+                                        class="table basic mr-t2 on-mobile-view vat-report-table"
+                                    >
+                                        <ng-container matColumnDef="number">
+                                            <th mat-header-cell *matHeaderCellDef></th>
+                                            <td mat-cell *matCellDef="let element">{{ element.number }}</td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="name">
+                                            <th mat-header-cell *matHeaderCellDef></th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <a href="javascript:;">{{ element.name }}</a>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="description">
+                                            <th mat-header-cell *matHeaderCellDef></th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <a
+                                                    href="javascript:void(0)"
+                                                    class="text-light invoice-preview"
+                                                    [matTooltip]="'fgxdgndfjng'"
+                                                    [matTooltipPosition]="'above'"
+                                                >
+                                                    <span class="icon-info text-light"></span>
+                                                </a>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="aed_amt">
+                                            <th mat-header-cell *matHeaderCellDef class="text-right">
+                                                {{ commonLocaleData?.app_amount }}
+                                                ({{ activeCompany?.baseCurrency }})
+                                            </th>
+                                            <td mat-cell *matCellDef="let element" class="text-right">
+                                                {{ element.aed_amt }}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="vat_amt">
+                                            <th mat-header-cell *matHeaderCellDef class="text-right">
+                                                {{ localeData?.vat_amount }}
+                                                ({{ activeCompany?.baseCurrency }})
+                                            </th>
+                                            <td mat-cell *matCellDef="let element" class="text-right">
+                                                {{ element.vat_amt }}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="adjustment">
+                                            <th mat-header-cell *matHeaderCellDef class="text-right">
+                                                {{ localeData?.adjustment }}
+                                                ({{ activeCompany?.baseCurrency }})
+                                            </th>
+                                            <td mat-cell *matCellDef="let element" class="text-right">
+                                                {{ element.adjustment }}
+                                            </td>
+                                        </ng-container>
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                                        <ng-container matColumnDef="disclaimer">
+                                            <td mat-footer-cell *matFooterCellDef colspan="6">Total</td>
+                                        </ng-container>
+                                        <tr
+                                            mat-footer-row
+                                            *matFooterRowDef="['disclaimer']"
+                                            class="example-second-footer-row"
+                                        ></tr>
+                                    </table>
                                 </div>
-                                <div
-                                    *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length"
-                                    class="no-data no-report"
-                                >
-                                    <h1>{{ localeData?.no_trn_available }}</h1>
+                            </div>
+                            <div class="white-box" *ngIf="i == 2">
+                                <p class="font-15 text-black">
+                                    <strong>{{ report.section }}</strong>
+                                </p>
+                                <div class="table-responsive">
+                                    <!-- <table
+                                        class="
+                                            table-hide-title table
+                                            basic
+                                            table-border-bottom
+                                            mr-t2
+                                            on-mobile-view
+                                        "
+                                    >
+                                        <tbody>
+                                            <tr *ngFor="let reportSections of report.sections; let i = index">
+                                                <td width="5%">{{ reportSections.section }}</td>
+                                                <td width="50%">{{ reportSections.description }}</td>
+                                                <td width="45%">
+                                                    <span class="pr-1">{{ reportSections.toolTip }}</span>
+                                                    <strong
+                                                        >{{ activeCompany.baseCurrencySymbol }}
+                                                        {{ reportSections.amount | giddhCurrency }}</strong
+                                                    >
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table> -->
+                                    <table
+                                        mat-table
+                                        [netVat]="netVat"
+                                        class="table basic mr-t2 on-mobile-view vat-report-table"
+                                    >
+                                        <ng-container matColumnDef="number">
+                                            <td mat-cell *matCellDef="let element">{{ reportSections.section }}</td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="name">
+                                            <td mat-cell *matCellDef="let element">{{ reportSections.description }}</td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="weight">
+                                            <td mat-cell *matCellDef="let element">
+                                                <span class="pr-1">{{ reportSections.toolTip }}</span>
+                                                <strong
+                                                    >{{ activeCompany.baseCurrencySymbol }}
+                                                    {{ reportSections.amount | giddhCurrency }}</strong
+                                                >
+                                            </td>
+                                        </ng-container>
+                                        <tr mat-header-row *matHeaderRowDef="netdisplayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: netdisplayedColumns"></tr>
+                                    </table>
                                 </div>
-                            </tab>
-                        </tabset>
+                            </div>
+                        </div>
+                        <div
+                            *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length"
+                            class="no-data no-report"
+                        >
+                            <h1>{{ localeData?.no_trn_available }}</h1>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -521,14 +398,13 @@
                 [inputStartDate]="selectedDateRange?.startDate"
                 [inputEndDate]="selectedDateRange?.endDate"
                 [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions"
+                [ranges]="datePickerOption"
                 [selectedRangeLabel]="selectedRangeLabel"
                 [showCustomRangeLabel]="true"
                 [showClearButton]="false"
                 [showCancel]="true"
                 [linkedCalendars]="true"
                 [showDropdowns]="true"
-                [locale]="{ applyLabel: commonLocaleData?.app_done }"
                 (rangeClicked)="dateSelectedCallback($event)"
                 (datesUpdated)="dateSelectedCallback($event)"
                 [keepCalendarOpeningWithRange]="false"

@@ -23,6 +23,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     declarations: [
@@ -53,7 +54,8 @@ import { MatMenuModule } from '@angular/material/menu';
         MatTooltipModule,
         MatButtonModule,
         MatTableModule,
-        MatMenuModule
+        MatMenuModule,
+        MatDialogModule
     ],
     exports: [
         VatReportRoutingModule
