@@ -321,7 +321,12 @@
                                         <span class="field-label">{{ bankAccount?.bankName }}</span
                                         ><br />
                                         <span class="account-number mt-2 font-15 inline"
-                                            ><b>{{ bankAccount?.iciciDetailsResource?.accountNumber }}</b></span
+                                            ><b
+                                                ><span *ngIf="!isIciciBankSupportedCountry"
+                                                    >{{ commonLocaleData?.app_ac }} #</span
+                                                >
+                                                {{ bankAccount?.iciciDetailsResource?.accountNumber }}</b
+                                            ></span
                                         >
                                     </div>
                                     <div class="col-md-4">
