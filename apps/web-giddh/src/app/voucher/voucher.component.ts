@@ -898,7 +898,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.isDefaultLoad = true;
 
             if (params['invoiceType']) {
-
+                if (params['invoiceType'] === VoucherTypeEnum.cashBill || params['invoiceType'] === VoucherTypeEnum.cashCreditNote || params['invoiceType'] === VoucherTypeEnum.cashDebitNote || params['invoiceType'] === VoucherTypeEnum.cashSales) {
+                    this.isCashInvoice = true;
+                    this.isCashBankAccount = true;
+                }
                 // Close account side bar when create from cmd + k
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
@@ -2044,7 +2047,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public prepareInvoiceTypeFlags() {
         this.isSalesInvoice = this.invoiceType === VoucherTypeEnum.sales;
-        this.isCashInvoice = this.invoiceType === VoucherTypeEnum.cash;
+        this.isCashInvoice = (this.invoiceType === VoucherTypeEnum.cashCreditNote || this.invoiceType === VoucherTypeEnum.cash || this.invoiceType === VoucherTypeEnum.cashDebitNote || this.invoiceType === VoucherTypeEnum.cashBill || this.invoiceType === VoucherTypeEnum.cashSales);
         this.isCreditNote = this.invoiceType === VoucherTypeEnum.creditNote;
         this.isDebitNote = this.invoiceType === VoucherTypeEnum.debitNote;
         this.isPurchaseInvoice = this.invoiceType === VoucherTypeEnum.purchase;
@@ -2885,7 +2888,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
-     * This Function is used to close Aside Menu Sidebar 
+     * This Function is used to close Aside Menu Sidebar
      *
      * @memberof VoucherComponent
      */
@@ -4735,6 +4738,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public getAllLastInvoices() {
+        let invoiceType = this.invoiceType;
         if (this.isProformaInvoice || this.isEstimateInvoice) {
             let filterRequest: ProformaFilter = new ProformaFilter();
             filterRequest.sortBy = this.isProformaInvoice ? 'proformaDate' : 'estimateDate';
@@ -4748,7 +4752,19 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             request.sort = 'desc';
             request.count = 5;
             request.isLastInvoicesRequest = true;
-            this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.voucherUtilityService.parseVoucherType(this.invoiceType)));
+            if (this.invoiceType === VoucherTypeEnum.cashBill) {
+                invoiceType = VoucherTypeEnum.purchase;
+            }
+            if (this.invoiceType === VoucherTypeEnum.cashCreditNote) {
+                invoiceType = VoucherTypeEnum.creditNote;
+            }
+            if (this.invoiceType === VoucherTypeEnum.cashDebitNote) {
+                invoiceType = VoucherTypeEnum.debitNote;
+            }
+            if (this.invoiceType === VoucherTypeEnum.cashSales) {
+                invoiceType = VoucherTypeEnum.sales;
+            }
+            this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.voucherUtilityService.parseVoucherType(invoiceType)));
         }
     }
 
@@ -5834,6 +5850,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public focusInCustomerName() {
+
         if (this.isCashInvoice) {
             setTimeout(() => {
                 if (this.inputCustomerName && this.inputCustomerName.nativeElement) {
@@ -8037,9 +8054,22 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     private initializeCurrentVoucherForm(): void {
+        let invoiceType = this.invoiceType;
+        if (this.invoiceType === VoucherTypeEnum.cashBill) {
+            invoiceType = VoucherTypeEnum.purchase;
+        }
+        if (this.invoiceType === VoucherTypeEnum.cashCreditNote) {
+            invoiceType = VoucherTypeEnum.creditNote;
+        }
+        if (this.invoiceType === VoucherTypeEnum.cashDebitNote) {
+            invoiceType = VoucherTypeEnum.debitNote;
+        }
+        if (this.invoiceType === VoucherTypeEnum.cashSales) {
+            invoiceType = VoucherTypeEnum.sales;
+        }
         if (this.voucherApiVersion === 2) {
             // Load the voucher form only for company that supports new voucher APIs
-            this.currentVoucherFormDetails = this.voucherUtilityService.prepareVoucherForm(this.invoiceType);
+            this.currentVoucherFormDetails = this.voucherUtilityService.prepareVoucherForm(invoiceType);
             this.getItemColumns();
         } else {
             this.currentVoucherFormDetails = undefined;

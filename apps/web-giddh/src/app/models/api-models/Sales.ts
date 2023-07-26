@@ -21,7 +21,11 @@ export enum VoucherTypeEnum {
     'generateEstimate' = 'estimates',
     'cash' = 'cash',
     'receipt' = 'receipt',
-    'payment' = 'payment'
+    'payment' = 'payment',
+    'cashDebitNote' = 'cash debit note',
+    'cashCreditNote' = 'cash credit note',
+    'cashSales' = 'cash sales',
+    'cashBill' = 'cash bill'
 }
 
 export enum ActionTypeAfterVoucherGenerateOrUpdate {
@@ -81,7 +85,35 @@ export const VOUCHER_TYPE_LIST: any[] = [
         additional: {
             label: 'Estimate (Beta)'
         }
-    }
+    },
+    {
+        value: VoucherTypeEnum.cashCreditNote,
+        label: 'Cash Credit Note',
+        additional: {
+            label: 'Cash Credit Note'
+        }
+    },
+    {
+        value: VoucherTypeEnum.cashDebitNote,
+        label: 'Cash Debit Note',
+        additional: {
+            label: 'Cash Debit Note'
+        }
+    },
+    {
+        value: VoucherTypeEnum.cashBill,
+        label: 'Cash Bill',
+        additional: {
+            label: 'Cash Bill'
+        }
+    },
+    {
+        value: VoucherTypeEnum.cashSales,
+        label: 'Cash Sales',
+        additional: {
+            label: 'Cash Sales'
+        }
+    },
 ];
 
 export interface IStockUnit {

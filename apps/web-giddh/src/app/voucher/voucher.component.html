@@ -185,6 +185,11 @@
                                                             (isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
+                                                                invoiceType !== 'cashDebitNote' &&
+                                                                invoiceType !== 'cashCreditNote' &&
+                                                                invoiceType !== 'cashBill' &&
+                                                                invoiceType !== 'cashSales' &&
+                                                                invoiceType !== 'cashDebitNote' &&
                                                                 invoiceType !== 'purchase' &&
                                                                 (voucherApiVersion === 1 ||
                                                                     (voucherApiVersion === 2 &&
@@ -230,7 +235,12 @@
                                                             isEinvoiceGenerated ||
                                                             (isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
-                                                                invoiceType !== 'cash')
+                                                                invoiceType !== 'cash' &&
+                                                                invoiceType !== 'cashDebitNote' &&
+                                                                invoiceType !== 'cashCreditNote' &&
+                                                                invoiceType !== 'cashBill' &&
+                                                                invoiceType !== 'cashSales' &&
+                                                                invoiceType !== 'cashDebitNote')
                                                         "
                                                     ></input-field>
                                                 </ng-container>
