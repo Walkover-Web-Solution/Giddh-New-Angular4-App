@@ -162,6 +162,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isCountryPaymentOptionSupported: any[] = ["IN", "NP", "BT", "GB"];
     /** True, if is other country in payment integration */
     public isPaymentOptionCountrySupported: boolean = false;
+/** True, if is add or manage group form outside */
+    public isAddAndManageOpenedFromOutside:boolean = false;
 
     constructor(
         private router: Router,
@@ -304,14 +306,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.activeCompany = activeCompany;
             }
         });
-        this.store.pipe(select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(response => {
-            if (!response) {
-                this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response?.referrer === 'payment') {
+        this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(response => {
+            if (!response && this.isAddAndManageOpenedFromOutside) {
+                this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(resp => {
+                    if (resp?.referrer === 'payment') {
                         this.loadDefaultBankAccountsSuggestions();
                     }
                 });
             }
+            this.isAddAndManageOpenedFromOutside = response;
         });
     }
 
@@ -620,6 +623,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadPaymentData(event?: any): void {
+        this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(result => {
+            this.isAddAndManageOpenedFromOutside = result;
+        });
         if (event && event instanceof TabDirective || !event) {
             this.loadDefaultBankAccountsSuggestions();
             this.getAllBankAccounts();
