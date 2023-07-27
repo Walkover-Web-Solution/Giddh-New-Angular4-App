@@ -7,8 +7,9 @@
 >
     <giddh-page-loader *ngIf="(showLoader && isUpdateMode) || isShowLoader"></giddh-page-loader>
     <div [ngStyle]="{ 'display': (!isUpdateMode || !showLoader) && !isShowLoader ? 'block' : 'none' }">
+        <div class="d-flex border-bottom mobile-view-padding"></div>
         <!-- region page change menu -->
-        <div class="d-flex border-bottom mobile-view-padding">
+        <!-- <div class="d-flex border-bottom mobile-view-padding">
             <hamburger-menu
                 [pageHeading]="(isCashInvoice ? localeData?.invoice_types?.cash : getInvoiceType()) | titlecase"
             >
@@ -63,7 +64,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- endregion -->
         <!-- region update mode loader-->
         <ng-container *ngIf="isUpdateDataInProcess">
@@ -3384,6 +3385,14 @@
                                         </div>
                                     </div>
                                     <!--region balance due for non-purchase-->
+                                    {{ !hideDepositSection }}
+                                    {{ isSalesInvoice }}
+                                    {{ currentVoucherFormDetails?.depositAllowed }}
+                                    {{ isPurchaseInvoice }}
+                                    {{ isCreditNote }}
+                                    {{ isPendingVoucherType }}
+                                    {{ isDebitNote }}
+                                    {{ isCashInvoice }}
                                     <div
                                         class="table-row"
                                         *ngIf="
