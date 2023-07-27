@@ -3,7 +3,7 @@ import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { AmazonSellerClass, CashfreeClass, EmailKeyClass, PaymentClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
@@ -177,7 +177,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private settingsIntegrationService: SettingsIntegrationService,
         private searchService: SearchService,
         private salesService: SalesService,
-        private plaidLinkService: NgxPlaidLinkService
+        private plaidLinkService: NgxPlaidLinkService,
+        private activateRoute: ActivatedRoute
 
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
@@ -301,6 +302,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
+            }
+        });
+        this.store.pipe(select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(response => {
+            if (!response) {
+                this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.referrer === 'payment') {
+                        this.loadDefaultBankAccountsSuggestions();
+                    }
+                });
             }
         });
     }
@@ -894,9 +904,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             if (response?.status === "success" && response?.body) {
                 this.loadPaymentData();
             } else {
-            this.toasty.clearAllToaster();
-            this.toasty.errorToast(response?.message);
-        }
+                this.toasty.clearAllToaster();
+                this.toasty.errorToast(response?.message);
+            }
         });
     }
 
