@@ -256,7 +256,7 @@
                 </div>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.payment?.tab_heading" *ngIf="isPaymentOptionCountrySupported">
+            <mat-tab [label]="localeData?.payment?.tab_heading">
                 <div class="clearfix box">
                     <ng-container *ngIf="isIciciBankSupportedCountry">
                         <ng-template>
