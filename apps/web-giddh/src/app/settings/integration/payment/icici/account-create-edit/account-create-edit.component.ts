@@ -24,7 +24,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
     /** This holds bank account details, If this is passed, it means we are in edit mode */
     @Input() public activeBankAccount: any;
     /** This willholds other country  */
-    @Input() public isOtherCountry: any;
+    @Input() public isIciciBankSupportedCountry: boolean;
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /** This emits true if bank accounts list needs refresh */
@@ -293,7 +293,16 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
 
             let request = { bankAccountUniqueName: this.activeBankAccount?.iciciDetailsResource?.uniqueName };
 
-            this.settingsIntegrationService.updateAccount(this.accountForm.value, request).pipe(take(1)).subscribe(response => {
+            let accountFormObj;
+            if (!this.isIciciBankSupportedCountry) {
+                accountFormObj = {
+                    accountNumber: this.accountForm.get('accountNumber')?.value,
+                    accountUniqueName: this.accountForm.get('accountUniqueName')?.value,
+                    paymentAlerts: [],
+                    bankName: 'plaid'
+                };
+            }
+            this.settingsIntegrationService.updateAccount(!this.isIciciBankSupportedCountry ? accountFormObj :this.accountForm.value, request).pipe(take(1)).subscribe(response => {
                 if (response?.status === "success") {
                     this.accountForm.markAsPristine();
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();

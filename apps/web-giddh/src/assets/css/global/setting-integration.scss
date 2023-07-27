@@ -1,0 +1,6 @@
+#tab-integration {
+    .mat-tab-body-wrapper {
+        overflow: auto !important;
+        min-height: calc(100vh - 214px);
+    }
+}

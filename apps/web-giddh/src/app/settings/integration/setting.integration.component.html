@@ -575,6 +575,7 @@
                     [activeBankAccount]="activeBankAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
                     (closeModalEvent)="closeEditAccountModal()"
+                    [isIciciBankSupportedCountry]="isIciciBankSupportedCountry"
                 >
                 </icici-account-create-edit>
             </div>
@@ -586,7 +587,6 @@
                 <icici-payor-account-create-edit
                     [commonLocaleData]="commonLocaleData"
                     [activeBankAccount]="activeBankAccount"
-                    [isIciciBankSupportedCountry]="isIciciBankSupportedCountry"
                     (getAllBankAccounts)="getAllBankAccounts()"
                     (closeModalEvent)="closeCreateNewAccountUserModal()"
                 ></icici-payor-account-create-edit>
@@ -599,7 +599,6 @@
                 <icici-payor-account-create-edit
                     [commonLocaleData]="commonLocaleData"
                     [activeBankAccount]="activeBankAccount"
-                    [isIciciBankSupportedCountry]="isIciciBankSupportedCountry"
                     [activePayorAccount]="activePayorAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
                     (closeModalEvent)="closeEditAccountUserModal()"
