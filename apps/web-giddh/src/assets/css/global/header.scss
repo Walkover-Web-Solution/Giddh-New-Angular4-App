@@ -4,7 +4,7 @@
         width: 30px;
         height: 30px;
         line-height: 30px;
-        padding: 0 15px 0 0 !important;
+        // padding: 0 40px 0 0 !important;
         span {
             color: var(--color-white) !important;
         }
@@ -14,8 +14,8 @@
     }
 }
 .mat-menu-panel {
-    max-width: 340px !important;
+    max-width: 450px !important;
 }
 .mat-menu-content {
-    width: 220px;
+    width: 450px;
 }

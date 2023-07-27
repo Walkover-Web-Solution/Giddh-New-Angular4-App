@@ -62,7 +62,7 @@
                     </button>
                     <mat-menu #menu="matMenu">
                         <span mat-menu-item class="create-txt font-12">Create New</span>
-                        <!-- <button mat-menu-item class="font-weight-bold">Credit</button>
+                        <!-- <button mat-menu-item class="">Credit</button>
                         <div class="mega-menu">
                             <div>
                                 <button mat-menu-item>Invoice</button>
@@ -73,7 +73,7 @@
                                 <button mat-menu-item>Debit Note</button>
                             </div>
                         </div>
-                        <button mat-menu-item class="font-weight-bold">Cash</button>
+                        <button mat-menu-item class="">Cash</button>
                         <div class="mega-menu">
                             <div>
                                 <button mat-menu-item>Invoice</button>
@@ -84,7 +84,7 @@
                                 <button mat-menu-item>Debit Note</button>
                             </div>
                         </div>
-                        <button mat-menu-item class="font-weight-bold">{{ localeData?.branch_transfer }}</button>
+                        <button mat-menu-item class="">{{ localeData?.branch_transfer }}</button>
                         <div class="mega-menu">
                             <div>
                                 <button mat-menu-item>{{ localeData?.receipt_note }}</button>
@@ -93,7 +93,7 @@
                                 <button mat-menu-item>{{ localeData?.delivery_challan }}</button>
                             </div>
                         </div>
-                        <button mat-menu-item class="font-weight-bold">{{ localeData?.stock }}</button>
+                        <button mat-menu-item class="">{{ localeData?.stock }}</button>
                         <div class="mega-menu">
                             <div>
                                 <button mat-menu-item>{{ localeData?.product }}</button>
@@ -104,41 +104,318 @@
                             </div>
                         </div> -->
                         <!-- <button mat-menu-item [matMenuTriggerFor]="cashinvoice">Cash</button> -->
-                        <!-- <button mat-menu-item>{{ localeData?.bill }}</button> -->
-                        <!-- <button mat-menu-item>{{ localeData?.credit_note }}</button>
-                        <button mat-menu-item>{{ localeData?.debit_note }}</button> -->
-                        <button mat-menu-item [matMenuTriggerFor]="cashinvoice">Credit</button>
-                        <button mat-menu-item [matMenuTriggerFor]="cash">Cash</button>
-                        <button mat-menu-item [matMenuTriggerFor]="cash">Branch Transfer</button>
-                        <button mat-menu-item [matMenuTriggerFor]="stock">Stock</button>
+                        <!-- <button mat-menu-item>Cash</button>
+                        <button mat-menu-item>{{ localeData?.bill }}</button>
+                        <button mat-menu-item>{{ localeData?.credit_note }}</button>
+                        <button mat-menu-item>{{ localeData?.debit_note }}</button>
                         <button mat-menu-item>{{ localeData?.estimate }}</button>
                         <button mat-menu-item>{{ localeData?.proforma }}</button>
-                        <button mat-menu-item>{{ localeData?.purchase_order }}</button>
+                        <button mat-menu-item>{{ localeData?.purchase_order }}</button> -->
                         <!-- <button mat-menu-item [matMenuTriggerFor]="branch">{{ localeData?.branch_transfer }}</button> -->
-                        <button mat-menu-item>{{ localeData?.manufacturing }}</button>
+                        <!-- <button mat-menu-item>{{ localeData?.branch_transfer }}</button>
+                        <button mat-menu-item>{{ localeData?.manufacturing }}</button> -->
                         <!-- <button mat-menu-item [matMenuTriggerFor]="stock">{{ localeData?.stock }}</button> -->
-                    </mat-menu>
-
-                    <mat-menu #cashinvoice="matMenu">
-                        <button mat-menu-item>Invoice</button>
-                        <button mat-menu-item>Bill</button>
-                        <button mat-menu-item>Credit Note</button>
-                        <button mat-menu-item>Debit Note</button>
-                    </mat-menu>
-                    <mat-menu #cash="matMenu">
-                        <button mat-menu-item>Invoice</button>
-                        <button mat-menu-item>Bill</button>
-                        <button mat-menu-item>Credit Note</button>
-                        <button mat-menu-item>Debit Note</button>
-                    </mat-menu>
-                    <mat-menu #branch="matMenu">
-                        <button mat-menu-item>Receipt Note</button>
-                        <button mat-menu-item>Delivery Challan</button>
-                    </mat-menu>
-                    <mat-menu #stock="matMenu">
-                        <button mat-menu-item>Product</button>
-                        <button mat-menu-item>Service</button>
-                        <button mat-menu-item>Fixed Assets</button>
+                        <!-- <button mat-menu-item>{{ localeData?.stock }}</button> -->
+                        <div class="menu-dropdown-wrapper">
+                            <div>
+                                <div class="mr-t2 mr-b05">
+                                    <span>
+                                        <i class="icon-credit-note-new mr-r1"></i>
+                                    </span>
+                                    <span class="">Credit</span>
+                                </div>
+                                <mat-list>
+                                    <mat-list-item>
+                                        <a href="javascript:;"
+                                            >Invoice
+                                            <span class="right-arrow">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    version="1.1"
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                >
+                                                    <path
+                                                        d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <a href="javascript:;"
+                                            >Bill
+                                            <span class="right-arrow">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    version="1.1"
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                >
+                                                    <path
+                                                        d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <a href="javascript:;"
+                                            >Credit Note
+                                            <span class="right-arrow">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    version="1.1"
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                >
+                                                    <path
+                                                        d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <a href="javascript:;"
+                                            >Debit Note
+                                            <span class="right-arrow">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    version="1.1"
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                >
+                                                    <path
+                                                        d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                            <div>
+                                <div class="mr-t2 mr-b05">
+                                    <span>
+                                        <i class="icon-credit-note-new mr-r1"></i>
+                                    </span>
+                                    <span class="">Cash</span>
+                                </div>
+                                <mat-list>
+                                    <mat-list-item>
+                                        <a href="javascript:;"
+                                            >Invoice
+                                            <span class="right-arrow">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    version="1.1"
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                >
+                                                    <path
+                                                        d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <a href="javascript:;"
+                                            >Bill
+                                            <span class="right-arrow">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    version="1.1"
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                >
+                                                    <path
+                                                        d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <a href="javascript:;"
+                                            >Credit Note
+                                            <span class="right-arrow">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    version="1.1"
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                >
+                                                    <path
+                                                        d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <a href="javascript:;"
+                                            >Debit Note
+                                            <span class="right-arrow">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    version="1.1"
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                >
+                                                    <path
+                                                        d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                            <div>
+                                <div class="mr-t2 mr-b05">
+                                    <span>
+                                        <i class="icon-branch-transfer mr-r1"></i>
+                                    </span>
+                                    <span class="">Branch Transfer</span>
+                                </div>
+                                <mat-list>
+                                    <mat-list-item>
+                                        <a href="javascript:;"
+                                            >Receipt Note
+                                            <span class="right-arrow">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    version="1.1"
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                >
+                                                    <path
+                                                        d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <a href="javascript:;"
+                                            >Delivery Challan
+                                            <span class="right-arrow">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    version="1.1"
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                >
+                                                    <path
+                                                        d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                            <div>
+                                <div class="mr-t2 mr-b05">
+                                    <span>
+                                        <i class="icon-stock mr-r1"></i>
+                                    </span>
+                                    <span class="">Stock</span>
+                                </div>
+                                <mat-list>
+                                    <mat-list-item>
+                                        <a href="javascript:;"
+                                            >Product
+                                            <span class="right-arrow">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    version="1.1"
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                >
+                                                    <path
+                                                        d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <a href="javascript:;"
+                                            >Service
+                                            <span class="right-arrow">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    version="1.1"
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                >
+                                                    <path
+                                                        d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <a href="javascript:;"
+                                            >Fixed Assets
+                                            <span class="right-arrow">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    version="1.1"
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                >
+                                                    <path
+                                                        d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                            <div class="mr-t2 mr-b05">
+                                <span>
+                                    <i class="icon-estimate-new mr-r1"></i>
+                                </span>
+                                <span class="">Estimate</span>
+                            </div>
+                            <div class="mr-t2 mr-b05">
+                                <span>
+                                    <i class="icon-proforma mr-r1"></i>
+                                </span>
+                                <span class="">Proforma</span>
+                            </div>
+                            <div class="mr-t2 mr-b05">
+                                <span>
+                                    <i class="icon-purchase-order mr-r1"></i>
+                                </span>
+                                <span class="">Purchase Order</span>
+                            </div>
+                            <div class="mr-t2 mr-b05">
+                                <span>
+                                    <i class="icon-manufacturing1 mr-r1"></i>
+                                </span>
+                                <span class="">Manufacturing</span>
+                            </div>
+                        </div>
                     </mat-menu>
 
                     <!-- <mat-menu #cashinvoice="matMenu">
