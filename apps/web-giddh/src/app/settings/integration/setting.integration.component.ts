@@ -147,10 +147,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     private plaidLinkHandler: PlaidLinkHandler;
     /** This will hold plaid configuration */
     private plaidConfig: PlaidConfig = {
-        env: "sandbox",
+        env: "production",
         token: null,
-        product: ["auth"],
-        countryCodes: ['GB'],
+        product: ["auth","transactions"],
         onSuccess: undefined,
         onExit: undefined
     };
@@ -889,6 +888,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         this.plaidLinkHandler = handler;
                         this.plaidLinkHandler.open();
                     });
+            } else {
+                this.toasty.clearAllToaster();
+                this.toasty.errorToast(response?.message);
             }
         });
     }
