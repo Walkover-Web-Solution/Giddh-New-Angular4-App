@@ -186,11 +186,6 @@
                                                             (isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
-                                                                invoiceType !== 'cashDebitNote' &&
-                                                                invoiceType !== 'cashCreditNote' &&
-                                                                invoiceType !== 'cashBill' &&
-                                                                invoiceType !== 'cashSales' &&
-                                                                invoiceType !== 'cashDebitNote' &&
                                                                 invoiceType !== 'purchase' &&
                                                                 (voucherApiVersion === 1 ||
                                                                     (voucherApiVersion === 2 &&
@@ -237,11 +232,9 @@
                                                             (isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
-                                                                invoiceType !== 'cashDebitNote' &&
-                                                                invoiceType !== 'cashCreditNote' &&
-                                                                invoiceType !== 'cashBill' &&
-                                                                invoiceType !== 'cashSales' &&
-                                                                invoiceType !== 'cashDebitNote')
+                                                                invoiceType !== 'credit note' &&
+                                                                invoiceType !== 'debit note' &&
+                                                                invoiceType !== 'purchase')
                                                         "
                                                     ></input-field>
                                                 </ng-container>
