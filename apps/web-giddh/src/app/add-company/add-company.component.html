@@ -5,7 +5,7 @@
         (localeData)="localeData = $event"
         (commonLocaleData)="commonLocaleData = $event"
     >
-        <hamburger-menu></hamburger-menu>
+        <hamburger-menu *ngIf="companiesList?.length"></hamburger-menu>
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
@@ -34,6 +34,7 @@
                                     [type]="'text'"
                                     formControlName="name"
                                     [showError]="isFormSubmitted && !firstStepForm.get('name')?.value"
+                                    [maxlength]="100"
                                 >
                                 </input-field>
                             </div>
@@ -284,6 +285,13 @@
                             </button>
                             <button mat-stroked-button color="primary" (click)="onSubmit()">
                                 {{ commonLocaleData?.app_submit }}
+                            </button>
+                            <button
+                                *ngIf="companiesList?.length === 0"
+                                mat-stroked-button
+                                (click)="openLogoutConfirmationDialog()"
+                            >
+                                {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
                     </form>
