@@ -1709,11 +1709,12 @@
                                             <div
                                                 class="form-group invoice-due-label"
                                                 *ngIf="
-                                                    currentVoucherFormDetails?.dueDate ||
-                                                    isSalesInvoice ||
-                                                    isPurchaseInvoice ||
-                                                    isProformaInvoice ||
-                                                    isEstimateInvoice
+                                                    (currentVoucherFormDetails?.dueDate ||
+                                                        isSalesInvoice ||
+                                                        isPurchaseInvoice ||
+                                                        isProformaInvoice ||
+                                                        isEstimateInvoice) &&
+                                                    !isCashInvoice
                                                 "
                                                 [ngClass]="{ 'due-invoice-parent-form': isPurchaseInvoice }"
                                             >
