@@ -160,7 +160,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     private plaidLinkHandler: PlaidLinkHandler;
     /** This will hold plaid configuration */
     private plaidConfig: PlaidConfig = {
-        env: "development",
+        env: "sandbox",
         token: null,
         product: ["auth","transactions"],
         onSuccess: undefined,
