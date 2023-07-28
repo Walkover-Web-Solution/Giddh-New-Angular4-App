@@ -20,35 +20,22 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { cloneDeep } from '../lodash-optimized';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
-export interface PeriodicElement {
-    number: string;
-    name: string;
-    description: string;
-    aed_amt: string;
-    vat_amt: string;
-    adjustment: string;
-}
-export interface NetVatElement {
-    number: string;
-    name: string;
-    description: string;
-    aed_amt: string;
-    vat_amt: string;
-    adjustment: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-    {number: '1a', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
-    {number: '1b', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
-    {number: '1c', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
-    {number: '1d', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
-    {number: '1e', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'}
-]
-const NET_ELEMENT_DATA: NetVatElement[] = [
-    {number: '1a', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
-    {number: '1b', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'},
-    {number: '1c', name: 'Standard Rated Supplies In Abu Dhabi', description: 'LTS', aed_amt: '0.00', vat_amt: '0.00', adjustment: '0.00'}
-]
+// export interface PeriodicElement {
+//     number: string;
+//     name: string;
+//     description: string;
+//     aed_amt: string;
+//     vat_amt: string;
+//     adjustment: string;
+// }
+// export interface PeriodicElement {
+//     number: string;
+//     name: string;
+//     description: string;
+//     aed_amt: string;
+//     vat_amt: string;
+//     adjustment: string;
+// }
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
@@ -129,9 +116,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /*-- mat-table --*/
     displayedColumns: string[] = ['number', 'name', 'description', 'aed_amt', 'vat_amt', 'adjustment'];
-    dataSource = ELEMENT_DATA;
-    netdisplayedColumns: string[] = ['number', 'name', 'description', 'aed_amt', 'vat_amt', 'adjustment'];
-    netVat = NET_ELEMENT_DATA;
+    netdisplayedColumns: string[] = ['number', 'description', 'tooltip'];
 
 
     constructor(
@@ -252,6 +237,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     }
 
     public getVatReport(event?: any) {
+        console.log(event)
         if (event && event.value) {
             this.taxNumber = event.value;
         }
@@ -268,11 +254,12 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 if (res) {
                     if (res.status === 'success') {
                         this.vatReport = res.body?.sections;
-                        this.cdRef.detectChanges();
+                        
                     } else {
                         this.toasty.errorToast(res.message);
                     }
                 }
+                this.cdRef.detectChanges();
             });
         }
     }

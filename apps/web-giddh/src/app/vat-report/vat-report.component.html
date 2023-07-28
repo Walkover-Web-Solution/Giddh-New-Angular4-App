@@ -69,6 +69,17 @@
                                         </ng-template>
                                     </sh-select>
                                 </div>
+                                <!-- <dropdown-field
+                                    [label]="commonLocaleData?.app_entity"
+                                    [options]="currentCompanyBranches"
+                                    [showClear]="false"
+                                    [ItemHeight]="33"
+                                    width="100%"
+                                    (selectedOption)="currentBranch.uniqueName = $event.value; handleBranchChange($event)"
+                                    [isFilterEnabled]="true"
+                                    [placeholder]="localeData?.select_entity"
+                                    [fixedValue]="currentBranch?.alias"
+                                ></dropdown-field> -->
                             </div>
                         </div>
                         <div class="row mb-3 mt-3">
@@ -105,12 +116,30 @@
                                                 <button mat-menu-item>
                                                     {{ commonLocaleData?.app_duration?.quarterly }}
                                                 </button>
-                                                <button mat-menu-item>
+                                                <button mat-menu-item [matMenuTriggerFor]="datemonth">
                                                     {{ commonLocaleData?.app_duration?.monthly }}
                                                 </button>
                                                 <button mat-menu-item>
                                                     {{ commonLocaleData?.app_duration?.monthly }}
                                                 </button>
+                                            </mat-menu>
+                                            <mat-menu #datemonth="matMenu" class="datemonth">
+                                                <div>
+                                                    <datepicker
+                                                        [datepickerMode]="'month'"
+                                                        name="fromDate"
+                                                        (click)="$event.stopPropagation()"
+                                                        [showWeeks]="false"
+                                                        [minMode]="'month'"
+                                                        (selectionDone)="
+                                                            periodChanged($event);
+                                                            monthWise?.hide();
+                                                            updateDatepickerVisibility('hidden')
+                                                        "
+                                                        [ngModel]="selectedMonth"
+                                                    >
+                                                    </datepicker>
+                                                </div>
                                             </mat-menu>
                                         </div>
                                     </span>
@@ -129,7 +158,7 @@
                                         <dropdown-field
                                             [label]="commonLocaleData?.app_trn"
                                             [options]="taxes"
-                                            (selectedOption)="taxNumber = $event.value; getVatReport()"
+                                            (selectedOption)="getVatReport($event)"
                                             [placeholder]="localeData?.select_trn"
                                             [required]="true"
                                         ></dropdown-field>
@@ -151,7 +180,7 @@
                                     <strong>{{ report.section }}</strong>
                                 </p>
                                 <div class="table-responsive">
-                                    <table class="table basic table-border-bottom mr-t2 on-mobile-view">
+                                    <!-- <table class="table basic table-border-bottom mr-t2 on-mobile-view">
                                         <thead>
                                             <tr>
                                                 <th width="5%"></th>
@@ -246,10 +275,10 @@
                                                 </td>
                                             </tr>
                                         </tbody>
-                                    </table>
+                                    </table> -->
 
                                     <!-- mat-table -->
-                                    <!-- <table
+                                    <table
                                         mat-table
                                         [dataSource]="report.sections"
                                         class="table basic mr-t2 on-mobile-view vat-report-table"
@@ -263,12 +292,9 @@
                                             <td mat-cell *matCellDef="let element">
                                                 <a
                                                     href="javascript:;"
-                                                    (click)="
-                                                        viewVatReportTransactions(element.section)
-                                                    "
-                                                >{{ element.description }}
-                                                </a
-                                            >
+                                                    (click)="viewVatReportTransactions(element.section)"
+                                                    >{{ element.description }}
+                                                </a>
                                             </td>
                                         </ng-container>
                                         <ng-container matColumnDef="description">
@@ -277,7 +303,7 @@
                                                 <a
                                                     href="javascript:void(0)"
                                                     class="text-light invoice-preview"
-                                                    [matTooltip]="'fgxdgndfjng'"
+                                                    [matTooltip]="report.toolTip"
                                                     [matTooltipPosition]="'above'"
                                                 >
                                                     <span class="icon-info text-light"></span>
@@ -327,7 +353,7 @@
                                             *matFooterRowDef="['disclaimer']"
                                             class="example-second-footer-row"
                                         ></tr>
-                                    </table> -->
+                                    </table>
                                 </div>
                             </div>
                             <div class="white-box" *ngIf="i == 2">
@@ -360,16 +386,19 @@
                                     </table> -->
                                     <table
                                         mat-table
-                                        [netVat]="report.sections"
-                                        class="table basic mr-t2 on-mobile-view vat-report-table"
+                                        [dataSource]="report.sections"
+                                        class="table-hide-title table basic table-border-bottom mr-t2 on-mobile-view"
                                     >
                                         <ng-container matColumnDef="number">
+                                            <th mat-header-cell *matHeaderCellDef></th>
                                             <td mat-cell *matCellDef="let element">{{ element.section }}</td>
                                         </ng-container>
-                                        <ng-container matColumnDef="name">
+                                        <ng-container matColumnDef="description">
+                                            <th mat-header-cell *matHeaderCellDef></th>
                                             <td mat-cell *matCellDef="let element">{{ element.description }}</td>
                                         </ng-container>
-                                        <ng-container matColumnDef="weight">
+                                        <ng-container matColumnDef="tooltip">
+                                            <th mat-header-cell *matHeaderCellDef></th>
                                             <td mat-cell *matCellDef="let element">
                                                 <span class="pr-1">{{ element.toolTip }}</span>
                                                 <strong

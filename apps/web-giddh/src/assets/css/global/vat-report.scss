@@ -23,3 +23,17 @@
         }
     }
 }
+.gst-sidebar-open {
+    .mat-menu-panel {
+        max-width: 300px !important;
+        .mat-menu-content {
+            width: 300px;
+            overflow: hidden;
+        }
+    }
+}
+.table-hide-title {
+    thead {
+        display: none !important;
+    }
+}

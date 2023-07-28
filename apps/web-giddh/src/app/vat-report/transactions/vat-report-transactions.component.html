@@ -76,7 +76,6 @@
                         </tr>
                     </tbody>
                 </table> -->
-
                 <table
                     mat-table
                     [dataSource]="vatReportTransactions.results"
@@ -93,7 +92,7 @@
                         <td mat-cell *matCellDef="let element">
                             <a
                                 href="javascript:;"
-                                [ngClass]="{ 'noclick': !item.voucherNumber && item.voucherType !== 'purchase' }"
+                                [ngClass]="{ 'noclick': !element.voucherNumber && element.voucherType !== 'purchase' }"
                                 (click)="onSelectInvoice(item)"
                                 >{{ element.voucherNumber ? element.voucherNumber : "-" }}</a
                             >
