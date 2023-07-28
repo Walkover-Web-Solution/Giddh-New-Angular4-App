@@ -301,18 +301,3 @@
         </ng-container>
     </ng-container>
 </div>
-<!-- popup for the company confirm -->
-<ng-template #companyConfirmModal>
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <confirm-modal
-                [title]="localeData?.logout"
-                [body]="localeData?.create_company_close"
-                (successCallBack)="logoutUser()"
-                (cancelCallBack)="closeDialog()"
-            >
-            </confirm-modal>
-        </div>
-    </div>
-</ng-template>
-<!-- popup end -->

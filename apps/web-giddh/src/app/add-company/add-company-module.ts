@@ -12,7 +12,6 @@ import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
 import { AddCompanyComponent } from "./add-company.component";
 import { AddCompanyRoutingModule } from "./add-company.routing.module";
-import { ConfirmModalModule } from '../theme/confirm-modal';
 
 @NgModule({
     declarations: [
@@ -31,8 +30,7 @@ import { ConfirmModalModule } from '../theme/confirm-modal';
         FormFieldsModule,
         HamburgerMenuModule,
         TranslateDirectiveModule,
-        GiddhPageLoaderModule,
-        ConfirmModalModule
+        GiddhPageLoaderModule
     ],
     providers: [
 

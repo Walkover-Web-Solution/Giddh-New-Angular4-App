@@ -23,6 +23,7 @@ import { PageLeaveUtilityService } from "../services/page-leave-utility.service"
 import { MatDialog } from "@angular/material/dialog";
 import { VerifyMobileActions } from "../actions/verify-mobile.actions";
 import { AuthService } from "../theme/ng-social-login-module/index";
+import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 @Component({
     selector: 'add-company',
     templateUrl: './add-company.component.html',
@@ -31,8 +32,6 @@ import { AuthService } from "../theme/ng-social-login-module/index";
 })
 
 export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
-    /** Instance of entry confirmation modal */
-    @ViewChild('companyConfirmModal', { static: false }) public companyConfirmModal: any;
     @ViewChild('stepper') stepperIcon: any;
     /** Mobile Number state instance */
     @ViewChild('mobileNo', { static: false }) mobileNo: ElementRef;
@@ -202,7 +201,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /**Observable to login with social account */
     public isLoggedInWithSocialAccount$: Observable<boolean>;
     /** List of companies */
-    public companiesList = [];
+    public companiesList: any[] = [];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -955,7 +954,23 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public openLogoutConfirmationDialog(): void {
-        this.dialog?.open(this.companyConfirmModal);
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '40%',
+            data: {
+                title: this.localeData?.logout,
+                body: this.localeData?.create_company_close,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.logoutUser();
+            } else {
+                this.closeDialog()
+            }
+        });
     }
 
     /**
