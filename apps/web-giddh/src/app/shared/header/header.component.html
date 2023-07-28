@@ -57,7 +57,158 @@
                     />
                 </div>
                 <ul class="nav universal-date mr-r1" *ngIf="selectedCompany | async">
-                    <li class="border-none pd-r15 notification" [ngClass]="{ 'mr-0': isTodaysDateSelected }">
+                    <button mat-icon-button [matMenuTriggerFor]="menu" class="icon-circle">
+                        <i class="icon-plus"></i>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <div (click)="$event.stopPropagation()">
+                            <span class="create-txt font-12 d-block">
+                                <a href="javascript:;"> Create New </a>
+                            </span>
+                            <div class="menu-dropdown-wrapper">
+                                <div>
+                                    <div class="mr-t2 mr-b05 d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <span class="d-flex">
+                                                <i class="icon-credit-note-new mr-r1"></i>
+                                            </span>
+                                            <span
+                                                >{{ localeData?.credit }}
+                                                <a
+                                                    href="javascript:;"
+                                                    [matTooltip]="'Information'"
+                                                    [matTooltipPosition]="'above'"
+                                                >
+                                                    <i class="icon-info mr-l15"></i>
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <span class="dot d-block"></span>
+                                            <a href="javascript:;"> {{ localeData?.invoice }} </a>
+                                        </mat-list-item>
+                                        <mat-list-item>
+                                            <span class="dot d-block"></span>
+                                            <a href="javascript:;"> {{ localeData?.bill }} </a>
+                                        </mat-list-item>
+                                        <mat-list-item>
+                                            <span class="dot d-block"></span>
+                                            <a href="javascript:;"> {{ localeData?.credit_note }} </a>
+                                        </mat-list-item>
+                                        <mat-list-item>
+                                            <span class="dot d-block"></span>
+                                            <a href="javascript:;"> {{ localeData?.debit_note }} </a>
+                                        </mat-list-item>
+                                    </mat-list>
+                                </div>
+                                <div>
+                                    <div class="mr-t2 mr-b05 d-flex align-items-center">
+                                        <span class="d-flex">
+                                            <i class="icon-credit-note-new mr-r1"></i>
+                                        </span>
+                                        <span
+                                            >{{ localeData?.cash }}
+                                            <a
+                                                href="javascript:;"
+                                                [matTooltip]="'Information'"
+                                                [matTooltipPosition]="'above'"
+                                            >
+                                                <i class="icon-info mr-l15"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <span class="dot d-block"></span>
+                                            <a href="javascript:;"> {{ localeData?.invoice }} </a>
+                                        </mat-list-item>
+                                        <mat-list-item>
+                                            <span class="dot d-block"></span>
+                                            <a href="javascript:;">{{ localeData?.bill }} </a>
+                                        </mat-list-item>
+                                        <mat-list-item>
+                                            <span class="dot d-block"></span>
+                                            <a href="javascript:;"> {{ localeData?.credit_note }} </a>
+                                        </mat-list-item>
+                                        <mat-list-item>
+                                            <span class="dot d-block"></span>
+                                            <a href="javascript:;"> {{ localeData?.debit_note }} </a>
+                                        </mat-list-item>
+                                    </mat-list>
+                                </div>
+                                <div>
+                                    <div class="mr-t2 mr-b05 d-flex align-items-center">
+                                        <span class="d-flex">
+                                            <i class="icon-branch-transfer mr-r1"></i>
+                                        </span>
+                                        <span class=""> {{ localeData?.branch_transfer }} </span>
+                                    </div>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <span class="dot d-block"></span>
+                                            <a href="javascript:;"> {{ localeData?.receipt_note }} </a>
+                                        </mat-list-item>
+                                        <mat-list-item>
+                                            <span class="dot d-block"></span>
+                                            <a href="javascript:;"> {{ localeData?.delivery_challan }} </a>
+                                        </mat-list-item>
+                                    </mat-list>
+                                </div>
+                                <div>
+                                    <div class="mr-t2 mr-b05 d-flex align-items-center">
+                                        <span class="d-flex">
+                                            <i class="icon-stock mr-r1"></i>
+                                        </span>
+                                        <span> {{ localeData?.stock }} </span>
+                                    </div>
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <span class="dot d-block"></span>
+                                            <a href="javascript:;"> {{ localeData?.product }} </a>
+                                        </mat-list-item>
+                                        <mat-list-item>
+                                            <span class="dot d-block"></span>
+                                            <a href="javascript:;"> {{ localeData?.service }} </a>
+                                        </mat-list-item>
+                                        <mat-list-item>
+                                            <span class="dot d-block"></span>
+                                            <a href="javascript:;"> {{ localeData?.fixed_assets }} </a>
+                                        </mat-list-item>
+                                    </mat-list>
+                                </div>
+                                <div class="mr-t2 mr-b05 d-flex align-items-center">
+                                    <span class="d-flex">
+                                        <i class="icon-estimate-new mr-r1"></i>
+                                    </span>
+                                    <span> {{ localeData?.estimate }} </span>
+                                </div>
+                                <div class="mr-t1 mr-b05 d-flex align-items-center">
+                                    <span class="d-flex">
+                                        <i class="icon-proforma mr-r1"></i>
+                                    </span>
+                                    <span> {{ localeData?.proforma }} </span>
+                                </div>
+                                <div class="mr-t1 mr-b05 d-flex align-items-center">
+                                    <span class="d-flex">
+                                        <i class="icon-purchase-order mr-r1"></i>
+                                    </span>
+                                    <span> {{ localeData?.purchase_order }} </span>
+                                </div>
+                                <div class="mr-t1 mr-b05 d-flex align-items-center">
+                                    <span class="d-flex">
+                                        <i class="icon-manufacturing1 mr-r1"></i>
+                                    </span>
+                                    <span> {{ localeData?.manufacturing }} </span>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-menu>
+                    <li
+                        class="border-none pd-r15 notification icon-circle"
+                        [ngClass]="{ 'mr-0': isTodaysDateSelected }"
+                    >
                         <i class="icon-bell-new"></i>
                     </li>
                     <li class="border-none pl-0 select-today">
