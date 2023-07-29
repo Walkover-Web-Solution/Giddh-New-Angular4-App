@@ -98,6 +98,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     private getBranchesInitiated: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** Hold branch transfer report type  */
+    public reportType: string = "";
 
     constructor(
         private store: Store<AppState>,
@@ -124,14 +126,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isMobileScreen = result?.breakpoints['(max-width: 1023px)'];
             this.isMobileView = result?.breakpoints['(max-width: 767px)'];
         });
-
         this.activeStock$ = this.store.pipe(select(p => p.inventory.activeStock), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(p => p.inventory.activeGroup), takeUntil(this.destroyed$));
         this.groupsWithStocks$ = this.store.pipe(select(s => s.inventory.groupsWithStocks), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         if (this.voucherApiVersion === 2) {
             document.querySelector("body")?.classList?.add("inventory-v2");
@@ -196,11 +196,19 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.universalDate$ = this.store.pipe(select(appStore => appStore.session.applicationDate), takeUntil(this.destroyed$));
 
-        this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : this.router.url?.indexOf('inventory/report') > -1 ? 3 : 0;
+        if (this.router.url === '/pages/inventory/report/delivery') {
+            this.reportType = 'deliverynote';
+        }
+        if (this.router.url === '/pages/inventory/report/receipt') {
+            this.reportType = 'receiptnote';
+        }
+
+
+        this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : this.router.url?.indexOf('inventory/report') > -1 ? 3 : (this.router.url?.indexOf('inventory/report/receipt') > -1 || this.router.url?.indexOf('inventory/report/delivery') > -1) ? 3 : 0;
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
-                this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : this.router.url?.indexOf('inventory/report') > -1 ? 3 : 0;
+                this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : this.router.url?.indexOf('inventory/report') > -1 ? 3 : (this.router.url?.indexOf('inventory/report/receipt') > -1 || this.router.url?.indexOf('inventory/report/delivery') > -1) ? 3 : 0;
             }
         });
         this.shouldShowInventoryReport$ = combineLatest([this.store.pipe(select(appStore => appStore.inventory.activeStockUniqueName)), this.store.pipe(select(appStore => appStore.inventory.activeGroupUniqueName))]).pipe(map(values => values[0] || values[1]));
@@ -262,8 +270,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
                     this.activeTabIndex = 2;
                     break;
-                case 'report':
-                    this.router.navigate(['/pages', 'inventory', 'report'], { relativeTo: this.route });
+                case 'report/receipt':
+                    this.router.navigate(['/pages', 'inventory', 'report', 'receipt'], { relativeTo: this.route });
+                    this.activeTabIndex = 3;
+                    break;
+                case 'report/delivery':
+                    this.router.navigate(['/pages', 'inventory', 'report', 'delivery'], { relativeTo: this.route });
                     this.activeTabIndex = 3;
                     break;
             }

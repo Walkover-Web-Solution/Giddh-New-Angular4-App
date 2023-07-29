@@ -44,6 +44,7 @@ import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'app-header',
@@ -87,6 +88,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
     /** All modules popover instance */
     @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
+    @ViewChild(MatMenuTrigger) public  trigger: MatMenuTrigger;
 
     public hideAsDesignChanges: boolean = false;
     public title: Observable<string>;
@@ -1103,6 +1105,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isTodaysDateSelected = false;
     }
 
+    public navigateToReport(event: any) {
+        if (event) {
+            this.trigger.closeMenu();
+            this.router.navigate(['/pages/inventory/report/'+event]);
+        }
+    }
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

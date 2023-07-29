@@ -57,13 +57,18 @@
                     />
                 </div>
                 <ul class="nav universal-date mr-r1" *ngIf="selectedCompany | async">
-                    <button mat-icon-button [matMenuTriggerFor]="menu" class="icon-circle">
+                    <button
+                        mat-icon-button
+                        #menuTrigger="matMenuTrigger"
+                        [matMenuTriggerFor]="menu"
+                        class="icon-circle"
+                    >
                         <i class="icon-plus"></i>
                     </button>
                     <mat-menu #menu="matMenu">
                         <div (click)="$event.stopPropagation()">
                             <span class="create-txt font-12 d-block">
-                                <a href="javascript:;"> Create New </a>
+                                {{ commonLocaleData?.app_create_new }}
                             </span>
                             <div class="menu-dropdown-wrapper">
                                 <div>
@@ -74,11 +79,7 @@
                                             </span>
                                             <span
                                                 >{{ localeData?.credit }}
-                                                <a
-                                                    href="javascript:;"
-                                                    [matTooltip]="'Information'"
-                                                    [matTooltipPosition]="'above'"
-                                                >
+                                                <a [matTooltip]="'Information'" [matTooltipPosition]="'above'">
                                                     <i class="icon-info mr-l15"></i>
                                                 </a>
                                             </span>
@@ -87,19 +88,27 @@
                                     <mat-list>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a href="javascript:;"> {{ localeData?.invoice }} </a>
+                                            <a [routerLink]="['/pages/proforma-invoice/invoice/sales']">
+                                                {{ localeData?.invoice }}
+                                            </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a href="javascript:;"> {{ localeData?.bill }} </a>
+                                            <a [routerLink]="['/pages/proforma-invoice/invoice/purchase']">
+                                                {{ localeData?.bill }}
+                                            </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a href="javascript:;"> {{ localeData?.credit_note }} </a>
+                                            <a [routerLink]="['/pages/proforma-invoice/invoice/credit note']">
+                                                {{ localeData?.credit_note }}
+                                            </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a href="javascript:;"> {{ localeData?.debit_note }} </a>
+                                            <a [routerLink]="['/pages/proforma-invoice/invoice/debit note']">
+                                                {{ localeData?.debit_note }}
+                                            </a>
                                         </mat-list-item>
                                     </mat-list>
                                 </div>
@@ -110,11 +119,7 @@
                                         </span>
                                         <span
                                             >{{ localeData?.cash }}
-                                            <a
-                                                href="javascript:;"
-                                                [matTooltip]="'Information'"
-                                                [matTooltipPosition]="'above'"
-                                            >
+                                            <a [matTooltip]="'Information'" [matTooltipPosition]="'above'">
                                                 <i class="icon-info mr-l15"></i>
                                             </a>
                                         </span>
@@ -122,19 +127,27 @@
                                     <mat-list>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a href="javascript:;"> {{ localeData?.invoice }} </a>
+                                            <a [routerLink]="['/pages/proforma-invoice/invoice/cash sales']">
+                                                {{ localeData?.invoice }}
+                                            </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a href="javascript:;">{{ localeData?.bill }} </a>
+                                            <a [routerLink]="['/pages/proforma-invoice/invoice/cash bill']"
+                                                >{{ localeData?.bill }}
+                                            </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a href="javascript:;"> {{ localeData?.credit_note }} </a>
+                                            <a [routerLink]="['/pages/proforma-invoice/invoice/cash credit note']">
+                                                {{ localeData?.credit_note }}
+                                            </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a href="javascript:;"> {{ localeData?.debit_note }} </a>
+                                            <a [routerLink]="['/pages/proforma-invoice/invoice/cash debit note']">
+                                                {{ localeData?.debit_note }}
+                                            </a>
                                         </mat-list-item>
                                     </mat-list>
                                 </div>
@@ -143,16 +156,20 @@
                                         <span class="d-flex">
                                             <i class="icon-branch-transfer mr-r1"></i>
                                         </span>
-                                        <span class=""> {{ localeData?.branch_transfer }} </span>
+                                        <span> {{ localeData?.branch_transfer }} </span>
                                     </div>
                                     <mat-list>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a href="javascript:;"> {{ localeData?.receipt_note }} </a>
+                                            <a class="cursor-pointer" (click)="navigateToReport('receipt')">
+                                                {{ localeData?.receipt_note }}
+                                            </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a href="javascript:;"> {{ localeData?.delivery_challan }} </a>
+                                            <a class="cursor-pointer" (click)="navigateToReport('delivery')">
+                                                {{ localeData?.delivery_challan }}
+                                            </a>
                                         </mat-list-item>
                                     </mat-list>
                                 </div>

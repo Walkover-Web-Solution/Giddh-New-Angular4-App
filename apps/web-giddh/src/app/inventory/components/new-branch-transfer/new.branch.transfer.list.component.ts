@@ -5,7 +5,8 @@ import {
     OnInit,
     ViewChild,
     ElementRef,
-    HostListener
+    HostListener,
+    Input
 } from "@angular/core";
 import { BsModalService, BsModalRef, ModalDirective } from "ngx-bootstrap/modal";
 import { InventoryService } from '../../../services/inventory.service';
@@ -28,6 +29,7 @@ import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
     selector: "new-branch-transfer-list",
@@ -129,6 +131,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /** Hold branch transfer report type */
+    @Input() public reportType: string
 
     constructor(
         private _generalService: GeneralService,
@@ -136,7 +140,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private inventoryService: InventoryService,
         private _toasty: ToasterService,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private activateRoute: ActivatedRoute,
     ) {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && !_.isEmpty(o)) {
@@ -149,9 +154,16 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.activateRoute.paramMap.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
+            console.log(params);
+        })
         document.querySelector("body")?.classList?.add("new-branch-list-page");
         this.initBranchTransferListResponse();
-
+        setTimeout(() => {
+            if (this.reportType) {
+                this.toggleTransferAsidePane();
+            }
+        }, 500);
         branchTransferVoucherTypes.map(voucherType => {
             this.voucherTypes.push({ label: voucherType.label, value: voucherType.value });
         });

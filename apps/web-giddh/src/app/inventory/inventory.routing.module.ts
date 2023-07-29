@@ -19,6 +19,7 @@ import { NewBranchTransferListComponent } from "./components/new-branch-transfer
             {
                 path: "",
                 component: InventoryComponent,
+
                 children: [
                     {
                         path: "add-group/:groupUniqueName",
@@ -60,6 +61,12 @@ import { NewBranchTransferListComponent } from "./components/new-branch-transfer
                     },
                     {
                         path: "report",
+                        pathMatch: "full",
+                        component: NewBranchTransferListComponent
+                    },
+                     {
+                         path: "report/:type",
+                         pathMatch: "full",
                         component: NewBranchTransferListComponent
                     }
                 ]
