@@ -1,39 +1,57 @@
 .vat-report {
     .vat-report-table {
-        // tbody {
-        //     tr {
-        //         &:last-child {
-        //             border-bottom: 0px !important;
-        //             td {
-        //                 background-color: var(--color-wild-sand) !important;
-        //                 padding: 14px 10px;
-        //                 font-weight: bold;
-        //                 border-bottom: 0px !important;
-        //                 a {
-        //                     color: var(--color-black) !important;
-        //                 }
-        //                 &:hover {
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
         tfoot {
             background-color: var(--color-wild-sand);
-        }
-    }
-}
-.gst-sidebar-open {
-    .mat-menu-panel {
-        max-width: 300px !important;
-        .mat-menu-content {
-            width: 300px;
-            overflow: hidden;
         }
     }
 }
 .table-hide-title {
     thead {
         display: none !important;
+    }
+}
+.white-box {
+    table {
+        tbody {
+            tr {
+                td {
+                    .btn-link {
+                        color: var(--color-table-secondary-heading) !important;
+                    }
+                }
+            }
+        }
+    }
+}
+.gst-sidebar-open {
+    .mat-menu-item {
+        height: 40px !important;
+        line-height: 34px !important;
+    }
+    #cdk-overlay-1 {
+        .mat-menu-panel {
+            max-width: 340px !important;
+            .mat-menu-content {
+                width: 288px !important;
+            }
+        }
+    }
+    #cdk-overlay-2 {
+        .mat-menu-panel {
+            max-width: 330px !important;
+            .mat-menu-content {
+                width: 230px !important;
+            }
+        }
+    }
+    .mat-dialog-container {
+        overflow: hidden;
+    }
+    .modal-dialog {
+        max-width: unset !important;
+        width: 980px;
+        .close-modal {
+            right: 38px;
+        }
     }
 }

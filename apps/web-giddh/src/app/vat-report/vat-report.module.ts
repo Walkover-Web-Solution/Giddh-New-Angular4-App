@@ -24,6 +24,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
+import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 
 @NgModule({
     declarations: [
@@ -55,7 +57,9 @@ import { MatDialogModule } from '@angular/material/dialog';
         MatButtonModule,
         MatTableModule,
         MatMenuModule,
-        MatDialogModule
+        MatDialogModule,
+        GiddhDateRangepickerModule,
+        DatepickerWrapperModule
     ],
     exports: [
         VatReportRoutingModule

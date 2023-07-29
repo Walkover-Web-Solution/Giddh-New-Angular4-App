@@ -10,7 +10,6 @@ import { VatService } from "../../services/vat.service";
 import { saveAs } from "file-saver";
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { DownloadOrSendInvoiceOnMailComponent } from '../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -21,23 +20,6 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ReceiptService } from '../../services/receipt.service';
 import { CommonService } from '../../services/common.service';
 import { MatDialog } from '@angular/material/dialog';
-
-export interface PeriodicElement {
-    date: string;
-    number: string;
-    name: string;
-    taxamt: string;
-    vat_amt: string;
-    reverse_charge: string;
-    trn_number: number;
-    place_supply: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-    {date: '26/07/2023',number: '1a', name: 'Standard Rated Supplies In Abu Dhabi', taxamt: '90,000.00', vat_amt: '0.00', reverse_charge: 'N', trn_number: 213546879147852, place_supply: 'SH'},
-    {date: '26/07/2023',number: '1b', name: 'Standard Rated Supplies In Abu Dhabi', taxamt: '90,000.00', vat_amt: '0.00', reverse_charge: 'N', trn_number: 213546879147852, place_supply: 'SH'},
-    {date: '26/07/2023',number: '1c', name: 'Standard Rated Supplies In Abu Dhabi', taxamt: '90,000.00', vat_amt: '0.00', reverse_charge: 'N', trn_number: 213546879147852, place_supply: 'SH'},
-]
 
 @Component({
     selector: 'app-vat-report-transactions',
@@ -81,7 +63,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /*-- mat-table --*/
     displayedColumns: string[] = ['date', 'number', 'name', 'taxamt', 'vat_amt', 'reverse_charge', 'trn_number', 'place_supply'];
-    dataSource = ELEMENT_DATA;
 
     constructor(
         private store: Store<AppState>, 
@@ -224,14 +205,12 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
                 }
 
-                this.loadDownloadOrSendMailComponent();
                 this.dialog.open(this.downloadOrSendMailModel, {
                     panelClass: 'modal-dialog',
-                    width: '1000px',
+                    width: '600px !important',
                 });   
             }
         }
-        
     }
 
     /**

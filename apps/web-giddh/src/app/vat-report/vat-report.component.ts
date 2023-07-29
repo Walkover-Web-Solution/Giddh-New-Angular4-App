@@ -19,23 +19,6 @@ import { OrganizationType } from '../models/user-login-state';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { cloneDeep } from '../lodash-optimized';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-
-// export interface PeriodicElement {
-//     number: string;
-//     name: string;
-//     description: string;
-//     aed_amt: string;
-//     vat_amt: string;
-//     adjustment: string;
-// }
-// export interface PeriodicElement {
-//     number: string;
-//     name: string;
-//     description: string;
-//     aed_amt: string;
-//     vat_amt: string;
-//     adjustment: string;
-// }
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
@@ -44,7 +27,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 export class VatReportComponent implements OnInit, OnDestroy {
     public vatReport: any[] = [];
     public activeCompany: any;
-    public datePickerOptions: any = {
+    public datePickerOption: any = {
         alwaysShowCalendars: true,
         startDate: dayjs().subtract(30, 'day'),
         endDate: dayjs()
@@ -55,8 +38,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     @ViewChild('monthWise', { static: true }) public monthWise: BsDropdownDirective;
     @ViewChild('periodDropdown', { static: true }) public periodDropdown;
-    public from: string = dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT);
-    public to: string = dayjs().format(GIDDH_DATE_FORMAT);
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     public isMonthSelected: boolean = true;
     public selectedMonth: any = null;
     public currentPeriod: any = {};
@@ -86,38 +69,23 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public asideGstSidebarMenuState: string = 'in';
     /** this will check mobile screen size */
     public isMobileScreen: boolean = false;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
-    /** This will store selected date range to show on UI */
-    public selectedDateRangeUi: any;
     /** Datepicker modal reference */
     public modalRef: BsModalRef;
-    /** Directive to get reference of element */
-    @ViewChild('datepickerEntryTemplate') public datepickerEntryTemplate: ElementRef;
-    /** Directive to get reference of element */
-    @ViewChild('datepickerVoucherTemplate') public datepickerVoucherTemplate: ElementRef;
-    /** This will store universalDate */
-    public universalDate: any;
-    /** Universal date observer */
-    public universalDate$: Observable<any>;
-    /** This will store selected date range to use in api */
-    public selectedDateRange: any;
-    /** This will store selected date range to use in api */
-    public selectedEntryDateRange: any;
-    /** This will store selected entry date range to show on UI */
-    public selectedEntryDateRangeUi: any;
-    /** This will store selected date range to use in api */
-    public selectedVoucherDateRange: any;
-    /** This will store selected entry date range to show on UI */
-    public selectedVoucherDateRangeUi: any;
-    /* Selected range label */
+    /** Selected range label */
     public selectedRangeLabel: any = "";
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /** This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /** Holds universal date */
+    private universalDate: Date[];
+    /** True if initial load of store filters */
+    private initialLoad: boolean = false;
     /*-- mat-table --*/
     displayedColumns: string[] = ['number', 'name', 'description', 'aed_amt', 'vat_amt', 'adjustment'];
     netdisplayedColumns: string[] = ['number', 'description', 'tooltip'];
-
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -219,12 +187,18 @@ export class VatReportComponent implements OnInit, OnDestroy {
         if (this.taxNumber) {
             this.getVatReport();
         }
-        /** Universal date observer */
+
+        // Refresh report data according to universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
-                this.universalDate = _.cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
-                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.universalDate = cloneDeep(dateObj);
+                setTimeout(() => {
+                    if (!this.initialLoad) {
+                        this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                        this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.getVatReport();
+                    }
+                }, 1000);
             }
         });
     }
@@ -237,7 +211,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
     }
 
     public getVatReport(event?: any) {
-        console.log(event)
         if (event && event.value) {
             this.taxNumber = event.value;
         }
@@ -254,12 +227,11 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 if (res) {
                     if (res.status === 'success') {
                         this.vatReport = res.body?.sections;
-                        
+                        this.cdRef.detectChanges();
                     } else {
                         this.toasty.errorToast(res.message);
                     }
                 }
-                this.cdRef.detectChanges();
             });
         }
     }
@@ -402,7 +374,13 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public handleNavigation(): void {
         this.route.navigate(['pages', 'gstfiling']);
     }
-    public showGiddhDatepicker(element: any): void {
+    /**
+     * To show the datepicker
+     *
+     * @param {*} element
+     * @memberof VatReportComponent
+     */
+        public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
@@ -411,9 +389,21 @@ export class VatReportComponent implements OnInit, OnDestroy {
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
         );
     }
-    public hideGiddhDatepicker(): void {
-        this.modalRef?.hide();
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof VatReportComponent
+     */
+        public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
     }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof VatReportComponent
+     */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
@@ -428,8 +418,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 }

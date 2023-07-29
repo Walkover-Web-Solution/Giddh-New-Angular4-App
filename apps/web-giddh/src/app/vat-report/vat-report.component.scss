@@ -60,7 +60,7 @@
         }
     }
     .trn-width {
-        min-width: 400px;
+        min-width: 280px;
     }
 }
 .export-btn {
@@ -78,11 +78,20 @@
         }
     }
 }
-// .advance-search-by-date.date-advance-search {
-//     width: 280px;
-// }
 .white-box {
     table {
+        tbody {
+            tr {
+                td {
+                    a {
+                        color: var(--color-table-secondary-heading) !important;
+                    }
+                    .btn-link {
+                        color: var(--color-table-secondary-heading) !important;
+                    }
+                }
+            }
+        }
         tfoot {
             background-color: var(--color-wild-sand);
         }
