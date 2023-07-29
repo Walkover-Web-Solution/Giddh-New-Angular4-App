@@ -9,7 +9,7 @@ import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rx
 import { map, take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { select, Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -196,16 +196,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.universalDate$ = this.store.pipe(select(appStore => appStore.session.applicationDate), takeUntil(this.destroyed$));
 
-        if (this.router.url === '/pages/inventory/report/delivery') {
-            this.reportType = 'deliverynote';
-        }
-        if (this.router.url === '/pages/inventory/report/receipt') {
-            this.reportType = 'receiptnote';
-        }
-
-
         this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : this.router.url?.indexOf('inventory/report') > -1 ? 3 : (this.router.url?.indexOf('inventory/report/receipt') > -1 || this.router.url?.indexOf('inventory/report/delivery') > -1) ? 3 : 0;
-
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
+            if (params.type) {
+                this.reportType = params.type;
+            }
+        })
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
                 this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : this.router.url?.indexOf('inventory/report') > -1 ? 3 : (this.router.url?.indexOf('inventory/report/receipt') > -1 || this.router.url?.indexOf('inventory/report/delivery') > -1) ? 3 : 0;

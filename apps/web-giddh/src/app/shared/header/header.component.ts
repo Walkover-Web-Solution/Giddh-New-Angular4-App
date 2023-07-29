@@ -1105,10 +1105,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isTodaysDateSelected = false;
     }
 
-    public navigateToReport(event: any) {
+    public navigateTo(event: any) {
         if (event) {
-            this.trigger.closeMenu();
-            this.router.navigate(['/pages/inventory/report/'+event]);
+            this.trigger?.closeMenu();
+            if (event === 'deliverynote' || event === 'receiptnote') {
+                this.router.navigate(['/pages/inventory/report/' + event]);
+            } else {
+                this.router.navigate(['/pages' + event]);
+            }
         }
     }
     public ngOnDestroy() {

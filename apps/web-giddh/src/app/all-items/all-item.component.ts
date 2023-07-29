@@ -6,8 +6,10 @@ import {
     HostListener,
     OnDestroy,
     OnInit,
+    TemplateRef,
     ViewChild,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
@@ -55,6 +57,8 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     public currentPeriod: any = {};
     /** this is store actvie company gst number */
     public activeCompanyGstNumber: string;
+    /** Instance of all items dialog */
+    @ViewChild("allItemModal") public dialogBox: TemplateRef<any>;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -63,7 +67,8 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         private groupWithAction: GroupWithAccountsAction,
         private router: Router,
         private store: Store<AppState>,
-        private gstReconcileService: GstReconcileService
+        private gstReconcileService: GstReconcileService,
+        public dialog: MatDialog
     ) {
 
     }
@@ -219,6 +224,32 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This will use for redirect links
+     *
+     * @param {*} subitem
+     * @memberof AllGiddhItemComponent
+     */
+    public redirectSubItemLink(subitem: any): void {
+        if (subitem) {
+            if (subitem.label === 'Invoice') {
+                this.dialog.open(this.dialogBox, {
+                });
+            } else {
+                this.router.navigate([subitem.link]);
+            }
+        }
+    }
+
+    /**
+    * Closes all dialogs
+    *
+    * @memberof ContactComponent
+    */
+    public closeAllDialogs(): void {
+        this.dialog.closeAll();
+    }
+
+    /**
      * Callback for translation response complete
      *
      * @param {*} event
@@ -230,6 +261,8 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                 if (items) {
                     this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(response => {
                         const allItems = this.generalService.getVisibleMenuItems("all-items", items, this.localeData?.items, response?.countryV2?.alpha2CountryCode);
+                        console.log(allItems);
+
                         this.allItems$ = of(allItems);
                         this.filteredItems$ = of(allItems);
                         this.changeDetectorRef.detectChanges();

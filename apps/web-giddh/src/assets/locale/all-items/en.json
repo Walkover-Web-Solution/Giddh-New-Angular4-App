@@ -16,10 +16,10 @@
                     }
                 },
                 {
-                    "label": "Cash Invoice",
-                    "link": "/pages/proforma-invoice/invoice/cash",
+                    "label": "Invoice",
+                   "link": "/pages/invoice/preview/sales",
                     "icon": "icon-invoice-new",
-                    "description": "Generate cash invoice"
+                    "description": "Generate invoice"
                 },
                 {
                     "label": "Credit Note",
@@ -38,7 +38,7 @@
                     }
                 },
                 {
-                    "label": "Invoice",
+                    "label": "Invoice Management",
                     "link": "/pages/invoice/preview/sales",
                     "icon": "icon-invoice-new",
                     "description": "Multicurrency, Recurring invoice, Cash invoice"
@@ -48,12 +48,6 @@
                     "link": "/pages/reports/receipt",
                     "icon": "icon-reciept-new",
                     "description": "Advance, normal, total, & unused receipts"
-                },
-                {
-                    "label": "Sales Invoice",
-                    "link": "/pages/proforma-invoice/invoice/sales",
-                    "icon": "icon-invoice-new",
-                    "description": "Generate sales invoice"
                 },
                 {
                     "label": "Sales Order",
@@ -90,7 +84,7 @@
                     "description": "Record debit note & update A/c"
                 },
                 {
-                    "label": "Purchase Bill",
+                    "label": "Bill",
                     "link": "/pages/proforma-invoice/invoice/purchase",
                     "icon": "icon-invoice-new",
                     "description": "Purchase request, purchase bill, modify PO"

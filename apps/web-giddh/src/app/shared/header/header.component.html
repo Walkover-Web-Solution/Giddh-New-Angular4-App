@@ -88,25 +88,37 @@
                                     <mat-list>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a [routerLink]="['/pages/proforma-invoice/invoice/sales']">
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="navigateTo('/proforma-invoice/invoice/sales')"
+                                            >
                                                 {{ localeData?.invoice }}
                                             </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a [routerLink]="['/pages/proforma-invoice/invoice/purchase']">
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="navigateTo('/proforma-invoice/invoice/purchase')"
+                                            >
                                                 {{ localeData?.bill }}
                                             </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a [routerLink]="['/pages/proforma-invoice/invoice/credit note']">
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="navigateTo('/proforma-invoice/invoice/credit note')"
+                                            >
                                                 {{ localeData?.credit_note }}
                                             </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a [routerLink]="['/pages/proforma-invoice/invoice/debit note']">
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="navigateTo('/proforma-invoice/invoice/debit note')"
+                                            >
                                                 {{ localeData?.debit_note }}
                                             </a>
                                         </mat-list-item>
@@ -127,25 +139,36 @@
                                     <mat-list>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a [routerLink]="['/pages/proforma-invoice/invoice/cash sales']">
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="navigateTo('/proforma-invoice/invoice/cash sales')"
+                                            >
                                                 {{ localeData?.invoice }}
                                             </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a [routerLink]="['/pages/proforma-invoice/invoice/cash bill']"
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="navigateTo('/proforma-invoice/invoice/cash bill')"
                                                 >{{ localeData?.bill }}
                                             </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a [routerLink]="['/pages/proforma-invoice/invoice/cash credit note']">
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="navigateTo('/proforma-invoice/invoice/cash credit note')"
+                                            >
                                                 {{ localeData?.credit_note }}
                                             </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a [routerLink]="['/pages/proforma-invoice/invoice/cash debit note']">
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="navigateTo('/proforma-invoice/invoice/cash debit note')"
+                                            >
                                                 {{ localeData?.debit_note }}
                                             </a>
                                         </mat-list-item>
@@ -161,13 +184,13 @@
                                     <mat-list>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a class="cursor-pointer" (click)="navigateToReport('receipt')">
+                                            <a class="cursor-pointer" (click)="navigateTo('receiptnote')">
                                                 {{ localeData?.receipt_note }}
                                             </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a class="cursor-pointer" (click)="navigateToReport('delivery')">
+                                            <a class="cursor-pointer" (click)="navigateTo('deliverynote')">
                                                 {{ localeData?.delivery_challan }}
                                             </a>
                                         </mat-list-item>
@@ -183,15 +206,21 @@
                                     <mat-list>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a href="javascript:;"> {{ localeData?.product }} </a>
+                                            <a [routerLink]="['/pages/inventory/v2/stock/product/create']">
+                                                {{ localeData?.product }}
+                                            </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a href="javascript:;"> {{ localeData?.service }} </a>
+                                            <a [routerLink]="['/pages/inventory/v2/stock/service/create']">
+                                                {{ localeData?.service }}
+                                            </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a href="javascript:;"> {{ localeData?.fixed_assets }} </a>
+                                            <a [routerLink]="['/pages/inventory/v2/stock/fixedassets/create']">
+                                                {{ localeData?.fixed_assets }}
+                                            </a>
                                         </mat-list-item>
                                     </mat-list>
                                 </div>
@@ -199,25 +228,53 @@
                                     <span class="d-flex">
                                         <i class="icon-estimate-new mr-r1"></i>
                                     </span>
-                                    <span> {{ localeData?.estimate }} </span>
+                                    <span>
+                                        <a
+                                            class="cursor-pointer"
+                                            (click)="navigateTo('/proforma-invoice/invoice/estimate')"
+                                        >
+                                            {{ localeData?.estimate }}
+                                        </a>
+                                    </span>
                                 </div>
                                 <div class="mr-t1 mr-b05 d-flex align-items-center">
                                     <span class="d-flex">
                                         <i class="icon-proforma mr-r1"></i>
                                     </span>
-                                    <span> {{ localeData?.proforma }} </span>
+                                    <span>
+                                        <a
+                                            class="cursor-pointer"
+                                            (click)="navigateTo('/proforma-invoice/invoice/proforma')"
+                                        >
+                                            {{ localeData?.proforma }}
+                                        </a>
+                                    </span>
                                 </div>
                                 <div class="mr-t1 mr-b05 d-flex align-items-center">
                                     <span class="d-flex">
                                         <i class="icon-purchase-order mr-r1"></i>
                                     </span>
-                                    <span> {{ localeData?.purchase_order }} </span>
+                                    <span>
+                                        <a
+                                            class="cursor-pointer"
+                                            (click)="navigateTo('/purchase-management/purchase-order/new')"
+                                        >
+                                            {{ localeData?.purchase_order }}
+                                        </a>
+                                    </span>
                                 </div>
                                 <div class="mr-t1 mr-b05 d-flex align-items-center">
                                     <span class="d-flex">
                                         <i class="icon-manufacturing1 mr-r1"></i>
                                     </span>
-                                    <span> {{ localeData?.manufacturing }} </span>
+                                    <span>
+                                        <a
+                                            class="cursor-pointer"
+                                            (click)="navigateTo('/inventory/v2/manufacturing/create')"
+                                        >
+                                            {{ localeData?.manufacturing }}
+                                        </a>
+                                    </span>
                                 </div>
                             </div>
                         </div>

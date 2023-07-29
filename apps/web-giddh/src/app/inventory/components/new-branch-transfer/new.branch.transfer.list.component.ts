@@ -154,9 +154,6 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.activateRoute.paramMap.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
-            console.log(params);
-        })
         document.querySelector("body")?.classList?.add("new-branch-list-page");
         this.initBranchTransferListResponse();
         setTimeout(() => {

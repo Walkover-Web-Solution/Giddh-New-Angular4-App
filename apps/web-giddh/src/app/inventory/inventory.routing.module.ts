@@ -63,15 +63,16 @@ import { NewBranchTransferListComponent } from "./components/new-branch-transfer
                         path: "report",
                         pathMatch: "full",
                         component: NewBranchTransferListComponent
-                    },
-                     {
-                         path: "report/:type",
-                         pathMatch: "full",
-                        component: NewBranchTransferListComponent
                     }
                 ]
-            }
-        ])
+            },
+                       {
+                         path: "report/:type",
+                         pathMatch: "full",
+                        component: InventoryComponent
+                    }
+        ]),
+
     ],
     exports: [RouterModule],
     providers: [InvViewService]
