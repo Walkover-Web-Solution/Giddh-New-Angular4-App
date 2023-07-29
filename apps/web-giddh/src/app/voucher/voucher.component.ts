@@ -713,6 +713,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     private currentlyLoadedStockVariantIndex: number;
     /** True if account has unsaved changes */
     public hasUnsavedChanges: boolean = false;
+    /** True if entry datepicker is open */
+    public isEntryDatepickerOpen: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -5874,11 +5876,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public handleOutsideClick(event: any): void {
-        if ((typeof event?.target?.className === "string" &&
-            event?.target?.className?.indexOf("option") === -1) &&
-            event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1 &&
-            this.accountAsideMenuState === 'out' &&
-            this.asideMenuStateForRecurringEntry === 'out' && this.asideMenuStateForOtherTaxes === 'out') {
+        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1 && this.accountAsideMenuState === 'out' && this.asideMenuStateForRecurringEntry === 'out' && this.asideMenuStateForOtherTaxes === 'out' && !this.isEntryDatepickerOpen) {
             this.activeIndx = null;
             this.checkVoucherEntries();
         }
@@ -8734,5 +8732,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             transaction.setAmount(entry);
             this.calculateWhenTrxAltered(entry, transaction);
         }
+    }
+
+    /**
+     * Callback for entry datepicker
+     *
+     * @param {*} event
+     * @memberof VoucherComponent
+     */
+    public onFocusEntryDate(event: any): void {
+        this.isEntryDatepickerOpen = event;
     }
 }

@@ -19,6 +19,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/search.scss";
 @import "../css/global/all-items.scss";
 @import "../css/global/vat-report.scss";
+@import "../css/global/setting-integration.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -903,15 +904,19 @@ aside-create-group {
         .inventory-sub-sideabar {
             .item-list {
                 a {
-                    &.account-name {
+                    &.group-name {
                         .mat-list-item-content {
                             color: var(--color-master-page-sidebar-primary-group);
                         }
                     }
                     &.isActive {
+                        background-color: var(--color-primary-header-background);
                         .mat-list-item-content {
                             color: var(--color-white);
                         }
+                    }
+                    mat-list-item {
+                        height: 100% !important;
                     }
                 }
                 .mat-list-item-content {
@@ -946,9 +951,11 @@ aside-create-group {
                 }
             }
         }
-        .cdk-virtual-scroll-viewport {
-            height: 100% !important;
-            min-height: calc(100vh - 188px);
+        mat-list {
+            .cdk-virtual-scroll-viewport {
+                height: 100% !important;
+                min-height: calc(100vh - 150px);
+            }
         }
     }
 
@@ -10882,6 +10889,13 @@ inventory-master {
     .mat-tooltip {
         margin-bottom: 40px !important;
     }
+    .inventory-search {
+        text-field {
+            .form-control {
+                width: 500px;
+            }
+        }
+    }
 }
 
 @media (max-width: 1366px) {
@@ -13044,10 +13058,6 @@ body.prevent-body-scroll {
     overflow-y: hidden !important;
 }
 
-.hide-payment-tab ul li:nth-child(4) {
-    display: none;
-}
-
 @media (max-width: 991px) and (min-width: 768px) {
     .hidden-sm {
         display: none !important;
@@ -14298,9 +14308,23 @@ voucher-component {
 .inventory-search {
     text-field {
         .form-control {
-            height: 42px;
-            width: 430px;
-            box-shadow: var(--color-search-box-shadow) 0px 48px 100px 0px;
+            height: 53px;
+            width: 674px;
+            background-color: var(--color-apple-search-background) !important;
+            box-shadow: 0 7px 32px 13px rgba(0, 0, 0, 0.3);
+            color: var(--color-white) !important;
+            border-color: var(--color-apple-search-background) !important;
+            padding-left: 43px !important;
+            padding-right: 38px !important;
+            font-size: var(--font-size-24) !important;
+            caret-color: var(--color-master-page-sidebar-primary-group);
+            border-radius: 10px !important;
+            &:focus {
+                border-color: var(--color-black) !important;
+            }
+            &::placeholder {
+                color: var(--color-master-page-sidebar-primary-group);
+            }
         }
     }
 }
