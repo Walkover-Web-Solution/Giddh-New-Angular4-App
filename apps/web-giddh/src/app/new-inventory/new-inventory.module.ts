@@ -165,7 +165,6 @@ import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.modu
         MatListModule,
         RecipeModule,
         ManufacturingModule,
-        SelectTableColumnModule,
         CdkScrollModule,
         FormsModule,
         NoDataModule,
