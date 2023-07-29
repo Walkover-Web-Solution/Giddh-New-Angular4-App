@@ -19,6 +19,7 @@ import { OrganizationType } from '../models/user-login-state';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { cloneDeep } from '../lodash-optimized';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
@@ -27,11 +28,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 export class VatReportComponent implements OnInit, OnDestroy {
     public vatReport: any[] = [];
     public activeCompany: any;
-    public datePickerOption: any = {
-        alwaysShowCalendars: true,
-        startDate: dayjs().subtract(30, 'day'),
-        endDate: dayjs()
-    };
+    /** This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public dayjs = dayjs;
     public fromDate: string = '';
     public toDate: string = '';
