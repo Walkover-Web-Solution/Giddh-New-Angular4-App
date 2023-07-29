@@ -3578,7 +3578,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             transaction.isStockTxn = true;
             if (isBulkItem) {
                 transaction.variant = selectedAcc.variant;
-            } else if (isLinkedPoItem) {
+            } else if (isLinkedPoItem && !transaction.variant) {
+                // Only re-assign the variant when it is not present (when user has added the linked PO entries with the current PB)
                 transaction.variant = o.stock.variant;
             }
             // Stock item, show the warehouse drop down if it is hidden
@@ -7038,6 +7039,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public addPoItems(poUniqueName: string, entries: any, totalPending: number): void {
         this.startLoader(true);
+        this.linkedPoItemsAdded = 0;
         let blankItemIndex = this.invFormData.entries?.findIndex(entry => !entry.transactions[0].accountUniqueName);
         let isBlankItemPresent;
         let startIndex = this.invFormData.entries?.length;
