@@ -78,10 +78,10 @@ import { AsideCreateUnitGroupComponent } from "./component/aside-create-unit-gro
 import { RecipeModule } from "./component/recipe/recipe.module";
 import { ManufacturingModule } from "../manufacturing/manufacturing.module";
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
-import { ScrollingModule } from "@angular/cdk/scrolling";
 import { FormsModule } from "@angular/forms";
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
+import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
 
 @NgModule({
     declarations: [
@@ -165,7 +165,8 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
         MatListModule,
         RecipeModule,
         ManufacturingModule,
-        ScrollingModule,
+        SelectTableColumnModule,
+        CdkScrollModule,
         FormsModule,
         NoDataModule,
         DragDropModule
