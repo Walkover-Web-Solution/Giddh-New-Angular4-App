@@ -78,10 +78,10 @@ import { RecipeModule } from "./component/recipe/recipe.module";
 import { ManufacturingModule } from "../manufacturing/manufacturing.module";
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
-import { ScrollingModule } from "@angular/cdk/scrolling";
 import { FormsModule } from "@angular/forms";
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
+import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
 
 @NgModule({
     declarations: [
@@ -165,7 +165,7 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
         RecipeModule,
         ManufacturingModule,
         SelectTableColumnModule,
-        ScrollingModule,
+        CdkScrollModule,
         FormsModule,
         NoDataModule,
         DragDropModule
