@@ -34,5 +34,7 @@
     "delivery_challan":"Delivery challan",
     "product":"Product",
     "service":"Service",
-    "fixed_assets":"Fixed Assets"
+    "fixed_assets":"Fixed Assets",
+    "cash_information":"Generate instant paid voucher without managing separate account/ledger.",
+    "credit_information":"Generate invoice and manage accounts/ledger separately."
 }

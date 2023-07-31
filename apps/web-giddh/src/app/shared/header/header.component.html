@@ -79,7 +79,10 @@
                                             </span>
                                             <span
                                                 >{{ localeData?.credit }}
-                                                <a [matTooltip]="'Information'" [matTooltipPosition]="'above'">
+                                                <a
+                                                    [matTooltip]="localeData?.credit_information"
+                                                    [matTooltipPosition]="'above'"
+                                                >
                                                     <i class="icon-info mr-l15"></i>
                                                 </a>
                                             </span>
@@ -131,7 +134,10 @@
                                         </span>
                                         <span
                                             >{{ localeData?.cash }}
-                                            <a [matTooltip]="'Information'" [matTooltipPosition]="'above'">
+                                            <a
+                                                [matTooltip]="localeData?.cash_information"
+                                                [matTooltipPosition]="'above'"
+                                            >
                                                 <i class="icon-info mr-l15"></i>
                                             </a>
                                         </span>

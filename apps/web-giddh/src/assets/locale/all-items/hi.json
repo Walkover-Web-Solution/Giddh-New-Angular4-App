@@ -16,10 +16,44 @@
           }
         },
         {
+          "label": "इनवॉइस",
+          "link": "/pages/invoice/preview/sales",
+          "icon": "icon-invoice-new",
+          "description": "ग्राहकों के लिए नकद/क्रेडिट चालान बनाएं।",
+          "submenu": [
+            {
+              "label": "नकद चालान",
+              "link": "/pages/proforma-invoice/invoice/cash",
+              "icon": "icon-invoice-new",
+              "description": "चालान बनाएं और ग्राहकों को प्रबंधित करें (ग्राहक खाते/खाता अलग से)।"
+            },
+            {
+              "label": "क्रेडिट चालान",
+              "link": "/pages/proforma-invoice/invoice/sales",
+              "icon": "icon-invoice-new",
+              "description": "चालान बनाएं और खाते/खाता अलग से प्रबंधित करें।"
+            }
+          ]
+        },
+        {
           "label": "क्रेडिट नोट",
           "link": "/pages/invoice/preview/credit note",
           "icon": "icon-credit-note-new",
-          "description": "क्रेडिट नोट जेनरेट करें और खाता अपडेट करें"
+          "description": "क्रेडिट नोट वाउचर जनरेट करें।",
+          "submenu": [
+            {
+              "label": "नकद क्रेडिट नोट",
+              "link": "/pages/proforma-invoice/invoice/cash credit note",
+              "icon": "icon-invoice-new",
+              "description": "विक्रेताओं को प्रबंधित किए बिना (अलग खाते/खाता के बिना) तत्काल भुगतान किया गया क्रेडिट उत्पन्न करें।"
+            },
+            {
+              "label": "क्रेडिट नोट",
+              "link": "/pages/invoice/preview/credit note",
+              "icon": "icon-credit-note-new",
+              "description": "क्रेडिट नोट बनाएं और ग्राहकों को प्रबंधित करें (ग्राहक खाते/खाता अलग से)।"
+            }
+          ]
         },
         {
           "label": "ग्राहक",
@@ -32,36 +66,16 @@
           }
         },
         {
-          "label": "चालान",
-          "link": "/pages/invoice/preview/sales",
+          "label": "बिक्री चालान",
+          "link": "/pages/proforma-invoice/invoice/sales",
           "icon": "icon-invoice-new",
-          "description": "बहुमुद्रा, आवर्ती चालान, नकद चालान",
-          "submenu": [
-            {
-              "label": "नकद चालान",
-              "link": "/pages/proforma-invoice/invoice/cash",
-              "icon": "icon-invoice-new",
-              "description": "नकद चालान उत्पन्न करें"
-            },
-            {
-              "label": "क्रेडिट चालान",
-              "link": "/pages/proforma-invoice/invoice/sales",
-              "icon": "icon-invoice-new",
-              "description": "Generate credit invoice"
-            }
-          ]
+          "description": "बिक्री चालान उत्पन्न करें"
         },
         {
           "label": "रसीद",
           "link": "/pages/reports/receipt",
           "icon": "icon-reciept-new",
           "description": "अग्रिम, सामान्य, कुल, और अप्रयुक्त रसीदें"
-        },
-        {
-          "label": "बिक्री चालान",
-          "link": "/pages/proforma-invoice/invoice/sales",
-          "icon": "icon-invoice-new",
-          "description": "बिक्री चालान उत्पन्न करें"
         },
         {
           "label": "बिक्री आदेश",
@@ -95,13 +109,41 @@
           "label": "डेबिट नोट",
           "link": "/pages/invoice/preview/debit note",
           "icon": "icon-debit-note-new",
-          "description": "डेबिट नोट रिकॉर्ड करें और खाता अपडेट करें"
+          "description": "डेबिट नोट वाउचर जोड़ें",
+          "submenu": [
+            {
+              "label": "नकद डेबिट नोट",
+              "link": "/pages/proforma-invoice/invoice/cash debit note",
+              "icon": "icon-invoice-new",
+              "description": "विक्रेताओं को प्रबंधित किए बिना (अलग खाते/खाता के बिना) तत्काल भुगतान डेबिट नोट जोड़ें।"
+            },
+            {
+              "label": "डेबिट नोट",
+              "link": "/pages/invoice/preview/debit note",
+              "icon": "icon-debit-note-new",
+              "description": "डेबिट नोट जोड़ें और विक्रेताओं को प्रबंधित करें (विक्रेता खाते/खाता अलग से)।"
+            }
+          ]
         },
         {
-          "label": "खरीद बिल",
+          "label": "बिल",
           "link": "/pages/proforma-invoice/invoice/purchase",
           "icon": "icon-invoice-new",
-          "description": "खरीद अनुरोध, खरीद बिल, पीओ संशोधित करें"
+          "description": "विक्रेताओं के लिए नकद/क्रेडिट बिल जोड़ें।",
+          "submenu": [
+            {
+              "label": "नकद बिल",
+              "link": "/pages/proforma-invoice/invoice/cash bill",
+              "icon": "icon-invoice-new",
+              "description": "विक्रेताओं को प्रबंधित किए बिना (अलग खाते/खाता के बिना) तुरंत भुगतान किया गया बिल जेनरेट करें।"
+            },
+            {
+              "label": "क्रेडिट बिल",
+              "link": "/pages/proforma-invoice/invoice/purchase",
+              "icon": "icon-invoice-new",
+              "description": "बिल बनाएं और विक्रेताओं को प्रबंधित करें (विक्रेता खाते/खाता अलग से)।"
+            }
+          ]
         },
         {
           "label": "खरीद प्रबंधन",

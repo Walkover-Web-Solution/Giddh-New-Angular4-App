@@ -19,19 +19,19 @@
           "label": "Invoice",
           "link": "/pages/invoice/preview/sales",
           "icon": "icon-invoice-new",
-          "description": "Generate invoice",
+          "description": "Generate Cash/Credit invoice for customers.",
           "submenu": [
             {
               "label": "Cash Invoice",
               "link": "/pages/proforma-invoice/invoice/cash",
               "icon": "icon-invoice-new",
-              "description": "Generate cash invoice"
+              "description": "Generate invoice and manage customers (customer accounts/ledger separately)."
             },
             {
               "label": "Credit Invoice",
               "link": "/pages/proforma-invoice/invoice/sales",
               "icon": "icon-invoice-new",
-              "description": "Generate credit invoice"
+              "description": "Create invoice and manage accounts/ledger separately."
             }
           ]
         },
@@ -39,19 +39,19 @@
           "label": "Credit Note",
           "link": "/pages/invoice/preview/credit note",
           "icon": "icon-credit-note-new",
-          "description": "Generate credit note & update A/c",
+          "description": "Generate Credit note voucher.",
           "submenu": [
             {
               "label": "Cash Credit Note",
               "link": "/pages/proforma-invoice/invoice/cash credit note",
               "icon": "icon-invoice-new",
-              "description": "Generate cash credit note"
+              "description": "Generate instant paid credit without managing vendors (Without separate account/ledger)."
             },
             {
               "label": "Credit Note",
               "link": "/pages/invoice/preview/credit note",
               "icon": "icon-credit-note-new",
-              "description": "Generate credit note"
+              "description": "Generate credit note and manage customers (customer accounts/ledger separately)."
             }
           ]
         },
@@ -109,19 +109,19 @@
           "label": "Debit Note",
           "link": "/pages/invoice/preview/debit note",
           "icon": "icon-debit-note-new",
-          "description": "Record debit note & update A/c",
+          "description": "Add Debit note voucher.",
           "submenu": [
             {
               "label": "Cash Debit Note",
               "link": "/pages/proforma-invoice/invoice/cash debit note",
               "icon": "icon-invoice-new",
-              "description": "Generate cash debit note"
+              "description": "Add instant paid debit note without managing vendors (Without separate account/ledger)."
             },
             {
               "label": "Debit Note",
               "link": "/pages/invoice/preview/debit note",
               "icon": "icon-debit-note-new",
-              "description": "Generate debit note"
+              "description": "Add debit note and manage vendors (vendor accounts/ledger separately)."
             }
           ]
         },
@@ -129,19 +129,19 @@
           "label": "Bill",
           "link": "/pages/proforma-invoice/invoice/purchase",
           "icon": "icon-invoice-new",
-          "description": "Purchase request, purchase bill, modify PO",
+          "description": "Add Cash/Credit bill for vendors.",
           "submenu": [
             {
               "label": "Cash Bill",
               "link": "/pages/proforma-invoice/invoice/cash bill",
               "icon": "icon-invoice-new",
-              "description": "Generate cash bill"
+              "description": "Generate instant paid bill without managing vendors (Without separate account/ledger)."
             },
             {
               "label": "Credit bill",
               "link": "/pages/proforma-invoice/invoice/purchase",
               "icon": "icon-invoice-new",
-              "description": "Generate credit bill"
+              "description": "Generate bill and manage vendors (vendor accounts/ledger separately)."
             }
           ]
         },
