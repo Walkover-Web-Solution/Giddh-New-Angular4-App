@@ -76,7 +76,6 @@ const _ROUTES: Routes = [
         RouterModule,
         TooltipModule
     ],
-    entryComponents: [TallysyncComponent],
     providers: [InvoiceUiDataService, TallySyncService]
 })
 export class TallysyncRoutingModule {

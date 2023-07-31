@@ -4,7 +4,7 @@ import { InventoryService } from "../../../services/inventory.service";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { cloneDeep } from "../../../lodash-optimized";
 
 @Component({
@@ -44,7 +44,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
     /** True if load more in progress */
     public loadMoreInProgress: boolean = false;
     /** Search field form control */
-    public searchFormControl = new FormControl();
+    public searchFormControl = new UntypedFormControl();
     /** Holds active parent group */
     public parentGroup: any = {};
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */

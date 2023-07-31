@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
@@ -44,11 +44,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** This will hold isMobileNumberInvalid */
     public isMobileNumberInvalid: boolean = false;
     /** Form Group for company form */
-    public companyForm: FormGroup;
+    public companyForm: UntypedFormGroup;
     /** Form Group for company form */
-    public firstStepForm: FormGroup;
+    public firstStepForm: UntypedFormGroup;
     /** Form Group for company address form */
-    public secondStepForm: FormGroup;
+    public secondStepForm: UntypedFormGroup;
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** Subject to unsubscribe from listeners */
@@ -204,7 +204,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public companiesList: any[] = [];
 
     constructor(
-        private formBuilder: FormBuilder,
+        private formBuilder: UntypedFormBuilder,
         private toaster: ToasterService,
         private http: HttpClient,
         private store: Store<AppState>,

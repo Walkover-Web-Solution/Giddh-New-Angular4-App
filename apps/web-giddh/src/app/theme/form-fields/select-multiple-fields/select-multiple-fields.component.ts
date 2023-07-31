@@ -1,6 +1,6 @@
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { ReplaySubject } from "rxjs";
@@ -37,7 +37,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     /** List of chips based on selected values */
     public chipList: any[] = [];
     /** Search field form control */
-    public searchFormControl = new FormControl();
+    public searchFormControl = new UntypedFormControl();
     /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions: IOption[] = [];
     /** Emit with seperate code for chiplist */
