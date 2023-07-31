@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -89,12 +89,12 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public showAdvanceSearchIcon: boolean = false;
     public showProductSearch: boolean = false;
     public showSourceSearch: boolean = false;
-    public productUniqueNameInput: FormControl = new FormControl();
-    public sourceUniqueNameInput: FormControl = new FormControl();
+    public productUniqueNameInput: UntypedFormControl = new UntypedFormControl();
+    public sourceUniqueNameInput: UntypedFormControl = new UntypedFormControl();
     public entities$: Observable<CompanyResponse[]>;
     public selectedEntity: string = null;
     // modal advance search
-    public advanceSearchForm: FormGroup;
+    public advanceSearchForm: UntypedFormGroup;
     public filterCategory: string = null;
     public filterCategoryType: string = null;
     public filterValueCondition: string = null;
@@ -238,7 +238,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         private store: Store<AppState>,
         private stockReportActions: StockReportActions,
         private inventoryService: InventoryService,
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         private _toasty: ToasterService,
         private inventoryAction: InventoryAction,
         private invViewService: InvViewService,

@@ -3,7 +3,7 @@ import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { InventoryService } from '../../../services/inventory.service';
 import { ReplaySubject } from 'rxjs';
 import { StockUnits } from '../../../inventory/components/custom-stock-components/stock-unit';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../services/toaster.service';
 import { cloneDeep } from '../../../lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
@@ -30,7 +30,7 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
     /** List of unit groups */
     public groupList: any[] = [];
     /** Form Group for unit form */
-    public unitForm: FormGroup;
+    public unitForm: UntypedFormGroup;
     /** Holds if form is valid or not */
     public isValidForm: boolean = true;
     /** Holds if form mappings are valid or not */
@@ -46,7 +46,7 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
 
     constructor(
         private inventoryService: InventoryService,
-        private formBuilder: FormBuilder,
+        private formBuilder: UntypedFormBuilder,
         private toaster: ToasterService,
         private dialog: MatDialog
     ) {
@@ -135,7 +135,7 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
      * @memberof CreateNewUnitComponent
      */
     public addNewMappedUnit(mapping?: any): void {
-        let mappings = this.unitForm.get('mappings') as FormArray;
+        let mappings = this.unitForm.get('mappings') as UntypedFormArray;
         let mappingForm = this.formBuilder.group({
             quantity: [mapping?.quantity ?? ''],
             stockUnitX: this.formBuilder.group({
@@ -168,7 +168,7 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
         this.isValidForm = true;
         this.isValidFormMappings = true;
 
-        let mappings = this.unitForm.get('mappings') as FormArray;
+        let mappings = this.unitForm.get('mappings') as UntypedFormArray;
         for (let mapping of mappings.controls) {
             this.removeMappedUnit(0);
         }
@@ -185,7 +185,7 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
      * @memberof CreateNewUnitComponent
      */
     public removeMappedUnit(index: number): void {
-        let mappings = this.unitForm.get('mappings') as FormArray;
+        let mappings = this.unitForm.get('mappings') as UntypedFormArray;
         mappings.removeAt(index);
     }
 

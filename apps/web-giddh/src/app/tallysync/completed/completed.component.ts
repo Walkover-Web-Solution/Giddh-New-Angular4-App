@@ -7,7 +7,7 @@ import { takeUntil } from "rxjs/operators";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../store";
 import { IOption } from "../../theme/ng-virtual-select/sh-options.interface";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { TallySyncService } from "../../services/tally-sync.service";
 import { TallySyncData, DownloadTallyErrorLogRequest } from "../../models/api-models/tally-sync";
@@ -36,7 +36,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
     public startDate: string;
     public endDate: string;
     public filter: any = {};
-    public filterForm: FormGroup;
+    public filterForm: UntypedFormGroup;
     public completedData: TallySyncData[] = [];
     public MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     public timeInterval: IOption[] = [
@@ -118,7 +118,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
     constructor(
         private store: Store<AppState>,
         private toaster: ToasterService,
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         private tallysyncService: TallySyncService,
         private generalService: GeneralService
     ) {

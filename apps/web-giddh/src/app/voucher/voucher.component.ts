@@ -17,7 +17,7 @@ import { auditTime, debounceTime, delay, filter, map, take, takeUntil } from 'rx
 import { IOption } from '../theme/ng-select/option.interface';
 import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { FormControl, NgForm } from '@angular/forms';
+import { UntypedFormControl, NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
 import { IContentCommon, InvoicePreviewDetailsVm } from '../models/api-models/Invoice';
 import { TaxResponse } from '../models/api-models/Company';
@@ -674,7 +674,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** This will hold selected cash account */
     public selectedBankAccount: any = 'Cash';
     /** This will use for instance of linkPO Dropdown */
-    public linkPoDropdown: FormControl = new FormControl();
+    public linkPoDropdown: UntypedFormControl = new UntypedFormControl();
     /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions: IOption[] = [];
     /** Compare function of link PO reference list */

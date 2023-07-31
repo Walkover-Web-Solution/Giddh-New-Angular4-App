@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
 import { Store, select } from "@ngrx/store";
@@ -57,7 +57,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     /** Holds temporarily list of taxes */
     public taxTempArray: any[] = [];
     /** Form Group for group form */
-    public groupForm: FormGroup;
+    public groupForm: UntypedFormGroup;
     /** True if loader is visible */
     public showLoader: boolean = false;
     /** True if translations loaded */
@@ -79,7 +79,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private inventoryService: InventoryService,
         private companyAction: CompanyActions,
-        private formBuilder: FormBuilder,
+        private formBuilder: UntypedFormBuilder,
         private toaster: ToasterService,
         private route: ActivatedRoute,
         private changeDetection: ChangeDetectorRef,
