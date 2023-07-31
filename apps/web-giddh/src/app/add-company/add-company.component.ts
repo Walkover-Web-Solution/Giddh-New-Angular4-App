@@ -966,6 +966,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
+                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                this.isCompanyCreated = true;
+                this.firstStepForm.markAsPristine();
                 this.logoutUser();
             } else {
                 this.closeDialog()
