@@ -715,6 +715,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public hasUnsavedChanges: boolean = false;
     /** True if entry datepicker is open */
     public isEntryDatepickerOpen: boolean = false;
+    /**Hold voucher type */
+    public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
+
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -898,7 +901,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.isDefaultLoad = true;
 
             if (params['invoiceType']) {
-                if (params['invoiceType'] === VoucherTypeEnum.cashBill || params['invoiceType'] === VoucherTypeEnum.cashCreditNote || params['invoiceType'] === VoucherTypeEnum.cashDebitNote) {
+                if (this.voucherTypes.includes(params['invoiceType'])) {
                     this.isCashInvoice = true;
                     this.isCashBankAccount = true;
                 }
@@ -2046,9 +2049,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
+    /**
+     * This will use for prepare invoice type flags
+     *
+     * @memberof VoucherComponent
+     */
     public prepareInvoiceTypeFlags() {
         this.isSalesInvoice = this.invoiceType === VoucherTypeEnum.sales;
-        this.isCashInvoice = (this.invoiceType === VoucherTypeEnum.cashCreditNote || this.invoiceType === VoucherTypeEnum.cash || this.invoiceType === VoucherTypeEnum.cashDebitNote || this.invoiceType === VoucherTypeEnum.cashBill);
+        this.isCashInvoice = this.voucherTypes.includes(this.invoiceType);
         this.isCreditNote = this.invoiceType === VoucherTypeEnum.creditNote;
         this.isDebitNote = this.invoiceType === VoucherTypeEnum.debitNote;
         this.isPurchaseInvoice = this.invoiceType === VoucherTypeEnum.purchase;
@@ -2429,16 +2437,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         this.isShowLoader = true;
         this._cdr.detectChanges();
-        let invoiceType = this.invoiceType;
-        if (this.invoiceType === VoucherTypeEnum.cashBill) {
-            invoiceType = VoucherTypeEnum.purchase;
-        }
-        if (this.invoiceType === VoucherTypeEnum.cashCreditNote) {
-            invoiceType = VoucherTypeEnum.creditNote;
-        }
-        if (this.invoiceType === VoucherTypeEnum.cashDebitNote) {
-            invoiceType = VoucherTypeEnum.debitNote;
-        }
+        let invoiceType = this.getVoucherType(this.invoiceType);
         if ((this.isSalesInvoice || this.isPurchaseInvoice) && this.depositAccountUniqueName && (this.userDeposit === null || this.userDeposit === undefined)) {
             this.userDeposit = 0;
         }
@@ -4745,7 +4744,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public getAllLastInvoices() {
-        let invoiceType = this.invoiceType;
+        let invoiceType = this.getVoucherType(this.invoiceType);
         if (this.isProformaInvoice || this.isEstimateInvoice) {
             let filterRequest: ProformaFilter = new ProformaFilter();
             filterRequest.sortBy = this.isProformaInvoice ? 'proformaDate' : 'estimateDate';
@@ -4759,15 +4758,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             request.sort = 'desc';
             request.count = 5;
             request.isLastInvoicesRequest = true;
-            if (this.invoiceType === VoucherTypeEnum.cashBill) {
-                invoiceType = VoucherTypeEnum.purchase;
-            }
-            if (this.invoiceType === VoucherTypeEnum.cashCreditNote) {
-                invoiceType = VoucherTypeEnum.creditNote;
-            }
-            if (this.invoiceType === VoucherTypeEnum.cashDebitNote) {
-                invoiceType = VoucherTypeEnum.debitNote;
-            }
             this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.voucherUtilityService.parseVoucherType(invoiceType)));
         }
     }
@@ -4907,16 +4897,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     private getVoucherDetailsFromInputs() {
-        let invoiceType = this.invoiceType;
-        if (this.invoiceType === VoucherTypeEnum.cashBill) {
-            invoiceType = VoucherTypeEnum.purchase;
-        }
-        if (this.invoiceType === VoucherTypeEnum.cashCreditNote) {
-            invoiceType = VoucherTypeEnum.creditNote;
-        }
-        if (this.invoiceType === VoucherTypeEnum.cashDebitNote) {
-            invoiceType = VoucherTypeEnum.debitNote;
-        }
+        let invoiceType = this.getVoucherType(this.invoiceType);
         if (!this.isLastInvoiceCopied) {
             this.getAccountDetails(this.accountUniqueName);
         }
@@ -7903,21 +7884,32 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
+     * This will use for get voucher type
+     *
+     * @param {*} type
+     * @return {*}  {*}
+     * @memberof VoucherComponent
+     */
+    public getVoucherType(type: any): any {
+        if (type === VoucherTypeEnum.cashBill) {
+            return VoucherTypeEnum.purchase;
+        }
+        if (type === VoucherTypeEnum.cashCreditNote) {
+            return VoucherTypeEnum.creditNote;
+        }
+        if (type === VoucherTypeEnum.cashDebitNote) {
+            return VoucherTypeEnum.debitNote;
+        }
+        return type;
+    }
+
+    /**
      * This will get copy previous invoice text
      *
      * @memberof VoucherComponent
      */
     public getCopyPreviousInvoiceText(): void {
-        let invoiceTypeObj = this.invoiceType;
-        if (this.invoiceType === VoucherTypeEnum.cashBill) {
-            invoiceTypeObj = VoucherTypeEnum.purchase;
-        }
-        if (this.invoiceType === VoucherTypeEnum.cashCreditNote) {
-            invoiceTypeObj = VoucherTypeEnum.creditNote;
-        }
-        if (this.invoiceType === VoucherTypeEnum.cashDebitNote) {
-            invoiceTypeObj = VoucherTypeEnum.debitNote;
-        }
+        let invoiceTypeObj = this.getVoucherType(this.invoiceType);
         this.copyPreviousInvoiceText = (this.isCreditNote || this.isDebitNote) ? this.localeData?.copy_previous_dr_cr : this.localeData?.copy_previous_invoices;
         let invoiceType = this.voucherTypeToNamePipe.transform(invoiceTypeObj);
         invoiceType = this.titleCasePipe.transform(invoiceType);

@@ -62,7 +62,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     /** This will hold sub menu  items */
     public subMenuItems: any[] = [];
     /** This will hold all items dialog title*/
-    public allItemsTitle: string = '';
+    public createNewModalTitle: string = '';
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -236,13 +236,12 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     public redirectSubItemLink(subitem: any): void {
         if (subitem) {
             if (subitem.submenu) {
-                this.allItemsTitle = subitem.label
+                this.createNewModalTitle = subitem.label
                 this.subMenuItems = subitem.submenu;
                 this.dialog.open(this.dialogBox, {
                     width: '630px'
                 });
-            }
-            else {
+            } else {
                 this.router.navigate([subitem.link]);
             }
         }
@@ -251,7 +250,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     /**
     * Closes all dialogs
     *
-    * @memberof ContactComponent
+    * @memberof AllGiddhItemComponent
     */
     public closeAllDialogs(): void {
         this.dialog.closeAll();
