@@ -2902,6 +2902,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public closeAsideMenuProductServiceModal(): void {
         this.asideMenuStateForProductService?.close();
+
+        setTimeout(() => {
+            if (this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        }, 100);
     }
 
     public toggleBodyClass() {
@@ -3423,20 +3429,20 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     stockUniqueName: selectedAcc.additional.stock?.uniqueName
                 };
             }
+            this.currentTxnRequestObject[this.activeIndx] = {
+                selectedAcc,
+                isLinkedPoItem,
+                txn,
+                entry,
+                params,
+                entryIndex
+            };
             if (isBulkItem) {
                 const allStockVariants = this.stockVariants.getValue();
                 allStockVariants[this.activeIndx] = observableOf(selectedAcc.variants);
                 this.stockVariants.next(allStockVariants);
                 txn = this.calculateItemValues(selectedAcc, txn, entry, true, true);
             } else {
-                this.currentTxnRequestObject[this.activeIndx] = {
-                    selectedAcc,
-                    isLinkedPoItem,
-                    txn,
-                    entry,
-                    params,
-                    entryIndex
-                };
                 if (selectedAcc.additional.stock) {
                     txn.isStockTxn = true;
                     this.loadStockVariants(selectedAcc.additional.stock.uniqueName, isLinkedPoItem ? entryIndex : undefined);
@@ -3583,7 +3589,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             transaction.isStockTxn = true;
             if (isBulkItem) {
                 transaction.variant = selectedAcc.variant;
-            } else if (isLinkedPoItem) {
+            } else if (isLinkedPoItem && !transaction.variant) {
+                // Only re-assign the variant when it is not present (when user has added the linked PO entries with the current PB)
                 transaction.variant = o.stock.variant;
             }
             // Stock item, show the warehouse drop down if it is hidden
@@ -7062,6 +7069,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public addPoItems(poUniqueName: string, entries: any, totalPending: number): void {
         this.startLoader(true);
+        this.linkedPoItemsAdded = 0;
         let blankItemIndex = this.invFormData.entries?.findIndex(entry => !entry.transactions[0].accountUniqueName);
         let isBlankItemPresent;
         let startIndex = this.invFormData.entries?.length;
@@ -8511,10 +8519,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
-     * This will use for delete attachment confirmation
-     *
-     * @memberof VoucherComponent
-     */
+    * This will use for delete attachment confirmation
+    *
+    * @memberof VoucherComponent
+    */
     public deleteAttachementConfirmation(): void {
         this.attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
         let dialogRef = this.dialog.open(this.attachmentDeleteConfirmationModel, {

@@ -47,7 +47,6 @@
                         formControlName="accountNumber"
                         name="accountNumber"
                         type="text"
-                        digitsOnlyDirective
                         [ngClass]="{
                             'error-box':
                                 accountForm?.get('accountNumber')?.dirty && accountForm?.get('accountNumber')?.errors
@@ -76,7 +75,7 @@
                         required
                     ></sh-select>
                 </div>
-                <div class="clearfix mr-t1">
+                <div class="clearfix mr-t1" *ngIf="activeBankAccount?.bank !== 'plaid'">
                     <label>{{ localeData?.payment?.payment_updates }}</label>
                     <sh-select
                         formControlName="paymentAlerts"
