@@ -67,7 +67,7 @@
                     </button>
                     <mat-menu #menu="matMenu">
                         <div (click)="$event.stopPropagation()">
-                            <span class="create-txt font-12 d-block">
+                            <span class="create-txt font-16 d-block">
                                 {{ commonLocaleData?.app_create_new }}
                             </span>
                             <div class="menu-dropdown-wrapper">
@@ -206,25 +206,34 @@
                                     <mat-list>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a [routerLink]="['/pages/inventory/v2/stock/product/create']">
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="navigateTo('inventory/v2/stock/product/create')"
+                                            >
                                                 {{ localeData?.product }}
                                             </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a [routerLink]="['/pages/inventory/v2/stock/service/create']">
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="navigateTo('inventory/v2/stock/service/create')"
+                                            >
                                                 {{ localeData?.service }}
                                             </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a [routerLink]="['/pages/inventory/v2/stock/fixedassets/create']">
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="navigateTo('inventory/v2/stock/fixedassets/create')"
+                                            >
                                                 {{ localeData?.fixed_assets }}
                                             </a>
                                         </mat-list-item>
                                     </mat-list>
                                 </div>
-                                <div class="mr-t2 mr-b05 d-flex align-items-center">
+                                <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
                                     <span class="d-flex">
                                         <i class="icon-estimate-new mr-r1"></i>
                                     </span>
@@ -237,7 +246,7 @@
                                         </a>
                                     </span>
                                 </div>
-                                <div class="mr-t1 mr-b05 d-flex align-items-center">
+                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
                                     <span class="d-flex">
                                         <i class="icon-proforma mr-r1"></i>
                                     </span>
@@ -250,7 +259,7 @@
                                         </a>
                                     </span>
                                 </div>
-                                <div class="mr-t1 mr-b05 d-flex align-items-center">
+                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
                                     <span class="d-flex">
                                         <i class="icon-purchase-order mr-r1"></i>
                                     </span>
@@ -263,7 +272,7 @@
                                         </a>
                                     </span>
                                 </div>
-                                <div class="mr-t1 mr-b05 d-flex align-items-center">
+                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
                                     <span class="d-flex">
                                         <i class="icon-manufacturing1 mr-r1"></i>
                                     </span>

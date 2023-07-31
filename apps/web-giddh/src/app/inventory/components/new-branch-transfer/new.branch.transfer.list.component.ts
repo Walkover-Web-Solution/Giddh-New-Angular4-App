@@ -6,7 +6,9 @@ import {
     ViewChild,
     ElementRef,
     HostListener,
-    Input
+    Input,
+    OnChanges,
+    SimpleChanges
 } from "@angular/core";
 import { BsModalService, BsModalRef, ModalDirective } from "ngx-bootstrap/modal";
 import { InventoryService } from '../../../services/inventory.service';
@@ -49,7 +51,7 @@ import { ActivatedRoute } from "@angular/router";
     ]
 })
 
-export class NewBranchTransferListComponent implements OnInit, OnDestroy {
+export class NewBranchTransferListComponent implements OnInit, OnDestroy, OnChanges {
 
     @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: ElementRef;
     @ViewChild('deleteBranchTransferModal', { static: true }) public deleteBranchTransferModal: ModalDirective;
@@ -156,11 +158,6 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.querySelector("body")?.classList?.add("new-branch-list-page");
         this.initBranchTransferListResponse();
-        setTimeout(() => {
-            if (this.reportType) {
-                this.toggleTransferAsidePane();
-            }
-        }, 500);
         branchTransferVoucherTypes.map(voucherType => {
             this.voucherTypes.push({ label: voucherType.label, value: voucherType.value });
         });
@@ -228,7 +225,15 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
             }
         });
     }
-
+    public ngOnChanges(changes: SimpleChanges): void {
+         if (changes?.reportType) {
+             setTimeout(() => {
+                 if (this.reportType) {
+                     this.toggleTransferAsidePane();
+                 }
+             }, 500);
+         }
+     }
     public ngOnDestroy(): void {
         document.querySelector("body")?.classList?.remove("new-branch-list-page");
         this.destroyed$.next(true);

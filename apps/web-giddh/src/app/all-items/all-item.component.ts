@@ -59,6 +59,10 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     public activeCompanyGstNumber: string;
     /** Instance of all items dialog */
     @ViewChild("allItemModal") public dialogBox: TemplateRef<any>;
+    /** This will hold sub menu  items */
+    public subMenuItems: any[] = [];
+    /** This will hold all items dialog title*/
+    public allItemsTitle: string = '';
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -231,10 +235,14 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      */
     public redirectSubItemLink(subitem: any): void {
         if (subitem) {
-            if (subitem.label === 'Invoice') {
+            if (subitem.submenu) {
+                this.allItemsTitle = subitem.label
+                this.subMenuItems = subitem.submenu;
                 this.dialog.open(this.dialogBox, {
+                    width: '630px'
                 });
-            } else {
+            }
+            else {
                 this.router.navigate([subitem.link]);
             }
         }

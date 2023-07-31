@@ -88,6 +88,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
     /** All modules popover instance */
     @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
+    /** Instance of menu trigger */
     @ViewChild(MatMenuTrigger) public  trigger: MatMenuTrigger;
 
     public hideAsDesignChanges: boolean = false;

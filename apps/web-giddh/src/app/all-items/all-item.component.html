@@ -85,7 +85,7 @@
 <ng-template #allItemModal>
     <div (click)="$event.stopPropagation()">
         <div class="modal-header theme-bg pd-l2 pd-r2">
-            <h3 class="modal-title bg" id="modal-title">Dialog Title</h3>
+            <h3 class="modal-title bg" id="modal-title">{{ allItemsTitle }}</h3>
             <button
                 mat-icon-button
                 aria-hidden="true"
@@ -97,6 +97,17 @@
                 ×
             </button>
         </div>
-        <div class="modal-body pd-l2 pd-r2 clearfix"></div>
+        <div class="modal-body pd-l2 pd-r2 clearfix d-flex">
+            <ng-container *ngFor="let item of subMenuItems">
+                <mat-card class="single-item" (click)="redirectSubItemLink(item)" [queryParams]="item?.additional">
+                    <mat-card-title>
+                        <h4><i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}</h4>
+                    </mat-card-title>
+                    <mat-card-content>
+                        <p>{{ item?.description }}</p>
+                    </mat-card-content>
+                </mat-card>
+            </ng-container>
+        </div>
     </div>
 </ng-template>
