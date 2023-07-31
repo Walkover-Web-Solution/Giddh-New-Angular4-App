@@ -85,12 +85,11 @@
 <ng-template #allItemModal>
     <div (click)="$event.stopPropagation()">
         <div class="modal-header theme-bg pd-l2 pd-r2">
-            <h3 class="modal-title bg" id="modal-title">{{ allItemsTitle }}</h3>
+            <h3 class="modal-title bg" id="modal-title">{{ createNewModalTitle }}</h3>
             <button
                 mat-icon-button
                 aria-hidden="true"
                 class="close"
-                data-dismiss="modal"
                 [attr.aria-label]="commonLocaleData?.app_close"
                 (click)="closeAllDialogs()"
             >

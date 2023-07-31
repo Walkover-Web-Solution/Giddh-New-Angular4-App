@@ -81,8 +81,6 @@
         position: relative;
         border: 1px solid var(--color-white);
         border-radius: 20px;
-
-        // padding: 0 7px;
         i {
             vertical-align: bottom;
             display: inline-block;
@@ -136,15 +134,6 @@
                 color: var(--color-table-secondary-heading);
                 text-decoration: underline;
                 position: relative;
-                // &::after{
-                //     color: var(--color-table-secondary-heading);
-                //     content: "→";
-                //     display: inline-block;
-                //     font-size: var(--font-size-16);
-                //     width: 15px;
-                //     position: absolute;
-                //     right: -24px;
-                // }
             }
 
             .dot {

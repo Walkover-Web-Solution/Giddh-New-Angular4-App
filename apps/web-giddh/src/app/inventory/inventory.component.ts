@@ -196,15 +196,19 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.universalDate$ = this.store.pipe(select(appStore => appStore.session.applicationDate), takeUntil(this.destroyed$));
 
-        this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : this.router.url?.indexOf('inventory/report') > -1 ? 3 : (this.router.url?.indexOf('inventory/report/receipt') > -1 || this.router.url?.indexOf('inventory/report/delivery') > -1) ? 3 : 0;
+        this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : ((this.router.url?.indexOf('inventory/report')) || (this.router.url?.indexOf('inventory/report/receiptnote')) || (this.router.url?.indexOf('inventory/report/deliverychallan'))) > -1 ? 3 : 0;
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
             if (params.type) {
-                this.reportType = params.type;
+                if (params?.type === 'deliverychallan') {
+                    this.reportType = 'deliverynote';
+                } else {
+                    this.reportType = params.type;
+                }
             }
         })
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
-                this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : this.router.url?.indexOf('inventory/report') > -1 ? 3 : (this.router.url?.indexOf('inventory/report/receipt') > -1 || this.router.url?.indexOf('inventory/report/delivery') > -1) ? 3 : 0;
+                this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : ((this.router.url?.indexOf('inventory/report')) || (this.router.url?.indexOf('inventory/report/receiptnote'))|| (this.router.url?.indexOf('inventory/report/deliverychallan'))) > -1 ? 3 : 0;
             }
         });
         this.shouldShowInventoryReport$ = combineLatest([this.store.pipe(select(appStore => appStore.inventory.activeStockUniqueName)), this.store.pipe(select(appStore => appStore.inventory.activeGroupUniqueName))]).pipe(map(values => values[0] || values[1]));
@@ -266,12 +270,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
                     this.activeTabIndex = 2;
                     break;
-                case 'report/receipt':
-                    this.router.navigate(['/pages', 'inventory', 'report', 'receipt'], { relativeTo: this.route });
+                case 'report/receiptnote':
+                    this.router.navigate(['/pages', 'inventory', 'report', 'receiptnote'], { relativeTo: this.route });
                     this.activeTabIndex = 3;
                     break;
-                case 'report/delivery':
-                    this.router.navigate(['/pages', 'inventory', 'report', 'delivery'], { relativeTo: this.route });
+                case 'report/deliverychallan':
+                    this.router.navigate(['/pages', 'inventory', 'report', 'deliverychallan'], { relativeTo: this.route });
                     this.activeTabIndex = 3;
                     break;
             }
