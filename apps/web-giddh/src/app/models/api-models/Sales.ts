@@ -24,7 +24,6 @@ export enum VoucherTypeEnum {
     'payment' = 'payment',
     'cashDebitNote' = 'cash debit note',
     'cashCreditNote' = 'cash credit note',
-    'cashSales' = 'cash sales',
     'cashBill' = 'cash bill'
 }
 
@@ -106,14 +105,7 @@ export const VOUCHER_TYPE_LIST: any[] = [
         additional: {
             label: 'Cash Bill'
         }
-    },
-    {
-        value: VoucherTypeEnum.cashSales,
-        label: 'Cash Sales',
-        additional: {
-            label: 'Cash Sales'
-        }
-    },
+    }
 ];
 
 export interface IStockUnit {

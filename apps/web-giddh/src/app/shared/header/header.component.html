@@ -93,7 +93,7 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateTo('/proforma-invoice/invoice/sales')"
+                                                (click)="navigateToSubItemLink('/proforma-invoice/invoice/sales')"
                                             >
                                                 {{ localeData?.invoice }}
                                             </a>
@@ -102,7 +102,7 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateTo('/proforma-invoice/invoice/purchase')"
+                                                (click)="navigateToSubItemLink('/proforma-invoice/invoice/purchase')"
                                             >
                                                 {{ localeData?.bill }}
                                             </a>
@@ -111,7 +111,7 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateTo('/proforma-invoice/invoice/credit note')"
+                                                (click)="navigateToSubItemLink('/proforma-invoice/invoice/credit note')"
                                             >
                                                 {{ localeData?.credit_note }}
                                             </a>
@@ -120,7 +120,7 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateTo('/proforma-invoice/invoice/debit note')"
+                                                (click)="navigateToSubItemLink('/proforma-invoice/invoice/debit note')"
                                             >
                                                 {{ localeData?.debit_note }}
                                             </a>
@@ -147,7 +147,7 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateTo('/proforma-invoice/invoice/cash sales')"
+                                                (click)="navigateToSubItemLink('/proforma-invoice/invoice/cash sales')"
                                             >
                                                 {{ localeData?.invoice }}
                                             </a>
@@ -156,7 +156,7 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateTo('/proforma-invoice/invoice/cash bill')"
+                                                (click)="navigateToSubItemLink('/proforma-invoice/invoice/cash bill')"
                                                 >{{ localeData?.bill }}
                                             </a>
                                         </mat-list-item>
@@ -164,7 +164,9 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateTo('/proforma-invoice/invoice/cash credit note')"
+                                                (click)="
+                                                    navigateToSubItemLink('/proforma-invoice/invoice/cash credit note')
+                                                "
                                             >
                                                 {{ localeData?.credit_note }}
                                             </a>
@@ -173,7 +175,9 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateTo('/proforma-invoice/invoice/cash debit note')"
+                                                (click)="
+                                                    navigateToSubItemLink('/proforma-invoice/invoice/cash debit note')
+                                                "
                                             >
                                                 {{ localeData?.debit_note }}
                                             </a>
@@ -190,13 +194,13 @@
                                     <mat-list>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a class="cursor-pointer" (click)="navigateTo('receiptnote')">
+                                            <a class="cursor-pointer" (click)="navigateToSubItemLink('receiptnote')">
                                                 {{ localeData?.receipt_note }}
                                             </a>
                                         </mat-list-item>
                                         <mat-list-item>
                                             <span class="dot d-block"></span>
-                                            <a class="cursor-pointer" (click)="navigateTo('deliverynote')">
+                                            <a class="cursor-pointer" (click)="navigateToSubItemLink('deliverynote')">
                                                 {{ localeData?.delivery_challan }}
                                             </a>
                                         </mat-list-item>
@@ -214,7 +218,7 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateTo('inventory/v2/stock/product/create')"
+                                                (click)="navigateToSubItemLink('inventory/v2/stock/product/create')"
                                             >
                                                 {{ localeData?.product }}
                                             </a>
@@ -223,7 +227,7 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateTo('inventory/v2/stock/service/create')"
+                                                (click)="navigateToSubItemLink('inventory/v2/stock/service/create')"
                                             >
                                                 {{ localeData?.service }}
                                             </a>
@@ -232,7 +236,7 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateTo('inventory/v2/stock/fixedassets/create')"
+                                                (click)="navigateToSubItemLink('inventory/v2/stock/fixedassets/create')"
                                             >
                                                 {{ localeData?.fixed_assets }}
                                             </a>
@@ -246,7 +250,7 @@
                                     <span>
                                         <a
                                             class="cursor-pointer"
-                                            (click)="navigateTo('/proforma-invoice/invoice/estimate')"
+                                            (click)="navigateToSubItemLink('/proforma-invoice/invoice/estimate')"
                                         >
                                             {{ localeData?.estimate }}
                                         </a>
@@ -259,7 +263,7 @@
                                     <span>
                                         <a
                                             class="cursor-pointer"
-                                            (click)="navigateTo('/proforma-invoice/invoice/proforma')"
+                                            (click)="navigateToSubItemLink('/proforma-invoice/invoice/proforma')"
                                         >
                                             {{ localeData?.proforma }}
                                         </a>
@@ -272,7 +276,7 @@
                                     <span>
                                         <a
                                             class="cursor-pointer"
-                                            (click)="navigateTo('/purchase-management/purchase-order/new')"
+                                            (click)="navigateToSubItemLink('/purchase-management/purchase-order/new')"
                                         >
                                             {{ localeData?.purchase_order }}
                                         </a>
@@ -285,7 +289,7 @@
                                     <span>
                                         <a
                                             class="cursor-pointer"
-                                            (click)="navigateTo('/inventory/v2/manufacturing/create')"
+                                            (click)="navigateToSubItemLink('/inventory/v2/manufacturing/create')"
                                         >
                                             {{ localeData?.manufacturing }}
                                         </a>

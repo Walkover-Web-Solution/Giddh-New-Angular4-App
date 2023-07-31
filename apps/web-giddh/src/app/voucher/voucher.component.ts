@@ -898,7 +898,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.isDefaultLoad = true;
 
             if (params['invoiceType']) {
-                if (params['invoiceType'] === VoucherTypeEnum.cashBill || params['invoiceType'] === VoucherTypeEnum.cashCreditNote || params['invoiceType'] === VoucherTypeEnum.cashDebitNote || params['invoiceType'] === VoucherTypeEnum.cashSales) {
+                if (params['invoiceType'] === VoucherTypeEnum.cashBill || params['invoiceType'] === VoucherTypeEnum.cashCreditNote || params['invoiceType'] === VoucherTypeEnum.cashDebitNote) {
                     this.isCashInvoice = true;
                     this.isCashBankAccount = true;
                 }
@@ -2048,7 +2048,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public prepareInvoiceTypeFlags() {
         this.isSalesInvoice = this.invoiceType === VoucherTypeEnum.sales;
-        this.isCashInvoice = (this.invoiceType === VoucherTypeEnum.cashCreditNote || this.invoiceType === VoucherTypeEnum.cash || this.invoiceType === VoucherTypeEnum.cashDebitNote || this.invoiceType === VoucherTypeEnum.cashBill || this.invoiceType === VoucherTypeEnum.cashSales);
+        this.isCashInvoice = (this.invoiceType === VoucherTypeEnum.cashCreditNote || this.invoiceType === VoucherTypeEnum.cash || this.invoiceType === VoucherTypeEnum.cashDebitNote || this.invoiceType === VoucherTypeEnum.cashBill);
         this.isCreditNote = this.invoiceType === VoucherTypeEnum.creditNote;
         this.isDebitNote = this.invoiceType === VoucherTypeEnum.debitNote;
         this.isPurchaseInvoice = this.invoiceType === VoucherTypeEnum.purchase;
@@ -2438,9 +2438,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         if (this.invoiceType === VoucherTypeEnum.cashDebitNote) {
             invoiceType = VoucherTypeEnum.debitNote;
-        }
-        if (this.invoiceType === VoucherTypeEnum.cashSales) {
-            invoiceType = VoucherTypeEnum.sales;
         }
         if ((this.isSalesInvoice || this.isPurchaseInvoice) && this.depositAccountUniqueName && (this.userDeposit === null || this.userDeposit === undefined)) {
             this.userDeposit = 0;
@@ -4771,9 +4768,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.invoiceType === VoucherTypeEnum.cashDebitNote) {
                 invoiceType = VoucherTypeEnum.debitNote;
             }
-            if (this.invoiceType === VoucherTypeEnum.cashSales) {
-                invoiceType = VoucherTypeEnum.sales;
-            }
             this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.voucherUtilityService.parseVoucherType(invoiceType)));
         }
     }
@@ -4922,9 +4916,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         if (this.invoiceType === VoucherTypeEnum.cashDebitNote) {
             invoiceType = VoucherTypeEnum.debitNote;
-        }
-        if (this.invoiceType === VoucherTypeEnum.cashSales) {
-            invoiceType = VoucherTypeEnum.sales;
         }
         if (!this.isLastInvoiceCopied) {
             this.getAccountDetails(this.accountUniqueName);
@@ -6078,7 +6069,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     private isMultiCurrencyModule(): boolean {
-        return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash, VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.purchase, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill, VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cashSales].includes(this.invoiceType);
+        return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash, VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.purchase, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill, VoucherTypeEnum.cashCreditNote].includes(this.invoiceType);
     }
 
     /**
@@ -6897,7 +6888,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.salesService.getAccountsWithCurrency(groups, `${customerCurrency}, ${this.companyCurrency}`).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             const bankAccounts = data?.body?.results?.filter(response => response?.uniqueName == this.selectedBankAccount?.toLowerCase());
-            if (this.invoiceType == VoucherTypeEnum.cash || this.invoiceType == VoucherTypeEnum.cashBill || this.invoiceType == VoucherTypeEnum.cashSales || this.invoiceType == VoucherTypeEnum.cashDebitNote || this.invoiceType == VoucherTypeEnum.cashCreditNote) {
+            if (this.invoiceType == VoucherTypeEnum.cash || this.invoiceType == VoucherTypeEnum.cashBill || this.invoiceType == VoucherTypeEnum.cashDebitNote || this.invoiceType == VoucherTypeEnum.cashCreditNote) {
                 if (bankAccounts.length > 0) {
                     this.onSelectPaymentMode({ label: bankAccounts[0]?.name, value: bankAccounts[0]?.uniqueName, additional: bankAccounts[0] });
                 }
@@ -7926,9 +7917,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         if (this.invoiceType === VoucherTypeEnum.cashDebitNote) {
             invoiceTypeObj = VoucherTypeEnum.debitNote;
-        }
-        if (this.invoiceType === VoucherTypeEnum.cashSales) {
-            invoiceTypeObj = VoucherTypeEnum.sales;
         }
         this.copyPreviousInvoiceText = (this.isCreditNote || this.isDebitNote) ? this.localeData?.copy_previous_dr_cr : this.localeData?.copy_previous_invoices;
         let invoiceType = this.voucherTypeToNamePipe.transform(invoiceTypeObj);

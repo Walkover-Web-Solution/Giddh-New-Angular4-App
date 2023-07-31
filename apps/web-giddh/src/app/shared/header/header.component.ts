@@ -89,7 +89,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /** All modules popover instance */
     @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
     /** Instance of menu trigger */
-    @ViewChild(MatMenuTrigger) public  trigger: MatMenuTrigger;
+    @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
 
     public hideAsDesignChanges: boolean = false;
     public title: Observable<string>;
@@ -1106,7 +1106,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isTodaysDateSelected = false;
     }
 
-    public navigateTo(event: any) {
+    /**
+     * This will use for navigae to subitem link
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    public navigateToSubItemLink(event: any) {
         if (event) {
             this.trigger?.closeMenu();
             if (event === 'deliverynote' || event === 'receiptnote') {
@@ -1116,6 +1122,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         }
     }
+
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

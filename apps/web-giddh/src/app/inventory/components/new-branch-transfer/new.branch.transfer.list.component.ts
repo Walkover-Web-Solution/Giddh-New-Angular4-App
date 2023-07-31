@@ -225,15 +225,23 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy, OnChan
             }
         });
     }
+
+    /**
+     *Thiis hook will use for on changes in component
+     *
+     * @param {SimpleChanges} changes
+     * @memberof NewBranchTransferListComponent
+     */
     public ngOnChanges(changes: SimpleChanges): void {
-         if (changes?.reportType) {
-             setTimeout(() => {
-                 if (this.reportType) {
-                     this.toggleTransferAsidePane();
-                 }
-             }, 500);
-         }
-     }
+        if (changes?.reportType) {
+            setTimeout(() => {
+                if (this.reportType) {
+                    this.toggleTransferAsidePane();
+                }
+            }, 500);
+        }
+    }
+
     public ngOnDestroy(): void {
         document.querySelector("body")?.classList?.remove("new-branch-list-page");
         this.destroyed$.next(true);
