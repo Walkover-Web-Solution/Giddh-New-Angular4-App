@@ -1,9 +1,9 @@
 import { PermissionDataService } from './../permissions/permission-data.service';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import { Injectable } from '@angular/core';
 import { GeneralService } from '../services/general.service';
 import { OrganizationType } from '../models/user-login-state';
 import { RESTRICTED_BRANCH_ROUTES } from '../app.constant';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 
 @Injectable()
 export class NeedsAuthorization implements CanActivate {
