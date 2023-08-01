@@ -12,6 +12,23 @@
                 [pageHeading]="(isCashInvoice ? localeData?.invoice_types?.cash : getInvoiceType()) | titlecase"
             >
             </hamburger-menu>
+            <div class="form-group mr-b05 clearfix pro-invoice-heading">
+                <div class="clearfix">
+                    <div class="btn-group proforma-sales-time" dropdown>
+                        <button
+                            id="giddh-page-heading-link"
+                            type="button"
+                            class="btn more-btn-dropdown dropdown-toggle"
+                            aria-controls="dropdown-basic"
+                        >
+                            <span>
+                                {{ invoiceType | titlecase }}
+                            </span>
+                            <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- region update mode loader-->
         <ng-container *ngIf="isUpdateDataInProcess">
