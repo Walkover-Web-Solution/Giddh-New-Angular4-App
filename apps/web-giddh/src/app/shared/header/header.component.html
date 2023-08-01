@@ -147,7 +147,7 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateToSubItemLink('/proforma-invoice/invoice/cash sales')"
+                                                (click)="navigateToSubItemLink('/proforma-invoice/invoice/cash')"
                                             >
                                                 {{ localeData?.invoice }}
                                             </a>
@@ -221,7 +221,7 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateToSubItemLink('inventory/v2/stock/product/create')"
+                                                (click)="navigateToSubItemLink('/inventory/v2/stock/product/create')"
                                             >
                                                 {{ localeData?.product }}
                                             </a>
@@ -230,7 +230,7 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateToSubItemLink('inventory/v2/stock/service/create')"
+                                                (click)="navigateToSubItemLink('/inventory/v2/stock/service/create')"
                                             >
                                                 {{ localeData?.service }}
                                             </a>
@@ -239,7 +239,9 @@
                                             <span class="dot d-block"></span>
                                             <a
                                                 class="cursor-pointer"
-                                                (click)="navigateToSubItemLink('inventory/v2/stock/fixedassets/create')"
+                                                (click)="
+                                                    navigateToSubItemLink('/inventory/v2/stock/fixedassets/create')
+                                                "
                                             >
                                                 {{ localeData?.fixed_assets }}
                                             </a>
