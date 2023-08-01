@@ -1,5 +1,4 @@
 .setting-container {
-    .mat-tab-body-wrapper {
-        // min-height: calc(100vh - 555px);
-    }
+    min-height: calc(100vh - 205px);
+    overflow-y: auto;
 }
