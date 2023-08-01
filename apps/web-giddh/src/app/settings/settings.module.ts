@@ -61,6 +61,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
+import { NgxPlaidLinkModule } from "ngx-plaid-link";
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
 };
@@ -130,7 +131,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatRadioModule,
         MatTooltipModule,
         MatMenuModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        NgxPlaidLinkModule
+
     ],
     providers: [
         {

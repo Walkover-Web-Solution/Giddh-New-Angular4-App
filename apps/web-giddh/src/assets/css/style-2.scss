@@ -20,8 +20,10 @@ $custom-typography: mat-typography-config(
 @import "../css/global/subscription.component.scss";
 @import "../css/global/custom-fields.scss";
 @import "../css/global/inventory.scss";
+@import "../css/global/mat-button.scss";
 @import "../css/global/search.scss";
 @import "../css/global/all-items.scss";
+@import "../css/global/setting-integration.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -906,15 +908,19 @@ aside-create-group {
         .inventory-sub-sideabar {
             .item-list {
                 a {
-                    &.account-name {
+                    &.group-name {
                         .mat-list-item-content {
                             color: var(--color-master-page-sidebar-primary-group);
                         }
                     }
                     &.isActive {
+                        background-color: var(--color-primary-header-background);
                         .mat-list-item-content {
                             color: var(--color-white);
                         }
+                    }
+                    mat-list-item {
+                        height: 100% !important;
                     }
                 }
                 .mat-list-item-content {
@@ -949,9 +955,11 @@ aside-create-group {
                 }
             }
         }
-        .cdk-virtual-scroll-viewport {
-            height: 100% !important;
-            min-height: calc(100vh - 188px);
+        mat-list {
+            .cdk-virtual-scroll-viewport {
+                height: 100% !important;
+                min-height: calc(100vh - 150px);
+            }
         }
     }
 
@@ -8618,8 +8626,6 @@ button.ladda-button .ladda-label {
     }
 
     .options-line {
-        padding: 5px;
-
         .option-label {
             color: var(--color-common-primary-text);
         }
@@ -10882,6 +10888,13 @@ inventory-master {
     .mat-tooltip {
         margin-bottom: 40px !important;
     }
+    .inventory-search {
+        text-field {
+            .form-control {
+                width: 500px;
+            }
+        }
+    }
 }
 
 @media (max-width: 1366px) {
@@ -13044,10 +13057,6 @@ body.prevent-body-scroll {
     overflow-y: hidden !important;
 }
 
-.hide-payment-tab ul li:nth-child(4) {
-    display: none;
-}
-
 @media (max-width: 991px) and (min-width: 768px) {
     .hidden-sm {
         display: none !important;
@@ -14203,22 +14212,10 @@ body.hide-scroll-body.master-page {
     transform: unset !important;
 }
 
-/*==========  Material Button Default Font Size Start Here =============*/
-.mat-button,
-.mat-raised-button,
-.mat-icon-button,
-.mat-stroked-button,
-.mat-flat-button,
-.mat-fab,
-.mat-mini-fab {
-    font-size: var(--font-size-15);
-}
-
 .mat-tab-label {
     font-size: var(--font-size-16);
 }
 
-/*==========  Material Button Default Font Size End Here ===============*/
 /*-- mat-stepper --*/
 .mat-step-header {
     background-color: transparent !important;
@@ -14260,27 +14257,6 @@ body.hide-scroll-body.master-page {
     }
 }
 
-/*================Material Buttons Color=======Start Here==================*/
-.mat-button,
-.mat-icon-button,
-.mat-stroked-button {
-    border-color: var(--color-secondary-input-bar-border) !important;
-    &.mat-primary {
-        color: var(--color-giddh-blue) !important;
-    }
-    /*--- common-btn ---*/
-    .mat-button.mat-primary,
-    .mat-icon-button.mat-primary,
-    .mat-stroked-button.mat-primary {
-        color: var(--color-primary-header-background);
-
-        .mat-button-focus-overlay {
-            background-color: var(--color-primary-header-background) !important;
-        }
-    }
-}
-/*================Material Buttons Color=======End Here==================*/
-
 /*--- voucher-datepicker ---*/
 voucher-component {
     .mat-datepicker-input {
@@ -14294,6 +14270,7 @@ voucher-component {
 .mat-tooltip {
     letter-spacing: 0.8px;
 }
+
 /*--- manufacturing-list-table ---*/
 .list-table-wrapper {
     th.mat-header-cell {
@@ -14335,69 +14312,26 @@ voucher-component {
 .inventory-search {
     text-field {
         .form-control {
-            height: 42px;
-            width: 430px;
-            box-shadow: var(--color-search-box-shadow) 0px 48px 100px 0px;
-        }
-    }
-}
-
-/* ======Ladda  Button Color in Material Stroked Button====Start Here=========== */
-button {
-    &.mat-stroked-button {
-        &.mat-primary {
-            &:disabled {
-                .ladda-label {
-                    color: transparent;
-                }
+            height: 53px;
+            width: 674px;
+            background-color: var(--color-apple-search-background) !important;
+            box-shadow: 0 7px 32px 13px rgba(0, 0, 0, 0.3);
+            color: var(--color-white) !important;
+            border-color: var(--color-apple-search-background) !important;
+            padding-left: 43px !important;
+            padding-right: 38px !important;
+            font-size: var(--font-size-24) !important;
+            caret-color: var(--color-master-page-sidebar-primary-group);
+            border-radius: 10px !important;
+            &:focus {
+                border-color: var(--color-black) !important;
             }
-            &.ladda-button {
-                &:not(:disabled) {
-                    .ladda-label {
-                        color: var(--color-giddh-blue) !important;
-                        display: contents;
-                        width: auto;
-                        height: auto;
-                    }
-                }
-                .ladda-spinner {
-                    div {
-                        div {
-                            div {
-                                background: var(--color-giddh-blue) !important;
-                            }
-                        }
-                    }
-                }
+            &::placeholder {
+                color: var(--color-master-page-sidebar-primary-group);
             }
         }
     }
 }
-
-/* This class is used to ladda button text color which is conditionally disabled*/
-.disabled-ladda-btn {
-    &.mat-stroked-button {
-        &.mat-primary {
-            &:disabled {
-                .ladda-label {
-                    color: var(--color-giddh-blue) !important;
-                }
-            }
-        }
-    }
-}
-
-/* ======Ladda  Button Color in Material Stroked Button====End Here=========== */
-
-/*============Material Button Disabled Cursor======Start===========*/
-button {
-    &.mat-button-disabled {
-        &:hover {
-            cursor: not-allowed !important;
-        }
-    }
-}
-/*============Material Button Disabled Cursor======End===========*/
 
 .ledger-date {
     .input-wrapper {

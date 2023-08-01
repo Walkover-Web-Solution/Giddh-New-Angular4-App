@@ -7,7 +7,7 @@
 >
     <div class="relative">
         <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-        <hamburger-menu></hamburger-menu>
+        <hamburger-menu *ngIf="!addGroup"></hamburger-menu>
 
         <ng-container *ngIf="!showLoader">
             <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">
@@ -25,6 +25,7 @@
                                             formControlName="name"
                                             (change)="!groupUniqueName ? generateUniqueName() : ''"
                                             [showError]="isFormSubmitted && !groupForm.get('name')?.value"
+                                            [autoFocus]="addGroup && !groupUniqueName"
                                         >
                                         </input-field>
                                     </div>
@@ -184,7 +185,7 @@
                                             </button>
 
                                             <button
-                                                *ngIf="groupUniqueName"
+                                                *ngIf="groupUniqueName && !addGroup"
                                                 mat-stroked-button
                                                 class="min-width-100"
                                                 (click)="cancelEdit()"
@@ -205,7 +206,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-3" *ngIf="!addGroup">
                             <span *ngIf="!showLoader" class="float-right mt-3">
                                 <button
                                     *ngIf="groupUniqueName"

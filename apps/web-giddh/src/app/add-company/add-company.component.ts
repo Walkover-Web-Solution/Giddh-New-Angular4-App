@@ -20,6 +20,10 @@ import { AppState } from "../store";
 import { ItemOnBoardingState } from "../store/item-on-boarding/item-on-boarding.reducer";
 import { IOption } from "../theme/ng-select/option.interface";
 import { PageLeaveUtilityService } from "../services/page-leave-utility.service";
+import { MatDialog } from "@angular/material/dialog";
+import { VerifyMobileActions } from "../actions/verify-mobile.actions";
+import { AuthService } from "../theme/ng-social-login-module/index";
+import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 @Component({
     selector: 'add-company',
     templateUrl: './add-company.component.html',
@@ -185,13 +189,19 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** List of counties of country */
     public countyList: IOption[] = [];
     /** List of registered business type countries */
-    public registeredTypeCountryList: any[] = ["IN", "GB", "AE"];
+    public registeredTypeCountryList: any[] = ["IN", "AE"];
     /** This will hold disable State */
     public disabledState: boolean = false;
+    /** Returns true if company created */
+    public isCompanyCreated: boolean = false;
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
-        return this.firstStepForm?.dirty;
+        return !this.isCompanyCreated && this.firstStepForm?.dirty;
     }
+    /**Observable to login with social account */
+    public isLoggedInWithSocialAccount$: Observable<boolean>;
+    /** List of companies */
+    public companiesList: any[] = [];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -206,8 +216,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private companyActions: CompanyActions,
         private route: Router,
         private loginAction: LoginActions,
-        private pageLeaveUtilityService: PageLeaveUtilityService
-    ) { }
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        public dialog: MatDialog,
+        private verifyActions: VerifyMobileActions,
+        private socialAuthService: AuthService
+    ) {
+        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(p => p.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
+    }
 
     /**
      * On init component hook
@@ -224,7 +239,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loggedInUser = this.generalService.user;
         this.subscriptionRequestObj.userUniqueName = (this.loggedInUser) ? this.loggedInUser.uniqueName : "";
 
-        this.companies$ = this.store.pipe(select(response => response.session.companies), takeUntil(this.destroyed$));
+        this.store.pipe(select(response => response.session.companies), takeUntil(this.destroyed$)).subscribe(companyList => {
+            this.companiesList = companyList;
+        });
         this.isCompanyCreated$ = this.store.pipe(select(response => response.session.isCompanyCreated), takeUntil(this.destroyed$));
 
         this.store.pipe(select(response => response.common.onboardingform), takeUntil(this.destroyed$)).subscribe(response => {
@@ -686,15 +703,12 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.firstStepForm.controls['mobile'].setValue(this.intl?.getNumber());
         this.selectedStep = 1;
-        let companies = null;
         this.company.name = this.firstStepForm.controls['name'].value;
         this.company.country = this.firstStepForm.controls['country'].value.value;
         this.company.baseCurrency = this.firstStepForm.controls['currency'].value.value;
         this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
         this.generalService.createNewCompany = this.company;
-
-        this.companies$.pipe(takeUntil(this.destroyed$)).subscribe(companyList => companies = companyList);
-        if (PRODUCTION_ENV && companies?.length === 0) {
+        if (PRODUCTION_ENV && this.companiesList?.length === 0) {
             this.sendNewUserInfo();
             this.fireSocketCompanyCreateRequest();
         }
@@ -840,18 +854,22 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.company.subscriptionRequest = this.subscriptionRequestObj;
             this.store.dispatch(this.companyActions.CreateNewCompany(this.company));
         }
-
+        this.isLoading = true;
         this.isCompanyCreated$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.firstStepForm.reset();
-                this.secondStepForm.reset();
-                this.companyForm.reset();
+                setTimeout(() => {
+                    this.isLoading = false;
+                }, 500);
+                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                this.isCompanyCreated = true;
                 this.firstStepForm.markAsPristine();
                 this.generalService.companyUniqueName = this.company?.uniqueName;
                 setTimeout(() => {
                     this.store.dispatch(this.loginAction.ChangeCompany(this.company?.uniqueName));
                     this.route.navigate(['/pages', 'onboarding']);
                 }, 500);
+            } else {
+                this.isLoading = false;
             }
         });
     }
@@ -928,6 +946,67 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         }
 
         return null;
+    }
+
+    /**
+     * This will open the logout confirmation dialog
+     *
+     * @memberof AddCompanyComponent
+     */
+    public openLogoutConfirmationDialog(): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '40%',
+            data: {
+                title: this.localeData?.logout,
+                body: this.localeData?.create_company_close,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                this.isCompanyCreated = true;
+                this.firstStepForm.markAsPristine();
+                this.logoutUser();
+            } else {
+                this.closeDialog()
+            }
+        });
+    }
+
+    /**
+     * This will close the modal
+     *
+     * @memberof AddCompanyComponent
+     */
+    public closeDialog(): void {
+        this.dialog?.closeAll();
+    }
+
+    /**
+     * This will use for logout user
+     *
+     * @memberof AddCompanyComponent
+     */
+    public logoutUser(): void {
+        this.store.dispatch(this.verifyActions.hideVerifyBox());
+        this.dialog?.closeAll();
+        if (isElectron) {
+            this.store.dispatch(this.loginAction.ClearSession());
+        } else {
+            this.isLoggedInWithSocialAccount$.subscribe((val) => {
+                if (val) {
+                    this.socialAuthService.signOut().then().catch((err) => {
+                    });
+                    this.store.dispatch(this.loginAction.ClearSession());
+                    this.store.dispatch(this.loginAction.socialLogoutAttempt());
+                } else {
+                    this.store.dispatch(this.loginAction.ClearSession());
+                }
+            });
+        }
     }
 
     /**

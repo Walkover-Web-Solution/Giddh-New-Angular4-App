@@ -11,6 +11,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
 import { AppState } from '../../../store';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { Location } from '@angular/common';
 
 /**
  * Data with nested structure.
@@ -113,7 +114,8 @@ export class InventorySidebarComponent implements OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
         private store: Store<AppState>,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private location: Location
     ) {
         this.breakPointObserver.observe([
             '(max-width: 767px)'
@@ -187,7 +189,7 @@ export class InventorySidebarComponent implements OnDestroy {
      * @memberof InventorySidebarComponent
      */
     public goToPreviousPage(): void {
-        this.router.navigate(['/pages/inventory/v2']);
+        this.location.back();
     }
 
     /**
@@ -221,7 +223,7 @@ export class InventorySidebarComponent implements OnDestroy {
                         { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/inventory/v2/reports/product/group' },
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/product/variant' },
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/product/transaction' },
-                        //{ name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/product/master' }
+                        { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/product/master' }
                     ],
                 },
                 {
@@ -233,7 +235,7 @@ export class InventorySidebarComponent implements OnDestroy {
                         { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/inventory/v2/reports/service/group' },
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/service/variant' },
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/service/transaction' },
-                        //{ name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/service/master' }
+                        { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/service/master' }
                     ],
                 },
                 {
@@ -245,7 +247,7 @@ export class InventorySidebarComponent implements OnDestroy {
                         { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/inventory/v2/reports/fixedassets/group' },
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/fixedassets/variant' },
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/fixedassets/transaction' },
-                        //{ name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/fixedassets/master' }
+                        { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/fixedassets/master' }
                     ],
                 },
                 {

@@ -2498,6 +2498,7 @@
                                                                     name="transaction.date_{{ entryIdx }}"
                                                                     [(ngModel)]="entry.entryDate"
                                                                     [appearance]="'fill'"
+                                                                    (datepickerState)="onFocusEntryDate($event)"
                                                                 >
                                                                 </giddh-datepicker>
                                                                 <span
