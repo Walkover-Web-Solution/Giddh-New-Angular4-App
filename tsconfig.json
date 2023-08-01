@@ -1,46 +1,47 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
-        "inlineSources": true,
-        "sourceMap": true,
-        "declaration": false,
-        "moduleResolution": "node",
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "importHelpers": true,
-        "target": "es2020",
-        "module": "es2015",
-        "typeRoots": [
-            "node_modules/@types",
-            "./node_modules/qz-tray/"
+      "inlineSources": true,
+      "sourceMap": true,
+      "declaration": false,
+      "moduleResolution": "node",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "importHelpers": true,
+      "target": "ES2022",
+      "module": "es2015",
+      "typeRoots": [
+        "node_modules/@types",
+        "./node_modules/qz-tray/"
+      ],
+      "lib": [
+        "es2017",
+        "dom"
+      ],
+      "skipLibCheck": true,
+      "skipDefaultLibCheck": true,
+      "baseUrl": ".",
+      "paths": {
+        "@giddh-workspaces/*": [
+          "libs/*"
         ],
-        "lib": [
-            "es2017",
-            "dom"
+        "@giddh-workspaces/electron": [
+          "xplat/electron/index.ts"
         ],
-        "skipLibCheck": true,
-        "skipDefaultLibCheck": true,
-        "baseUrl": ".",
-        "paths": {
-            "@giddh-workspaces/*": [
-                "libs/*"
-            ],
-            "@giddh-workspaces/electron": [
-                "xplat/electron/index.ts"
-            ],
-            "@giddh-workspaces/electron/*": [
-                "xplat/electron/*"
-            ],
-            "@giddh-workspaces/web": [
-                "xplat/web/index.ts"
-            ],
-            "@giddh-workspaces/web/*": [
-                "xplat/web/*"
-            ],
-            "path":[
-                "./node_modules/path-browserify"
-            ]
-        }
+        "@giddh-workspaces/electron/*": [
+          "xplat/electron/*"
+        ],
+        "@giddh-workspaces/web": [
+          "xplat/web/index.ts"
+        ],
+        "@giddh-workspaces/web/*": [
+          "xplat/web/*"
+        ],
+        "path": [
+          "./node_modules/path-browserify"
+        ]
+      },
+      "useDefineForClassFields": false
     },
     "exclude": [
         "node_modules",
