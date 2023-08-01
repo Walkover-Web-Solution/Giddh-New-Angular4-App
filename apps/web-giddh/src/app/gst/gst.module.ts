@@ -4,9 +4,8 @@ import { TransactionSummaryComponent } from './filing/tabs/push-to-gstin/compone
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FilingComponent } from './filing/filing.component';
@@ -43,6 +42,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatButtonModule } from '@angular/material/button';
 import { PushToPortalComponent } from './modals/push-to-portal/push-to-portal.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -55,7 +55,7 @@ import { PushToPortalComponent } from './modals/push-to-portal/push-to-portal.co
         GstRoutingModule,
         CollapseModule,
         PaginationModule.forRoot(),
-        DatepickerModule.forRoot(),
+        BsDatepickerModule.forRoot(),
         BsDropdownModule.forRoot(),
         Daterangepicker,
         LaddaModule.forRoot({

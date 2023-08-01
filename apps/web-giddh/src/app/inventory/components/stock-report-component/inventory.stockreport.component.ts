@@ -16,6 +16,7 @@ import {
     OnDestroy,
     OnInit,
     SimpleChanges,
+    TemplateRef,
     ViewChild
 } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
@@ -24,7 +25,7 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } 
 import * as dayjs from 'dayjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BranchFilterRequest, CompanyResponse } from '../../../models/api-models/Company';
+import { CompanyResponse } from '../../../models/api-models/Company';
 import { createSelector } from 'reselect';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -62,7 +63,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     @ViewChild('shCategoryType', { static: true }) public shCategoryType: ShSelectComponent;
     @ViewChild('shValueCondition', { static: true }) public shValueCondition: ShSelectComponent;
     /** Template reference */
-    @ViewChild('template', { static: true }) public template: ElementRef;
+    @ViewChild('template', { static: true }) public template: TemplateRef<any>;
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
@@ -256,7 +257,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
