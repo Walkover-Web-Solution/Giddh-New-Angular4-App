@@ -49,7 +49,7 @@
             },
             {
               "label": "Credit Note",
-              "link": "/pages/invoice/preview/credit note",
+              "link": "/pages/proforma-invoice/invoice/credit note",
               "icon": "icon-credit-note-new",
               "description": "Generate credit note and manage customers (customer accounts/ledger separately)."
             }
@@ -119,7 +119,7 @@
             },
             {
               "label": "Debit Note",
-              "link": "/pages/invoice/preview/debit note",
+              "link": "/pages/proforma-invoice/invoice/debit note",
               "icon": "icon-debit-note-new",
               "description": "Add debit note and manage vendors (vendor accounts/ledger separately)."
             }
