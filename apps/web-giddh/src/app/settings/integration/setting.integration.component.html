@@ -133,7 +133,7 @@
 
                 <div class="box clearfix mb-2">
                     <h3 class="font-16 bold mb-2">{{ localeData?.collection?.razorpay_form_heading }}</h3>
-                    <form #razorPayform="ngForm" novalidate class="">
+                    <form #razorPayform="ngForm" novalidate>
                         <div class="row">
                             <div class="form-group col-lg-4 col-md-6 col-xs-12 pd-r05">
                                 <input-field
@@ -276,7 +276,9 @@
                             <div class="form-group mr-l2">
                                 <button
                                     type="button"
-                                    class="btn btn-sky-blue mr-r2"
+                                    mat-stroked-button
+                                    color="primary"
+                                    class="mr-r2"
                                     (click)="openCreateNewAccountModal()"
                                 >
                                     {{ localeData?.payment?.connect_new_account }}
@@ -323,7 +325,7 @@
                                 class="account-wrapper"
                                 *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName"
                             >
-                                <div class="account-info-background width-100 font-15 row">
+                                <div class="account-info-background width-100 font-15 row align-items-center">
                                     <div class="col-md-4">
                                         <span class="field-label">{{ bankAccount?.bankName }}</span
                                         ><br />
@@ -337,25 +339,25 @@
                                         >
                                     </div>
                                     <div class="col-md-4">
-                                        <span class="field-label">{{ localeData?.payment?.linked_account }}</span
-                                        ><br />
                                         <span
                                             *ngIf="isIciciBankSupportedCountry"
                                             class="width-100 view-only-field inline"
                                             >{{ bankAccount?.account?.name }}</span
                                         >
-                                        <sh-select
+                                        <dropdown-field
+                                            [label]="localeData?.payment?.linked_account"
                                             *ngIf="!isIciciBankSupportedCountry"
-                                            class="linked-account"
-                                            name="bankAccountUniqueName"
+                                            [cssClass]="'input-background'"
+                                            [name]="'bankAccountUniqueName'"
                                             [placeholder]="localeData?.payment?.link_account_placeholder"
                                             [options]="bankAccounts$ | async"
-                                            (selected)="selectBankAccount($event, bankAccount)"
-                                            [(ngModel)]="bankAccount?.account.uniqueName"
-                                        >
-                                        </sh-select>
+                                            (selectedOption)="
+                                                bankAccount?.account.uniqueName = $event.value;
+                                                selectBankAccount($event, bankAccount)
+                                            "
+                                        ></dropdown-field>
                                     </div>
-                                    <span class="mr-l1 action-div mr-t3" *ngIf="!isIciciBankSupportedCountry">
+                                    <span class="mr-l1 action-div" *ngIf="!isIciciBankSupportedCountry">
                                         <a
                                             href="javascript:;"
                                             class="icon-edit-pencil"

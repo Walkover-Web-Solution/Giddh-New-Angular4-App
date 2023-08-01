@@ -3257,6 +3257,7 @@ input-field {
     .mat-form-field-appearance-outline {
         .mat-form-field-outline {
             top: 0;
+            z-index: 1;
         }
         .mat-form-field-outline-start {
             border-top-left-radius: 0.5rem;

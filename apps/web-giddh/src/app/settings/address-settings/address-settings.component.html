@@ -295,6 +295,10 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
+                <giddh-page-loader *ngIf="shouldShowLoader"></giddh-page-loader>
+                <div class="no-data" *ngIf="addresses?.length === 0 && !shouldShowLoader">
+                    <h1>{{ localeData?.no_address_found }}</h1>
+                </div>
             </div>
         </div>
         <!-- branch profile element start -->
@@ -373,31 +377,6 @@
 </div>
 
 <!-- Create address part of Address Tab -->
-<!-- <div
-    *ngIf="accountAsideMenuState === 'in' && !closeSidePane"
-    [keyboardShortcut]="'esc'"
-    (onShortcutPress)="toggleAccountAsidePane()"
->
-    <div class="aside-overlay"></div>
-    <create-address
-        class="account-aside-menu-state transform-inherit"
-        [@slideInOut]="accountAsideMenuState"
-        [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''"
-        [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-        [showLoader]="isAddressChangeInProgress"
-        (saveAddress)="saveAddress($event)"
-        (updateAddress)="updateAddress($event)"
-        [addressToUpdate]="addressToUpdate"
-        (closeAsideEvent)="toggleAccountAsidePane()"
-        [addressConfiguration]="addressConfiguration"
-        [localeData]="localeData"
-        [commonLocaleData]="commonLocaleData"
-        [hideLinkEntity]="
-            (addressToUpdate && hideLinkEntity) || (!addressToUpdate && addresses?.length <= 0 && hideLinkEntity)
-        "
-    >
-    </create-address>
-</div> -->
 <div [keyboardShortcut]="'esc'" (onShortcutPress)="toggleAccountAsidePane()">
     <ng-template #asideAccountAsidePane>
         <create-address

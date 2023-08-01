@@ -39,6 +39,7 @@
                             </mat-form-field> -->
                             <dropdown-field
                                 [label]="localeData?.subscription?.plan"
+                                [cssClass]="'input-background'"
                                 [placeholder]="commonLocaleData?.app_select"
                                 (selectedOption)="(filters.plan)"
                                 [options]="plansList"
@@ -60,6 +61,7 @@
                             </mat-form-field> -->
                             <dropdown-field
                                 [placeholder]="commonLocaleData?.app_select"
+                                [cssClass]="'input-background'"
                                 [label]="localeData?.subscription?.expiring_within"
                                 (selectedOption)="(filters.expiration)"
                                 [options]="expiringList"
@@ -86,6 +88,7 @@
                             </mat-form-field> -->
                             <dropdown-field
                                 [placeholder]="commonLocaleData?.app_select"
+                                [cssClass]="'input-background'"
                                 [label]="localeData?.subscription?.transaction_balance"
                                 (selectedOption)="(filters.transactionBalance)"
                                 [options]="transactionBalanceList"

@@ -114,7 +114,7 @@
                             </tbody>
                         </table> -->
 
-                        <table mat-table [dataSource]="dataSource" class="basic giddh-table table on-mobile-view w-100">
+                        <table mat-table [dataSource]="tags" class="basic giddh-table table on-mobile-view w-100">
                             <ng-container matColumnDef="number">
                                 <th mat-header-cell *matHeaderCellDef>{{ localeData?.s_no }}</th>
                                 <td mat-cell *matCellDef="let element">{{ element.number }}</td>
@@ -122,29 +122,26 @@
                             <ng-container matColumnDef="name">
                                 <th mat-header-cell *matHeaderCellDef>{{ localeData?.tags_name }}</th>
                                 <td mat-cell *matCellDef="let element">
-                                    {{ element.name }}
-                                    <!-- <div>
-                                        <input-field
-                                            [type]="'text'"
-                                            [placeholder]="localeData?.tags_name"
-                                        >
-                                        </input-field>
-                                    </div> -->
+                                    <span *ngIf="updateIndex !== i">{{ element.name }}</span>
+                                    <input
+                                        *ngIf="updateIndex === i"
+                                        type="text"
+                                        class="form-control"
+                                        name="name_of_{{ i }}"
+                                        [(ngModel)]="tag.name"
+                                    />
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="description">
                                 <th mat-header-cell *matHeaderCellDef>{{ localeData?.tags_description }}</th>
                                 <td mat-cell *matCellDef="let element">
-                                    {{ element.description }}
-                                    <!-- <div>
-                                        <mat-form-field appearance="outline" class="w-100">
-                                            <mat-label>{{localeData?.tags_description}}</mat-label>
-                                            <textarea 
-                                                matInput
-                                                [placeholder]="localeData?.tags_description"
-                                            ></textarea>
-                                        </mat-form-field>
-                                    </div> -->
+                                    <div *ngIf="updateIndex !== i">{{ element.description }}</div>
+                                    <textarea
+                                        *ngIf="updateIndex === i"
+                                        class="form-control"
+                                        name="description_of_{{ i }}"
+                                        [(ngModel)]="tag.description"
+                                    ></textarea>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="action">
