@@ -85,7 +85,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
     displayedColumns: string[] = ['number', 'name', 'description', 'aed_amt', 'vat_amt', 'adjustment'];
     netdisplayedColumns: string[] = ['number', 'description', 'tooltip'];
     ukdisplayedColumns: string[] = ['number', 'name', 'description', 'adjustment', 'aed_amt'];
-    uknetdisplayedColumns: string[] = ['number', 'description', 'tooltip'];
 
     constructor(
         private gstReconcileService: GstReconcileService,
