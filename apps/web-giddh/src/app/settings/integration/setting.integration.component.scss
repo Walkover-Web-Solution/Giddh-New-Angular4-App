@@ -419,6 +419,7 @@
 
 .connected-accounts {
     margin-left: 10px;
+    height: 100%;
 }
 
 .btn-light-blue {
@@ -487,4 +488,8 @@
             width: 14% !important;
         }
     }
+}
+
+.set {
+    min-height: calc(100vh - 500px);
 }
