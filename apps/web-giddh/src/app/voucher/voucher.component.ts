@@ -715,6 +715,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public hasUnsavedChanges: boolean = false;
     /** True if entry datepicker is open */
     public isEntryDatepickerOpen: boolean = false;
+    /** True, if the linking with PO is in progress */
+    private isPoLinkingInProgress: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -3572,8 +3574,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             transaction.isStockTxn = true;
             if (isBulkItem) {
                 transaction.variant = selectedAcc.variant;
-            } else if (isLinkedPoItem && !transaction.variant) {
-                // Only re-assign the variant when it is not present (when user has added the linked PO entries with the current PB)
+            } else if (isLinkedPoItem && this.isPoLinkingInProgress) {
+                // Only re-assign the variant when user has added the linked PO entries with the current PB successfully, if the
+                // addition is in progress then do nothing
                 transaction.variant = o.stock.variant;
             }
             // Stock item, show the warehouse drop down if it is hidden
@@ -7034,6 +7037,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public addPoItems(poUniqueName: string, entries: any, totalPending: number): void {
         this.startLoader(true);
         this.linkedPoItemsAdded = 0;
+        this.isPoLinkingInProgress = true;
         let blankItemIndex = this.invFormData.entries?.findIndex(entry => !entry.transactions[0].accountUniqueName);
         let isBlankItemPresent;
         let startIndex = this.invFormData.entries?.length;
@@ -7121,6 +7125,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.linkedPoItemsAdded === totalPending) {
                 if (!buildBulkDataStarted) {
                     this.linkedPoItemsAdded = 0;
+                    this.isPoLinkingInProgress = false;
                     buildBulkDataStarted = true;
                     clearInterval(interval);
                     this.startLoader(false);
@@ -8686,8 +8691,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     txn.maxQuantity = maxQuantity;
 
                     this.calculateWhenTrxAltered(entry, txn);
-
-                    this.linkedPoItemsAdded++;
+                    if (this.isPoLinkingInProgress) {
+                        this.linkedPoItemsAdded++;
+                    }
                 }
                 this.focusOnDescription();
             }
