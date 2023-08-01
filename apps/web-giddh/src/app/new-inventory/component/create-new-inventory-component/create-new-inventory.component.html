@@ -643,7 +643,7 @@
                                                     <div class="col-sm-6 col-lg-6">
                                                         <label>Category</label>
                                                         <div class="multi-select-input">
-                                                            <mat-chip-list #chipList aria-label="Fruit selection">
+                                                            <mat-chip-listbox #chipList aria-label="Fruit selection">
                                                                 <mat-chip
                                                                     class="s-chip"
                                                                     *ngFor="let categorys of category"
@@ -669,7 +669,7 @@
                                                                     [matChipInputAddOnBlur]="addOnBlur"
                                                                     (matChipInputTokenEnd)="add($event)"
                                                                 />
-                                                            </mat-chip-list>
+                                                            </mat-chip-listbox>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1822,7 +1822,7 @@
                                                             <div class="col-sm-6 col-lg-6">
                                                                 <label>Category</label>
                                                                 <div class="multi-select-input">
-                                                                    <mat-chip-list
+                                                                    <mat-chip-listbox
                                                                         #chipList
                                                                         aria-label="Fruit selection"
                                                                     >
@@ -1853,7 +1853,7 @@
                                                                             [matChipInputAddOnBlur]="addOnBlur"
                                                                             (matChipInputTokenEnd)="add($event)"
                                                                         />
-                                                                    </mat-chip-list>
+                                                                    </mat-chip-listbox>
                                                                 </div>
                                                             </div>
                                                         </div>

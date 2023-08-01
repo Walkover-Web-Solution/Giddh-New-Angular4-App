@@ -95,7 +95,7 @@
                 class="select-multiple-chiplist-inventory"
                 [ngClass]="{ 'searching-bar-chiplist': filtersChipList?.length }"
             >
-                <mat-chip-list #matChipList>
+                <mat-chip-listbox #matChipList>
                     <mat-chip
                         *ngFor="let chip of filtersChipList; let indx = index"
                         [selectable]="true"
@@ -119,7 +119,7 @@
                         matAutocompletePosition="auto"
                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                     />
-                </mat-chip-list>
+                </mat-chip-listbox>
                 <mat-autocomplete
                     class="inventory-autocomplete"
                     #auto="matAutocomplete"

@@ -51,13 +51,12 @@ import { OrganizationType } from "../models/user-login-state";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
 import { UntypedFormControl } from "@angular/forms";
 import { Lightbox } from "ngx-lightbox";
-import { MatCheckboxChange } from "@angular/material/checkbox/checkbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { CustomFieldsService } from "../services/custom-fields.service";
 import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 @Component({
     selector: "contact-detail",
