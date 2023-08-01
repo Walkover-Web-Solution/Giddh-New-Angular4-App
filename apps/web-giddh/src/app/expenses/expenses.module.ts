@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -48,7 +47,6 @@ import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-
     imports: [CommonModule,
         ReactiveFormsModule,
         FormsModule,
-        DatepickerModule,
         Daterangepicker,
         ExpensesRoutingModule,
         TabsModule.forRoot(),

@@ -33,7 +33,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { TextMaskModule } from 'angular2-text-mask';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -137,7 +137,6 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
         ClickOutsideModule,
         ElementViewChildModule,
         DecimalDigitsModule,
-        DatepickerModule,
         BsDropdownModule.forRoot(),
         AsideMenuRecurringEntryModule,
         SalesShSelectModule,
