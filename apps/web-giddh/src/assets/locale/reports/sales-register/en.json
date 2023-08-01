@@ -18,5 +18,12 @@
     "account": "Account",
     "sales": "Sales",
     "return": "Return",
-    "net_sales": "Net Sales"
+    "net_sales": "Net Sales",
+    "parent_group":"Parent Group",
+    "tax_no":"Tax no",
+    "address":"Address",
+    "pincode":"Pincode",
+    "email":"Email",
+    "mobile_no":"Mobile No.",
+    "sales_account": "Sales Account"
 }

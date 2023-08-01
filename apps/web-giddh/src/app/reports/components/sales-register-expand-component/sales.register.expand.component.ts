@@ -15,6 +15,8 @@ import { GeneralService } from '../../../services/general.service';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-register-export/sales-purchase-register-export.component';
 
 @Component({
     selector: 'sales-register-expand',
@@ -79,11 +81,18 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         value: false,
         discount: false,
         tax: false,
-        net_sales: false
+        net_sales: false,
+        parent_group: false,
+        sales_account: false,
+        tax_no: false,
+        address: false,
+        pincode: false,
+        email: false,
+        mobile_no: false
     };
     /** True if api call in progress */
     public isLoading: boolean = false;
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private ledgerService: LedgerService, private toaster: ToasterService) {
+    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private ledgerService: LedgerService, private toaster: ToasterService, private dialog:MatDialog) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetSalesDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsSuccess), takeUntil(this.destroyed$));
@@ -158,6 +167,41 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             {
                 "value": "account",
                 "label": "Account",
+                "checked": true
+            },
+            {
+                "value": "parent_group",
+                "label": "Parent Group",
+                "checked": true
+            },
+            {
+                "value": "tax_no",
+                "label": "Tax no.",
+                "checked": true
+            },
+            {
+                "value": "address",
+                "label": "Address",
+                "checked": true
+            },
+            {
+                "value": "pincode",
+                "label": "Pincode",
+                "checked": true
+            },
+            {
+                "value": "email",
+                "label": "Email",
+                "checked": true
+            },
+            {
+                "value": "mobile_no",
+                "label": "Mobile No.",
+                "checked": true
+            },
+            {
+                "value": "sales_account",
+                "label": "Sales Account",
                 "checked": true
             },
             {
@@ -392,39 +436,52 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof SalesRegisterExpandComponent
      */
     public export(): void {
-        let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
-        exportBodyRequest.from = this.from;
-        exportBodyRequest.to = this.to;
-        exportBodyRequest.exportType = "SALES_REGISTER_DETAILED_EXPORT";
-        exportBodyRequest.fileType = "CSV";
-        exportBodyRequest.isExpanded = this.expand;
-        exportBodyRequest.q = this.voucherNumberInput?.value;
-        exportBodyRequest.branchUniqueName = this.getDetailedsalesRequestFilter?.branchUniqueName;
-        exportBodyRequest.columnsToExport = [];
-        if (this.showFieldFilter.voucher_type) {
-            exportBodyRequest.columnsToExport.push("Voucher Type");
+        let exportData = {
+        from : this.from,
+        to :this.to,
+        exportType : "SALES_REGISTER_DETAILED_EXPORT",
+        fileType : "CSV",
+        isExpanded : this.expand,
+        q :this.voucherNumberInput?.value,
+        branchUniqueName :this.getDetailedsalesRequestFilter?.branchUniqueName
         }
-        if (this.showFieldFilter.voucher_no) {
-            exportBodyRequest.columnsToExport.push("Voucher No");
-        }
-        if (this.showFieldFilter.qty_rate) {
-            exportBodyRequest.columnsToExport.push("Qty/Unit");
-        }
-        if (this.showFieldFilter.discount) {
-            exportBodyRequest.columnsToExport.push("Discount");
-        }
-        if (this.showFieldFilter.tax) {
-            exportBodyRequest.columnsToExport.push("Tax");
-        }
-
-        this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === 'success') {
-                this.toaster.successToast(response?.body);
-                this.router.navigate(["/pages/downloads"]);
-            } else {
-                this.toaster.errorToast(response?.message);
-            }
+        this.dialog.open(SalesPurchaseRegisterExportComponent, {
+            width: '630px',
+           data:exportData
         });
+        // let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
+        // exportBodyRequest.from = this.from;
+        // exportBodyRequest.to = this.to;
+        // exportBodyRequest.exportType = "SALES_REGISTER_DETAILED_EXPORT";
+        // exportBodyRequest.fileType = "CSV";
+        // exportBodyRequest.isExpanded = this.expand;
+        // exportBodyRequest.q = this.voucherNumberInput?.value;
+        // exportBodyRequest.branchUniqueName = this.getDetailedsalesRequestFilter?.branchUniqueName;
+        // exportBodyRequest.columnsToExport = [];
+        // if (this.showFieldFilter.voucher_type) {
+        //     exportBodyRequest.columnsToExport.push("Voucher Type");
+        // }
+        // if (this.showFieldFilter.voucher_no) {
+        //     exportBodyRequest.columnsToExport.push("Voucher No");
+        // }
+        // if (this.showFieldFilter.qty_rate) {
+        //     exportBodyRequest.columnsToExport.push("Qty/Unit");
+        // }
+        // if (this.showFieldFilter.discount) {
+        //     exportBodyRequest.columnsToExport.push("Discount");
+        // }
+        // if (this.showFieldFilter.tax) {
+        //     exportBodyRequest.columnsToExport.push("Tax");
+        // }
+
+        // this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        //     if (response?.status === 'success') {
+        //         this.toaster.successToast(response?.body);
+        //         this.router.navigate(["/pages/downloads"]);
+        //     } else {
+        //         this.toaster.errorToast(response?.message);
+        //     }
+        // });
     }
 
     /**
