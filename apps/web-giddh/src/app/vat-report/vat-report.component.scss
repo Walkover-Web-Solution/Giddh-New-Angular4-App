@@ -40,11 +40,32 @@
     display: inline-block;
     border: 1px solid var(--color-iron);
 }
+.datepicker-border {
+    border: 1px solid var(--color-iron);
+}
+
 .tax-engine {
     background: none;
 }
-.advance-search-by-date .btn-group > .dropdown-menu {
-    margin-top: 0;
+.advance-search-by-date {
+    display: flex;
+    column-gap: 15px;
+    .input-wrapper {
+        display: flex;
+        .btn-group {
+            button {
+                margin: 0 !important;
+                height: 100%;
+            }
+        }
+    }
+    .trn-width {
+        min-width: 280px;
+    }
+}
+.export-btn {
+    display: flex;
+    justify-content: flex-end;
 }
 .month-picker {
     position: absolute;
@@ -57,8 +78,24 @@
         }
     }
 }
-.advance-search-by-date.date-advance-search {
-    width: 280px;
+.white-box {
+    table {
+        tbody {
+            tr {
+                td {
+                    a {
+                        color: var(--color-table-secondary-heading) !important;
+                    }
+                    .btn-link {
+                        color: var(--color-table-secondary-heading) !important;
+                    }
+                }
+            }
+        }
+        tfoot {
+            background-color: var(--color-wild-sand);
+        }
+    }
 }
 
 .no-report {
@@ -73,9 +110,6 @@
     .on-mobile-view.table-hide-title tr td {
         padding-left: 15px !important;
     }
-}
-.vat-report .dropdown-menu li label {
-    padding-left: 0px !important;
 }
 .daterangePicker {
     position: absolute;

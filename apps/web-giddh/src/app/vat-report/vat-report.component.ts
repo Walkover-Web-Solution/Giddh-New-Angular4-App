@@ -1,6 +1,6 @@
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, } from '@angular/core';
 import { Router } from '@angular/router';
 import { VatReportRequest } from '../models/api-models/Vat';
 import { Store, select } from '@ngrx/store';
@@ -9,7 +9,7 @@ import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
 import { VatService } from "../services/vat.service";
 import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT } from "../shared/helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/defaultDateFormat";
 import { saveAs } from "file-saver";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { IOption } from '../theme/ng-select/ng-select';
@@ -18,6 +18,8 @@ import { SettingsBranchActions } from '../actions/settings/branch/settings.branc
 import { OrganizationType } from '../models/user-login-state';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { cloneDeep } from '../lodash-optimized';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
@@ -26,17 +28,16 @@ import { cloneDeep } from '../lodash-optimized';
 export class VatReportComponent implements OnInit, OnDestroy {
     public vatReport: any[] = [];
     public activeCompany: any;
-    public datePickerOptions: any = {
-        alwaysShowCalendars: true,
-        startDate: dayjs().subtract(30, 'day'),
-        endDate: dayjs()
-    };
+    /** This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public dayjs = dayjs;
     public fromDate: string = '';
     public toDate: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     @ViewChild('monthWise', { static: true }) public monthWise: BsDropdownDirective;
     @ViewChild('periodDropdown', { static: true }) public periodDropdown;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     public isMonthSelected: boolean = true;
     public selectedMonth: any = null;
     public currentPeriod: any = {};
@@ -66,6 +67,24 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public asideGstSidebarMenuState: string = 'in';
     /** this will check mobile screen size */
     public isMobileScreen: boolean = false;
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Datepicker modal reference */
+    public modalRef: BsModalRef;
+    /** Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /** This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /** Holds universal date */
+    private universalDate: Date[];
+    /** True if initial load of store filters */
+    private initialLoad: boolean = false;
+    /*-- mat-table --*/
+    displayedColumns: string[] = ['number', 'name', 'description', 'aed_amt', 'vat_amt', 'adjustment'];
+    netdisplayedColumns: string[] = ['number', 'description', 'tooltip'];
+    ukdisplayedColumns: string[] = ['number', 'name', 'description', 'adjustment', 'aed_amt'];
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -76,7 +95,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private cdRef: ChangeDetectorRef,
         private route: Router,
         private settingsBranchAction: SettingsBranchActions,
-        private breakpointObserver: BreakpointObserver
+        private breakpointObserver: BreakpointObserver,
+        private modalService: BsModalService,
     ) {
 
     }
@@ -166,6 +186,20 @@ export class VatReportComponent implements OnInit, OnDestroy {
         if (this.taxNumber) {
             this.getVatReport();
         }
+
+        // Refresh report data according to universal date
+        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
+            if (dateObj) {
+                this.universalDate = cloneDeep(dateObj);
+                setTimeout(() => {
+                    if (!this.initialLoad) {
+                        this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                        this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.getVatReport();
+                    }
+                }, 1000);
+            }
+        });
     }
 
     public ngOnDestroy() {
@@ -338,5 +372,51 @@ export class VatReportComponent implements OnInit, OnDestroy {
      */
     public handleNavigation(): void {
         this.route.navigate(['pages', 'gstfiling']);
+    }
+    /**
+     * To show the datepicker
+     *
+     * @param {*} element
+     * @memberof VatReportComponent
+     */
+        public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof VatReportComponent
+     */
+        public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof VatReportComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+        }
     }
 }
