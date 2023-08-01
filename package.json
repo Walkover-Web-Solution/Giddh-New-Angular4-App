@@ -122,7 +122,7 @@
     "ngx-perfect-scrollbar": "10.1.1",
     "ngx-plaid-link": "^13.0.2",
     "ngx-quicklink": "0.2.6",
-    "ngx-toastr": "13.0.0",
+    "ngx-toastr": "14.3.0",
     "ngx-uploader": "11.0.0",
     "node": "16.13.2",
     "path-browserify": "^1.0.1",
