@@ -47,6 +47,8 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
     public transferEntrySuccess$: Observable<boolean>;
     public isSaveClicked: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Hold branch transfer report type */
+    @Input() public reportType: string;
 
     constructor(private _store: Store<AppState>,
         private _inventoryAction: InventoryAction,
@@ -75,6 +77,11 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
                 this.isSaveClicked = false;
             }
         });
+        setTimeout(() => {
+            if (this.reportType) {
+                this.openBranchTransferPopup(this.reportType);
+            }
+        }, 500);
 
         // tslint:disable-next-line:no-shadowed-variable
         this._store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (branches) => {

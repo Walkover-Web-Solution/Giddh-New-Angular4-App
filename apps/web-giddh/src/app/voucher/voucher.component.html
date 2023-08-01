@@ -7,64 +7,12 @@
 >
     <giddh-page-loader *ngIf="(showLoader && isUpdateMode) || isShowLoader"></giddh-page-loader>
     <div [ngStyle]="{ 'display': (!isUpdateMode || !showLoader) && !isShowLoader ? 'block' : 'none' }">
-        <!-- region page change menu -->
         <div class="d-flex border-bottom mobile-view-padding">
             <hamburger-menu
                 [pageHeading]="(isCashInvoice ? localeData?.invoice_types?.cash : getInvoiceType()) | titlecase"
             >
             </hamburger-menu>
-            <div class="form-group mr-b05 clearfix pro-invoice-heading">
-                <div class="clearfix">
-                    <div class="btn-group proforma-sales-time" dropdown>
-                        <button
-                            id="giddh-page-heading-link"
-                            dropdownToggle
-                            type="button"
-                            class="btn more-btn-dropdown dropdown-toggle"
-                            aria-controls="dropdown-basic"
-                            *ngIf="!isUpdateMode"
-                        >
-                            <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
-                                {{ localeData?.invoice_types?.cash }}
-                            </span>
-                            <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
-                            <span class="caret"></span>
-                        </button>
-                        <button
-                            id="giddh-page-heading-link"
-                            type="button"
-                            class="btn more-btn-dropdown dropdown-toggle"
-                            aria-controls="dropdown-basic"
-                            *ngIf="isUpdateMode"
-                        >
-                            <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
-                                {{ localeData?.invoice_types?.cash }}
-                            </span>
-                            <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
-                            <span class="caret" *ngIf="!isUpdateMode"></span>
-                        </button>
-                        <ng-container *ngIf="!isUpdateMode">
-                            <ul
-                                id="dropdown1-basic"
-                                *dropdownMenu
-                                class="dropdown-menu"
-                                role="menu"
-                                aria-labelledby="button-basic"
-                            >
-                                <li
-                                    role="menuitem"
-                                    (click)="pageChanged(item?.value, item.additional.label)"
-                                    *ngFor="let item of pageList"
-                                >
-                                    <a class="dropdown-item cp">{{ item.additional?.label }}</a>
-                                </li>
-                            </ul>
-                        </ng-container>
-                    </div>
-                </div>
-            </div>
         </div>
-        <!-- endregion -->
         <!-- region update mode loader-->
         <ng-container *ngIf="isUpdateDataInProcess">
             <div class="loader-class">
@@ -230,7 +178,10 @@
                                                             isEinvoiceGenerated ||
                                                             (isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
-                                                                invoiceType !== 'cash')
+                                                                invoiceType !== 'cash' &&
+                                                                invoiceType !== 'credit note' &&
+                                                                invoiceType !== 'debit note' &&
+                                                                invoiceType !== 'purchase')
                                                         "
                                                     ></input-field>
                                                 </ng-container>
@@ -1705,11 +1656,12 @@
                                             <div
                                                 class="form-group invoice-due-label"
                                                 *ngIf="
-                                                    currentVoucherFormDetails?.dueDate ||
-                                                    isSalesInvoice ||
-                                                    isPurchaseInvoice ||
-                                                    isProformaInvoice ||
-                                                    isEstimateInvoice
+                                                    (currentVoucherFormDetails?.dueDate ||
+                                                        isSalesInvoice ||
+                                                        isPurchaseInvoice ||
+                                                        isProformaInvoice ||
+                                                        isEstimateInvoice) &&
+                                                    !isCashInvoice
                                                 "
                                                 [ngClass]="{ 'due-invoice-parent-form': isPurchaseInvoice }"
                                             >

@@ -44,6 +44,7 @@ import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'app-header',
@@ -89,6 +90,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
     /** All modules popover instance */
     @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
+    /** Instance of menu trigger */
+    @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
 
     public hideAsDesignChanges: boolean = false;
     public title: Observable<string>;
@@ -1079,6 +1082,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public openDateRangePicker() {
         this.isTodaysDateSelected = false;
+    }
+
+    /**
+     * This will use for navigae to subitem link
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    public navigateToSubItemLink(event: any): void {
+        if (event) {
+            this.trigger?.closeMenu();
+            if (event === 'deliverychallan' || event === 'receiptnote') {
+                this.router.navigate(['/pages/inventory/report/' + event]);
+            } else {
+                this.router.navigate(['/pages' + event]);
+            }
+        }
     }
 
     public ngOnDestroy() {

@@ -1024,7 +1024,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private modifyStateResp(stateList: StateCode[]): IOption[] {
         let stateListRet: IOption[] = [];
-        stateList.forEach(stateR => {
+        stateList?.forEach(stateR => {
             stateListRet.push({ label: stateR.name, value: stateR.code ? stateR.code : stateR.stateGstCode, stateGstCode: stateR.stateGstCode ? stateR.stateGstCode : stateR.code });
         });
         return stateListRet;
