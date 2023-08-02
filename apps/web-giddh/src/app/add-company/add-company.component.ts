@@ -872,9 +872,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isCompanyCreated = true;
                 this.firstStepForm.markAsPristine();
                 this.generalService.companyUniqueName = this.company?.uniqueName;
-                this.route.navigate(['/pages’, ‘onboarding']);
                 setTimeout(() => {
                     this.store.dispatch(this.loginAction.ChangeCompany(this.company?.uniqueName));
+                    this.route.navigate(['/pages’, ‘onboarding']);
                 }, 500);
             }
         });
