@@ -85,7 +85,7 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
         exportBodyRequest.isExpanded = body?.expand;
         exportBodyRequest.q = body?.q;
         exportBodyRequest.branchUniqueName = body?.branchUniqueName;
-        exportBodyRequest.columnsToExport = ["Account"];
+        exportBodyRequest.columnsToExport = ["Account UniqueName"];
         if (this.exportForm.value.showVoucherType) {
             exportBodyRequest.columnsToExport.push("Voucher Type");
         }
@@ -124,7 +124,6 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
         if (this.exportForm.value.showStock) {
             exportBodyRequest.columnsToExport.push("Stock");
         }
-        console.log(exportBodyRequest);
         this.ledgerService
             .exportData(exportBodyRequest)
             .pipe(takeUntil(this.destroyed$))
