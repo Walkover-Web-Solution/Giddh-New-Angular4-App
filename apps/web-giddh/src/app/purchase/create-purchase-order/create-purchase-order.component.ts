@@ -1369,19 +1369,19 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     stockUniqueName: selectedAcc.additional.stock.uniqueName
                 };
             }
+            this.currentTxnRequestObject[this.activeIndex] = {
+                selectedAcc,
+                txn,
+                entry,
+                params,
+                entryIndex
+            };
             if (isBulkItem) {
                 const allStockVariants = this.stockVariants.getValue();
                 allStockVariants[this.activeIndex] = observableOf(selectedAcc.variants);
                 this.stockVariants.next(allStockVariants);
                 txn = this.calculateItemValues(selectedAcc, txn, entry, false, true);
             } else {
-                this.currentTxnRequestObject[this.activeIndex] = {
-                    selectedAcc,
-                    txn,
-                    entry,
-                    params,
-                    entryIndex
-                };
                 if (selectedAcc.additional.stock) {
                     txn.isStockTxn = true;
                     this.loadStockVariants(selectedAcc.additional.stock.uniqueName);

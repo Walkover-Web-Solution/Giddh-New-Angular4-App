@@ -733,16 +733,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         /* TO SHOW NOTIFICATIONS */
 
-        /* intlTelInputGlobals */
-        if (window['intlTelInputGlobals'] === undefined) {
-            let scriptTag = document.createElement('script');
-            scriptTag.src = './assets/js/intl-tel-input.js';
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            document.body.appendChild(scriptTag);
-        }
-        /* intlTelInputGlobals */
-
         if (this.selectedPlanStatus === 'expired') {// active expired
             if (!this.isMobileSite) {
                 this.openExpiredPlanModel(this.expiredPlanModel);
