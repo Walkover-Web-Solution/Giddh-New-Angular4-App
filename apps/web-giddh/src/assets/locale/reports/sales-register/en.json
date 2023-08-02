@@ -25,5 +25,7 @@
     "pincode":"Pincode",
     "email":"Email",
     "mobile_no":"Mobile No.",
-    "sales_account": "Sales Account"
+    "sales_account": "Sales Account",
+    "sales_account_name": "Sales Account Name",
+    "sales_register_export":"Export sales register"
 }

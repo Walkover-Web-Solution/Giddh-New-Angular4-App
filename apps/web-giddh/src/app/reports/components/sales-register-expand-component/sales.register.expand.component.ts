@@ -92,7 +92,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     };
     /** True if api call in progress */
     public isLoading: boolean = false;
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private ledgerService: LedgerService, private toaster: ToasterService, private dialog:MatDialog) {
+    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private ledgerService: LedgerService, private toaster: ToasterService, private dialog: MatDialog) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetSalesDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsSuccess), takeUntil(this.destroyed$));
@@ -437,17 +437,19 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
      */
     public export(): void {
         let exportData = {
-        from : this.from,
-        to :this.to,
-        exportType : "SALES_REGISTER_DETAILED_EXPORT",
-        fileType : "CSV",
-        isExpanded : this.expand,
-        q :this.voucherNumberInput?.value,
-        branchUniqueName :this.getDetailedsalesRequestFilter?.branchUniqueName
+            from: this.from,
+            to: this.to,
+            exportType: "SALES_REGISTER_DETAILED_EXPORT",
+            fileType: "CSV",
+            isExpanded: this.expand,
+            q: this.voucherNumberInput?.value,
+            branchUniqueName: this.getDetailedsalesRequestFilter?.branchUniqueName,
+            commonLocaleData: this.commonLocaleData,
+            localeData: this.localeData
         }
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
             width: '630px',
-           data:exportData
+            data: exportData
         });
         // let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
         // exportBodyRequest.from = this.from;
