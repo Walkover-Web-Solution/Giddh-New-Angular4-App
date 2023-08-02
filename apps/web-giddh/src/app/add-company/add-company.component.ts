@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
+import { filter, skip, take, takeUntil } from "rxjs/operators";
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
@@ -178,6 +178,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public loggedInUser: UserDetails;
     /** Observable to company created */
     public isCompanyCreated$: Observable<boolean>;
+    /** Observable to company creation process */
+    public isCompanyCreationInProcess$: Observable<boolean>;
     /** True if other country selected */
     public isOtherCountry: boolean = false;
     /** Constant for business type */
@@ -243,6 +245,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.companiesList = companyList;
         });
         this.isCompanyCreated$ = this.store.pipe(select(response => response.session.isCompanyCreated), takeUntil(this.destroyed$));
+        this.isCompanyCreationInProcess$ = this.store.pipe(select(response => response.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
 
         this.store.pipe(select(response => response.common.onboardingform), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -855,21 +858,22 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.store.dispatch(this.companyActions.CreateNewCompany(this.company));
         }
         this.isLoading = true;
-        this.isCompanyCreated$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.isCompanyCreationInProcess$.pipe(filter(response => !response), take(1)).subscribe(response => {
+            setTimeout(() => {
+                this.isLoading = false;
+                this.changeDetection.detectChanges();
+            }, 500);
+        });
+        this.isCompanyCreated$.pipe(skip(1), take(1)).subscribe(response => {
             if (response) {
-                setTimeout(() => {
-                    this.isLoading = false;
-                }, 500);
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                 this.isCompanyCreated = true;
                 this.firstStepForm.markAsPristine();
                 this.generalService.companyUniqueName = this.company?.uniqueName;
+                this.route.navigate(['/pages’, ‘onboarding']);
                 setTimeout(() => {
                     this.store.dispatch(this.loginAction.ChangeCompany(this.company?.uniqueName));
-                    this.route.navigate(['/pages', 'onboarding']);
                 }, 500);
-            } else {
-                this.isLoading = false;
             }
         });
     }
