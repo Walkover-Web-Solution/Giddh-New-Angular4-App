@@ -5,7 +5,6 @@ import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { cloneDeep } from "../../lodash-optimized";
 import { ExportBodyRequest } from "../../models/api-models/DaybookRequest";
 import { LedgerService } from "../../services/ledger.service";
 import { ToasterService } from "../../services/toaster.service";

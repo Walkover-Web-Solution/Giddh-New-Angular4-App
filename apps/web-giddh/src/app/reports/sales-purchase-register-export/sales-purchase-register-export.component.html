@@ -20,7 +20,7 @@
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" formControlName="showVoucherType">
                             <span class="pull-left">{{
-                                (exportForm?.controls)["showVoucherType"]?.value
+                                exportForm.get("showVoucherType")?.value
                                     ? inputData?.commonLocaleData?.app_yes
                                     : inputData?.commonLocaleData?.app_no
                             }}</span>
@@ -32,7 +32,7 @@
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" formControlName="showVoucherNumber">
                             <span class="pull-left">{{
-                                (exportForm?.controls)["showVoucherNumber"]?.value
+                                exportForm.get("showVoucherNumber")?.value
                                     ? inputData?.commonLocaleData?.app_yes
                                     : inputData?.commonLocaleData?.app_no
                             }}</span>
@@ -44,7 +44,7 @@
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" formControlName="showDiscount">
                             <span class="pull-left">{{
-                                (exportForm?.controls)["showDiscount"]?.value
+                                exportForm.get("showDiscount")?.value
                                     ? inputData?.commonLocaleData?.app_yes
                                     : inputData?.commonLocaleData?.app_no
                             }}</span>
@@ -56,7 +56,7 @@
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" formControlName="showTax">
                             <span class="pull-left">{{
-                                (exportForm?.controls)["showTax"]?.value
+                                exportForm.get("showTax")?.value
                                     ? inputData?.commonLocaleData?.app_yes
                                     : inputData?.commonLocaleData?.app_no
                             }}</span>
@@ -68,7 +68,7 @@
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" formControlName="showGroup">
                             <span class="pull-left">{{
-                                (exportForm?.controls)["showGroup"]?.value
+                                exportForm.get("showGroup")?.value
                                     ? inputData?.commonLocaleData?.app_yes
                                     : inputData?.commonLocaleData?.app_no
                             }}</span>
@@ -80,7 +80,7 @@
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" formControlName="showTaxNumber">
                             <span class="pull-left">{{
-                                (exportForm?.controls)["showTaxNumber"]?.value
+                                exportForm.get("showTaxNumber")?.value
                                     ? inputData?.commonLocaleData?.app_yes
                                     : inputData?.commonLocaleData?.app_no
                             }}</span>
@@ -92,7 +92,7 @@
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" formControlName="showAddress">
                             <span class="pull-left">{{
-                                (exportForm?.controls)["showAddress"]?.value
+                                exportForm.get("showAddress")?.value
                                     ? inputData?.commonLocaleData?.app_yes
                                     : inputData?.commonLocaleData?.app_no
                             }}</span>
@@ -104,7 +104,7 @@
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" formControlName="showPincode">
                             <span class="pull-left">{{
-                                (exportForm?.controls)["showPincode"]?.value
+                                exportForm.get("showPincode")?.value
                                     ? inputData?.commonLocaleData?.app_yes
                                     : inputData?.commonLocaleData?.app_no
                             }}</span>
@@ -116,7 +116,7 @@
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" formControlName="showEmail">
                             <span class="pull-left">{{
-                                (exportForm?.controls)["showEmail"]?.value
+                                exportForm.get("showEmail")?.value
                                     ? inputData?.commonLocaleData?.app_yes
                                     : inputData?.commonLocaleData?.app_no
                             }}</span>
@@ -128,7 +128,7 @@
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" formControlName="showMobileNumber">
                             <span class="pull-left">{{
-                                (exportForm?.controls)["showMobileNumber"]?.value
+                                exportForm.get("showMobileNumber")?.value
                                     ? inputData?.commonLocaleData?.app_yes
                                     : inputData?.commonLocaleData?.app_no
                             }}</span>
@@ -146,7 +146,7 @@
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" formControlName="showSalesPurchaseAccount">
                             <span class="pull-left">{{
-                                (exportForm?.controls)["showSalesPurchaseAccount"]?.value
+                                exportForm.get("showSalesPurchaseAccount")?.value
                                     ? inputData?.commonLocaleData?.app_yes
                                     : inputData?.commonLocaleData?.app_no
                             }}</span>
@@ -158,7 +158,7 @@
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" formControlName="showStock">
                             <span class="pull-left">{{
-                                (exportForm?.controls)["showStock"]?.value
+                                exportForm.get("showStock")?.value
                                     ? inputData?.commonLocaleData?.app_yes
                                     : inputData?.commonLocaleData?.app_no
                             }}</span>
