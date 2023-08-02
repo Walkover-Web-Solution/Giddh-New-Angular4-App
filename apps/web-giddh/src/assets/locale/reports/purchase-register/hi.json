@@ -18,5 +18,15 @@
     "tax": "कर",
     "date": "तारीख",
     "account": "खाता",
-    "return": "वापस करना"
+    "return": "वापस करना",
+    "parent_group":"अभिभावक समूह",
+    "tax_no":"टैक्स संख्या",
+    "address":"पता",
+    "pincode":"पिन कोड",
+    "email":"ईमेल",
+    "mobile_no":"मोबाइल नंबर।",
+    "purchase_account": "खरीद खाता",
+    "purchase_account_name": "खरीद खाता नाम",
+     "sales_account": "विक्रय खाता",
+    "purchase_register_export":"निर्यात खरीद रजिस्टर"
 }

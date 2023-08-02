@@ -18,5 +18,15 @@
     "account": "खाते",
     "sales": "विक्री",
     "return": "परत",
-    "net_sales": "निव्वळ विक्री"
+    "net_sales": "निव्वळ विक्री",
+    "parent_group":"पालक गट",
+    "tax_no":"कर क्र",
+    "address":"पत्ता",
+    "pincode":"पिन कोड",
+    "email":"ईमेल",
+    "mobile_no":"मोबाईल नंबर.",
+    "purchase_account": "खरेदी खाते",
+     "sales_account": "विक्री खाते",
+    "sales_account_name": "विक्री खात्याचे नाव",
+    "sales_register_export":"निर्यात विक्री रजिस्टर"
 }

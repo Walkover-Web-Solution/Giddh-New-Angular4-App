@@ -1,0 +1,176 @@
+<div *ngIf="isLoading">
+    <giddh-page-loader></giddh-page-loader>
+</div>
+<ng-container *ngIf="!isLoading">
+    <div>
+        <div class="modal-header">
+            <h3 class="modal-title">
+                {{
+                    inputData?.localeData?.sales_register_export
+                        ? inputData?.localeData?.sales_register_export
+                        : inputData?.localeData?.purchase_register_export
+                }}
+            </h3>
+            <button mat-icon-button class="close" data-dismiss="modal" (click)="onCancel()">×</button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="exportForm">
+                <div class="pd-b2 clearfix">
+                    <label class="export-label">{{ inputData?.localeData?.voucher_type }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" formControlName="showVoucherType">
+                            <span class="pull-left">{{
+                                exportForm.get("showVoucherType")?.value
+                                    ? inputData?.commonLocaleData?.app_yes
+                                    : inputData?.commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="export-label">{{ inputData?.localeData?.voucher_no }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" formControlName="showVoucherNumber">
+                            <span class="pull-left">{{
+                                exportForm.get("showVoucherNumber")?.value
+                                    ? inputData?.commonLocaleData?.app_yes
+                                    : inputData?.commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="export-label">{{ inputData?.localeData?.discount }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" formControlName="showDiscount">
+                            <span class="pull-left">{{
+                                exportForm.get("showDiscount")?.value
+                                    ? inputData?.commonLocaleData?.app_yes
+                                    : inputData?.commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="export-label">{{ inputData?.localeData?.tax }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" formControlName="showTax">
+                            <span class="pull-left">{{
+                                exportForm.get("showTax")?.value
+                                    ? inputData?.commonLocaleData?.app_yes
+                                    : inputData?.commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="export-label">{{ inputData?.localeData?.parent_group }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" formControlName="showGroup">
+                            <span class="pull-left">{{
+                                exportForm.get("showGroup")?.value
+                                    ? inputData?.commonLocaleData?.app_yes
+                                    : inputData?.commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="export-label">{{ inputData?.localeData?.tax_no }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" formControlName="showTaxNumber">
+                            <span class="pull-left">{{
+                                exportForm.get("showTaxNumber")?.value
+                                    ? inputData?.commonLocaleData?.app_yes
+                                    : inputData?.commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="export-label">{{ inputData?.localeData?.address }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" formControlName="showAddress">
+                            <span class="pull-left">{{
+                                exportForm.get("showAddress")?.value
+                                    ? inputData?.commonLocaleData?.app_yes
+                                    : inputData?.commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="export-label">{{ inputData?.localeData?.pincode }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" formControlName="showPincode">
+                            <span class="pull-left">{{
+                                exportForm.get("showPincode")?.value
+                                    ? inputData?.commonLocaleData?.app_yes
+                                    : inputData?.commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="export-label">{{ inputData?.localeData?.email }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" formControlName="showEmail">
+                            <span class="pull-left">{{
+                                exportForm.get("showEmail")?.value
+                                    ? inputData?.commonLocaleData?.app_yes
+                                    : inputData?.commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="export-label">{{ inputData?.localeData?.mobile_no }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" formControlName="showMobileNumber">
+                            <span class="pull-left">{{
+                                exportForm.get("showMobileNumber")?.value
+                                    ? inputData?.commonLocaleData?.app_yes
+                                    : inputData?.commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="export-label"
+                        >{{
+                            inputData?.localeData?.sales_account_name
+                                ? inputData?.localeData?.sales_account_name
+                                : inputData?.localeData?.purchase_account_name
+                        }}:</label
+                    >
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" formControlName="showSalesPurchaseAccount">
+                            <span class="pull-left">{{
+                                exportForm.get("showSalesPurchaseAccount")?.value
+                                    ? inputData?.commonLocaleData?.app_yes
+                                    : inputData?.commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="clearfix">
+                    <label class="export-label">{{ inputData?.commonLocaleData?.app_stock }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" formControlName="showStock">
+                            <span class="pull-left">{{
+                                exportForm.get("showStock")?.value
+                                    ? inputData?.commonLocaleData?.app_yes
+                                    : inputData?.commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer export-button">
+            <button mat-stroked-button color="primary" (click)="export()">
+                {{ inputData?.commonLocaleData?.app_download }}
+            </button>
+        </div>
+    </div>
+</ng-container>
