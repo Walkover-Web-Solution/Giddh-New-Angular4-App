@@ -863,7 +863,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             setTimeout(() => {
                 this.isLoading = response;
                 this.changeDetection.detectChanges();
-            }, 500);
+            }, 700);
         });
 
         this.isCompanyCreated$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
