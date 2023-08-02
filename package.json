@@ -183,7 +183,6 @@
     "karma-coverage-istanbul-reporter": "3.0.3",
     "karma-jasmine": "^5.1.0",
     "karma-jasmine-html-reporter": "^2.0.0",
-    "lint-staged": "^13.0.3",
     "mocha": "^9.2.1",
     "mochawesome": "^7.0.0",
     "movefiles": "1.0.1",
@@ -201,8 +200,5 @@
   },
   "xplat": {
     "prefix": "foo"
-  },
-  "lint-staged": {
-    "*.{html,scss}": "npx prettier --write --ignore-unknown"
   }
 }
