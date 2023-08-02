@@ -451,39 +451,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             width: '630px',
             data: exportData
         });
-        // let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
-        // exportBodyRequest.from = this.from;
-        // exportBodyRequest.to = this.to;
-        // exportBodyRequest.exportType = "SALES_REGISTER_DETAILED_EXPORT";
-        // exportBodyRequest.fileType = "CSV";
-        // exportBodyRequest.isExpanded = this.expand;
-        // exportBodyRequest.q = this.voucherNumberInput?.value;
-        // exportBodyRequest.branchUniqueName = this.getDetailedsalesRequestFilter?.branchUniqueName;
-        // exportBodyRequest.columnsToExport = [];
-        // if (this.showFieldFilter.voucher_type) {
-        //     exportBodyRequest.columnsToExport.push("Voucher Type");
-        // }
-        // if (this.showFieldFilter.voucher_no) {
-        //     exportBodyRequest.columnsToExport.push("Voucher No");
-        // }
-        // if (this.showFieldFilter.qty_rate) {
-        //     exportBodyRequest.columnsToExport.push("Qty/Unit");
-        // }
-        // if (this.showFieldFilter.discount) {
-        //     exportBodyRequest.columnsToExport.push("Discount");
-        // }
-        // if (this.showFieldFilter.tax) {
-        //     exportBodyRequest.columnsToExport.push("Tax");
-        // }
-
-        // this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-        //     if (response?.status === 'success') {
-        //         this.toaster.successToast(response?.body);
-        //         this.router.navigate(["/pages/downloads"]);
-        //     } else {
-        //         this.toaster.errorToast(response?.message);
-        //     }
-        // });
     }
 
     /**
