@@ -20,6 +20,8 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
     public exportForm: FormGroup;
     /** To destroy observers */
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
@@ -77,14 +79,13 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
      */
     public export(): void {
         let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
-        let body = cloneDeep(this.inputData);
-        exportBodyRequest.from = body?.from;
-        exportBodyRequest.to = body?.to;
-        exportBodyRequest.exportType = body?.exportType;
-        exportBodyRequest.fileType = body?.fileType;
-        exportBodyRequest.isExpanded = body?.expand;
-        exportBodyRequest.q = body?.q;
-        exportBodyRequest.branchUniqueName = body?.branchUniqueName;
+        exportBodyRequest.from = this.inputData?.from;
+        exportBodyRequest.to = this.inputData?.to;
+        exportBodyRequest.exportType = this.inputData?.exportType;
+        exportBodyRequest.fileType = this.inputData?.fileType;
+        exportBodyRequest.isExpanded = this.inputData?.expand;
+        exportBodyRequest.q = this.inputData?.q;
+        exportBodyRequest.branchUniqueName = this.inputData?.branchUniqueName;
         exportBodyRequest.columnsToExport = ["Account UniqueName"];
         if (this.exportForm.value.showVoucherType) {
             exportBodyRequest.columnsToExport.push("Voucher Type");
@@ -124,11 +125,13 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
         if (this.exportForm.value.showStock) {
             exportBodyRequest.columnsToExport.push("Stock");
         }
+        this.isLoading = true;
         this.ledgerService
             .exportData(exportBodyRequest)
             .pipe(takeUntil(this.destroyed$))
             .subscribe((response) => {
                 if (response?.status === "success") {
+                    this.isLoading = false;
                     this.toaster.successToast(response?.body);
                     this.router.navigate(["/pages/downloads"]);
                 } else {
