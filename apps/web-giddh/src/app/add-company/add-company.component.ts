@@ -858,13 +858,15 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.store.dispatch(this.companyActions.CreateNewCompany(this.company));
         }
         this.isLoading = true;
-        this.isCompanyCreationInProcess$.pipe(filter(response => !response), take(1)).subscribe(response => {
+
+        this.isCompanyCreationInProcess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             setTimeout(() => {
-                this.isLoading = false;
+                this.isLoading = response;
                 this.changeDetection.detectChanges();
             }, 500);
         });
-        this.isCompanyCreated$.pipe(skip(1), take(1)).subscribe(response => {
+
+        this.isCompanyCreated$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                 this.isCompanyCreated = true;
