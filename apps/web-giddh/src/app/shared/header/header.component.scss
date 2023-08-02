@@ -101,14 +101,10 @@
     button {
         color: var(--color-primary-credit) !important;
     }
-
-    .create-txt {
-        color: var(--color-abbey);
-    }
 }
 
 .menu-dropdown-wrapper {
-    padding: 0 25px 25px;
+    padding: 0 30px 15px;
 
     span {
         font-size: var(--font-size-16);
@@ -152,7 +148,8 @@
 
 .create-txt {
     border-bottom: 1px solid var(--color-table-primary-content-bar-border);
-    padding: 25px 25px 12px 25px;
+    padding: 15px 30px 12px 30px;
+    color: var(--color-gray);
 
     a {
         font-size: var(--font-size-14) !important;
@@ -168,8 +165,8 @@
 
 .icon-circle {
     background-color: var(--color-transparent-background);
-    width: 32px;
-    height: 32px;
+    width: 35px;
+    height: 35px;
     align-items: center;
     justify-content: center;
     display: flex !important;
