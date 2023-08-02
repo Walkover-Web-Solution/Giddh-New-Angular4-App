@@ -129,8 +129,8 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
             .exportData(exportBodyRequest)
             .pipe(takeUntil(this.destroyed$))
             .subscribe((response) => {
+                this.isLoading = false;
                 if (response?.status === "success") {
-                    this.isLoading = false;
                     this.toaster.successToast(response?.body);
                     this.router.navigate(["/pages/downloads"]);
                 } else {
