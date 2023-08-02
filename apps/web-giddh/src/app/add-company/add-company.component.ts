@@ -876,8 +876,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.store.dispatch(this.loginAction.ChangeCompany(this.company?.uniqueName));
                     this.route.navigate(['/pages', 'onboarding']);
                 }, 500);
-            } else {
-                this.isLoading = false;
             }
         });
     }
