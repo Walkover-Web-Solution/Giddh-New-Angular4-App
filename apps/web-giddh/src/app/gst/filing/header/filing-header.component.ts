@@ -17,6 +17,7 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { GstReport } from '../../constants/gst.constant';
 import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { GeneralService } from '../../../services/general.service';
+import { saveAs } from 'file-saver';
 
 @Component({
     // tslint:disable-next-line:component-selector
