@@ -874,7 +874,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.generalService.companyUniqueName = this.company?.uniqueName;
                 setTimeout(() => {
                     this.store.dispatch(this.loginAction.ChangeCompany(this.company?.uniqueName));
-                    this.route.navigate(['/pages’, ‘onboarding']);
+                    this.route.navigate(['/pages', 'onboarding']);
                 }, 500);
             }
         });
