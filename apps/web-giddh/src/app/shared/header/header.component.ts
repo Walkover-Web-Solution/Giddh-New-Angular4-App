@@ -44,6 +44,7 @@ import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'app-header',
@@ -67,6 +68,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
 
+    public asideInventorySidebarMenuState: string = 'out';
+
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
     @ViewChild('companyadd', { static: true }) public companyadd: ElementViewContainerRef;
@@ -87,6 +90,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
     /** All modules popover instance */
     @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
+    /** Instance of menu trigger */
+    @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
 
     public hideAsDesignChanges: boolean = false;
     public title: Observable<string>;
@@ -187,24 +192,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public searchBranchQuery: string;
     /** Current organization type */
     public currentOrganizationType: OrganizationType;
+    /** Version of lated mac app  */
+    public macAppVersion: string;
     /** This will hold the time when last session renewal was checked or updated */
     public lastSessionRenewalTime: any;
     /** All modules data with routing shared with user */
     public allModulesList = [];
-    /** Version of lated mac app  */
-    public macAppVersion: string;
-
-    /**
-     * Returns whether the account section needs to be displayed or not
-     *
-     * @readonly
-     * @type {boolean} True, if either branch is switched or company is switched and only HO is there (single branch)
-     * @memberof HeaderComponent
-     */
-    public get shouldShowAccounts(): boolean {
-        return this.currentOrganizationType === OrganizationType.Branch ||
-            (this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches && this.currentCompanyBranches.length === 1);
-    }
     /** This will hold that how many days are left for subscription expiration */
     public remainingSubscriptionDays: any = false;
     /** Menu items received from API */
@@ -219,7 +212,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isSidebarExpanded: boolean = false;
     /** This will hold if setting icon is disabled */
     public isSettingsIconDisabled: boolean = false;
-    /* This will hold if resolution is 768 consider as ipad screen */
+    /* This will hold if resolution is more than 768 to consider as ipad screen */
     public isIpadScreen: boolean = false;
     /** True if sidebar is forcely expanded */
     public sidebarForcelyExpanded: boolean = false;
@@ -438,10 +431,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (res) {
                 this.createNewCompanyUser = res;
             }
-        });
-        this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
-            this.isMobileSite = s;
-            this.accountItemsFromIndexDB = DEFAULT_AC;
         });
         this.totalNumberOfcompanies$ = this.store.pipe(select(state => state.session.totalNumberOfcompanies), takeUntil(this.destroyed$));
 
@@ -741,7 +730,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
-                    window.location.href = (environment.production) ? `https://stage.giddh.com/login` : `https://test.giddh.com/login`;
+                    window.location.href = (environment.production) ? `https://giddh.com/login` : `https://test.giddh.com/login`;
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
@@ -801,9 +790,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                                 if (this.selectedDateRange?.endDate >= dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT) && this.selectedDateRange?.endDate <= dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
                                     activeFinancialYear = {
                                         uniqueName: key?.uniqueName,
-                                        isLocked: key.isLocked,
-                                        financialYearStarts: dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
-                                        financialYearEnds: dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
+                                        isLocked: key?.isLocked,
+                                        financialYearStarts: dayjs(key?.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                                        financialYearEnds: dayjs(key?.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
                                     };
                                 }
                             });
@@ -848,6 +837,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.asideSettingMenuState = 'out';
                 document.querySelector('body')?.classList?.remove('aside-setting');
             }
+            this.asideInventorySidebarMenuState = 'out'
             document.querySelector('body').classList.remove('mobile-setting-sidebar');
             this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
             this.toggleBodyClass();
@@ -868,6 +858,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.asideHelpSupportMenuState = 'out';
             }
             this.asideSettingMenuState = (show) ? 'in' : 'out';
+            this.asideInventorySidebarMenuState = (show && this.asideInventorySidebarMenuState === 'out') ? 'in' : 'out';
             this.toggleBodyClass();
 
             if (this.asideSettingMenuState === "in") {
@@ -876,12 +867,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body')?.classList?.remove('aside-setting');
             }
 
-            if (this.asideSettingMenuState === "in") {
+            if (this.asideSettingMenuState === "in" && this.asideInventorySidebarMenuState === "in") {
                 document.querySelector('body').classList.add('mobile-setting-sidebar');
             } else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
-        }, ((this.asideSettingMenuState === 'out') ? 100 : 0));
+        }, ((this.asideSettingMenuState === 'out') ? 100 : 0) && (this.asideInventorySidebarMenuState === 'out') ? 100 : 0);
     }
 
     /**
@@ -1093,6 +1084,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isTodaysDateSelected = false;
     }
 
+    /**
+     * This will use for navigae to subitem link
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    public navigateToSubItemLink(event: any): void {
+        if (event) {
+            this.trigger?.closeMenu();
+            if (event === 'deliverychallan' || event === 'receiptnote') {
+                this.router.navigate(['/pages/inventory/report/' + event]);
+            } else {
+                this.router.navigate(['/pages' + event]);
+            }
+        }
+    }
+
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -1235,10 +1243,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isLedgerAccSelected = false;
         } else if (entity === 'accounts') {
             this.isLedgerAccSelected = true;
-            this.selectedLedgerName = item.uniqueName;
+            this.selectedLedgerName = item?.uniqueName;
         }
 
-        if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
+        if (this.activeCompanyForDb?.uniqueName) {
             let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
             let branches = [];
             this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
@@ -1324,9 +1332,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public setCurrentPageTitle(menu) {
         let currentPageObj = new CurrentPage();
-        currentPageObj.name = menu.name;
-        currentPageObj.url = menu.uniqueName;
-        currentPageObj.additional = menu.additional;
+        currentPageObj.name = menu?.name;
+        currentPageObj.url = menu?.uniqueName;
+        currentPageObj.additional = menu?.additional;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
@@ -1404,13 +1412,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             } else if (
                 document.getElementsByTagName("tabset") &&
                 document.getElementsByTagName("tabset").length > 0 &&
-                !this.router.url.includes("/vendor")) {
+                !this.router.url.includes("/vendor") && (!document.getElementsByClassName("static-tabs-on-page") || (document.getElementsByClassName("static-tabs-on-page") && document.getElementsByClassName("static-tabs-on-page").length === 0))) {
                 document.querySelector('body').classList.add('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
-            else {
+            /* this code is not working so that inventory sidebar is not working on mobile view, developer please check it */
+            else if (document.getElementsByClassName("new-inventory-page") && document.getElementsByClassName("new-inventory-page").length > 0) {
+                document.querySelector('body').classList.add('inventory-sidebar');
+                document.querySelector('body').classList.remove('page-has-tabs');
+                document.querySelector('body').classList.remove('on-user-page');
+            } else {
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
@@ -1606,6 +1619,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             window['Headway'].init();
         }
     }
+    /**
+     * This function will check if page has tabs to show/hide page heading
+     *
+     * @memberof HeaderComponent
+     */
+    public checkIfPageHasTabs(): void | boolean {
+        this.pageHasTabs = false;
+        let currentUrl = this.router.url;
+
+        NAVIGATION_ITEM_LIST.find((page) => {
+            if (page.uniqueName === decodeURI(currentUrl) && page.hasTabs === true) {
+                this.pageHasTabs = true;
+                return true;
+            }
+        });
+    }
 
     /**
      * Navigates to previous page
@@ -1632,22 +1661,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let version = res.split('files')[0];
                 let versNum = version.split(' ')[1];
                 this.macAppVersion = versNum;
-            }
-        })
-    }
-    /**
-     * This function will check if page has tabs to show/hide page heading
-     *
-     * @memberof HeaderComponent
-     */
-    public checkIfPageHasTabs(): void | boolean {
-        this.pageHasTabs = false;
-        let currentUrl = this.router.url;
-
-        NAVIGATION_ITEM_LIST.find((page) => {
-            if (page?.uniqueName === decodeURI(currentUrl) && page.hasTabs === true) {
-                this.pageHasTabs = true;
-                return true;
             }
         });
     }

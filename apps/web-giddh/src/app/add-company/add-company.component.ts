@@ -178,6 +178,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public loggedInUser: UserDetails;
     /** Observable to company created */
     public isCompanyCreated$: Observable<boolean>;
+    /** Observable to company creation process */
+    public isCompanyCreationInProcess$: Observable<boolean>;
     /** True if other country selected */
     public isOtherCountry: boolean = false;
     /** Constant for business type */
@@ -189,7 +191,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** List of counties of country */
     public countyList: IOption[] = [];
     /** List of registered business type countries */
-    public registeredTypeCountryList: any[] = ["IN", "AE"];
+    public registeredTypeCountryList: any[] = ["IN", "GB", "AE"];
     /** This will hold disable State */
     public disabledState: boolean = false;
     /** Returns true if company created */
@@ -243,6 +245,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.companiesList = companyList;
         });
         this.isCompanyCreated$ = this.store.pipe(select(response => response.session.isCompanyCreated), takeUntil(this.destroyed$));
+        this.isCompanyCreationInProcess$ = this.store.pipe(select(response => response.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
 
         this.store.pipe(select(response => response.common.onboardingform), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -855,11 +858,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.store.dispatch(this.companyActions.CreateNewCompany(this.company));
         }
         this.isLoading = true;
+
+        this.isCompanyCreationInProcess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            setTimeout(() => {
+                this.isLoading = response;
+                this.changeDetection.detectChanges();
+            }, 700);
+        });
+
         this.isCompanyCreated$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                setTimeout(() => {
-                    this.isLoading = false;
-                }, 500);
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                 this.isCompanyCreated = true;
                 this.firstStepForm.markAsPristine();
