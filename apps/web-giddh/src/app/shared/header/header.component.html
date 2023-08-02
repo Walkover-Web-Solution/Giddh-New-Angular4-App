@@ -505,13 +505,18 @@
     </ng-template>
 
     <!--help & support sidebar  -->
-    <div
+    <!-- <div
         class="help-support-aside"
         *ngIf="asideHelpSupportMenuState === 'in'"
         (clickOutside)="closeHelpPaneOnOutsideClick()"
     >
         <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
-    </div>
+    </div> -->
+
+    <ng-template #asideHelpSupportMenuStateRef>
+        <aside-help-support (closeAsideEvent)="matDialogRef.close()"></aside-help-support>
+    </ng-template>
+
     <!-- setting aside pane -->
     <div class="help-support-aside setting-sidebar-wrapper">
         <perfect-scrollbar [scrollIndicators]="true">

@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatMenuModule } from "@angular/material/menu";
+import { MatDialogModule } from "@angular/material/dialog";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatTreeModule } from "@angular/material/tree";
 import { RouterModule } from "@angular/router";
@@ -49,7 +50,8 @@ import { HeaderComponent } from "./header.component";
         RouterModule,
         MatMenuModule,
         MatButtonModule,
-        MatTreeModule
+        MatTreeModule,
+        MatDialogModule
     ],
     exports: [
         HeaderComponent,
