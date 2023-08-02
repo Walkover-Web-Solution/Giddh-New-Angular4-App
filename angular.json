@@ -10,9 +10,7 @@
             "projectType": "application",
             "prefix": "foo",
             "schematics": {
-                "@nrwl/schematics:component": {
-                    "style": "scss"
-                }
+                
             },
             "architect": {
                 "build": {
@@ -221,14 +219,6 @@
             "projectType": "library",
             "prefix": "foo",
             "architect": {
-                "test": {
-                    "builder": "@angular-builders/custom-webpack:karma",
-                    "options": {
-                        "main": "testing/test.libs.ts",
-                        "tsConfig": "testing/tsconfig.libs.spec.json",
-                        "karmaConfig": "testing/karma.conf.js"
-                    }
-                },
                 "lint": {
                     "builder": "@angular-builders/custom-webpack:tslint",
                     "options": {
@@ -491,15 +481,6 @@
                             "**/node_modules/**"
                         ]
                     }
-                },
-                "test": {
-                    "builder": "@angular-builders/custom-webpack:karma",
-                    "options": {
-                        "main": "apps/web-giddh/src/test.ts",
-                        "tsConfig": "apps/web-giddh/tsconfig.spec.json",
-                        "karmaConfig": "apps/web-giddh/karma.conf.js",
-                        "polyfills": "apps/web-giddh/src/polyfills.ts"
-                    }
                 }
             }
         },
@@ -537,14 +518,6 @@
             "projectType": "library",
             "prefix": "foo",
             "architect": {
-                "test": {
-                    "builder": "@angular-builders/custom-webpack:karma",
-                    "options": {
-                        "main": "testing/test.xplat.ts",
-                        "tsConfig": "testing/tsconfig.xplat.spec.json",
-                        "karmaConfig": "testing/karma.conf.js"
-                    }
-                },
                 "lint": {
                     "builder": "@angular-builders/custom-webpack:tslint",
                     "options": {
