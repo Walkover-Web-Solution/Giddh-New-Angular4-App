@@ -44,6 +44,7 @@ import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-header',
@@ -87,6 +88,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
     /** All modules popover instance */
     @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
+    @ViewChild('asideHelpSupportMenuStateRef', { static: true }) public asideHelpSupportMenuStateRef: TemplateRef<any>;
 
     public hideAsDesignChanges: boolean = false;
     public title: Observable<string>;
@@ -227,6 +229,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCalendlyModelActivate: boolean = false;
     /** Calendly url */
     public calendlyUrl: any = '';
+    public matDialogRef: any;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -265,7 +268,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         public location: Location,
         private localeService: LocaleService,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private sanitizer: DomSanitizer
+        private sanitizer: DomSanitizer,
+        public dialog: MatDialog,
+       
     ) {
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
         // Reset old stored application date
@@ -842,17 +847,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @param {boolean} show
      * @memberof HeaderComponent
      */
-    public toggleHelpSupportPane(show: boolean): void {
-        setTimeout(() => {
-            if (show) {
-                this.asideSettingMenuState = 'out';
-                document.querySelector('body')?.classList?.remove('aside-setting');
+    public toggleHelpSupportPane(): void {
+        this.matDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef,{
+            width:'1000px',
+            position: {
+                right: '0',
+                top: '0'
             }
-            document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
-            this.toggleBodyClass();
-        }, (this.asideHelpSupportMenuState === 'out') ? 100 : 0);
+        })
     }
+    
 
     /**
      * This will toggle the settings popup
@@ -1388,7 +1392,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public addClassInBodyIfPageHasTabs(): void {
-        this.toggleHelpSupportPane(false);
+        // this.toggleHelpSupportPane(false);
 
         setTimeout(() => {
             if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data")?.length > 0) {

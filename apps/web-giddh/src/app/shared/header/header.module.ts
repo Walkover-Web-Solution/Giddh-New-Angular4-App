@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatDialogModule } from "@angular/material/dialog";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { RouterModule } from "@angular/router";
 import { LaddaModule } from "angular2-ladda";
@@ -43,7 +44,8 @@ import { HeaderComponent } from "./header.component";
             spinnerSize: 30
         }),
         ConfirmModalModule,
-        RouterModule
+        RouterModule,
+        MatDialogModule
     ],
     exports: [
         HeaderComponent,
