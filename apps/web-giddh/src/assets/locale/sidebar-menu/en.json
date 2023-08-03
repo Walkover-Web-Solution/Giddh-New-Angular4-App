@@ -90,7 +90,7 @@
                     "description": "Record debit note & update A/c"
                 },
                 {
-                    "label": "Purchase Bill",
+                    "label": "Bill",
                     "link": "/pages/proforma-invoice/invoice/purchase",
                     "icon": "icon-invoice-new",
                     "description": "Purchase request, purchase bill, modify PO"

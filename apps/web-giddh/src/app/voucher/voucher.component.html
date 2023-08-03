@@ -22,7 +22,7 @@
                             aria-controls="dropdown-basic"
                         >
                             <span>
-                                {{ invoiceType | titlecase }}
+                                {{ invoiceTypeLabel }}
                             </span>
                             <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
                         </button>
