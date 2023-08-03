@@ -90,9 +90,12 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                     this.showVatMenus = true;
                     this.showGstMenus = false;
-                } else {
+                } else if (activeCompany.countryV2?.alpha2CountryCode ==='IN'){
                     this.showGstMenus = true;
                     this.showVatMenus = false;
+                } else{
+                    this.showVatMenus = false;
+                    this.showGstMenus = false;
                 }
             }
         });
