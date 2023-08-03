@@ -175,7 +175,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     /** Tax type (gst/trn) */
     public taxType: string = '';
     /** True if initial data is fetched */
-    public showGstColumn: boolean;
+    public showTaxColumn: boolean;
 
     constructor(
         private commonService: CommonService,
@@ -1231,9 +1231,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                             this.taxType = this.commonLocaleData?.app_gstin;
                         }
                         if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode) || activeCompany.countryV2?.alpha2CountryCode === 'IN') {
-                            this.showGstColumn = true;
+                            this.showTaxColumn = true;
                         } else {
-                            this.showGstColumn = false;
+                            this.showTaxColumn = false;
                         }
                     }
                 });
