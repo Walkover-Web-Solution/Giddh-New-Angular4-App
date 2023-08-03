@@ -169,37 +169,37 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             {
                 "value": "parent_group",
                 "label": "Parent Group",
-                "checked": true
+                "checked": false
             },
             {
                 "value": "tax_no",
                 "label": "Tax no.",
-                "checked": true
+                "checked": false
             },
             {
                 "value": "address",
                 "label": "Address",
-                "checked": true
+                "checked": false
             },
             {
                 "value": "pincode",
                 "label": "Pincode",
-                "checked": true
+                "checked": false
             },
             {
                 "value": "email",
                 "label": "Email",
-                "checked": true
+                "checked": false
             },
             {
                 "value": "mobile_no",
                 "label": "Mobile No.",
-                "checked": true
+                "checked": false
             },
             {
                 "value": "sales_account",
                 "label": "Sales Account",
-                "checked": true
+                "checked": false
             },
             {
                 "value": "voucher_type",
@@ -446,6 +446,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         }
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
             width: '630px',
+            panelClass: 'export-container',
             data: exportData
         });
     }
