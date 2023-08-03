@@ -28,5 +28,6 @@
     "purchase_account": "Purchase Account",
     "purchase_account_name": "Purchase Account Name",
      "sales_account": "Sales Account",
-    "purchase_register_export":"Export purchase register"
+    "purchase_register_export":"Export purchase register",
+    "export_note": "The default columns 'Date, Account , Sales, Return, Net sales' will be exported, you also have the option to add custom columns as needed."
 }
