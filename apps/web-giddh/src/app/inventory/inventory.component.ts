@@ -4,12 +4,12 @@ import { GroupStockReportRequest, StockDetailResponse, StockGroupResponse } from
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { select, Store } from '@ngrx/store';
-import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -53,6 +53,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('inventoryStaticTabs', { static: true }) public inventoryStaticTabs: TabsetComponent;
     /** Warehouse filter instance */
     @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ShSelectComponent;
+    /** Instance of branch transfer template */
+    @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: ElementRef;
 
     public dataSyncOption = IsyncData;
     public companies$: Observable<CompanyResponse[]>;
@@ -98,8 +100,10 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     private getBranchesInitiated: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
-    /** Hold branch transfer report type  */
-    public reportType: string = "";
+    /** Hold branch transfer mode  */
+    public branchTransferMode: string = "";
+    /** This will use for bootstrap modal refrence */
+    public modalRef: BsModalRef;
 
     constructor(
         private store: Store<AppState>,
@@ -117,7 +121,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private settingsUtilityService: SettingsUtilityService,
         private toastService: ToasterService,
         private breakPointObservar: BreakpointObserver,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private modalService: BsModalService
     ) {
         this.breakPointObservar.observe([
             '(max-width: 1023px)',
@@ -200,15 +205,19 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
             if (params.type) {
                 if (params?.type === 'deliverychallan') {
-                    this.reportType = 'deliverynote';
+                    this.branchTransferMode = 'deliverynote';
                 } else {
-                    this.reportType = params.type;
+                    this.branchTransferMode = params.type;
                 }
+                this.modalRef = this.modalService.show(
+                    this.branchtransfertemplate,
+                    Object.assign({}, { class: 'modal-lg receipt-note-modal  mb-0 pd-t85' })
+                );
             }
         })
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
-                this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : ((this.router.url?.indexOf('inventory/report')) || (this.router.url?.indexOf('inventory/report/receiptnote'))|| (this.router.url?.indexOf('inventory/report/deliverychallan'))) > -1 ? 3 : 0;
+                this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : ((this.router.url?.indexOf('inventory/report')) || (this.router.url?.indexOf('inventory/report/receiptnote')) || (this.router.url?.indexOf('inventory/report/deliverychallan'))) > -1 ? 3 : 0;
             }
         });
         this.shouldShowInventoryReport$ = combineLatest([this.store.pipe(select(appStore => appStore.inventory.activeStockUniqueName)), this.store.pipe(select(appStore => appStore.inventory.activeGroupUniqueName))]).pipe(map(values => values[0] || values[1]));
@@ -223,6 +232,15 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
+    /**
+     *This will use for hide branch transfer
+     *
+     * @memberof InventoryComponent
+     */
+    public hideModal(): void {
+        this.router.navigate(['/pages/inventory/report']);
+        this.modalRef.hide();
+    }
     public ngOnDestroy() {
         if (this.voucherApiVersion === 2) {
             document.querySelector("body")?.classList?.remove("inventory-v2");
