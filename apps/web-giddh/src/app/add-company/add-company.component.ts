@@ -119,6 +119,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public states: IOption[] = [];
     /** True if gstin number valid */
     public isGstinValid: boolean = false;
+    /** Hold selected country */
+    public selectedCountry: string = '';
     /** Hold selected state */
     public selectedState: string = '';
     /** Hold selected state */
@@ -468,6 +470,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public selectCountry(event: any): void {
         if (event?.value) {
+            this.selectedCountry = event.label;
             this.secondStepForm.get('gstin')?.setValue('');
             this.secondStepForm.get('state')?.setValue('');
             this.selectedState = "";
@@ -814,6 +817,18 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 }, 500);
             } else {
                 this.isLoading = false;
+                this.toaster.showSnackBar("error", response?.message);
+
+                let mobileNo = this.intl?.getNumber();
+
+                setTimeout(() => {
+                    this.showPhoneNumberField();
+                    setTimeout(() => {
+                        this.intl?.setNumber(mobileNo);
+                    }, 500);
+                }, 500);
+
+                this.changeDetection.detectChanges();
             }
         });
     }
