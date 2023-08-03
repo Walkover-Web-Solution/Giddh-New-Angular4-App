@@ -491,6 +491,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         };
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
             width: "630px",
+            panelClass: 'export-container',
             data: exportData,
         });
     }

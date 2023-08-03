@@ -7,14 +7,22 @@
     float: left;
 }
 .modal-body {
+    p {
+        color: var(--color-sidebar-content-text);
+    }
     form {
         overflow: auto;
-        // height: 400px;
+        height: 230px;
         min-height: 200px;
         max-height: 275px;
-        .export-form {
+        padding: 0 15px;
+        &.export-form {
             .radio-inline {
                 line-height: 10px;
+            }
+            .toggle-gap {
+                display: flex;
+                column-gap: 15px;
             }
         }
         .export-border {
@@ -24,10 +32,10 @@
                 display: block;
                 position: absolute;
                 width: 1px;
-                height: 65%;
-                background-color: var(--color-abbey);
-                top: 50%;
-                right: -75px;
+                height: 55%;
+                background-color: var(--color-gray);
+                top: 46%;
+                right: -32px;
                 transform: translateY(-50%);
             }
         }
