@@ -36,7 +36,6 @@ import { ElementViewChildModule } from './helpers/directives/elementViewChild/el
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NgxMaskModule } from './helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
-import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
@@ -76,7 +75,6 @@ export function provideConfig() {
         ManageGroupsAccountsComponent,
         AccountOperationsComponent,
         AccountFilterPipe,
-        OnBoardingComponent,
         GroupAddComponent,
         GroupUpdateComponent,
         ShareGroupModalComponent,
@@ -150,7 +148,6 @@ export function provideConfig() {
         PaginationModule,
         ClickOutsideModule,
         PerfectScrollbarModule,
-        OnBoardingComponent,
         ConfirmModalModule,
         TextCaseChangeModule,
         KeyboardShortutModule,
