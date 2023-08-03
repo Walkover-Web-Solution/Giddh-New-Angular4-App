@@ -90,27 +90,29 @@
                                     </ng-container>
                                 </div>
                             </th>
-                            <th
-                                #searchTaxInputField
-                                width="25%"
-                                class="td-search-box"
-                                (clickOutside)="clickedOutside($event, searchTaxInputField, 'searchTaxInput')"
-                            >
-                                <div>
-                                    <ng-container
-                                        *ngTemplateOutlet="
-                                            searchTemplate;
-                                            context: {
-                                                $implicit: showSearchTax,
-                                                title: taxType,
-                                                fieldName: 'searchTaxInput',
-                                                formControl: searchTaxInput
-                                            }
-                                        "
-                                    >
-                                    </ng-container>
-                                </div>
-                            </th>
+                            <ng-container *ngIf="showGstColumn">
+                                <th
+                                    #searchTaxInputField
+                                    width="25%"
+                                    class="td-search-box"
+                                    (clickOutside)="clickedOutside($event, searchTaxInputField, 'searchTaxInput')"
+                                >
+                                    <div>
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showSearchTax,
+                                                    title: taxType,
+                                                    fieldName: 'searchTaxInput',
+                                                    formControl: searchTaxInput
+                                                }
+                                            "
+                                        >
+                                        </ng-container>
+                                    </div>
+                                </th>
+                            </ng-container>
                             <th
                                 #searchStateInputField
                                 width="15%"
@@ -248,7 +250,7 @@
                                 <label>{{ commonLocaleData?.app_address }}:</label>
                                 <p>
                                     {{ address.address }}
-                                    <ng-container *ngIf="address.taxType && address.taxNumber">
+                                    <ng-container *ngIf="showGstColumn && address.taxType && address.taxNumber">
                                         <br *ngIf="address.address" />
                                         {{ address.taxType }} : {{ address.taxNumber }}
                                     </ng-container>
