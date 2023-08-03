@@ -60,7 +60,7 @@ import { PurchaseOrderService } from './purchase-order.service';
 import { LocaleService } from './locale.service';
 import { BulkVoucherExportService } from './bulkvoucherexport.service';
 import { CustomFieldsService } from "./custom-fields.service";
-import { ThermalService } from "./thermal.service";
+//import { ThermalService } from "./thermal.service";
 import { PrinterFormatService } from "./printer.format.service";
 import { ActivityLogsService } from "./activity-logs.service";
 import { DownloadsService } from "./downloads.service";
@@ -141,7 +141,7 @@ export class ServiceModule {
                 BulkVoucherExportService,
                 LocaleService,
                 CustomFieldsService,
-                ThermalService,
+                //ThermalService,
                 PrinterFormatService,
                 DownloadsService,
                 ImportsService,

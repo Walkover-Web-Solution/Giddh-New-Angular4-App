@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ConnectionService } from 'ng-connection-service';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { LoginActions } from '../actions/login.action';
@@ -11,7 +10,7 @@ import { AppState } from '../store';
 
 @Component({
     selector: "token-verify",
-    templateUrl: "./token-verify.component.html",
+    templateUrl: "./token-verify.component.html"
 })
 export class TokenVerifyComponent implements OnInit, OnDestroy {
     public loading = false;
@@ -26,8 +25,7 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private generalService: GeneralService,
         private authenticationService: AuthenticationService,
-        private _loginAction: LoginActions,
-        private connectionService: ConnectionService,
+        private loginAction: LoginActions,
         private authService: AuthenticationService
     ) {
         
@@ -39,8 +37,8 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.connectionService.monitor().pipe(takeUntil(this.destroyed$)).subscribe(isConnected => {
-            if (!isConnected) {
+        setInterval(() => {
+            if (!navigator.onLine) {
                 this.isConnected = false;
             } else {
                 if (!this.isConnected) {
@@ -53,12 +51,12 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
         if (this.route.snapshot.queryParams['signup'] && this.generalService.user) {
             this.authService.ClearSession().pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === 'success') {
-                    this.store.dispatch(this._loginAction.socialLogoutAttempt());
+                    this.store.dispatch(this.loginAction.socialLogoutAttempt());
                     this.processLogin();
                 }
             });
         } else {
-            this.store.dispatch(this._loginAction.socialLogoutAttempt());
+            this.store.dispatch(this.loginAction.socialLogoutAttempt());
             this.processLogin();
         }
     }
@@ -93,7 +91,7 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
      * @memberof TokenVerifyComponent
      */
     public verifyToken(): void {
-        this.store.dispatch(this._loginAction.signupWithGoogle(this.token));
+        this.store.dispatch(this.loginAction.signupWithGoogle(this.token));
     }
 
     /**
@@ -102,7 +100,7 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
      * @memberof TokenVerifyComponent
      */
     public verifyUser(): void {
-        this.store.dispatch(this._loginAction.LoginWithPasswdResponse(this.request));
+        this.store.dispatch(this.loginAction.LoginWithPasswdResponse(this.request));
     }
 
     /**
