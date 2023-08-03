@@ -9,11 +9,26 @@
 .modal-body {
     form {
         overflow: auto;
-        height: 500px;
+        // height: 400px;
         min-height: 200px;
+        max-height: 275px;
         .export-form {
             .radio-inline {
                 line-height: 10px;
+            }
+        }
+        .export-border {
+            position: relative;
+            &::after {
+                content: "";
+                display: block;
+                position: absolute;
+                width: 1px;
+                height: 65%;
+                background-color: var(--color-abbey);
+                top: 50%;
+                right: -75px;
+                transform: translateY(-50%);
             }
         }
     }
