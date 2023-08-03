@@ -90,7 +90,7 @@
                                     </ng-container>
                                 </div>
                             </th>
-                            <ng-container *ngIf="showGstColumn">
+                            <ng-container *ngIf="showTaxColumn">
                                 <th
                                     #searchTaxInputField
                                     width="25%"
@@ -250,7 +250,7 @@
                                 <label>{{ commonLocaleData?.app_address }}:</label>
                                 <p>
                                     {{ address.address }}
-                                    <ng-container *ngIf="showGstColumn && address.taxType && address.taxNumber">
+                                    <ng-container *ngIf="showTaxColumn && address.taxType && address.taxNumber">
                                         <br *ngIf="address.address" />
                                         {{ address.taxType }} : {{ address.taxNumber }}
                                     </ng-container>
