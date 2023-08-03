@@ -36,13 +36,11 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public accountSearchControl: UntypedFormControl = new UntypedFormControl();
     public tags: TagRequest[] = [];
     public selectedTag: string;
-    @Input() public tbExportPdf: boolean = false;
     @Input() public tbExportXLS: boolean = false;
     @Input() public tbExportCsv: boolean = false;
     @Input() public plBsExportXLS: boolean = false;
     @Input() public BsExportXLS: boolean = false;
     @Output() public seachChange = new EventEmitter<string>();
-    @Output() public tbExportPdfEvent = new EventEmitter<string>();
     @Output() public tbExportXLSEvent = new EventEmitter<string>();
     @Output() public tbExportCsvEvent = new EventEmitter<string>();
     @Output() public plBsExportXLSEvent = new EventEmitter<string>();
