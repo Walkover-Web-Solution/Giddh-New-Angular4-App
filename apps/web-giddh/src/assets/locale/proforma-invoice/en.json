@@ -3,10 +3,13 @@
         "sales": "Sales",
         "credit_note": "Credit Note",
         "debit_note": "Debit Note",
-        "purchase": "Purchase",
+        "purchase": "Bill",
         "cash": "Cash",
         "proforma": "Proforma",
-        "estimate": "Estimate"
+        "estimate": "Estimate",
+        "cash_bill": "Cash Bill",
+        "cash_credit_note": "Cash Credit Note",
+        "cash_debit_note": "Cash Debit Note"
     },
     "customer_name": "Customer Name",
     "balance_due": "Balance Due",
