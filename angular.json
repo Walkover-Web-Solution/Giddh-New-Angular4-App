@@ -250,7 +250,6 @@
                         "baseHref": "http://localhost:3000",
                         "allowedCommonJsDependencies": [
                             "file-saver",
-                            "angular2-text-mask",
                             "ngrx-store-localstorage",
                             "css-element-queries",
                             "jspdf",
