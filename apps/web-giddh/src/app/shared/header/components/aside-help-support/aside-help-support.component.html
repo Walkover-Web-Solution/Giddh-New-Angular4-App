@@ -61,26 +61,28 @@
                                 >
                             </mat-list-item>
                         </div>
-                        <mat-list-item role="listitem" class="d-none">
-                            <a
-                                href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8"
-                                target="_blank"
-                                [title]="localeData?.ios_app"
-                            >
-                                <i class="icon-mac"></i> {{ localeData?.ios }}</a
-                            >
-                        </mat-list-item>
-                        <mat-list-item role="listitem">
-                            <a
-                                href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{
-                                    apkVersion
-                                }}.exe"
-                                target="_blank"
-                                [title]="localeData?.windows_app"
-                            >
-                                <i class="icon-windows"></i> {{ localeData?.windows }}</a
-                            >
-                        </mat-list-item>
+                        <div class="d-flex">
+                            <mat-list-item role="listitem">
+                                <a
+                                    href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8"
+                                    target="_blank"
+                                    [title]="localeData?.ios_app"
+                                >
+                                    <i class="icon-mac"></i> {{ localeData?.ios }}</a
+                                >
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <a
+                                    href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{
+                                        apkVersion
+                                    }}.exe"
+                                    target="_blank"
+                                    [title]="localeData?.windows_app"
+                                >
+                                    <i class="icon-windows"></i> {{ localeData?.windows }}</a
+                                >
+                            </mat-list-item>
+                        </div>
                     </mat-list>
                 </div>
                 <div class="request-demo">
