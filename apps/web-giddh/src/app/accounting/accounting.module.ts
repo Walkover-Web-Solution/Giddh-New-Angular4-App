@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
-import { TextMaskModule } from 'angular2-text-mask';
 import {
     AccountingSidebarComponent,
 } from 'apps/web-giddh/src/app/accounting/accouting-sidebar/accounting-sidebar.component';
@@ -65,7 +64,6 @@ import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
         ClickOutsideModule,
         TooltipModule.forRoot(),
         TypeaheadModule.forRoot(),
-        TextMaskModule,
         VirtualScrollModule,
         ElementViewChildModule,
         QuickAccountModule,

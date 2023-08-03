@@ -30,7 +30,6 @@ import { FontPickerConfigInterface, FontPickerModule, FONT_PICKER_CONFIG } from 
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-import { TextMaskModule } from 'angular2-text-mask';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -140,7 +139,6 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
         BsDropdownModule.forRoot(),
         AsideMenuRecurringEntryModule,
         SalesShSelectModule,
-        TextMaskModule,
         Daterangepicker,
         AccountDetailModalModule,
         CurrencyModule,

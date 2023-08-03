@@ -21,7 +21,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
-import { TextMaskModule } from 'angular2-text-mask';
 import { Daterangepicker } from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
@@ -67,7 +66,6 @@ const _ROUTES: Routes = [
         DecimalDigitsModule,
         BsDropdownModule.forRoot(),
         SalesShSelectModule,
-        TextMaskModule,
         Daterangepicker,
         SharedModule
     ],
