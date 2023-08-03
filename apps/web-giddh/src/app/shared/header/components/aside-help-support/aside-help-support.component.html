@@ -20,35 +20,48 @@
                     </a>
                 </div>
                 <div class="feature-block">
-                    <ul>
-                        <li>
+                    <mat-list role="list">
+                        <mat-list-item role="listitem">
                             <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">{{
                                 localeData?.upcoming
                             }}</a>
-                        </li>
-                        <li>
+                        </mat-list-item>
+                        <mat-list-item role="listitem">
                             <a href="https://giddh.canny.io/feature-requests" target="_blank">{{
                                 localeData?.feature_request
                             }}</a>
-                        </li>
-                        <li>
+                        </mat-list-item>
+                        <mat-list-item role="listitem">
                             <a href="https://changelog.giddh.com" target="_blank">{{ localeData?.changelog }}</a>
-                        </li>
-                    </ul>
+                        </mat-list-item>
+                    </mat-list>
                 </div>
                 <div class="download-block">
                     <h4>{{ commonLocaleData?.app_download }}</h4>
-                    <ul class="clearfix">
-                        <li>
-                            <a
-                                href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en"
-                                target="_blank"
-                                [title]="localeData?.android_app"
-                            >
-                                <i class="icon-android"></i> {{ localeData?.android }}</a
-                            >
-                        </li>
-                        <li hidden>
+                    <mat-list role="list">
+                        <div class="d-flex">
+                            <mat-list-item role="listitem">
+                                <a
+                                    href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en"
+                                    target="_blank"
+                                    [title]="localeData?.android_app"
+                                >
+                                    <i class="icon-android"></i> {{ localeData?.android }}</a
+                                >
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <a
+                                    href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{
+                                        macAppVersion
+                                    }}.dmg"
+                                    target="_blank"
+                                    [title]="localeData?.macos_app"
+                                >
+                                    <i class="icon-mac"></i> {{ localeData?.macos }}</a
+                                >
+                            </mat-list-item>
+                        </div>
+                        <mat-list-item role="listitem" class="d-none">
                             <a
                                 href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8"
                                 target="_blank"
@@ -56,19 +69,8 @@
                             >
                                 <i class="icon-mac"></i> {{ localeData?.ios }}</a
                             >
-                        </li>
-                        <li>
-                            <a
-                                href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{
-                                    macAppVersion
-                                }}.dmg"
-                                target="_blank"
-                                [title]="localeData?.macos_app"
-                            >
-                                <i class="icon-mac"></i> {{ localeData?.macos }}</a
-                            >
-                        </li>
-                        <li>
+                        </mat-list-item>
+                        <mat-list-item role="listitem">
                             <a
                                 href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{
                                     apkVersion
@@ -78,16 +80,16 @@
                             >
                                 <i class="icon-windows"></i> {{ localeData?.windows }}</a
                             >
-                        </li>
-                    </ul>
+                        </mat-list-item>
+                    </mat-list>
                 </div>
                 <div class="request-demo">
                     <div class="file-image">
                         <img src="{{ imgPath }}request-demo.svg" />
                         <p class="text-gray">{{ localeData?.request_demo }}:</p>
-                        <a class="btn btn-sky-blue mb-3 mr-0" href="javascript:void(0)" (click)="scheduleNow($event)">{{
-                            commonLocaleData?.app_schedule_now
-                        }}</a>
+                        <button mat-stroked-button color="primary" (click)="scheduleNow($event)">
+                            {{ commonLocaleData?.app_schedule_now }}
+                        </button>
                         <br />
                         <p class="text-gray">{{ localeData?.contact }}:</p>
                     </div>

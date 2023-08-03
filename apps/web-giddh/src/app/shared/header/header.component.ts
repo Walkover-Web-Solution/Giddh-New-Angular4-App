@@ -44,7 +44,7 @@ import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-header',
@@ -850,6 +850,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public toggleHelpSupportPane(): void {
         this.matDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef,{
             width:'1000px',
+            backdropClass: 'cdk-overlay-transparent-backdrop',
             position: {
                 right: '0',
                 top: '0'
