@@ -90,7 +90,7 @@
                     "description": "डेबिट नोट रिकॉर्ड करें और खाता अपडेट करें"
                 },
                 {
-                    "label": "खरीद बिल",
+                    "label": "बिल",
                     "link": "/pages/proforma-invoice/invoice/purchase",
                     "icon": "icon-invoice-new",
                     "description": "खरीद अनुरोध, खरीद बिल, पीओ संशोधित करें"
@@ -299,7 +299,7 @@
                     "additional": {
                         "voucherVersion": 1
                     }
-                }, 
+                },
                 {
                     "label": "इन्वेंटरी",
                     "link": "/pages/inventory/v2/reports/product/stock",

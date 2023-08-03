@@ -90,7 +90,7 @@
                     "description": "डेबिट नोट रेकॉर्ड करा आणि अद्यतनित करा"
                 },
                 {
-                    "label": "खरेदी बिल",
+                    "label": "बिल",
                     "link": "/pages/proforma-invoice/invoice/purchase",
                     "icon": "icon-invoice-new",
                     "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा"
