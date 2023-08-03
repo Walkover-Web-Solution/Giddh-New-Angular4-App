@@ -11,8 +11,7 @@
       "target": "ES2022",
       "module": "ES2022",
       "typeRoots": [
-        "node_modules/@types",
-        "./node_modules/qz-tray/"
+        "node_modules/@types"
       ],
       "lib": [
         "ES2022",
