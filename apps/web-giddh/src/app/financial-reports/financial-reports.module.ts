@@ -33,7 +33,6 @@ import {
 import { BalanceSheetExportXlsComponent } from './components/export/balance-sheet/export-xls/export-xls.component';
 import { ProfitLossExportXlsComponent } from './components/export/profit-loss/export-xls/export-xls.component';
 import { TrialBalanceExportCsvComponent } from './components/export/trial-balance/export-csv/export-csv.component';
-import { TrialBalanceExportPdfComponent } from './components/export/trial-balance/export-pdf/export-pdf.component';
 import { TrialBalanceExportXlsComponent } from './components/export/trial-balance/export-xls/export-xls.component';
 import { FinancialReportsFilterComponent } from './components/filter/filter.component';
 import { GridRowComponent } from './components/grid-row/grid-row.component';
@@ -63,7 +62,6 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         ProfitLossGridRowComponent,
         ProfitLossExportXlsComponent,
         TrialBalanceExportCsvComponent,
-        TrialBalanceExportPdfComponent,
         TrialBalanceExportXlsComponent,
         BalanceSheetExportXlsComponent,
         BalanceSheetComponent,
