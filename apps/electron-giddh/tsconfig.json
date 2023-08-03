@@ -13,6 +13,9 @@
             "../../node_modules/@types"
         ],
         "lib": [
+            "ES2017",
+            "ES2016",
+            "ES2015",
             "ES2022",
             "dom"
         ]
