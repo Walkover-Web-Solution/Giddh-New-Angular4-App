@@ -1,7 +1,20 @@
 .export-label {
     vertical-align: top;
     width: 160px;
+    line-height: 25px;
 }
 .export-button {
     float: left;
+}
+.modal-body {
+    form {
+        overflow: auto;
+        height: 500px;
+        min-height: 200px;
+        .export-form {
+            .radio-inline {
+                line-height: 10px;
+            }
+        }
+    }
 }
