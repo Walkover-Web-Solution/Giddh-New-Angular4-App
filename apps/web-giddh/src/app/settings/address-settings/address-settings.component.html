@@ -160,7 +160,7 @@
                                     </ng-container>
                                 </div>
                             </td>
-                            <td [attr.data-title]="taxType">
+                            <td [attr.data-title]="taxType" *ngIf="showTaxColumn">
                                 <div>
                                     <ng-container *ngIf="address.taxType && address.taxNumber">
                                         {{ address.taxNumber }}
