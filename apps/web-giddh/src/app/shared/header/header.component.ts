@@ -93,7 +93,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
     /** Instance of menu trigger */
     @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
-    /*--- help-dialog open ---*/
+    /** Instance of mat dialog */
     @ViewChild('asideHelpSupportMenuStateRef', { static: true }) public asideHelpSupportMenuStateRef: TemplateRef<any>;
 
     public hideAsDesignChanges: boolean = false;
@@ -841,7 +841,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.dialog.open(this.asideHelpSupportMenuStateRef,{
                 width:'1000px',
                 backdropClass: 'cdk-overlay-transparent-backdrop',
-                disableClose: true,
                 position: {
                     right: '0',
                     top: '0'
@@ -897,7 +896,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
            
         },50)
     }
-
     /**
      * redirect to route and save page entry into db
      * @param e event

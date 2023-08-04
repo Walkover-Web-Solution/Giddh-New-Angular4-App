@@ -32,7 +32,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
         private authService: AuthenticationService,
         private generalActions: GeneralActions,
         private store: Store<AppState>
-        ) {
+    ) {
 
     }
 
@@ -52,10 +52,10 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     *
     * @param {*} [event]
     * @memberof AsideHelpSupportComponent
-         */
-            public closeAsidePane(event?): void {
-            this.closeAsideEvent.emit(event);
-        }
+    */
+    public closeAsidePane(event?): void {
+        this.closeAsideEvent.emit(event);
+    }
 
     /**
      * This will open schedule now window
