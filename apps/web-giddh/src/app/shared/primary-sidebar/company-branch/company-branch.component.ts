@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -25,13 +25,15 @@ import { CommonActions } from '../../../actions/common.actions';
     styleUrls: ['./company-branch.component.scss'],
 })
 
-export class CompanyBranchComponent implements OnInit, OnDestroy {
+export class CompanyBranchComponent implements OnInit, OnDestroy,OnChanges {
     /** Instance of tabset */
     @ViewChild('staticTabs', { static: false }) staticTabs: TabsetComponent;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** True, if sidebar needs to be shown */
+    @Input() public isGoToBranch: boolean = false;
     /** Stores the list of all the companies for a user */
     public companies$: Observable<CompanyResponse[]>;
     /** Stores the total company list */
@@ -87,6 +89,13 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
     }
 
+    public ngOnChanges(changes: SimpleChanges): void {
+        console.log(changes);
+
+        if (changes.isGoToBranch?.currentValue) {
+            this.getCompanyBranches(this.companyBranches, false);
+        }
+    }
     /**
      * Initializes the component
      *
@@ -158,6 +167,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      * @memberof CompanyBranchComponent
      */
     public ngOnDestroy(): void {
+        this.isGoToBranch = false;
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -328,7 +338,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                     }
 
                     this.changeDetectorRef.detectChanges();
-
                     if (!reloadBranches && this.companyBranches.branchCount > 1) {
                         this.showAllBranches(company);
                     }

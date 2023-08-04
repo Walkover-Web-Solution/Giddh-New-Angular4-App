@@ -196,6 +196,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public allModulesList = [];
     /** Version of lated mac app  */
     public macAppVersion: string;
+    public isGoToBranch: boolean = false;
 
     /**
      * Returns whether the account section needs to be displayed or not
@@ -1193,6 +1194,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 showPlans: true
             }
         });
+    }
+
+    public gotToBranchTab(): void {
+        this.trigger?.closeMenu();
+        this.expandSidebar(false);
+        this.isGoToBranch = true;
     }
 
     public onRight(nodes) {
