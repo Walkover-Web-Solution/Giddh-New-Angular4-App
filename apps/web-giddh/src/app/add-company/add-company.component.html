@@ -45,6 +45,7 @@
                                     [placeholder]="localeData?.enter_country_name"
                                     [options]="countries"
                                     (selectedOption)="selectCountry($event)"
+                                    [defaultValue]="selectedCountry"
                                     [showError]="isFormSubmitted && !firstStepForm.get('country')?.value"
                                 >
                                 </dropdown-field>
