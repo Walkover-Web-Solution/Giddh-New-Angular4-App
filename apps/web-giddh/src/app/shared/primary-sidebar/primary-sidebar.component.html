@@ -64,7 +64,11 @@
                 </li>
             </ul>
             <div class="dropdown-menu company-branch-nav" *ngIf="showCompanyBranchSwitch">
-                <company-branch [localeData]="localeData" [commonLocaleData]="commonLocaleData"></company-branch>
+                <company-branch
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    [isGoToBranch]="isGoToBranch"
+                ></company-branch>
             </div>
         </div>
         <div>

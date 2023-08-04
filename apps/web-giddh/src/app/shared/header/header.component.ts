@@ -198,6 +198,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public lastSessionRenewalTime: any;
     /** All modules data with routing shared with user */
     public allModulesList = [];
+    public isGoToBranch: boolean = false;
     /** This will hold that how many days are left for subscription expiration */
     public remainingSubscriptionDays: any = false;
     /** Menu items received from API */
@@ -1181,6 +1182,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 showPlans: true
             }
         });
+    }
+
+    public gotToBranchTab(): void {
+        this.trigger?.closeMenu();
+        this.expandSidebar(false);
+        this.isGoToBranch = true;
     }
 
     public onRight(nodes) {
