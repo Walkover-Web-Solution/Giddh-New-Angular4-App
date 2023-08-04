@@ -156,7 +156,7 @@
             }
             // hover effect
             &.selected {
-                background-color: var(--color-popup-list-hover);
+                background-color: var(--color-primary-header-background);
                 .item-details {
                     color: var(--color-popup-list-input-text-hover);
                     small {

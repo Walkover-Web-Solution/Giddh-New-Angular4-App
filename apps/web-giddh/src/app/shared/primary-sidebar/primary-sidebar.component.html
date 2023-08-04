@@ -245,27 +245,24 @@
     </div>
     <!--CMD + G modal  -->
     <ng-template #navigationModal>
-        <div class="modal-body" #mdl>
-            <command-k
-                (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
-                (groupEmitter)="makeGroupEntryInDB($event)"
-                (selectedItemEmitter)="onItemSelected($event)"
-                [parentEle]="mdl"
-                [isOpen]="true"
-                [setParentWidth]="true"
-                (closeEmitter)="modelRef.hide()"
-            ></command-k>
-
-            <div class="shortcuts">
-                <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
-                <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
-                {{ localeData?.to_select }}
-                <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
-                    commonLocaleData?.app_esc
-                }}</strong
-                >&nbsp;
-                {{ localeData?.to_dismiss }}
-            </div>
+        <command-k
+            (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
+            (groupEmitter)="makeGroupEntryInDB($event)"
+            (selectedItemEmitter)="onItemSelected($event)"
+            [parentEle]="mdl"
+            [isOpen]="true"
+            [setParentWidth]="true"
+            (closeEmitter)="modelRef.hide()"
+        ></command-k>
+        <div class="shortcuts">
+            <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
+            <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
+            {{ localeData?.to_select }}
+            <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
+                commonLocaleData?.app_esc
+            }}</strong
+            >&nbsp;
+            {{ localeData?.to_dismiss }}
         </div>
     </ng-template>
 </ng-container>

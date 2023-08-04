@@ -1,8 +1,8 @@
 :host {
     position: fixed;
     left: auto;
-    top: 57px;
-    right: 0;
+    top: 70px;
+    right: -5px;
     bottom: 0;
     max-width: 330px;
     width: 100%;
@@ -98,7 +98,7 @@
             padding: 15px;
             border-bottom: 1px solid var(--color-common-secondary-border);
             h4 {
-                padding-bottom: 15px;
+                padding-bottom: 5px;
                 font-size: var(--font-size-15);
                 font-family: var(--font-semibold);
             }
@@ -136,6 +136,14 @@
             p {
                 a {
                     color: var(--color-nero);
+                }
+            }
+        }
+        .feature-block,
+        .download-block {
+            .mat-list-base {
+                .mat-list-item {
+                    height: 32px !important;
                 }
             }
         }

@@ -45,6 +45,7 @@ import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-header',
@@ -92,6 +93,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
     /** Instance of menu trigger */
     @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
+    @ViewChild('asideHelpSupportMenuStateRef', { static: true }) public asideHelpSupportMenuStateRef: TemplateRef<any>;
 
     public hideAsDesignChanges: boolean = false;
     public title: Observable<string>;
@@ -258,7 +260,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         public location: Location,
         private localeService: LocaleService,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private sanitizer: DomSanitizer
+        private sanitizer: DomSanitizer,
+        public dialog: MatDialog,
+       
     ) {
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
         // Reset old stored application date
@@ -831,18 +835,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @param {boolean} show
      * @memberof HeaderComponent
      */
-    public toggleHelpSupportPane(show: boolean): void {
-        setTimeout(() => {
-            if (show) {
-                this.asideSettingMenuState = 'out';
-                document.querySelector('body')?.classList?.remove('aside-setting');
-            }
-            this.asideInventorySidebarMenuState = 'out'
-            document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
-            this.toggleBodyClass();
-        }, (this.asideHelpSupportMenuState === 'out') ? 100 : 0);
+    public toggleHelpSupportPane(event: boolean): void {
+        if(event){
+            this.dialog.open(this.asideHelpSupportMenuStateRef,{
+                width:'1000px',
+                backdropClass: 'cdk-overlay-transparent-backdrop',
+                position: {
+                    right: '0',
+                    top: '0'
+                }
+            });
+        } else{
+            this.dialog.closeAll();
+        }
     }
+    
 
     /**
      * This will toggle the settings popup
