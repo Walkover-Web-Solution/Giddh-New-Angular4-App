@@ -12,13 +12,14 @@
     }
     form {
         overflow: auto;
-        height: 230px;
+        height: 260px;
         min-height: 200px;
         max-height: 275px;
-        padding: 0 15px;
+        padding: 8px 15px 0;
         &.export-form {
             .radio-inline {
                 line-height: 10px;
+                width: 70px;
             }
             .toggle-gap {
                 display: flex;
@@ -35,7 +36,7 @@
                 height: 55%;
                 background-color: var(--color-gray);
                 top: 46%;
-                right: -32px;
+                right: -20px;
                 transform: translateY(-50%);
             }
         }
