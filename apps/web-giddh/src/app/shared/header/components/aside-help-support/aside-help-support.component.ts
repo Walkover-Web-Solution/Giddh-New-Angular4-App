@@ -48,16 +48,6 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will close the popup
-     *
-     * @param {*} [event]
-     * @memberof AsideHelpSupportComponent
-     */
-    public closeAsidePane(event?): void {
-        this.closeAsideEvent.emit(event);
-    }
-
-    /**
      * This will open schedule now window
      *
      * @param {*} event
@@ -65,7 +55,6 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
      */
     public scheduleNow(event): void {
         this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
-        this.closeAsidePane(event);
     }
 
     /**
@@ -82,16 +71,6 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
                 this.apkVersion = versNum;
             }
         });
-    }
-
-    /**
-     * This will detect the ESCAPE keypress and will close the popup
-     *
-     * @param {KeyboardEvent} event
-     * @memberof AsideHelpSupportComponent
-     */
-    @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-        this.closeAsidePane();
     }
 
     /**

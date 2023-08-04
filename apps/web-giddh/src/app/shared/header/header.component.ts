@@ -222,7 +222,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCalendlyModelActivate: boolean = false;
     /** Calendly url */
     public calendlyUrl: any = '';
-    public matDialogRef: any;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -837,7 +836,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleHelpSupportPane(): void {
-        this.matDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef,{
+        this.dialog.open(this.asideHelpSupportMenuStateRef,{
             width:'1000px',
             backdropClass: 'cdk-overlay-transparent-backdrop',
             position: {

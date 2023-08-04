@@ -505,16 +505,9 @@
     </ng-template>
 
     <!--help & support sidebar  -->
-    <!-- <div
-        class="help-support-aside"
-        *ngIf="asideHelpSupportMenuState === 'in'"
-        (clickOutside)="closeHelpPaneOnOutsideClick()"
-    >
-        <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
-    </div> -->
 
     <ng-template #asideHelpSupportMenuStateRef>
-        <aside-help-support (closeAsideEvent)="matDialogRef.close()"></aside-help-support>
+        <aside-help-support></aside-help-support>
     </ng-template>
 
     <!-- setting aside pane -->

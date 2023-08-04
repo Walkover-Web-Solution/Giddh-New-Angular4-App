@@ -53,7 +53,6 @@ import { HeaderComponent } from "./header.component";
         MatButtonModule,
         MatTreeModule,
         MatDialogModule,
-        MatDialogModule,
         MatListModule,
         MatButtonModule
     ],
