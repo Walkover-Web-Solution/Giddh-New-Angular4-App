@@ -181,8 +181,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (this.companyList?.length > 0) {
                 this.dialog.open(this.navigationModal, {
                     width:'630px',
-                    height: '600',
-                })
+                    height: '600'
+                });
             }
         }
     }

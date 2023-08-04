@@ -257,7 +257,7 @@
 
     <!--help & support sidebar  -->
     <ng-template #asideHelpSupportMenuStateRef>
-        <aside-help-support></aside-help-support>
+        <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
     </ng-template>
 
     <!-- setting aside pane -->

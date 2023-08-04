@@ -65,6 +65,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
      */
     public scheduleNow(event): void {
         this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
+        this.closeAsidePane(event);
     }
 
     /**
