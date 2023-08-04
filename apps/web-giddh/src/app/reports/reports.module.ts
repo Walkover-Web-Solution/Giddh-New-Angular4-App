@@ -44,6 +44,7 @@ import { SendEmailModule } from '../shared/send-email/send-email.module';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
+import { SalesPurchaseRegisterExportComponent } from './sales-purchase-register-export/sales-purchase-register-export.component';
 
 @NgModule({
     declarations: [
@@ -63,7 +64,8 @@ import { SelectTableColumnModule } from '../shared/select-table-column/select-ta
         CashFlowStatementComponent,
         PaymentReportComponent,
         PaymentAdvanceSearchComponent,
-        PreviewComponent
+        PreviewComponent,
+        SalesPurchaseRegisterExportComponent
     ],
     exports: [
         ReportsComponent,
