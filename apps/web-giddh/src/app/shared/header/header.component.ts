@@ -229,7 +229,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCalendlyModelActivate: boolean = false;
     /** Calendly url */
     public calendlyUrl: any = '';
-    public matDialogRef: any;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -847,15 +846,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @param {boolean} show
      * @memberof HeaderComponent
      */
-    public toggleHelpSupportPane(): void {
-        this.matDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef,{
-            width:'1000px',
-            backdropClass: 'cdk-overlay-transparent-backdrop',
-            position: {
-                right: '0',
-                top: '0'
-            }
-        })
+    public toggleHelpSupportPane(event: boolean): void {
+        if(event){
+            this.dialog.open(this.asideHelpSupportMenuStateRef,{
+                width:'1000px',
+                backdropClass: 'cdk-overlay-transparent-backdrop',
+                position: {
+                    right: '0',
+                    top: '0'
+                }
+            });
+        } else{
+            this.dialog.closeAll();
+        }
     }
     
 
@@ -1393,7 +1396,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public addClassInBodyIfPageHasTabs(): void {
-        // this.toggleHelpSupportPane(false);
+        this.toggleHelpSupportPane(false);
 
         setTimeout(() => {
             if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data")?.length > 0) {
