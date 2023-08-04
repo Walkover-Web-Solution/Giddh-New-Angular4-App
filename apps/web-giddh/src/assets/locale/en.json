@@ -10,6 +10,7 @@
     "app_email_id": "Email Id",
     "app_state": "State",
     "app_tax_number": "Tax Number",
+    "app_tax_number_short": "Tax No.",
     "app_customer": "Customer",
     "app_purchase": "Purchase",
     "app_sales": "Sales",

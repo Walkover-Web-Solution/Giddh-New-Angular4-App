@@ -105,7 +105,7 @@
                     [id]="activeTabIndex === 3 ? 'giddh-page-heading' : ''"
                 >
                     <ng-container *ngIf="activeTabIndex === 3">
-                        <new-branch-transfer-list></new-branch-transfer-list>
+                        <new-branch-transfer-list [reportType]="reportType"> </new-branch-transfer-list>
                     </ng-container>
                 </tab>
             </tabset>
