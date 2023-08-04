@@ -1,7 +1,43 @@
 .export-label {
     vertical-align: top;
     width: 160px;
+    line-height: 25px;
 }
 .export-button {
     float: left;
+}
+.modal-body {
+    p {
+        color: var(--color-sidebar-content-text);
+    }
+    form {
+        overflow: auto;
+        height: 230px;
+        min-height: 200px;
+        max-height: 275px;
+        padding: 0 15px;
+        &.export-form {
+            .radio-inline {
+                line-height: 10px;
+            }
+            .toggle-gap {
+                display: flex;
+                column-gap: 15px;
+            }
+        }
+        .export-border {
+            position: relative;
+            &::after {
+                content: "";
+                display: block;
+                position: absolute;
+                width: 1px;
+                height: 55%;
+                background-color: var(--color-gray);
+                top: 46%;
+                right: -32px;
+                transform: translateY(-50%);
+            }
+        }
+    }
 }
