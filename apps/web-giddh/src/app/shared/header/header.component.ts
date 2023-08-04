@@ -93,6 +93,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
     /** Instance of menu trigger */
     @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
+    /*--- help-dialog open ---*/
     @ViewChild('asideHelpSupportMenuStateRef', { static: true }) public asideHelpSupportMenuStateRef: TemplateRef<any>;
 
     public hideAsDesignChanges: boolean = false;
@@ -261,7 +262,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private localeService: LocaleService,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private sanitizer: DomSanitizer,
-        public dialog: MatDialog,
+        public dialog: MatDialog    
        
     ) {
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
@@ -840,6 +841,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.dialog.open(this.asideHelpSupportMenuStateRef,{
                 width:'1000px',
                 backdropClass: 'cdk-overlay-transparent-backdrop',
+                disableClose: true,
                 position: {
                     right: '0',
                     top: '0'
@@ -889,11 +891,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public closeHelpPaneOnOutsideClick(): void {
         setTimeout(() => {
-            if (this.asideHelpSupportMenuState === "in") {
-                this.asideHelpSupportMenuState = 'out';
-                document.querySelector('body')?.classList?.remove('fixed');
+            if(this.dialog.open){
+                this.toggleHelpSupportPane(true);
             }
-        }, 50);
+           
+        },50)
     }
 
     /**

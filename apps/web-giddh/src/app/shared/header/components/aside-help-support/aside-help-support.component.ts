@@ -48,6 +48,16 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     }
 
     /**
+    * This will close the popup
+    *
+    * @param {*} [event]
+    * @memberof AsideHelpSupportComponent
+         */
+            public closeAsidePane(event?): void {
+            this.closeAsideEvent.emit(event);
+        }
+
+    /**
      * This will open schedule now window
      *
      * @param {*} event
@@ -55,6 +65,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
      */
     public scheduleNow(event): void {
         this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
+        this.closeAsidePane(event);
     }
 
     /**
