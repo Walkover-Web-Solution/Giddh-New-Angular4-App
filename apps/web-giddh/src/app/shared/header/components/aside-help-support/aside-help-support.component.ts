@@ -32,7 +32,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
         private authService: AuthenticationService,
         private generalActions: GeneralActions,
         private store: Store<AppState>
-        ) {
+    ) {
 
     }
 
