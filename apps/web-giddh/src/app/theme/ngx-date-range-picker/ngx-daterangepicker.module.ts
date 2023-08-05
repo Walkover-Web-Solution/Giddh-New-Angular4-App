@@ -27,7 +27,7 @@ import { CdkScrollModule } from '../form-fields/cdk-scroll/cdk-scroll.module';
         FormsModule,
         ReactiveFormsModule,
         NgxMaskModule.forRoot(),
-        ModalModule,
+        ModalModule.forRoot(),
         TranslateDirectiveModule,
         MatButtonModule,
         MatInputModule,

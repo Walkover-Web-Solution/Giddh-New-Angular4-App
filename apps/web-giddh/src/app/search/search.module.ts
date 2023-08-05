@@ -43,7 +43,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         FormsModule,
         ReactiveFormsModule,
         SearchRoutingModule,
-        ModalModule,
+        ModalModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

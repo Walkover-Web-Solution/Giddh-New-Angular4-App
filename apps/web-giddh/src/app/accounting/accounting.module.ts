@@ -53,7 +53,7 @@ import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
         CurrencyModule,
         FormsModule,
         ReactiveFormsModule,
-        ModalModule,
+        ModalModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

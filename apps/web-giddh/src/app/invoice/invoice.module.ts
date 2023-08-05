@@ -119,7 +119,7 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
         CommonModule,
         TabsModule.forRoot(),
         ReactiveFormsModule,
-        ModalModule,
+        ModalModule.forRoot(),
         TooltipModule.forRoot(),
         PaginationModule.forRoot(),
         InvoiceTemplatesModule,

@@ -15,7 +15,7 @@ import { LoaderModule } from '../loader/loader.module';
         FormsModule,
         ReactiveFormsModule,
         LoginRoutingModule,
-        ModalModule,
+        ModalModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

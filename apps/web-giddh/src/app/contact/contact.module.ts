@@ -68,7 +68,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             spinnerSize: 30
         }),
         ShSelectModule,
-        TabsModule,
         BsDropdownModule.forRoot(),
         TooltipModule.forRoot(),
         SharedModule,

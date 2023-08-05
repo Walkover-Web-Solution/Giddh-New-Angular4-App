@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { UserDetailsRoutingModule } from './user-details.routing.module';
 import { UserDetailsComponent } from './user-details.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { AlertModule } from 'ngx-bootstrap/alert';
 import { LaddaModule } from 'angular2-ladda';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
@@ -65,7 +64,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ReactiveFormsModule,
         UserDetailsRoutingModule,
         TabsModule.forRoot(),
-        AlertModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

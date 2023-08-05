@@ -46,7 +46,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         CommonModule,
         FormsModule,
         HomeRoutingModule,
-        ModalModule,
+        ModalModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

@@ -59,7 +59,7 @@ import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
     imports: [
         PurchaseRoutingModule,
         InvoiceModule,
-        CollapseModule,
+        CollapseModule.forRoot(),
         PaginationModule.forRoot(),
         BsDropdownModule.forRoot(),
         LaddaModule.forRoot({
@@ -83,7 +83,7 @@ import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
         TranslateDirectiveModule,
         KeyboardShortutModule,
         DecimalDigitsModule,
-        ModalModule,
+        ModalModule.forRoot(),
         HamburgerMenuModule,
         BsDatepickerModule.forRoot(),
         DeleteVoucherConfirmationModalModule,

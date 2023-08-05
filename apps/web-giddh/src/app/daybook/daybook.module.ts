@@ -33,10 +33,13 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
     providers: [],
-    imports: [CommonModule,
-        ReactiveFormsModule, DecimalDigitsModule,
-        FormsModule, ModalModule,
-        BsDatepickerModule,
+    imports: [
+        CommonModule,
+        ReactiveFormsModule, 
+        DecimalDigitsModule,
+        FormsModule,
+        ModalModule.forRoot(),
+        BsDatepickerModule.forRoot(),
         PaginationModule.forRoot(),
         Daterangepicker,
         DaybookRoutingModule,
