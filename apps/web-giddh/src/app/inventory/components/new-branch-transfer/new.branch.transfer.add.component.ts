@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChanges, ChangeDetectorRef, Output, EventEmitter, TemplateRef, Inject } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChanges, ChangeDetectorRef, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import {
     CompanyResponse
