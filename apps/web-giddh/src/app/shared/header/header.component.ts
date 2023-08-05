@@ -198,6 +198,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public lastSessionRenewalTime: any;
     /** All modules data with routing shared with user */
     public allModulesList = [];
+    /* True if it is redirect to go to branch mode */
     public isGoToBranch: boolean = false;
     /** This will hold that how many days are left for subscription expiration */
     public remainingSubscriptionDays: any = false;
