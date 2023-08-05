@@ -90,10 +90,10 @@ export class CompanyBranchComponent implements OnInit, OnDestroy,OnChanges {
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
-
         if (changes.isGoToBranch?.currentValue) {
             this.getCompanyBranches(this.companyBranches, false);
+            this.tabChanged('branch');
+            this.changeDetectorRef.detectChanges();
         }
     }
     /**
@@ -167,7 +167,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy,OnChanges {
      * @memberof CompanyBranchComponent
      */
     public ngOnDestroy(): void {
-        this.isGoToBranch = false;
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

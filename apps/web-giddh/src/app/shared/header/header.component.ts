@@ -1041,6 +1041,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public sideBarStateChange(event: boolean) {
+        this.isGoToBranch = false;
         if (this.sideMenu) {
             this.sideMenu.isopen = event;
         }
@@ -1476,6 +1477,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
+        this.isGoToBranch = false;
         if (closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
             return;
         }
