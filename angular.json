@@ -9,9 +9,7 @@
             "sourceRoot": "apps/web-giddh/src",
             "projectType": "application",
             "prefix": "foo",
-            "schematics": {
-                
-            },
+            "schematics": {},
             "architect": {
                 "build": {
                     "builder": "@angular-builders/custom-webpack:browser",
@@ -49,7 +47,7 @@
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js",
-                               "node_modules/intl-tel-input/build/js/intlTelInput.js"
+                            "node_modules/intl-tel-input/build/js/intlTelInput.js"
                         ]
                     },
                     "configurations": {
@@ -290,7 +288,7 @@
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js",
-                              "node_modules/intl-tel-input/build/js/intlTelInput.js"
+                            "node_modules/intl-tel-input/build/js/intlTelInput.js"
                         ],
                         "customWebpackConfig": {
                             "path": "apps/web-giddh/webpack.partial.js",
