@@ -1198,6 +1198,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
     }
 
+    /**
+     * This will use for go to branch mode
+     *
+     * @memberof HeaderComponent
+     */
     public gotToBranchTab(): void {
         this.trigger?.closeMenu();
         this.expandSidebar(false);

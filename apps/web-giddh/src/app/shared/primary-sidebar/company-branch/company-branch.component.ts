@@ -25,7 +25,7 @@ import { CommonActions } from '../../../actions/common.actions';
     styleUrls: ['./company-branch.component.scss'],
 })
 
-export class CompanyBranchComponent implements OnInit, OnDestroy,OnChanges {
+export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     /** Instance of tabset */
     @ViewChild('staticTabs', { static: false }) staticTabs: TabsetComponent;
     /* This will hold local JSON data */
@@ -89,13 +89,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy,OnChanges {
 
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (changes.isGoToBranch?.currentValue) {
-            this.getCompanyBranches(this.companyBranches, false);
-            this.tabChanged('branch');
-            this.changeDetectorRef.detectChanges();
-        }
-    }
     /**
      * Initializes the component
      *
@@ -159,6 +152,20 @@ export class CompanyBranchComponent implements OnInit, OnDestroy,OnChanges {
                 this.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
             }
         });
+    }
+
+    /**
+     * This hook will call on component changes
+     *
+     * @param {SimpleChanges} changes
+     * @memberof CompanyBranchComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.isGoToBranch?.currentValue) {
+            this.getCompanyBranches(this.companyBranches, false);
+            this.tabChanged('branch');
+            this.changeDetectorRef.detectChanges();
+        }
     }
 
     /**
