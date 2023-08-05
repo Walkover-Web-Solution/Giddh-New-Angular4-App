@@ -16,7 +16,7 @@
                 class="list-style-none branch-connection dropdown-toggle"
                 id="button-company-branch"
                 dropdownToggle
-                (click)="openCompanyBranchDropdown()"
+                (click)="openCompanyBranchDropdown(); isGoToBranch = false"
             >
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
                     <span class="inner-span"></span>

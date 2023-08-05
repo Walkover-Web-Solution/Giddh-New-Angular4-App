@@ -192,8 +192,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
-
         if (changes?.isGoToBranch?.currentValue) {
             this.openCompanyBranchDropdown();
         }
@@ -350,7 +348,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnDestroy(): void {
-        this.isGoToBranch = false;
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

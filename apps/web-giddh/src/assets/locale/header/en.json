@@ -36,5 +36,7 @@
     "service":"Service",
     "fixed_assets":"Fixed Assets",
     "cash_information":"Generate instant paid voucher without managing separate account/ledger.",
-    "credit_information":"Generate invoice and manage accounts/ledger separately."
+    "credit_information":"Generate invoice and manage accounts/ledger separately.",
+    "go_to_branch_information":"To access other create options go to branch mode",
+    "go_to_branch":" Go to branch"
 }

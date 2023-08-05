@@ -72,13 +72,7 @@
                                 {{ commonLocaleData?.app_create_new }}
                             </span>
                             <div class="menu-dropdown-wrapper">
-                                {{ branches?.length }}
-                                {{ currentOrganizationType }}
-                                <div
-                                    *ngIf="
-                                        currentOrganizationType === OrganizationType?.Company && branches?.length > 1
-                                    "
-                                >
+                                <div *ngIf="currentOrganizationType === 'BRANCH'">
                                     <div class="mr-t2 mr-b05 d-flex justify-content-between">
                                         <div class="d-flex align-items-center">
                                             <span class="d-flex">
@@ -134,11 +128,7 @@
                                         </mat-list-item>
                                     </mat-list>
                                 </div>
-                                <div
-                                    *ngIf="
-                                        currentOrganizationType === OrganizationType?.Company && branches?.length > 1
-                                    "
-                                >
+                                <div *ngIf="currentOrganizationType === 'BRANCH'">
                                     <div class="mr-t2 mr-b05 d-flex align-items-center">
                                         <span class="d-flex">
                                             <i class="icon-credit-note-new mr-r1"></i>
@@ -195,11 +185,7 @@
                                         </mat-list-item>
                                     </mat-list>
                                 </div>
-                                <div
-                                    *ngIf="
-                                        currentOrganizationType === OrganizationType?.Company && branches?.length > 1
-                                    "
-                                >
+                                <div *ngIf="currentOrganizationType === 'BRANCH'">
                                     <div class="mr-t2 mr-b05 d-flex align-items-center">
                                         <span class="d-flex">
                                             <i class="icon-branch-transfer mr-r1"></i>
@@ -224,7 +210,12 @@
                                         </mat-list-item>
                                     </mat-list>
                                 </div>
-                                <div *ngIf="currentOrganizationType === OrganizationType?.Company">
+                                <div
+                                    *ngIf="
+                                        (currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY') ||
+                                        currentOrganizationType === 'BRANCH'
+                                    "
+                                >
                                     <div class="mr-t2 mr-b05 d-flex align-items-center">
                                         <span class="d-flex">
                                             <i class="icon-stock mr-r1"></i>
@@ -265,18 +256,14 @@
                                 </div>
                                 <div
                                     class="mr-t2 mr-b05 align-items-center"
-                                    *ngIf="currentOrganizationType === OrganizationType?.Company"
+                                    *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
                                 >
-                                    <span> To access other create options go to branch mode </span>
-                                    <button class="btn btn-sky-blue mr-t2" (click)="gotToBranchTab()">
-                                        Go to branch
+                                    <span>{{ localeData?.go_to_branch_information }} </span>
+                                    <button mat-stroked-button color="primary" class="mr-t2" (click)="gotToBranchTab()">
+                                        {{ localeData?.go_to_branch }}
                                     </button>
                                 </div>
-                                <ng-container
-                                    *ngIf="
-                                        currentOrganizationType === OrganizationType?.Company && branches?.length > 1
-                                    "
-                                >
+                                <ng-container *ngIf="currentOrganizationType === 'BRANCH'">
                                     <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
                                         <span class="d-flex">
                                             <i class="icon-estimate-new mr-r1"></i>
