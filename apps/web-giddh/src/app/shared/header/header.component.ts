@@ -198,8 +198,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public lastSessionRenewalTime: any;
     /** All modules data with routing shared with user */
     public allModulesList = [];
-    /* True if it is redirect to go to branch mode */
-    public isGoToBranch: boolean = false;
     /** This will hold that how many days are left for subscription expiration */
     public remainingSubscriptionDays: any = false;
     /** Menu items received from API */
@@ -222,6 +220,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCalendlyModelActivate: boolean = false;
     /** Calendly url */
     public calendlyUrl: any = '';
+    /* True if it is redirect to go to branch mode */
+    public isGoToBranch: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
