@@ -3,10 +3,10 @@ import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
 dayjs.extend(quarterOfYear) // use plugin
 
 export const Configuration = {
-    AppUrl,
-    ApiUrl,
-    isElectron,
-    APP_FOLDER
+    'AppUrl': AppUrl,
+    'ApiUrl': ApiUrl,
+    'isElectron': isElectron,
+    'APP_FOLDER': APP_FOLDER
 };
 
 /** Add Company business type*/

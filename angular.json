@@ -9,9 +9,7 @@
             "sourceRoot": "apps/web-giddh/src",
             "projectType": "application",
             "prefix": "foo",
-            "schematics": {
-                
-            },
+            "schematics": {},
             "architect": {
                 "build": {
                     "builder": "@angular-builders/custom-webpack:browser",
