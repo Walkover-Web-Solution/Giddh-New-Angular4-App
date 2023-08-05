@@ -97,6 +97,8 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** True, if show gst column */
+    @Input() public showTaxColumn: boolean = false;
     /** Page change event emitter */
     @Output() public pageChanged: EventEmitter<any> = new EventEmitter<any>();
     /** Search field event emitter */
