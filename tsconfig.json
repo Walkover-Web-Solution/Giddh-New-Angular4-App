@@ -36,6 +36,12 @@
         "@giddh-workspaces/web/*": [
           "xplat/web/*"
         ],
+        "@giddh-workspaces/utils": [
+          "libs/utils/index.ts"
+        ],
+        "@giddh-workspaces/utils/*": [
+            "libs/utils/*"
+        ],
         "path": [
           "./node_modules/path-browserify"
         ],

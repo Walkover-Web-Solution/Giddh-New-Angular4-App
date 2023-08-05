@@ -13,7 +13,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { DownloadData, DownloadsRequest } from '../../../models/api-models/downloads';
 import { cloneDeep } from '../../../lodash-optimized';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, Configuration } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { ExportsJsonComponent } from '../exports-json/exports-json.component';
 import { download } from '@giddh-workspaces/utils';
 
