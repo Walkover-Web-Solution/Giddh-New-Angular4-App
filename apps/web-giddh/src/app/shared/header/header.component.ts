@@ -1548,15 +1548,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     * This will navigate user to mobile home page
-     *
-     * @memberof HeaderComponent
-     */
-    public redirectToMobileHome(): void {
-        this.router.navigate(['/pages/mobile/home']);
-    }
-
-    /**
      * This will stop the body scroll if company dropdown is open
      *
      * @memberof HeaderComponent

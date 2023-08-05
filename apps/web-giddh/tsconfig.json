@@ -1,14 +1,7 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "importHelpers": true,
-        "module": "ES2022",
-        "paths": {
-            "tslib" : [
-                "./node_modules/tslib/tslib.d.ts"
-            ]
-        },
-        "useDefineForClassFields": false
+        "module": "ES2022"
     },
     "include": [
         "**/*.ts",

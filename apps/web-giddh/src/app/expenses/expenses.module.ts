@@ -56,7 +56,7 @@ import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-
         PaginationModule.forRoot(),
         SharedModule,
         ShSelectModule,
-        ModalModule,
+        ModalModule.forRoot(),
         ElementViewChildModule,
         SalesModule,
         UpdateLedgerEntryPanelModule,

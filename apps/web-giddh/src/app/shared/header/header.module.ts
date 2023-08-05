@@ -30,7 +30,7 @@ import { HeaderComponent } from "./header.component";
         ReactiveFormsModule,
         TranslateDirectiveModule,
         MatTooltipModule,
-        ModalModule,
+        ModalModule.forRoot(),
         ElementViewChildModule,
         PerfectScrollbarModule,
         PrimarySidebarModule,

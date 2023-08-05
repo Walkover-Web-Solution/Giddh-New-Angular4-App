@@ -77,7 +77,7 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
     providers: [],
     imports: [
         CommonModule,
-        ModalModule,
+        ModalModule.forRoot(),
         FormsModule,
         ReactiveFormsModule,
         Daterangepicker,

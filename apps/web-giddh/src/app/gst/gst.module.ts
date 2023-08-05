@@ -1,7 +1,6 @@
 import { PurchaseModule } from '../purchase/purchase.module';
 import { PushToGstInComponent } from './filing/tabs/push-to-gstin/push-to-gstin.component';
 import { TransactionSummaryComponent } from './filing/tabs/push-to-gstin/components/transaction-summary/transaction-summary.component';
-import { AlertModule } from 'ngx-bootstrap/alert';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -67,9 +66,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
         ClickOutsideModule,
         TabsModule.forRoot(),
         ElementViewChildModule,
-        AlertModule,
         DecimalDigitsModule,
-        ModalModule,
+        ModalModule.forRoot(),
         PurchaseModule,
         InvoiceModule,
         PerfectScrollbarModule,

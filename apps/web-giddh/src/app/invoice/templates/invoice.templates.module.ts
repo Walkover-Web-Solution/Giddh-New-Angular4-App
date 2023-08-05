@@ -15,7 +15,7 @@ import { ThermalTemplateComponent } from './edit-template/out-tempate/templates/
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        CollapseModule,
+        CollapseModule.forRoot(),
         NgxUploaderModule,
         HasFocusDirectiveModule
     ],

@@ -34,10 +34,10 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
         SelectModule.forRoot(),
         ElementViewChildModule,
         TaxControlModule,
-        ModalModule,
+        ModalModule.forRoot(),
         TooltipModule.forRoot(),
         TypeaheadModule.forRoot(),
-        CollapseModule,
+        CollapseModule.forRoot(),
         SharedModule,
         LaddaModule.forRoot({
             style: 'slide-left',
