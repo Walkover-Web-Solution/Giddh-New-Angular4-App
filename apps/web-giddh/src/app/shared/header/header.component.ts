@@ -196,8 +196,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public allModulesList = [];
     /** Version of lated mac app  */
     public macAppVersion: string;
-    /* True if it is redirect to go to branch mode */
-    public isGoToBranch: boolean = false;
 
     /**
      * Returns whether the account section needs to be displayed or not
@@ -232,6 +230,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCalendlyModelActivate: boolean = false;
     /** Calendly url */
     public calendlyUrl: any = '';
+    /* True if it is redirect to go to branch mode */
+    public isGoToBranch: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
