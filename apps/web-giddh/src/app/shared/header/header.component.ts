@@ -196,6 +196,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public allModulesList = [];
     /** Version of lated mac app  */
     public macAppVersion: string;
+    /* True if it is redirect to go to branch mode */
     public isGoToBranch: boolean = false;
 
     /**
