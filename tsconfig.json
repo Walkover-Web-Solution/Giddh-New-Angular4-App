@@ -44,9 +44,6 @@
         ],
         "path": [
           "./node_modules/path-browserify"
-        ],
-        "tslib" : [
-            "./node_modules/tslib/tslib.d.ts"
         ]
       },
       "useDefineForClassFields": false

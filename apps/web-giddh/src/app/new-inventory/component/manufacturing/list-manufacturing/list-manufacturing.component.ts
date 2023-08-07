@@ -31,7 +31,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class ListManufacturingComponent implements OnInit {
     /** Instance of Mat Dialog for Advance Filter */
-    @ViewChild("advance_filter_dialog") public advanceFilterComponent: TemplateRef<any>;
+    @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will hold local JSON data */
@@ -392,7 +392,7 @@ export class ListManufacturingComponent implements OnInit {
         this.dialog.open(this.advanceFilterComponent, {
             width: '500px',
             autoFocus: false
-        })
+        });
     }
 
     /**

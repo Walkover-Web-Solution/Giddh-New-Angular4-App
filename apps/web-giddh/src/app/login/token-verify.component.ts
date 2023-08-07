@@ -13,11 +13,13 @@ import { AppState } from '../store';
     templateUrl: "./token-verify.component.html"
 })
 export class TokenVerifyComponent implements OnInit, OnDestroy {
-    public loading = false;
-    public returnUrl: string;
+    /** Holds the token param from the url */
     public token: string;
+    /** Holds the request param from the url */
     public request: any;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if user is connected with internet */
     public isConnected: boolean = true;
 
     constructor(
@@ -28,26 +30,26 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
         private loginAction: LoginActions,
         private authService: AuthenticationService
     ) {
-        
+
     }
 
-    public ngOnDestroy() {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
+    /**
+     * Life cycle hook on initialization of component
+     *
+     * @memberof TokenVerifyComponent
+     */
     public ngOnInit() {
-        setInterval(() => {
-            if (!navigator.onLine) {
-                this.isConnected = false;
-            } else {
-                if (!this.isConnected) {
-                    this.isConnected = true;
-                    this.refreshPage();
-                }
+        window.addEventListener("online", (event) => {
+            if (!this.isConnected) {
+                this.isConnected = true;
+                this.refreshPage();
             }
         });
-        
+
+        window.addEventListener("offline", (event) => {
+            this.isConnected = false;
+        });
+
         if (this.route.snapshot.queryParams['signup'] && this.generalService.user) {
             this.authService.ClearSession().pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === 'success') {
@@ -59,6 +61,16 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.loginAction.socialLogoutAttempt());
             this.processLogin();
         }
+    }
+
+    /**
+     * Releases all the memory
+     *
+     * @memberof TokenVerifyComponent
+     */
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     /**
