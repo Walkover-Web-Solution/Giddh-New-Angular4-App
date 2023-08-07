@@ -178,6 +178,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
     /** Tax type (gst/trn) */
     public taxType: string = '';
+    /** True if initial data is fetched */
+    public showTaxColumn: boolean;
 
     constructor(
         private commonService: CommonService,
@@ -1244,6 +1246,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                             this.taxType = this.commonLocaleData?.app_trn;
                         } else {
                             this.taxType = this.commonLocaleData?.app_gstin;
+                        }
+                        if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode) || activeCompany.countryV2?.alpha2CountryCode === 'IN') {
+                            this.showTaxColumn = true;
+                        } else {
+                            this.showTaxColumn = false;
                         }
                     }
                 });
