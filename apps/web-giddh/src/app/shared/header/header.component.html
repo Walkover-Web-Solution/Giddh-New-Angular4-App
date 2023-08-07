@@ -59,6 +59,7 @@
                 </div>
                 <ul class="nav universal-date mr-r1" *ngIf="selectedCompany | async">
                     <button
+                        *ngIf="voucherApiVersion === '2'"
                         mat-icon-button
                         #menuTrigger="matMenuTrigger"
                         [matMenuTriggerFor]="menu"
