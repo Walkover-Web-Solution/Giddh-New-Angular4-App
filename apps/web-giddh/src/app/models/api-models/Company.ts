@@ -323,6 +323,7 @@ export class CreateCompanyUsersPlan {
     companiesWithTransactions?: any;
     companyTotalTransactions?: any;
     totalTransactions?: number;
+    currency?: any;
 }
 
 export class PlanDetails {
