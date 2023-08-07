@@ -386,7 +386,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public handleNewTeamCreationEmitter(e: any): void {
-        this.modelRef.hide();
+        this.modelRef?.hide();
         if (e[0] === "group") {
             if (this.accountAsideMenuState === "in") {
                 this.toggleAccountAsidePane();

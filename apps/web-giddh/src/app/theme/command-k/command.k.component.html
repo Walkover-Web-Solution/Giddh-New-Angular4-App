@@ -116,7 +116,12 @@
                                     <button mat-stroked-button color="primary" (click)="triggerAddManage('group')">
                                         {{ commonLocaleData?.app_create_group }}
                                     </button>
-                                    <button mat-stroked-button color="primary" (click)="triggerAddManage('account')">
+                                    <button
+                                        mat-dialog-close
+                                        mat-stroked-button
+                                        color="primary"
+                                        (click)="triggerAddManage('account')"
+                                    >
                                         {{ commonLocaleData?.app_create_ac }}
                                     </button>
                                 </ng-container>
