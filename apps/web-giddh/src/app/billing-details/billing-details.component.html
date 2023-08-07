@@ -225,7 +225,7 @@
                                     <div class="amount-field-content">
                                         <amount-field
                                             [amount]="selectedPlans?.planDetails?.amount"
-                                            [currencySymbol]="aselectedPlans?.planDetails?.currency?.symbol"
+                                            [currencySymbol]="selectedPlans?.planDetails?.currency?.symbol"
                                             [currencyCode]="selectedPlans?.planDetails?.currency?.code"
                                         >
                                         </amount-field>
@@ -301,7 +301,7 @@
                                                 ? selectedPlans?.planDetails?.amount * taxPercentage
                                                 : 0)
                                         "
-                                        [currencySymbol]="aselectedPlans?.planDetails?.currency?.symbol"
+                                        [currencySymbol]="selectedPlans?.planDetails?.currency?.symbol"
                                         [currencyCode]="selectedPlans?.planDetails?.currency?.code"
                                     >
                                     </amount-field>
