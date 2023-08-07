@@ -643,8 +643,8 @@
                                                     <div class="col-sm-6 col-lg-6">
                                                         <label>Category</label>
                                                         <div class="multi-select-input">
-                                                            <mat-chip-listbox #chipList aria-label="Fruit selection">
-                                                                <mat-chip
+                                                            <mat-chip-grid #chipList aria-label="Fruit selection">
+                                                                <mat-chip-row
                                                                     class="s-chip"
                                                                     *ngFor="let categorys of category"
                                                                     [selectable]="selectable"
@@ -659,7 +659,7 @@
                                                                     >
                                                                         <i class="icon-cross"></i>
                                                                     </button>
-                                                                </mat-chip>
+                                                                </mat-chip-row>
 
                                                                 <input
                                                                     placeholder="xs, x, m"
@@ -669,7 +669,7 @@
                                                                     [matChipInputAddOnBlur]="addOnBlur"
                                                                     (matChipInputTokenEnd)="add($event)"
                                                                 />
-                                                            </mat-chip-listbox>
+                                                            </mat-chip-grid>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1795,11 +1795,11 @@
                                                             <div class="col-sm-6 col-lg-6">
                                                                 <label>Category</label>
                                                                 <div class="multi-select-input">
-                                                                    <mat-chip-listbox
+                                                                    <mat-chip-grid
                                                                         #chipList
                                                                         aria-label="Fruit selection"
                                                                     >
-                                                                        <mat-chip
+                                                                        <mat-chip-row
                                                                             class="s-chip"
                                                                             *ngFor="let categorys of category"
                                                                             [selectable]="selectable"
@@ -1814,7 +1814,7 @@
                                                                             >
                                                                                 <i class="icon-cross"></i>
                                                                             </button>
-                                                                        </mat-chip>
+                                                                        </mat-chip-row>
 
                                                                         <input
                                                                             placeholder="xs, x, m"
@@ -1826,7 +1826,7 @@
                                                                             [matChipInputAddOnBlur]="addOnBlur"
                                                                             (matChipInputTokenEnd)="add($event)"
                                                                         />
-                                                                    </mat-chip-listbox>
+                                                                    </mat-chip-grid>
                                                                 </div>
                                                             </div>
                                                         </div>

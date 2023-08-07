@@ -136,10 +136,12 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      * @memberof InputFieldComponent
      */
     set value(value: any) {
-        this.ngModel = value;
-        this.onChangeCallback(value);
-        this.onTouchedCallback();
-        this.stateChanges.next();
+        if (value !== undefined && value !== null) {
+            this.ngModel = value;
+            this.onChangeCallback(value);
+            this.onTouchedCallback();
+            this.stateChanges.next();
+        }
     }
 
     /**
@@ -158,8 +160,10 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      * @memberof InputFieldComponent
      */
     public writeValue(value: any): void {
-        this.value = value;
-        this.changeDetectionRef.detectChanges();
+        if (value !== undefined && value !== null) {
+            this.value = value;
+            this.changeDetectionRef.detectChanges();
+        }
     }
 
     /**
