@@ -38,6 +38,7 @@
 :host .aside-pane {
     max-width: 760px;
     width: 100%;
+    box-shadow: -3px 0 6px var(--color-primary-common-box-shadow);
 }
 .aside-header {
     padding: 20px 10px;
