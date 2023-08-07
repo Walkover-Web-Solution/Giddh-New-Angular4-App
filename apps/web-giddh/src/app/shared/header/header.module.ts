@@ -48,7 +48,8 @@ import { HeaderComponent } from "./header.component";
         ConfirmModalModule,
         RouterModule,
         MatDialogModule,
-        MatListModule
+        MatListModule,
+        MatButtonModule
     ],
     exports: [
         HeaderComponent,
