@@ -1,5 +1,5 @@
 <mat-form-field floatLabel="never">
-    <mat-chip-list #matChipList>
+    <mat-chip-listbox #matChipList>
         <mat-chip
             *ngFor="let chip of chipList; let indx = index"
             [selectable]="true"
@@ -27,7 +27,7 @@
             class="select-multiple-field-input"
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
         />
-    </mat-chip-list>
+    </mat-chip-listbox>
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''">
         <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
             {{ option.label }}

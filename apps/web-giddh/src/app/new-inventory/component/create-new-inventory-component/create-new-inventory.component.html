@@ -643,7 +643,7 @@
                                                     <div class="col-sm-6 col-lg-6">
                                                         <label>Category</label>
                                                         <div class="multi-select-input">
-                                                            <mat-chip-list #chipList aria-label="Fruit selection">
+                                                            <mat-chip-listbox #chipList aria-label="Fruit selection">
                                                                 <mat-chip
                                                                     class="s-chip"
                                                                     *ngFor="let categorys of category"
@@ -669,7 +669,7 @@
                                                                     [matChipInputAddOnBlur]="addOnBlur"
                                                                     (matChipInputTokenEnd)="add($event)"
                                                                 />
-                                                            </mat-chip-list>
+                                                            </mat-chip-listbox>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1096,14 +1096,7 @@
                                                     </div>
                                                 </div>
                                                 <div
-                                                    class="
-                                                        col-xl-6 col-lg-12
-                                                        d-flex
-                                                        recipe-input-tab
-                                                        mr-b1
-                                                        flex-column flex-sm-row
-                                                        pr-0
-                                                    "
+                                                    class="col-xl-6 col-lg-12 d-flex recipe-input-tab mr-b1 flex-column flex-sm-row pr-0"
                                                 >
                                                     <div class="width-30-percent">
                                                         <label> Attribute </label>
@@ -1149,15 +1142,7 @@
                                     </div>
                                     <div class="row flex-column mr-t15">
                                         <div
-                                            class="
-                                                text-primary
-                                                cursor-pointer
-                                                px-3
-                                                d-flex
-                                                justify-content-between
-                                                mr-b1
-                                                font-15
-                                            "
+                                            class="text-primary cursor-pointer px-3 d-flex justify-content-between mr-b1 font-15"
                                             (click)="toggleExpense()"
                                         >
                                             <a
@@ -1175,13 +1160,7 @@
                                             >
                                         </div>
                                         <div
-                                            class="
-                                                col-xl-6
-                                                d-flex
-                                                flex-column flex-lg-row
-                                                align-items-center
-                                                expense-form
-                                            "
+                                            class="col-xl-6 d-flex flex-column flex-lg-row align-items-center expense-form"
                                             *ngIf="!isExpense"
                                         >
                                             <div class="width-30-percent">
@@ -1210,13 +1189,7 @@
                                                 ></text-field>
                                             </div>
                                             <div
-                                                class="
-                                                    cursor-pointer
-                                                    add-expense
-                                                    d-flex
-                                                    justify-content-center
-                                                    align-items-center
-                                                "
+                                                class="cursor-pointer add-expense d-flex justify-content-center align-items-center"
                                             >
                                                 <button mat-icon-button role="button" type="button">
                                                     <span class="icon-font-22 text-primary pd-l05 pd-r05">+</span>
@@ -1822,7 +1795,7 @@
                                                             <div class="col-sm-6 col-lg-6">
                                                                 <label>Category</label>
                                                                 <div class="multi-select-input">
-                                                                    <mat-chip-list
+                                                                    <mat-chip-listbox
                                                                         #chipList
                                                                         aria-label="Fruit selection"
                                                                     >
@@ -1853,7 +1826,7 @@
                                                                             [matChipInputAddOnBlur]="addOnBlur"
                                                                             (matChipInputTokenEnd)="add($event)"
                                                                         />
-                                                                    </mat-chip-list>
+                                                                    </mat-chip-listbox>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -2279,14 +2252,7 @@
                                                     </div>
                                                 </div>
                                                 <div
-                                                    class="
-                                                        col-xl-6 col-lg-12
-                                                        d-flex
-                                                        recipe-input-tab
-                                                        mr-b1
-                                                        flex-column flex-sm-row
-                                                        pr-0
-                                                    "
+                                                    class="col-xl-6 col-lg-12 d-flex recipe-input-tab mr-b1 flex-column flex-sm-row pr-0"
                                                 >
                                                     <div class="width-30-percent">
                                                         <label> Attribute </label>
@@ -2327,15 +2293,7 @@
                                     </div>
                                     <div class="row flex-column mr-t15">
                                         <div
-                                            class="
-                                                text-primary
-                                                cursor-pointer
-                                                px-3
-                                                d-flex
-                                                justify-content-between
-                                                mr-b1
-                                                font-15
-                                            "
+                                            class="text-primary cursor-pointer px-3 d-flex justify-content-between mr-b1 font-15"
                                             (click)="toggleExpense()"
                                         >
                                             <a
@@ -2353,13 +2311,7 @@
                                             >
                                         </div>
                                         <div
-                                            class="
-                                                col-xl-6
-                                                d-flex
-                                                flex-column flex-lg-row
-                                                align-items-center
-                                                expense-form
-                                            "
+                                            class="col-xl-6 d-flex flex-column flex-lg-row align-items-center expense-form"
                                             *ngIf="!isExpense"
                                         >
                                             <div class="width-30-percent">
@@ -2388,13 +2340,7 @@
                                                 ></text-field>
                                             </div>
                                             <div
-                                                class="
-                                                    cursor-pointer
-                                                    add-expense
-                                                    d-flex
-                                                    justify-content-center
-                                                    align-items-center
-                                                "
+                                                class="cursor-pointer add-expense d-flex justify-content-center align-items-center"
                                             >
                                                 <span class="icon-font-22 text-primary pd-l05 pd-r05">+</span>
                                             </div>
@@ -3716,14 +3662,7 @@
                                                     </div>
                                                 </div>
                                                 <div
-                                                    class="
-                                                        col-xl-6 col-lg-12
-                                                        d-flex
-                                                        recipe-input-tab
-                                                        mr-b1
-                                                        flex-column flex-sm-row
-                                                        pr-0
-                                                    "
+                                                    class="col-xl-6 col-lg-12 d-flex recipe-input-tab mr-b1 flex-column flex-sm-row pr-0"
                                                 >
                                                     <div class="width-30-percent">
                                                         <label> Attribute </label>
@@ -3764,15 +3703,7 @@
                                     </div>
                                     <div class="row flex-column mr-t15">
                                         <div
-                                            class="
-                                                text-primary
-                                                cursor-pointer
-                                                px-3
-                                                d-flex
-                                                justify-content-between
-                                                mr-b1
-                                                font-15
-                                            "
+                                            class="text-primary cursor-pointer px-3 d-flex justify-content-between mr-b1 font-15"
                                             (click)="toggleExpense()"
                                         >
                                             <a
@@ -3790,13 +3721,7 @@
                                             >
                                         </div>
                                         <div
-                                            class="
-                                                col-xl-6
-                                                d-flex
-                                                flex-column flex-lg-row
-                                                align-items-center
-                                                expense-form
-                                            "
+                                            class="col-xl-6 d-flex flex-column flex-lg-row align-items-center expense-form"
                                             *ngIf="!isExpense"
                                         >
                                             <div class="width-30-percent">
@@ -3825,13 +3750,7 @@
                                                 ></text-field>
                                             </div>
                                             <div
-                                                class="
-                                                    cursor-pointer
-                                                    add-expense
-                                                    d-flex
-                                                    justify-content-center
-                                                    align-items-center
-                                                "
+                                                class="cursor-pointer add-expense d-flex justify-content-center align-items-center"
                                             >
                                                 <button mat-icon-button class="icon-font-22 text-primary">+</button>
                                             </div>

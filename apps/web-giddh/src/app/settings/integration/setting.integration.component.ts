@@ -27,9 +27,9 @@ import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { MatTabGroup } from '@angular/material/tabs';
 import {
-    PlaidConfig,
     NgxPlaidLinkService,
-    PlaidLinkHandler
+    PlaidLinkHandler,
+    LegacyPlaidConfig
 } from "ngx-plaid-link";
 
 @Component({
@@ -146,8 +146,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** This will hold plaid link handler */
     private plaidLinkHandler: PlaidLinkHandler;
     /** This will hold plaid configuration */
-    private plaidConfig: PlaidConfig = {
-        env: "development",
+    private plaidConfig: LegacyPlaidConfig = {
+        env: "sandbox",
         token: null,
         product: ["auth","transactions"],
         onSuccess: undefined,

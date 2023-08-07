@@ -127,13 +127,7 @@
                                     </form>
                                 </div>
                                 <div
-                                    class="
-                                        clear-filter
-                                        align-items-center
-                                        d-flex
-                                        justify-content-xl-center justify-content-lg-start
-                                        w-50
-                                    "
+                                    class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
                                     *ngIf="showClearFilter"
                                 >
                                     <button mat-stroked-button class="mr-0" (click)="resetAdvanceSearch()">
@@ -235,16 +229,7 @@
                             "
                         >
                             <div
-                                class="
-                                    total-details-box
-                                    mr-r05
-                                    d-flex
-                                    justify-content-between
-                                    count-box
-                                    align-items-end
-                                    position-relative
-                                    min-width-230
-                                "
+                                class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end position-relative min-width-230"
                             >
                                 <h5>
                                     <ng-container *ngIf="!selectedCheckedContacts?.length">{{
@@ -460,11 +445,11 @@
                 <small class="mr-t05 mr-b05 grey">{{ localeData?.tip }}</small>
 
                 <div class="mt-3">
-                    <mat-chip-list class="font-12">
+                    <mat-chip-listbox class="font-12">
                         <mat-chip *ngFor="let val of dataVariables" (click)="addValueToMsg(val)">{{
                             val.name
                         }}</mat-chip>
-                    </mat-chip-list>
+                    </mat-chip-listbox>
                 </div>
                 <div class="mr-t4">
                     <button
@@ -520,11 +505,11 @@
                 <small class="mr-t05 mr-b05 grey">{{ localeData?.tip }}</small>
 
                 <div class="mt-3">
-                    <mat-chip-list class="font-12">
+                    <mat-chip-listbox class="font-12">
                         <mat-chip *ngFor="let val of dataVariables" (click)="addValueToMsg(val)">{{
                             val.name
                         }}</mat-chip>
-                    </mat-chip-list>
+                    </mat-chip-listbox>
                 </div>
 
                 <div class="mr-t4">
@@ -1079,13 +1064,13 @@
                                             }}</small>
 
                                             <div class="mat-chip-wrapper">
-                                                <mat-chip-list class="font-12">
+                                                <mat-chip-listbox class="font-12">
                                                     <mat-chip
                                                         *ngFor="let val of dataVariables"
                                                         (click)="addValueToMsg(val)"
                                                         >{{ val.name }}</mat-chip
                                                     >
-                                                </mat-chip-list>
+                                                </mat-chip-listbox>
                                             </div>
                                             <div class="mr-t4">
                                                 <button
