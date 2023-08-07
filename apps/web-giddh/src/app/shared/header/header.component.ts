@@ -45,6 +45,7 @@ import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-header',
@@ -61,8 +62,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public imgPath: string = '';
     public subscribedPlan: SubscriptionsUser;
     public isLedgerAccSelected: boolean = false;
-    /* This will hold the value out/in to open/close help popup */
-    public asideHelpSupportMenuState: string = 'out';
+    /* This will hold the help popup dialog ref */
+    public asideHelpSupportDialogRef: any;
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideSettingMenuState: string = 'out';
     /*This will check if page has not tabs*/
@@ -92,6 +93,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
     /** Instance of menu trigger */
     @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
+    /** Instance of mat dialog */
+    @ViewChild('asideHelpSupportMenuStateRef', { static: true }) public asideHelpSupportMenuStateRef: TemplateRef<any>;
 
     public hideAsDesignChanges: boolean = false;
     public title: Observable<string>;
@@ -260,7 +263,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         public location: Location,
         private localeService: LocaleService,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private sanitizer: DomSanitizer
+        private sanitizer: DomSanitizer,
+        public dialog: MatDialog
     ) {
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
         // Reset old stored application date
@@ -815,36 +819,34 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     * This will toggle the fixed class on body
-     *
-     * @memberof HeaderComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideHelpSupportMenuState === 'in') {
-            document.querySelector('body')?.classList?.add('fixed');
-        } else {
-            document.querySelector('body')?.classList?.remove('fixed');
-        }
-    }
-
-    /**
      * This will toggle the help popup
      *
      * @param {boolean} show
      * @memberof HeaderComponent
      */
-    public toggleHelpSupportPane(show: boolean): void {
-        setTimeout(() => {
-            if (show) {
-                this.asideSettingMenuState = 'out';
-                document.querySelector('body')?.classList?.remove('aside-setting');
-            }
-            this.asideInventorySidebarMenuState = 'out'
-            document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
-            this.toggleBodyClass();
-        }, (this.asideHelpSupportMenuState === 'out') ? 100 : 0);
+    public toggleHelpSupportPane(event: boolean): void {
+        if (event) {
+            this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
+                width: '1000px',
+                hasBackdrop: false,
+                position: {
+                    right: '0',
+                    top: '0'
+                }
+            });
+
+            this.asideHelpSupportDialogRef.afterOpened().pipe(take(1)).subscribe(response => {
+                document.querySelector('body')?.classList?.add('fixed');
+            });
+
+            this.asideHelpSupportDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                document.querySelector('body')?.classList?.remove('fixed');
+            });
+        } else {
+            this.dialog.closeAll();
+        }
     }
+
 
     /**
      * This will toggle the settings popup
@@ -857,11 +859,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
             if (show) {
-                this.asideHelpSupportMenuState = 'out';
+                this.asideHelpSupportDialogRef.close();
             }
             this.asideSettingMenuState = (show) ? 'in' : 'out';
             this.asideInventorySidebarMenuState = (show && this.asideInventorySidebarMenuState === 'out') ? 'in' : 'out';
-            this.toggleBodyClass();
 
             if (this.asideSettingMenuState === "in") {
                 document.querySelector('body')?.classList?.add('aside-setting');
@@ -875,20 +876,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
         }, ((this.asideSettingMenuState === 'out') ? 100 : 0) && (this.asideInventorySidebarMenuState === 'out') ? 100 : 0);
-    }
-
-    /**
-     * This will close the help popup if click outside of popup
-     *
-     * @memberof HeaderComponent
-     */
-    public closeHelpPaneOnOutsideClick(): void {
-        setTimeout(() => {
-            if (this.asideHelpSupportMenuState === "in") {
-                this.asideHelpSupportMenuState = 'out';
-                document.querySelector('body')?.classList?.remove('fixed');
-            }
-        }, 50);
     }
 
     /**
@@ -987,7 +974,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public showManageGroupsModal() {
-        this.closeHelpPaneOnOutsideClick();
+        this.toggleHelpSupportPane(false);
         this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(''));
     }
 

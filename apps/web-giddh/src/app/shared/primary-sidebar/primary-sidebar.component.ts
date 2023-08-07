@@ -22,6 +22,7 @@ import { GeneralService } from '../../services/general.service';
 import { LocaleService } from '../../services/locale.service';
 import { AppState } from '../../store';
 import { AllItem, AllItems } from '../helpers/allItems';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'primary-sidebar',
@@ -124,7 +125,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         private dbService: DbService,
         private groupWithAction: GroupWithAccountsAction,
         private localeService: LocaleService,
-        private salesAction: SalesActions
+        private salesAction: SalesActions,
+        public dialog: MatDialog,
     ) {
         this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -179,7 +181,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             event.preventDefault();
             event.stopPropagation();
             if (this.companyList?.length > 0) {
-                this.showNavigationModal();
+                this.dialog.open(this.navigationModal, {
+                    width:'630px',
+                    height: '600'
+                });
             }
         }
     }
@@ -385,7 +390,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public handleNewTeamCreationEmitter(e: any): void {
-        this.modelRef.hide();
+        this.modelRef?.hide();
         if (e[0] === "group") {
             if (this.accountAsideMenuState === "in") {
                 this.toggleAccountAsidePane();
