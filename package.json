@@ -87,7 +87,7 @@
     "json-tree-viewer": "0.0.2",
     "jsondiffpatch": "0.4.1",
     "ng-click-outside": "^9.0.0",
-    "ngrx-store-localstorage": "^15.0.0",
+    "ngrx-store-localstorage": "^16.0.0",
     "ngx-bootstrap": "^10.3.0",
     "ngx-clipboard": "^16.0.0",
     "ngx-font-picker": "^14.0.0",
