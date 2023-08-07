@@ -8,6 +8,7 @@ import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrol
 import { TranslateDirectiveModule } from '../translate/translate.directive.module';
 import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -22,7 +23,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PerfectScrollbarModule,
         TranslateDirectiveModule,
         MatListModule,
-        MatDialogModule
+        MatDialogModule,
+        MatButtonModule
     ],
     declarations: [
         CommandKComponent,
