@@ -887,19 +887,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     * This will close the help popup if click outside of popup
-     *
-     * @memberof HeaderComponent
-     */
-    public closeHelpPaneOnOutsideClick(): void {
-        setTimeout(() => {
-            if (this.dialog.open) {
-                this.toggleHelpSupportPane(true);
-            }
-
-        }, 50)
-    }
-    /**
      * redirect to route and save page entry into db
      * @param e event
      * @param pageName page router url
