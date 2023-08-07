@@ -10335,9 +10335,9 @@ giddh-datepicker {
 }
 
 .stock-create-edit {
-    .mat-pseudo-checkbox-checked {
-        background: var(--color-giddh-blue) !important;
-    }
+    // .mat-pseudo-checkbox-checked {
+    //     background: var(--color-giddh-blue) !important;
+    // }
 
     #main {
         #content-wrapper {
@@ -10391,10 +10391,6 @@ giddh-datepicker {
                                 input {
                                     min-width: 320px;
                                 }
-                            }
-
-                            mat-select {
-                                min-width: 320px;
                             }
                         }
                     }
@@ -10836,10 +10832,10 @@ body.update-scroll-hidden {
     }
 }
 
-.cdk-overlay-pane {
-    height: auto !important;
-    transform: translateX(-5px) translateY(-13px) !important;
-}
+// .cdk-overlay-pane {
+//     height: auto !important;
+//     transform: translateX(-5px) translateY(-13px) !important;
+// }
 
 /*---- inventory-master ----*/
 
@@ -14051,24 +14047,24 @@ hamburger-menu {
     }
 }
 
-#mat-select-0-panel,
-#mat-select-1-panel,
-#mat-select-2-panel {
-    min-width: calc(100% + 12px) !important;
-    position: absolute;
-    top: 44px;
-    left: 0px;
+// #mat-select-0-panel,
+// #mat-select-1-panel,
+// #mat-select-2-panel {
+//     min-width: calc(100% + 12px) !important;
+//     position: absolute;
+//     top: 44px;
+//     left: 0px;
 
-    button {
-        span.mat-button-wrapper {
-            color: var(--color-blue);
-        }
-    }
+//     button {
+//         span.mat-button-wrapper {
+//             color: var(--color-blue);
+//         }
+//     }
 
-    .mat-pseudo-checkbox {
-        color: var(--color-primary-checkbox-and-expansion-panel-arrow);
-    }
-}
+//     .mat-pseudo-checkbox {
+//         color: var(--color-primary-checkbox-and-expansion-panel-arrow);
+//     }
+// }
 
 .myPanelClass {
     margin-top: 30px !important;

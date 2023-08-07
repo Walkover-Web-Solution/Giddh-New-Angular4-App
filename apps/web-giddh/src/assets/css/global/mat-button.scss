@@ -16,6 +16,11 @@
         background-color: var(--color-primary-header-background) !important;
     }
 }
+.mat-mdc-outlined-button {
+    &.mat-primary {
+        color: var(--color-giddh-blue) !important;
+    }
+}
 
 /*==========  Material Button Default Font Size Start Here =============*/
 .mat-button,
