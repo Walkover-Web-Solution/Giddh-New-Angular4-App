@@ -506,11 +506,9 @@
 
     <!--help & support sidebar  -->
 
-    <div (clickOutside)="closeHelpPaneOnOutsideClick()">
-        <ng-template #asideHelpSupportMenuStateRef>
-            <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
-        </ng-template>
-    </div>
+    <ng-template #asideHelpSupportMenuStateRef>
+        <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
+    </ng-template>
 
     <!-- setting aside pane -->
     <div class="help-support-aside setting-sidebar-wrapper">
