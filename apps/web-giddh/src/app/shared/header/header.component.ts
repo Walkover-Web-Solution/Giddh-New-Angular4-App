@@ -225,6 +225,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public calendlyUrl: any = '';
     /* True if it is redirect to go to branch mode */
     public isGoToBranch: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -474,7 +476,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnInit() {
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
-
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let branches = [];
