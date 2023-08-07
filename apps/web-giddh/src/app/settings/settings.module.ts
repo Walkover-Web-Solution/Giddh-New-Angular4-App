@@ -21,8 +21,6 @@ import { SettingTaxesComponent } from './taxes/setting.taxes.component';
 import { SettingTriggerComponent } from './trigger/setting.trigger.component';
 import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-warehouse.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
-import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
@@ -57,9 +55,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SettingCampaignComponent } from './integration/campaign/setting-campaign/setting-campaign.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxPlaidLinkModule } from "ngx-plaid-link";
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-    suppressScrollX: true
-};
 
 @NgModule({
     declarations: [
@@ -94,7 +89,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ContactModule,
         ReactiveFormsModule,
         CurrencyModule,
-        PerfectScrollbarModule,
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
         ShSelectModule,
@@ -124,12 +118,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatSlideToggleModule,
         NgxPlaidLinkModule
 
-    ],
-    providers: [
-        {
-            provide: PERFECT_SCROLLBAR_CONFIG,
-            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        }
     ]
 })
 

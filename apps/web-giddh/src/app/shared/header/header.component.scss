@@ -226,27 +226,6 @@ a[vr-item]:focus {
     justify-content: space-between;
 }
 
-:host ::ng-deep .left-fixed-header perfect-scrollbar > .ps.ps--scrolling-y > .ps__rail-y {
-    opacity: 0;
-}
-
-:host
-    ::ng-deep
-    .left-fixed-header
-    perfect-scrollbar.ps-show-active
-    > .ps.ps--active-y
-    > .ps-overlay:not(.ps-at-top)
-    .ps-indicator-top,
-:host
-    ::ng-deep
-    .left-fixed-header
-    perfect-scrollbar.ps-show-active
-    > .ps.ps--active-y
-    > .ps-overlay:not(.ps-at-bottom)
-    .ps-indicator-bottom {
-    background: linear-gradient(to bottom, rgb(43, 42, 42) 0, rgba(0, 0, 0, 0) 100%);
-}
-
 .left-fixed-header h6 {
     color: var(--color-giddh-blue);
     font-size: var(--font-size-15);

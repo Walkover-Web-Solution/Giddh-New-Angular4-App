@@ -28,7 +28,6 @@ import { ElementViewContainerRef } from "../../shared/helpers/directives/element
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import * as dayjs from "dayjs";
-import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
 import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSearch.component";
 import { GeneralService } from "../../services/general.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
@@ -63,7 +62,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public key: string = "name";
     public order: string = "asc";
     public filter: string = "";
-    public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     public searchStr$ = new Subject<string>();
     public searchStr: string = "";
     public isMobileScreen: boolean = false;

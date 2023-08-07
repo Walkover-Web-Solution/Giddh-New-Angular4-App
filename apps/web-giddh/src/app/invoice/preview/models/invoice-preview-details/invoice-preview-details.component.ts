@@ -28,7 +28,6 @@ import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 //import { ThermalService } from 'apps/web-giddh/src/app/services/thermal.service';
 import { saveAs } from 'file-saver';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
-import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { fromEvent, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, take, takeUntil } from 'rxjs/operators';
@@ -50,6 +49,7 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { AppState } from '../../../../store';
 import { ProformaListComponent } from '../../../proforma/proforma-list.component';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
     selector: 'invoice-preview-details-component',
@@ -67,8 +67,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @ViewChild('attachedDocumentPreview', { static: true }) attachedDocumentPreview: ElementRef;
     /** Instance of PDF container iframe */
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
-    /** Instance of perfect scrollbar */
-    @ViewChild('perfectScrollbar', { static: false }) public perfectScrollbar: PerfectScrollbarComponent;
+    /** Instance of cdk scrollbar */
+    @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
     @Input() public items: InvoicePreviewDetailsVm[];
     @Input() public selectedItem: InvoicePreviewDetailsVm;
     /** Emits the selected item to the parent for updating the current selected item in parent component */
@@ -1065,7 +1065,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     private scrollToActiveItem(): void {
         setTimeout(() => {
-            this.perfectScrollbar?.directiveRef?.scrollToElement(".single-invoice-detail.activeItem");
+            this.cdkScrollbar?.scrollToIndex(0);
         }, 200);
     }
 

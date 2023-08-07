@@ -14,8 +14,6 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
@@ -55,9 +53,6 @@ import { GenericAsideMenuAccountModule } from './generic-aside-menu-account/gene
 import { AccountUpdateNewDetailsModule } from './header/components/account-update-new-details/account-update-new-details.module';
 import { MatRadioModule } from '@angular/material/radio';
 
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-    suppressScrollX: true
-};
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
@@ -93,7 +88,6 @@ export function provideConfig() {
         TooltipModule.forRoot(),
         BsDropdownModule.forRoot(),
         PopoverModule.forRoot(),
-        PerfectScrollbarModule,
         SocialLoginModule,
         SelectModule,
         ClickOutsideModule,
@@ -147,7 +141,7 @@ export function provideConfig() {
         SelectModule,
         PaginationModule,
         ClickOutsideModule,
-        PerfectScrollbarModule,
+        ScrollingModule,
         ConfirmModalModule,
         TextCaseChangeModule,
         KeyboardShortutModule,
@@ -176,10 +170,6 @@ export function provideConfig() {
         {
             provide: AuthServiceConfig,
             useFactory: provideConfig
-        },
-        {
-            provide: PERFECT_SCROLLBAR_CONFIG,
-            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         }
     ]
 })

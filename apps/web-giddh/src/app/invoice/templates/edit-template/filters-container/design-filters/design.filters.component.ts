@@ -13,7 +13,6 @@ import { InvoiceTemplatesService } from '../../../../../services/invoice.templat
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { IOption } from '../../../../../theme/ng-virtual-select/sh-options.interface';
 import { ActivatedRoute } from '@angular/router';
-import { Font } from "ngx-font-picker";
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 export class TemplateDesignUISectionVisibility {
@@ -39,15 +38,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public logoAttached: boolean = false;
     public showLogo: boolean = true;
     public selectedTemplateUniqueName: string = 'gst_template_a';
-
-    public font: Font = new Font({
-        family: 'Roboto',
-        size: '14px',
-        style: 'regular',
-        styles: ['regular']
-    });
-    // 'Sans-Serif', 'Open Sans', 'Lato'
-
     public _presetFonts = [
         { label: 'Open Sans', value: 'Open Sans' },
         { label: 'Sans-Serif', value: 'Sans-Serif' },

@@ -53,10 +53,10 @@
                     </div>
 
                     <ul class="invoice-sidebar">
-                        <perfect-scrollbar #perfectScrollbar>
+                        <cdk-virtual-scroll-viewport [itemSize]="62">
                             <li
                                 class="single-invoice-detail cp"
-                                *ngFor="let item of filteredData"
+                                *cdkVirtualFor="let item of filteredData"
                                 [ngClass]="{ 'activeItem': item?.uniqueName === selectedItem?.uniqueName }"
                                 (click)="selectVoucher(item)"
                             >
@@ -90,7 +90,7 @@
                                     </div>
                                 </div>
                             </li>
-                        </perfect-scrollbar>
+                        </cdk-virtual-scroll-viewport>
                     </ul>
                 </div>
             </div>
