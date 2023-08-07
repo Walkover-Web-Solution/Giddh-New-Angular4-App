@@ -62,8 +62,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public imgPath: string = '';
     public subscribedPlan: SubscriptionsUser;
     public isLedgerAccSelected: boolean = false;
-    /* This will hold the value out/in to open/close help popup */
-    public asideHelpSupportMenuState: string = 'out';
+    /* This will hold the help popup dialog ref */
+    public asideHelpSupportDialogRef: any;
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideSettingMenuState: string = 'out';
     /*This will check if page has not tabs*/
@@ -262,8 +262,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private localeService: LocaleService,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private sanitizer: DomSanitizer,
-        public dialog: MatDialog    
-       
+        public dialog: MatDialog
     ) {
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
         // Reset old stored application date
@@ -818,39 +817,34 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     * This will toggle the fixed class on body
-     *
-     * @memberof HeaderComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideHelpSupportMenuState === 'in') {
-            document.querySelector('body')?.classList?.add('fixed');
-        } else {
-            document.querySelector('body')?.classList?.remove('fixed');
-        }
-    }
-
-    /**
      * This will toggle the help popup
      *
      * @param {boolean} show
      * @memberof HeaderComponent
      */
     public toggleHelpSupportPane(event: boolean): void {
-        if(event){
-            this.dialog.open(this.asideHelpSupportMenuStateRef,{
-                width:'1000px',
-                backdropClass: 'cdk-overlay-transparent-backdrop',
+        if (event) {
+            this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
+                width: '1000px',
+                hasBackdrop: false,
                 position: {
                     right: '0',
                     top: '0'
                 }
             });
-        } else{
+
+            this.asideHelpSupportDialogRef.afterOpened().pipe(take(1)).subscribe(response => {
+                document.querySelector('body')?.classList?.add('fixed');
+            });
+
+            this.asideHelpSupportDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                document.querySelector('body')?.classList?.remove('fixed');
+            });
+        } else {
             this.dialog.closeAll();
         }
     }
-    
+
 
     /**
      * This will toggle the settings popup
@@ -863,11 +857,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
             if (show) {
-                this.asideHelpSupportMenuState = 'out';
+                this.asideHelpSupportDialogRef.close();
             }
             this.asideSettingMenuState = (show) ? 'in' : 'out';
             this.asideInventorySidebarMenuState = (show && this.asideInventorySidebarMenuState === 'out') ? 'in' : 'out';
-            this.toggleBodyClass();
 
             if (this.asideSettingMenuState === "in") {
                 document.querySelector('body')?.classList?.add('aside-setting');
@@ -890,11 +883,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public closeHelpPaneOnOutsideClick(): void {
         setTimeout(() => {
-            if(this.dialog.open){
+            if (this.dialog.open) {
                 this.toggleHelpSupportPane(true);
             }
-           
-        },50)
+
+        }, 50)
     }
     /**
      * redirect to route and save page entry into db
@@ -992,7 +985,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public showManageGroupsModal() {
-        this.closeHelpPaneOnOutsideClick();
+        this.toggleHelpSupportPane(false);
         this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(''));
     }
 
