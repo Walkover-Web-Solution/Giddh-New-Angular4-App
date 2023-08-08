@@ -56,7 +56,7 @@
                     "description": "Generate sales invoice"
                 },
                 {
-                    "label": "Sales Order",
+                    "label": "Estimates (Beta)",
                     "link": "/pages/invoice/preview/estimates",
                     "icon": "icon-sales-order1",
                     "description": "Final sales order"
