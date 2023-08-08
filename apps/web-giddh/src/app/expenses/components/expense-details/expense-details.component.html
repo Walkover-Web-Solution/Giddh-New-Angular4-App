@@ -46,10 +46,7 @@
                                     type="file"
                                     accept="image/png, image/jpeg"
                                     id="signatureImg-edit"
-                                    ngFileSelect
-                                    (uploadOutput)="onUploadFileOutput($event)"
-                                    [options]="fileUploadOptions"
-                                    [uploadInput]="uploadInput"
+                                    (change)="uploadFile()"
                                 />
                             </div>
                         </li>

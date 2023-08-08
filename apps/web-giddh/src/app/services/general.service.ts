@@ -1484,4 +1484,20 @@ export class GeneralService {
 
         return result;
     }
+
+    /**
+     * Reads the selected file and returns blob
+     *
+     * @param {*} file
+     * @param {Function} callback
+     * @memberof GeneralService
+     */
+    public getSelectedFile(file: any, callback: Function): void {
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(file);
+        reader.onload = () => {
+            const blob = new Blob([reader.result], { type: file.type });
+            callback(blob, file);
+        };
+    }
 }

@@ -1806,7 +1806,7 @@
                                 <!-- for sales invoice start (ngModelChange)="touristSchemeApplicableToggle($event)"-->
                                 <ng-container *ngIf="companyCountryCode === 'AE'">
                                     <div class="row mt-1" *ngIf="isSalesInvoice || isCashInvoice">
-                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
+                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileScreen">
                                             <label></label>
                                         </div>
                                         <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
@@ -3123,11 +3123,7 @@
                                             type="file"
                                             name="invoiceFile"
                                             id="invoiceFile"
-                                            [options]="fileUploadOptions"
-                                            ngFileSelect
-                                            [uploadInput]="uploadInput"
-                                            (uploadOutput)="onUploadOutput($event)"
-                                            (change)="onFileChange($event.target)"
+                                            (change)="uploadFile()"
                                             droppable="true"
                                         />
                                     </label>

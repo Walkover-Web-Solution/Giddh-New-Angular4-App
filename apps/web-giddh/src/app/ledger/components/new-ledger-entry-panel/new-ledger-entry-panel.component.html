@@ -989,19 +989,15 @@
                     </ul>
                 </div>
                 <div class="pull-right">
-                    <!-- <input
+                    <input
                         [disabled]="isReadOnly"
                         type="file"
                         [hidden]="true"
                         name="invoiceFile"
                         id="invoiceFile"
-                        [options]="fileUploadOptions"
-                        ngFileSelect
-                        [uploadInput]="uploadInput"
-                        (uploadOutput)="onWebUpload($event)"
                         #webFileInput
-                        (click)="onUploadOutput()"
-                    /> -->
+                        (change)="uploadFile()"
+                    />
                     <label
                         class="upload-div pd-r15"
                         [ngClass]="{ hide: blankLedger?.generateInvoice || blankLedger?.attachedFile }"
