@@ -309,7 +309,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
      */
     public initializePayment(): void {
         let that = this;
-
         let activeCompany = null;
         this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => activeCompany = activeCompany);
 
@@ -328,19 +327,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
             name: 'GIDDH',
             description: 'Walkover Technologies Private Limited.'
         };
-
-        let interval = setInterval(() => {
-            try {
-                if (!this.razorpay) {
-                    this.razorpay = new window['Razorpay'](options);
-                    clearInterval(interval);
-
-                    setTimeout(() => {
-                        this.razorpay?.open();
-                    }, 100);
-                }
-            } catch (exception) { }
-        }, 50);
+        try {
+            this.razorpay = new window['Razorpay'](options);
+            setTimeout(() => {
+                this.razorpay?.open();
+            }, 100);
+        } catch (exception) { }
     }
 
     public reFillForm(): void {
