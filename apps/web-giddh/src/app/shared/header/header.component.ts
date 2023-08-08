@@ -45,7 +45,7 @@ import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-header',
@@ -63,7 +63,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public subscribedPlan: SubscriptionsUser;
     public isLedgerAccSelected: boolean = false;
     /* This will hold the help popup dialog ref */
-    public asideHelpSupportDialogRef: any;
+    public asideHelpSupportDialogRef: MatDialogRef<any>;
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideSettingMenuState: string = 'out';
     /*This will check if page has not tabs*/
@@ -828,24 +828,28 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public toggleHelpSupportPane(event: boolean): void {
         if (event) {
-            this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
-                width: '1000px',
-                hasBackdrop: false,
-                position: {
-                    right: '0',
-                    top: '0'
-                }
-            });
+            if (this.asideHelpSupportDialogRef?.id && this.dialog.getDialogById(this.asideHelpSupportDialogRef?.id)) {
+                this.asideHelpSupportDialogRef?.close();
+            } else {
+                this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
+                    width: '1000px',
+                    hasBackdrop: false,
+                    position: {
+                        right: '0',
+                        top: '0'
+                    }
+                });
 
-            this.asideHelpSupportDialogRef.afterOpened().pipe(take(1)).subscribe(response => {
-                document.querySelector('body')?.classList?.add('fixed');
-            });
+                this.asideHelpSupportDialogRef.afterOpened().pipe(take(1)).subscribe(response => {
+                    document.querySelector('body')?.classList?.add('fixed');
+                });
 
-            this.asideHelpSupportDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-                document.querySelector('body')?.classList?.remove('fixed');
-            });
+                this.asideHelpSupportDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    document.querySelector('body')?.classList?.remove('fixed');
+                });
+            }
         } else {
-            this.dialog.closeAll();
+            this.asideHelpSupportDialogRef?.close();
         }
     }
 
@@ -861,7 +865,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
             if (show) {
-                this.asideHelpSupportDialogRef.close();
+                this.asideHelpSupportDialogRef?.close();
             }
             this.asideSettingMenuState = (show) ? 'in' : 'out';
             this.asideInventorySidebarMenuState = (show && this.asideInventorySidebarMenuState === 'out') ? 'in' : 'out';
