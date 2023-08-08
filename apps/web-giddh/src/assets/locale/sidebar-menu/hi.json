@@ -56,7 +56,7 @@
                     "description": "बिक्री चालान उत्पन्न करें"
                 },
                 {
-                    "label": "बिक्री आदेश",
+                    "label": "अनुमान (बीटा)",
                     "link": "/pages/invoice/preview/estimates",
                     "icon": "icon-sales-order1",
                     "description": "अंतिम बिक्री आदेश"

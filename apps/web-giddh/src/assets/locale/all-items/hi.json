@@ -52,7 +52,7 @@
           "description": "बहुमुद्रा, आवर्ती चालान, नकद चालान"
         },
         {
-          "label": "नया बिक्री आदेश",
+          "label": "अनुमान (बीटा)",
           "link": "/pages/invoice/preview/estimates",
           "icon": "icon-sales-order1",
           "description": "अंतिम बिक्री आदेश"
