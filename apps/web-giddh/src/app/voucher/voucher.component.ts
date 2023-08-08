@@ -3615,6 +3615,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             transaction.amount = 0;
             transaction.highPrecisionAmount = transaction.amount;
             transaction.taxableValue = 0;
+            transaction.variant = null;
             this.handleWarehouseVisibility();
         }
         transaction.sacNumber = null;
