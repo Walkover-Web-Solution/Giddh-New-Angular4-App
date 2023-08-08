@@ -56,7 +56,7 @@
                     "description": "विक्री बीजक उत्पन्न"
                 },
                 {
-                    "label": "विक्री ऑर्डर",
+                    "label": "अंदाज (बीटा)",
                     "link": "/pages/invoice/preview/estimates",
                     "icon": "icon-sales-order1",
                     "description": "अंतिम विक्री ऑर्डर"

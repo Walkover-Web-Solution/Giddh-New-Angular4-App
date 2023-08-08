@@ -52,7 +52,7 @@
           "description": "मल्टीक्युरन्सी, आवर्ती चलन, रोख चलन"
         },
         {
-          "label": "नवीन विक्री ऑर्डर",
+          "label": "अंदाज (बीटा)",
           "link": "/pages/invoice/preview/estimates",
           "icon": "icon-sales-order1",
           "description": "अंतिम विक्री ऑर्डर"
