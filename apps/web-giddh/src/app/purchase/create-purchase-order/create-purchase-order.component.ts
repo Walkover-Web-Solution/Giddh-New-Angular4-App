@@ -1024,7 +1024,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private modifyStateResp(stateList: StateCode[]): IOption[] {
         let stateListRet: IOption[] = [];
-        stateList.forEach(stateR => {
+        stateList?.forEach(stateR => {
             stateListRet.push({ label: stateR.name, value: stateR.code ? stateR.code : stateR.stateGstCode, stateGstCode: stateR.stateGstCode ? stateR.stateGstCode : stateR.code });
         });
         return stateListRet;
@@ -1369,19 +1369,19 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     stockUniqueName: selectedAcc.additional.stock.uniqueName
                 };
             }
+            this.currentTxnRequestObject[this.activeIndex] = {
+                selectedAcc,
+                txn,
+                entry,
+                params,
+                entryIndex
+            };
             if (isBulkItem) {
                 const allStockVariants = this.stockVariants.getValue();
                 allStockVariants[this.activeIndex] = observableOf(selectedAcc.variants);
                 this.stockVariants.next(allStockVariants);
                 txn = this.calculateItemValues(selectedAcc, txn, entry, false, true);
             } else {
-                this.currentTxnRequestObject[this.activeIndex] = {
-                    selectedAcc,
-                    txn,
-                    entry,
-                    params,
-                    entryIndex
-                };
                 if (selectedAcc.additional.stock) {
                     txn.isStockTxn = true;
                     this.loadStockVariants(selectedAcc.additional.stock.uniqueName);

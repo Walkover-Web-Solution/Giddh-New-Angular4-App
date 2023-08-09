@@ -18,6 +18,9 @@ $custom-typography: mat-typography-config(
 @import "../css/global/mat-button.scss";
 @import "../css/global/search.scss";
 @import "../css/global/all-items.scss";
+@import "../css/global/header.scss";
+@import "../css/global/setting-integration.scss";
+@import "../css/global/sales-register-expand.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -10883,10 +10886,6 @@ inventory-master {
             }
         }
     }
-    /*--- tooltip ----*/
-    .mat-tooltip {
-        margin-bottom: 40px !important;
-    }
     .inventory-search {
         text-field {
             .form-control {
@@ -13054,10 +13053,6 @@ inventory-master {
 
 body.prevent-body-scroll {
     overflow-y: hidden !important;
-}
-
-.hide-payment-tab ul li:nth-child(4) {
-    display: none;
 }
 
 @media (max-width: 991px) and (min-width: 768px) {
