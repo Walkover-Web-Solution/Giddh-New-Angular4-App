@@ -58,7 +58,7 @@ export class Addresses {
     public name?: string;
     public taxType?: string;
     public pincode?: string;
-    public county?: { code: any; };
+    public county?: { code: any; name?: any };
 }
 
 export class CompanyTotals {
@@ -276,6 +276,7 @@ export class BillingDetails {
     contactNo: string;
     gstin: string;
     stateCode: string;
+    county?: { code: string, name: string };
     address: string;
     autorenew: any;
 }

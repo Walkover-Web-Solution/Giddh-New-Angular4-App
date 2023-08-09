@@ -37,7 +37,11 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         gstin: '',
         stateCode: '',
         address: '',
-        autorenew: true
+        autorenew: true,
+        county: {
+            name: '',
+            code: ''
+        }
     };
     public createNewCompany: CompanyCreateRequest;
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -84,6 +88,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     public statesSource: IOption[] = [];
     /** This will hold company's country states */
     public companyStatesSource: IOption[] = [];
+    /** This will hold company's country states */
+    public countyList: IOption[] = [];
     /** This will use for tax percentage */
     public taxPercentage: number = 0.18;
     /** Holds if state field is disabled for selection */
@@ -143,7 +149,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
 
     public checkGstNumValidation(ele: HTMLInputElement): void {
         let isValid: boolean = false;
-
         if (ele?.value) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
@@ -264,9 +269,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         }
         if (billingDetail.valid && this.createNewCompany) {
             this.createNewCompany.userBillingDetails = billingDetail?.value;
+
             if (this.billingDetailsObj) {
                 if (this.billingDetailsObj.stateCode) {
                     this.createNewCompany.userBillingDetails.stateCode = this.billingDetailsObj.stateCode;
+                } else if (this.billingDetailsObj.county) {
+                    this.createNewCompany.userBillingDetails.county = this.billingDetailsObj.county;
                 } else {
                     return;
                 }
@@ -283,6 +291,18 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
      */
     public onStateChange(event: any): void {
         this.billingDetailsObj.stateCode = event?.value;
+        this.cdRef.detectChanges();
+    }
+
+    /**
+     * This function will use for on select region change
+     *
+     * @param {*} event
+     * @memberof BillingDetailComponent
+     */
+    public onRegionChange(event: any): void {
+        this.billingDetailsObj.county.name = event?.label;
+        this.billingDetailsObj.county.code = event?.value;
         this.cdRef.detectChanges();
     }
 
@@ -351,7 +371,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
                         this.razorpay?.open();
                     }, 100);
                 }
-            } catch (exception) {}
+            } catch (exception) { }
         }, 50);
     }
 
@@ -408,22 +428,32 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.states = [];
-                Object.keys(res.stateList).forEach(key => {
-                    if (res.stateList[key].stateGstCode !== null) {
-                        this.stateGstCode[res.stateList[key].stateGstCode] = [];
-                        this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
-                    }
-
-                    this.states.push({ label: res.stateList[key].name, value: res.stateList[key].code });
-
-                    if (this.createNewCompany !== undefined && this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
-                        if (res.stateList[key].code === this.createNewCompany.addresses[0].stateCode) {
-                            this.searchBillingStates = res.stateList[key].name;
-                            this.selectedState = res.stateList[key].name;
-                            this.billingDetailsObj.stateCode = res.stateList[key].code;
+                this.countyList = [];
+                if (res.stateList) {
+                    Object.keys(res.stateList)?.forEach(key => {
+                        if (res.stateList[key].stateGstCode !== null) {
+                            this.stateGstCode[res.stateList[key].stateGstCode] = [];
+                            this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
                         }
-                    }
-                });
+
+                        this.states.push({ label: res.stateList[key].name, value: res.stateList[key].code });
+                        if (this.createNewCompany !== undefined && this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
+                            if (res.stateList[key].code === this.createNewCompany.addresses[0].stateCode) {
+                                this.searchBillingStates = res.stateList[key].name;
+                                this.selectedState = res.stateList[key].name;
+                                this.billingDetailsObj.stateCode = res.stateList[key].code;
+                                this.billingDetailsObj.county.code = res.stateList[key].code;
+                            }
+                        }
+                    });
+                }
+                if (res.countyList) {
+                    this.billingDetailsObj.stateCode = '';
+                    this.countyList = res.countyList?.map(county => {
+                        return { label: county.name, value: county.code };
+                    });
+                }
+
                 this.statesSource$ = observableOf(this.states);
                 this.showLoader = false;
                 this.cdRef.detectChanges();
@@ -538,7 +568,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
      */
     public modifyStateResp(stateList: StateCode[], countryCode: string): IOption[] {
         let stateListRet: IOption[] = [];
-        stateList.forEach(stateR => {
+        stateList?.forEach(stateR => {
             stateListRet.push({
                 label: stateR.name,
                 value: stateR.code ? stateR.code : stateR.stateGstCode,
