@@ -154,9 +154,9 @@
                                                 ? commonLocaleData?.app_state
                                                 : commonLocaleData?.app_region
                                         }}
-                                        <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text">{{
-                                            (statesSource$ | async)?.length ? "*" : ""
-                                        }}</span></label
+                                        <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
+                                            >*
+                                        </span></label
                                     >
                                     <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
                                     <select-field
@@ -180,6 +180,10 @@
                                         [placeholder]="commonLocaleData?.app_region"
                                         [options]="countyList"
                                         (selectedOption)="onRegionChange($event)"
+                                        [required]="true"
+                                        [defaultValue]="searchRegionStates"
+                                        (onClear)="resetRegion($event)"
+                                        [allowValueReset]="true"
                                     >
                                     </select-field>
                                 </div>
@@ -343,7 +347,7 @@
                                     [disabled]="
                                         billingForm.invalid ||
                                         !isMobileNumberValid ||
-                                        ((statesSource$ | async)?.length ? !billingDetailsObj.stateCode : null)
+                                        (!billingDetailsObj.stateCode && !billingDetailsObj.county.code)
                                     "
                                 >
                                     {{ commonLocaleData?.app_pay_now }}

@@ -94,6 +94,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     public taxPercentage: number = 0.18;
     /** Holds if state field is disabled for selection */
     public isStateDisabled: boolean = false;
+    /** Hold search region states */
+    public searchRegionStates: string = "";
 
     constructor(private store: Store<AppState>, private generalService: GeneralService, private toasty: ToasterService, private route: Router, private companyService: CompanyService, private generalActions: GeneralActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef,
         private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions, private settingsProfileService: SettingsProfileService, private salesService: SalesService,) {
@@ -205,6 +207,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
                 this.isStateDisabled = false;
                 this.billingDetailsObj.stateCode = '';
             }
+            this.cdRef.detectChanges();
         }
     }
 
@@ -301,8 +304,25 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
      * @memberof BillingDetailComponent
      */
     public onRegionChange(event: any): void {
-        this.billingDetailsObj.county.name = event?.label;
-        this.billingDetailsObj.county.code = event?.value;
+        if (event.value) {
+            this.billingDetailsObj.county.name = event?.label;
+            this.billingDetailsObj.county.code = event?.value;
+        }
+        this.cdRef.detectChanges();
+    }
+
+    /**
+     * This will use for on clear value of region
+     *
+     * @param {*} event
+     * @memberof BillingDetailComponent
+     */
+    public resetRegion(event: any): void {
+        if (!event?.value) {
+            this.billingDetailsObj.county.name = '';
+            this.billingDetailsObj.county.code = '';
+            this.searchRegionStates = '';
+        }
         this.cdRef.detectChanges();
     }
 
@@ -435,13 +455,17 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
                                 this.searchBillingStates = res.stateList[key].name;
                                 this.selectedState = res.stateList[key].name;
                                 this.billingDetailsObj.stateCode = res.stateList[key].code;
-                                this.billingDetailsObj.county.code = res.stateList[key].code;
                             }
                         }
                     });
                 }
+
                 if (res.countyList) {
-                    this.billingDetailsObj.stateCode = '';
+                    if (this.createNewCompany !== undefined && this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
+                        this.searchRegionStates = this.createNewCompany.addresses[0].county?.name;
+                        this.billingDetailsObj.county.name = this.createNewCompany.addresses[0].county?.name;
+                        this.billingDetailsObj.county.code = this.createNewCompany.addresses[0].county?.code;
+                    }
                     this.countyList = res.countyList?.map(county => {
                         return { label: county.name, value: county.code };
                     });
