@@ -1,0 +1,38 @@
+.payment-mode{
+    dropdown-field{
+            .mat-mdc-form-field {
+            .mat-mdc-text-field-wrapper {
+                .mat-mdc-form-field-infix{
+                    .dropdown-bg{
+                        background-color: transparent;
+                    }
+                }
+            } 
+        }
+    }
+}
+.voucher-preview-edit{
+    .mat-mdc-menu-item-text{
+        width: 100%;
+    }
+}
+.deposit-section{
+    dropdown-field, input-field{
+        .mat-mdc-form-field{
+            .mat-mdc-text-field-wrapper{
+                background-color: var(--color-white);
+            }
+        }
+    }
+}
+.new-datepicker{
+    giddh-datepicker{
+        .mat-mdc-form-field {
+            .mat-mdc-text-field-wrapper {
+                .mat-mdc-form-field-infix{
+                    padding: 12px !important;
+                }
+            }
+        }
+    }
+}

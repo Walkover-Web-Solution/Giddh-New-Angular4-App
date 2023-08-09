@@ -1842,9 +1842,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, {
             position: {
                 right: '0',
+                top: '0',
             },
             width: '760px',
-            height: '100vh !important',
             disableClose: true
         });
 

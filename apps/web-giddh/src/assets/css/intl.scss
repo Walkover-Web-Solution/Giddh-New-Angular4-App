@@ -125,7 +125,7 @@
 .iti--allow-dropdown .iti__flag-container,
 .iti--separate-dial-code .iti__flag-container {
     right: auto;
-    left: 0;
+    left: -12px !important;
 }
 .iti--allow-dropdown .iti__flag-container:hover {
     cursor: pointer;

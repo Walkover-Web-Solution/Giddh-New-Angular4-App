@@ -363,6 +363,13 @@ textarea:focus {
 .max-width-600 {
     max-width: 600px;
 }
+.delete-image {
+    width: 3%;
+    position: absolute;
+    right: 25%;
+    top: 58px;
+    cursor: pointer;
+}
 
 .more-btn-dropdown {
     border: 0 !important;
@@ -611,7 +618,7 @@ span.edit-icon {
     width: 100%;
     min-width: 250px;
     left: auto;
-    top: 31px;
+    top: 47px;
     box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
     right: 0;
     z-index: 4;
@@ -1229,6 +1236,11 @@ label.checkbox-custom-label {
 .bill-add {
     label {
         min-width: 110px;
+    }
+    .mat-mdc-checkbox {
+        .mdc-form-field{
+            height: 32px;
+        }
     }
 }
 
