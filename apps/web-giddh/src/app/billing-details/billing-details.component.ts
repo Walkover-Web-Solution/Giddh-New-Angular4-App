@@ -319,6 +319,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
      */
     public initializePayment(): void {
         let that = this;
+
+        console.log("Plan Amount : ", this.razorpayAmount);
+
         let activeCompany = null;
         this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => activeCompany = activeCompany);
 

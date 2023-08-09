@@ -28,6 +28,7 @@ import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { Router } from "@angular/router";
 
 @Component({
     selector: "new-branch-transfer-list",
@@ -136,7 +137,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private inventoryService: InventoryService,
         private _toasty: ToasterService,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private router: Router
     ) {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && !_.isEmpty(o)) {
@@ -151,7 +153,6 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.querySelector("body")?.classList?.add("new-branch-list-page");
         this.initBranchTransferListResponse();
-
         branchTransferVoucherTypes.map(voucherType => {
             this.voucherTypes.push({ label: voucherType.label, value: voucherType.value });
         });
@@ -314,6 +315,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public hideModal(refreshList: boolean): void {
+        this.router.navigate(['/pages/inventory/report']);
         if (refreshList) {
             this.getBranchTransferList(true);
         }
