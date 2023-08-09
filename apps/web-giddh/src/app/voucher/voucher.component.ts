@@ -8712,7 +8712,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : data.body.parentGroups.join(', '),
                     category: data.body.category
                 };
-                txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem, false, isLinkedPoItem);
+                txn = this.calculateItemValues(selectedAcc, txn, entry, !this.isPoLinkingInProgress, false, isLinkedPoItem);
 
                 if (isLinkedPoItem) {
                     txn.applicableTaxes = entry.taxList;
