@@ -79,6 +79,7 @@ declare var GOOGLE_CLIENT_SECRET: string;
 declare var RAZORPAY_KEY: string;
 declare var OTP_WIDGET_ID: string;
 declare var OTP_TOKEN_AUTH: string;
+declare var NOTARIZE_TEAM_ID: string;
 
 interface SystemJS {
     import: (path?: string) => Promise<any>;

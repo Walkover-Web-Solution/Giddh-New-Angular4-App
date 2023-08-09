@@ -21,7 +21,8 @@ module.exports = async function (params) {
             appBundleId: appId,
             appPath: appPath,
             appleId: process.env.NOTARIZE_EMAIL, // enter Credential to generate mac's electron build
-            appleIdPassword: process.env.NOTARIZE_PASS
+            appleIdPassword: process.env.NOTARIZE_PASS,
+            teamId: process.env.NOTARIZE_TEAM_ID
         });
     } catch (error) {
         console.error(error);
