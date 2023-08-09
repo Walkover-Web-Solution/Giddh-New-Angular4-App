@@ -139,10 +139,7 @@
                                         class="d-none"
                                         name="BulkUploadfileInput"
                                         id="BulkUploadfileInput"
-                                        [options]="fileUploadOptions"
-                                        ngFileSelect
-                                        [uploadInput]="uploadInput"
-                                        (uploadOutput)="onUploadOutput($event)"
+                                        (change)="uploadFile()"
                                     />
                                 </div>
                                 <div class="single-search-box d-flex" *ngIf="checkedTrxWhileHovering?.length === 0">
@@ -287,10 +284,7 @@
                                         #BulkUploadfileInput
                                         name="BulkUploadfileInput"
                                         id="BulkUploadfileInput"
-                                        [options]="fileUploadOptions"
-                                        ngFileSelect
-                                        [uploadInput]="uploadInput"
-                                        (uploadOutput)="onUploadOutput($event)"
+                                        (change)="uploadFile()"
                                         class="d-none"
                                     />
                                 </div>

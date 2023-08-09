@@ -3122,11 +3122,7 @@
                                             type="file"
                                             name="invoiceFile"
                                             id="invoiceFile"
-                                            [options]="fileUploadOptions"
-                                            ngFileSelect
-                                            [uploadInput]="uploadInput"
-                                            (uploadOutput)="onUploadOutput($event)"
-                                            (change)="onFileChange($event.target)"
+                                            (change)="uploadFile()"
                                             droppable="true"
                                         />
                                     </label>

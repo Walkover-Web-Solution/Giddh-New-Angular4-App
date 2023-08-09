@@ -2112,12 +2112,9 @@
                                                 "
                                                 type="file"
                                                 name="invoiceFile"
-                                                #fileInputUpdate
                                                 id="invoiceFile"
-                                                ngFileSelect
-                                                [uploadInput]="uploadInput"
-                                                [options]="fileUploadOptions"
-                                                (uploadOutput)="onUploadOutputUpdate($event)"
+                                                #fileInputUpdate
+                                                (change)="uploadFile()"
                                             />
                                             <label for="invoiceFile" class="cp font-15">
                                                 <i

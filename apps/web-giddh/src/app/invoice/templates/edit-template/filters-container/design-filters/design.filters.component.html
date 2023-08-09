@@ -117,11 +117,8 @@
                                     #fileInput
                                     accept="image/png, image/jpeg"
                                     id="logo-edit"
-                                    [options]="fileUploadOptions"
-                                    ngFileSelect
                                     [disabled]="isFileUploaded"
-                                    (uploadOutput)="onUploadMyFileOutput($event)"
-                                    [uploadInput]="uploadInput"
+                                    (change)="uploadLogo()"
                                 />
                                 <small>Upload Your Logo</small>
                             </label>

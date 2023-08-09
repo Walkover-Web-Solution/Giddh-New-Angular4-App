@@ -41,7 +41,7 @@
                         <span
                             class="cursor-pointer font-15"
                             [ngClass]="{
-                                'active-file': !isMobileView && voucherPdf?.uniqueName === previewedFile?.uniqueName
+                                'active-file': voucherPdf?.uniqueName === previewedFile?.uniqueName
                             }"
                             (click)="showVoucherPreview()"
                             >{{ voucherPdf?.name || commonLocaleData?.app_not_available }}</span
@@ -66,7 +66,7 @@
                                     class="file-name cursor-pointer font-15"
                                     [ngClass]="{
                                         'active-file':
-                                            !isMobileView && attachment?.uniqueName === previewedFile?.uniqueName
+                                            attachment?.uniqueName === previewedFile?.uniqueName
                                     }"
                                     (click)="showFilePreview(attachment)"
                                     >{{ attachment?.name }}</span
@@ -78,39 +78,8 @@
                         </mat-list>
                     </div>
                 </ng-container>
-                <!-- <label class="upload-div">
-                    <input [disabled]="
-                            !isPettyCash &&
-                            currentOrganizationType === 'COMPANY' &&
-                            branches?.length > 1
-                        " type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
-                        [uploadInput]="uploadInput" [options]="fileUploadOptions" (uploadOutput)="onUploadOutput($event)" />
-                    <label for="invoiceFile" class="cp font-15">
-                        <i [ngClass]="
-                                !isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'
-                            "></i>
-                        Attach File</label>
-                </label> -->
-                <div class="right-side-buttons" *ngIf="isMobileView">
-                    <a
-                        href="javascript:;"
-                        (click)="downloadFiles()"
-                        [matTooltip]="commonLocaleData?.app_download"
-                        [matTooltipPosition]="'above'"
-                    >
-                        <i class="icon-file"></i>
-                    </a>
-                    <a
-                        href="javascript:;"
-                        (click)="printFiles()"
-                        [matTooltip]="commonLocaleData?.app_print"
-                        [matTooltipPosition]="'above'"
-                    >
-                        <i class="fa fa-print"></i>
-                    </a>
-                </div>
             </div>
-            <div class="right-side" *ngIf="!isMobileView">
+            <div class="right-side">
                 <div class="right-side-buttons" *ngIf="previewedFile">
                     <span [ngClass]="{ 'disabled': previewedFile?.type === 'unsupported' }" *ngIf="previewedFile?.type">
                         <a

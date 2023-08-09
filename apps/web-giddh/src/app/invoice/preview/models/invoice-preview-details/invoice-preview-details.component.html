@@ -627,10 +627,7 @@
                                     [placeholder]="localeData?.upload_excel_csv"
                                     droppable="true"
                                     class="form-control"
-                                    [options]="fileUploadOptions"
-                                    ngFileSelect
-                                    [uploadInput]="uploadInput"
-                                    (uploadOutput)="onUploadOutput($event)"
+                                    (change)="uploadFile()"
                                 />
                                 <div class="clearfix position-relative width-100">
                                     <div class="file-input-wrapper text-center">

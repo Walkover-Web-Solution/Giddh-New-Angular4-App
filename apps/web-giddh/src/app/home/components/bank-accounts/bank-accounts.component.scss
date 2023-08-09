@@ -22,9 +22,10 @@ a.connect-bank {
     padding-top: 5px;
     display: block;
 }
-.wrap-single-bank-detail {
-    height: 265px;
-    overflow-y: auto;
+.bank-details-block {
+    cdk-virtual-scroll-viewport {
+        height: 305px;
+    }
 }
 .add-bank-details {
     display: flex;
