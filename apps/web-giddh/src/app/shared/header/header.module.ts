@@ -1,7 +1,10 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatMenuModule } from "@angular/material/menu";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatTreeModule } from "@angular/material/tree";
 import { RouterModule } from "@angular/router";
 import { LaddaModule } from "angular2-ladda";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
@@ -43,7 +46,10 @@ import { HeaderComponent } from "./header.component";
             spinnerSize: 30
         }),
         ConfirmModalModule,
-        RouterModule
+        RouterModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatTreeModule
     ],
     exports: [
         HeaderComponent,
