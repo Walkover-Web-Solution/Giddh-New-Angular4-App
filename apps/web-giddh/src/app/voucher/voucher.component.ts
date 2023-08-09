@@ -715,6 +715,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public hasUnsavedChanges: boolean = false;
     /** True if entry datepicker is open */
     public isEntryDatepickerOpen: boolean = false;
+    /** True, if the linking with PO is in progress */
+    private isPoLinkingInProgress: boolean = false;
     /**Hold voucher type */
     public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
     /** This will hold invoice text */
@@ -3584,7 +3586,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             transaction.isStockTxn = true;
             if (isBulkItem) {
                 transaction.variant = selectedAcc.variant;
-            } else if (isLinkedPoItem) {
+            } else if (isLinkedPoItem && this.isPoLinkingInProgress) {
+                // Only re-assign the variant when user has added the linked PO entries with the current PB successfully, if the
+                // addition is in progress then do nothing
                 transaction.variant = o.stock.variant;
             }
             // Stock item, show the warehouse drop down if it is hidden
@@ -3605,6 +3609,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             transaction.amount = 0;
             transaction.highPrecisionAmount = transaction.amount;
             transaction.taxableValue = 0;
+            transaction.variant = null;
             this.handleWarehouseVisibility();
         }
         transaction.sacNumber = null;
@@ -7045,6 +7050,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public addPoItems(poUniqueName: string, entries: any, totalPending: number): void {
         this.startLoader(true);
+        this.linkedPoItemsAdded = 0;
+        this.isPoLinkingInProgress = true;
         let blankItemIndex = this.invFormData.entries?.findIndex(entry => !entry.transactions[0].accountUniqueName);
         let isBlankItemPresent;
         let startIndex = this.invFormData.entries?.length;
@@ -7132,6 +7139,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.linkedPoItemsAdded === totalPending) {
                 if (!buildBulkDataStarted) {
                     this.linkedPoItemsAdded = 0;
+                    this.isPoLinkingInProgress = false;
                     buildBulkDataStarted = true;
                     clearInterval(interval);
                     this.startLoader(false);
@@ -8698,7 +8706,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     mergedAccounts: data.body.mergedAccounts,
                     mobileNo: data.body.mobileNo,
                     nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.name).join(', ') : data.body.parentGroups.join(', '),
-                    stock: (isLinkedPoItem && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
+                    stock: (isLinkedPoItem && this.isPoLinkingInProgress && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
                     hsnNumber: selectedAcc.stock?.hsnNumber ? selectedAcc.stock.hsnNumber : data.body.hsnNumber,
                     sacNumber: selectedAcc.stock?.sacNumber ? selectedAcc.stock.sacNumber : data.body.sacNumber,
                     uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : data.body.parentGroups.join(', '),
@@ -8738,8 +8746,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     txn.maxQuantity = maxQuantity;
 
                     this.calculateWhenTrxAltered(entry, txn);
-
-                    this.linkedPoItemsAdded++;
+                    if (this.isPoLinkingInProgress) {
+                        this.linkedPoItemsAdded++;
+                    }
                 }
                 this.focusOnDescription();
             }
