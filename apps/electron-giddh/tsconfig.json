@@ -9,13 +9,15 @@
         "experimentalDecorators": true,
         "esModuleInterop": true,
         "target": "ES2022",
+        "module": "CommonJS",
         "typeRoots": [
             "../../node_modules/@types"
         ],
         "lib": [
             "ES2022",
             "dom"
-        ]
+        ],
+        "useDefineForClassFields": false
     },
     "include": [
         "src/index.ts"
