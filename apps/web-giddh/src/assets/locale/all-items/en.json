@@ -35,7 +35,7 @@
               "label": "Cash Invoice",
               "link": "/pages/proforma-invoice/invoice/cash",
               "icon": "icon-invoice-new",
-              "description": "Generate invoice and manage customers (customer accounts/ledger separately)."
+              "description": "Generate instant paid invoice without managing customers (Without separate account/ledger)."
             },
             {
               "label": "Credit Invoice",
@@ -67,7 +67,7 @@
               "label": "Cash Credit Note",
               "link": "/pages/proforma-invoice/invoice/cash credit note",
               "icon": "icon-invoice-new",
-              "description": "Generate instant paid credit without managing vendors (Without separate account/ledger)."
+              "description": "Generate instant paid credit note without managing vendors (Without separate account/ledger)."
             },
             {
               "label": "Credit Note",
