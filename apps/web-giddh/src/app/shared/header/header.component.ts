@@ -426,6 +426,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
+                this.voucherApiVersion = this.generalService.voucherApiVersion;
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
@@ -486,7 +487,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnInit() {
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let branches = [];
