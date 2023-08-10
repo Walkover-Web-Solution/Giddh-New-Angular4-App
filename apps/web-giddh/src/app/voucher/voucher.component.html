@@ -413,11 +413,13 @@
                                                                                 {{ customerCountryName }}
                                                                             </label>
                                                                         </div>
+                                                                        <!-- {{ statesSource | json }}
                                                                         <div
                                                                             class="
                                                                                 col-sm-12 col-md-6
                                                                                 billing-shipping-value
                                                                             "
+                                                                            *ngIf="statesSource?.length"
                                                                         >
                                                                             <select-field
                                                                                 [placeholder]="
@@ -440,6 +442,45 @@
                                                                                 [defaultValue]="
                                                                                     invFormData?.accountDetails
                                                                                         ?.billingDetails?.state?.name
+                                                                                "
+                                                                                (onClear)="
+                                                                                    fillShippingBillingDetails(
+                                                                                        $event,
+                                                                                        true
+                                                                                    );
+                                                                                    autoFillShippingDetails()
+                                                                                "
+                                                                                [readonly]="isEinvoiceGenerated"
+                                                                            >
+                                                                            </select-field>
+                                                                        </div> -->
+                                                                        <div
+                                                                            class="
+                                                                                col-sm-12 col-md-6
+                                                                                billing-shipping-value
+                                                                            "
+                                                                        >
+                                                                            <select-field
+                                                                                [placeholder]="
+                                                                                    commonLocaleData?.app_region
+                                                                                "
+                                                                                [cssClass]="
+                                                                                    'select-bdr-bottom form-control  input-bill'
+                                                                                "
+                                                                                (selectedOption)="
+                                                                                    fillShippingBillingDetails(
+                                                                                        $event,
+                                                                                        true
+                                                                                    );
+                                                                                    autoFillShippingDetails()
+                                                                                "
+                                                                                #statesBilling
+                                                                                [options]="regionsSource"
+                                                                                [name]="'billingDetails.county.code'"
+                                                                                [allowValueReset]="true"
+                                                                                [defaultValue]="
+                                                                                    invFormData?.accountDetails
+                                                                                        ?.billingDetails?.county?.name
                                                                                 "
                                                                                 (onClear)="
                                                                                     fillShippingBillingDetails(
@@ -663,7 +704,7 @@
                                                                                     </label>
                                                                                 </div>
                                                                             </div>
-                                                                            <div
+                                                                            <!-- <div
                                                                                 class="
                                                                                     col-sm-12 col-md-6
                                                                                     billing-shipping-value
@@ -691,6 +732,48 @@
                                                                                     [defaultValue]="
                                                                                         invFormData?.accountDetails
                                                                                             ?.shippingDetails?.state
+                                                                                            ?.name
+                                                                                    "
+                                                                                    (onClear)="
+                                                                                        fillShippingBillingDetails(
+                                                                                            $event,
+                                                                                            false
+                                                                                        )
+                                                                                    "
+                                                                                    [readonly]="isEinvoiceGenerated"
+                                                                                >
+                                                                                </select-field>
+                                                                            </div> -->
+                                                                            <div
+                                                                                class="
+                                                                                    col-sm-12 col-md-6
+                                                                                    billing-shipping-value
+                                                                                "
+                                                                                #shippingState
+                                                                            >
+                                                                                <select-field
+                                                                                    #customerShippingState
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_region
+                                                                                    "
+                                                                                    [cssClass]="
+                                                                                        'select-bdr-bottom form-control input-bill'
+                                                                                    "
+                                                                                    #statesShipping
+                                                                                    (selectedOption)="
+                                                                                        fillShippingBillingDetails(
+                                                                                            $event,
+                                                                                            false
+                                                                                        )
+                                                                                    "
+                                                                                    [options]="regionsSource"
+                                                                                    [name]="
+                                                                                        'shippingDetails.county.code'
+                                                                                    "
+                                                                                    [allowValueReset]="true"
+                                                                                    [defaultValue]="
+                                                                                        invFormData?.accountDetails
+                                                                                            ?.shippingDetails?.county
                                                                                             ?.name
                                                                                     "
                                                                                     (onClear)="
@@ -1081,7 +1164,7 @@
                                                                             {{ companyCountryName }}
                                                                         </label>
                                                                     </div>
-                                                                    <div
+                                                                    <!-- <div
                                                                         class="
                                                                             col-sm-12 col-md-6
                                                                             billing-shipping-value
@@ -1122,6 +1205,51 @@
                                                                             [defaultValue]="
                                                                                 purchaseBillCompany?.billingDetails
                                                                                     ?.state?.name
+                                                                            "
+                                                                        >
+                                                                        </select-field>
+                                                                    </div> -->
+                                                                    <div
+                                                                        class="
+                                                                            col-sm-12 col-md-6
+                                                                            billing-shipping-value
+                                                                        "
+                                                                        #billingStateCompany
+                                                                    >
+                                                                        <select-field
+                                                                            #companyBillingState
+                                                                            [placeholder]="commonLocaleData?.app_region"
+                                                                            [cssClass]="
+                                                                                ' select-bdr-bottom form-control input-bill'
+                                                                            "
+                                                                            (selectedOption)="
+                                                                                fillShippingBillingCompanyDetails(
+                                                                                    $event,
+                                                                                    true
+                                                                                );
+                                                                                autoFillCompanyShippingDetails()
+                                                                            "
+                                                                            [allowValueReset]="true"
+                                                                            (onClear)="
+                                                                                fillShippingBillingCompanyDetails(
+                                                                                    $event,
+                                                                                    true
+                                                                                );
+                                                                                autoFillCompanyShippingDetails()
+                                                                            "
+                                                                            [options]="companyRegionsSource"
+                                                                            [name]="'companyBillingDetailsStateCode'"
+                                                                            [readonly]="
+                                                                                purchaseBillCompany.billingDetails
+                                                                                    .gstNumber &&
+                                                                                purchaseBillCompany.billingDetails
+                                                                                    .gstNumber.length >= 2
+                                                                                    ? true
+                                                                                    : null
+                                                                            "
+                                                                            [defaultValue]="
+                                                                                purchaseBillCompany?.billingDetails
+                                                                                    ?.county?.name
                                                                             "
                                                                         >
                                                                         </select-field>
@@ -1301,7 +1429,7 @@
                                                                                 </label>
                                                                             </div>
                                                                         </div>
-                                                                        <div
+                                                                        <!-- <div
                                                                             class="
                                                                                 col-sm-12 col-md-6
                                                                                 billing-shipping-value
@@ -1349,6 +1477,58 @@
                                                                                 [defaultValue]="
                                                                                     purchaseBillCompany.shippingDetails
                                                                                         .state?.name
+                                                                                "
+                                                                            >
+                                                                            </select-field>
+                                                                        </div> -->
+                                                                        <div
+                                                                            class="
+                                                                                col-sm-12 col-md-6
+                                                                                billing-shipping-value
+                                                                            "
+                                                                            #shippingStateCompany
+                                                                        >
+                                                                            <select-field
+                                                                                #companyShippingState
+                                                                                [placeholder]="
+                                                                                    commonLocaleData?.app_region
+                                                                                "
+                                                                                [cssClass]="
+                                                                                    'select-bdr-bottom form-control input-bill'
+                                                                                "
+                                                                                [ngClass]="{
+                                                                                    'disabled': autoFillCompanyShipping
+                                                                                }"
+                                                                                (selectedOption)="
+                                                                                    fillShippingBillingCompanyDetails(
+                                                                                        $event,
+                                                                                        false
+                                                                                    )
+                                                                                "
+                                                                                [allowValueReset]="true"
+                                                                                (onClear)="
+                                                                                    fillShippingBillingCompanyDetails(
+                                                                                        $event,
+                                                                                        false
+                                                                                    )
+                                                                                "
+                                                                                [options]="companyRegionsSource"
+                                                                                [name]="
+                                                                                    'companyShippingDetailsCountyCode'
+                                                                                "
+                                                                                [readonly]="
+                                                                                    autoFillCompanyShipping ||
+                                                                                    (purchaseBillCompany.shippingDetails
+                                                                                        .gstNumber &&
+                                                                                        purchaseBillCompany
+                                                                                            .shippingDetails.gstNumber
+                                                                                            .length >= 2)
+                                                                                        ? true
+                                                                                        : null
+                                                                                "
+                                                                                [defaultValue]="
+                                                                                    purchaseBillCompany.shippingDetails
+                                                                                        .county?.name
                                                                                 "
                                                                             >
                                                                             </select-field>
