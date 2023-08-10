@@ -58,7 +58,7 @@ export class Addresses {
     public name?: string;
     public taxType?: string;
     public pincode?: string;
-    public county?: { code: any; name?: any };
+    public county?: { code: string; name?: string };
 }
 
 export class CompanyTotals {

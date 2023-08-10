@@ -192,7 +192,11 @@
                                                                                     "
                                                                                 >
                                                                                     {{ address.address }}
-                                                                                    {{ address.state?.name }}
+                                                                                    {{
+                                                                                        address.state?.name
+                                                                                            ? address.state?.name
+                                                                                            : address.county?.name
+                                                                                    }}
                                                                                     <span class="d-block"
                                                                                         >{{
                                                                                             address.gstNumber
@@ -231,8 +235,11 @@
                                                                             {{ vendorCountry }}
                                                                         </label>
                                                                     </div>
-
-                                                                    <div class="col-sm-12 col-md-6" #vendorBillingState>
+                                                                    <div
+                                                                        class="col-sm-12 col-md-6"
+                                                                        #vendorBillingState
+                                                                        *ngIf="statesSource?.length"
+                                                                    >
                                                                         <sales-sh-select
                                                                             [placeholder]="commonLocaleData?.app_state"
                                                                             class="select-border-bottom"
@@ -251,6 +258,33 @@
                                                                             [(ngModel)]="
                                                                                 purchaseOrder.account.billingDetails
                                                                                     .state.code
+                                                                            "
+                                                                        >
+                                                                        </sales-sh-select>
+                                                                    </div>
+                                                                    <div
+                                                                        class="col-sm-12 col-md-6"
+                                                                        #vendorBillingState
+                                                                        *ngIf="regionsSource?.length"
+                                                                    >
+                                                                        <sales-sh-select
+                                                                            [placeholder]="commonLocaleData?.app_region"
+                                                                            class="select-border-bottom"
+                                                                            (selected)="
+                                                                                fillShippingBillingDetails(
+                                                                                    $event,
+                                                                                    true,
+                                                                                    'vendor'
+                                                                                );
+                                                                                autoFillShippingDetails('vendor')
+                                                                            "
+                                                                            #vendorStatesBilling
+                                                                            [showBottomBorderOnly]="true"
+                                                                            [options]="regionsSource"
+                                                                            name="vendorBillingDetailsRegionCode"
+                                                                            [(ngModel)]="
+                                                                                purchaseOrder.account.billingDetails
+                                                                                    .county.code
                                                                             "
                                                                         >
                                                                         </sales-sh-select>
@@ -382,7 +416,11 @@
                                                                                     "
                                                                                 >
                                                                                     {{ address.address }}
-                                                                                    {{ address.state?.name }}
+                                                                                    {{
+                                                                                        address.state?.name
+                                                                                            ? address.state?.name
+                                                                                            : address.county?.name
+                                                                                    }}
                                                                                     {{
                                                                                         address.gstNumber
                                                                                             ? (showGSTINNo
@@ -431,6 +469,7 @@
                                                                                 select-border-bottom
                                                                             "
                                                                             #vendorShippingState
+                                                                            *ngIf="statesSource?.length"
                                                                         >
                                                                             <sales-sh-select
                                                                                 [placeholder]="
@@ -452,6 +491,38 @@
                                                                                 [(ngModel)]="
                                                                                     purchaseOrder.account
                                                                                         .shippingDetails.state.code
+                                                                                "
+                                                                            >
+                                                                            </sales-sh-select>
+                                                                        </div>
+                                                                        <div
+                                                                            class="
+                                                                                col-sm-12 col-md-6
+                                                                                select-border-bottom
+                                                                            "
+                                                                            #vendorShippingState
+                                                                            *ngIf="regionsSource?.length"
+                                                                        >
+                                                                            <sales-sh-select
+                                                                                [placeholder]="
+                                                                                    commonLocaleData?.app_region
+                                                                                "
+                                                                                [disabled]="autoFillVendorShipping"
+                                                                                class="select-border-bottom"
+                                                                                (selected)="
+                                                                                    fillShippingBillingDetails(
+                                                                                        $event,
+                                                                                        false,
+                                                                                        'vendor'
+                                                                                    )
+                                                                                "
+                                                                                #vendorStatesShipping
+                                                                                [showBottomBorderOnly]="true"
+                                                                                [options]="regionsSource"
+                                                                                name="vendorShippingDetailsRegionCode"
+                                                                                [(ngModel)]="
+                                                                                    purchaseOrder.account
+                                                                                        .shippingDetails.county.code
                                                                                 "
                                                                             >
                                                                             </sales-sh-select>
@@ -611,7 +682,11 @@
                                                                             "
                                                                         >
                                                                             {{ address.address }}
-                                                                            {{ address.state?.name }}
+                                                                            {{
+                                                                                address.state?.name
+                                                                                    ? address.state?.name
+                                                                                    : address.county?.name
+                                                                            }}
                                                                             {{
                                                                                 address.taxNumber
                                                                                     ? (showGSTINNo
@@ -646,7 +721,11 @@
                                                                     {{ companyCountryName }}
                                                                 </label>
                                                             </div>
-                                                            <div class="col-sm-12 col-md-6" #companyBillingState>
+                                                            <div
+                                                                class="col-sm-12 col-md-6"
+                                                                #companyBillingState
+                                                                *ngIf="companyStatesSource?.length"
+                                                            >
                                                                 <sales-sh-select
                                                                     [placeholder]="commonLocaleData?.app_state"
                                                                     class="select-border-bottom"
@@ -676,6 +755,44 @@
                                                                     "
                                                                     [(ngModel)]="
                                                                         purchaseOrder.company.billingDetails.state.code
+                                                                    "
+                                                                >
+                                                                </sales-sh-select>
+                                                            </div>
+                                                            <div
+                                                                class="col-sm-12 col-md-6"
+                                                                #companyBillingState
+                                                                *ngIf="companyRegionsSource?.length"
+                                                            >
+                                                                <sales-sh-select
+                                                                    [placeholder]="commonLocaleData?.app_region"
+                                                                    class="select-border-bottom"
+                                                                    (selected)="
+                                                                        fillShippingBillingDetails(
+                                                                            $event,
+                                                                            true,
+                                                                            'company'
+                                                                        );
+                                                                        autoFillShippingDetails('company')
+                                                                    "
+                                                                    [showBottomBorderOnly]="true"
+                                                                    [options]="companyRegionsSource"
+                                                                    name="companyBillingDetailsRegionCode"
+                                                                    [disabled]="
+                                                                        purchaseOrder.company.billingDetails.county
+                                                                            .code &&
+                                                                        purchaseOrder.company.billingDetails
+                                                                            .gstNumber &&
+                                                                        purchaseOrder.company.billingDetails.gstNumber
+                                                                            .length >= 2
+                                                                            ? true
+                                                                            : null
+                                                                    "
+                                                                    [fixedValue]="
+                                                                        purchaseOrder.company.billingDetails.county.name
+                                                                    "
+                                                                    [(ngModel)]="
+                                                                        purchaseOrder.company.billingDetails.county.code
                                                                     "
                                                                 >
                                                                 </sales-sh-select>
@@ -793,7 +910,11 @@
                                                                             "
                                                                         >
                                                                             {{ address.address }}
-                                                                            {{ address.state?.name }}
+                                                                            {{
+                                                                                address.state?.name
+                                                                                    ? address.state?.name
+                                                                                    : address.county?.name
+                                                                            }}
                                                                             {{
                                                                                 address.taxNumber
                                                                                     ? (showGSTINNo
@@ -835,7 +956,11 @@
                                                                         </label>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-sm-12 col-md-6" #companyShippingState>
+                                                                <div
+                                                                    class="col-sm-12 col-md-6"
+                                                                    #companyShippingState
+                                                                    *ngIf="companyStatesSource?.length"
+                                                                >
                                                                     <sales-sh-select
                                                                         [placeholder]="commonLocaleData?.app_state"
                                                                         [disabled]="autoFillCompanyShipping"
@@ -866,6 +991,46 @@
                                                                         "
                                                                         [(ngModel)]="
                                                                             purchaseOrder.company.shippingDetails.state
+                                                                                .code
+                                                                        "
+                                                                    >
+                                                                    </sales-sh-select>
+                                                                </div>
+                                                                <div
+                                                                    class="col-sm-12 col-md-6"
+                                                                    #companyShippingState
+                                                                    *ngIf="companyRegionsSource?.length"
+                                                                >
+                                                                    <sales-sh-select
+                                                                        [placeholder]="commonLocaleData?.app_region"
+                                                                        [disabled]="autoFillCompanyShipping"
+                                                                        class="select-border-bottom disabled"
+                                                                        (selected)="
+                                                                            fillShippingBillingDetails(
+                                                                                $event,
+                                                                                false,
+                                                                                'company'
+                                                                            )
+                                                                        "
+                                                                        [showBottomBorderOnly]="true"
+                                                                        [options]="companyRegionsSource"
+                                                                        name="companyShippingDetailsRegionCode"
+                                                                        [disabled]="
+                                                                            purchaseOrder.company.shippingDetails.county
+                                                                                .code &&
+                                                                            purchaseOrder.company.shippingDetails
+                                                                                .gstNumber &&
+                                                                            purchaseOrder.company.shippingDetails
+                                                                                .gstNumber.length >= 2
+                                                                                ? true
+                                                                                : null
+                                                                        "
+                                                                        [fixedValue]="
+                                                                            purchaseOrder.company.shippingDetails.county
+                                                                                .name
+                                                                        "
+                                                                        [(ngModel)]="
+                                                                            purchaseOrder.company.shippingDetails.county
                                                                                 .code
                                                                         "
                                                                     >

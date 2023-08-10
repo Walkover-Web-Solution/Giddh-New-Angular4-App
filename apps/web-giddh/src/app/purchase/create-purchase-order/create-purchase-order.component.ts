@@ -389,6 +389,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     private currentTxnRequestObject: Array<any> = [];
     /** Stores the index of current stock variants being loaded */
     private currentlyLoadedStockVariantIndex: number;
+    /* This will hold list of vendor country region */
+    public regionsSource: IOption[] = [];
+    /* This will hold list of company country regions */
+    public companyRegionsSource: IOption[] = [];
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
         return (!this.isUpdateMode && this.purchaseOrder?.account?.uniqueName) ? true : false;
@@ -495,6 +499,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.initializeWarehouse();
 
         this.selectedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(async accountDetails => {
+
             if (accountDetails) {
                 if (accountDetails.country) {
                     await this.getUpdatedStateCodes(accountDetails.country.countryCode, false);
@@ -504,21 +509,31 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     name: accountDetails.name,
                     uniqueName: accountDetails.uniqueName
                 }], 1, SEARCH_TYPE.VENDOR);
+
                 if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails) {
                     let billingDetails = this.purchaseOrderDetails.account.billingDetails;
 
                     this.purchaseOrder.account.billingDetails.address = billingDetails.address;
                     this.purchaseOrder.account.billingDetails.gstNumber = billingDetails.gstNumber;
+
                     if (billingDetails.stateCode) {
                         this.purchaseOrder.account.billingDetails.state.name = billingDetails.stateName;
                         this.purchaseOrder.account.billingDetails.state.code = (billingDetails.stateCode) ? billingDetails.stateCode : billingDetails.stateGstCode;
                         this.purchaseOrder.account.billingDetails.stateCode = billingDetails.stateCode;
                         this.purchaseOrder.account.billingDetails.stateName = billingDetails.stateName;
-                    } else {
+                        this.purchaseOrder.account.billingDetails.state.name = billingDetails.stateName;
+
+                    } else if (billingDetails.county) {
+                        this.purchaseOrder.account.billingDetails.county.name = billingDetails.county.name;
+                        this.purchaseOrder.account.billingDetails.county.code = billingDetails.county.code;
+                    }
+                    else {
                         this.purchaseOrder.account.billingDetails.state.name = "";
                         this.purchaseOrder.account.billingDetails.state.code = "";
                         this.purchaseOrder.account.billingDetails.stateCode = "";
                         this.purchaseOrder.account.billingDetails.stateName = "";
+                        this.purchaseOrder.account.billingDetails.county.name = "";
+                        this.purchaseOrder.account.billingDetails.county.code = "";
                     }
 
                     this.purchaseOrder.account.billingDetails.panNumber = "";
@@ -533,11 +548,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         this.purchaseOrder.account.shippingDetails.state.code = (shippingDetails.stateCode) ? shippingDetails.stateCode : shippingDetails.stateGstCode;
                         this.purchaseOrder.account.shippingDetails.stateCode = shippingDetails.stateCode;
                         this.purchaseOrder.account.shippingDetails.stateName = shippingDetails.stateName;
+                    } else if (shippingDetails.county) {
+                        this.purchaseOrder.account.shippingDetails.county.name = shippingDetails.county.name;
+                        this.purchaseOrder.account.shippingDetails.county.code = shippingDetails.county.code;
                     } else {
                         this.purchaseOrder.account.shippingDetails.state.name = "";
                         this.purchaseOrder.account.shippingDetails.state.code = "";
                         this.purchaseOrder.account.shippingDetails.stateCode = "";
                         this.purchaseOrder.account.shippingDetails.stateName = "";
+                        this.purchaseOrder.account.shippingDetails.county.name = "";
+                        this.purchaseOrder.account.shippingDetails.county.code = "";
                     }
                     this.purchaseOrder.account.shippingDetails.panNumber = "";
                     this.purchaseOrder.account.shippingDetails.pincode = shippingDetails.pincode;
@@ -753,6 +773,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.accountAddressList = accountDetails.addresses;
 
                 accountDetails.addresses.forEach(defaultAddress => {
+
                     if (defaultAddress && defaultAddress.isDefault) {
                         this.purchaseOrder.account.billingDetails.address = [];
                         this.purchaseOrder.account.billingDetails.address.push(defaultAddress.address);
@@ -762,29 +783,39 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             this.purchaseOrder.account.billingDetails.state.code = (defaultAddress.state) ? (defaultAddress.state.code) ? defaultAddress.state.code : defaultAddress.state.stateGstCode : defaultAddress.stateCode;
                             this.purchaseOrder.account.billingDetails.stateCode = this.purchaseOrder.account.billingDetails.state.code;
                             this.purchaseOrder.account.billingDetails.stateName = defaultAddress.state.name;
+                        } else if (defaultAddress.county) {
+                            this.purchaseOrder.account.billingDetails.county.name = defaultAddress.county.name;
+                            this.purchaseOrder.account.billingDetails.county.code = defaultAddress.county.code;
+                            this.purchaseOrder.account.billingDetails.county.code = this.purchaseOrder.account.billingDetails.county.code;
                         } else {
                             this.purchaseOrder.account.billingDetails.state.name = "";
                             this.purchaseOrder.account.billingDetails.state.code = "";
                             this.purchaseOrder.account.billingDetails.stateCode = "";
                             this.purchaseOrder.account.billingDetails.stateName = "";
+                            this.purchaseOrder.account.billingDetails.county.name = "";
+                            this.purchaseOrder.account.billingDetails.county.code = "";
                         }
-
                         this.purchaseOrder.account.billingDetails.panNumber = "";
                         this.purchaseOrder.account.billingDetails.pincode = defaultAddress.pincode;
-
                         this.purchaseOrder.account.shippingDetails.address = [];
                         this.purchaseOrder.account.shippingDetails.address.push(defaultAddress.address);
                         this.purchaseOrder.account.shippingDetails.gstNumber = defaultAddress.gstNumber;
                         if (defaultAddress.state) {
                             this.purchaseOrder.account.shippingDetails.state.name = defaultAddress.state.name;
                             this.purchaseOrder.account.shippingDetails.state.code = (defaultAddress.state) ? (defaultAddress.state.code) ? defaultAddress.state.code : defaultAddress.state.stateGstCode : defaultAddress.stateCode;
-                            this.purchaseOrder.account.shippingDetails.stateCode = this.purchaseOrder.account.shippingDetails.state.code;
+                            this.purchaseOrder.account.shippingDetails.stateCode = this.purchaseOrder.account.shippingDetails.county.code;
                             this.purchaseOrder.account.shippingDetails.stateName = defaultAddress.state.name;
+
+                        } else if (defaultAddress.county) {
+                            this.purchaseOrder.account.billingDetails.county.name = defaultAddress.county.name;
+                            this.purchaseOrder.account.billingDetails.county.code = defaultAddress.county.code;
                         } else {
                             this.purchaseOrder.account.shippingDetails.state.name = "";
                             this.purchaseOrder.account.shippingDetails.state.code = "";
                             this.purchaseOrder.account.shippingDetails.stateCode = "";
                             this.purchaseOrder.account.shippingDetails.stateName = "";
+                            this.purchaseOrder.account.billingDetails.county.name = "";
+                            this.purchaseOrder.account.billingDetails.county.code = "";
                         }
                         this.purchaseOrder.account.shippingDetails.pincode = defaultAddress.pincode;
                         this.purchaseOrder.account.shippingDetails.panNumber = "";
@@ -907,6 +938,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.purchaseOrder.account.billingDetails.state.name = stateName;
                 this.purchaseOrder.account.billingDetails.stateName = stateName;
                 this.purchaseOrder.account.billingDetails.stateCode = stateCode;
+                this.purchaseOrder.account.billingDetails.county.name = stateName;
+                this.purchaseOrder.account.billingDetails.county.code = stateCode;
             } else {
                 // update account details address if it's billing details
                 if (this.companyBillingState && this.companyBillingState.nativeElement) {
@@ -915,6 +948,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.purchaseOrder.company.billingDetails.state.name = stateName;
                 this.purchaseOrder.company.billingDetails.stateName = stateName;
                 this.purchaseOrder.company.billingDetails.stateCode = stateCode;
+                this.purchaseOrder.company.billingDetails.county.name = stateName;
+                this.purchaseOrder.company.billingDetails.county.code = stateCode;
             }
         } else {
             if (addressType === "vendor") {
@@ -927,6 +962,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.account.shippingDetails.stateName = stateName;
                     this.purchaseOrder.account.shippingDetails.stateCode = stateCode;
                     this.purchaseOrder.account.shippingDetails.state.name = stateName;
+                    this.purchaseOrder.account.billingDetails.county.name = stateName;
+                    this.purchaseOrder.account.billingDetails.county.code = stateCode;
                 }
             } else {
                 if (this.companyBillingState && this.companyBillingState.nativeElement) {
@@ -939,6 +976,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.shippingDetails.stateCode = stateCode;
                     this.purchaseOrder.company.shippingDetails.state.code = stateCode;
                     this.purchaseOrder.company.shippingDetails.state.name = stateName;
+                    this.purchaseOrder.company.billingDetails.county.name = stateName;
+                    this.purchaseOrder.company.billingDetails.county.code = stateCode;
                 }
             }
         }
@@ -987,8 +1026,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.startLoader(false);
                     if (!isCompanyStates) {
                         this.statesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : []);
+                        this.regionsSource = this.modifyStateResp((resp.body) ? resp.body?.countyList : []);
                     } else {
                         this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : []);
+                        this.companyRegionsSource = this.modifyStateResp((resp.body) ? resp.body?.countyList : []);
                     }
                     resolve();
                 }, () => {
@@ -2333,13 +2374,42 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         obj.templateDetails = data.templateDetails;
         obj.entries = salesEntryClassArray;
 
-        obj.account.billingDetails.countryName = this.vendorCountry;
-        obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
-        obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
+        if (this.regionsSource.length) {
+            delete obj.account.shippingDetails.state;
+            delete obj.account.shippingDetails.stateName;
+            delete obj.account.shippingDetails.stateCode;
+            delete obj.account.shippingDetails.state;
+            delete obj.account.billingDetails.state;
+            delete obj.account.billingDetails.stateName;
+            delete obj.account.billingDetails.stateCode;
+            delete obj.company.shippingDetails.state;
+            delete obj.company.shippingDetails.stateName;
+            delete obj.company.shippingDetails.stateCode;
+            delete obj.company.billingDetails.state;
+            delete obj.company.billingDetails.stateName;
+            delete obj.company.billingDetails.stateCode;
+            obj.account.billingDetails.county.code = obj.account.billingDetails.county.code;
+            obj.account.billingDetails.county.name = obj.account.billingDetails.county.name;
+            obj.account.shippingDetails.county.code = obj.account.shippingDetails.county.code;
+            obj.account.shippingDetails.county.name = obj.account.shippingDetails.county.name;
+        }
+        if (this.statesSource.length) {
+            obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
+            obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
+            obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
+            obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
+            delete obj.account.billingDetails.county.code;
+            delete obj.account.billingDetails.county.name;
+            delete obj.account.shippingDetails.county.code;
+            delete obj.account.shippingDetails.county.name;
+            delete obj.company.billingDetails.county.code;
+            delete obj.company.billingDetails.county.name;
+            delete obj.company.shippingDetails.county.code;
+            delete obj.company.shippingDetails.county.name;
+        }
 
+        obj.account.billingDetails.countryName = this.vendorCountry;
         obj.account.shippingDetails.countryName = this.vendorCountry;
-        obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
-        obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
 
         if (this.isUpdateMode) {
             obj.uniqueName = this.purchaseOrderUniqueName;
@@ -2436,7 +2506,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         find(transaction.stockList, (txn) => {
             if (txn.id === selectedUnit) {
                 transaction.stockUnitCode = txn.text;
-                return transaction.rate = giddhRoundOff(txn.rate  / this.exchangeRate, this.highPrecisionRate);
+                return transaction.rate = giddhRoundOff(txn.rate / this.exchangeRate, this.highPrecisionRate);
             }
         });
     }
@@ -2494,10 +2564,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         }
         if (currentBranch && currentBranch.addresses) {
             const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
+
             this.purchaseOrder.company.billingDetails.address = [];
             this.purchaseOrder.company.billingDetails.address.push(defaultAddress ? defaultAddress.address : '');
             this.purchaseOrder.company.billingDetails.state.code = defaultAddress ? defaultAddress.stateCode : '';
             this.purchaseOrder.company.billingDetails.state.name = defaultAddress ? defaultAddress.stateName : '';
+            // this.purchaseOrder.company.billingDetails.county.code = defaultAddress ? defaultAddress.county.code : '';
+            // this.purchaseOrder.company.billingDetails.county.name = defaultAddress ? defaultAddress.county.name : '';
+            this.purchaseOrder.company.billingDetails.county.code = defaultAddress ? 'GB-NIR' : '';
+            this.purchaseOrder.company.billingDetails.county.name = defaultAddress ? 'Northern Ireland' : '';
+            this.purchaseOrder.company.shippingDetails.county.code = defaultAddress ? 'GB-NIR' : '';
+            this.purchaseOrder.company.shippingDetails.county.name = defaultAddress ? 'Northern Ireland' : '';
             this.purchaseOrder.company.billingDetails.stateCode = defaultAddress ? defaultAddress.stateCode : '';
             this.purchaseOrder.company.billingDetails.stateName = defaultAddress ? defaultAddress.stateName : '';
             this.purchaseOrder.company.billingDetails.gstNumber = defaultAddress ? defaultAddress.taxNumber : '';
@@ -2631,12 +2708,18 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
                     this.purchaseOrder.company.billingDetails.state = { name: '', code: '' };
                     this.purchaseOrder.company.shippingDetails.state = { name: '', code: '' };
+                    this.purchaseOrder.company.billingDetails.county = { name: '', code: '' };
+                    this.purchaseOrder.company.shippingDetails.county = { name: '', code: '' };
 
                     this.purchaseOrder.company.billingDetails.state.code = this.purchaseOrderDetails.company.billingDetails.stateCode;
                     this.purchaseOrder.company.billingDetails.state.name = this.purchaseOrderDetails.company.billingDetails.stateName;
-
                     this.purchaseOrder.company.shippingDetails.state.code = this.purchaseOrderDetails.company.shippingDetails.stateCode;
                     this.purchaseOrder.company.shippingDetails.state.name = this.purchaseOrderDetails.company.shippingDetails.stateName;
+
+                    this.purchaseOrder.company.billingDetails.county.code = this.purchaseOrderDetails.company.billingDetails.county.code;
+                    this.purchaseOrder.company.billingDetails.county.name = this.purchaseOrderDetails.company.billingDetails.county.name;
+                    this.purchaseOrder.company.shippingDetails.county.code = this.purchaseOrderDetails.company.shippingDetails.county.code;
+                    this.purchaseOrder.company.shippingDetails.county.name = this.purchaseOrderDetails.company.shippingDetails.county.name;
 
                     this.checkForAutoFillShippingAddress('company');
 
@@ -3097,8 +3180,12 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             if (!data.state) {
                 data.state = {};
             }
-
-            data.state.code = (isCompanyAddress) ? address.stateCode : (address.state) ? address.state.code : "";
+            if (data.state.code) {
+                data.state.code = (isCompanyAddress) ? address.stateCode : (address.state) ? address.state.code : "";
+            }
+            if (data.county.code) {
+                data.county.code = address.county ? address.county.code : "";
+            }
             data.gstNumber = (isCompanyAddress) ? address.taxNumber : address.gstNumber;
             data.pincode = address.pincode;
 
@@ -3555,8 +3642,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.calculateTransactionValueInclusively(entry, transaction);
             });
         } else {
-        this.calculateStockEntryAmount(transaction);
-        this.calculateWhenTrxAltered(entry, transaction);
+            this.calculateStockEntryAmount(transaction);
+            this.calculateWhenTrxAltered(entry, transaction);
         }
         return transaction;
     }
@@ -3683,6 +3770,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (sectionName === 'account') {
             if (this.purchaseOrder?.account?.billingDetails?.address[0] === this.purchaseOrder?.account?.shippingDetails?.address[0] &&
                 this.purchaseOrder?.account?.billingDetails?.stateCode === this.purchaseOrder?.account?.shippingDetails?.stateCode &&
+                this.purchaseOrder?.account?.billingDetails?.county.code === this.purchaseOrder?.account?.shippingDetails?.county.code &&
                 this.purchaseOrder?.account?.billingDetails?.gstNumber === this.purchaseOrder?.account?.shippingDetails?.gstNumber &&
                 this.purchaseOrder?.account?.billingDetails?.pincode === this.purchaseOrder?.account?.shippingDetails?.pincode) {
                 this.autoFillVendorShipping = true;
@@ -3692,6 +3780,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         } else if (sectionName === 'company') {
             if (this.purchaseOrder?.company?.billingDetails?.address[0] === this.purchaseOrder?.company?.shippingDetails?.address[0] &&
                 this.purchaseOrder?.company?.billingDetails?.stateCode === this.purchaseOrder?.company?.shippingDetails?.stateCode &&
+                this.purchaseOrder?.account?.billingDetails?.county.code === this.purchaseOrder?.account?.shippingDetails?.county.code &&
                 this.purchaseOrder?.company?.billingDetails?.gstNumber === this.purchaseOrder?.company?.shippingDetails?.gstNumber &&
                 this.purchaseOrder?.company?.billingDetails?.pincode === this.purchaseOrder?.company?.shippingDetails?.pincode) {
                 this.autoFillCompanyShipping = true;
@@ -4045,7 +4134,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private loadStockVariants(stockUniqueName: string, index?: number): void {
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(
-            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName })))).subscribe(res => {
                 const allStockVariants = this.stockVariants.getValue();
                 this.currentlyLoadedStockVariantIndex = index;
                 allStockVariants[this.currentlyLoadedStockVariantIndex ?? this.activeIndex] = observableOf(res);

@@ -19,6 +19,10 @@ export class Address {
     public stateCode: string;
     public panNumber: string;
     public pincode?: string;
+    public county?: { code: string, name?: string };
+    constructor() {
+        this.county = { code: '', name: '' }
+    }
 }
 
 export class Transaction {
