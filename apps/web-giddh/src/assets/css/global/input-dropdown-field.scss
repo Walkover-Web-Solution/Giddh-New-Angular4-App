@@ -5,7 +5,8 @@ giddh-datepicker,
 add-company,
 stock-create-edit,
 dropdown-field,
-input-field {
+input-field,
+stock-balance {
     .mat-mdc-form-field {
         width: 100%;
     }
@@ -35,108 +36,11 @@ input-field {
         .mat-mdc-floating-label{
             &.mdc-floating-label{
                 line-height: 38px;
-                // height: 100%;
                 margin-top: -5px;
             }
         }
     }
     .mat-form-field-appearance-outline {
-        // .mat-form-field-outline {
-        //     top: 0;
-        // }
-        // .mat-form-field-outline-start {
-        //     border-top-left-radius: 0.5rem;
-        //     border-bottom-left-radius: 0.5rem;
-        // }
-        // .mat-form-field-outline-end {
-        //     border-top-right-radius: 0.5rem;
-        //     border-bottom-right-radius: 0.5rem;
-        // }
-        // .mat-form-field-outline-thick {
-        //     .mat-form-field-outline-start,
-        //     .mat-form-field-outline-end,
-        //     .mat-form-field-outline-gap {
-        //         border-width: 1px;
-        //     }
-        // }
-        // .mat-form-field-outline-start,
-        // .mat-form-field-outline-end {
-        //     min-width: 0.5rem;
-        // }
-        // .mat-form-field-flex {
-        //     margin-top: 0;
-        //     min-height: 3rem;
-        //     align-items: center;
-        //     border-radius: 0.5rem;
-        //     padding-left: 0;
-        //     padding-right: 0;
-        // }
-        // .mat-form-field-infix {
-        //     display: flex;
-        //     min-height: 3rem;
-        //     width: auto;
-        //     align-items: center;
-        //     border-width: 0px;
-        //     padding: 0 !important;
-        //     .mat-input-element {
-        //         margin: 0;
-        //         line-height: 1.25rem;
-        //         padding: 14px !important;
-        //     }
-        //     textarea {
-        //         &.mat-input-element {
-        //             margin-top: 0.5rem;
-        //             margin-bottom: 0.5rem;
-        //         }
-        //     }
-        // }
-        // .mat-form-field-label-wrapper {
-        //     top: -0.75rem;
-        //     padding-top: 0.75rem;
-        // }
-        // .mat-form-field-label {
-        //     margin-top: 1px;
-        //     font-size: var(--font-size-15);
-        //     padding-left: 14px;
-        // }
-        // .mat-form-field-wrapper {
-        //     margin: 0;
-        //     padding-top: 0;
-        //     padding-bottom: 0;
-        // }
-        // .mat-form-field-hint-spacer {
-        //     display: none;
-        // }
-        // .mat-form-field-prefix,
-        // .mat-form-field-suffix {
-        //     top: 0;
-        // }
-        // .mat-form-field-subscript-wrapper {
-        //     margin-top: 0;
-        //     padding: 0;
-        //     top: calc(100% - 0.875rem);
-        // }
-        // .mat-select-arrow-wrapper {
-        //     transform: none;
-        // }
-        // &.mat-form-field-can-float {
-        //     &.mat-form-field-should-float {
-        //         .mat-form-field-label {
-        //             transform: translateY(-1.5em) scale(0.75) !important;
-        //             padding-left: 21px;
-        //         }
-        //     }
-        // }
-        // &.mat-form-field-can-float {
-        //     .mat-input-server {
-        //         &:focus + .mat-form-field-label-wrapper {
-        //             .mat-form-field-label {
-        //                 transform: translateY(-1.5em) scale(0.75) !important;
-        //                 padding-left: 21px;
-        //             }
-        //         }
-        //     }
-        // }
          .mat-mdc-form-field-icon-suffix {
              margin-left: 0;
              margin-right: 10px;
@@ -171,12 +75,19 @@ input-field {
         }
     }
 }
-.single-search-box, .ledger-date, giddh-datepicker{
-    .mat-mdc-form-field{
-        .mat-mdc-text-field-wrapper {
-            padding: 0;
+/*--- giddh-datepicker ---*/
+.search-datepicker{
+    giddh-datepicker {
+        .mat-mdc-form-field-flex {
+            border: 1px solid var(--color-secondary-input-bar-border)!important; 
+            border-radius: 5px!important;
+        }
+        .mdc-text-field__input{
+            padding: 5px;
         }
     }
+}
+.single-search-box, .ledger-date, giddh-datepicker, .form-group{
     .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix{
         padding-top: 0 !important;
         padding-bottom: 0 !important;
@@ -250,6 +161,108 @@ voucher-component {
             .mat-form-field-flex {
                 border: 0 !important;
             }
+        }
+    }
+}
+
+/*------ dropdown option checkbox color ------*/
+.mat-pseudo-checkbox-checked,
+.mat-pseudo-checkbox-indeterminate{
+    &.mat-pseudo-checkbox-minimal{
+        &::after{
+            color: var(--color-giddh-blue);
+        }
+    }
+}
+
+.mat-mdc-option{
+    &:focus{
+        &.mdc-list-item {
+            background-color: transparent !important;
+        }
+    }
+    &.mat-mdc-option-active{
+        &.mdc-list-item {
+            background-color: transparent !important;
+        }
+    }
+}
+
+input {
+    &.mat-mdc-chip-input {
+        margin: 0 !important;
+    }
+}
+
+/*----- checkbox -----*/
+.mdc-checkbox {
+    padding: 4px !important;
+    left: 3px !important;
+    margin-right: 10px !important;
+}
+.mat-mdc-checkbox-touch-target {
+    height: 18px !important;
+    width: 18px !important;
+}
+.mdc-checkbox .mdc-checkbox__native-control {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0 !important;
+    top: 0px !important;
+    left: 8px !important;
+}
+.mdc-checkbox__ripple {
+    width: 18px !important;
+    height: 18px !important;
+    left: 10px !important;
+    top: 4px !important;
+}
+.mdc-checkbox .mdc-checkbox__background {
+    top: 4px !important;
+}
+.align-checkbox{
+    .mdc-checkbox {
+        left: -8px !important;
+    }
+}
+/*----- radio-button -----*/
+
+.mat-mdc-radio-button {
+    .mdc-radio {
+        .mdc-radio__native-control:enabled:checked+.mdc-radio__background {
+            .mdc-radio__outer-circle {
+                border-color: var(--color-giddh-blue) !important;
+            }
+            .mdc-radio__inner-circle{
+                background-color: var(--color-giddh-blue) !important;
+            }
+        }
+    }
+}
+
+/*---- custom ----*/
+.custom-input-field{
+    .mdc-text-field--filled {
+        padding: 0;
+    }
+    &.share-input-width{
+        width: 80%;
+    }
+    .mat-mdc-form-field-infix{
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        min-height: 2rem !important;
+    }
+}
+
+/*--- manufacturing edit ---*/
+.manufacturing-date{
+    giddh-datepicker{
+        .mat-mdc-text-field-wrapper{
+            padding: 0 !important;
+        }
+        .mat-datepicker-input{
+            padding: 5px 15px !important;
         }
     }
 }

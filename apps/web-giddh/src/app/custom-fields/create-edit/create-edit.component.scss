@@ -5,10 +5,10 @@
         top: 0;
         z-index: 10;
         padding: 0px 10px;
+        align-items: center;
         i {
-            font-size: 21px;
+            font-size: 20px;
             float: left;
-            margin-top: 12%;
         }
     }
     .custom-field-wrapper {
@@ -39,6 +39,9 @@
                 display: flex;
                 align-items: center;
                 column-gap: 15px;
+                input-field{
+                    min-width: 120px;
+                }
             }
         }
     }

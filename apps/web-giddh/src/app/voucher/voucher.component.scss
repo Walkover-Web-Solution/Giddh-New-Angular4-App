@@ -338,7 +338,7 @@ textarea:focus {
         > tr {
             > td {
                 border: 1px solid var(--color-table-primary-content-bar-border) !important;
-                padding: 10px 8px;
+                padding: 10px 8px 20px;
                 white-space: nowrap;
                 position: relative;
 
@@ -725,12 +725,17 @@ section.static-invoice-table {
     padding-left: 15px;
 }
 
-.wrap-billing-address.clearfix {
-    margin-top: 15px;
-    margin-bottom: 5px;
-
-    .bottom-border-only {
-        padding-left: 0 !important;
+.wrap-billing-address {
+    .mat-mdc-checkbox.mat-primary {
+        line-height: 40px;
+    }
+    &.clearfix {
+        margin-top: 15px;
+        margin-bottom: 5px;
+    
+        .bottom-border-only {
+            padding-left: 0 !important;
+        }
     }
 }
 

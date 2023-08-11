@@ -29,8 +29,9 @@
 .mat-stroked-button,
 .mat-flat-button,
 .mat-fab,
-.mat-mini-fab {
-    font-size: var(--font-size-15);
+.mat-mini-fab,
+.mat-mdc-outlined-button .mdc-button__label {
+    // font-size: var(--font-size-15) !important;
 }
 /*==========  Material Button Default Font Size End Here ===============*/
 
@@ -96,5 +97,30 @@ button {
     i,
     .mat-icon {
         color: var(--color-primary-icon);
+    }
+}
+
+/*==========  Material Icon Button Default hover =============*/
+.mat-mdc-icon-button {
+    &:hover{
+        .mat-mdc-button-persistent-ripple{
+            &::before{
+                opacity: 0;
+            }
+        }
+    }
+    &:active{
+        .mat-mdc-button-persistent-ripple{
+            &::before{
+                opacity: 0;
+            }
+        }       
+    }
+    &.cdk-keyboard-focused {
+        .mat-mdc-button-persistent-ripple{
+            &::before{
+                opacity: 0;
+            }
+        }
     }
 }

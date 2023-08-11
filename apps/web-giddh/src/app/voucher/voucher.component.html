@@ -583,7 +583,7 @@
                                                         <div class="col-sm-12 col-xl-6 col-md-10 bill-add pd-l1">
                                                             <div class="form-group p-0 width-100 mb-0">
                                                                 <div class="d-flex align-items-center pb-1">
-                                                                    <span class="pb-0 pd-r15">
+                                                                    <span class="pb-0 pd-r15 align-checkbox">
                                                                         <mat-checkbox
                                                                             (keydown.enter)="$event.preventDefault()"
                                                                             (change)="autoFillShippingDetails()"
@@ -1030,7 +1030,7 @@
                                                     <!-- region billing address -->
                                                     <div class="col-sm-12 col-xl-6 col-md-10 bill-add pd-r1">
                                                         <div class="form-group">
-                                                            <div class="d-flex align-items-center pd-b2">
+                                                            <div class="d-flex align-items-center pd-b1">
                                                                 <span class="pd-r15">{{
                                                                     localeData?.billing_address
                                                                 }}</span>
@@ -1230,8 +1230,8 @@
                                                     <!-- region shipping address -->
                                                     <div class="col-sm-12 col-xl-6 col-md-10 bill-add pd-l1">
                                                         <div class="form-group p-0 width-100">
-                                                            <div class="d-flex align-items-center pb-1">
-                                                                <span class="pd-r15">
+                                                            <div class="d-flex align-items-center pb-2">
+                                                                <span class="pd-r15 align-checkbox">
                                                                     <mat-checkbox
                                                                         (keydown.enter)="$event.preventDefault()"
                                                                         autocomplete="None"
@@ -1776,7 +1776,7 @@
                                         (currentVoucherFormDetails?.rcmAllowed && companyCountryName === 'India')
                                     "
                                 >
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 align-checkbox">
                                         <mat-checkbox
                                             (keydown.enter)="$event.preventDefault()"
                                             #rcmCheckbox
@@ -1807,7 +1807,7 @@
                                 <ng-container *ngIf="companyCountryCode === 'AE'">
                                     <div class="row mt-1" *ngIf="isSalesInvoice || isCashInvoice">
                                         <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                            <div class="col-sm-12 col-xl-10 col-lg-10 col-md-10 pl-0">
+                                            <div class="col-sm-12 col-xl-10 col-lg-10 col-md-10 pl-0 align-checkbox">
                                                 <mat-checkbox
                                                     color="primary"
                                                     (keydown.enter)="$event.preventDefault()"
@@ -2483,7 +2483,7 @@
                                                     <div class="col-6 col-sm-6 pl-0">
                                                         <div class="entry-date">
                                                             <label>{{ localeData?.entry_date }}: </label>
-                                                            <span *ngIf="!isUpdateMode" class="custom-date-entries">
+                                                            <span *ngIf="!isUpdateMode" class="custom-date-entries custom-input-field">
                                                                 <giddh-datepicker
                                                                     [showToggleIcon]="true"
                                                                     #dp="ngModel"
@@ -3750,7 +3750,7 @@
                                     *ngIf="!isCompany && (isProformaInvoice || isEstimateInvoice)"
                                 >
                                     <div
-                                        class="d-inline-flex"
+                                        class="d-inline-flex column-gap15"
                                         [isDisabled]="
                                             !hasVoucherEntry || (invoiceForm?.controls)['message2']?.errors?.maxlength
                                         "
@@ -3983,13 +3983,9 @@
     </ng-template>
     <!-- region  delete attachment confirmation popup -->
     <ng-template #attachmentDeleteConfirmationModel>
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <confirmation-modal
-                    (buttonClicked)="handleAttachmentDelete($event)"
-                    [configuration]="attachmentDeleteConfiguration"
-                ></confirmation-modal>
-            </div>
-        </div>
+        <confirmation-modal
+            (buttonClicked)="handleAttachmentDelete($event)"
+            [configuration]="attachmentDeleteConfiguration"
+        ></confirmation-modal>
     </ng-template>
 </ng-container>

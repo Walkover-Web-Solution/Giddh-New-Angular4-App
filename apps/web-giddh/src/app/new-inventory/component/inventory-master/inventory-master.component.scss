@@ -10,7 +10,7 @@
         position: fixed;
         bottom: 10%;
         left: 50%;
-        z-index: 999;
+        z-index: 99;
         transform: translateX(-50%);
         .search-icon {
             position: absolute;
@@ -90,7 +90,7 @@
             }
         }
         .item-list {
-            width: 254px;
+            width: 221px;
             height: 100%;
             float: left;
             position: relative;

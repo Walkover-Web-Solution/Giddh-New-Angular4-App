@@ -187,12 +187,18 @@
         .delete-btn-wrapper {
             width: 10%;
             display: inline-block;
+            button{
+                i{
+                    font-size: var(--font-size-15);
+                }
+            }
 
             .chip-close-btn {
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 height: 32px;
+                width: 40px;
                 border-radius: 5px;
                 color: var(--color-tertiary-button-text);
                 border: 1px solid var(--color-common-secondary-border);
@@ -280,7 +286,7 @@
                         align-items: center;
                         justify-content: center;
                         position: absolute;
-                        top: 10px;
+                        bottom: 0px;
                         left: 95%;
                         min-width: 95px;
                     }
@@ -930,7 +936,6 @@ table.stock-table {
         padding: 0 15px;
     }
     .right-fix-pencil-icon {
-        margin-right: 10px;
         display: none;
         i {
             font-size: 9px;
@@ -947,7 +952,7 @@ table.stock-table {
     .right-fix-save-icon {
         position: relative;
         top: 0;
-        left: -15px;
+        left: -7px;
         i {
             font-size: 10px;
             border: 1px solid var(--color-iron);
@@ -972,12 +977,16 @@ table.stock-table {
     align-items: center;
     flex-direction: row;
     justify-content: flex-end;
+    label{
+        margin-left: 10px;
+    }
     &:hover {
         .right-fix-pencil-icon {
             display: block;
         }
     }
 }
+
 .unit-rate-align {
     align-items: baseline;
 }

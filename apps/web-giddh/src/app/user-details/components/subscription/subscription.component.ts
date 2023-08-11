@@ -247,7 +247,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         event.preventDefault();
         event.stopPropagation();
         this.selectedCompany = company;
-        this.dialog.open(this.moveCompany, { height: '50%', width: '40%' });
+        this.dialog.open(this.moveCompany, { width: '40%' });
     }
 
     /**
