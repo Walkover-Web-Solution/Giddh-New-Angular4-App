@@ -208,6 +208,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public showGSTINNo: boolean;
     /** Show TRN number */
     public showTRNNo: boolean;
+    /** Show vat number */
+    public showVATNo: boolean;
     /** Show other details collapsed */
     public isOthrDtlCollapsed: boolean = false;
     /** Show type head number of results */
@@ -358,7 +360,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Prevents double click on generate button */
     public generateUpdateButtonClicked = new Subject<NgForm>();
     /** True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
-    public shouldShowTrnGstField: boolean = false;
+    public shouldShowTrnGstVatField: boolean = false;
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
     /** Placeholder text for template */
@@ -1500,7 +1502,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.getUpdatedStateCodes(tempSelectedAcc.country?.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         });
-
                         this.showGstAndTrnUsingCountryName(this.customerCountryName);
                         if (this.isMulticurrencyAccount) {
                             this.getCurrencyRate(this.companyCurrency, tempSelectedAcc.currency, this.invFormData.voucherDetails.voucherDate);
@@ -1678,9 +1679,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     });
                 }
                 if (this.formFields && this.formFields['taxName']) {
-                    this.shouldShowTrnGstField = true;
+                    this.shouldShowTrnGstVatField = true;
                 } else {
-                    this.shouldShowTrnGstField = false;
+                    this.shouldShowTrnGstVatField = false;
                 }
             }
         });
@@ -1802,6 +1803,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
         if (profile && Object.keys(profile).length) {
             this.customerCountryName = profile.country;
+
             this.showGstAndTrnUsingCountryName(profile.country);
 
             this.companyCurrency = profile.baseCurrency || 'INR';
@@ -2283,7 +2285,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     /**
      * To check Tax number validation using regex get by API
-     *
+     *defaultAddress
      * @param {*} value Value to be validated
      * @param {string} fieldName Field name for which the value is validated
      * @memberof VoucherComponent
@@ -5517,7 +5519,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.customerCountryName = result.account.billingDetails?.countryName ?? result?.account?.billingDetails?.country?.name;
             this.customerCountryCode = result?.account?.billingDetails?.countryCode ?? result?.account?.billingDetails?.country?.code ?? 'IN';
         }
-
         this.showGstAndTrnUsingCountryName(this.customerCountryName);
 
         this.exchangeRate = result.exchangeRate;
@@ -5807,15 +5808,23 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (name === 'India') {
                 this.showGSTINNo = true;
                 this.showTRNNo = false;
+                this.showVATNo = false;
                 this.getOnboardingForm('IN')
             } else if (name === 'United Arab Emirates') {
                 this.showGSTINNo = false;
                 this.showTRNNo = true;
+                this.showVATNo = false;
                 this.getOnboardingForm('AE')
+            } else if (name === 'United Kingdom') {
+                this.showGSTINNo = false;
+                this.showTRNNo = false;
+                this.showVATNo = true;
+                this.getOnboardingForm('GB')
+            } else {
+                this.showGSTINNo = false;
+                this.showTRNNo = false;
+                this.showVATNo = false;
             }
-        } else {
-            this.showGSTINNo = false;
-            this.showTRNNo = false;
         }
     }
 
@@ -7381,6 +7390,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.purchaseBillCompany.billingDetails.stateName = defaultAddress.stateName;
                         this.purchaseBillCompany.billingDetails.gstNumber = defaultAddress.gstNumber ?? defaultAddress.taxNumber;
                         this.purchaseBillCompany.billingDetails.pincode = defaultAddress.pincode;
+                        this.purchaseBillCompany.billingDetails.county.code = defaultAddress ? defaultAddress.county.code : '';
+                        this.purchaseBillCompany.billingDetails.county.name = defaultAddress ? defaultAddress.county.name : '';
                         this.isDeliverAddressFilled = true;
                     }
                 }
@@ -7409,10 +7420,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.purchaseBillCompany.shippingDetails.stateName = defaultAddress.stateName;
                     this.purchaseBillCompany.shippingDetails.gstNumber = defaultAddress.gstNumber ?? defaultAddress.taxNumber;
                     this.purchaseBillCompany.shippingDetails.pincode = defaultAddress.pincode;
-                    this.purchaseBillCompany.billingDetails.county.code = defaultAddress ? 'GB-NIR' : '';
-                    this.purchaseBillCompany.billingDetails.county.name = defaultAddress ? 'Northern Ireland' : '';
-                    this.purchaseBillCompany.shippingDetails.county.code = defaultAddress ? 'GB-NIR' : '';
-                    this.purchaseBillCompany.shippingDetails.county.name = defaultAddress ? 'Northern Ireland' : '';
+                    this.purchaseBillCompany.shippingDetails.county.code = defaultAddress ? defaultAddress.county.code : '';
+                    this.purchaseBillCompany.shippingDetails.county.name = defaultAddress ? defaultAddress.county.name : '';
                 } else {
                     this.resetShippingAddress();
                 }
@@ -8311,7 +8320,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     private getProfile(): void {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
-            if (profile) {
+            if (profile && Object.keys(profile).length) {
                 this.companyCountryName = profile.country;
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 await this.prepareCompanyCountryAndCurrencyFromProfile(profile);

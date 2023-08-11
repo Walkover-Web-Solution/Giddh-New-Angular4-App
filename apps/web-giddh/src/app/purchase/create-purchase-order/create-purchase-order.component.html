@@ -289,12 +289,11 @@
                                                                         >
                                                                         </sales-sh-select>
                                                                     </div>
-
                                                                     <div
                                                                         class="col-sm-12 col-md-6"
                                                                         *ngIf="
-                                                                            shouldShowTrnGstField &&
-                                                                            (showGSTINNo || showTRNNo)
+                                                                            shouldShowTrnGstVatField &&
+                                                                            (showGSTINNo || showTRNNo || showVATNo)
                                                                         "
                                                                     >
                                                                         <input
@@ -309,12 +308,21 @@
                                                                             class="form-control input-custom"
                                                                             (blur)="autoFillShippingDetails('vendor')"
                                                                             (change)="
-                                                                                getStateCode('billingDetails', 'vendor')
+                                                                                !showVATNo
+                                                                                    ? getStateCode(
+                                                                                          'billingDetails',
+                                                                                          'vendor'
+                                                                                      )
+                                                                                    : null
                                                                             "
                                                                             [placeholder]="
                                                                                 showGSTINNo
                                                                                     ? commonLocaleData?.app_gstin
-                                                                                    : commonLocaleData?.app_trn
+                                                                                    : showTRNNo
+                                                                                    ? commonLocaleData?.app_trn
+                                                                                    : showVATNo
+                                                                                    ? commonLocaleData?.app_enter_vat
+                                                                                    : ''
                                                                             "
                                                                         />
                                                                     </div>
@@ -322,9 +330,11 @@
                                                                     <div
                                                                         [ngClass]="{
                                                                             'col-sm-12 col-md-6':
-                                                                                showGSTINNo || showTRNNo,
+                                                                                showGSTINNo || showTRNNo || showVATNo,
                                                                             'col-sm-12 col-md-12': !(
-                                                                                showGSTINNo || showTRNNo
+                                                                                showGSTINNo ||
+                                                                                showTRNNo ||
+                                                                                showVATNo
                                                                             )
                                                                         }"
                                                                     >
@@ -530,8 +540,8 @@
                                                                         <div
                                                                             class="col-sm-12 col-md-6"
                                                                             *ngIf="
-                                                                                shouldShowTrnGstField &&
-                                                                                (showGSTINNo || showTRNNo)
+                                                                                shouldShowTrnGstVatField &&
+                                                                                (showGSTINNo || showTRNNo || showVATNo)
                                                                             "
                                                                         >
                                                                             <input
@@ -545,15 +555,21 @@
                                                                                 "
                                                                                 class="form-control input-custom"
                                                                                 (change)="
-                                                                                    getStateCode(
-                                                                                        'shippingDetails',
-                                                                                        'vendor'
-                                                                                    )
+                                                                                    !showVATNo
+                                                                                        ? getStateCode(
+                                                                                              'shippingDetails',
+                                                                                              'vendor'
+                                                                                          )
+                                                                                        : null
                                                                                 "
                                                                                 [placeholder]="
                                                                                     showGSTINNo
                                                                                         ? commonLocaleData?.app_gstin
-                                                                                        : commonLocaleData?.app_trn
+                                                                                        : showTRNNo
+                                                                                        ? commonLocaleData?.app_trn
+                                                                                        : showVATNo
+                                                                                        ? commonLocaleData?.app_enter_vat
+                                                                                        : ''
                                                                                 "
                                                                             />
                                                                         </div>
@@ -561,9 +577,13 @@
                                                                         <div
                                                                             [ngClass]="{
                                                                                 'col-sm-12 col-md-6':
-                                                                                    showGSTINNo || showTRNNo,
+                                                                                    showGSTINNo ||
+                                                                                    showTRNNo ||
+                                                                                    showVATNo,
                                                                                 'col-sm-12 col-md-12': !(
-                                                                                    showGSTINNo || showTRNNo
+                                                                                    showGSTINNo ||
+                                                                                    showTRNNo ||
+                                                                                    showVATNo
                                                                                 )
                                                                             }"
                                                                         >
@@ -688,13 +708,19 @@
                                                                                     : address.county?.name
                                                                             }}
                                                                             {{
-                                                                                address.taxNumber
-                                                                                    ? (showGSTINNo
-                                                                                          ? commonLocaleData?.app_gstin +
-                                                                                            ": "
-                                                                                          : commonLocaleData?.app_trn +
-                                                                                            ": ") + address.taxNumber
-                                                                                    : ""
+                                                                                    address.taxNumber
+                                                                                        ? showGSTINNo
+                                                                                              ? commonLocaleData?.app_gstin +
+                                                                                                ":" ?
+                                                                                            showTRNNo
+                                                                                                  ? commonLocaleData?.app_trn +
+                                                                                                    ":" ?
+                                                                                              showVATNo
+                                                                                                  ? commonLocaleData?.enter_vat_no +
+                                                                                                    ":"
+                                                                                                  :''" +
+                                                                                          address.taxNumber
+                                                                                        : ""
                                                                             }}
                                                                         </a>
                                                                     </li>
@@ -800,7 +826,8 @@
                                                             <div
                                                                 class="col-sm-12 col-md-6"
                                                                 *ngIf="
-                                                                    shouldShowTrnGstField && (showGSTINNo || showTRNNo)
+                                                                    shouldShowTrnGstVatField &&
+                                                                    (showGSTINNo || showTRNNo || showVATNo)
                                                                 "
                                                             >
                                                                 <input
@@ -813,19 +840,32 @@
                                                                     "
                                                                     class="form-control input-custom"
                                                                     (blur)="autoFillShippingDetails('company')"
-                                                                    (change)="getStateCode('billingDetails', 'company')"
+                                                                    (change)="
+                                                                        !showVATNo
+                                                                            ? getStateCode('billingDetails', 'company')
+                                                                            : null
+                                                                    "
                                                                     [placeholder]="
                                                                         showGSTINNo
                                                                             ? commonLocaleData?.app_gstin
-                                                                            : commonLocaleData?.app_trn
+                                                                            : showTRNNo
+                                                                            ? commonLocaleData?.app_trn
+                                                                            : showVATNo
+                                                                            ? commonLocaleData?.app_enter_vat
+                                                                            : ''
                                                                     "
                                                                 />
                                                             </div>
                                                             <!-- static pin code  -->
                                                             <div
                                                                 [ngClass]="{
-                                                                    'col-sm-12 col-md-6': showGSTINNo || showTRNNo,
-                                                                    'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)
+                                                                    'col-sm-12 col-md-6':
+                                                                        showGSTINNo || showTRNNo || showVATNo,
+                                                                    'col-sm-12 col-md-12': !(
+                                                                        showGSTINNo ||
+                                                                        showTRNNo ||
+                                                                        showVATNo
+                                                                    )
                                                                 }"
                                                             >
                                                                 <div class="form-group mr-b05">
@@ -916,13 +956,19 @@
                                                                                     : address.county?.name
                                                                             }}
                                                                             {{
-                                                                                address.taxNumber
-                                                                                    ? (showGSTINNo
-                                                                                          ? commonLocaleData?.app_gstin +
-                                                                                            ": "
-                                                                                          : commonLocaleData?.app_trn +
-                                                                                            ": ") + address.taxNumber
-                                                                                    : ""
+                                                                                    address.taxNumber
+                                                                                        ? showGSTINNo
+                                                                                              ? commonLocaleData?.app_gstin +
+                                                                                                ":" ?
+                                                                                            showTRNNo
+                                                                                                  ? commonLocaleData?.app_trn +
+                                                                                                    ":" ?
+                                                                                              showVATNo
+                                                                                                  ? commonLocaleData?.enter_vat_no +
+                                                                                                    ":"
+                                                                                                  :''" +
+                                                                                          address.taxNumber
+                                                                                        : ""
                                                                             }}
                                                                         </a>
                                                                     </li>
@@ -1039,8 +1085,8 @@
                                                                 <div
                                                                     class="col-sm-12 col-md-6"
                                                                     *ngIf="
-                                                                        shouldShowTrnGstField &&
-                                                                        (showGSTINNo || showTRNNo)
+                                                                        shouldShowTrnGstVatField &&
+                                                                        (showGSTINNo || showTRNNo || showVATNo)
                                                                     "
                                                                 >
                                                                     <input
@@ -1054,21 +1100,33 @@
                                                                         "
                                                                         class="form-control input-custom"
                                                                         (change)="
-                                                                            getStateCode('shippingDetails', 'company')
+                                                                            !showVATNo
+                                                                                ? getStateCode(
+                                                                                      'shippingDetails',
+                                                                                      'company'
+                                                                                  )
+                                                                                : null
                                                                         "
                                                                         [placeholder]="
                                                                             showGSTINNo
                                                                                 ? commonLocaleData?.app_gstin
-                                                                                : commonLocaleData?.app_trn
+                                                                                : showTRNNo
+                                                                                ? commonLocaleData?.app_trn
+                                                                                : showVATNo
+                                                                                ? commonLocaleData?.app_enter_vat
+                                                                                : ''
                                                                         "
                                                                     />
                                                                 </div>
                                                                 <!-- static pin code  -->
                                                                 <div
                                                                     [ngClass]="{
-                                                                        'col-sm-12 col-md-6': showGSTINNo || showTRNNo,
+                                                                        'col-sm-12 col-md-6':
+                                                                            showGSTINNo || showTRNNo || showVATNo,
                                                                         'col-sm-12 col-md-12': !(
-                                                                            showGSTINNo || showTRNNo
+                                                                            showGSTINNo ||
+                                                                            showTRNNo ||
+                                                                            showVATNo
                                                                         )
                                                                     }"
                                                                 >
