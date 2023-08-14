@@ -55,6 +55,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SettingCampaignComponent } from './integration/campaign/setting-campaign/setting-campaign.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxPlaidLinkModule } from "ngx-plaid-link";
+import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 
 @NgModule({
     declarations: [
@@ -116,8 +117,8 @@ import { NgxPlaidLinkModule } from "ngx-plaid-link";
         MatChipsModule,
         MatAutocompleteModule,
         MatSlideToggleModule,
-        NgxPlaidLinkModule
-
+        NgxPlaidLinkModule,
+        AsideMenuAccountModule
     ]
 })
 
