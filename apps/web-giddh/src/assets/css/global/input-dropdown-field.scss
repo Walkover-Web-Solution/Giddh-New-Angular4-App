@@ -18,6 +18,11 @@ stock-balance {
             .mat-mdc-form-field-infix{
                 min-height: 3rem;
                 padding: 12px 0 !important;
+                .mat-mdc-input-element{
+                    &::placeholder{
+                        color: var(--color-popup-list-input-text) !important;
+                    }
+                }
             }
             &.mdc-text-field--outlined {
                 .mdc-notched-outline--upgraded {
@@ -55,10 +60,13 @@ stock-balance {
     .mdc-text-field--outlined{
         &:not(.mdc-text-field--disabled) {
             .mdc-notched-outline__leading{
-                border-color: var(--color-fields-border);
+                border-color: var(--color-fields-border) !important;
             }
             &.mdc-text-field--focused {
                 .mdc-notched-outline__notch {
+                    border-color: var(--color-border-focus) !important;
+                }
+                .mdc-notched-outline__leading {
                     border-color: var(--color-border-focus) !important;
                 }
             }
@@ -68,6 +76,12 @@ stock-balance {
                         .mdc-notched-outline__notch {
                             border-color: var(--color-field-hover) !important;
                         }
+                        .mdc-notched-outline__trailing{
+                            border-color: var(--color-field-hover) !important;
+                        }
+                        .mdc-notched-outline__leading {
+                            border-color: var(--color-field-hover) !important;
+                        }
                     }
                 }
             }
@@ -75,6 +89,13 @@ stock-balance {
         .mdc-notched-outline {
             .mdc-notched-outline__trailing {
                 border-color: var(--color-fields-border);
+            }
+        }
+    }
+    .mdc-text-field{
+        &:not(.mdc-text-field--disabled) {
+            .mdc-floating-label{
+                color: var(--color-popup-list-input-text) !important;
             }
         }
     }
@@ -90,6 +111,14 @@ stock-balance {
                 fill: var(--color-popup-list-input-text);
             }
         }
+    }
+    .mdc-notched-outline {
+        .mdc-notched-outline__leading {
+            border-color: var(--color-field-hover) !important;
+        }
+    }
+    .mat-mdc-select-placeholder, .mat-mdc-select {
+        color: var(--color-popup-list-input-text) !important;
     }
 }
 .mat-mdc-form-field{

@@ -14465,3 +14465,6 @@ activity-compare-json{
 .mat-form-field-invalid  .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading, .mat-form-field-invalid .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch, .mat-form-field-invalid .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
     border-color: var(--color-red) !important;
 }
+.mat-mdc-dialog-content{
+    max-height: 70vh !important;
+}

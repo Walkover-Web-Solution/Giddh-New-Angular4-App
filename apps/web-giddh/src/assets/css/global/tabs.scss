@@ -8,6 +8,7 @@
         .mat-mdc-tab {
             .mdc-tab__text-label {
                 font-size: var(--font-size-16);
+                color: var(--color-tab-primary-inactive);
             }
             &.mdc-tab--active {
                 .mdc-tab__text-label{

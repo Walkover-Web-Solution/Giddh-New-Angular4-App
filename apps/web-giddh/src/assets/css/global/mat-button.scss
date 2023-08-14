@@ -2,7 +2,6 @@
 .mat-icon-button,
 .mat-stroked-button,
 .mat-raised-button {
-    border-color: var(--color-secondary-input-bar-border) !important;
     &.mat-primary {
         color: var(--color-giddh-blue) !important;
     }
@@ -20,6 +19,9 @@
     &.mat-primary {
         color: var(--color-giddh-blue) !important;
     }
+    &:not(:disabled){
+        border-color: var(--color-fields-border) !important;
+    }
 }
 
 /*==========  Material Button Default Font Size Start Here =============*/
@@ -32,6 +34,7 @@
 .mat-mini-fab,
 .mat-mdc-outlined-button .mdc-button__label {
     // font-size: var(--font-size-15) !important;
+    border-color: var(--color-fields-border) !important;
 }
 /*==========  Material Button Default Font Size End Here ===============*/
 
