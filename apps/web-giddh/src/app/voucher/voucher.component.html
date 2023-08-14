@@ -375,19 +375,19 @@
                                                                                         *ngIf="address.gstNumber"
                                                                                     >
                                                                                         {{
-                                                                                    address.taxNumber
-                                                                                        ? showGSTINNo
-                                                                                              ? commonLocaleData?.app_gstin +
-                                                                                                ":" ?
-                                                                                            showTRNNo
-                                                                                                  ? commonLocaleData?.app_trn +
-                                                                                                    ":" ?
-                                                                                              showVATNo
-                                                                                                  ? commonLocaleData?.enter_vat_no +
-                                                                                                    ":"
-                                                                                                  :''" +
-                                                                                          address.taxNumber
-                                                                                        : ""
+                                                                                            address.taxNumber
+                                                                                                ? (showGSTINNo
+                                                                                                      ? commonLocaleData?.app_gstin +
+                                                                                                        ":"
+                                                                                                      : showTRNNo
+                                                                                                      ? commonLocaleData?.app_trn +
+                                                                                                        ":"
+                                                                                                      : showVATNo
+                                                                                                      ? commonLocaleData?.enter_vat_no +
+                                                                                                        ":"
+                                                                                                      : "") +
+                                                                                                  address.gstNumber
+                                                                                                : ""
                                                                                         }}
                                                                                     </p>
                                                                                 </a>
@@ -691,19 +691,19 @@
                                                                                         *ngIf="address.gstNumber"
                                                                                     >
                                                                                         {{
-                                                                                    address.taxNumber
-                                                                                        ? showGSTINNo
-                                                                                              ? commonLocaleData?.app_gstin +
-                                                                                                ":" ?
-                                                                                            showTRNNo
-                                                                                                  ? commonLocaleData?.app_trn +
-                                                                                                    ":" ?
-                                                                                              showVATNo
-                                                                                                  ? commonLocaleData?.enter_vat_no +
-                                                                                                    ":"
-                                                                                                  :''" +
-                                                                                          address.taxNumber
-                                                                                        : ""
+                                                                                            address.taxNumber
+                                                                                                ? (showGSTINNo
+                                                                                                      ? commonLocaleData?.app_gstin +
+                                                                                                        ":"
+                                                                                                      : showTRNNo
+                                                                                                      ? commonLocaleData?.app_trn +
+                                                                                                        ":"
+                                                                                                      : showVATNo
+                                                                                                      ? commonLocaleData?.enter_vat_no +
+                                                                                                        ":"
+                                                                                                      : "") +
+                                                                                                  address.gstNumber
+                                                                                                : ""
                                                                                         }}
                                                                                     </p>
                                                                                 </a>
@@ -1190,19 +1190,16 @@
                                                                             >
                                                                                 {{
                                                                                     address.taxNumber
-                                                                                        ? ((showGSTINNo
+                                                                                        ? (showGSTINNo
                                                                                               ? commonLocaleData?.app_gstin +
                                                                                                 ":"
-                                                                                              : "") ||
-                                                                                              (showTRNNo
-                                                                                                  ? commonLocaleData?.app_trn +
-                                                                                                    ":"
-                                                                                                  : "") ||
-                                                                                              (showVATNo
-                                                                                                  ? commonLocaleData?.enter_vat_no +
-                                                                                                    ":"
-                                                                                                  : "")) +
-                                                                                          address.taxNumber
+                                                                                              : showTRNNo
+                                                                                              ? commonLocaleData?.app_trn +
+                                                                                                ":"
+                                                                                              : showVATNo
+                                                                                              ? commonLocaleData?.enter_vat_no +
+                                                                                                ":"
+                                                                                              : "") + address.gstNumber
                                                                                         : ""
                                                                                 }}
                                                                             </p>
@@ -1477,7 +1474,7 @@
                                                                                                   ? commonLocaleData?.enter_vat_no +
                                                                                                     ":"
                                                                                                   : "")) +
-                                                                                          address.taxNumber
+                                                                                          address.gstNumber
                                                                                         : ""
                                                                                 }}
                                                                             </p>

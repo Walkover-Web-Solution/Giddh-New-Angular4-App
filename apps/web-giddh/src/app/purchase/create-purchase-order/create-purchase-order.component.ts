@@ -775,7 +775,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.accountAddressList = accountDetails.addresses;
 
                 accountDetails.addresses.forEach(defaultAddress => {
-
                     if (defaultAddress && defaultAddress.isDefault) {
                         this.purchaseOrder.account.billingDetails.address = [];
                         this.purchaseOrder.account.billingDetails.address.push(defaultAddress.address);
@@ -788,7 +787,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         } else if (defaultAddress.county) {
                             this.purchaseOrder.account.billingDetails.county.name = defaultAddress.county.name;
                             this.purchaseOrder.account.billingDetails.county.code = defaultAddress.county.code;
-                            this.purchaseOrder.account.billingDetails.county.code = this.purchaseOrder.account.billingDetails.county.code;
                         } else {
                             this.purchaseOrder.account.billingDetails.state.name = "";
                             this.purchaseOrder.account.billingDetails.state.code = "";
@@ -811,7 +809,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         } else if (defaultAddress.county) {
                             this.purchaseOrder.account.shippingDetails.county.name = defaultAddress.county.name;
                             this.purchaseOrder.account.shippingDetails.county.code = defaultAddress.county.code;
-                            this.purchaseOrder.account.shippingDetails.county.code = this.purchaseOrder.account.shippingDetails.county.code;
                         } else {
                             this.purchaseOrder.account.shippingDetails.state.name = "";
                             this.purchaseOrder.account.shippingDetails.state.code = "";

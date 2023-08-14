@@ -210,10 +210,10 @@ export class AccountDetailsClass {
                 this.billingDetails.state.code = (attrs.addresses[0].state) ?
                     (attrs.addresses[0].state.code) ? attrs.addresses[0].state.code : attrs.addresses[0].state.stateGstCode
                     : attrs.addresses[0].stateCode;
-                this.billingDetails.county.code = (attrs.addresses[0].county) ?
-                    (attrs.addresses[0].county.code) : attrs.addresses[0].county.code;
+                this.billingDetails.county.code = attrs.addresses[0]?.county?.code;
+                this.billingDetails.county.name = attrs.addresses[0].county?.name;
                 this.billingDetails.state.name = attrs.addresses[0].stateName;
-                this.billingDetails.county.name = attrs.addresses[0].county.name;
+
                 this.billingDetails.gstNumber = attrs.addresses[0].gstNumber;
                 this.billingDetails.taxNumber = attrs.addresses[0].gstNumber;
                 this.billingDetails.pincode = attrs.addresses[0].pincode;
@@ -224,10 +224,9 @@ export class AccountDetailsClass {
                 this.shippingDetails.state.code = (attrs.addresses[0].state) ?
                     (attrs.addresses[0].state.code) ? attrs.addresses[0].state.code : attrs.addresses[0].state.stateGstCode
                     : attrs.addresses[0].stateCode;
-                this.shippingDetails.county.code = (attrs.addresses[0].county) ?
-                    (attrs.addresses[0].county.code) : attrs.addresses[0].county.code;
+                this.shippingDetails.county.code = attrs.addresses[0].county?.code;
+                this.shippingDetails.county.name = attrs.addresses[0]?.county?.name;
                 this.shippingDetails.state.name = attrs.addresses[0].stateName;
-                this.shippingDetails.county.name = attrs.addresses[0].county.name;
                 this.shippingDetails.gstNumber = attrs.addresses[0].gstNumber;
                 this.shippingDetails.taxNumber = attrs.addresses[0].gstNumber;
                 this.shippingDetails.pincode = attrs.addresses[0].pincode;
