@@ -1293,6 +1293,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                     }
                                     obj.companyDetails.billingDetails.state = { code: obj.companyDetails.billingDetails?.stateCode, name: obj.companyDetails.billingDetails?.state?.name };
                                     obj.companyDetails.shippingDetails.state = { code: obj.companyDetails.shippingDetails?.stateCode, name: obj.companyDetails.shippingDetails?.state?.name };
+                                    obj.companyDetails.billingDetails.county = { code: obj.companyDetails.billingDetails?.county.code, name: obj.companyDetails.billingDetails?.county?.name };
+                                    obj.companyDetails.shippingDetails.county = { code: obj.companyDetails.shippingDetails?.county.code, name: obj.companyDetails.shippingDetails?.county?.name };
+
                                 }
                                 this.assignCompanyBillingShipping(obj.companyDetails);
 
@@ -5275,7 +5278,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         obj.templateDetails = data.templateDetails;
         obj.entries = salesEntryClassArray;
-
         obj.account.billingDetails.countryName = this.customerCountryName;
         obj.account.billingDetails.countryCode = this.customerCountryCode;
         obj.account.billingDetails.stateCode = obj.account.billingDetails.state?.code;
@@ -8309,7 +8311,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             // auto fill all the details
             this.invFormData.accountDetails = new AccountDetailsClass(data);
-
             if (this.invFormData.accountDetails) {
                 this.getStateCode('billingDetails', this.statesBilling);
                 this.autoFillShippingDetails();
