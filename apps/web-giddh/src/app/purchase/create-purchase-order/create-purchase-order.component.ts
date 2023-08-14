@@ -3475,7 +3475,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             transaction.quantity = null;
             transaction.amount = 0;
             transaction.taxableValue = 0;
-            transaction.variant = null;
         }
         this.handleWarehouseVisibility();
         transaction.sacNumber = null;
