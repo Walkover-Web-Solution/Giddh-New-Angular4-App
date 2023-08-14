@@ -27,7 +27,6 @@
                 >
                     <div [formGroupName]="i" class="d-flex">
                         <dropdown-field
-                            [closeOnFocusOut]="true"
                             class="width-query-types mr-3"
                             [options]="queryTypes"
                             [required]="true"
@@ -44,7 +43,6 @@
                         >
                         </dropdown-field>
                         <dropdown-field
-                            [closeOnFocusOut]="true"
                             class="width-query-differs mr-3"
                             [options]="queryDiffers"
                             (selectedOption)="item?.get('queryDiffer').patchValue($event.value)"
