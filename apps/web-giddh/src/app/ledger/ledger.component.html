@@ -353,7 +353,7 @@
                                 (click)="showGiddhDatepicker($event)"
                             >
                                 <span class="input-wrapper">
-                                    <mat-form-field appearance="fill" class="w-100 custom-input-field share-input-width">
+                                    <mat-form-field appearance="fill" class="w-100 custom-input-field share-input-width pd-t1">
                                         <input
                                             matInput
                                             id="giddh-datepicker"
@@ -636,7 +636,7 @@
                                                         >
                                                             <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center column-gap5">
-                                                                    <span class="checkbox-span align-checkbox">
+                                                                    <span class="checkbox-span ">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -652,7 +652,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="custom-input-field">
+                                                                    <span class="custom-input-field pd-t1">
                                                                         <giddh-datepicker
                                                                             name="bsdateledger"
                                                                             [(ngModel)]="item.entryDate"
@@ -939,7 +939,7 @@
                                                         >
                                                             <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center column-gap5">
-                                                                    <span class="checkbox-span align-checkbox">
+                                                                    <span class="checkbox-span ">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -956,7 +956,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="custom-input-field">
+                                                                    <span class="custom-input-field pd-t1">
                                                                         <giddh-datepicker
                                                                             name="bsDates"
                                                                             [(ngModel)]="item.entryDate"
@@ -1723,7 +1723,7 @@
                                                     <div class="d-flex align-items-center column-gap5">
                                                         <span class="ledger-checkbox pull-left"> </span>
                                                         <giddh-datepicker
-                                                            class="custom-input-field"
+                                                            class="custom-input-field pd-t1"
                                                             name="ledgDate"
                                                             [(ngModel)]="lc.blankLedger.entryDate"
                                                             [placeholder]="lc.formatPlaceholder"
@@ -2182,7 +2182,7 @@
                                                     class="new-entry-date"
                                                     [attr.data-title]="commonLocaleData?.app_date"
                                                 >
-                                                    <div class="d-flex align-items-center column-gap5 custom-input-field">
+                                                    <div class="d-flex align-items-center column-gap5 custom-input-field pd-t1">
                                                         <span class="ledger-checkbox pull-left"> </span>
                                                         <giddh-datepicker
                                                             class="custom-input-field"

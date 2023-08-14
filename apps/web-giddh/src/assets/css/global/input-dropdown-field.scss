@@ -39,6 +39,9 @@ stock-balance {
                 margin-top: -5px;
             }
         }
+        .mdc-notched-outline__notch{
+            border-color: var(--color-fields-border) !important;
+        }
     }
     .mat-form-field-appearance-outline {
          .mat-mdc-form-field-icon-suffix {
@@ -49,8 +52,44 @@ stock-balance {
     .mat-mdc-form-field-subscript-wrapper{
         display: none;
     }
+    .mdc-text-field--outlined{
+        &:not(.mdc-text-field--disabled) {
+            .mdc-notched-outline__leading{
+                border-color: var(--color-fields-border);
+            }
+            &.mdc-text-field--focused {
+                .mdc-notched-outline__notch {
+                    border-color: var(--color-border-focus) !important;
+                }
+            }
+            &:not(.mdc-text-field--focused){
+                &:hover {
+                    .mdc-notched-outline {
+                        .mdc-notched-outline__notch {
+                            border-color: var(--color-field-hover) !important;
+                        }
+                    }
+                }
+            }
+        }
+        .mdc-notched-outline {
+            .mdc-notched-outline__trailing {
+                border-color: var(--color-fields-border);
+            }
+        }
+    }
+    .mdc-text-field--focused {
+        .mdc-notched-outline__leading, .mdc-notched-outline__notch, .mdc-notched-outline__trailing {
+            border-width: 1px;
+        }
+    }
     mat-select {
         padding: 0 14px;
+        .mat-mdc-select-arrow {
+            svg {
+                fill: var(--color-popup-list-input-text);
+            }
+        }
     }
 }
 .mat-mdc-form-field{
@@ -196,9 +235,14 @@ input {
 
 /*----- checkbox -----*/
 .mdc-checkbox {
-    padding: 4px !important;
-    left: 3px !important;
-    margin-right: 10px !important;
+    margin-left: -8px !important;
+    padding-right: 4px !important;
+    .mat-mdc-checkbox-ripple {
+        display: none;
+    }
+    .mdc-checkbox__native-control {
+        margin: 0 !important;
+    }
 }
 .mat-mdc-checkbox-touch-target {
     height: 18px !important;
@@ -207,23 +251,9 @@ input {
 .mdc-checkbox .mdc-checkbox__native-control {
     width: 18px !important;
     height: 18px !important;
-    margin: 0 !important;
-    top: 0px !important;
-    left: 8px !important;
 }
 .mdc-checkbox__ripple {
-    width: 18px !important;
-    height: 18px !important;
-    left: 10px !important;
-    top: 4px !important;
-}
-.mdc-checkbox .mdc-checkbox__background {
-    top: 4px !important;
-}
-.align-checkbox{
-    .mdc-checkbox {
-        left: -8px !important;
-    }
+    display: none !important;
 }
 /*----- radio-button -----*/
 

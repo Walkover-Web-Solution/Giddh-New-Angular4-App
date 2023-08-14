@@ -26,7 +26,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /** CSS class name to add on the mat autocomplete panel class */
     @Input() public customPanelClass: string = "";
     /** Placeholder of search field */
-    @Input() public placeholder: any = null;
+    @Input() public placeholder: any = "";
     /** List of data */
     @Input() public options: any;
     /** Name of search field */

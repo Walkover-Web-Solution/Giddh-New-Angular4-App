@@ -15,7 +15,7 @@
         height: 0;
         border-left: 5px solid transparent;
         border-right: 5px solid transparent;
-        border-top: 5px solid;
+        border-top: 5px solid var(--color-popup-list-input-text) !important;
         top: 8px;
         right: 4px;
     }

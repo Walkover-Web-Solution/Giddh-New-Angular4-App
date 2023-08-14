@@ -573,7 +573,7 @@
                             #searchCustomerContainer
                             (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
                         >
-                            <div class="d-flex select-all-checkbox-wrapper align-checkbox">
+                            <div class="d-flex select-all-checkbox-wrapper ">
                                 <mat-checkbox
                                     class="pos-abs checkbox-left-side-in-table "
                                     color="primary"
@@ -611,7 +611,7 @@
                             [attr.data-title]="localeData?.customer"
                         >
                             <div class="customer-name-filed cursor-pointer" (dblclick)="trigger?.openMenu()">
-                                <div class="select-single-checkbox-wrapper align-checkbox">
+                                <div class="select-single-checkbox-wrapper ">
                                     <mat-checkbox
                                         color="primary"
                                         class="mr-2 checkbox-left-side-in-table"
@@ -912,7 +912,7 @@
                             #searchCustomerContainer
                             (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
                         >
-                            <div class="d-flex select-all-checkbox-wrapper align-checkbox">
+                            <div class="d-flex select-all-checkbox-wrapper ">
                                 <mat-checkbox
                                     class="pos-abs"
                                     color="primary"
@@ -951,7 +951,7 @@
                             [attr.data-title]="commonLocaleData?.app_vendor_name"
                         >
                             <div class="vendor-name-field cursor-pointer" (dblclick)="trigger?.openMenu()">
-                                <div class="select-single-checkbox-wrapper align-checkbox">
+                                <div class="select-single-checkbox-wrapper ">
                                     <mat-checkbox
                                         [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
                                         type="checkbox"
