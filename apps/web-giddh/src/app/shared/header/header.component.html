@@ -265,7 +265,6 @@
     </div>
     <!-- setting aside pane -->
     <div class="help-support-aside setting-sidebar-wrapper">
-        <cdk-virtual-scroll-viewport [itemSize]="100">
             <aside-setting
                 [ngClass]="{
                     'setting-sidebar': isMobileSidebar,
@@ -273,7 +272,6 @@
                 }"
                 (closeAsideEvent)="toggleSidebarPane(false, false)"
             ></aside-setting>
-        </cdk-virtual-scroll-viewport>
     </div>
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">

@@ -753,15 +753,17 @@
                                             <label class="default-color">{{
                                                 commonLocaleData?.app_cheque_clearance_date
                                             }}</label>
-                                            <giddh-datepicker
-                                                class="db"
-                                                [showToggleIcon]="false"
-                                                [cssClass]="'mat-field-border bdr form-control'"
-                                                [disabled]="isReadOnly"
-                                                id="cheque-clearance-date"
-                                                (datepickerState)="datepickerState($event)"
-                                                [(ngModel)]="blankLedger.chequeClearanceDate"
-                                            ></giddh-datepicker>
+                                            <div class="custom-input-field">
+                                                <giddh-datepicker
+                                                    class="db"
+                                                    [showToggleIcon]="false"
+                                                    [cssClass]="'mat-field-border bdr form-control'"
+                                                    [disabled]="isReadOnly"
+                                                    id="cheque-clearance-date"
+                                                    (datepickerState)="datepickerState($event)"
+                                                    [(ngModel)]="blankLedger.chequeClearanceDate"
+                                                ></giddh-datepicker>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1031,7 +1033,7 @@
                     {{ commonLocaleData?.app_reset }}
                 </button>
 
-                <div class="pull-right xs-d-block">
+                <div class="pull-right xs-d-block d-flex column-gap15">
                     <button
                         mat-stroked-button
                         id="ledger-add-button-dr"

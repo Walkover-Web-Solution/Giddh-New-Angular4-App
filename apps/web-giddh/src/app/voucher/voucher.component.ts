@@ -2855,6 +2855,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, {
             position: {
                 right: '0',
+                top: '0'
             },
             width: '760px',
             height: '100vh !important',

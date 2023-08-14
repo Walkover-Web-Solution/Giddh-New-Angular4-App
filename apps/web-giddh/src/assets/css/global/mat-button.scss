@@ -1,4 +1,4 @@
-.mat-button,
+.mat-mdc-button,
 .mat-icon-button,
 .mat-stroked-button,
 .mat-raised-button {
@@ -16,16 +16,22 @@
         background-color: var(--color-primary-header-background) !important;
     }
 }
+.mat-mdc-outlined-button {
+    &.mat-primary {
+        color: var(--color-giddh-blue) !important;
+    }
+}
 
 /*==========  Material Button Default Font Size Start Here =============*/
-.mat-button,
+.mat-mdc-button,
 .mat-raised-button,
 .mat-icon-button,
 .mat-stroked-button,
 .mat-flat-button,
 .mat-fab,
-.mat-mini-fab {
-    font-size: var(--font-size-15);
+.mat-mini-fab,
+.mat-mdc-outlined-button .mdc-button__label {
+    // font-size: var(--font-size-15) !important;
 }
 /*==========  Material Button Default Font Size End Here ===============*/
 
@@ -91,5 +97,30 @@ button {
     i,
     .mat-icon {
         color: var(--color-primary-icon);
+    }
+}
+
+/*==========  Material Icon Button Default hover =============*/
+.mat-mdc-icon-button {
+    &:hover{
+        .mat-mdc-button-persistent-ripple{
+            &::before{
+                opacity: 0;
+            }
+        }
+    }
+    &:active{
+        .mat-mdc-button-persistent-ripple{
+            &::before{
+                opacity: 0;
+            }
+        }       
+    }
+    &.cdk-keyboard-focused {
+        .mat-mdc-button-persistent-ripple{
+            &::before{
+                opacity: 0;
+            }
+        }
     }
 }

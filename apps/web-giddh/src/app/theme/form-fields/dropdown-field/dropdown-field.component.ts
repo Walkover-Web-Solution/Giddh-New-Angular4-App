@@ -26,7 +26,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /** CSS class name to add on the mat autocomplete panel class */
     @Input() public customPanelClass: string = "";
     /** Placeholder of search field */
-    @Input() public placeholder: any = "";
+    @Input() public placeholder: any = null;
     /** List of data */
     @Input() public options: any;
     /** Name of search field */
@@ -315,11 +315,11 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
      *
      * @memberof DropdownFieldComponent
      */
-    public addClassForDropdown(): void {
-        setTimeout(() => {
-            if (document.querySelectorAll(".cdk-overlay-pane")?.length) {
-                document.querySelectorAll(".cdk-overlay-pane")[document.querySelectorAll(".cdk-overlay-pane")?.length - 1]?.classList?.add("dropdown-position");
-            }
-        }, 10);
-    }
+    // public addClassForDropdown(): void {
+    //     setTimeout(() => {
+    //         if (document.querySelectorAll(".cdk-overlay-pane")?.length) {
+    //             document.querySelectorAll(".cdk-overlay-pane")[document.querySelectorAll(".cdk-overlay-pane")?.length - 1]?.classList?.add("dropdown-position");
+    //         }
+    //     }, 10);
+    // }
 }

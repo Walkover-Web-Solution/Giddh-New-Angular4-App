@@ -122,7 +122,7 @@
                 </div>
                 <!--end of clearfix first row -->
                 <!-- end repeater -->
-                <div class="clearfix mr-t4">
+                <div class="clearfix mr-t4 d-flex column-gap15">
                     <button
                         [disabled]="searchQueryForm.invalid"
                         mat-stroked-button
@@ -152,7 +152,7 @@
         <i class="icon-refresh"></i>
         {{ commonLocaleData?.app_reset }}
     </button>
-    <div class="pull-right">
+    <div class="pull-right d-flex column-gap15">
         <div class="btn-group" *ngIf="showSendButton">
             <button type="button" mat-stroked-button [matMenuTriggerFor]="sendAsMenu">
                 {{ localeData?.send_as }}

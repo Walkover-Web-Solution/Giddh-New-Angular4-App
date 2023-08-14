@@ -28,18 +28,16 @@
                 </label>
                 <span class="path-name"> {{ selectedFile }} </span>
             </div>
-            <div class="pd-b2 clearfix password-label" *ngIf="getRequest.entity === 'pdf'">
-                <mat-form-field appearance="fill">
-                    <label class="import-field-label">{{ inputData?.localeData?.password }}</label>
-                    <label class="radio-inline p-0">
-                        <input
-                            matInput
-                            type="password"
-                            name="password"
-                            class="form-control mat-field-border"
-                            [(ngModel)]="postRequest.password"
-                        />
-                    </label>
+            <div class="pd-b2 clearfix password-label d-flex" *ngIf="getRequest.entity === 'pdf'">
+                <label class="import-field-label">{{ inputData?.localeData?.password }}</label>
+                <mat-form-field appearance="fill" class="w-100 custom-input-field">
+                    <input
+                        matInput
+                        type="password"
+                        name="password"
+                        class="form-control mat-field-border"
+                        [(ngModel)]="postRequest.password"
+                    />
                 </mat-form-field>
             </div>
             <div

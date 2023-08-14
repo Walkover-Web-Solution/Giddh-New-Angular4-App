@@ -177,6 +177,7 @@
                         </div>
                         <div class="other-group mt-2">
                             <mat-tab-group
+                                mat-stretch-tabs="false"
                                 [selectedIndex]="activeTabIndex"
                                 (selectedTabChange)="onTabChange($event)"
                                 mat-align-tabs="start"
@@ -227,7 +228,7 @@
                                                                             </mat-radio-group>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-sm-6 col-lg-12 pt-3 mr-b15">
+                                                                    <div class="col-sm-6 col-lg-12 pt-3">
                                                                         <dropdown-field
                                                                             [name]="'fixedAssetsAccounts'"
                                                                             [placeholder]="localeData?.linked_accounts"
@@ -425,7 +426,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div
-                                                                            class="col-sm-6 col-lg-12 pt-3 which-tab mr-b15"
+                                                                            class="col-sm-6 col-lg-12 pt-3 which-tab"
                                                                         >
                                                                             <dropdown-field
                                                                                 [name]="'purchaseAccount'"
@@ -630,7 +631,7 @@
                                                                                 </mat-radio-group>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-lg-12 pt-3 mr-b15">
+                                                                        <div class="col-sm-6 col-lg-12 pt-3">
                                                                             <dropdown-field
                                                                                 [name]="'salesAccount'"
                                                                                 [placeholder]="
@@ -1630,7 +1631,7 @@
                                                         [type]="'text'"
                                                         [(ngModel)]="stockForm.customField1Heading"
                                                         [autoFocus]="true"
-                                                        class="common-custom-field-width"
+                                                        class="common-custom-field-width w-100"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -1711,7 +1712,7 @@
                                                         [type]="'text'"
                                                         [(ngModel)]="stockForm.customField2Heading"
                                                         [autoFocus]="true"
-                                                        class="common-custom-field-width"
+                                                        class="common-custom-field-width w-100"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -4677,14 +4678,7 @@
             </div>
         </div>
         <div class="inner-content-footer">
-            <div class="button-group d-flex">
-                <button
-                    *ngIf="!queryParams?.stockUniqueName"
-                    mat-stroked-button
-                    (click)="resetForm(stockCreateEditForm)"
-                >
-                    {{ commonLocaleData?.app_reset }}
-                </button>
+            <div class="button-group d-flex column-gap15">
                 <button
                     *ngIf="!queryParams?.stockUniqueName"
                     mat-stroked-button
@@ -4692,6 +4686,24 @@
                     (click)="createStock()"
                 >
                     {{ commonLocaleData?.app_create }}
+                </button>
+                <button
+                    *ngIf="!queryParams?.stockUniqueName"
+                    mat-stroked-button
+                    color="warn"
+                    (click)="resetForm(stockCreateEditForm)"
+                >
+                    {{ commonLocaleData?.app_clear }}
+                </button>
+                <button
+                    *ngIf="queryParams?.stockUniqueName"
+                    mat-stroked-button
+                    color="primary"
+                    class="min-width-100"
+                    (click)="updateStock(stockCreateEditForm)"
+                    [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError"
+                >
+                    {{ commonLocaleData?.app_update }}
                 </button>
                 <button
                     *ngIf="queryParams?.stockUniqueName && !activeGroup?.uniqueName"
@@ -4709,16 +4721,6 @@
                     (click)="deleteStock()"
                 >
                     {{ commonLocaleData?.app_delete }}
-                </button>
-                <button
-                    *ngIf="queryParams?.stockUniqueName"
-                    mat-stroked-button
-                    color="primary"
-                    class="min-width-100"
-                    (click)="updateStock(stockCreateEditForm)"
-                    [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError"
-                >
-                    {{ commonLocaleData?.app_update }}
                 </button>
             </div>
         </div>

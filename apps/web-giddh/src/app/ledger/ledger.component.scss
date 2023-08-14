@@ -49,10 +49,6 @@
             height: 49px;
             border: 0 !important;
         }
-        mat-checkbox {
-            min-height: 20px;
-            height: 20px;
-        }
     }
     .ledger-row {
         &:first-child {
@@ -174,7 +170,7 @@ table.ledger-footer-1 td[class*="col-"] {
         position: relative;
         i {
             color: var(--color-sidebar-search-bar-text);
-            left: 8px;
+            left: 12px;
             top: -8px;
             z-index: 1;
         }
@@ -457,6 +453,7 @@ sh-select:focus {
 .advance-search-by-date {
     display: inline-flex;
     position: relative;
+    min-width: 250px;
 }
 .advance-search-by-date:before {
     position: absolute;
@@ -473,7 +470,7 @@ sh-select:focus {
     height: 1px;
     width: 32%;
     background-color: var(--color-secondary-input-bar-border);
-    right: -42%;
+    right: -28%;
     top: 17px;
 }
 
@@ -591,7 +588,7 @@ sh-select:focus {
 .date-range-picker {
     text-decoration-line: none;
     text-decoration-style: none;
-    padding-left: 10px !important;
+    padding: 8px 10px !important;
     position: relative;
     z-index: 99;
     cursor: default;
@@ -604,6 +601,7 @@ sh-select:focus {
     box-sizing: content-box !important;
     color: var(--color-primary-head-datepicker-text) !important;
     text-align: center;
+    border: 1px solid var(--color-secondary-input-bar-border)!important;
     &:focus {
         border-color: var(--color-blue);
     }
@@ -1265,5 +1263,11 @@ input#ledger-search {
         img {
             padding-top: 5px;
         }
+    }
+}
+
+.ledger-checkbox{
+    .entry-date{
+        margin-left: 8px;
     }
 }
