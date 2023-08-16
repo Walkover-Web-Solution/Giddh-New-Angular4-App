@@ -712,13 +712,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
     /** This will hold invoice text */
     public invoiceTypeLabel: string = "";
-
     /** True, if the linking with PO is in progress */
     private isPoLinkingInProgress: boolean = false;
-    /**Hold voucher type */
-    public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
-    /** This will hold invoice text */
-    public invoiceTypeLabel: string = "";
 
 
     /**
