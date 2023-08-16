@@ -48,7 +48,8 @@
                             *ngIf="!isCompany && voucherType !== 'sales'"
                             (click)="goToInvoice()"
                         >
-                            {{ localeData?.new }} {{ voucherType | voucherTypeToNamePipe }}
+                            {{ localeData?.new }}
+                            {{ voucherType === "purchase" ? localeData?.bill : (voucherType | voucherTypeToNamePipe) }}
                         </button>
                     </div>
 
@@ -706,7 +707,6 @@
         </div>
     </div>
     <!-- endregion -->
-
     <!-- region edit invoice -->
     <div *ngIf="showEditMode">
         <div class="invoice-edit-wrapper">

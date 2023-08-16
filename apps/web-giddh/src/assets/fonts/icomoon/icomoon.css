@@ -41,6 +41,9 @@
   margin-left: -1em;
   color: #fff;
 }
+.icon-info-italic:before {
+  content: "\e916";
+}
 .icon-custom-field:before {
   content: "\ea15";
 }

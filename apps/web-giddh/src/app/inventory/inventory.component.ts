@@ -4,12 +4,12 @@ import { GroupStockReportRequest, StockDetailResponse, StockGroupResponse } from
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { select, Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -29,7 +29,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
-import { cloneDeep, each, find, isEmpty, orderBy } from '../lodash-optimized';
+import { cloneDeep, each, find, orderBy } from '../lodash-optimized';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -53,6 +53,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('inventoryStaticTabs', { static: true }) public inventoryStaticTabs: TabsetComponent;
     /** Warehouse filter instance */
     @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ShSelectComponent;
+    /** Instance of branch transfer template */
+    @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: TemplateRef<any>;
 
     public dataSyncOption = IsyncData;
     public companies$: Observable<CompanyResponse[]>;
@@ -98,6 +100,10 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     private getBranchesInitiated: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** Hold branch transfer mode  */
+    public branchTransferMode: string = "";
+    /** This will use for bootstrap modal refrence */
+    public modalRef: BsModalRef;
 
     constructor(
         private store: Store<AppState>,
@@ -115,7 +121,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private settingsUtilityService: SettingsUtilityService,
         private toastService: ToasterService,
         private breakPointObservar: BreakpointObserver,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private modalService: BsModalService
     ) {
         this.breakPointObservar.observe([
             '(max-width: 1023px)',
@@ -124,14 +131,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isMobileScreen = result?.breakpoints['(max-width: 1023px)'];
             this.isMobileView = result?.breakpoints['(max-width: 767px)'];
         });
-
         this.activeStock$ = this.store.pipe(select(p => p.inventory.activeStock), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(p => p.inventory.activeGroup), takeUntil(this.destroyed$));
         this.groupsWithStocks$ = this.store.pipe(select(s => s.inventory.groupsWithStocks), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         if (this.voucherApiVersion === 2) {
             document.querySelector("body")?.classList?.add("inventory-v2");
@@ -196,11 +201,23 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.universalDate$ = this.store.pipe(select(appStore => appStore.session.applicationDate), takeUntil(this.destroyed$));
 
-        this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : this.router.url?.indexOf('inventory/report') > -1 ? 3 : 0;
-
+        this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : ((this.router.url?.indexOf('inventory/report')) || (this.router.url?.indexOf('inventory/report/receiptnote')) || (this.router.url?.indexOf('inventory/report/deliverychallan'))) > -1 ? 3 : 0;
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
+            if (params.type) {
+                if (params?.type === 'deliverychallan') {
+                    this.branchTransferMode = 'deliverynote';
+                } else {
+                    this.branchTransferMode = params.type;
+                }
+                this.modalRef = this.modalService.show(
+                    this.branchtransfertemplate,
+                    Object.assign({}, { class: 'modal-lg receipt-note-modal  mb-0 pd-t85' })
+                );
+            }
+        })
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
-                this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : this.router.url?.indexOf('inventory/report') > -1 ? 3 : 0;
+                this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : ((this.router.url?.indexOf('inventory/report')) || (this.router.url?.indexOf('inventory/report/receiptnote')) || (this.router.url?.indexOf('inventory/report/deliverychallan'))) > -1 ? 3 : 0;
             }
         });
         this.shouldShowInventoryReport$ = combineLatest([this.store.pipe(select(appStore => appStore.inventory.activeStockUniqueName)), this.store.pipe(select(appStore => appStore.inventory.activeGroupUniqueName))]).pipe(map(values => values[0] || values[1]));
@@ -215,6 +232,15 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
+    /**
+     *This will use for hide branch transfer
+     *
+     * @memberof InventoryComponent
+     */
+    public hideModal(): void {
+        this.router.navigate(['/pages/inventory/report']);
+        this.modalRef.hide();
+    }
     public ngOnDestroy() {
         if (this.voucherApiVersion === 2) {
             document.querySelector("body")?.classList?.remove("inventory-v2");
@@ -262,8 +288,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
                     this.activeTabIndex = 2;
                     break;
-                case 'report':
-                    this.router.navigate(['/pages', 'inventory', 'report'], { relativeTo: this.route });
+                case 'report/receiptnote':
+                    this.router.navigate(['/pages', 'inventory', 'report', 'receiptnote'], { relativeTo: this.route });
+                    this.activeTabIndex = 3;
+                    break;
+                case 'report/deliverychallan':
+                    this.router.navigate(['/pages', 'inventory', 'report', 'deliverychallan'], { relativeTo: this.route });
                     this.activeTabIndex = 3;
                     break;
             }

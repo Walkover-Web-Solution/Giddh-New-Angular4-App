@@ -990,7 +990,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public getEditVoucherText(voucherType: string): string {
         let editVoucher = this.localeData?.edit_voucher;
-        editVoucher = editVoucher?.replace("[VOUCHER]", voucherType);
+        editVoucher = editVoucher?.replace("[VOUCHER]", voucherType === 'Purchase' ? this.localeData?.bill : voucherType);
         return editVoucher;
     }
 
