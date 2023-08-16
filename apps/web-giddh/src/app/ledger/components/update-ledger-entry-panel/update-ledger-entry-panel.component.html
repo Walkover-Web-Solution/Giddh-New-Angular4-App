@@ -2112,12 +2112,9 @@
                                                 "
                                                 type="file"
                                                 name="invoiceFile"
-                                                #fileInputUpdate
                                                 id="invoiceFile"
-                                                ngFileSelect
-                                                [uploadInput]="uploadInput"
-                                                [options]="fileUploadOptions"
-                                                (uploadOutput)="onUploadOutputUpdate($event)"
+                                                #fileInputUpdate
+                                                (change)="uploadFile()"
                                             />
                                             <label for="invoiceFile" class="cp font-15">
                                                 <i
@@ -2143,7 +2140,7 @@
                                                 branches?.length > 1
                                             )
                                         "
-                                        class="d-flex"
+                                        class="d-flex column-gap15"
                                     >
                                         <button
                                             mat-stroked-button

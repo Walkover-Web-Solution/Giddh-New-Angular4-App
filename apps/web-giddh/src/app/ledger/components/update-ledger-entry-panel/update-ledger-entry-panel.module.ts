@@ -16,7 +16,6 @@ import { TranslateDirectiveModule } from '../../../theme/translate/translate.dir
 import { UpdateLedgerTaxControlComponent } from '../update-ledger-tax-control/update-ledger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
 import { UpdateLedgerEntryPanelComponent } from './update-ledger-entry-panel.component';
-import { NgxUploaderModule } from 'ngx-uploader';
 import { AsideMenuSalesOtherTaxesModule } from '../../../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -28,6 +27,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AttachmentsModule } from '../../../theme/attachments/attachments.module';
 import { LaddaModule } from 'angular2-ladda';
+import { FileUploadModule } from '@iplab/ngx-file-upload';
 
 @NgModule({
     declarations: [
@@ -50,7 +50,7 @@ import { LaddaModule } from 'angular2-ladda';
         DecimalDigitsModule,
         ClickOutsideModule,
         ReplacePipeModule,
-        NgxUploaderModule,
+        FileUploadModule,
         AsideMenuSalesOtherTaxesModule,
         MatInputModule,
         MatCheckboxModule,

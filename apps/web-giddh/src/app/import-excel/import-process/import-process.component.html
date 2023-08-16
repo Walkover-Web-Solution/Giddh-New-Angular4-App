@@ -8,7 +8,7 @@
             </button>
         </div>
     </div>
-    <div class="data-overview" [perfectScrollbar]="config">
+    <cdk-virtual-scroll-viewport [itemSize]="100">
         <table class="table basic table-bordered mr-t1">
             <thead>
                 <tr>
@@ -38,6 +38,6 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </cdk-virtual-scroll-viewport>
 </div>
 <!-- Review Field end-->

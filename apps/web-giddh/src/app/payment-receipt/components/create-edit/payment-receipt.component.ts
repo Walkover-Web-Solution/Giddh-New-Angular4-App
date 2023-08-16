@@ -1,12 +1,11 @@
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { TitleCasePipe } from "@angular/common";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { UntypedFormControl, NgForm } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
-import { UploaderOptions, UploadInput, UploadOutput } from "ngx-uploader";
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from "rxjs";
 import { auditTime, take, takeUntil } from "rxjs/operators";
 import { CommonActions } from "../../../actions/common.actions";
@@ -14,14 +13,13 @@ import { CompanyActions } from "../../../actions/company.actions";
 import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
 import { InvoiceReceiptActions } from "../../../actions/invoice/receipt/receipt.actions";
 import { SalesActions } from "../../../actions/sales/sales.action";
-import { Configuration, SearchResultText, SubVoucher } from "../../../app.constant";
+import { SearchResultText, SubVoucher } from "../../../app.constant";
 import { cloneDeep, find, isEqual, orderBy, uniqBy } from "../../../lodash-optimized";
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from "../../../models/api-models/Account";
 import { OnboardingFormRequest } from "../../../models/api-models/Common";
 import { TaxResponse } from "../../../models/api-models/Company";
 import { IContentCommon } from "../../../models/api-models/Invoice";
 import { AccountDetailsClass, IForceClear, PaymentReceipt, PaymentReceiptTransaction, SalesOtherTaxesModal, StateCode, VoucherTypeEnum } from "../../../models/api-models/Sales";
-import { LEDGER_API } from "../../../services/apiurls/ledger.api";
 import { GeneralService } from "../../../services/general.service";
 import { LedgerService } from "../../../services/ledger.service";
 import { SalesService } from "../../../services/sales.service";
@@ -95,10 +93,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public noResultsFoundLabel = SearchResultText.NewSearch;
     /** Observable for force clear sh-select */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-    /** File upload options */
-    public fileUploadOptions: UploaderOptions;
-    /** Emitted for upload input */
-    public uploadInput: EventEmitter<UploadInput>;
     /** True if file is uploading */
     public isFileUploading: boolean = false;
     /** True if is uploading */
@@ -386,9 +380,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         if (this.asideMenuStateForOtherTaxes === 'in') {
             this.toggleOtherTaxesAsidePane(true);
         }
-
-        this.uploadInput = new EventEmitter<UploadInput>();
-        this.fileUploadOptions = { concurrency: 0 };
 
         // listen for search field value changes
         this.searchBankAccount.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
@@ -786,41 +777,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.allowFocus = false;
         this.selectedCustomerForDetails = null;
         this.toggleAccountAsidePane();
-    }
-
-    /**
-     * Callback for file upload
-     *
-     * @param {UploadOutput} output
-     * @memberof PaymentReceiptComponent
-     */
-    public onUploadOutput(output: UploadOutput): void {
-        if (output.type === 'allAddedToQueue') {
-            let sessionKey = null;
-            let companyUniqueName = this.activeCompany?.uniqueName;
-            this.sessionKey$.pipe(take(1)).subscribe(key => sessionKey = key);
-            const event: UploadInput = {
-                type: 'uploadAll',
-                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', companyUniqueName),
-                method: 'POST',
-                fieldName: 'file',
-                data: { company: companyUniqueName },
-                headers: { 'Session-Id': sessionKey },
-            };
-            this.uploadInput.emit(event);
-        } else if (output.type === 'start') {
-            this.isFileUploading = true;
-        } else if (output.type === 'done') {
-            if (output.file.response?.status === 'success') {
-                this.isFileUploading = false;
-                this.voucherFormData.attachedFiles = [output.file.response?.body?.uniqueName];
-                this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
-            } else {
-                this.isFileUploading = false;
-                this.voucherFormData.attachedFiles = [];
-                this.toaster.showSnackBar("error", output.file.response?.message);
-            }
-        }
     }
 
     /**

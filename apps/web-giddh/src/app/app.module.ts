@@ -11,8 +11,6 @@ import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 import { ToastrModule } from 'ngx-toastr';
 import { environment } from '../environments/environment';
 import { ActionModule } from './actions/action.module';
@@ -36,6 +34,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
 import { LoaderModule } from './loader/loader.module';
 import { PageModule } from './page/page.module';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -54,9 +53,6 @@ let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 if (!environment.production) {
     CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
 }
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-    suppressScrollX: true
-};
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -84,12 +80,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ShSelectModule,
         ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
         StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false } }),
-        PerfectScrollbarModule,
+        ScrollingModule,
         RouterModule.forRoot(ROUTES, {
-    useHash: IS_ELECTRON_WA,
-    onSameUrlNavigation: 'reload',
-    preloadingStrategy: QuicklinkStrategy
-}),
+            useHash: IS_ELECTRON_WA,
+            onSameUrlNavigation: 'reload',
+            preloadingStrategy: QuicklinkStrategy
+        }),
         QuicklinkModule,
         MatSnackBarModule,
         SnackBarModule,
@@ -106,10 +102,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         environment.ENV_PROVIDERS,
         APP_PROVIDERS,
         WindowRef,
-        {
-            provide: PERFECT_SCROLLBAR_CONFIG,
-            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        },
         {
             provide: ServiceConfig,
             useValue: { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }

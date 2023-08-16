@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanDeactivate, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 import { SettingsComponent } from '../settings.component';
 
@@ -11,7 +11,7 @@ import { SettingsComponent } from '../settings.component';
  * @implements {CanDeactivate<SettingsComponent>}
  */
 @Injectable()
-export class SettingsDeactivateGuard implements CanDeactivate<SettingsComponent> {
+export class SettingsDeactivateGuard  {
 
     /**
      * Returns true if there is no modal displayed in the UI and only then navigation

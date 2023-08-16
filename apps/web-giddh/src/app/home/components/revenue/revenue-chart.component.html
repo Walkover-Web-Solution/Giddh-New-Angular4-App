@@ -54,7 +54,7 @@
                                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                             </div>
                             <div class="chart-div">
-                                <cdk-virtual-scroll-viewport class="virtual-group-list overflow-x-hidden">
+                                <cdk-virtual-scroll-viewport [itemSize]="300" class="virtual-group-list overflow-x-hidden">
                                     <div class="dashboard-line-chart-container">
                                         <canvas
                                             id="revenueChartCanvas"

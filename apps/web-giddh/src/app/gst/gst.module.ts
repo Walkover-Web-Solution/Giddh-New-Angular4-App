@@ -19,7 +19,6 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { HsnSummaryComponent } from './filing/tabs/push-to-gstin/components/hsn-summary/hsn-summary.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ViewTransactionsComponent } from './filing/tabs/overview/view-transactions/view-transactions.component';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { LaddaModule } from 'angular2-ladda';
@@ -70,7 +69,6 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
         ModalModule.forRoot(),
         PurchaseModule,
         InvoiceModule,
-        PerfectScrollbarModule,
         CurrencyModule,
         ConfirmModalModule,
         SharedModule,

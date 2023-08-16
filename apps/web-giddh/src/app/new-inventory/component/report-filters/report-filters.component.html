@@ -101,9 +101,12 @@
                         [selectable]="true"
                         [removable]="true"
                         (removed)="removeOption(chip, indx)"
+                        class="mr-r1"
                     >
                         {{ chip?.name }}
-                        <i class="icon-cross" matChipRemove></i>
+                        <span matChipRemove>
+                            <i class="icon-cross font-12"></i>
+                        </span>
                     </mat-chip-row>
                     <input
                         type="text"

@@ -106,10 +106,6 @@ td {
 }
 
 ::ng-deep {
-    .mat-pseudo-checkbox-checked {
-        background: var(--color-giddh-blue) !important;
-    }
-
     .inventory-transaction-list {
         tbody {
             .mat-no-data-row:last-child {

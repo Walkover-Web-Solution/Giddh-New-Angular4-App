@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { LaddaModule } from 'angular2-ladda';
-import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
@@ -42,11 +41,6 @@ import { AccountUpdateNewDetailsModule } from '../shared/header/components/accou
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
 
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-    suppressScrollX: false,
-    suppressScrollY: true
-};
-
 @NgModule({
     declarations: [
         ContactComponent,
@@ -80,7 +74,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ElementViewChildModule,
         CurrencyModule,
         Daterangepicker,
-        PerfectScrollbarModule,
         NgxDaterangepickerMd.forRoot(),
         NgxMaskModule.forRoot(),
         NoDataModule,
@@ -101,10 +94,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         SelectTableColumnModule
     ],
     providers: [
-        {
-            provide: PERFECT_SCROLLBAR_CONFIG,
-            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        },
         GiddhCurrencyPipe
     ]
 })

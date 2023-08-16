@@ -186,7 +186,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.addLinkTag("./assets/css/font-awesome.css");
             this._generalService.addLinkTag("./assets/fonts/icomoon/icomoon.css");
             this._generalService.addLinkTag("./assets/css/toastr.css");
-            this._generalService.addLinkTag("./assets/css/perfect-scrollbar.component.scss");
             this._generalService.addLinkTag("./assets/css/ngx-bootstrap/bs-datepicker.css");
             this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
             this._generalService.addLinkTag("./assets/css/lightbox.scss");

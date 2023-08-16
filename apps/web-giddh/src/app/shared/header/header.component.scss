@@ -226,27 +226,6 @@ a[vr-item]:focus {
     justify-content: space-between;
 }
 
-:host ::ng-deep .left-fixed-header perfect-scrollbar > .ps.ps--scrolling-y > .ps__rail-y {
-    opacity: 0;
-}
-
-:host
-    ::ng-deep
-    .left-fixed-header
-    perfect-scrollbar.ps-show-active
-    > .ps.ps--active-y
-    > .ps-overlay:not(.ps-at-top)
-    .ps-indicator-top,
-:host
-    ::ng-deep
-    .left-fixed-header
-    perfect-scrollbar.ps-show-active
-    > .ps.ps--active-y
-    > .ps-overlay:not(.ps-at-bottom)
-    .ps-indicator-bottom {
-    background: linear-gradient(to bottom, rgb(43, 42, 42) 0, rgba(0, 0, 0, 0) 100%);
-}
-
 .left-fixed-header h6 {
     color: var(--color-giddh-blue);
     font-size: var(--font-size-15);
@@ -805,7 +784,7 @@ ul.sub-list {
         }
         #add-manage {
             color: var(--color-primary-button-text) !important;
-            padding: 6px 8px;
+            padding: 4.8px 8px;
             background-color: var(--color-primary-button-background);
             display: flex;
             justify-content: center;
@@ -816,6 +795,7 @@ ul.sub-list {
                 padding: 0 5px !important;
                 padding-left: 0 !important;
                 color: var(--color-primary-button-text) !important;
+                font-size: var(--font-size-16);
             }
         }
         .header-utility-icons {

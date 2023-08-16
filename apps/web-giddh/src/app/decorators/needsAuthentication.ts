@@ -1,12 +1,12 @@
 import { map } from 'rxjs/operators';
 import { AppState } from '../store';
-import { CanActivate, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Injectable, NgZone } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { userLoginStateEnum } from '../models/user-login-state';
 
 @Injectable()
-export class NeedsAuthentication implements CanActivate {
+export class NeedsAuthentication  {
     constructor(public router: Router, private store: Store<AppState>, private zone: NgZone) {
     }
 

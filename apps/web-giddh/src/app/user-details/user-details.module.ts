@@ -5,8 +5,6 @@ import { UserDetailsRoutingModule } from './user-details.routing.module';
 import { UserDetailsComponent } from './user-details.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { LaddaModule } from 'angular2-ladda';
-import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { SharedModule } from "../shared/shared.module";
 import { ElementViewChildModule } from "../shared/helpers/directives/elementViewChild/elementViewChild.module";
@@ -40,14 +38,9 @@ import { SafePipeModule } from '../shared/helpers/pipes/safePipe/safePipe.module
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-    suppressScrollX: true
-};
-
 @NgModule({
 
     declarations: [
-        // Components / Directives/ Pipes
         UserDetailsComponent,
         UserDetailsPipe,
         SubscriptionsPlansComponent,
@@ -68,7 +61,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             style: 'slide-left',
             spinnerSize: 30
         }),
-        PerfectScrollbarModule,
         DecimalDigitsModule,
         SharedModule,
         ElementViewChildModule,
@@ -97,14 +89,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatSlideToggleModule
     ],
     providers: [
-
-        {
-            provide: PERFECT_SCROLLBAR_CONFIG,
-            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        },
         DecimalPipe
     ]
-
 })
 export class UserDetailsModule {
 

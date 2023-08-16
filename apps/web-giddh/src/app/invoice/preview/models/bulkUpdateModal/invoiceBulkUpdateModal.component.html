@@ -95,10 +95,7 @@
                                 class="d-none"
                                 name="bulkUploadfileInput"
                                 id="bulkUploadfileInput"
-                                [options]="fileUploadOptions"
-                                ngFileSelect
-                                [uploadInput]="uploadInput"
-                                (uploadOutput)="onUploadOutput($event)"
+                                (change)="uploadImage()"
                             />
                             <label class="cp font-15 text-gray" for="bulkUploadfileInput">
                                 {{ localeData?.upload_logo }}

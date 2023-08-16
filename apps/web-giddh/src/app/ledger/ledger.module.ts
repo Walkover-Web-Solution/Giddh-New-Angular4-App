@@ -6,7 +6,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ClipboardModule } from 'ngx-clipboard';
-import { NgxUploaderModule } from 'ngx-uploader';
 import { InventoryAddStockModule } from '../inventory/components/add-stock-components/inventory.addstock.module';
 import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
@@ -59,6 +58,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { AttachmentsModule } from '../theme/attachments/attachments.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { StockCreateEditModule } from '../new-inventory/component/stock-create-edit/stock-create-edit.module';
+import { FileUploadModule } from '@iplab/ngx-file-upload';
 
 @NgModule({
     declarations: [
@@ -85,7 +85,7 @@ import { StockCreateEditModule } from '../new-inventory/component/stock-create-e
         LedgerRoutingModule,
         ModalModule.forRoot(),
         PaginationModule.forRoot(),
-        NgxUploaderModule,
+        FileUploadModule,
         ClipboardModule,
         LaddaModule.forRoot({
             style: 'slide-left',

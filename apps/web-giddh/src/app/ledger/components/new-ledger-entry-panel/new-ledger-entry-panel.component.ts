@@ -1,52 +1,22 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    EventEmitter,
-    HostListener,
-    Input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    Output,
-    SimpleChanges,
-    TemplateRef,
-    ViewChild,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import {
-    Configuration,
-    HIGH_RATE_FIELD_PRECISION,
-    RATE_FIELD_PRECISION,
-    SubVoucher,
-} from 'apps/web-giddh/src/app/app.constant';
+import { HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SubVoucher } from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
-import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
-import {
-    ConfirmationModalConfiguration,
-} from '../../../theme/confirmation-modal/confirmation-modal.interface';
+import { ConfirmationModalConfiguration } from '../../../theme/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
 import { cloneDeep, forEach, sumBy } from '../../../lodash-optimized';
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { IVariant, ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
-import {
-    IForceClear,
-    SalesOtherTaxesCalculationMethodEnum,
-    SalesOtherTaxesModal,
-    VoucherTypeEnum,
-} from '../../../models/api-models/Sales';
+import { IForceClear, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { AdvanceSearchRequest } from '../../../models/interfaces/advance-search-request';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
-import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { GeneralService } from '../../../services/general.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -69,6 +39,8 @@ import { AdjustmentUtilityService } from '../../../shared/advance-receipt-adjust
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 import { LedgerUtilityService } from '../../services/ledger-utility.service';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
+import { CommonService } from '../../../services/common.service';
+
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
     ['amount', 'convertedAmount'],
@@ -163,8 +135,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
 
     public sourceWarehouse: true;
-    public uploadInput: EventEmitter<UploadInput>;
-    public fileUploadOptions: UploaderOptions;
     public companyTaxesList$: Observable<TaxResponse[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -284,7 +254,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** True, if stock category is 'assets' and inclusive tax is applied */
     public fixedAssetTaxInclusive: boolean;
     /** Stores the value of selected stock variant */
-    public selectedStockVariant: IOption = {label: '', value: ''};
+    public selectedStockVariant: IOption = { label: '', value: '' };
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -297,7 +267,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private settingsTagService: SettingsTagService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private settingsDiscountService: SettingsDiscountService,
-        private ledgerUtilityService: LedgerUtilityService
+        private ledgerUtilityService: LedgerUtilityService,
+        private commonService: CommonService
     ) {
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
@@ -344,8 +315,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             subVoucher: SubVoucher.AdvanceReceipt
         }]);
 
-        this.uploadInput = new EventEmitter<UploadInput>();
-        this.fileUploadOptions = { concurrency: 0 };
         this.currentTxn.taxInclusiveAmount = this.currentTxn.amount;
         this.activeAccount$.subscribe(acc => {
             if (acc) {
@@ -837,8 +806,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
             if (transaction.inventory && transaction.selectedAccount?.stock?.variant) {
                 transaction.inventory.taxInclusive = transaction.selectedAccount.stock.variant.salesTaxInclusive ||
-                transaction.selectedAccount.stock.variant.purchaseTaxInclusive ||
-                transaction.selectedAccount.stock.variant.fixedAssetTaxInclusive;
+                    transaction.selectedAccount.stock.variant.purchaseTaxInclusive ||
+                    transaction.selectedAccount.stock.variant.fixedAssetTaxInclusive;
             }
             if (this.generalService.voucherApiVersion === 1) {
                 /** From API, for v1 companies, isStock key is creating issue in entry creation */
@@ -851,44 +820,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public resetPanel() {
         this.resetBlankLedger.emit(true);
         this.currentTxn = null;
-    }
-
-    public onUploadOutput(): void {
-        this.webFileInput?.nativeElement.click();
-    }
-
-    public onWebUpload(output: UploadOutput) {
-        if (output.type === 'allAddedToQueue') {
-            let sessionKey = null;
-            let companyUniqueName = null;
-            this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
-            this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
-            const event: UploadInput = {
-                type: 'uploadAll',
-                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', companyUniqueName),
-                method: 'POST',
-                fieldName: 'file',
-                data: { company: companyUniqueName },
-                headers: { 'Session-Id': sessionKey },
-            };
-            this.uploadInput.emit(event);
-        } else if (output.type === 'start') {
-            this.isFileUploading = true;
-            this.loaderService.show();
-        } else if (output.type === 'done') {
-            this.loaderService.hide();
-            if (output.file.response?.status === 'success') {
-                this.isFileUploading = false;
-                this.blankLedger.attachedFile = output.file.response.body?.uniqueName;
-                this.blankLedger.attachedFileName = output.file.response.body?.name;
-                this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
-            } else {
-                this.isFileUploading = false;
-                this.blankLedger.attachedFile = '';
-                this.blankLedger.attachedFileName = '';
-                this.toaster.showSnackBar("error", output.file.response.message);
-            }
-        }
     }
 
     public showDeleteAttachedFileModal() {
@@ -1947,7 +1878,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     private loadStockVariants(stockUniqueName: string): void {
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(
-            map((variants: IVariant[]) => (variants ?? []).map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))), takeUntil(this.destroyed$)).subscribe(res => {
+            map((variants: IVariant[]) => (variants ?? []).map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName }))), takeUntil(this.destroyed$)).subscribe(res => {
                 this.stockVariants.next(res);
             });
     }
@@ -2027,7 +1958,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         return giddhRoundOff(((Number(total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
-        (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
+            (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
     }
 
     /**
@@ -2081,5 +2012,36 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt || this.isInclusiveEntry, this.isInclusiveEntry ? this.currentTxn.total : this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
         }
         this.currentTxn.convertedTax = this.calculateConversionRate(this.currentTxn.tax);
+    }
+
+    /**
+     * Uploads attachment
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public uploadFile(): void {
+        const selectedFile: any = document.getElementById("invoiceFile");
+        if (selectedFile?.files?.length) {
+            const file = selectedFile?.files[0];
+
+            this.generalService.getSelectedFile(file, (blob, file) => {
+                this.isFileUploading = true;
+                this.loaderService.show();
+
+                this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.loaderService.hide();
+                    this.isFileUploading = false;
+                    if (response?.status === 'success') {
+                        this.blankLedger.attachedFile = response.body?.uniqueName;
+                        this.blankLedger.attachedFileName = response.body?.name;
+                        this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
+                    } else {
+                        this.blankLedger.attachedFile = '';
+                        this.blankLedger.attachedFileName = '';
+                        this.toaster.showSnackBar("error", response.message);
+                    }
+                });
+            });
+        }
     }
 }

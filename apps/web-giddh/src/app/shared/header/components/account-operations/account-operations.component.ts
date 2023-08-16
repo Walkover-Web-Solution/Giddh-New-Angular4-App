@@ -18,7 +18,6 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponseV2, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { IAccountsInfo } from '../../../../models/interfaces/account-info.interface';
 import { ToasterService } from '../../../../services/toaster.service';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -66,7 +65,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public shareAccountForm: UntypedFormGroup;
     public moveAccountForm: UntypedFormGroup;
     public activeGroupSelected$: Observable<string[]>;
-    public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
     @ViewChild('shareGroupModal', { static: true }) public shareGroupModal: ModalDirective;
     @ViewChild('shareAccountModal', { static: true }) public shareAccountModal: ModalDirective;
     @ViewChild('shareAccountModalComp', { static: true }) public shareAccountModalComp: ShareAccountModalComponent;

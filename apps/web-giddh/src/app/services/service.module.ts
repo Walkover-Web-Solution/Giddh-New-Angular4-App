@@ -67,6 +67,7 @@ import { CustomFieldsService } from "./custom-fields.service";
 import { ImportsService } from "./imports.service";
 import { CampaignIntegrationService } from "./campaign.integration.service";
 import { PageLeaveUtilityService } from "./page-leave-utility.service";
+import { LedgerService } from "./ledger.service";
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -145,7 +146,8 @@ export class ServiceModule {
                 //ThermalService,
                 CustomFieldsService,
                 ImportsService,
-                PageLeaveUtilityService
+                PageLeaveUtilityService,
+                LedgerService
             ]
         };
     }
