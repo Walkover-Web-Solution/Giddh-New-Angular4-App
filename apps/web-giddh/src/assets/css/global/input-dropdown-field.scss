@@ -92,6 +92,43 @@ stock-balance {
             }
         }
     }
+    .mat-form-field-invalid{
+        .mdc-text-field--outlined{
+            &:not(.mdc-text-field--disabled) {
+                .mdc-notched-outline__leading{
+                    border-color: var(--color-red) !important;
+                }
+                &.mdc-text-field--focused {
+                    .mdc-notched-outline__notch {
+                        border-color: var(--color-red) !important;
+                    }
+                    .mdc-notched-outline__leading {
+                        border-color: var(--color-red) !important;
+                    }
+                }
+                &:not(.mdc-text-field--focused){
+                    &:hover {
+                        .mdc-notched-outline {
+                            .mdc-notched-outline__notch {
+                                border-color: var(--color-field-hover) !important;
+                            }
+                            .mdc-notched-outline__trailing{
+                                border-color: var(--color-field-hover) !important;
+                            }
+                            .mdc-notched-outline__leading {
+                                border-color: var(--color-field-hover) !important;
+                            }
+                        }
+                    }
+                }
+            }
+            .mdc-notched-outline {
+                .mdc-notched-outline__trailing {
+                    border-color: var(--color-fields-border);
+                }
+            }
+        }
+    }
     .mdc-text-field{
         &:not(.mdc-text-field--disabled) {
             .mdc-floating-label{
