@@ -44,3 +44,54 @@ report-filters{
         }
     }
 }
+
+/*---- inventory-stock ----*/
+.back-btn-align{
+    .mdc-button {
+        .mdc-button__label{
+            display: flex;
+            align-items: center;
+            column-gap: 2px;
+        }
+    }
+}
+
+/*---- inventory-sidebar ----*/
+inventory-sidebar{
+    .mat-mdc-icon-button{
+        &.mat-mdc-button-base{
+            width: 40px;
+        }
+    }
+}
+
+/*---- variant ----*/
+.option-value-field{
+    text-field,
+    select-field{
+        input{
+            padding: 12px;
+            border: 1px solid var(--color-fields-border) !important;
+            border-radius: 4px;
+        }
+    }
+    select-field{
+        position: relative;
+        input{
+            height: 48px !important;
+        }
+        &::before{
+            content: '';
+            position: absolute;
+            width: 0px;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid var(--color-popup-list-input-text) !important;
+            top: 50%;
+            right: 12px;
+            z-index: 9;
+            transform: translateY(-50%);
+        }
+    }
+}

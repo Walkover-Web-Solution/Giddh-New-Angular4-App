@@ -11,7 +11,7 @@
             <hamburger-menu *ngIf="!addStock"></hamburger-menu>
             <div class="select-physical-product input-border-wrapper">
                 <form class="form-body" #stockCreateEditForm="ngForm" novalidate autocomplete="off">
-                    <span>
+                    <span class="back-btn-align">
                         <button
                             *ngIf="queryParams?.stockUniqueName && !addStock"
                             (click)="backClicked()"
@@ -868,8 +868,19 @@
                                                                         "
                                                                     >
                                                                         <div class="col-lg-4 option-delete pr-0 mt-2">
-                                                                            <div class="w-100">
-                                                                                <input-field
+                                                                            <div class="w-100 option-value-field">
+                                                                                <text-field
+                                                                                    [name]="
+                                                                                        'option-value-' + i + '-' + j
+                                                                                    "
+                                                                                    [(ngModel)]="optionValue.value"
+                                                                                    (ngModelChange)="
+                                                                                        validateOptionValue(i, j)
+                                                                                    "
+                                                                                    class="inventory-category-field-input"
+                                                                                    [type]="'text'"
+                                                                                ></text-field>
+                                                                                <!-- <input-field
                                                                                     [name]="
                                                                                         'option-value-' + i + '-' + j
                                                                                     "
@@ -880,7 +891,7 @@
                                                                                     class="inventory-category-field-input"
                                                                                     [type]="'text'"
                                                                                 >
-                                                                                </input-field>
+                                                                                </input-field> -->
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-lg-2">

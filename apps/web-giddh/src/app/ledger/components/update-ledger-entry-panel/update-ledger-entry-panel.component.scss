@@ -426,10 +426,12 @@ p.edit-message {
         width: 185px;
         height: 36px !important;
     }
-    .debit-blank-row .amount-total {
-        width: 185px;
-        margin-top: 5px;
-    }
+    .debit-blank-row {
+        .amount-total {
+            width: 185px;
+            margin-top: 5px;
+        }
+    } 
     .currency-convertor {
         float: right;
         display: block;
@@ -490,6 +492,16 @@ p.edit-message {
 .total-detail-table {
     .mat-input-element {
         box-sizing: border-box !important;
+    }
+}
+
+.width-datepicker {
+    width: 130px !important;
+}
+
+@media screen and (max-width: 1440px) {
+    .width-datepicker {
+        width: 100px !important;
     }
 }
 

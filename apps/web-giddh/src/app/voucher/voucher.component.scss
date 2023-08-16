@@ -726,9 +726,6 @@ section.static-invoice-table {
 }
 
 .wrap-billing-address {
-    .mat-mdc-checkbox.mat-primary {
-        line-height: 40px;
-    }
     &.clearfix {
         margin-top: 15px;
         margin-bottom: 5px;
@@ -737,6 +734,7 @@ section.static-invoice-table {
             padding-left: 0 !important;
         }
     }
+
 }
 
 .customer-invoice-table.bg-white {

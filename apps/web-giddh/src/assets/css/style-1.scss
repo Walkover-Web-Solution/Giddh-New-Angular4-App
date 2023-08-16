@@ -1698,9 +1698,11 @@ ul.pills li {
     width: 100%;
     left: 0;
     top: 0;
+    bottom: 0;
     z-index: 1;
     text-align: center;
     transform-style: preserve-3d;
+    min-height: 357px;
 }
 .long-code-details {
     margin-top: 10px;

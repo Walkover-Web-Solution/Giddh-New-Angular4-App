@@ -3668,7 +3668,7 @@
                                             {{ generateInvoiceText }}
                                         </button>
                                     </div>
-                                    <div *ngIf="!isCompany" class="d-inline-flex">
+                                    <ng-container *ngIf="!isCompany">
                                         <mat-menu
                                             #dropdownMenu="matMenu"
                                             class="bottom-dropdown-menu"
@@ -3711,7 +3711,7 @@
                                         >
                                             <span class="caret"></span>
                                         </button>
-                                    </div>
+                                    </ng-container>
                                 </span>
                                 <!-- endregion -->
                                 <!-- region proforma/estimates -->
@@ -3902,14 +3902,10 @@
     </ng-template>
     <!-- region purchase  order  popup -->
     <ng-template #purchaseRecordConfirmationPopup>
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <confirmation-modal
-                    [configuration]="purchaseRecordConfirmationConfiguration"
-                    (buttonClicked)="handlePurchaseRecordConfirmation($event)"
-                ></confirmation-modal>
-            </div>
-        </div>
+        <confirmation-modal
+            [configuration]="purchaseRecordConfirmationConfiguration"
+            (buttonClicked)="handlePurchaseRecordConfirmation($event)"
+        ></confirmation-modal>
     </ng-template>
     <!-- region bulk items -->
     <ng-template #bulkItemsModal>
@@ -3942,14 +3938,10 @@
     </ng-template>
     <!-- region  date change confirmation popup -->
     <ng-template #dateChangeConfirmationModel>
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <confirmation-modal
-                    [configuration]="dateChangeConfiguration"
-                    (buttonClicked)="handleDateChangeConfirmation($event)"
-                ></confirmation-modal>
-            </div>
-        </div>
+        <confirmation-modal
+            [configuration]="dateChangeConfiguration"
+            (buttonClicked)="handleDateChangeConfirmation($event)"
+        ></confirmation-modal>
     </ng-template>
     <!-- region  delete attachment confirmation popup -->
     <ng-template #attachmentDeleteConfirmationModel>
