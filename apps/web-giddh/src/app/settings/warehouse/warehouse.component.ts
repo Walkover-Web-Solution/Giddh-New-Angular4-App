@@ -183,7 +183,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public openCreateWarehouseModal(): void {
         this.startOnBoarding();
-        this.createNewWarehouseModal();
         this.warehouseOnBoardingModal?.show();
     }
 
@@ -477,29 +476,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                     resolve();
                 }, 1000);
             }
-        });
-    }
-
-    /**
-     * Responsible for preparing the component to be shown in create
-     * new warehouse modal
-     *
-     * @private
-     * @memberof WarehouseComponent
-     */
-    private createNewWarehouseModal(): void {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(OnBoardingComponent);
-        let viewContainerRef = this.onBoardingContainer.viewContainerRef;
-        viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as OnBoardingComponent).onBoardingType = OnBoardingType.Warehouse;
-        (componentRef.instance as OnBoardingComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
-            if (data && data.isFirstStepCompleted) {
-                this.showWelcomePage();
-            } else {
-                this.endOnBoarding();
-            }
-            this.hideAddCompanyModal();
         });
     }
 

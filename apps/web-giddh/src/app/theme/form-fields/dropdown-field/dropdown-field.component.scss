@@ -5,8 +5,10 @@
     background-color: var(--color-white);
     width: 20px;
     height: 20px;
-    position: relative;
-    z-index: 99;
+    position: absolute;
+    z-index: 8;
+    right: 10px;
+    top: 13px;
     .arrow-dropdown {
         position: absolute;
         width: 0;

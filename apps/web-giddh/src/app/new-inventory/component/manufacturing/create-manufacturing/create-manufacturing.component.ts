@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -27,7 +27,7 @@ import { take, takeUntil } from 'rxjs/operators';
     styleUrls: ['./create-manufacturing.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateManufacturingComponent implements OnInit {
+export class CreateManufacturingComponent implements OnInit, OnDestroy {
     /**  This will use for universal date */
     public universalDate: any;
     /** List of warehouses */
@@ -126,6 +126,16 @@ export class CreateManufacturingComponent implements OnInit {
                 }
             }
         });
+    }
+
+    /**
+     * Lifecycle hook for destroy
+     *
+     * @memberof CreateManufacturingComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     /**
@@ -533,7 +543,18 @@ export class CreateManufacturingComponent implements OnInit {
      * @memberof CreateManufacturingComponent
      */
     public addNewLinkedStock(): void {
-        this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(new ManufacturingLinkedStock());
+        this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(
+            {
+                selectedStock: { label: "", value: "", additional: { stockUnitCode: "", stockUnitUniqueName: "", unitsList: [] } },
+                stockUniqueName: "",
+                quantity: 1,
+                stockUnitUniqueName: "",
+                stockUnitCode: "",
+                rate: 0,
+                amount: 0,
+                variant: { name: '', uniqueName: '' }
+            }
+        );
         this.preventStocksApiCall = false;
         this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[(this.manufacturingObject.manufacturingDetails[0].linkedStocks?.length - 1)], 1, '', this.selectedInventoryType);
     }
@@ -577,7 +598,7 @@ export class CreateManufacturingComponent implements OnInit {
 
         this.totals.totalRate = totalRate;
         this.totals.totalAmount = totalAmount;
-        this.totals.costPerItem = giddhRoundOff((totalAmount / (this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity * this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf)), this.giddhBalanceDecimalPlaces);
+        this.totals.costPerItem = giddhRoundOff((totalAmount / this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity), this.giddhBalanceDecimalPlaces);
 
         this.changeDetectionRef.detectChanges();
     }
@@ -975,7 +996,7 @@ export class CreateManufacturingComponent implements OnInit {
         const finishedStockQuantity = ((Number(this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity)) ? Number(this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity) : 1) / this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf;
 
         this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
-            let selectedStock = this.initialLinkedStocks?.find(stock => stock.stockUniqueName === linkedStock.stockUniqueName);
+            let selectedStock = this.initialLinkedStocks?.find(stock => stock.variant?.uniqueName === linkedStock.variant?.uniqueName);
 
             if (selectedStock) {
                 linkedStock.quantity = giddhRoundOff(selectedStock.quantity * finishedStockQuantity, this.giddhBalanceDecimalPlaces);

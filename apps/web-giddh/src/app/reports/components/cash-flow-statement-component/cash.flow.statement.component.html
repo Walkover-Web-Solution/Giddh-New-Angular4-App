@@ -7,27 +7,31 @@
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <section class="clearfix text-center pt-5">
         <div class="container-fluid">
-            <p class="mr-b15">{{ activeCompany?.name }}</p>
-            <h5 class="bold mb-2">{{ localeData?.cashflow_statement }}</h5>
             <div class="d-flex align-items-center justify-content-center mb-2">
-                <label class="mr-r05 font-15">{{ localeData?.as_on }}</label>
-                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                <label class="mr-r05 font-15 mr-t1">{{ localeData?.as_on }}</label>
+                <div class="custom-datepicker custom-new-datepicker" (click)="showGiddhDatepicker($event)">
+                    <div>
+                        <p class="mr-b15">{{ activeCompany?.name }}</p>
+                        <h5 class="bold mb-2">{{ localeData?.cashflow_statement }}</h5>
+                    </div>
                     <input
                         type="text"
                         name="selectedDateRange"
                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker"
+                        class="giddh-datepicker date-range-picker mb-2"
                     />
+                    <button
+                        type="button"
+                        mat-stroked-button
+                        color="primary"
+                        class="mr-0 download-btn"
+                        (click)="downloadReport()"
+                        [disabled]="isLoading || !fromDate || !toDate || !downloadRequest.companyUniqueName"
+                    >
+                        {{ commonLocaleData?.app_download_report }}
+                    </button>
                 </div>
             </div>
-            <button
-                type="button"
-                class="btn btn-sky-blue mr-0"
-                (click)="downloadReport()"
-                [disabled]="isLoading || !fromDate || !toDate || !downloadRequest.companyUniqueName"
-            >
-                {{ commonLocaleData?.app_download_report }}
-            </button>
         </div>
         <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
     </section>

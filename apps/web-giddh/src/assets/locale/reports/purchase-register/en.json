@@ -18,5 +18,16 @@
     "account": "Account",
     "purchase": "Purchase",
     "return": "Return",
-    "net_purchase": "Net Purchase"
+    "net_purchase": "Net Purchase",
+    "parent_group":"Parent Group",
+    "tax_no":"Tax no",
+    "address":"Address",
+    "pincode":"Pincode",
+    "email":"Email",
+    "mobile_no":"Mobile No.",
+    "purchase_account": "Purchase Account",
+    "purchase_account_name": "Purchase Account Name",
+     "sales_account": "Sales Account",
+    "purchase_register_export":"Export purchase register",
+    "export_note": "The default columns 'Date, Account , Purchase, Return, Net purchase' will be exported, you also have the option to add custom columns as needed."
 }

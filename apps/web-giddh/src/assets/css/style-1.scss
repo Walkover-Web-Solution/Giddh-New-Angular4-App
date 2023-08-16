@@ -2070,18 +2070,6 @@ bs-datepicker-container {
 .modal-dialog.universal_modal .modal-body {
     padding: 0;
 }
-.modal-dialog.universal_modal .shortcuts {
-    background: var(--color-popup-footer-background);
-    border-top: none;
-    margin: 0;
-    padding: 12px 16px 12px 20px;
-    color: var(--color-abbey);
-    font-size: var(--font-size-12);
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    text-align: right;
-}
-
 perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-top) .ps-indicator-top,
 perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bottom) .ps-indicator-bottom {
     opacity: 0;
@@ -2490,7 +2478,6 @@ form#groupDetailForm {
 .advance-search,
 #share-modal,
 #exportModal,
-.other-details-section,
 .daybook-advance-search,
 .petty-cash-reject-modal {
     .mat-form-field {
@@ -2590,16 +2577,6 @@ giddh-datepicker {
             word-break: break-word !important;
         }
     }
-}
-.mat-button,
-.mat-raised-button {
-    margin-right: 15px !important;
-    height: 36px;
-    box-shadow: none !important;
-}
-
-.mat-raised-button:focus {
-    box-shadow: none !important;
 }
 
 .search-ledger-field {
@@ -2873,10 +2850,7 @@ td.mat-footer-cell {
 .mat-expansion-indicator::after {
     color: var(--color-primary-checkbox-and-expansion-panel-arrow) !important;
 }
-.mat-icon-button i,
-.mat-icon-button .mat-icon {
-    color: var(--color-primary-icon);
-}
+
 .other-tax {
     .mat-checkbox-layout {
         .mat-checkbox-label {
@@ -3307,6 +3281,7 @@ td.mat-footer-cell {
 }
 
 /*-- input-new-form-field --*/
+voucher-component,
 create-update-group,
 giddh-datepicker,
 add-company,
@@ -3347,8 +3322,8 @@ input-field {
             min-height: 3rem;
             align-items: center;
             border-radius: 0.5rem;
-            padding-left: 1rem;
-            padding-right: 1rem;
+            padding-left: 0;
+            padding-right: 0;
         }
         .mat-form-field-infix {
             display: flex;
@@ -3360,7 +3335,7 @@ input-field {
             .mat-input-element {
                 margin: 0;
                 line-height: 1.25rem;
-                padding: 14px 0;
+                padding: 14px !important;
             }
             textarea {
                 &.mat-input-element {
@@ -3376,6 +3351,7 @@ input-field {
         .mat-form-field-label {
             margin-top: 1px;
             font-size: var(--font-size-15);
+            padding-left: 14px;
         }
         .mat-form-field-wrapper {
             margin: 0;
@@ -3401,6 +3377,7 @@ input-field {
             &.mat-form-field-should-float {
                 .mat-form-field-label {
                     transform: translateY(-1.5em) scale(0.75) !important;
+                    padding-left: 21px;
                 }
             }
         }
@@ -3409,10 +3386,18 @@ input-field {
                 &:focus + .mat-form-field-label-wrapper {
                     .mat-form-field-label {
                         transform: translateY(-1.5em) scale(0.75) !important;
+                        padding-left: 21px;
                     }
                 }
             }
         }
+        .mat-form-field-suffix {
+            margin-left: 0;
+            margin-right: 10px;
+        }
+    }
+    mat-select {
+        padding: 0 14px;
     }
 }
 
@@ -3447,8 +3432,8 @@ input-field {
     background-color: var(--color-white);
     border-radius: 4px;
     width: fit-content !important;
-    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
-        0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 5px 5px -3px var(--color-drag-shadow), 0 8px 10px 1px var(--color-drag-bottom-shadow),
+        0 3px 14px 2px var(--color-drag-right-shadow);
 
     .product-option-wrapper {
         background-color: var(--color-white);
@@ -3485,6 +3470,57 @@ input-field {
         }
     }
 }
+.other-details-section {
+    .mat-form-field-appearance-outline {
+        .mat-form-field-flex {
+            background-color: var(--color-white);
+        }
+    }
+}
+add-company,
+voucher-component {
+    .mobile-number {
+        .mat-form-field-appearance-outline {
+            .mat-form-field-label {
+                padding-left: 48px;
+            }
+            .mat-form-field-infix {
+                .mat-input-element {
+                    padding-left: 48px !important;
+                }
+            }
+            &.mat-form-field-can-float {
+                &.mat-form-field-should-float {
+                    .mat-form-field-label {
+                        padding-left: 64px;
+                    }
+                }
+            }
+        }
+    }
+    giddh-datepicker {
+        .mat-focused {
+            .mat-form-field-flex {
+                border: 0 !important;
+            }
+        }
+    }
+}
+add-company {
+    .fill-form {
+        input {
+            &::placeholder {
+                color: var(--color-popup-list-input-text) !important;
+            }
+        }
+    }
+}
+.invoice-date-label {
+    &:focus-visible {
+        outline: none;
+    }
+}
+
 .row-gap {
     row-gap: 15px;
 }

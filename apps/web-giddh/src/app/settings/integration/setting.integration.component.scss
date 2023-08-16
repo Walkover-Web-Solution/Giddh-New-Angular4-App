@@ -421,6 +421,7 @@
 
 .connected-accounts {
     margin-left: 10px;
+    height: 100%;
 }
 
 .btn-light-blue {
@@ -448,6 +449,7 @@
     vertical-align: top;
     margin-top: -4px;
 }
+
 @media (max-width: 1600px) and (min-width: 1200px) {
     .account-wrapper {
         width: 80% !important;

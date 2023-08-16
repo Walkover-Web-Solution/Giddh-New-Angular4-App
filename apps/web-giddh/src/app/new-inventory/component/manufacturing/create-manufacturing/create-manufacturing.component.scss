@@ -8,6 +8,9 @@
         }
         .max-width-stock {
             max-width: 1400px;
+            .section-head {
+                color: var(--color-primary-header-background);
+            }
         }
         .less-than-text {
             font-size: 32px;
@@ -18,6 +21,12 @@
 
         .branch-msg {
             color: var(--color-primary-header-background);
+            background-color: var(--color-common-septenary-background-for-all-components);
+            display: flex;
+            justify-content: center;
+            max-width: 250px;
+            margin: 0 auto;
+            padding: 5px;
         }
 
         .form-fields {
@@ -42,10 +51,11 @@
                 width: 100%;
                 th,
                 td {
-                    padding: 10px 15px;
+                    padding: 10px 5px;
                     font-size: var(--font-size-15);
                     text-align: right;
-                    &:first-child {
+                    &:first-child,
+                    &:nth-child(2) {
                         text-align: left;
                     }
                 }
@@ -103,12 +113,12 @@
                         td {
                             color: var(--color-nero);
                             font-weight: 100;
+                            &:nth-child(2) {
+                                text-align: right;
+                            }
                         }
                     }
                 }
-            }
-            .section-head {
-                padding-left: 15px;
             }
             .icon-cross {
                 color: var(--color-red);
@@ -166,7 +176,4 @@
             }
         }
     }
-}
-.generate-clear {
-    column-gap: 10px;
 }

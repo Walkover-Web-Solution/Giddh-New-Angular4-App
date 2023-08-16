@@ -6,6 +6,9 @@ import { CommandKComponent, ScrollComponent } from '.';
 import { CommandKService } from '../../services/commandk.service';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { TranslateDirectiveModule } from '../translate/translate.directive.module';
+import { MatListModule } from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -18,7 +21,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormsModule,
         ClickOutsideModule,
         PerfectScrollbarModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        MatListModule,
+        MatDialogModule,
+        MatButtonModule
     ],
     declarations: [
         CommandKComponent,

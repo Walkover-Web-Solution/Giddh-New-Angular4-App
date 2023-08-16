@@ -90,27 +90,29 @@
                                     </ng-container>
                                 </div>
                             </th>
-                            <th
-                                #searchTaxInputField
-                                width="25%"
-                                class="td-search-box"
-                                (clickOutside)="clickedOutside($event, searchTaxInputField, 'searchTaxInput')"
-                            >
-                                <div>
-                                    <ng-container
-                                        *ngTemplateOutlet="
-                                            searchTemplate;
-                                            context: {
-                                                $implicit: showSearchTax,
-                                                title: taxType,
-                                                fieldName: 'searchTaxInput',
-                                                formControl: searchTaxInput
-                                            }
-                                        "
-                                    >
-                                    </ng-container>
-                                </div>
-                            </th>
+                            <ng-container *ngIf="showTaxColumn">
+                                <th
+                                    #searchTaxInputField
+                                    width="25%"
+                                    class="td-search-box"
+                                    (clickOutside)="clickedOutside($event, searchTaxInputField, 'searchTaxInput')"
+                                >
+                                    <div>
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showSearchTax,
+                                                    title: taxType,
+                                                    fieldName: 'searchTaxInput',
+                                                    formControl: searchTaxInput
+                                                }
+                                            "
+                                        >
+                                        </ng-container>
+                                    </div>
+                                </th>
+                            </ng-container>
                             <th
                                 #searchStateInputField
                                 width="15%"
@@ -123,7 +125,9 @@
                                             searchTemplate;
                                             context: {
                                                 $implicit: showSearchState,
-                                                title: commonLocaleData?.app_state,
+                                                title: addressConfiguration.countyList?.length
+                                                    ? commonLocaleData?.app_region
+                                                    : commonLocaleData?.app_state,
                                                 fieldName: 'searchStateInput',
                                                 formControl: searchStateInput
                                             }
@@ -156,15 +160,26 @@
                                     </ng-container>
                                 </div>
                             </td>
-                            <td [attr.data-title]="taxType">
+                            <td [attr.data-title]="taxType" *ngIf="showTaxColumn">
                                 <div>
                                     <ng-container *ngIf="address.taxType && address.taxNumber">
                                         {{ address.taxNumber }}
                                     </ng-container>
                                 </div>
                             </td>
-                            <td [attr.data-title]="commonLocaleData?.app_state">
-                                <div>{{ address.stateCode }} - {{ address.stateName }}</div>
+                            <td
+                                [attr.data-title]="
+                                    addressConfiguration.countyList?.length
+                                        ? commonLocaleData?.app_region
+                                        : commonLocaleData?.app_state
+                                "
+                            >
+                                <div *ngIf="addressConfiguration.countyList?.length">
+                                    {{ address.county?.code }} - {{ address.county?.name }}
+                                </div>
+                                <div *ngIf="!addressConfiguration.countyList?.length">
+                                    {{ address.stateCode }} - {{ address.stateName }}
+                                </div>
                             </td>
                             <td
                                 [attr.data-title]="localeData?.linked_with"
@@ -235,7 +250,7 @@
                                 <label>{{ commonLocaleData?.app_address }}:</label>
                                 <p>
                                     {{ address.address }}
-                                    <ng-container *ngIf="address.taxType && address.taxNumber">
+                                    <ng-container *ngIf="showTaxColumn && address.taxType && address.taxNumber">
                                         <br *ngIf="address.address" />
                                         {{ address.taxType }} : {{ address.taxNumber }}
                                     </ng-container>

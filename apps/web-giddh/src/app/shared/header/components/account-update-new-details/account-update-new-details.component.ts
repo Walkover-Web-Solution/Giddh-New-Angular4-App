@@ -100,6 +100,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
+    /** List of counties of country */
+    public countyList: IOption[] = [];
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
     public isTaxableAccount$: Observable<boolean>;
@@ -310,17 +312,22 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.selectedaccountForMerge = '';
         });
-        this.isTaxableAccount$ = this.store.pipe(select(createSelector([
-            (state: AppState) => state.groupwithaccounts.activeAccount],
-            (activeAccount) => {
-                let result: boolean = false;
-                if (this.activeGroupUniqueName && activeAccount) {
-                    result = this.getAccountFromGroup(activeAccount, false);
-                } else {
-                    result = false;
-                }
-                return result;
-            })), takeUntil(this.destroyed$));
+        this.isTaxableAccount$ = this.store.pipe(select(createSelector([(state: AppState) => state.groupwithaccounts.activeAccount], (activeAccount) => {
+            let result: boolean = false;
+            if (this.activeGroupUniqueName && activeAccount) {
+                result = this.getAccountFromGroup(activeAccount, false);
+            } else {
+                result = false;
+            }
+            return result;
+        })), takeUntil(this.destroyed$));
+
+        this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                this.addAccountForm?.markAsPristine();
+            }
+        });
     }
 
     public ngAfterViewInit() {
@@ -489,6 +496,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             closingBalanceTriggerAmountType: ['CREDIT'],
             customFields: this._fb.array([])
         });
+
+        this.addAccountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+        });
+
         this.getInvoiceSettings();
     }
 
@@ -503,7 +515,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 name: [''],
                 stateGstCode: ['']
             }),
-            stateCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
+            stateCode: [{ value: '', disabled: false }, (this.isStateRequired && !this.countyList?.length) ? Validators.required : ""],
+            county: this._fb.group({
+                code: [''],
+                name: ['']
+            }),
+            countyCode: [{ value: '', disabled: false }, (this.isStateRequired && this.countyList?.length) ? Validators.required : ""],
             isDefault: [false],
             isComposite: [false],
             partyType: ['NOT APPLICABLE'],
@@ -512,6 +529,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         if (val) {
             val.stateCode = val.state ? (val.state.code ? val.state.code : val.stateCode) : val.stateCode;
+            val.countyCode = val.county ? val.county.code : "";
             gstFields?.patchValue(val);
         }
         return gstFields;
@@ -523,6 +541,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
             control.get('stateCode')?.patchValue(null);
+            control.get('countyCode')?.patchValue(null);
             control.get('state').get('code')?.patchValue(null);
             control.get('gstNumber')?.setValue("");
         }
@@ -711,6 +730,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
+        if (accountRequest.addresses && accountRequest.addresses.length > 0) {
+            accountRequest.addresses.forEach(address => {
+                if (this.countyList?.length) {
+                    delete address['state'];
+                    delete address['stateCode'];
+                } else {
+                    delete address['county'];
+                    delete address['countyCode'];
+                }
+            });
+        }
+
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
             accountRequest
@@ -762,7 +793,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             gstForm.get('state').get('code')?.patchValue(event?.value);
 
         }
+    }
 
+    public selectedCounty(gstForm: FormGroup, event) {
+        if (gstForm && event?.label) {
+            gstForm.get('countyCode')?.patchValue(event?.value);
+            gstForm.get('county').get('code')?.patchValue(event?.value);
+            gstForm.get('county').get('name')?.patchValue(event?.label);
+        }
     }
 
     public selectGroup(event: IOption) {
@@ -919,19 +957,30 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                 }
                 this.states = [];
+                this.stateList = [];
+                this.countyList = [];
+                this.statesSource$ = observableOf([]);
+
                 if (res.stateList) {
                     this.stateList = res.stateList;
+
+                    Object.keys(res.stateList).forEach(key => {
+                        if (res.stateList[key].stateGstCode !== null) {
+                            this.stateGstCode[res.stateList[key].stateGstCode] = [];
+                            this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
+                        }
+                        this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+                    });
+                    this.statesSource$ = observableOf(this.states);
                 }
-                Object.keys(res.stateList).forEach(key => {
 
-                    if (res.stateList[key].stateGstCode !== null) {
-                        this.stateGstCode[res.stateList[key].stateGstCode] = [];
-                        this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
-                    }
+                if (res.countyList) {
+                    this.countyList = res.countyList?.map(county => {
+                        return { label: county.name, value: county.code };
+                    });
+                }
 
-                    this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
-                });
-                this.statesSource$ = observableOf(this.states);
+                this.toggleStateRequired();
             } else {
                 let statesRequest = new StatesRequest();
                 statesRequest.country = countryCode;
@@ -1128,12 +1177,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         let i = 0;
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
+            control.get('stateCode').setValidators(null);
+            control.get('countyCode').setValidators(null);
             if (this.isStateRequired) {
-                control.get('stateCode').setValidators([Validators.required]);
-            } else {
-                control.get('stateCode').setValidators(null);
+                if (this.countyList?.length) {
+                    control.get('countyCode').setValidators([Validators.required]);
+                } else {
+                    control.get('stateCode').setValidators([Validators.required]);
+                }
             }
             control.get('stateCode').updateValueAndValidity();
+            control.get('countyCode').updateValueAndValidity();
             i++;
         }
         this.addAccountForm.controls['addresses'].updateValueAndValidity();
@@ -1711,6 +1765,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 accountDetails.addresses.forEach(address => {
                     address.state = address.state ? address.state : { code: '', stateGstCode: '', name: '' };
                     address.stateCodeName = address.state.code + " - " + address.state.name;
+
+                    address.county = address.county ? address.county : { code: '', name: '' };
                 });
 
                 for (let i = 0; i <= 10; i++) {

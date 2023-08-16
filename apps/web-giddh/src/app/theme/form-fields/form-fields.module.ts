@@ -31,7 +31,6 @@ import { DropdownFieldComponent } from "./dropdown-field/dropdown-field.componen
         TextFieldComponent,
         SelectFieldComponent,
         SelectMultipleFieldsComponent,
-        CdkScrollComponent,
         InputFieldComponent,
         DropdownFieldComponent
     ],
@@ -63,11 +62,8 @@ import { DropdownFieldComponent } from "./dropdown-field/dropdown-field.componen
         SelectFieldComponent,
         SelectMultipleFieldsComponent,
         MatFormFieldModule,
-        CdkScrollComponent,
         InputFieldComponent,
-        DropdownFieldComponent,
-        CdkScrollModule,
-        ScrollingModule
+        DropdownFieldComponent
     ]
 })
 

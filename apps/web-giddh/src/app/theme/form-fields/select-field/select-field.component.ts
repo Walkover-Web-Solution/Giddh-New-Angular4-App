@@ -93,9 +93,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         if (this.enableDynamicSearch) {
             this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
                 if (search) {
-                    if (typeof search === "string") {
+                    if (typeof search === "string" && search !== this.defaultValue) {
                         this.dynamicSearchedQuery.emit(search);
-                    } else {
+                    } else if (search?.label !== this.defaultValue) {
                         this.dynamicSearchedQuery.emit(search?.label || "");
                     }
                 } else {
@@ -137,14 +137,16 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
             this.fieldFilteredOptions = changes.options.currentValue;
         }
         if (changes?.defaultValue) {
-            this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
-            if (!this.options || this.options?.length === 0) {
-                if (this.enableDynamicSearch) {
-                    this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
-                } else {
-                    this.filterOptions(changes?.defaultValue.currentValue);
+            // setTimeout(() => {
+                this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
+                if (!this.options || this.options?.length === 0) {
+                    if (this.enableDynamicSearch) {
+                        this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
+                    } else {
+                        this.filterOptions(changes?.defaultValue.currentValue);
+                    }
                 }
-            }
+            // }, 500);
         }
     }
 
@@ -305,7 +307,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      */
     public addClassForDropdown(): void {
         setTimeout(() => {
-            document.querySelectorAll(".cdk-overlay-pane")[0].classList.add("dropdown-position");
+            if (document.querySelectorAll(".cdk-overlay-pane")?.length) {
+                document.querySelectorAll(".cdk-overlay-pane")[document.querySelectorAll(".cdk-overlay-pane")?.length - 1]?.classList?.add("dropdown-position");
+            }
         }, 10);
     }
 }

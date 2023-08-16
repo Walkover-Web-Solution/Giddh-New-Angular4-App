@@ -403,23 +403,20 @@ span.input-addon {
 }
 
 button.btn.btn-filter {
-    background: var(--color-dark-fog);
-    border: 1px solid var(--color-dark-fog);
     font-size: var(--font-size-15);
-    color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
     width: 140px !important;
     margin: 0 auto !important;
     margin-right: 0 !important;
-    box-shadow: none !important;
     height: 40px;
 }
 .btn-small {
     box-shadow: none !important;
 }
-button.btn.btn-filter span.icon-cross {
-    margin-right: 5px;
+
+.icon-cross {
+    line-height: 32px;
 }
 
 .customer-form-inline {
@@ -963,9 +960,6 @@ button.btn.btn-filter span.icon-cross {
 }
 .min-width-137 {
     min-width: 137px;
-    color: var(--color-denary-button-text);
-    background-color: var(--color-denary-button-background);
-    border: 1px solid var(--color-primary-button-border);
 }
 
 .btn-light:not(:disabled):not(.disabled).active,

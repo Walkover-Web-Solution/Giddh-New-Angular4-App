@@ -272,6 +272,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public invoiceListRequestParams: any = {};
     /** Current page for reference vouchers */
     private referenceVouchersCurrentPage: number = 1;
+    /** Total pages for reference vouchers */
+    private referenceVouchersTotalPages: number = 1;
     /** Reference voucher search field */
     private searchReferenceVoucher: any = "";
     /** Invoice list observable */
@@ -1081,6 +1083,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
 
         request.page = this.referenceVouchersCurrentPage;
+
+        if (this.voucherApiVersion === 2 && request.page > 1 && this.referenceVouchersTotalPages < request.page) {
+            return;
+        }
+
         this.referenceVouchersCurrentPage++;
 
         let date;
@@ -1096,6 +1103,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.body) {
+                this.referenceVouchersTotalPages = response.body.totalPages;
+
                 if (response.body.results || response.body.items) {
                     let items = [];
                     if (response.body.results) {
@@ -2428,6 +2437,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.invoiceList = [];
         this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 1;
+        this.referenceVouchersTotalPages = 1;
     }
 
     /**
@@ -2561,24 +2571,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         stockUnitCode: variantUnitRates[0].stockUnitCode,
                         code: variantUnitRates[0].stockUnitCode,
                         rate: variantUnitRates[0].rate,
-                        name: stockDetails.name
+                        name: stockDetails.name,
+                        stockUnitUniqueName: variantUnitRates[0].stockUnitUniqueName
                     };
                     // For V1 company, the unitRates is obtained in 'stock' and for v2 company, unitRates is obtained in 'stock.variant'
                     const unitRates = this.generalService.voucherApiVersion === 1 ? stockDetails?.unitRates : variantUnitRates
                     txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
-                    if (requestObject.variantUniqueName) {
-                        // Variant got changed, search the selected variant's unit and assign its rate
-                        const selectedUnitRate = unitRates.find (unitRate => unitRate.stockUnitUniqueName === this.vm.stockTrxEntry.inventory.unit.uniqueName)
-                        rate = selectedUnitRate?.rate ?? defaultUnit.rate;
-                        unitCode = selectedUnitRate?.code ?? defaultUnit.code;
-                    } else {
-                        rate = defaultUnit.rate;
-                        unitCode = defaultUnit.code;
-                    }
+                    rate = defaultUnit.rate;
+                    unitCode = defaultUnit.code;
+                    stockUnitUniqueName = defaultUnit.stockUnitUniqueName;
                     rate = Number((rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                     stockName = defaultUnit.name;
                     stockUniqueName = stockDetails?.uniqueName;
-                    stockUnitUniqueName = variantUnitRates[0].stockUnitUniqueName;
                 }
 
                 if (stockName && stockUniqueName) {
@@ -2592,8 +2596,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             stockUnitCode: unitCode,
                             code: unitCode,
                             rate: rate,
-                            stockUnitUniqueName: stockUnitUniqueName,
-                            uniqueName: txn.inventory?.unit?.uniqueName,
+                            stockUnitUniqueName,
+                            uniqueName: stockUnitUniqueName,
                         },
                         amount: 0,
                         rate
@@ -2626,6 +2630,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     (stockDetails.variant?.fixedAssetTaxInclusive && category === 'fixedassets'))) {
                     // Calculate inclusively
                     this.vm.isInclusiveTax = true;
+                    this.vm.grandTotal = this.vm.stockTrxEntry.inventory.quantity * this.vm.stockTrxEntry.inventory.rate;
                     this.vm.inventoryTotalChanged();
                 } else {
                     this.vm.isInclusiveTax = false;

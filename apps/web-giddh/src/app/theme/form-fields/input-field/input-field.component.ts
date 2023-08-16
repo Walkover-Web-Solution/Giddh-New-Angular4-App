@@ -20,14 +20,23 @@ const noop = () => {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAccessor {
+    /** Instance of input field */
     @ViewChild('textField', { static: false }) public textField: ElementRef;
+    /** Regex pattern for the input field */
     @Input() public pattern: any = null;
+    /** True if field is required */
     @Input() public required: boolean = false;
+    /** Minimum value of field */
     @Input() public min: number = null;
+    /** Maximum value of field */
     @Input() public max: number = null;
+    /** True if need to allow decimal with digits */
     @Input() public allowDecimalDigitsOnly: boolean = false;
+    /** True if need to allow only digits */
     @Input() public allowDigitsOnly: boolean = false;
+    /** Css classes to be applied on input field */
     @Input() public cssClass: string = "";
+    /** Css styles to be applied on input field */
     @Input() public cssStyle: string = "";
     /** Taking placeholder as input */
     @Input() public placeholder: any = "";
@@ -35,8 +44,11 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public name: any = "";
     /** Taking id as input */
     @Input() public id: any = "";
+    /** Max length of input field */
     @Input() public maxlength: number;
+    /** True if field is read only */
     @Input() public readonly: boolean;
+    /** Type of input field */
     @Input() public type: string = "text";
     /** Adds red border around field if true */
     @Input() public showError: boolean = false;
@@ -50,9 +62,22 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public prefix: any;
     /** It will show suffix in the text field */
     @Input() public suffix: any;
+    /** Holds custom decimal places */
     @Input() public customDecimalPlaces: any;
     /** Holds mat suffic */
     @Input() public matSuffix: any;
+    /** Holds mat prefix */
+    @Input() public matPrefix: any;
+    /** True if field is autocomplete */
+    @Input() public autocomplete: string = 'off';
+    /** Appearance of mat form field */
+    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
+    /** Label of mat form field */
+    @Input() public floatLabel: any = 'auto';
+    /** Holds Mat Input Label */
+    @Input() public label: string;
+    /** Emits on change event */
+    @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */
@@ -60,20 +85,13 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
-    /** True if field is autocomplete */
-    @Input() public autocomplete: string;
-    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
-    /** Holds Mat Input Label */
-    @Input() public label: string;
-    /** Emits on change event */
-    @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
         private elementRef: ElementRef<HTMLElement>,
         private changeDetectionRef: ChangeDetectorRef
     ) {
-        if (this.ngControl != null) {
+        if (this.ngControl !== null) {
             this.ngControl.valueAccessor = this;
         }
     }
@@ -96,14 +114,14 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      *
      * @memberof InputFieldComponent
      */
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.stateChanges.complete();
     }
 
     //////// ControlValueAccessor //////////
 
     /**
-     * This is used to get the inner value of datepicker
+     * This is used to get the inner value of field
      *
      * @type {*}
      * @memberof InputFieldComponent

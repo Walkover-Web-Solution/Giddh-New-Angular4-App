@@ -11,7 +11,8 @@
                 <div class="col-sm-1" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <div class="back-btnn">
                         <button
-                            class="btn btn-default back-button d-inline-flex"
+                            mat-stroked-button
+                            class="back-button"
                             (click)="backToSubscriptions()"
                             *ngIf="!showLoader"
                         >
@@ -224,8 +225,8 @@
                                     <div class="amount-field-content">
                                         <amount-field
                                             [amount]="selectedPlans?.planDetails?.amount"
-                                            [currencySymbol]="activeCompany?.countryV2.currency?.symbol"
-                                            [currencyCode]="activeCompany?.countryV2.currency?.code"
+                                            [currencySymbol]="selectedPlans?.planDetails?.currency?.symbol"
+                                            [currencyCode]="selectedPlans?.planDetails?.currency?.code"
                                         >
                                         </amount-field>
                                     </div>
@@ -300,8 +301,8 @@
                                                 ? selectedPlans?.planDetails?.amount * taxPercentage
                                                 : 0)
                                         "
-                                        [currencySymbol]="activeCompany?.countryV2.currency?.symbol"
-                                        [currencyCode]="activeCompany?.countryV2.currency?.code"
+                                        [currencySymbol]="selectedPlans?.planDetails?.currency?.symbol"
+                                        [currencyCode]="selectedPlans?.planDetails?.currency?.code"
                                     >
                                     </amount-field>
                                 </div>
@@ -320,7 +321,7 @@
                                 ></div>
                                 <button
                                     class="pay-now"
-                                    mat-button
+                                    mat-stroked-button
                                     color="primary"
                                     [ngClass]="{ 'pay-now-content': showLoader }"
                                     (click)="payWithRazor(billingForm)"

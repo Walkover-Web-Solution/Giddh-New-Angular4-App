@@ -50,7 +50,6 @@
         "variant_name":"Variant Name",
         "no_entries_found_1":"No entries found within given criteria.",
         "no_entries_found_2":"Do search with some other dates",
-        "no_columns_found":"No columns are selected from customise filter.",
         "voucher_type":"Voucher Type",
         "rate":"Rate",
         "date":"Date",
@@ -87,7 +86,11 @@
         "equals":"Equals",
         "greater_than":"Greater than",
         "less_than":"Less than",
-        "excluded":"Excluded"
+        "excluded":"Excluded",
+        "category":"Category",
+        "type":"Type",
+        "select_value":"Select Value",
+        "enter_amount":"Enter Amount"
     },
     "warehouse_opening_balance":{
         "unique_name":"Unique Name",

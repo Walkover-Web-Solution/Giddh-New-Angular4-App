@@ -162,14 +162,15 @@ export class ReportsComponent implements OnInit {
                     this.showClearFilter = cloneDeep(this.storeFilters[this.currentUrl]?.showClearFilter);
                     this.advanceSearchModalResponse = cloneDeep(this.storeFilters[this.currentUrl]?.advanceSearchModalResponse);
 
-                    this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.stockReportRequest.from = this.fromDate;
-                    this.stockReportRequest.to = this.toDate;
-                    this.balanceStockReportRequest.from = this.fromDate;
-                    this.balanceStockReportRequest.to = this.toDate;
-
-                    this.fromToDate = { from: this.fromDate, to: this.toDate };
+                    if (this.stockReportRequest?.from) {
+                        this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.stockReportRequest.from = this.fromDate;
+                        this.stockReportRequest.to = this.toDate;
+                        this.balanceStockReportRequest.from = this.fromDate;
+                        this.balanceStockReportRequest.to = this.toDate;
+                        this.fromToDate = { from: this.fromDate, to: this.toDate };
+                    }
                 }
             } else {
                 this.storeFilters = response;
@@ -210,17 +211,20 @@ export class ReportsComponent implements OnInit {
                 this.pullUniversalDate = false;
                 this.initialLoad = true;
                 this.stockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.stockReportRequest);
+
                 this.balanceStockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.balanceStockReportRequest);
                 this.todaySelected = cloneDeep(this.storeFilters[this.currentUrl]?.todaySelected);
                 this.showClearFilter = cloneDeep(this.storeFilters[this.currentUrl]?.showClearFilter);
                 this.advanceSearchModalResponse = cloneDeep(this.storeFilters[this.currentUrl]?.advanceSearchModalResponse);
-                this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                this.stockReportRequest.from = this.fromDate;
-                this.stockReportRequest.to = this.toDate;
-                this.balanceStockReportRequest.from = this.fromDate;
-                this.balanceStockReportRequest.to = this.toDate;
-                this.fromToDate = { from: this.fromDate, to: this.toDate };
+                if (this.stockReportRequest?.from) {
+                    this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.stockReportRequest.from = this.fromDate;
+                    this.stockReportRequest.to = this.toDate;
+                    this.balanceStockReportRequest.from = this.fromDate;
+                    this.balanceStockReportRequest.to = this.toDate;
+                    this.fromToDate = { from: this.fromDate, to: this.toDate };
+                }
                 if (!this.isCompany) {
                     this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                     this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
@@ -721,7 +725,8 @@ export class ReportsComponent implements OnInit {
         if (this.moduleType?.toUpperCase() === 'FIXED_ASSETS') {
             this.moduleType = 'fixedassets';
         }
-        this.router.navigate(['/pages/inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName]);
+
+        this.router.navigate(['/pages/inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName], { queryParams: { tab: 1 } });
     }
 
     /**

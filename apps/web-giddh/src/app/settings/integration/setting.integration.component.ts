@@ -1,4 +1,4 @@
-import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
@@ -27,6 +27,11 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { MatTabGroup } from '@angular/material/tabs';
+import {
+    PlaidConfig,
+    NgxPlaidLinkService,
+    PlaidLinkHandler
+} from "ngx-plaid-link";
 
 @Component({
     selector: 'setting-integration',
@@ -72,8 +77,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     private isSellerUpdate: Observable<boolean> = observableOf(false);
     /** Input mast for number format */
     public inputMaskFormat: string = '';
-    /** To check company country */
-    public isIndianCompany: boolean = true;
     /**This will use for select tab index */
     @Input() public selectedTabParent: number;
     @ViewChild('removegmailintegration', { static: true }) public removegmailintegration: ModalDirective;
@@ -153,6 +156,22 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** This will hold plaid link handler */
+    private plaidLinkHandler: PlaidLinkHandler;
+    /** This will hold plaid configuration */
+    private plaidConfig: PlaidConfig = {
+        env: "sandbox",
+        token: null,
+        product: ["auth","transactions"],
+        onSuccess: undefined,
+        onExit: undefined
+    };
+    /** List of icici bank supported countries */
+    public iciciBankSupportedCountryList: any[] = ["IN", "NP", "BT"];
+    /** True, if is other country in payment integration */
+    public isIciciBankSupportedCountry: boolean = false;
+/** True, if is add or manage group form outside */
+    public isAddAndManageOpenedFromOutside:boolean = false;
 
     constructor(
         private router: Router,
@@ -168,7 +187,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private settingsIntegrationService: SettingsIntegrationService,
         private searchService: SearchService,
         private salesService: SalesService,
-        private route: ActivatedRoute
+        private plaidLinkService: NgxPlaidLinkService,
+        private activateRoute: ActivatedRoute
 
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
@@ -271,9 +291,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                this.isIndianCompany = profile.countryV2.alpha2CountryCode === 'IN' ? true : false;
-                if (!this.isIndianCompany && this.selectedTabParent === 3) {
-                    this.selectedTabParent = 0;
+                if (this.iciciBankSupportedCountryList.includes(profile.countryV2.alpha2CountryCode)) {
+                    this.isIciciBankSupportedCountry = true;
+                } else {
+                    this.isIciciBankSupportedCountry = false;
                 }
             }
         });
@@ -286,6 +307,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
+        });
+        this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(response => {
+            if (!response && this.isAddAndManageOpenedFromOutside) {
+                this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(resp => {
+                    if (resp?.referrer === 'payment') {
+                        this.loadDefaultBankAccountsSuggestions();
+                    }
+                });
+            }
+            this.isAddAndManageOpenedFromOutside = response;
         });
     }
 
@@ -594,6 +625,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadPaymentData(event?: any): void {
+        this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(result => {
+            this.isAddAndManageOpenedFromOutside = result;
+        });
         if (event && event instanceof TabDirective || !event) {
             this.loadDefaultBankAccountsSuggestions();
             this.getAllBankAccounts();
@@ -836,6 +870,85 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public openCreateNewAccountModal(): void {
         this.createNewAccountModal?.show();
+    }
+
+    /**
+     * This will open create new account modal
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public getPlaidLinkToken(): void {
+        this.settingsIntegrationService.getPlaidLinkToken().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body) {
+                this.plaidConfig.token = response.body?.link_token;
+                this.plaidLinkService
+                    .createPlaid(
+                        Object.assign({}, this.plaidConfig, {
+                            onSuccess: (token, metadata) => this.getPlaidSuccessPublicToken(token, metadata)
+                        })
+                    )
+                    .then((handler: PlaidLinkHandler) => {
+                        this.plaidLinkHandler = handler;
+                        this.plaidLinkHandler.open();
+                    });
+            } else {
+                this.toasty.clearAllToaster();
+                this.toasty.errorToast(response?.message);
+            }
+        });
+    }
+
+    /**
+     *This will use for get plaid success public token
+     *
+     * @param {*} token
+     * @param {*} metadata
+     * @memberof SettingIntegrationComponent
+     */
+    public getPlaidSuccessPublicToken(token: string, metadata: any): void {
+        let data = {
+            public_token: token,
+            institution: metadata?.institution,
+            accounts: metadata?.accounts
+        }
+        this.settingsIntegrationService.savePlaidAccessToken(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body) {
+                this.loadPaymentData();
+            } else {
+                this.toasty.clearAllToaster();
+                this.toasty.errorToast(response?.message);
+            }
+        });
+    }
+
+    /**
+     * This will use for select bank account only for plaid integration
+     *
+     * @param {*} event
+     * @param {*} bank
+     * @memberof SettingIntegrationComponent
+     */
+    public selectBankAccount(event: any, bank: any): void {
+        if (event) {
+            let request = { bankAccountUniqueName: bank?.iciciDetailsResource?.uniqueName };
+            let accountForm = {
+                accountNumber: bank?.iciciDetailsResource?.accountNumber,
+                accountUniqueName: event?.value,
+                paymentAlerts: [],
+                bankName: 'plaid'
+            };
+            this.settingsIntegrationService.updateAccount(accountForm, request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success") {
+                    if (response?.body?.message) {
+                        this.toasty.clearAllToaster();
+                        this.toasty.successToast(response?.body?.message);
+                    }
+                } else {
+                    this.toasty.clearAllToaster();
+                    this.toasty.errorToast(response?.message);
+                }
+            });
+        }
     }
 
     /**

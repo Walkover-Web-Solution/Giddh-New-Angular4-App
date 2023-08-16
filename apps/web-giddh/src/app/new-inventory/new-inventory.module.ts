@@ -73,11 +73,15 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { MatListModule } from "@angular/material/list";
 import { MatDivider } from "@angular/material/divider";
 import { AsideCreateNewUnitComponent } from "./component/aside-create-unit/aside-create-unit.component";
-import { CreateGroupComponent } from "./component/create-group/create-group.component";
-import { AsideCreatGroupComponent } from "./component/aside-create-group/aside-create-group.component";
+import { CreateUnitGroupComponent } from "./component/create-unit-group/create-unit-group.component";
+import { AsideCreateUnitGroupComponent } from "./component/aside-create-unit-group/aside-create-unit-group.component";
 import { RecipeModule } from "./component/recipe/recipe.module";
 import { ManufacturingModule } from "../manufacturing/manufacturing.module";
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
+import { FormsModule } from "@angular/forms";
+import { NoDataModule } from "../shared/no-data/no-data.module";
+import { DragDropModule } from "@angular/cdk/drag-drop";
+import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
 
 @NgModule({
     declarations: [
@@ -120,8 +124,8 @@ import { InventoryMasterComponent } from "./component/inventory-master/inventory
         ReportFiltersComponent,
         ReportsComponent,
         AsideCreateNewUnitComponent,
-        CreateGroupComponent,
-        AsideCreatGroupComponent,
+        CreateUnitGroupComponent,
+        AsideCreateUnitGroupComponent,
         CustomUnitsComponent,
         InventoryMasterComponent
     ],
@@ -160,7 +164,11 @@ import { InventoryMasterComponent } from "./component/inventory-master/inventory
         MatGridListModule,
         MatListModule,
         RecipeModule,
-        ManufacturingModule
+        ManufacturingModule,
+        CdkScrollModule,
+        FormsModule,
+        NoDataModule,
+        DragDropModule
     ],
     exports: [
         NewInventoryComponent,

@@ -320,7 +320,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 stockReportRequest: this.stockReportRequest,
                 advanceSearchResponse: this.advanceSearchModalResponse,
                 reportType: this.searchPage
-            }
+            },
+            width: '500px'
         });
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

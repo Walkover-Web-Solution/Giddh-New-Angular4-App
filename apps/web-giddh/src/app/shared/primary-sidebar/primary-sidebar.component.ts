@@ -22,6 +22,7 @@ import { GeneralService } from '../../services/general.service';
 import { LocaleService } from '../../services/locale.service';
 import { AppState } from '../../store';
 import { AllItem, AllItems } from '../helpers/allItems';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'primary-sidebar',
@@ -81,10 +82,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public allItems: AllItems[] = [];
     /** True, if sidebar needs to be shown */
     @Input() public isOpen: boolean = false;
+    /** True, if sidebar needs to be shown */
+    @Input() public isGoToBranch: boolean = false;
     /** API menu items, required to show permissible items only in the menu */
     @Input() public apiMenuItems: Array<any> = [];
-    /** Event to carry out new company onboarding */
-    @Output() public newCompany: EventEmitter<void> = new EventEmitter();
     /** Stores the instance of CMD+K dropdown */
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Stores the instance of company detail dropdown */
@@ -109,6 +110,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     private createAccountIsSuccess$: Observable<boolean>;
     /* This will hold the active route url */
     public isActiveRoute: string;
+    /** True if account has unsaved changes */
+    public hasUnsavedChanges: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -122,7 +125,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         private dbService: DbService,
         private groupWithAction: GroupWithAccountsAction,
         private localeService: LocaleService,
-        private salesAction: SalesActions
+        private salesAction: SalesActions,
+        public dialog: MatDialog,
     ) {
         this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -149,6 +153,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasUnsavedChanges = response;
+        });
     }
 
     /**
@@ -173,7 +181,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             event.preventDefault();
             event.stopPropagation();
             if (this.companyList?.length > 0) {
-                this.showNavigationModal();
+                this.dialog.open(this.navigationModal, {
+                    width:'630px',
+                    height: '600'
+                });
             }
         }
     }
@@ -186,6 +197,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.isGoToBranch?.currentValue) {
+            this.openCompanyBranchDropdown();
+        }
         if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length && this.localeData?.page_heading) {
             this.allItems = this.generalService.getVisibleMenuItems("sidebar", changes.apiMenuItems.currentValue, this.localeData?.items);
             this.allItems?.map(items => {
@@ -287,7 +301,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
                 this.changeDetectorRef.detectChanges();
             }
-
             if (event instanceof NavigationStart) {
                 if (this.companyDetailsDropDownWeb.isOpen) {
                     this.companyDetailsDropDownWeb.hide();
@@ -377,7 +390,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public handleNewTeamCreationEmitter(e: any): void {
-        this.modelRef.hide();
+        this.modelRef?.hide();
         if (e[0] === "group") {
             if (this.accountAsideMenuState === "in") {
                 this.toggleAccountAsidePane();
@@ -527,15 +540,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         if (item?.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
         }
-    }
-
-    /**
-     * Opens new company modal
-     *
-     * @memberof PrimarySidebarComponent
-     */
-    public createNewCompany(): void {
-        this.newCompany.emit();
     }
 
     /**

@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output, ViewChild, Input } from '@angu
 import { SearchDataSet } from '../../../models/api-models/Search';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../shared/helpers/customValidationHelper';
-import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
     selector: 'search-filter',
@@ -25,13 +25,16 @@ export class SearchFilterComponent implements OnInit {
     @Output() public createCsv = new EventEmitter();
     @Output() public openEmailDialog = new EventEmitter();
     @Output() public openSmsDialog = new EventEmitter();
-    @ViewChild('filterDropdown', { static: true }) public filterDropdown: BsDropdownDirective;
+    /* This will holds the Filter By Account Mat Menu Reference */
+    @ViewChild('filterMenu', { static: false, read: MatAutocompleteTrigger }) filterMenu: MatAutocompleteTrigger;
     public queryTypes = [];
     public queryDiffers = [];
     public balType = [];
     public searchQueryForm: FormGroup;
     public searchDataSet: FormArray;
     public toggleFilters: boolean = false;
+    /* It reset the status for Filter by Account  */
+    public resetValues: boolean = false;
 
     /**
      * TypeScript public modifiers
@@ -51,25 +54,28 @@ export class SearchFilterComponent implements OnInit {
 
     public ngOnInit() {
         this.queryTypes = [
-            { name: this.localeData?.query_types.closing_balance, uniqueName: 'closingBalance' },
-            { name: this.localeData?.query_types.opening_balance, uniqueName: 'openingBalance' },
-            { name: this.localeData?.query_types.cr_total, uniqueName: 'creditTotal' },
-            { name: this.localeData?.query_types.dr_total, uniqueName: 'debitTotal' }
+            { label: this.localeData?.query_types.closing_balance, value: 'closingBalance' },
+            { label: this.localeData?.query_types.opening_balance, value: 'openingBalance' },
+            { label: this.localeData?.query_types.cr_total, value: 'creditTotal' },
+            { label: this.localeData?.query_types.dr_total, value: 'debitTotal' }
         ];
 
         this.queryDiffers = [
-            this.localeData?.query_differs.less,
-            this.localeData?.query_differs.greater,
-            this.localeData?.query_differs.equals
+            { label: this.localeData?.query_differs.less, value: this.localeData?.query_differs.less},
+            { label: this.localeData?.query_differs.greater, value: this.localeData?.query_differs.greater },
+            { label: this.localeData?.query_differs.equals, value: this.localeData?.query_differs.equals }
         ];
 
         this.balType = [
-            { name: this.localeData?.balance_type.cr, uniqueName: 'CREDIT' },
-            { name: this.localeData?.balance_type.dr, uniqueName: 'DEBIT' }
+            { label: this.localeData?.balance_type.cr, value: 'CREDIT' },
+            { label: this.localeData?.balance_type.dr, value: 'DEBIT' }
         ];
     }
 
     public filterData() {
+        if (this.searchQueryForm.invalid) {
+            return;
+        }
         this.isFiltered.emit(true);
         this.searchQuery.emit(this.searchQueryForm?.value.searchQuery);
     }
@@ -79,6 +85,9 @@ export class SearchFilterComponent implements OnInit {
     }
 
     public addSearchRow() {
+        if (this.searchDataSet?.controls?.length > 3 || this.searchQueryForm.invalid) {
+            return;
+        }
         this.searchDataSet.push(this.fb.group({
             queryType: ['closingBalance', Validators.required],
             openingBalanceType: ['DEBIT', Validators.required],
@@ -91,6 +100,7 @@ export class SearchFilterComponent implements OnInit {
     public resetQuery() {
         this.searchDataSet.controls = [];
         this.addSearchRow();
+        this.resetValues = true;
         this.isFiltered.emit(false);
     }
 

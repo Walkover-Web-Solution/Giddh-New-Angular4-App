@@ -141,7 +141,7 @@ export class ManufacturingService {
      * @returns {Observable<BaseResponse<any, string>>}
      * @memberof ManufacturingService
      */
-    public getVariantRecipe(stockUniqueName: string, variantUniqueNames: string[], withRate: boolean = false): Observable<BaseResponse<any, string>> {
+    public getVariantRecipe(stockUniqueName: string, variantUniqueNames: string[] = [], withRate: boolean = false): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + MANUFACTURING_API.GET_RECIPE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))?.replace(':withRate', String(withRate)), variantUniqueNames).pipe(
             map((res) => {
@@ -149,7 +149,7 @@ export class ManufacturingService {
                 data.queryString = stockUniqueName;
                 return data;
             }),
-            catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
     }
 
     /**
@@ -264,10 +264,17 @@ export class ManufacturingService {
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
     }
 
-    public loadStockUnits(stockUniqueName: string): Observable<Array<any>> {
+    /**
+     * Gets linked stock units by stock unit unique name
+     *
+     * @param {string} stockUnitUniqueName
+     * @returns {Observable<Array<any>>}
+     * @memberof ManufacturingService
+     */
+    public loadStockUnits(stockUnitUniqueName: string): Observable<Array<any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         const url = this.config.apiUrl + MANUFACTURING_API.GET_STOCK_UNITS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
+            ?.replace(':stockUnitUniqueName', encodeURIComponent(stockUnitUniqueName));
         return this.http.get(url).pipe(map((res) => res.body),catchError(e => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 }

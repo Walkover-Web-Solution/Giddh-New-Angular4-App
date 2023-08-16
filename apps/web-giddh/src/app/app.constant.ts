@@ -9,6 +9,12 @@ export const Configuration = {
     APP_FOLDER
 };
 
+/** Add Company business type*/
+export enum BusinessTypes {
+    Registered = 'Registered',
+    Unregistered = 'Unregistered'
+};
+
 export const APP_DEFAULT_TITLE = '';
 
 export const DEFAULT_TOASTER_OPTIONS = {
@@ -224,7 +230,7 @@ export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandat
 
 /** Vat supported country codes */
 export const VAT_SUPPORTED_COUNTRIES = [
-    'QA', 'BH', 'AE', 'SA', 'OM', 'KW'
+    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB'
 ];
 
 export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
@@ -336,6 +342,62 @@ export const GIDDH_VOUCHER_FORM = [
     },
     {
         type: "cash",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "cash bill",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "cash debit note",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "cash credit note",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "cash sales",
         advanceReceiptAllowed: false,
         rcmAllowed: false,
         depositAllowed: true,

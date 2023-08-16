@@ -79,10 +79,10 @@
                 </button>
             </div>
             <div class="dis middle top-bar-content-right-side">
-                <button mat-flat-button color="primary" class="back-btn" (click)="gotoSalesRegister()">
+                <button mat-stroked-button color="primary" class="back-btn" (click)="gotoSalesRegister()">
                     {{ commonLocaleData?.app_back }}
                 </button>
-                <button mat-flat-button color="primary" class="back-btn mr-l1" (click)="export()">
+                <button mat-stroked-button color="primary" class="back-btn mr-l1" (click)="export()">
                     {{ commonLocaleData?.app_export }}
                 </button>
                 <select-table-column
@@ -258,6 +258,41 @@
                                     <span> {{ commonLocaleData?.app_account }}</span>
                                 </div>
                             </th>
+                            <th class="td-search-box" *ngIf="showFieldFilter.parent_group">
+                                <div>
+                                    <span> {{ commonLocaleData?.app_parent_group }}</span>
+                                </div>
+                            </th>
+                            <th class="td-search-box" *ngIf="showFieldFilter.tax_no">
+                                <div>
+                                    <span> {{ commonLocaleData?.app_tax_number_short }}</span>
+                                </div>
+                            </th>
+                            <th class="td-search-box" *ngIf="showFieldFilter.address">
+                                <div>
+                                    <span> {{ commonLocaleData?.app_address }}</span>
+                                </div>
+                            </th>
+                            <th class="td-search-box" *ngIf="showFieldFilter.pincode">
+                                <div>
+                                    <span> {{ commonLocaleData?.app_pin_code }}</span>
+                                </div>
+                            </th>
+                            <th class="td-search-box" *ngIf="showFieldFilter.email">
+                                <div>
+                                    <span> {{ commonLocaleData?.app_email }}</span>
+                                </div>
+                            </th>
+                            <th class="td-search-box" *ngIf="showFieldFilter.mobile_no">
+                                <div>
+                                    <span> {{ commonLocaleData?.app_mobile_no }}</span>
+                                </div>
+                            </th>
+                            <th class="td-search-box" *ngIf="showFieldFilter.sales_account">
+                                <div>
+                                    <span> {{ localeData?.sales_account }}</span>
+                                </div>
+                            </th>
                             <th *ngIf="showFieldFilter.voucher_type">
                                 <div class="d-flex">
                                     <div>{{ commonLocaleData?.app_voucher_type }}</div>
@@ -418,6 +453,47 @@
                                         <p>{{ stock.stock.name }}</p>
                                     </ng-container>
                                 </ng-container>
+                            </td>
+                            <td
+                                [attr.data-title]="commonLocaleData?.app_parent_group"
+                                *ngIf="showFieldFilter.parent_group"
+                            >
+                                <span class="d-inline-flex">
+                                    {{ item?.group?.name ? item?.group?.name : "-" }}
+                                </span>
+                            </td>
+                            <td
+                                [attr.data-title]="commonLocaleData?.app_tax_number_short"
+                                *ngIf="showFieldFilter.tax_no"
+                            >
+                                <span class="d-inline-flex">
+                                    {{ item?.gstin ? item?.gstin : "-" }}
+                                </span>
+                            </td>
+                            <td [attr.data-title]="commonLocaleData?.app_address" *ngIf="showFieldFilter.address">
+                                <span class="d-inline-flex">
+                                    {{ item?.address ? item?.address : "-" }}
+                                </span>
+                            </td>
+                            <td [attr.data-title]="commonLocaleData?.app_pin_code" *ngIf="showFieldFilter.pincode">
+                                <span class="d-inline-flex">
+                                    {{ item?.pincode ? item?.pincode : "-" }}
+                                </span>
+                            </td>
+                            <td [attr.data-title]="commonLocaleData?.app_email" *ngIf="showFieldFilter.email">
+                                <span class="d-inline-flex">
+                                    {{ item?.email ? item?.email : "-" }}
+                                </span>
+                            </td>
+                            <td [attr.data-title]="commonLocaleData?.app_mobile_no" *ngIf="showFieldFilter.mobile_no">
+                                <span class="d-inline-flex">
+                                    {{ item?.mobileNo ? item?.mobileNo : "-" }}
+                                </span>
+                            </td>
+                            <td [attr.data-title]="localeData?.sales_account" *ngIf="showFieldFilter.sales_account">
+                                <span class="d-inline-flex">
+                                    {{ item?.salesPurchaseAccount?.name ? item?.salesPurchaseAccount?.name : "-" }}
+                                </span>
                             </td>
                             <td
                                 [attr.data-title]="commonLocaleData?.app_voucher_type"

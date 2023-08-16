@@ -1,6 +1,9 @@
 {
     "fixed_assets": "स्थिर मालमत्ता",
     "enter_product": "उत्पादन प्रविष्ट करा",
+    "enter_stock": "स्टॉक प्रविष्ट करा",
+    "enter_service": "सेवा प्रविष्ट करा",
+    "enter_fixed": "मालमत्ता प्रविष्ट करा",
     "select_unit": "युनिट निवडा",
     "under_group": "गट अंतर्गत",
     "move": "गट हलवा",
@@ -13,6 +16,9 @@
     "is_sales_inclusive":"विक्री दर कर समावेशक आहे का?",
     "purchase_information": "खरेदी माहिती",
     "linked_accounts": "लिंक केलेली खाती",
+    "linked_account": "लिंक खाते",
+    "linked_purchase_accounts": "लिंक केलेली खरेदी खाती",
+    "linked_sales_accounts": "लिंक केलेली विक्री खाती",
     "unit_price": "युनिट आणि किंमत ",
     "add_new":"+ नवीन जोडा",
     "sales_information": "विक्री माहिती",
@@ -79,6 +85,15 @@
     "stock_create_succesfully":"स्टॉक यशस्वीरित्या तयार केला.",
     "stock_update_succesfully":"स्टॉक यशस्वीरित्या अपडेट केला.",
     "remove_variant":"कृती केल्याने सर्व रूपे काढून टाकली जातील, तुमची खात्री आहे की तुम्ही त्याची निवड रद्द करू इच्छिता?",
-    "inclusive": "MRP (Inclusive)",
-    "exclusive": "Exclusive"
+    "inclusive": "एमआरपी (समावेशक)",
+    "exclusive": "अनन्य",
+    "option_name": "पर्यायाचे नाव",
+    "option_values": "पर्याय मूल्ये",
+    "duplicate_option_value": "तुम्ही आधीच पर्याय मूल्य [VALUE] वापरले आहे.",
+    "option_name_required": "पर्यायाचे नाव आवश्यक आहे",
+    "option_value_required": "पर्याय मूल्य आवश्यक आहे",
+    "save_stock_for_recipe": "स्टॉक सेव्ह करा आणि रेसिपी तयार करा",
+    "confirm_delete_option": "पर्याय हटवल्याने पर्यायाचे सर्व प्रकार देखील काढून टाकले जातील. तुम्हाला अजूनही पर्याय हटवायचा आहे का?",
+    "unit_group": "युनिट गट",
+    "select_unit_group": "युनिट गट निवडा"
 }

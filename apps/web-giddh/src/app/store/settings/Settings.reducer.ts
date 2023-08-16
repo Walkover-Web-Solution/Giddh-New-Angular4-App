@@ -90,6 +90,7 @@ export interface SettingsState {
     branchRemoved: boolean;
     financialYearLimits: any;
     freePlanSubscribed: boolean;
+    hasUnsavedChanges: boolean;
 }
 
 export const initialState: SettingsState = {
@@ -114,7 +115,8 @@ export const initialState: SettingsState = {
     // Get profile API call in process
     getProfileInProgress: false,
     financialYearLimits: null,
-    freePlanSubscribed: false
+    freePlanSubscribed: false,
+    hasUnsavedChanges: false
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -579,6 +581,10 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         case SETTINGS_PROFILE_ACTIONS.FREE_PLAN_SUBSCRIBED: {
             return Object.assign({}, state, { freePlanSubscribed: action.payload });
+        }
+
+        case SETTINGS_PROFILE_ACTIONS.HAS_UNSAVED_CHANGES: {
+            return Object.assign({}, state, { hasUnsavedChanges: action.payload });
         }
 
         //  endregion discount reducer

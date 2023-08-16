@@ -15,10 +15,7 @@
         <div class="modal-body">
             <form>
                 <div class="row mr-b15">
-                    <div class="col-lg-4">
-                        <label> {{ localeData?.advance_search_filter?.date }}</label>
-                    </div>
-                    <div class="col-lg-8">
+                    <div class="col-lg-12">
                         <div class="custom-datepicker-wrapper">
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                                 <input
@@ -32,78 +29,73 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4">
-                        <label> {{ localeData?.advance_search_filter?.select_category }}</label>
-                    </div>
-                    <div class="col-lg-8">
+                    <div class="col-lg-12">
                         <div class="row">
-                            <div class="col-lg-6 col-sm-6 col-12 mr-b15">
+                            <div class="col-lg-6 col-sm-6 col-12 mr-b15 pr-2">
                                 <ng-container *ngIf="reportType === 'TRANSACTION'">
-                                    <select-field
-                                        [cssClass]="'form-control mat-field-border'"
+                                    <dropdown-field
                                         [placeholder]="localeData?.advance_search_filter?.select_category"
                                         [options]="advanceSearchCategoryTransaction"
                                         (selectedOption)="selectCategory($event?.value)"
                                         [defaultValue]="advanceSearchFormObj.param1"
                                         [allowValueReset]="true"
                                         (onClear)="advanceSearchFormObj.param1 = ''"
-                                    ></select-field>
+                                        [label]="localeData?.advance_search_filter?.category"
+                                    >
+                                    </dropdown-field>
                                 </ng-container>
                                 <ng-container *ngIf="reportType !== 'TRANSACTION'">
-                                    <select-field
-                                        [cssClass]="'form-control mat-field-border'"
+                                    <dropdown-field
                                         [placeholder]="localeData?.advance_search_filter?.select_category"
                                         [options]="advanceSearchCategory"
                                         (selectedOption)="selectCategory($event?.value)"
                                         [defaultValue]="advanceSearchFormObj.param1"
                                         [allowValueReset]="true"
                                         (onClear)="advanceSearchFormObj.param1 = ''"
-                                    ></select-field>
+                                        [label]="localeData?.advance_search_filter?.category"
+                                    ></dropdown-field>
                                 </ng-container>
                             </div>
-                            <div class="col-lg-6 col-sm-6 col-12 mr-b15">
-                                <select-field
-                                    [cssClass]="'form-control mat-field-border'"
+                            <div class="col-lg-6 col-sm-6 col-12 mr-b15 pl-2">
+                                <dropdown-field
                                     [placeholder]="localeData?.advance_search_filter?.select_type"
                                     [options]="advanceSearchCategoryOptions"
                                     (selectedOption)="selectCategoryOptions($event?.value)"
                                     [defaultValue]="advanceSearchFormObj.param2"
                                     [allowValueReset]="true"
                                     (onClear)="advanceSearchFormObj.param2 = ''"
-                                ></select-field>
+                                    [label]="localeData?.advance_search_filter?.type"
+                                ></dropdown-field>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4">
-                        <label> {{ localeData?.advance_search_filter?.value }}</label>
-                    </div>
-                    <div class="col-lg-8">
+                    <div class="col-lg-12">
                         <div class="row">
-                            <div class="col-lg-6 col-sm-6 col-12 mr-b15">
-                                <select-field
-                                    [cssClass]="'form-control mat-field-border'"
-                                    [placeholder]="localeData?.advance_search_filter?.select_type"
+                            <div class="col-lg-6 col-sm-6 mr-b15 pr-2">
+                                <dropdown-field
+                                    [placeholder]="localeData?.advance_search_filter?.select_value"
                                     [options]="advanceSearchValue"
                                     (selectedOption)="selectValueType($event?.value)"
                                     [defaultValue]="advanceSearchFormObj.expression"
                                     [allowValueReset]="true"
                                     (onClear)="advanceSearchFormObj.expression = ''"
-                                ></select-field>
+                                    [label]="localeData?.advance_search_filter?.value"
+                                ></dropdown-field>
                             </div>
-                            <div class="col-lg-6 col-sm-6 col-12 mr-b15">
-                                <text-field
+                            <div class="col-lg-6 col-sm-6 mr-b15 pl-2">
+                                <input-field
                                     [type]="'number'"
-                                    [cssClass]="'form-control mat-field-border'"
-                                    [placeholder]="localeData?.advance_search_filter?.amount"
+                                    [placeholder]="localeData?.advance_search_filter?.enter_amount"
                                     [name]="'amount'"
                                     [(ngModel)]="advanceSearchFormObj.val"
                                     [allowDigitsOnly]="true"
                                     (onClear)="advanceSearchFormObj.val = ''"
                                     [autocomplete]="'off'"
+                                    [label]="localeData?.advance_search_filter?.amount"
                                 >
-                                </text-field>
+                                </input-field>
                             </div>
                         </div>
                     </div>
@@ -131,13 +123,13 @@
                         <sh-select placeholder="Search Branch Alice" id="Select Branch"></sh-select>
                     </div>
                 </div> -->
-                <div class="row mr-b15">
+                <div class="row mt-3">
                     <div class="col-sm-12">
                         <div class="button-group d-flex justify-content-end">
                             <button
                                 id="search-btn"
-                                mat-raised-button
-                                class="btn btn-success"
+                                mat-stroked-button
+                                color="primary"
                                 (click)="advanceSearchAction('search')"
                                 [disabled]="
                                     !advanceSearchFormObj.param1 ||
@@ -148,7 +140,12 @@
                             >
                                 {{ commonLocaleData?.app_search }}
                             </button>
-                            <button id="clear-btn" class="btn btn-danger mr-0" (click)="advanceSearchAction('clear')">
+                            <button
+                                id="clear-btn"
+                                mat-stroked-button
+                                class="mr-0"
+                                (click)="advanceSearchAction('clear')"
+                            >
                                 {{ commonLocaleData?.app_reset }}
                             </button>
                         </div>

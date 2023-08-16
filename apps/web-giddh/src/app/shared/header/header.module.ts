@@ -1,7 +1,12 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatListModule } from "@angular/material/list";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatTreeModule } from "@angular/material/tree";
 import { RouterModule } from "@angular/router";
 import { LaddaModule } from "angular2-ladda";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
@@ -16,13 +21,11 @@ import { ElementViewChildModule } from "../helpers/directives/elementViewChild/e
 import { PrimarySidebarModule } from "../primary-sidebar/primary-sidebar.module";
 import { AsideHelpSupportComponent } from "./components/aside-help-support/aside-help-support.component";
 import { AsideSettingComponent } from "./components/aside-setting/aside-setting.component";
-import { CompanyAddNewUiComponent } from "./components/company-add-new-ui/company-add-new-ui.component";
 import { HeaderComponent } from "./header.component";
 
 @NgModule({
     declarations: [
         HeaderComponent,
-        CompanyAddNewUiComponent,
         AsideSettingComponent,
         AsideHelpSupportComponent
     ],
@@ -45,11 +48,15 @@ import { HeaderComponent } from "./header.component";
             spinnerSize: 30
         }),
         ConfirmModalModule,
-        RouterModule
+        RouterModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatTreeModule,
+        MatDialogModule,
+        MatListModule
     ],
     exports: [
         HeaderComponent,
-        CompanyAddNewUiComponent,
         AsideSettingComponent
     ]
 })

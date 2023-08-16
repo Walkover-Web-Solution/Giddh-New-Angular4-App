@@ -11,6 +11,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
 import { AppState } from '../../../store';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { Location } from '@angular/common';
 
 /**
  * Data with nested structure.
@@ -20,7 +21,7 @@ interface SidebarNode {
     icons?: string;
     name: string;
     link?: string;
-    hiddenLink?: string; // this will hold link of the page which is not available to go through directly
+    hiddenLink?: string[]; // this will hold link of the page which is not available to go through directly
     moduleType?: string;
     openActiveMenu?: boolean;
     children?: SidebarNode[];
@@ -113,7 +114,8 @@ export class InventorySidebarComponent implements OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
         private store: Store<AppState>,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private location: Location
     ) {
         this.breakPointObserver.observe([
             '(max-width: 767px)'
@@ -159,7 +161,7 @@ export class InventorySidebarComponent implements OnDestroy {
         let activeNodeIndex = null;
         this.dataSource.data?.forEach((tree, index) => {
             if (activeNodeIndex === null) {
-                let activeNode = tree?.children?.filter(node => node?.link === url || node?.hiddenLink === url);
+                let activeNode = tree?.children?.filter(node => node?.link === url || node?.hiddenLink?.includes(url));
                 if (activeNode?.length) {
                     activeNodeIndex = index;
                 }
@@ -187,7 +189,7 @@ export class InventorySidebarComponent implements OnDestroy {
      * @memberof InventorySidebarComponent
      */
     public goToPreviousPage(): void {
-        this.router.navigate(['/pages/inventory/v2']);
+        this.location.back();
     }
 
     /**
@@ -216,7 +218,7 @@ export class InventorySidebarComponent implements OnDestroy {
                     name: this.localeData?.sidebar?.stock,
                     icons: 'stock.svg',
                     children: [
-                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'product', hiddenLink: '/pages/inventory/v2/stock/product/create' },
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'product', hiddenLink: ['/pages/inventory/v2/stock/product/create', '/pages/inventory/v2/group/product/create'] },
                         { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/inventory/v2/reports/product/stock' },
                         { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/inventory/v2/reports/product/group' },
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/product/variant' },
@@ -228,7 +230,7 @@ export class InventorySidebarComponent implements OnDestroy {
                     name: this.localeData?.sidebar?.services,
                     icons: 'service.svg',
                     children: [
-                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'service', hiddenLink: '/pages/inventory/v2/stock/service/create' },
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'service', hiddenLink: ['/pages/inventory/v2/stock/service/create', '/pages/inventory/v2/group/service/create'] },
                         { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/inventory/v2/reports/service/stock' },
                         { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/inventory/v2/reports/service/group' },
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/service/variant' },
@@ -240,7 +242,7 @@ export class InventorySidebarComponent implements OnDestroy {
                     name: this.localeData?.sidebar?.fixed_assets,
                     icons: 'fixed-assets.svg',
                     children: [
-                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'fixedassets', hiddenLink: '/pages/inventory/v2/stock/fixedassets/create' },
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'fixedassets', hiddenLink: ['/pages/inventory/v2/stock/fixedassets/create', '/pages/inventory/v2/group/fixedassets/create'] },
                         { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/inventory/v2/reports/fixedassets/stock' },
                         { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/inventory/v2/reports/fixedassets/group' },
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/fixedassets/variant' },
@@ -248,32 +250,30 @@ export class InventorySidebarComponent implements OnDestroy {
                         { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/fixedassets/master' }
                     ],
                 },
-                // {
-                //     name: this.localeData?.sidebar?.branch_transfer,
-                //     icons: 'branch-transfer.svg',
-                //     children: [
-                //         { name: this.localeData?.sidebar?.create_branch_transfer, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'branchtransfer' },
-                //         { name: this.localeData?.sidebar?.report, icons: 'group-wise.svg', link: '/pages/inventory/v2/branch-transfer/list' }],
-                // },
                 {
                     name: this.localeData?.sidebar?.manufacturing,
                     icons: 'manufacturing.svg',
                     children: [
-                        { name: this.localeData?.sidebar?.create_manufacturing, icons: 'create-new.svg', link: '/pages/inventory/v2/manufacturing/create', onlyBranchMode: true },
-                        { name: this.localeData?.sidebar?.recipe, icons: 'create-new.svg', link: '/pages/inventory/v2/recipe/create' },
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', link: '/pages/inventory/v2/manufacturing/create', onlyBranchMode: true },
+                        // { name: this.localeData?.sidebar?.recipe, icons: 'create-new.svg', link: '/pages/inventory/v2/recipe/create' },
                         { name: this.localeData?.sidebar?.report, icons: 'group-wise.svg', link: '/pages/inventory/v2/manufacturing/list' }
                     ],
+                },
+                {
+                    name: this.localeData?.sidebar?.custom_units,
+                    link: '/pages/inventory/v2/custom-units',
+                    icons: 'warehouse-opening-balance.svg'
+                },
+                {
+                    name: this.localeData?.sidebar?.branch_transfer,
+                    icons: 'branch-transfer.svg',
+                    link: '/pages/inventory/report',
                 },
                 {
                     name: this.localeData?.sidebar?.warehouse_balance,
                     link: '/pages/inventory/v2/stock-balance',
                     icons: 'warehouse-opening-balance.svg'
-                },
-                // {
-                //     name: this.localeData?.sidebar?.custom_units,
-                //     link: '/pages/inventory/v2/custom-units',
-                //     icons: 'warehouse-opening-balance.svg'
-                // },
+                }
             ];
             this.dataSource.data = this.dataList;
 

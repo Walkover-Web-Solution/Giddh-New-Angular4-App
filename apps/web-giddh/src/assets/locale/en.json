@@ -10,6 +10,7 @@
     "app_email_id": "Email Id",
     "app_state": "State",
     "app_tax_number": "Tax Number",
+    "app_tax_number_short": "Tax No.",
     "app_customer": "Customer",
     "app_purchase": "Purchase",
     "app_sales": "Sales",
@@ -382,6 +383,7 @@
     "app_payment_mode": "Payment Mode",
     "app_select_account": "Select Account",
     "app_select_accounts": "Select Accounts",
+    "app_select_voucher": "Select Voucher",
     "app_invoice_date": "Invoice Date",
     "app_invoice_number": "Invoice Number",
     "app_sku": "SKU",
@@ -497,6 +499,8 @@
     "app_update_account": "Update Account",
     "app_add_product": "Add Product",
     "app_add_service": "Add Service",
+    "app_add_account": "Add Account",
+    "app_add_fixedassets": "Add Fixed Assets",
     "app_account_created": "Account Created Successfully",
     "app_start_date": "Start Date",
     "app_end_date": "End Date",
@@ -697,5 +701,13 @@
         "product": "PRODUCT",
         "service": "SERVICE",
         "fixed_assets": "FIXED ASSETS"
-    }
+    },
+    "app_unsaved_changes": {
+        "title": "Leave page with unsaved changes?",
+        "content": "You have unsaved changes. Do you want to leave this page?",
+        "no": "Stay",
+        "yes": "Leave page"
+    },
+    "app_region": "Region",
+    "app_select_region": "Select Region"
 }

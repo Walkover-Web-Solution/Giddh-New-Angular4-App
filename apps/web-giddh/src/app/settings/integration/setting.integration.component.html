@@ -6,7 +6,7 @@
 >
     <div class="clearfix">
         <mat-tab-group
-            [ngClass]="{ 'tab-integration': true, 'hide-payment-tab': !isIndianCompany }"
+            [ngClass]="{ 'tab-integration': true }"
             id="tab-integration"
             animationDuration="0ms"
             [selectedIndex]="selectedTabParent"
@@ -256,43 +256,55 @@
                 </div>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.payment?.tab_heading" [hidden]="!isIndianCompany">
-                <div *ngIf="isIndianCompany" class="clearfix box">
-                    <ng-template>
-                        <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
-                    </ng-template>
-                    <div class="mb-2 bank-logo">
-                        <img src="{{ imgPath }}ICICI-logo.png" />
-                    </div>
-                    <div class="row">
-                        <div class="form-group mr-l2">
-                            <button type="button" class="btn btn-sky-blue mr-r2" (click)="openCreateNewAccountModal()">
-                                {{ localeData?.payment?.connect_new_account }}
-                            </button>
-                            <span class="button-separator">|</span> <br />
-                            <a
-                                href="https://giddh.com/help/how-to-integrate-icici-bank-account-with-giddh"
-                                target="_blank"
-                                class="font-12"
-                                >{{ localeData?.payment?.learn_connect }}</a
-                            >
+            <mat-tab [label]="localeData?.payment?.tab_heading">
+                <div class="box">
+                    <ng-container *ngIf="isIciciBankSupportedCountry">
+                        <ng-template>
+                            <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
+                        </ng-template>
+                        <div class="mb-2 bank-logo">
+                            <img src="{{ imgPath }}ICICI-logo.png" />
                         </div>
-                        <div class="form-group mr-l1">
-                            <p class="mb-4 mr-l05 font-12">
-                                <a
-                                    class="btn icici-button"
-                                    href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/"
-                                    target="_blank"
-                                    ><span class="icon-icici-logo"
-                                        ><span class="path1"></span><span class="path2"></span
-                                        ><span class="path3"></span
-                                    ></span>
-                                    {{ localeData?.payment?.open_new_current_account }}</a
+                        <div class="row">
+                            <div class="form-group mr-l2">
+                                <button
+                                    type="button"
+                                    class="btn btn-sky-blue mr-r2"
+                                    (click)="openCreateNewAccountModal()"
                                 >
-                            </p>
+                                    {{ localeData?.payment?.connect_new_account }}
+                                </button>
+                                <span class="button-separator">|</span> <br />
+                                <a
+                                    href="https://giddh.com/help/how-to-integrate-icici-bank-account-with-giddh"
+                                    target="_blank"
+                                    class="font-12"
+                                    >{{ localeData?.payment?.learn_connect }}</a
+                                >
+                            </div>
+                            <div class="form-group mr-l1">
+                                <p class="mb-4 mr-l05 font-12">
+                                    <a
+                                        class="btn icici-button"
+                                        href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/"
+                                        target="_blank"
+                                        ><span class="icon-icici-logo"
+                                            ><span class="path1"></span><span class="path2"></span
+                                            ><span class="path3"></span
+                                        ></span>
+                                        {{ localeData?.payment?.open_new_current_account }}</a
+                                    >
+                                </p>
+                            </div>
                         </div>
-                    </div>
-
+                    </ng-container>
+                    <ng-container *ngIf="!isIciciBankSupportedCountry">
+                        <div class="form-group">
+                            <button mat-stroked-button class="mr-r2" color="primary" (click)="getPlaidLinkToken()">
+                                {{ localeData?.payment?.connect_bank }}
+                            </button>
+                        </div>
+                    </ng-container>
                     <div class="connected-accounts">
                         <b class="font-15" *ngIf="!isLoading && connectedBankAccounts?.length > 0">{{
                             localeData?.payment?.connected_accounts
@@ -306,22 +318,47 @@
                             >
                                 <div class="account-info-background width-100 font-15 row">
                                     <div class="col-md-4">
-                                        <span class="field-label">{{ localeData?.payment?.account_number_label }}</span
+                                        <span class="field-label">{{ bankAccount?.bankName }}</span
                                         ><br />
                                         <span class="account-number mt-2 font-15 inline"
-                                            ><b>{{ bankAccount?.iciciDetailsResource?.accountNumber }}</b></span
+                                            ><b
+                                                ><span *ngIf="!isIciciBankSupportedCountry"
+                                                    >{{ commonLocaleData?.app_ac }} #</span
+                                                >
+                                                {{ bankAccount?.iciciDetailsResource?.accountNumber }}</b
+                                            ></span
                                         >
                                     </div>
                                     <div class="col-md-4">
                                         <span class="field-label">{{ localeData?.payment?.linked_account }}</span
                                         ><br />
-                                        <span class="width-100 view-only-field inline">{{
-                                            bankAccount?.account?.name
-                                        }}</span>
+                                        <span
+                                            *ngIf="isIciciBankSupportedCountry"
+                                            class="width-100 view-only-field inline"
+                                            >{{ bankAccount?.account?.name }}</span
+                                        >
+                                        <sh-select
+                                            *ngIf="!isIciciBankSupportedCountry"
+                                            class="linked-account"
+                                            name="bankAccountUniqueName"
+                                            [placeholder]="localeData?.payment?.link_account_placeholder"
+                                            [options]="bankAccounts$ | async"
+                                            (selected)="selectBankAccount($event, bankAccount)"
+                                            [(ngModel)]="bankAccount?.account.uniqueName"
+                                        >
+                                        </sh-select>
                                     </div>
-                                    <div class="col-md-4">
-                                        <span class="field-label">{{ localeData?.payment?.payment_updates }}</span
-                                        ><br />
+                                    <span class="mr-l1 action-div mr-t3" *ngIf="!isIciciBankSupportedCountry">
+                                        <a
+                                            href="javascript:;"
+                                            class="icon-edit-pencil"
+                                            (click)="openEditAccountModal(bankAccount)"
+                                        ></a>
+                                    </span>
+                                    <div class="col-md-4" *ngIf="isIciciBankSupportedCountry">
+                                        <span class="field-label"
+                                            >{{ localeData?.payment?.payment_updates }}<br
+                                        /></span>
                                         <span
                                             class="payment-updates view-only-field inline"
                                             *ngIf="bankAccount?.iciciDetailsResource?.paymentAlerts?.length > 0"
@@ -440,21 +477,14 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <button
+                                            type="button"
+                                            class="btn btn-light-blue bold font-15 mt-2 mr-l15"
+                                            (click)="openCreateNewAccountUserModal(bankAccount)"
+                                        >
+                                            {{ localeData?.payment?.add_more_users }}
+                                        </button>
                                     </ng-container>
-                                    <button
-                                        type="button"
-                                        class="btn btn-light-blue bold font-15 mt-2 mr-l15"
-                                        (click)="openCreateNewAccountUserModal(bankAccount)"
-                                    >
-                                        {{ localeData?.payment?.add_more_users }}
-                                    </button>
-                                    <a class="btn icici-button font-12 mt-2 pull-right mr-0" href="javascript:;"
-                                        ><span class="icon-icici-logo"
-                                            ><span class="path1"></span><span class="path2"></span
-                                            ><span class="path3"></span
-                                        ></span>
-                                        {{ localeData?.payment?.get_instant_overdraft }}</a
-                                    >
                                 </div>
                             </div>
                         </ng-container>
@@ -545,6 +575,7 @@
                     [activeBankAccount]="activeBankAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
                     (closeModalEvent)="closeEditAccountModal()"
+                    [isIciciBankSupportedCountry]="isIciciBankSupportedCountry"
                 >
                 </icici-account-create-edit>
             </div>
