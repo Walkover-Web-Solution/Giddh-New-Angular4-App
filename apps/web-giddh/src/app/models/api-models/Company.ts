@@ -369,6 +369,11 @@ export class StateList {
     stateGstCode: string
 }
 
+export class CountyList {
+    code: string;
+    name: string;
+}
+
 export class BranchFilterRequest {
     from: string;
     to: string;

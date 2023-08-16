@@ -708,19 +708,18 @@
                                                                                     : address.county?.name
                                                                             }}
                                                                             {{
-                                                                                    address.taxNumber
-                                                                                        ? showGSTINNo
-                                                                                              ? commonLocaleData?.app_gstin +
-                                                                                                ":" ?
-                                                                                            showTRNNo
-                                                                                                  ? commonLocaleData?.app_trn +
-                                                                                                    ":" ?
-                                                                                              showVATNo
-                                                                                                  ? commonLocaleData?.enter_vat_no +
-                                                                                                    ":"
-                                                                                                  :''" +
-                                                                                          address.taxNumber
-                                                                                        : ""
+                                                                                address.taxNumber
+                                                                                    ? (showGSTINNo
+                                                                                          ? commonLocaleData?.app_gstin +
+                                                                                            ":"
+                                                                                          : showTRNNo
+                                                                                          ? commonLocaleData?.app_trn +
+                                                                                            ":"
+                                                                                          : showVATNo
+                                                                                          ? commonLocaleData?.enter_vat_no +
+                                                                                            ":"
+                                                                                          : "") + address.gstNumber
+                                                                                    : ""
                                                                             }}
                                                                         </a>
                                                                     </li>
@@ -956,19 +955,18 @@
                                                                                     : address.county?.name
                                                                             }}
                                                                             {{
-                                                                                    address.taxNumber
-                                                                                        ? showGSTINNo
-                                                                                              ? commonLocaleData?.app_gstin +
-                                                                                                ":" ?
-                                                                                            showTRNNo
-                                                                                                  ? commonLocaleData?.app_trn +
-                                                                                                    ":" ?
-                                                                                              showVATNo
-                                                                                                  ? commonLocaleData?.enter_vat_no +
-                                                                                                    ":"
-                                                                                                  :''" +
-                                                                                          address.taxNumber
-                                                                                        : ""
+                                                                                address.taxNumber
+                                                                                    ? (showGSTINNo
+                                                                                          ? commonLocaleData?.app_gstin +
+                                                                                            ":"
+                                                                                          : showTRNNo
+                                                                                          ? commonLocaleData?.app_trn +
+                                                                                            ":"
+                                                                                          : showVATNo
+                                                                                          ? commonLocaleData?.enter_vat_no +
+                                                                                            ":"
+                                                                                          : "") + address.gstNumber
+                                                                                    : ""
                                                                             }}
                                                                         </a>
                                                                     </li>
