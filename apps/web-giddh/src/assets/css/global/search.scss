@@ -4,7 +4,7 @@ body {
             .cdk-overlay-connected-position-bounding-box {
                 .cdk-overlay-pane {
                     .mat-mdc-menu-panel {
-                        max-width: 550px;
+                        max-width: 550px !important;
                     }
                 }
             }
@@ -29,7 +29,8 @@ body {
             }
         }
         .width-balance-type {
-            .mat-mdc-form-field {
+            .mat-mdc-form-field, 
+            input {
                 width: 92px;
             }
         }

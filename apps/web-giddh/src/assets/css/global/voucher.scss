@@ -53,8 +53,21 @@
                 svg{
                     position: absolute;
                     top: 0;
+                    z-index: 9999;
+                    opacity: 1;
                 }
             }
+        }
+    }
+}
+
+/*---- inventiry-stock ----*/
+.back-btn-align{
+    .mdc-button {
+        .mdc-button__label{
+            display: flex;
+            align-items: center;
+            column-gap: 2px;
         }
     }
 }

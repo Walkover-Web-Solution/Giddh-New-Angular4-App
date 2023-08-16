@@ -9500,6 +9500,8 @@ span#HW_badge_cont:nth-child(3) {
         display: flex;
         flex-direction: column;
         padding: 20px;
+        height: 100%;
+        row-gap: 50px;
     }
 }
 
@@ -10377,9 +10379,6 @@ giddh-datepicker {
 }
 
 .stock-create-edit {
-    // .mat-pseudo-checkbox-checked {
-    //     background: var(--color-giddh-blue) !important;
-    // }
 
     #main {
         #content-wrapper {
