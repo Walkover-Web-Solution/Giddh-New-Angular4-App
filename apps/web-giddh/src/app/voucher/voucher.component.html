@@ -418,7 +418,6 @@
                                                                                 {{ customerCountryName }}
                                                                             </label>
                                                                         </div>
-                                                                        <!-- {{ statesSource | json }}
                                                                         <div
                                                                             class="
                                                                                 col-sm-12 col-md-6
@@ -458,8 +457,9 @@
                                                                                 [readonly]="isEinvoiceGenerated"
                                                                             >
                                                                             </select-field>
-                                                                        </div> -->
+                                                                        </div>
                                                                         <div
+                                                                            *ngIf="regionsSource?.length"
                                                                             class="
                                                                                 col-sm-12 col-md-6
                                                                                 billing-shipping-value
@@ -737,12 +737,13 @@
                                                                                     </label>
                                                                                 </div>
                                                                             </div>
-                                                                            <!-- <div
+                                                                            <div
                                                                                 class="
                                                                                     col-sm-12 col-md-6
                                                                                     billing-shipping-value
                                                                                 "
                                                                                 #shippingState
+                                                                                *ngIf="statesSource?.length"
                                                                             >
                                                                                 <select-field
                                                                                     #customerShippingState
@@ -776,13 +777,14 @@
                                                                                     [readonly]="isEinvoiceGenerated"
                                                                                 >
                                                                                 </select-field>
-                                                                            </div> -->
+                                                                            </div>
                                                                             <div
                                                                                 class="
                                                                                     col-sm-12 col-md-6
                                                                                     billing-shipping-value
                                                                                 "
                                                                                 #shippingState
+                                                                                *ngIf="regionsSource?.length"
                                                                             >
                                                                                 <select-field
                                                                                     #customerShippingState
@@ -1226,12 +1228,13 @@
                                                                             {{ companyCountryName }}
                                                                         </label>
                                                                     </div>
-                                                                    <!-- <div
+                                                                    <div
                                                                         class="
                                                                             col-sm-12 col-md-6
                                                                             billing-shipping-value
                                                                         "
                                                                         #billingStateCompany
+                                                                        *ngIf="companyStatesSource?.length"
                                                                     >
                                                                         <select-field
                                                                             #companyBillingState
@@ -1270,13 +1273,14 @@
                                                                             "
                                                                         >
                                                                         </select-field>
-                                                                    </div> -->
+                                                                    </div>
                                                                     <div
                                                                         class="
                                                                             col-sm-12 col-md-6
                                                                             billing-shipping-value
                                                                         "
-                                                                        #billingStateCompany
+                                                                        #billingStateCompany1
+                                                                        *ngIf="companyRegionsSource?.length"
                                                                     >
                                                                         <select-field
                                                                             #companyBillingState
@@ -1508,12 +1512,13 @@
                                                                                 </label>
                                                                             </div>
                                                                         </div>
-                                                                        <!-- <div
+                                                                        <div
                                                                             class="
                                                                                 col-sm-12 col-md-6
                                                                                 billing-shipping-value
                                                                             "
                                                                             #shippingStateCompany
+                                                                            *ngIf="companyStatesSource?.length"
                                                                         >
                                                                             <select-field
                                                                                 #companyShippingState
@@ -1559,13 +1564,14 @@
                                                                                 "
                                                                             >
                                                                             </select-field>
-                                                                        </div> -->
+                                                                        </div>
                                                                         <div
                                                                             class="
                                                                                 col-sm-12 col-md-6
                                                                                 billing-shipping-value
                                                                             "
                                                                             #shippingStateCompany
+                                                                            *ngIf="companyRegionsSource?.length"
                                                                         >
                                                                             <select-field
                                                                                 #companyShippingState
