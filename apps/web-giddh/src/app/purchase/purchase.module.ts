@@ -7,7 +7,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -44,6 +43,7 @@ import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/asid
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
     declarations: [
@@ -59,7 +59,7 @@ import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
     imports: [
         PurchaseRoutingModule,
         InvoiceModule,
-        CollapseModule,
+        CollapseModule.forRoot(),
         PaginationModule.forRoot(),
         BsDropdownModule.forRoot(),
         LaddaModule.forRoot({
@@ -70,7 +70,7 @@ import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
         ClickOutsideModule,
         TabsModule.forRoot(),
         ElementViewChildModule,
-        PerfectScrollbarModule,
+        ScrollingModule,
         ShSelectModule,
         SalesShSelectModule,
         CurrencyModule,
@@ -83,7 +83,7 @@ import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
         TranslateDirectiveModule,
         KeyboardShortutModule,
         DecimalDigitsModule,
-        ModalModule,
+        ModalModule.forRoot(),
         HamburgerMenuModule,
         BsDatepickerModule.forRoot(),
         DeleteVoucherConfirmationModalModule,

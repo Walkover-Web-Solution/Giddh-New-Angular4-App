@@ -114,6 +114,7 @@ button.mat-menu-item {
     text-transform: none !important;
     img {
         filter: var(--color-image-filter);
+        width: 15px;
     }
 }
 
@@ -564,6 +565,11 @@ button.btn.btn-filter {
 
 .customer-vendor-name-search-icon {
     top: 2px;
+    width: 25px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
 }
 .customer-img {
     height: 360px;

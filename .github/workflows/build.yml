@@ -36,7 +36,7 @@ jobs:
       - name: Install Node.js & NPM
         uses: actions/setup-node@v3
         with:
-          node-version: "14.19.3"
+          node-version: "18.10.0"
 
 #       Runs npm i
       - uses: bahmutov/npm-install@v1
@@ -44,6 +44,7 @@ jobs:
           CYPRESS_INSTALL_BINARY: 0
         with:
           useLockFile: false
+          useRollingCache: false
           working-directory: .
           install-command: npm i --force
       - name: Creating Test bundle

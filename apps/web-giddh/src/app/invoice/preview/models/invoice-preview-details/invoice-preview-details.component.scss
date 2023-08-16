@@ -39,6 +39,10 @@
     background-color: var(--color-white);
     padding: 0;
     height: calc(100vh - 120px);
+
+    cdk-virtual-scroll-viewport {
+        height: 100%;
+    }
 }
 
 .d-flex {

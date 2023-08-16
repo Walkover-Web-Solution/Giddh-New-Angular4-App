@@ -9,7 +9,7 @@ import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
 import { take, takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { FormControl, NgForm } from '@angular/forms';
+import { UntypedFormControl, NgForm } from '@angular/forms';
 import { CompanyService } from '../services/company.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CompanyActions } from '../actions/company.actions';
@@ -69,7 +69,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     /** control for the MatSelect filter keyword */
     public searchBillingStates: string = "";
     /** control for the MatSelect filter keyword */
-    public searchCountry: FormControl = new FormControl();
+    public searchCountry: UntypedFormControl = new UntypedFormControl();
     /** True if api call in progress */
     public showLoader: boolean = true;
     /** True if we need to show GSTIN number */
@@ -309,6 +309,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
      */
     public initializePayment(): void {
         let that = this;
+
+        console.log("Plan Amount : ", this.razorpayAmount);
+
         let activeCompany = null;
         this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => activeCompany = activeCompany);
 

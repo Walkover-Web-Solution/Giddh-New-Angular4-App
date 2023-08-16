@@ -2416,10 +2416,7 @@
                                             [disabled]="customTemplate.sections.footer.data.slogan.display"
                                             accept="image/png, image/jpeg"
                                             id="signatureImg-edit"
-                                            ngFileSelect
-                                            (uploadOutput)="onUploadFileOutput($event)"
-                                            [options]="fileUploadOptions"
-                                            [uploadInput]="uploadInput"
+                                            (change)="uploadImage()"
                                         />
                                         <small>Upload Signature</small>
                                     </label>

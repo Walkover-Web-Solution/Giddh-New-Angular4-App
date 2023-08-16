@@ -171,13 +171,6 @@
                         class="pull-right mr-r05"
                     >
                     </trial-balance-export-xls>
-                    <trial-balance-export-pdf
-                        *ngIf="tbExportPdf"
-                        [trialBalanceRequest]="filterForm?.value"
-                        [selectedCompany]="selectedCompany"
-                        (tbExportPdfEvent)="tbExportPdfEvent.emit($event)"
-                        class="pull-right mr-r05"
-                    ></trial-balance-export-pdf>
                     <profit-loss-export-xls
                         *ngIf="plBsExportXLS"
                         [fy]="filterForm.controls['fy']?.value"
@@ -355,13 +348,6 @@
                 class="pull-left mr-r15"
             >
             </trial-balance-export-xls>
-            <trial-balance-export-pdf
-                *ngIf="tbExportPdf"
-                [trialBalanceRequest]="filterForm?.value"
-                [selectedCompany]="selectedCompany"
-                (tbExportPdfEvent)="tbExportPdfEvent.emit($event)"
-                class="pull-left mr-r15"
-            ></trial-balance-export-pdf>
             <profit-loss-export-xls
                 *ngIf="plBsExportXLS"
                 [fy]="filterForm.controls['fy']?.value"

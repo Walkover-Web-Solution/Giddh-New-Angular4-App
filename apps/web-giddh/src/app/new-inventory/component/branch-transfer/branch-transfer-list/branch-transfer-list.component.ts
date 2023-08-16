@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -33,7 +33,7 @@ export class BranchTransferListComponent implements OnInit {
    /** Instance of Mat Dialog for Advance Filter */
    @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
    /** directive to get reference of element */
-   @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+   @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     public selectedDateRange: any;
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;

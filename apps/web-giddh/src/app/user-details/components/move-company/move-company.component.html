@@ -5,7 +5,7 @@
 <div *ngIf="isLoading">
     <giddh-page-loader></giddh-page-loader>
 </div>
-<mat-dialog-content class="move-content">
+<mat-dialog-content class="move-content w-100">
     <div *ngIf="!isLoading">
         <div id="my-frame" class="modal-body move-company-modal-body clearfix">
             <p class="mb-2" [innerHTML]="getMovePlanText()"></p>

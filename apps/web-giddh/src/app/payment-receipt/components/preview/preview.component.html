@@ -31,7 +31,7 @@
                             </button>
                         </div>
                         <ul class="voucher-sidebar">
-                            <perfect-scrollbar *ngIf="filteredData && filteredData.length > 0">
+                            <cdk-virtual-scroll-viewport [itemSize]="62" *ngIf="filteredData && filteredData.length > 0">
                                 <li
                                     class="single-voucher-details cp"
                                     *ngFor="let row of filteredData; let i = index"
@@ -69,7 +69,7 @@
                                         </div>
                                     </div>
                                 </li>
-                            </perfect-scrollbar>
+                            </cdk-virtual-scroll-viewport>
                         </ul>
                     </div>
                 </div>

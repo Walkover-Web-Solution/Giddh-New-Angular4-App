@@ -292,6 +292,9 @@ tfoot td .table-sec.form-group {
     display: flex;
     justify-content: center;
     align-items: center;
+    i{
+        font-size: var(--font-size-12);
+    }
 }
 .add-new-line.mr-t1 {
     position: absolute;

@@ -93,7 +93,6 @@ events.json
 *.ts
 *.d.ts
 .vscode
-cypress
 electron-sign
 libs
 mochawesome-report

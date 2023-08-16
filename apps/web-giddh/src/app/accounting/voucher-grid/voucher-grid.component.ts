@@ -1,5 +1,5 @@
 import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { ToasterService } from './../../services/toaster.service';
@@ -109,7 +109,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public inputForList: IOption[];
     public selectedField: 'account' | 'stock';
 
-    public chequeDetailForm: FormGroup;
+    public chequeDetailForm: UntypedFormGroup;
     public asideMenuStateForProductService: string = 'out';
     public isFirstRowDeleted: boolean = false;
     public autoFocusStockGroupField: boolean = false;
@@ -138,7 +138,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         private _tallyModuleService: TallyModuleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         public bsConfig: BsDatepickerConfig,
         private generalService: GeneralService) {
 

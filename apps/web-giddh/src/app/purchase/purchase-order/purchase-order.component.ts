@@ -28,7 +28,7 @@ import { cloneDeep } from '../../lodash-optimized';
 
 export class PurchaseOrderComponent implements OnDestroy {
     /* Datepicker component */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* Input element for column search */
     @ViewChild('searchBox') public searchBox: ElementRef;
     /* Confirm box */

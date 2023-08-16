@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { NgxUploaderModule } from 'ngx-uploader';
 import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
 import { LedgerModule } from '../ledger/ledger.module';
 import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
@@ -33,6 +31,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { LightboxModule } from 'ngx-lightbox';
 import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-petty-cash-entry-confirm-dialog/reject-petty-cash-entry-confirm-dialog.component';
+import { FileUploadModule } from '@iplab/ngx-file-upload';
 
 @NgModule({
     declarations: [
@@ -48,17 +47,16 @@ import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-
     imports: [CommonModule,
         ReactiveFormsModule,
         FormsModule,
-        DatepickerModule,
         Daterangepicker,
         ExpensesRoutingModule,
         TabsModule.forRoot(),
         LedgerModule,
         CurrencyModule,
-        NgxUploaderModule,
+        FileUploadModule,
         PaginationModule.forRoot(),
         SharedModule,
         ShSelectModule,
-        ModalModule,
+        ModalModule.forRoot(),
         ElementViewChildModule,
         SalesModule,
         UpdateLedgerEntryPanelModule,

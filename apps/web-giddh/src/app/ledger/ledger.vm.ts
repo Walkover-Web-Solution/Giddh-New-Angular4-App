@@ -4,7 +4,6 @@ import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as dayjs from 'dayjs';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flatten-accounts-result-item.interface';
-import { v4 as uuidv4 } from 'uuid';
 import { cloneDeep, forEach, remove } from '../lodash-optimized';
 import { INameUniqueName } from '../models/api-models/Inventory';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
@@ -167,7 +166,7 @@ export class LedgerVM {
     public addNewTransaction(type: string = 'DEBIT'): TransactionVM {
         return {
             ...new TransactionVM(),
-            id: uuidv4(),
+            id: this.getUuId(),
             type,
             discounts: [this.staticDefaultDiscount()],
             selectedAccount: null,
@@ -339,7 +338,7 @@ export class LedgerVM {
             transactions: [
                 {
                     ...new TransactionVM(),
-                    id: uuidv4(),
+                    id: this.getUuId(),
                     type: 'DEBIT',
                     discounts: [this.staticDefaultDiscount()],
                     selectedAccount: null,
@@ -347,7 +346,7 @@ export class LedgerVM {
                 },
                 {
                     ...new TransactionVM(),
-                    id: uuidv4(),
+                    id: this.getUuId(),
                     type: 'CREDIT',
                     discounts: [this.staticDefaultDiscount()],
                     selectedAccount: null,
@@ -374,6 +373,10 @@ export class LedgerVM {
             exchangeRate: 1,
             valuesInAccountCurrency: true
         };
+    }
+
+    private getUuId(): string {
+        return Date.now().toString() + Math.random().toString(36)?.replace(/[^a-zA-Z0-9]+/g, '')?.substr(0, 6);
     }
 }
 

@@ -11,7 +11,7 @@
             <hamburger-menu *ngIf="!addStock"></hamburger-menu>
             <div class="select-physical-product input-border-wrapper">
                 <form class="form-body" #stockCreateEditForm="ngForm" novalidate autocomplete="off">
-                    <span>
+                    <span class="back-btn-align">
                         <button
                             *ngIf="queryParams?.stockUniqueName && !addStock"
                             (click)="backClicked()"
@@ -177,6 +177,7 @@
                         </div>
                         <div class="other-group mt-2">
                             <mat-tab-group
+                                mat-stretch-tabs="false"
                                 [selectedIndex]="activeTabIndex"
                                 (selectedTabChange)="onTabChange($event)"
                                 mat-align-tabs="start"
@@ -195,12 +196,7 @@
                                                             <div class="purchase-information fixed-assets-information">
                                                                 <div class="row row-gap">
                                                                     <div
-                                                                        class="
-                                                                            col-lg-12
-                                                                            d-flex
-                                                                            align-items-center
-                                                                            rate-head
-                                                                        "
+                                                                        class="col-lg-12 d-flex align-items-center rate-head"
                                                                     >
                                                                         <div>
                                                                             <h1 class="section-head p-0">
@@ -232,7 +228,7 @@
                                                                             </mat-radio-group>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-sm-6 col-lg-12 pt-3 mr-b15">
+                                                                    <div class="col-sm-6 col-lg-12 pt-3">
                                                                         <dropdown-field
                                                                             [name]="'fixedAssetsAccounts'"
                                                                             [placeholder]="localeData?.linked_accounts"
@@ -397,12 +393,7 @@
                                                                 <div class="purchase-information account-tab-3">
                                                                     <div class="row align-items-center row-gap">
                                                                         <div
-                                                                            class="
-                                                                                col-lg-12
-                                                                                d-flex
-                                                                                align-items-center
-                                                                                rate-head
-                                                                            "
+                                                                            class="col-lg-12 d-flex align-items-center rate-head"
                                                                         >
                                                                             <div>
                                                                                 <h1 class="section-head p-0">
@@ -435,12 +426,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div
-                                                                            class="
-                                                                                col-sm-6 col-lg-12
-                                                                                pt-3
-                                                                                which-tab
-                                                                                mr-b15
-                                                                            "
+                                                                            class="col-sm-6 col-lg-12 pt-3 which-tab"
                                                                         >
                                                                             <dropdown-field
                                                                                 [name]="'purchaseAccount'"
@@ -461,10 +447,7 @@
                                                                             </dropdown-field>
                                                                         </div>
                                                                         <div
-                                                                            class="
-                                                                                col-xl-12 col-lg-12 col-sm-6
-                                                                                which-tab-3
-                                                                            "
+                                                                            class="col-xl-12 col-lg-12 col-sm-6 which-tab-3"
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
@@ -616,12 +599,7 @@
                                                                     <!-- input field will disabled if sales info unchecked -->
                                                                     <div class="row row-gap">
                                                                         <div
-                                                                            class="
-                                                                                col-lg-12
-                                                                                d-flex
-                                                                                align-items-center
-                                                                                rate-head
-                                                                            "
+                                                                            class="col-lg-12 d-flex align-items-center rate-head"
                                                                         >
                                                                             <div>
                                                                                 <h1 class="section-head p-0">
@@ -653,7 +631,7 @@
                                                                                 </mat-radio-group>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-lg-12 pt-3 mr-b15">
+                                                                        <div class="col-sm-6 col-lg-12 pt-3">
                                                                             <dropdown-field
                                                                                 [name]="'salesAccount'"
                                                                                 [placeholder]="
@@ -890,8 +868,8 @@
                                                                         "
                                                                     >
                                                                         <div class="col-lg-4 option-delete pr-0 mt-2">
-                                                                            <div class="w-100">
-                                                                                <input-field
+                                                                            <div class="w-100 option-value-field">
+                                                                                <text-field
                                                                                     [name]="
                                                                                         'option-value-' + i + '-' + j
                                                                                     "
@@ -899,12 +877,21 @@
                                                                                     (ngModelChange)="
                                                                                         validateOptionValue(i, j)
                                                                                     "
-                                                                                    class="
-                                                                                        inventory-category-field-input
+                                                                                    class="inventory-category-field-input"
+                                                                                    [type]="'text'"
+                                                                                ></text-field>
+                                                                                <!-- <input-field
+                                                                                    [name]="
+                                                                                        'option-value-' + i + '-' + j
                                                                                     "
+                                                                                    [(ngModel)]="optionValue.value"
+                                                                                    (ngModelChange)="
+                                                                                        validateOptionValue(i, j)
+                                                                                    "
+                                                                                    class="inventory-category-field-input"
                                                                                     [type]="'text'"
                                                                                 >
-                                                                                </input-field>
+                                                                                </input-field> -->
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-lg-2">
@@ -954,7 +941,7 @@
                                                                                         <strong class="d-block mb-2">{{
                                                                                             option.name
                                                                                         }}</strong>
-                                                                                        <mat-chip-list
+                                                                                        <mat-chip-listbox
                                                                                             [aria-label]="option.name"
                                                                                         >
                                                                                             <ng-container
@@ -971,7 +958,7 @@
                                                                                                     }}</mat-chip
                                                                                                 >
                                                                                             </ng-container>
-                                                                                        </mat-chip-list>
+                                                                                        </mat-chip-listbox>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -1140,11 +1127,7 @@
                                                                         </text-field>
                                                                     </td>
                                                                     <td
-                                                                        class="
-                                                                            sales-purchase-info
-                                                                            inventory-tab
-                                                                            purchase-information-enable
-                                                                        "
+                                                                        class="sales-purchase-info inventory-tab purchase-information-enable"
                                                                         *ngIf="
                                                                             stockForm?.purchaseAccountDetails
                                                                                 .accountUniqueName
@@ -1253,11 +1236,7 @@
                                                                         </ng-container>
                                                                     </td>
                                                                     <td
-                                                                        class="
-                                                                            sales-purchase-info
-                                                                            inventory-tab
-                                                                            sales-information-enable
-                                                                        "
+                                                                        class="sales-purchase-info inventory-tab sales-information-enable"
                                                                         *ngIf="
                                                                             stockForm?.salesAccountDetails
                                                                                 .accountUniqueName
@@ -1359,11 +1338,7 @@
                                                                         </ng-container>
                                                                     </td>
                                                                     <td
-                                                                        class="
-                                                                            sales-purchase-info
-                                                                            fixed-assets-unit-rates
-                                                                            inventory-tab
-                                                                        "
+                                                                        class="sales-purchase-info fixed-assets-unit-rates inventory-tab"
                                                                         *ngIf="
                                                                             stockForm?.fixedAssetAccountDetails
                                                                                 .accountUniqueName
@@ -1667,7 +1642,7 @@
                                                         [type]="'text'"
                                                         [(ngModel)]="stockForm.customField1Heading"
                                                         [autoFocus]="true"
-                                                        class="common-custom-field-width"
+                                                        class="common-custom-field-width w-100"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -1748,7 +1723,7 @@
                                                         [type]="'text'"
                                                         [(ngModel)]="stockForm.customField2Heading"
                                                         [autoFocus]="true"
-                                                        class="common-custom-field-width"
+                                                        class="common-custom-field-width w-100"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -2008,13 +1983,7 @@
                                                         </div>
                                                         <div class="row">
                                                             <div
-                                                                class="
-                                                                    col-xl-6 col-lg-12
-                                                                    d-flex
-                                                                    mr-b1
-                                                                    flex-column flex-sm-row
-                                                                    pr-0
-                                                                "
+                                                                class="col-xl-6 col-lg-12 d-flex mr-b1 flex-column flex-sm-row pr-0"
                                                             >
                                                                 <div class="width-30-percent">
                                                                     <label> {{ localeData?.final_product_1 }} </label>
@@ -2072,14 +2041,7 @@
                                                                 </div>
                                                             </div>
                                                             <div
-                                                                class="
-                                                                    col-xl-6 col-lg-12
-                                                                    d-flex
-                                                                    recipe-input-tab
-                                                                    mr-b1
-                                                                    flex-column flex-sm-row
-                                                                    pr-0
-                                                                "
+                                                                class="col-xl-6 col-lg-12 d-flex recipe-input-tab mr-b1 flex-column flex-sm-row pr-0"
                                                             >
                                                                 <div class="width-30-percent">
                                                                     <label> {{ localeData?.attribute }} </label>
@@ -2125,15 +2087,7 @@
                                                 </div>
                                                 <div class="row flex-column mr-t15">
                                                     <div
-                                                        class="
-                                                            text-primary
-                                                            cursor-pointer
-                                                            px-3
-                                                            d-flex
-                                                            justify-content-between
-                                                            mr-b1
-                                                            font-15
-                                                        "
+                                                        class="text-primary cursor-pointer px-3 d-flex justify-content-between mr-b1 font-15"
                                                         (click)="toggleExpense()"
                                                     >
                                                         <a
@@ -2145,25 +2099,14 @@
                                                         </a>
                                                         <a
                                                             href="javascript:void(0);"
-                                                            class="
-                                                                text-primary
-                                                                font-15
-                                                                text-right
-                                                                add-new-final-product
-                                                            "
+                                                            class="text-primary font-15 text-right add-new-final-product"
                                                             id="add-new-product-btn"
                                                         >
                                                             {{ localeData?.add_row }}</a
                                                         >
                                                     </div>
                                                     <div
-                                                        class="
-                                                            col-xl-6
-                                                            d-flex
-                                                            flex-column flex-lg-row
-                                                            align-items-center
-                                                            expense-form
-                                                        "
+                                                        class="col-xl-6 d-flex flex-column flex-lg-row align-items-center expense-form"
                                                         *ngIf="!isExpense"
                                                     >
                                                         <div class="width-30-percent">
@@ -2191,13 +2134,7 @@
                                                             </input-field>
                                                         </div>
                                                         <div
-                                                            class="
-                                                                cursor-pointer
-                                                                add-expense
-                                                                d-flex
-                                                                justify-content-center
-                                                                align-items-center
-                                                            "
+                                                            class="cursor-pointer add-expense d-flex justify-content-center align-items-center"
                                                         >
                                                             <button mat-icon-button role="button" type="button">
                                                                 <span class="icon-font-22 text-primary pd-l05 pd-r05"
@@ -3461,13 +3398,7 @@
                                                         </div>
                                                         <div class="row">
                                                             <div
-                                                                class="
-                                                                    col-xl-6 col-lg-12
-                                                                    d-flex
-                                                                    mr-b1
-                                                                    flex-column flex-sm-row
-                                                                    pr-0
-                                                                "
+                                                                class="col-xl-6 col-lg-12 d-flex mr-b1 flex-column flex-sm-row pr-0"
                                                             >
                                                                 <div class="width-30-percent">
                                                                     <label> Final Product 1 </label>
@@ -3522,14 +3453,7 @@
                                                                 </div>
                                                             </div>
                                                             <div
-                                                                class="
-                                                                    col-xl-6 col-lg-12
-                                                                    d-flex
-                                                                    recipe-input-tab
-                                                                    mr-b1
-                                                                    flex-column flex-sm-row
-                                                                    pr-0
-                                                                "
+                                                                class="col-xl-6 col-lg-12 d-flex recipe-input-tab mr-b1 flex-column flex-sm-row pr-0"
                                                             >
                                                                 <div class="width-30-percent">
                                                                     <label> Attribute </label>
@@ -3572,15 +3496,7 @@
                                                 </div>
                                                 <div class="row flex-column mr-t15">
                                                     <div
-                                                        class="
-                                                            text-primary
-                                                            cursor-pointer
-                                                            px-3
-                                                            d-flex
-                                                            justify-content-between
-                                                            mr-b1
-                                                            font-15
-                                                        "
+                                                        class="text-primary cursor-pointer px-3 d-flex justify-content-between mr-b1 font-15"
                                                         (click)="toggleExpense()"
                                                     >
                                                         <a
@@ -3592,24 +3508,13 @@
                                                         </a>
                                                         <a
                                                             href="javascript:void(0);"
-                                                            class="
-                                                                text-primary
-                                                                font-15
-                                                                text-right
-                                                                add-new-final-product
-                                                            "
+                                                            class="text-primary font-15 text-right add-new-final-product"
                                                             id="combo-add-new-product-btn"
                                                             >+ Add New Row</a
                                                         >
                                                     </div>
                                                     <div
-                                                        class="
-                                                            col-xl-6
-                                                            d-flex
-                                                            flex-column flex-lg-row
-                                                            align-items-center
-                                                            expense-form
-                                                        "
+                                                        class="col-xl-6 d-flex flex-column flex-lg-row align-items-center expense-form"
                                                         *ngIf="!isExpense"
                                                     >
                                                         <div class="width-30-percent">
@@ -3637,13 +3542,7 @@
                                                             ></input-field>
                                                         </div>
                                                         <div
-                                                            class="
-                                                                cursor-pointer
-                                                                add-expense
-                                                                d-flex
-                                                                justify-content-center
-                                                                align-items-center
-                                                            "
+                                                            class="cursor-pointer add-expense d-flex justify-content-center align-items-center"
                                                         >
                                                             <button mat-icon-button class="icon-font-22 text-primary">
                                                                 +
@@ -4790,14 +4689,7 @@
             </div>
         </div>
         <div class="inner-content-footer">
-            <div class="button-group d-flex">
-                <button
-                    *ngIf="!queryParams?.stockUniqueName"
-                    mat-stroked-button
-                    (click)="resetForm(stockCreateEditForm)"
-                >
-                    {{ commonLocaleData?.app_reset }}
-                </button>
+            <div class="button-group d-flex column-gap15">
                 <button
                     *ngIf="!queryParams?.stockUniqueName"
                     mat-stroked-button
@@ -4805,6 +4697,24 @@
                     (click)="createStock()"
                 >
                     {{ commonLocaleData?.app_create }}
+                </button>
+                <button
+                    *ngIf="!queryParams?.stockUniqueName"
+                    mat-stroked-button
+                    color="warn"
+                    (click)="resetForm(stockCreateEditForm)"
+                >
+                    {{ commonLocaleData?.app_clear }}
+                </button>
+                <button
+                    *ngIf="queryParams?.stockUniqueName"
+                    mat-stroked-button
+                    color="primary"
+                    class="min-width-100"
+                    (click)="updateStock(stockCreateEditForm)"
+                    [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError"
+                >
+                    {{ commonLocaleData?.app_update }}
                 </button>
                 <button
                     *ngIf="queryParams?.stockUniqueName && !activeGroup?.uniqueName"
@@ -4822,16 +4732,6 @@
                     (click)="deleteStock()"
                 >
                     {{ commonLocaleData?.app_delete }}
-                </button>
-                <button
-                    *ngIf="queryParams?.stockUniqueName"
-                    mat-stroked-button
-                    color="primary"
-                    class="min-width-100"
-                    (click)="updateStock(stockCreateEditForm)"
-                    [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError"
-                >
-                    {{ commonLocaleData?.app_update }}
                 </button>
             </div>
         </div>
