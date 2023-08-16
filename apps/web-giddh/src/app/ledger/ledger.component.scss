@@ -462,7 +462,7 @@ sh-select:focus {
     width: 32%;
     background-color: var(--color-secondary-input-bar-border);
     left: -32%;
-    top: 30px;
+    top: 20px;
 }
 .advance-search-by-date:after {
     position: absolute;
@@ -471,7 +471,7 @@ sh-select:focus {
     width: 32%;
     background-color: var(--color-secondary-input-bar-border);
     right: -28%;
-    top: 30px;
+    top: 20px;
 }
 
 .ledger-head {
@@ -890,6 +890,17 @@ input#ledger-search {
     }
     .show-if-update-ledger-open {
         height: 230px;
+    }
+    .linked-entities{
+        max-width: 155px;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    .ledger-row{
+        .column-gap5{
+            column-gap: 0 !important;
+        }
     }
 }
 
