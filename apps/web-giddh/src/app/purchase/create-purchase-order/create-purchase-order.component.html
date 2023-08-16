@@ -1061,13 +1061,7 @@
                                                                         name="companyShippingDetailsRegionCode"
                                                                         [disabled]="
                                                                             purchaseOrder.company.shippingDetails.county
-                                                                                .code &&
-                                                                            purchaseOrder.company.shippingDetails
-                                                                                .gstNumber &&
-                                                                            purchaseOrder.company.shippingDetails
-                                                                                .gstNumber.length >= 2
-                                                                                ? true
-                                                                                : null
+                                                                                .code
                                                                         "
                                                                         [fixedValue]="
                                                                             purchaseOrder.company.shippingDetails.county

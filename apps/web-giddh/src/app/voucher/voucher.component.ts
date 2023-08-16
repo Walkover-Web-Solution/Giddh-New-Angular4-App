@@ -1193,7 +1193,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 /** results[1] :- get voucher details response */
                 if (results[0]) {
                     let obj;
-
+                    this.invFormData.accountDetails.billingDetails = results[0].account?.billingDetails;
+                    this.invFormData.accountDetails.shippingDetails = results[0].account?.shippingDetails;
                     if (this.voucherApiVersion === 2) {
                         results[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(results[0], this.selectedVoucherType);
 
@@ -1243,8 +1244,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         } else {
                             tempObj = cloneDeep((obj as GenericRequestForGenerateSCD).voucher);
                         }
-                        obj.accountDetails.billingDetails = results[0].account?.billingDetails
-                        obj.accountDetails.shippingDetails = results[0].account?.shippingDetails
+
                         tempObj.entries.forEach((entry, index) => {
                             let entryDate = voucherDate || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT);
 
@@ -8317,7 +8317,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 data.addresses = [find(data.addresses, (tax) => tax.isDefault)];
             }
             // auto fill all the details
-            this.invFormData.accountDetails = new AccountDetailsClass(data);
+            if (!this.isUpdateMode) {
+                this.invFormData.accountDetails = new AccountDetailsClass(data);
+            }
             if (this.invFormData.accountDetails) {
                 this.getStateCode('billingDetails', this.statesBilling);
                 this.autoFillShippingDetails();
