@@ -8714,7 +8714,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 };
                 txn = this.calculateItemValues(selectedAcc, txn, entry, !this.isPoLinkingInProgress, false, isLinkedPoItem);
 
-                if (isLinkedPoItem) {
+                if (isLinkedPoItem && this.isPoLinkingInProgress) {
                     txn.applicableTaxes = entry.taxList;
 
                     if (selectedAcc.stock) {
