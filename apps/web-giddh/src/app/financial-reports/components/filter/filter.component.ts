@@ -109,9 +109,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private settingsTagService: SettingsTagService,
         private generalService: GeneralService,
+        private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
         private settingsBranchAction: SettingsBranchActions,
-        private modalService: BsModalService,
         private toaster: ToasterService
     ) {
         this.filterForm = this.fb.group({

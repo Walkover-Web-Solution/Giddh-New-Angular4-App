@@ -142,7 +142,7 @@
                                 >
                                     <div class="mr-t2 mr-b05 d-flex align-items-center">
                                         <span class="d-flex">
-                                            <i class="icon-credit-note-new mr-r1"></i>
+                                            <i class="icon-invoice-new mr-r1"></i>
                                         </span>
                                         <span
                                             >{{ localeData?.cash }}
@@ -540,13 +540,11 @@
     </ng-template>
 
     <!--help & support sidebar  -->
-    <div
-        class="help-support-aside"
-        *ngIf="asideHelpSupportMenuState === 'in'"
-        (clickOutside)="closeHelpPaneOnOutsideClick()"
-    >
+
+    <ng-template #asideHelpSupportMenuStateRef>
         <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
-    </div>
+    </ng-template>
+
     <!-- setting aside pane -->
     <div class="help-support-aside setting-sidebar-wrapper">
         <perfect-scrollbar [scrollIndicators]="true">
@@ -558,6 +556,13 @@
                 (closeAsideEvent)="toggleSidebarPane(false, false)"
             ></aside-setting>
         </perfect-scrollbar>
+    </div>
+    <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
+        <inventory-sidebar
+            class="inventory-sidebar"
+            [ngClass]="{ 'inventory-sidebar': isMobileSidebar }"
+            (closeAsideEvent)="toggleSidebarPane(false, false)"
+        ></inventory-sidebar>
     </div>
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">

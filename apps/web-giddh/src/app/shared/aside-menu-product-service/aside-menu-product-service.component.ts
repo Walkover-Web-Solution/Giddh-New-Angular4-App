@@ -57,7 +57,6 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService
     ) {
-
     }
 
     /**
@@ -92,8 +91,9 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Releases memory
+     * This will use for toggle stock pane
      *
+     * @param {string} [type]
      * @memberof AsideMenuProductServiceComponent
      */
     public ngOnDestroy(): void {
@@ -109,12 +109,24 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         this.isAddStockOpen = !this.isAddStockOpen;
     }
 
+    /**
+    * Ths will use for toggle service pane
+    *
+    *
+    * @memberof AsideMenuProductServiceComponent
+    */
     public toggleServicePane(): void {
         this.hideFirstStep = true;
         this.isAddStockOpen = false;
         this.isAddServiceOpen = !this.isAddServiceOpen;
     }
 
+    /**
+     * Ths will use for close aside pane
+     *
+     * @param {*} [e]
+     * @memberof AsideMenuProductServiceComponent
+     */
     public closeAsidePane(event?: any): void {
         if (this.isAddServiceOpen && this.hasUnsavedChanges) {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
@@ -135,6 +147,11 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will use for back button presse
+     *
+     * @memberof AsideMenuProductServiceComponent
+     */
     public backButtonPressed(): void {
         if (this.isAddServiceOpen && this.hasUnsavedChanges) {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {

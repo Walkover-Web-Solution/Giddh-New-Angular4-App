@@ -13,10 +13,11 @@
         "manufacturing":"Manufacturing",
         "warehouse_balance":"Warehouse Opening Balance",
         "custom_units":"Custom Units",
+        "master":"Master",
         "recipe":"Recipe",
         "create_manufacturing":"Create Manufacturing",
         "report":"Report",
-        "master":"Master"
+        "create_branch_transfer": "Create Branch Transfer"
     },
     "reports":{
         "transaction_count":"Transaction Count",
@@ -49,7 +50,6 @@
         "variant_name":"Variant Name",
         "no_entries_found_1":"No entries found within given criteria.",
         "no_entries_found_2":"Do search with some other dates",
-        "no_columns_found":"No columns are selected from customise filter.",
         "voucher_type":"Voucher Type",
         "rate":"Rate",
         "date":"Date",

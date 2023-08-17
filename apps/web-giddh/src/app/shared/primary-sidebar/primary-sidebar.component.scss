@@ -429,6 +429,11 @@
                     padding: 14px 10px !important;
                 }
             }
+            &.padding-14 {
+                .branch-connection {
+                    padding: 14px 10px !important;
+                }
+            }
             h3 {
                 justify-content: center;
                 align-items: center;
@@ -710,6 +715,18 @@
         }
     }
 }
+.shortcuts {
+    background: var(--color-popup-footer-background);
+    border-top: none;
+    margin: 0;
+    padding: 12px 16px 12px 20px;
+    color: var(--color-abbey);
+    font-size: var(--font-size-12);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    text-align: right;
+}
+
 /*responsive starts here*/
 @media (min-height: 800px) and (max-height: 1024px) {
     .primary-sidebar {

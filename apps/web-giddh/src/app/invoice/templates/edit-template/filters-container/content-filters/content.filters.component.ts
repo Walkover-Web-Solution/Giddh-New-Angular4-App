@@ -51,8 +51,6 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold the value if Gst Composition will show/hide */
     public showGstComposition: boolean = false;
-    /** Stores the image signature ID */
-    public imageSignatureId: string;
     /** Stores the active company name */
     public activeCompanyName: string;
     /** Ng form instance of content filter component */
@@ -371,6 +369,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      */
     public changeInvoiceHeader(event: boolean): void {
         this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
+        this.onChangeFieldVisibility(null, null, null);
     }
 
     /**

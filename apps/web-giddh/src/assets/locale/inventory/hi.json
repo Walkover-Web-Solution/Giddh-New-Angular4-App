@@ -13,10 +13,11 @@
         "manufacturing":"उत्पादन",
         "warehouse_balance":"वेयरहाउस ओपनिंग बैलेंस",
         "custom_units":"कस्टम इकाई",
+        "master":"मास्टर",
         "recipe":"व्यंजन विधि",
         "create_manufacturing":"मैन्युफैक्चरिंग बनाएं",
         "report":"प्रतिवेदन",
-        "master":"मास्टर"
+        "create_branch_transfer":"शाखा स्थानांतरण बनाएँ"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",
@@ -49,7 +50,6 @@
         "variant_name":"वेरिएंट का नाम",
         "no_entries_found_1":"दिए गए मानदंडों के भीतर कोई प्रविष्टि नहीं मिली।",
         "no_entries_found_2":"कुछ अन्य तिथियों के साथ खोजें",
-        "no_columns_found":"कस्टम फ़िल्टर से कोई कॉलम नहीं चुना गया है।",
         "voucher_type":"वाउचर प्रकार",
         "rate":"दर",
         "date":"तारीख",

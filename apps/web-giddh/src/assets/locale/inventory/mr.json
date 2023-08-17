@@ -13,10 +13,11 @@
         "manufacturing":"उत्पादन",
         "warehouse_balance":"गोदाम उघडण्याची शिल्लक",
         "custom_units":"सानुकूल युनिट",
+        "master":"मास्टर",
         "recipe":"कृती",
         "create_manufacturing":"मॅन्युफॅक्चरिंग तयार करा",
         "report":"अहवाल द्या",
-        "master":"मास्टर"
+        "create_branch_transfer":"शाखा हस्तांतरण तयार करा"
     },
     "reports":{
         "transaction_count":"व्यवहाराची संख्या",
@@ -49,7 +50,6 @@
         "variant_name":"भिन्न नाव",
         "no_entries_found_1":"दिलेल्या निकषांमध्ये कोणत्याही नोंदी आढळल्या नाहीत.",
         "no_entries_found_2":"काही इतर तारखांसह शोधा",
-        "no_columns_found":"सानुकूल फिल्टरमधून कोणतेही स्तंभ निवडलेले नाहीत.",
         "voucher_type":"व्हाउचर प्रकार",
         "rate":"दर",
         "date":"तारीख",
