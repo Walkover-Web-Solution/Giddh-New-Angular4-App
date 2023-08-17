@@ -24,7 +24,7 @@ a.connect-bank {
 }
 .bank-details-block {
     cdk-virtual-scroll-viewport {
-        height: 305px;
+        height: 270px;
     }
 }
 .add-bank-details {
@@ -36,4 +36,7 @@ a.connect-bank {
 }
 p {
     color: var(--color-abbey);
+}
+.banks-scrollbar-wrapper{
+    row-gap: 0;
 }
