@@ -5755,10 +5755,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (countryCode) {
                 if (this.countryStates[countryCode]) {
                     if (!isCompanyStates) {
-                        this.statesSource = this.countryStates[countryCode];
+                        if (countryCode !== 'GB') {
+                            this.statesSource = this.countryStates[countryCode];
+                        }
                         this.regionsSource = this.countryStates[countryCode];
                     } else {
-                        this.companyStatesSource = this.countryStates[countryCode];
+                        if (countryCode !== 'GB') {
+                            this.companyStatesSource = this.countryStates[countryCode];
+                        }
                         this.companyRegionsSource = this.countryStates[countryCode];
                     }
                     this.startLoader(false);
@@ -5767,10 +5771,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
                         this.startLoader(false);
                         if (!isCompanyStates) {
-                            this.statesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
+                            if (countryCode !== 'GB') {
+                                this.statesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
+                            }
                             this.regionsSource = this.modifyStateResp((resp.body) ? resp.body?.countyList : [], countryCode);
                         } else {
-                            this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
+                            if (countryCode !== 'GB') {
+                                this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
+                            }
                             this.companyRegionsSource = this.modifyStateResp((resp.body) ? resp.body?.countyList : [], countryCode);
                         }
                         resolve();
@@ -7751,6 +7759,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 data.state = {};
             }
             data.state.code = (isCompanyAddress) ? address.stateCode : (address.state) ? address.state.code : "";
+            if (data.county) {
+                data.county.code = address.county ? address.county.code : "";
+                data.county.name = address.county ? address.county.name : "";
+            }
             data.stateCode = data.state.code;
             data.state.name = (isCompanyAddress) ? address.stateName : (address.state) ? address.state.name : "";
             data.stateName = data.state.name;
