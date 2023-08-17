@@ -2498,7 +2498,6 @@ form#groupDetailForm {
 .advance-search,
 #share-modal,
 #exportModal,
-.other-details-section,
 .daybook-advance-search,
 .petty-cash-reject-modal {
     .mat-form-field {
@@ -2598,16 +2597,6 @@ giddh-datepicker {
             word-break: break-word !important;
         }
     }
-}
-.mat-button,
-.mat-raised-button {
-    margin-right: 15px !important;
-    height: 36px;
-    box-shadow: none !important;
-}
-
-.mat-raised-button:focus {
-    box-shadow: none !important;
 }
 
 .search-ledger-field {
@@ -2881,10 +2870,7 @@ td.mat-footer-cell {
 .mat-expansion-indicator::after {
     color: var(--color-primary-checkbox-and-expansion-panel-arrow) !important;
 }
-.mat-icon-button i,
-.mat-icon-button .mat-icon {
-    color: var(--color-primary-icon);
-}
+
 .other-tax {
     .mat-checkbox-layout {
         .mat-checkbox-label {
@@ -3258,6 +3244,7 @@ td.mat-footer-cell {
 }
 
 /*-- input-new-form-field --*/
+voucher-component,
 create-update-group,
 giddh-datepicker,
 add-company,
@@ -3311,7 +3298,7 @@ input-field {
             .mat-input-element {
                 margin: 0;
                 line-height: 1.25rem;
-                padding: 14px;
+                padding: 14px !important;
             }
             textarea {
                 &.mat-input-element {
@@ -3437,6 +3424,57 @@ input-field {
         }
     }
 }
+.other-details-section {
+    .mat-form-field-appearance-outline {
+        .mat-form-field-flex {
+            background-color: var(--color-white);
+        }
+    }
+}
+add-company,
+voucher-component {
+    .mobile-number {
+        .mat-form-field-appearance-outline {
+            .mat-form-field-label {
+                padding-left: 48px;
+            }
+            .mat-form-field-infix {
+                .mat-input-element {
+                    padding-left: 48px !important;
+                }
+            }
+            &.mat-form-field-can-float {
+                &.mat-form-field-should-float {
+                    .mat-form-field-label {
+                        padding-left: 64px;
+                    }
+                }
+            }
+        }
+    }
+    giddh-datepicker {
+        .mat-focused {
+            .mat-form-field-flex {
+                border: 0 !important;
+            }
+        }
+    }
+}
+add-company {
+    .fill-form {
+        input {
+            &::placeholder {
+                color: var(--color-popup-list-input-text) !important;
+            }
+        }
+    }
+}
+.invoice-date-label {
+    &:focus-visible {
+        outline: none;
+    }
+}
+
 .row-gap {
     row-gap: 15px;
 }

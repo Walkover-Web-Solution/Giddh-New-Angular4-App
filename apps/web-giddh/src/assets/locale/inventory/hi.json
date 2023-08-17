@@ -16,8 +16,7 @@
         "recipe":"व्यंजन विधि",
         "create_manufacturing":"मैन्युफैक्चरिंग बनाएं",
         "report":"प्रतिवेदन",
-        "master":"मास्टर",
-        "create_branch_transfer":"शाखा स्थानांतरण बनाएँ"
+        "master":"मास्टर"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",
@@ -50,7 +49,6 @@
         "variant_name":"वेरिएंट का नाम",
         "no_entries_found_1":"दिए गए मानदंडों के भीतर कोई प्रविष्टि नहीं मिली।",
         "no_entries_found_2":"कुछ अन्य तिथियों के साथ खोजें",
-        "no_columns_found":"कस्टम फ़िल्टर से कोई कॉलम नहीं चुना गया है।",
         "voucher_type":"वाउचर प्रकार",
         "rate":"दर",
         "date":"तारीख",
@@ -86,7 +84,11 @@
         "equals":"बराबर",
         "greater_than":"से अधिक",
         "less_than":"से कम",
-        "excluded":"छोड़ा गया"
+        "excluded":"छोड़ा गया",
+        "category":"श्रेणी",
+        "type":"प्रकार",
+        "select_value":"कीमत चुनें",
+        "enter_amount":"राशि डालें"
     },
      "warehouse_opening_balance":{
         "unique_name":"अनूठा नाम",

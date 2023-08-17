@@ -1,5 +1,9 @@
-<div class="text-field-container">
-    <mat-form-field [ngClass]="{ 'mat-form-field-invalid': showError }" [appearance]="appearance">
+<div class="text-field-container" [ngClass]="{ 'readonly-field': readonly }">
+    <mat-form-field
+        [ngClass]="{ 'mat-form-field-invalid': showError }"
+        [appearance]="appearance"
+        [floatLabel]="floatLabel"
+    >
         <mat-label>{{ label ? label : placeholder }}</mat-label>
         <input
             matInput
@@ -17,8 +21,6 @@
             [required]="required"
             [attr.min]="min"
             [attr.max]="max"
-            [maxLength]="maxlength"
-            [customDecimalPlaces]="customDecimalPlaces"
             *ngIf="!allowDecimalDigitsOnly && !allowDigitsOnly && !useMask"
             #textField
             (keydown.enter)="$event.preventDefault()"
@@ -28,7 +30,7 @@
         <input
             matInput
             [name]="name"
-            type="number"
+            [type]="type"
             [id]="id"
             [class]="cssClass"
             [placeholder]="placeholder"
@@ -63,6 +65,7 @@
             [required]="required"
             [attr.min]="min"
             [attr.max]="max"
+            [maxlength]="maxlength"
             *ngIf="allowDigitsOnly && !useMask"
             [customDecimalPlaces]="customDecimalPlaces"
             digitsOnlyDirective

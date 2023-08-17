@@ -3,7 +3,7 @@ const UNIVERSAL_URI_LEDGER = 'company/:companyUniqueName/accounts/:accountUnique
 export const LEDGER_API = {
     // ledger methods get,create,delete,update
     GET: UNIVERSAL_URI_LEDGER + 'transactions?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to',
-    CREATE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/',
+    CREATE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2',
     RECONCILIATION: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/reconcile',
     UNIVERSAL: UNIVERSAL_URI_LEDGER + ':entryUniqueName',
     // A New API Endpoint Added to Differenciate for Get Transactions
@@ -39,7 +39,7 @@ export const LEDGER_API = {
     GET_COLUMNAR_REPORT: 'v2/company/:companyUniqueName/groups/:groupUniqueName/export/account-balances',
     // Export Ledger get columnar report table
     EXPORT_LEDGER_COLUMNAR_REPORT_TABLE: 'company/:companyUniqueName/accounts/:accountUniqueName/columnar-report?from=:from&to=:to',
-    IMPORT_STATEMENT: 'company/:companyUniqueName/import-pdf/bank-statement/?entity=pdf&accountUniqueName=:accountUniqueName',
+    IMPORT_STATEMENT: 'company/:companyUniqueName/import-pdf/bank-statement?entity=pdf&accountUniqueName=:accountUniqueName',
     DELETE_BANK_TRANSACTIONS: 'company/:companyUniqueName/bank/accounts/:accountUniqueName/transactions',
 
     // Export Ledger Entry and Group Ledger entry

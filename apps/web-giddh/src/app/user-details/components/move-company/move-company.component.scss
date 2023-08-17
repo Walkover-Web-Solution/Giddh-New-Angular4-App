@@ -21,12 +21,4 @@
         white-space: normal;
         word-break: break-word;
     }
-    button {
-        cursor: pointer;
-        color: var(--color-secondary-button-text);
-        background-color: var(--color-secondary-button-background);
-        &:hover {
-            background-color: var(--color-secondary-button-background-hover);
-        }
-    }
 }

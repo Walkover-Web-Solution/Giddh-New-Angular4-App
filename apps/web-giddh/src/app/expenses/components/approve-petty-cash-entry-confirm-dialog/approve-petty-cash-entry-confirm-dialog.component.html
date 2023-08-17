@@ -89,12 +89,12 @@
         </div>
 
         <div class="d-flex">
-            <button mat-raised-button class="btn btn-warning" (click)="approveEntry.emit(false)">
+            <button mat-stroked-button (click)="approveEntry.emit(false)">
                 {{ commonLocaleData?.app_no }}
             </button>
             <button
-                mat-raised-button
-                class="btn btn-success"
+                mat-stroked-button
+                color="primary"
                 (click)="confirmApproveEntry()"
                 [ladda]="approveEntryRequestInProcess"
             >

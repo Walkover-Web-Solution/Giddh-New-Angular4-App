@@ -1,6 +1,9 @@
 {
     "fixed_assets": "स्थिर मालमत्ता",
     "enter_product": "उत्पादन प्रविष्ट करा",
+    "enter_stock": "स्टॉक प्रविष्ट करा",
+    "enter_service": "सेवा प्रविष्ट करा",
+    "enter_fixed": "मालमत्ता प्रविष्ट करा",
     "select_unit": "युनिट निवडा",
     "under_group": "गट अंतर्गत",
     "move": "गट हलवा",
@@ -89,5 +92,8 @@
     "duplicate_option_value": "तुम्ही आधीच पर्याय मूल्य [VALUE] वापरले आहे.",
     "option_name_required": "पर्यायाचे नाव आवश्यक आहे",
     "option_value_required": "पर्याय मूल्य आवश्यक आहे",
-    "save_stock_for_recipe": "स्टॉक सेव्ह करा आणि रेसिपी तयार करा"
+    "save_stock_for_recipe": "स्टॉक सेव्ह करा आणि रेसिपी तयार करा",
+    "confirm_delete_option": "पर्याय हटवल्याने पर्यायाचे सर्व प्रकार देखील काढून टाकले जातील. तुम्हाला अजूनही पर्याय हटवायचा आहे का?",
+    "unit_group": "युनिट गट",
+    "select_unit_group": "युनिट गट निवडा"
 }

@@ -8,15 +8,16 @@
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <div [style.display]="showLoader ? 'none' : 'block'">
         <div class="relative create-new-inventory-page static-tabs-on-page">
-            <hamburger-menu></hamburger-menu>
+            <hamburger-menu *ngIf="!addStock"></hamburger-menu>
             <div class="select-physical-product input-border-wrapper">
                 <form class="form-body" #stockCreateEditForm="ngForm" novalidate autocomplete="off">
                     <span>
                         <button
-                            *ngIf="queryParams?.stockUniqueName"
+                            *ngIf="queryParams?.stockUniqueName && !addStock"
                             (click)="backClicked()"
-                            class="btn-sky-blue btn-position-left mr-0"
-                            mat-button
+                            class="btn-position-left mr-0"
+                            mat-stroked-button
+                            color="primary"
                         >
                             <i class="icon-left back-left"></i>
                             {{ commonLocaleData?.app_back }}
@@ -40,7 +41,13 @@
                                         <div class="col-sm-6 col-lg-6">
                                             <input-field
                                                 [name]="'productName'"
-                                                [placeholder]="localeData?.enter_product"
+                                                [placeholder]="
+                                                    stockForm.type === 'PRODUCT'
+                                                        ? localeData?.enter_stock
+                                                        : stockForm.type === 'SERVICE'
+                                                        ? localeData?.enter_service
+                                                        : localeData?.enter_fixed
+                                                "
                                                 [type]="'text'"
                                                 [(ngModel)]="stockForm.name"
                                                 (ngModelChange)="checkSpacingValidation(stockForm.name)"
@@ -48,21 +55,6 @@
                                                 [showError]="isFormSubmitted && !stockForm.name"
                                             >
                                             </input-field>
-                                        </div>
-                                        <div class="col-sm-6 col-lg-6">
-                                            <dropdown-field
-                                                [name]="'stockUnitCode'"
-                                                [placeholder]="localeData?.select_unit"
-                                                [options]="stockUnits"
-                                                (selectedOption)="
-                                                    stockForm.stockUnitUniqueName = $event?.value;
-                                                    stockUnitName = $event.label;
-                                                    prefillUnits()
-                                                "
-                                                [defaultValue]="stockUnitName"
-                                                [showError]="isFormSubmitted && !stockForm.stockUnitUniqueName"
-                                            >
-                                            </dropdown-field>
                                         </div>
                                         <div class="col-sm-6 col-lg-6">
                                             <input-field
@@ -73,6 +65,70 @@
                                                 [autocomplete]="'off'"
                                             >
                                             </input-field>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6">
+                                            <dropdown-field
+                                                [name]="'stockUnitGroup'"
+                                                [placeholder]="localeData?.select_unit_group"
+                                                [label]="localeData?.unit_group"
+                                                [options]="groupList"
+                                                (selectedOption)="
+                                                    stockForm.stockUnitGroup.uniqueName = $event?.value;
+                                                    stockForm.stockUnitGroup.name = $event.label;
+                                                    stockForm.stockUnitUniqueName = '';
+                                                    stockUnitName = '';
+                                                    getStockUnits()
+                                                "
+                                                [defaultValue]="stockForm.stockUnitGroup?.name"
+                                                [readonly]="queryParams?.stockUniqueName"
+                                            >
+                                            </dropdown-field>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6">
+                                            <dropdown-field
+                                                [name]="'stockUnitCode'"
+                                                [placeholder]="localeData?.select_unit"
+                                                [label]="commonLocaleData?.app_unit"
+                                                [options]="stockMainUnits"
+                                                (selectedOption)="
+                                                    stockForm.stockUnitUniqueName = $event?.value;
+                                                    stockUnitName = $event.label;
+                                                    getStockLinkedUnits()
+                                                "
+                                                [defaultValue]="stockUnitName"
+                                                [showError]="isFormSubmitted && !stockForm.stockUnitUniqueName"
+                                                [readonly]="queryParams?.stockUniqueName"
+                                            >
+                                            </dropdown-field>
+                                        </div>
+                                    </div>
+                                    <div class="row mr-b1 mr-t15">
+                                        <div class="col-sm-6 col-lg-6" *ngIf="showTaxField">
+                                            <mat-form-field class="w-100" appearance="outline">
+                                                <mat-label>{{ commonLocaleData?.app_tax }}</mat-label>
+                                                <mat-select
+                                                    name="taxes"
+                                                    [placeholder]="commonLocaleData?.app_select_tax"
+                                                    multiple
+                                                    [value]="stockForm.taxes"
+                                                    (openedChange)="openedSelectTax($event)"
+                                                >
+                                                    <mat-option
+                                                        *ngFor="let tax of taxes"
+                                                        [value]="tax?.uniqueName"
+                                                        [disabled]="tax.isDisabled"
+                                                        [selected]="tax.isChecked"
+                                                        (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
+                                                        >{{ tax.name }}</mat-option
+                                                    >
+                                                    <mat-option
+                                                        class="create-update-no-data"
+                                                        [disabled]="true"
+                                                        *ngIf="!taxes?.length"
+                                                        >{{ commonLocaleData?.app_no_result_found }}</mat-option
+                                                    >
+                                                </mat-select>
+                                            </mat-form-field>
                                         </div>
                                         <div
                                             class="col-sm-6 col-lg-6 under-group-field-button-wrapper position-relative"
@@ -104,44 +160,16 @@
                                                 </mat-select>
                                             </mat-form-field>
                                             <button
-                                                *ngIf="queryParams?.stockUniqueName"
-                                                mat-raised-button
-                                                class="btn-success min-width-100 move-stock mr-0"
+                                                *ngIf="queryParams?.stockUniqueName && stockGroups?.length > 1"
+                                                mat-stroked-button
+                                                color="primary"
+                                                class="min-width-100 move-stock mr-0"
                                                 (click)="moveStock()"
                                                 [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
                                                 [autocomplete]="'off'"
                                             >
                                                 {{ localeData?.move }}
                                             </button>
-                                        </div>
-                                    </div>
-                                    <div class="row mr-b1 mr-t15" *ngIf="showTaxField">
-                                        <div class="col-sm-6 col-lg-6">
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <mat-label>{{ commonLocaleData?.app_tax }}</mat-label>
-                                                <mat-select
-                                                    name="taxes"
-                                                    [placeholder]="commonLocaleData?.app_select_tax"
-                                                    multiple
-                                                    [value]="stockForm.taxes"
-                                                    (openedChange)="openedSelectTax($event)"
-                                                >
-                                                    <mat-option
-                                                        *ngFor="let tax of taxes"
-                                                        [value]="tax?.uniqueName"
-                                                        [disabled]="tax.isDisabled"
-                                                        [selected]="tax.isChecked"
-                                                        (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
-                                                        >{{ tax.name }}</mat-option
-                                                    >
-                                                    <mat-option
-                                                        class="create-update-no-data"
-                                                        [disabled]="true"
-                                                        *ngIf="!taxes?.length"
-                                                        >{{ commonLocaleData?.app_no_result_found }}</mat-option
-                                                    >
-                                                </mat-select>
-                                            </mat-form-field>
                                         </div>
                                     </div>
                                 </div>
@@ -835,10 +863,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-lg-2">
-                                                                            <div
-                                                                                class="delete-btn-wrapper"
-                                                                                *ngIf="stockForm.options?.length > 1"
-                                                                            >
+                                                                            <div class="delete-btn-wrapper">
                                                                                 <button
                                                                                     mat-icon-button
                                                                                     class="chip-close-btn"
@@ -1200,7 +1225,7 @@
                                                                                 >
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
-    
+
                                                                                 <button
                                                                                     mat-icon-button
                                                                                     class="icon-button-add-sales"
@@ -1308,7 +1333,7 @@
                                                                                 >
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
-    
+
                                                                                 <button
                                                                                     mat-icon-button
                                                                                     class="icon-button-add-sales"
@@ -1353,7 +1378,7 @@
                                                                             <div class="sales-purchase-wrapper d-flex">
                                                                                 <text-field
                                                                                     [cssClass]="
-                                                                                        'text-right unit-amount'
+                                                                                        'text-right unit-amount form-control'
                                                                                     "
                                                                                     [placeholder]="'0.00'"
                                                                                     [name]="
@@ -1396,7 +1421,8 @@
                                                                                         checkUnitRateValidation[i]
                                                                                             ?.fixedAssets
                                                                                             ? 'error-box'
-                                                                                            : '') + ' unit-rates'
+                                                                                            : '') +
+                                                                                        ' unit-rates form-control'
                                                                                     "
                                                                                 ></select-field>
                                                                                 <!-- <button
@@ -1417,7 +1443,7 @@
                                                                                 >
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
-    
+
                                                                                 <button
                                                                                     mat-icon-button
                                                                                     class="icon-button-add-sales"
@@ -4781,17 +4807,18 @@
                     {{ commonLocaleData?.app_create }}
                 </button>
                 <button
-                    *ngIf="queryParams?.stockUniqueName"
+                    *ngIf="queryParams?.stockUniqueName && !activeGroup?.uniqueName"
                     mat-stroked-button
-                    class="btn-primary min-width-100"
-                    (click)="backClicked()"
+                    class="min-width-100"
+                    (click)="backClicked(true)"
                 >
                     {{ commonLocaleData?.app_close }}
                 </button>
                 <button
                     *ngIf="queryParams?.stockUniqueName"
                     mat-stroked-button
-                    class="btn-danger min-width-100"
+                    color="warn"
+                    class="min-width-100"
                     (click)="deleteStock()"
                 >
                     {{ commonLocaleData?.app_delete }}
@@ -4799,7 +4826,8 @@
                 <button
                     *ngIf="queryParams?.stockUniqueName"
                     mat-stroked-button
-                    class="btn-success min-width-100"
+                    color="primary"
+                    class="min-width-100"
                     (click)="updateStock(stockCreateEditForm)"
                     [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError"
                 >

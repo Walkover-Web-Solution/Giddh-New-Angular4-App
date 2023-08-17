@@ -25,13 +25,9 @@
                                     />
                                 </div>
                             </div>
-                            <div
-                                class="list-header"
-                                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
-                            >
+                            <div class="list-header" *ngIf="isCompany">
                                 <dropdown-field
                                     class="max-width-230"
-                                    [cssClass]="'form-control'"
                                     [name]="'branch'"
                                     [placeholder]="commonLocaleData?.app_select_branch"
                                     [options]="currentCompanyBranches"
@@ -40,10 +36,9 @@
                                 >
                                 </dropdown-field>
                             </div>
-                            <div class="list-header" *ngIf="allWarehouses?.length > 1">
+                            <div class="list-header" *ngIf="warehouses?.length > 1">
                                 <dropdown-field
                                     class="max-width-230"
-                                    [cssClass]="'form-control'"
                                     [name]="'warehouse'"
                                     [placeholder]="commonLocaleData?.app_select_warehouse"
                                     [options]="warehouses"
@@ -59,8 +54,8 @@
                             <div>
                                 <button
                                     type="button"
-                                    class="mr-0"
-                                    mat-raised-button
+                                    class="mr-0 search-btn"
+                                    mat-stroked-button
                                     color="primary"
                                     (click)="getReport()"
                                 >
@@ -72,7 +67,7 @@
                                 <button
                                     type="button"
                                     class="mr-0"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                     (click)="initializeSearchReqObj()"
                                     *ngIf="showClearButton"
@@ -187,21 +182,21 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
-            <div class="pagination-wrapper" [hidden]="totalItems <= paginationLimit">
-                <pagination
-                    [totalItems]="totalItems"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="paginationLimit"
-                    [rotate]="false"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                ></pagination>
-            </div>
         </section>
+        <div class="pagination-wrapper mt-1" [hidden]="totalItems <= paginationLimit">
+            <pagination
+                [totalItems]="totalItems"
+                [maxSize]="5"
+                class="pagination-sm"
+                [boundaryLinks]="true"
+                [itemsPerPage]="paginationLimit"
+                [rotate]="false"
+                [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last"
+            ></pagination>
+        </div>
     </section>
 
     <!-- Advance Filter Modal -->
@@ -221,6 +216,7 @@
                                 <dropdown-field
                                     [name]="'inventoryType'"
                                     [placeholder]="commonLocaleData?.app_select_inventory_type"
+                                    [label]="commonLocaleData?.app_inventory_type"
                                     [options]="inventoryTypeFilters"
                                     [defaultValue]="selectedInventoryTypeName"
                                     (selectedOption)="
@@ -238,6 +234,7 @@
                                         class="max-width-230"
                                         [name]="'stock'"
                                         [placeholder]="commonLocaleData?.app_select_stock"
+                                        [label]="commonLocaleData?.app_stock"
                                         [options]="stockList"
                                         (selectedOption)="
                                             selectedStockName = $event.label;
@@ -257,6 +254,7 @@
                                         class="max-width-230"
                                         [name]="'variant'"
                                         [placeholder]="commonLocaleData?.app_select_variant"
+                                        [label]="commonLocaleData?.app_variant"
                                         [options]="variantList"
                                         (selectedOption)="
                                             selectedVariantName = $event.label;
@@ -273,6 +271,7 @@
                                 <dropdown-field
                                     [name]="'searchBy'"
                                     [placeholder]="localeData?.select_search_by"
+                                    [label]="localeData?.search_by"
                                     [options]="searchByFilters"
                                     [defaultValue]="selectedOperationName"
                                     (selectedOption)="
@@ -288,6 +287,7 @@
                                 <dropdown-field
                                     [name]="'searchOperation'"
                                     [placeholder]="localeData?.select_operation"
+                                    [label]="localeData?.operation"
                                     [options]="operatorFilters"
                                     [defaultValue]="selectedFilterByName"
                                     (selectedOption)="
@@ -304,6 +304,7 @@
                                     [type]="'number'"
                                     [name]="'searchValue'"
                                     [placeholder]="localeData?.enter_value"
+                                    [label]="commonLocaleData?.app_value"
                                     [(ngModel)]="manufacturingSearchRequest.searchValue"
                                     [allowDecimalDigitsOnly]="true"
                                 ></input-field>
@@ -315,7 +316,7 @@
                                 <button
                                     type="button"
                                     class="mr-0"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                     mat-dialog-close
                                     (click)="getReport()"
@@ -324,7 +325,7 @@
                                 </button>
                             </div>
                             <div class="ml-2">
-                                <button type="button" mat-dialog-close class="mr-0" mat-stroked-button color="primary">
+                                <button type="button" mat-dialog-close class="mr-0" mat-stroked-button>
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
                             </div>

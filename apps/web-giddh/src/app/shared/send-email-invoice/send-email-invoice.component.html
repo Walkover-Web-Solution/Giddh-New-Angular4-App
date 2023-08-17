@@ -79,15 +79,15 @@
             <div class="col-sm-12">
                 <div class="btn-group" role="group">
                     <button
-                        mat-button
-                        class="btn btn-success"
+                        mat-stroked-button
+                        color="primary"
                         [disabled]="!emailAddresses || (!isTransport && !isOriginal && !isCustomer)"
                         (click)="sendEmail()"
                     >
                         {{ commonLocaleData?.app_send }}
                     </button>
 
-                    <button mat-button class="btn btn-danger" (click)="cancel()">
+                    <button mat-stroked-button (click)="cancel()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

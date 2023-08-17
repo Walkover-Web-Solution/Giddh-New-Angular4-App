@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
-import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
+import { ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
@@ -44,6 +44,7 @@ import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'app-header',
@@ -74,7 +75,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('addmanage', { static: true }) public addmanage: ElementViewContainerRef;
     @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: ModalDirective;
     @ViewChild('addCompanyModal', { static: true }) public addCompanyModal: ModalDirective;
-    @ViewChild('addCompanyNewModal', { static: true }) public addCompanyNewModal: ModalDirective;
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     @ViewChild('dateRangePickerCmp', { static: true }) public dateRangePickerCmp: ElementRef;
     @ViewChild('dropdown', { static: true }) public companyDropdown: BsDropdownDirective;
@@ -88,6 +88,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
     /** All modules popover instance */
     @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
+    /** Instance of menu trigger */
+    @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
 
     public hideAsDesignChanges: boolean = false;
     public title: Observable<string>;
@@ -228,6 +230,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCalendlyModelActivate: boolean = false;
     /** Calendly url */
     public calendlyUrl: any = '';
+    /* True if it is redirect to go to branch mode */
+    public isGoToBranch: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -420,6 +426,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
+                this.voucherApiVersion = this.generalService.voucherApiVersion;
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
@@ -445,11 +452,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.accountItemsFromIndexDB = DEFAULT_AC;
         });
         this.totalNumberOfcompanies$ = this.store.pipe(select(state => state.session.totalNumberOfcompanies), takeUntil(this.destroyed$));
-        this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
-            if (value === 'resetcompanysession') {
-                this.removeCompanySessionData();
-            }
-        });
 
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
@@ -485,7 +487,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnInit() {
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
-
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let branches = [];
@@ -736,16 +737,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         /* TO SHOW NOTIFICATIONS */
 
-        /* intlTelInputGlobals */
-        if (window['intlTelInputGlobals'] === undefined) {
-            let scriptTag = document.createElement('script');
-            scriptTag.src = './assets/js/intl-tel-input.js';
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            document.body.appendChild(scriptTag);
-        }
-        /* intlTelInputGlobals */
-
         if (this.selectedPlanStatus === 'expired') {// active expired
             if (!this.isMobileSite) {
                 this.openExpiredPlanModel(this.expiredPlanModel);
@@ -761,7 +752,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
-                    this.router.navigate(['/new-user']);
+                    this.router.navigate(['/new-company']);
                 });
             } else if (s === userLoginStateEnum.userLoggedIn) {
                 if (this.generalService.getUtmParameter("companyUniqueName")) {
@@ -786,9 +777,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             }
         });
-        if (this.router.url === '/new-user') {
-            this.showAddCompanyModal();
-        }
+
         this.store.dispatch(this.loginAction.FetchUserDetails());
 
         // Get universal date
@@ -1026,36 +1015,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.manageGroupsAccountsModal.hide();
     }
 
-    public showAddCompanyModal() {
-        this.loadAddCompanyNewUiComponent();
-        this.addCompanyNewModal?.show();
-    }
 
-    public hideAddCompanyModal() {
-        this.addCompanyNewModal?.hide();
-    }
-
-    public hideCompanyModalAndShowAddAndManage() {
-        this.addCompanyModal.hide();
-        this.manageGroupsAccountsModal?.show();
-    }
 
     public onHide() {
         this.store.dispatch(this.companyActions.ResetCompanyPopup());
     }
 
-    public loadAddCompanyNewUiComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddNewUiComponent);
-        let viewContainerRef = this.companynewadd.viewContainerRef;
-        viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
-            this.hideAddCompanyModal();
-        });
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
-            this.hideCompanyModalAndShowAddAndManage();
-        });
-    }
 
     public loadAddManageComponent() {
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(ManageGroupsAccountsComponent);
@@ -1079,6 +1044,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public sideBarStateChange(event: boolean) {
+        this.isGoToBranch = false;
         if (this.sideMenu) {
             this.sideMenu.isopen = event;
         }
@@ -1133,6 +1099,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public openDateRangePicker() {
         this.isTodaysDateSelected = false;
+    }
+
+    /**
+     * This will use for navigae to subitem link
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    public navigateToSubItemLink(event: any): void {
+        if (event) {
+            this.trigger?.closeMenu();
+            if (event === 'deliverychallan' || event === 'receiptnote') {
+                this.router.navigate(['/pages/inventory/report/' + event]);
+            } else {
+                this.router.navigate(['/pages' + event]);
+            }
+        }
     }
 
     public ngOnDestroy() {
@@ -1215,6 +1198,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 showPlans: true
             }
         });
+    }
+
+    /**
+     * This will use for go to branch mode
+     *
+     * @memberof HeaderComponent
+     */
+    public gotToBranchTab(): void {
+        this.trigger?.closeMenu();
+        this.expandSidebar(false);
+        this.isGoToBranch = true;
     }
 
     public onRight(nodes) {
@@ -1345,12 +1339,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
-    public removeCompanySessionData() {
-        this.generalService.createNewCompany = null;
-        this.store.dispatch(this.commonActions.resetCountry());
-        this.store.dispatch(this.companyActions.removeCompanyCreateSession());
-    }
-
     public setCurrentPage() {
         let currentUrl = this.router.url;
 
@@ -1401,17 +1389,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public openScheduleModel() {
         this.store.dispatch(this._generalActions.isOpenCalendlyModel(true));
     }
-
-    /**
-     * Opens new company modal
-     *
-     * @memberof HeaderComponent
-     */
-    public createNewCompany(): void {
-        this.removeCompanySessionData();
-        this.showAddCompanyModal();
-    }
-
 
     /**
      * Fetches whether company country has other taxes (TCS/TDS)
@@ -1508,6 +1485,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
+        this.isGoToBranch = false;
         if (closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
             return;
         }
@@ -1626,15 +1604,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         } else {
             document.querySelector('body').classList.remove('prevent-body-scroll');
         }
-    }
-
-    /**
-     * Navigate to all module
-     *
-     * @memberof HeaderComponent
-     */
-    public navigateToAllModules(): void {
-        this.router.navigate(['/pages/all-modules']);
     }
 
     /**
@@ -1860,6 +1829,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = decodeURI(lastState);
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+        if (lastState !== 'pages/new-company') {
+            this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+        }
     }
 }

@@ -137,6 +137,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public entrySide: string;
     /** Stores the selected account details */
     @Input() public selectedAccountDetails: IOption;
+    /** Total pages for reference vouchers */
+    @Input() private referenceVouchersTotalPages: number = 1;
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
     public selectedInvoices: string[] = [];
@@ -449,7 +451,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.currentTxn?.currentValue?.selectedAccount) {
             this.currentTxn.taxInclusiveAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
-            if (!this.currentTxn.isStock) {
+            if (!this.currentTxn?.isStock) {
                 this.selectedWarehouse = String(this.defaultWarehouse);
             }
             this.calculatePreAppliedTax();
@@ -458,7 +460,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
         }
-        if (changes?.selectedAccountDetails?.currentValue !== changes?.selectedAccountDetails?.previousValue && this.currentTxn.isStock) {
+        if (changes?.selectedAccountDetails?.currentValue !== changes?.selectedAccountDetails?.previousValue && this.currentTxn?.isStock) {
             this.loadStockVariants(this.currentTxn.stockUniqueName);
         }
         if (this.voucherApiVersion === 2 && changes?.invoiceList?.currentValue) {
@@ -840,7 +842,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
             if (this.generalService.voucherApiVersion === 1) {
                 /** From API, for v1 companies, isStock key is creating issue in entry creation */
-                delete transaction.isStock;
+                delete transaction?.isStock;
             }
         });
         this.saveBlankLedger.emit(true);
@@ -1848,6 +1850,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
 
             request.page = this.referenceVouchersCurrentPage;
+
+            if (this.voucherApiVersion === 2 && request.page > 1 && this.referenceVouchersTotalPages < request.page) {
+                return;
+            }
+
             this.referenceVouchersCurrentPage++;
 
             let date;
@@ -1861,6 +1868,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
             this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 if (response && response.body) {
+                    this.referenceVouchersTotalPages = response.body.totalPages;
                     let items = [];
                     if (response.body.results) {
                         items = response.body.results;
@@ -1894,6 +1902,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.invoiceList = [];
         this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 2;
+        this.referenceVouchersTotalPages = 1;
     }
 
     /**
@@ -1950,7 +1959,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private setTaxCalculationMethodForStock(): void {
-        if (this.currentTxn.isStock && this.currentTxn.selectedAccount) {
+        if (this.currentTxn?.isStock && this.currentTxn?.selectedAccount) {
             const category = this.currentTxn.selectedAccount.category;
             switch (category) {
                 case 'income':

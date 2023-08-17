@@ -543,7 +543,18 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @memberof CreateManufacturingComponent
      */
     public addNewLinkedStock(): void {
-        this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(new ManufacturingLinkedStock());
+        this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(
+            {
+                selectedStock: { label: "", value: "", additional: { stockUnitCode: "", stockUnitUniqueName: "", unitsList: [] } },
+                stockUniqueName: "",
+                quantity: 1,
+                stockUnitUniqueName: "",
+                stockUnitCode: "",
+                rate: 0,
+                amount: 0,
+                variant: { name: '', uniqueName: '' }
+            }
+        );
         this.preventStocksApiCall = false;
         this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[(this.manufacturingObject.manufacturingDetails[0].linkedStocks?.length - 1)], 1, '', this.selectedInventoryType);
     }
@@ -979,7 +990,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         const finishedStockQuantity = ((Number(this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity)) ? Number(this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity) : 1) / this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf;
 
         this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
-            let selectedStock = this.initialLinkedStocks?.find(stock => stock.stockUniqueName === linkedStock.stockUniqueName);
+            let selectedStock = this.initialLinkedStocks?.find(stock => stock.variant?.uniqueName === linkedStock.variant?.uniqueName);
 
             if (selectedStock) {
                 linkedStock.quantity = giddhRoundOff(selectedStock.quantity * finishedStockQuantity, this.giddhBalanceDecimalPlaces);

@@ -35,12 +35,6 @@
         </form>
     </mat-grid-list>
     <div class="button-wrapper">
-        <button
-            [ngClass]="{ 'mat-button-disabled': disabled, 'save-button': !disabled }"
-            (click)="saveMapping()"
-            mat-flat-button
-        >
-            Save
-        </button>
+        <button (click)="saveMapping()" mat-stroked-button color="primary" [disabled]="disabled">Save</button>
     </div>
 </div>

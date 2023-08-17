@@ -54,6 +54,7 @@ import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-s
 import { LedgerService } from '../../services/ledger.service';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
 import { MatDialog } from '@angular/material/dialog';
+import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 
 /** Type of search: vendor and item (product/service) search */
 const SEARCH_TYPE = {
@@ -388,6 +389,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     private currentTxnRequestObject: Array<any> = [];
     /** Stores the index of current stock variants being loaded */
     private currentlyLoadedStockVariantIndex: number;
+    /** Returns true if account is selected else false */
+    public get showPageLeaveConfirmation(): boolean {
+        return (!this.isUpdateMode && this.purchaseOrder?.account?.uniqueName) ? true : false;
+    }
 
     constructor(
         private store: Store<AppState>,
@@ -413,7 +418,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private ngZone: NgZone,
         private changeDetection: ChangeDetectorRef,
         private settingsDiscountService: SettingsDiscountService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
@@ -827,6 +833,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.isMulticurrencyAccount = item.additional.currency !== this.companyCurrency;
             }
             this.getAccountDetails(item?.value);
+            this.pageLeaveUtilityService.addBrowserConfirmationDialog();
         }
     }
 
@@ -1017,7 +1024,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private modifyStateResp(stateList: StateCode[]): IOption[] {
         let stateListRet: IOption[] = [];
-        stateList.forEach(stateR => {
+        stateList?.forEach(stateR => {
             stateListRet.push({ label: stateR.name, value: stateR.code ? stateR.code : stateR.stateGstCode, stateGstCode: stateR.stateGstCode ? stateR.stateGstCode : stateR.code });
         });
         return stateListRet;
@@ -1362,19 +1369,19 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     stockUniqueName: selectedAcc.additional.stock.uniqueName
                 };
             }
+            this.currentTxnRequestObject[this.activeIndex] = {
+                selectedAcc,
+                txn,
+                entry,
+                params,
+                entryIndex
+            };
             if (isBulkItem) {
                 const allStockVariants = this.stockVariants.getValue();
-                allStockVariants.push(observableOf(selectedAcc.variants));
+                allStockVariants[this.activeIndex] = observableOf(selectedAcc.variants);
                 this.stockVariants.next(allStockVariants);
                 txn = this.calculateItemValues(selectedAcc, txn, entry, false, true);
             } else {
-                this.currentTxnRequestObject[this.activeIndex] = {
-                    selectedAcc,
-                    txn,
-                    entry,
-                    params,
-                    entryIndex
-                };
                 if (selectedAcc.additional.stock) {
                     txn.isStockTxn = true;
                     this.loadStockVariants(selectedAcc.additional.stock.uniqueName);
@@ -2441,6 +2448,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public resetForm(): void {
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         if (this.container) {
             this.container.clear();
         }
@@ -3467,6 +3475,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             transaction.quantity = null;
             transaction.amount = 0;
             transaction.taxableValue = 0;
+            transaction.variant = null;
         }
         this.handleWarehouseVisibility();
         transaction.sacNumber = null;

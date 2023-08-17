@@ -5,36 +5,40 @@
     background-color: var(--color-white);
     height: calc(100vh - 90px);
     position: relative;
+    margin-left: -15px;
     .inventory-search {
-        position: absolute;
+        position: fixed;
         bottom: 10%;
         left: 50%;
+        z-index: 999;
         transform: translateX(-50%);
-        z-index: 99;
-        text-field {
-            .form-control {
-                height: 42px;
+        .search-icon {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            i {
+                color: var(--color-master-page-sidebar-primary-group);
+                font-size: 21px;
             }
         }
     }
     .mat-list-wrap {
         overflow-x: auto;
-        display: flex;
         height: 100%;
         .inventory-sideabar {
-            max-width: 49.66%;
-            float: left;
             .inventory-sub-sideabar {
                 display: inline-flex;
                 float: left;
                 height: 100%;
+                &:last-child {
+                    border: 0;
+                }
             }
         }
         .inventory-btnside {
             position: relative;
             overflow-x: scroll;
-            width: 100%;
-            padding-left: 15px;
+            height: 100%;
             .create-btn-grp {
                 display: flex;
                 flex-direction: column;
@@ -59,7 +63,6 @@
             }
             .inventory-modal {
                 width: 100%;
-                // overflow: auto;
             }
             .pd-l15 {
                 padding-left: 15px !important;
@@ -81,28 +84,24 @@
                     }
                 }
             }
+            .searchbar {
+                padding-left: 25px;
+                border-bottom: 1px solid var(--color-iron);
+            }
         }
         .item-list {
-            width: 205px;
-            // margin: 0 0 0 15px;
-            // padding-right: 15px;
+            width: 254px;
             height: 100%;
             float: left;
             position: relative;
-            overflow-y: auto;
             a {
                 display: block;
                 height: 28px;
                 line-height: 20px;
                 color: var(--color-black);
-                &.account-name {
-                    .mat-list-item-content {
-                        color: var(--color-master-page-sidebar-primary-group);
-                    }
-                }
             }
             .create-head {
-                color: var(--color-master-page-text-secondary-hover);
+                color: var(--color-giddh-blue);
                 font-size: var(--font-size-15);
                 background-color: var(--color-master-page-main-content-primary-background);
                 width: 100%;
@@ -132,12 +131,16 @@
                 justify-content: space-between;
                 padding-top: 0px;
             }
-            &:last-child {
-                border: 0px !important;
-            }
         }
         .border-grid {
             border-right: 1px solid var(--color-iron);
+        }
+        .horizontal-scroll {
+            height: 100%;
+            overflow-x: auto;
+            max-width: 40%;
+            min-width: 205px;
+            float: left;
         }
     }
 }

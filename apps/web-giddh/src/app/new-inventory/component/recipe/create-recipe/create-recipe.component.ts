@@ -116,10 +116,15 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             isEdit: true
         });
 
+        if (this.variantsList?.length === 1) {
+            this.recipeObject.manufacturingDetails[0].variant.name = this.variantsList[0].label;
+            this.recipeObject.manufacturingDetails[0].variant.uniqueName = this.variantsList[0].value;
+        }
+
         this.getStocks(this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1].linkedStocks[0], 1, "");
 
         if (!this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1]?.units?.length) {
-            this.getStockUnits(this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1], this.stock.uniqueName, true);
+            this.getStockUnits(this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1], this.stock.stockUnitUniqueName, true);
         }
 
         this.changeDetectionRef.detectChanges();
@@ -233,10 +238,10 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             return;
         }
 
-        if (!isEdit) {
-            object.stockUnitCode = event?.additional?.stockUnitCode;
-            object.stockUnitUniqueName = event?.additional?.stockUnitUniqueName;
-        }
+        // if (!isEdit) {
+        //     object.stockUnitCode = event?.additional?.stockUnitCode;
+        //     object.stockUnitUniqueName = event?.additional?.stockUnitUniqueName;
+        // }
 
         object.variants = [];
 
@@ -259,6 +264,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                         };
                     }
                 }
+                this.changeDetectionRef.detectChanges();
             }
         });
     }
@@ -267,14 +273,14 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      * Get stock units
      *
      * @param {*} object
-     * @param {string} stockUniqueName
+     * @param {string} stockUnitUniqueName
      * @param {boolean} isFinishedStock
      * @param {boolean} [isEdit=false]
      * @returns {void}
      * @memberof CreateRecipeComponent
      */
-    public getStockUnits(object: any, stockUniqueName: string, isFinishedStock: boolean, isEdit: boolean = false): void {
-        if (!stockUniqueName) {
+    public getStockUnits(object: any, stockUnitUniqueName: string, isFinishedStock: boolean, isEdit: boolean = false): void {
+        if (!stockUnitUniqueName) {
             return;
         }
 
@@ -295,7 +301,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             return;
         }
 
-        this.manufacturingService.loadStockUnits(stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(units => {
+        this.manufacturingService.loadStockUnits(stockUnitUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(units => {
             if (units?.length) {
                 units?.forEach(unit => {
                     object.units.push({ label: unit?.code, value: unit?.uniqueName });
@@ -320,6 +326,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                         }
                     }
                 }
+                this.changeDetectionRef.detectChanges();
             }
         });
     }
@@ -362,7 +369,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                     this.recipeObject.manufacturingDetails[index].variant = manufacturingDetail.variant;
                     this.recipeObject.manufacturingDetails[index].linkedStocks = [];
 
-                    this.getStockUnits(this.recipeObject.manufacturingDetails[index], this.stock.uniqueName, true, true);
+                    this.getStockUnits(this.recipeObject.manufacturingDetails[index], this.stock.stockUnitUniqueName, true, true);
 
                     let linkedStockIndex = 0;
                     manufacturingDetail.linkedStocks?.forEach(linkedStock => {
@@ -533,7 +540,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             return;
         }
 
-        this.manufacturingService.saveRecipe(this.stock.uniqueName, recipeObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.manufacturingService.saveRecipe(this.stock.uniqueName, recipeObject).subscribe(response => {
             if (response?.status === "success") {
                 this.toasterService.showSnackBar("success", this.localeData?.recipe_saved);
             } else {

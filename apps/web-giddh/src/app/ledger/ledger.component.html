@@ -88,12 +88,12 @@
                                     </div>
                                     <div class="d-flex mr-l15">
                                         <button
-                                            mat-raised-button
+                                            mat-stroked-button
+                                            color="warn"
                                             [disabled]="
                                                 currentOrganizationType === 'COMPANY' &&
                                                 currentCompanyBranches?.length > 2
                                             "
-                                            class="btn btn-danger"
                                             id="delete-ledger-mobile-view"
                                             (click)="performBulkAction('delete')"
                                             [matTooltip]="commonLocaleData?.app_delete"
@@ -104,7 +104,7 @@
                                         </button>
 
                                         <button
-                                            mat-raised-button
+                                            mat-stroked-button
                                             [disabled]="
                                                 currentOrganizationType === 'COMPANY' &&
                                                 currentCompanyBranches?.length > 2
@@ -120,7 +120,7 @@
                                         </button>
                                     </div>
                                     <button
-                                        mat-raised-button
+                                        mat-stroked-button
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
@@ -212,10 +212,11 @@
                                 </span>
                                 <button
                                     id="advance-filter"
+                                    mat-stroked-button
                                     (click)="onOpenAdvanceSearch()"
-                                    class="advance-icon d-flex advance-search-filter pointer"
+                                    class="advance-icon d-flex advance-search-filter icon-button-width pointer"
                                     [matTooltip]="commonLocaleData?.app_advance_search"
-                                    [matTooltipPosition]="'below'"
+                                    [matTooltipPosition]="'above'"
                                     matTooltipClass="tooltip-black"
                                     [ngStyle]="{ 'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px' : '0px' }"
                                 >
@@ -228,7 +229,7 @@
                                     href="javascript:;"
                                     (click)="resetAdvanceSearch()"
                                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
-                                    [matTooltipPosition]="'below'"
+                                    [matTooltipPosition]="'above'"
                                     matTooltipClass="tooltip-black"
                                 >
                                     <i aria-hidden="true" class="icon-refresh"></i>
@@ -238,48 +239,48 @@
                                     *ngIf="checkedTrxWhileHovering?.length > 0 && !isMobileScreen"
                                 >
                                     <button
-                                        mat-raised-button
+                                        mat-stroked-button
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
-                                        class="btn btn-danger d-flex align-items-center justify-content-center"
+                                        class="d-flex align-items-center justify-content-center icon-button-width"
                                         id="delete-ledger"
                                         (click)="performBulkAction('delete')"
                                         [matTooltip]="commonLocaleData?.app_delete"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                     >
-                                        <i class="icon-trash font-15"></i>
+                                        <i class="icon-trash"></i>
                                     </button>
 
                                     <button
-                                        mat-raised-button
+                                        mat-stroked-button
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
                                         id="generate-invoice"
-                                        class="btn btn-warning d-flex align-items-center justify-content-center"
+                                        class="d-flex align-items-center justify-content-center icon-button-width"
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                     >
-                                        <i class="icon-generate-invoice font-15"></i>
+                                        <i class="icon-generate-invoice"></i>
                                     </button>
 
                                     <button
-                                        mat-raised-button
+                                        mat-stroked-button
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
-                                        class="btn btn-success d-flex align-items-center justify-content-center"
+                                        class="d-flex align-items-center justify-content-center icon-button-width"
                                         id="attach-file"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                     >
-                                        <i class="icon-file-path font-15"></i>
+                                        <i class="icon-file-path"></i>
                                     </button>
                                     <input
                                         type="file"
@@ -354,7 +355,7 @@
                             *ngIf="!isMobileScreen"
                         >
                             <div
-                                class="advance-search-by-date date-advance-search"
+                                class="advance-search-by-date date-advance-search ledger-date"
                                 (click)="showGiddhDatepicker($event)"
                             >
                                 <span class="input-wrapper">
@@ -450,7 +451,7 @@
                                         id="upload"
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.import_statement"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showUploadBankStatementModal()"
                                     >
@@ -462,7 +463,7 @@
                                         id="share"
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.share_ledger"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showShareLedgerModal()"
                                     >
@@ -474,7 +475,7 @@
                                         id="export-ledger"
                                         href="javascript:void(0)"
                                         [matTooltip]="commonLocaleData?.app_export"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showExportLedgerModal()"
                                     >
@@ -486,7 +487,7 @@
                                         id="delete-bank-transaction"
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.delete_bank_transactions"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
                                         *ngIf="entryUniqueNamesForBulkAction?.length > 0"
@@ -503,7 +504,7 @@
                                         "
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.reload_bank_transactions"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="getBankTransactions()"
                                     >
@@ -517,7 +518,7 @@
                                         id="autopaid"
                                         href="javascript:void(0)"
                                         [matTooltip]="this.localeData?.autopaid_title"
-                                        [matTooltipPosition]="'below'"
+                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showAutopaidModal()"
                                     >
@@ -641,7 +642,7 @@
                                                         >
                                                             <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center">
-                                                                    <span class="pd-l05 checkbox-span">
+                                                                    <span class="checkbox-span">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -657,7 +658,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="mr-l05">
+                                                                    <span>
                                                                         <giddh-datepicker
                                                                             name="bsdateledger"
                                                                             [(ngModel)]="item.entryDate"
@@ -744,6 +745,7 @@
                                                                         "
                                                                         [enableDynamicSearch]="true"
                                                                         (selected)="
+                                                                            addBrowserConfirmation();
                                                                             selectAccount($event, txn, false, true)
                                                                         "
                                                                         (onClear)="
@@ -884,6 +886,9 @@
                                                                     (getInvoiceListsForCreditNote)="
                                                                         getInvoiceListsForCreditNote($event)
                                                                     "
+                                                                    [referenceVouchersTotalPages]="
+                                                                        referenceVouchersTotalPages
+                                                                    "
                                                                     [isTouristSchemeApplicable]="
                                                                         isTouristSchemeApplicable
                                                                     "
@@ -940,7 +945,7 @@
                                                         >
                                                             <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center">
-                                                                    <span class="pd-l05 checkbox-span">
+                                                                    <span class="checkbox-span">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -957,7 +962,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="mr-l05">
+                                                                    <span>
                                                                         <giddh-datepicker
                                                                             name="bsDates"
                                                                             [(ngModel)]="item.entryDate"
@@ -1024,6 +1029,7 @@
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         (selected)="
+                                                                            addBrowserConfirmation();
                                                                             selectAccount($event, txn, false, true)
                                                                         "
                                                                         (onClear)="
@@ -1177,6 +1183,9 @@
                                                                     "
                                                                     (getInvoiceListsForCreditNote)="
                                                                         getInvoiceListsForCreditNote($event)
+                                                                    "
+                                                                    [referenceVouchersTotalPages]="
+                                                                        referenceVouchersTotalPages
                                                                     "
                                                                     [invoiceList]="invoiceList"
                                                                     (saveOtherTax)="saveOtherTax(item, $event)"
@@ -1765,7 +1774,9 @@
                                                             (onShow)="isSelectOpen = true"
                                                             (onHide)="onSelectHide()"
                                                             (selected)="
-                                                                selectAccount($event, txn); showNewLedgerEntryPopup(txn)
+                                                                addBrowserConfirmation();
+                                                                selectAccount($event, txn);
+                                                                showNewLedgerEntryPopup(txn)
                                                             "
                                                             (onClear)="selectAccount($event, txn, true)"
                                                             (keydown)="keydownPressed($event)"
@@ -1899,6 +1910,7 @@
                                                 (saveBlankLedger)="saveBlankTransaction()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                                 (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
+                                                [referenceVouchersTotalPages]="referenceVouchersTotalPages"
                                                 (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                 [invoiceList]="invoiceList"
                                                 [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
@@ -2216,7 +2228,9 @@
                                                             (onHide)="onSelectHide()"
                                                             [(ngModel)]="txn.particular"
                                                             (selected)="
-                                                                selectAccount($event, txn); showNewLedgerEntryPopup(txn)
+                                                                addBrowserConfirmation();
+                                                                selectAccount($event, txn);
+                                                                showNewLedgerEntryPopup(txn)
                                                             "
                                                             (onClear)="selectAccount($event, txn, true)"
                                                             [showClear]="false"
@@ -2353,6 +2367,7 @@
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                                 (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                 (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
+                                                [referenceVouchersTotalPages]="referenceVouchersTotalPages"
                                                 [invoiceList]="invoiceList"
                                                 [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
                                                 [shouldShowItcSection]="shouldShowItcSection"
@@ -2517,9 +2532,10 @@
                 <div>
                     <div class="text-right mr-t1 mr-b1" [hidden]="!isBankOrCashAccount">
                         <button
-                            mat-button
+                            mat-stroked-button
+                            color="primary"
                             [hidden]="!closingBalanceBeforeReconcile || showLoader"
-                            class="btn btn-primary btn-sm mr-0"
+                            class="btn-sm mr-0"
                             (click)="getReconciledBack()"
                         >
                             {{ commonLocaleData?.app_back }}
@@ -2881,7 +2897,7 @@
             <!-- modal sections -->
             <div *ngIf="isShowLedgerColumnarReportTable">
                 <div class="back-btn text-right pr-1 mt-1 mr-b1">
-                    <button mat-button class="btn btn-default bdr" (click)="isShowLedgerColumnarReportTable = false">
+                    <button mat-stroked-button class="bdr" (click)="isShowLedgerColumnarReportTable = false">
                         {{ commonLocaleData?.app_back }}
                     </button>
                 </div>
@@ -2893,18 +2909,16 @@
                 </ledger-columnar-report-table>
             </div>
             <!-- aside menu section -->
-            <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-            <ledger-aside-pane
-                [class]="asideMenuState"
-                *ngIf="asideMenuState === 'in'"
-                [@slideInOut]="asideMenuState"
-                [keyboardShortcut]="'esc'"
-                [localeData]="localeData"
-                [commonLocaleData]="commonLocaleData"
-                (onShortcutPress)="toggleAsidePane()"
-                (closeAsideEvent)="toggleAsidePane()"
-            >
-            </ledger-aside-pane>
+            <ng-template #ledgerAsidePane>
+                <ledger-aside-pane
+                    [keyboardShortcut]="'esc'"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    (onShortcutPress)="ledgerAsidePaneModal?.close()"
+                    (closeAsideEvent)="ledgerAsidePaneModal?.close()"
+                >
+                </ledger-aside-pane>
+            </ng-template>
             <!-- aside menu section -->
             <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
             <app-aside-menu-sales-other-taxes

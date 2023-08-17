@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { CreateUpdateGroupComponent } from "./create-update-group.component";
 import { MainGroupComponent } from "./main-group.component";
+import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confirmation-guard";
 
 const routes: Routes = [
     {
@@ -9,28 +10,16 @@ const routes: Routes = [
         component: MainGroupComponent,
         children: [
             {
-                path: "product/create",
-                component: CreateUpdateGroupComponent
+                path: ":type/create",
+                component: CreateUpdateGroupComponent,
+                pathMatch: 'full',
+                canDeactivate: [PageLeaveConfirmationGuard]
             },
             {
-                path: "service/create",
-                component: CreateUpdateGroupComponent
-            },
-            {
-                path: "fixedassets/create",
-                component: CreateUpdateGroupComponent
-            },
-            {
-                path: "product/edit/:groupUniqueName",
-                component: CreateUpdateGroupComponent
-            },
-            {
-                path: "service/edit/:groupUniqueName",
-                component: CreateUpdateGroupComponent
-            },
-            {
-                path: "fixedassets/edit/:groupUniqueName",
-                component: CreateUpdateGroupComponent
+                path: ":type/edit/:groupUniqueName",
+                component: CreateUpdateGroupComponent,
+                pathMatch: 'full',
+                canDeactivate: [PageLeaveConfirmationGuard]
             }
         ]
     }
