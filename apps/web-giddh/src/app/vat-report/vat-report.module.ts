@@ -18,6 +18,15 @@ import { InvoiceModule } from '../invoice/invoice.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 
 @NgModule({
     declarations: [
@@ -43,7 +52,16 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
         InvoiceModule,
         ShSelectModule,
         SharedModule,
-        TaxSidebarModule
+        TaxSidebarModule,
+        FormFieldsModule,
+        MatTooltipModule,
+        MatButtonModule,
+        MatTableModule,
+        MatMenuModule,
+        MatDialogModule,
+        GiddhDateRangepickerModule,
+        DatepickerWrapperModule,
+        GiddhPageLoaderModule
     ],
     exports: [
         VatReportRoutingModule

@@ -17,7 +17,12 @@
                 {{ commonLocaleData?.app_more }} <span class="caret"></span>
             </button>
         </span>
-        <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel('closed')"></i>
+        <i
+            mat-dialog-close
+            class="icon-cross text-right close-modal"
+            aria-hidden="true"
+            (click)="onCancel('closed')"
+        ></i>
 
         <!-- drop down for Esignature area -->
         <div class="dropdown-menu mr-l3" [ngClass]="{ open: showEsign }">

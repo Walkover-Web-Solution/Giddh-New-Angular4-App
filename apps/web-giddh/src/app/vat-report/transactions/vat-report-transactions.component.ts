@@ -1,6 +1,6 @@
 import { ReplaySubject } from 'rxjs';
 import { takeUntil, delay } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver, } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver, TemplateRef, } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { VatReportTransactionsRequest } from '../../models/api-models/Vat';
 import { Store, select } from '@ngrx/store';
@@ -10,7 +10,6 @@ import { VatService } from "../../services/vat.service";
 import { saveAs } from "file-saver";
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { DownloadOrSendInvoiceOnMailComponent } from '../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -20,6 +19,7 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ReceiptService } from '../../services/receipt.service';
 import { CommonService } from '../../services/common.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-vat-report-transactions',
@@ -28,7 +28,7 @@ import { CommonService } from '../../services/common.service';
 })
 
 export class VatReportTransactionsComponent implements OnInit, OnDestroy {
-    @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
+    @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: TemplateRef<any>;
     @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
 
     public activeCompany: any;
@@ -61,9 +61,26 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /*-- mat-table --*/
+    displayedColumns: string[] = ['date', 'number', 'name', 'taxamt', 'vat_amt', 'reverse_charge', 'trn_number', 'place_supply'];
 
-    constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService, private breakpointObserver: BreakpointObserver, private receiptService: ReceiptService, private commonService: CommonService) {
-
+    constructor(
+        private store: Store<AppState>, 
+        private vatService: VatService, 
+        private toasty: ToasterService, 
+        private cdRef: ChangeDetectorRef, 
+        public route: ActivatedRoute, 
+        private router: Router, 
+        private invoiceReceiptActions: InvoiceReceiptActions, 
+        private invoiceActions: InvoiceActions, 
+        private componentFactoryResolver: ComponentFactoryResolver, 
+        private invoiceService: InvoiceService, 
+        private generalService: GeneralService, 
+        private breakpointObserver: BreakpointObserver, 
+        private receiptService: ReceiptService, 
+        private commonService: CommonService,
+        public dialog: MatDialog,
+    ) {
     }
 
     /**
@@ -188,8 +205,10 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
                 }
 
-                this.loadDownloadOrSendMailComponent();
-                this.downloadOrSendMailModel?.show();
+                this.dialog.open(this.downloadOrSendMailModel, {
+                    panelClass: 'modal-dialog',
+                    width: '600px !important',
+                });   
             }
         }
     }
@@ -221,7 +240,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public closeDownloadOrSendMailPopup(userResponse: any): void {
-        this.downloadOrSendMailModel.hide();
         if (userResponse.action === 'closed') {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }

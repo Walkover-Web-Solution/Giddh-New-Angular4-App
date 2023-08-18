@@ -78,6 +78,7 @@ import { DeleteTemplateConfirmationModalModule } from './templates/edit-template
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { VoucherModule } from '../voucher/voucher.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     // Change this to your Google API key
@@ -172,7 +173,8 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
         BsDatepickerModule.forRoot(),
         GiddhPageLoaderModule,
         DatepickerWrapperModule,
-        DeleteTemplateConfirmationModalModule
+        DeleteTemplateConfirmationModalModule,
+        MatDialogModule
     ],
     exports: [
         InvoiceRoutingModule,

@@ -1,6 +1,6 @@
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, } from '@angular/core';
 import { Router } from '@angular/router';
 import { VatReportRequest } from '../models/api-models/Vat';
 import { Store, select } from '@ngrx/store';
@@ -9,7 +9,7 @@ import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
 import { VatService } from "../services/vat.service";
 import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT } from "../shared/helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/defaultDateFormat";
 import { saveAs } from "file-saver";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { IOption } from '../theme/ng-select/ng-select';
@@ -18,6 +18,8 @@ import { SettingsBranchActions } from '../actions/settings/branch/settings.branc
 import { OrganizationType } from '../models/user-login-state';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { cloneDeep } from '../lodash-optimized';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
@@ -26,19 +28,17 @@ import { cloneDeep } from '../lodash-optimized';
 export class VatReportComponent implements OnInit, OnDestroy {
     public vatReport: any[] = [];
     public activeCompany: any;
-    public datePickerOptions: any = {
-        alwaysShowCalendars: true,
-        startDate: dayjs().subtract(30, 'day'),
-        endDate: dayjs()
-    };
+    /** This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public dayjs = dayjs;
     public fromDate: string = '';
     public toDate: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     @ViewChild('monthWise', { static: true }) public monthWise: BsDropdownDirective;
     @ViewChild('periodDropdown', { static: true }) public periodDropdown;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     public isMonthSelected: boolean = true;
-    public selectedMonth: any = null;
     public currentPeriod: any = {};
     public showCalendar: boolean = false;
     public datepickerVisibility: any = 'hidden';
@@ -66,6 +66,43 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public asideGstSidebarMenuState: string = 'in';
     /** this will check mobile screen size */
     public isMobileScreen: boolean = false;
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Datepicker modal reference */
+    public modalRef: BsModalRef;
+    /** Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /** This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /** Hold uae main table displayed columns */
+    public displayedColumns: string[] = ['number', 'name', 'description', 'aed_amt', 'vat_amt', 'adjustment'];
+    /** Hold uae bottom table displayed columns */
+    public uaeDisplayedColumns: string[] = ['number', 'description', 'tooltip'];
+    /** Hold uk main table and bottom table displayed columns */
+    public ukDisplayedColumns: string[] = ['number', 'name', 'aed_amt'];
+    /** True if active country is UK */
+    public isUKCompany: boolean = false;
+    /** Hold static months array */
+    public months: any[] = [
+        { label: 'January', value: 1 },
+        { label: 'Febuary', value: 2 },
+        { label: 'March', value: 3 },
+        { label: ' April', value: 4 },
+        { label: 'May', value: 5 },
+        { label: 'June', value: 61 },
+        { label: 'July', value: 7 },
+        { label: 'August', value: 8 },
+        { label: 'September', value: 9 },
+        { label: 'October', value: 10 },
+        { label: 'November', value: 11 },
+        { label: 'December', value: 12 },
+    ];
+    /** True if api call in progress */
+    public isLoading: boolean = false;
+    /** Hold selected month value */
+    public selectedMonth: any = "";
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -76,7 +113,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private cdRef: ChangeDetectorRef,
         private route: Router,
         private settingsBranchAction: SettingsBranchActions,
-        private breakpointObserver: BreakpointObserver
+        private breakpointObserver: BreakpointObserver,
+        private modalService: BsModalService
     ) {
 
     }
@@ -84,14 +122,14 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
-        .observe(['(max-width: 767px)'])
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((state: BreakpointState) => {
-            this.isMobileScreen = state.matches;
-            if (!this.isMobileScreen) {
-                this.asideGstSidebarMenuState = 'in';
-            }
-        });
+            .observe(['(max-width: 767px)'])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((state: BreakpointState) => {
+                this.isMobileScreen = state.matches;
+                if (!this.isMobileScreen) {
+                    this.asideGstSidebarMenuState = 'in';
+                }
+            });
         this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
             if (this.isMobileScreen) {
                 if (shouldOpen) {
@@ -103,25 +141,10 @@ export class VatReportComponent implements OnInit, OnDestroy {
         });
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.loadTaxDetails();
-        this.currentPeriod = {
-            from: dayjs().startOf('month').format(GIDDH_DATE_FORMAT),
-            to: dayjs().endOf('month').format(GIDDH_DATE_FORMAT)
-        };
-        this.taxNumber = window.history.state.taxNumber || '';
-        if (window.history.state.from && window.history.state.to) {
-            this.currentPeriod = {
-                from: window.history.state.from,
-                to: window.history.state.to
-            };
-        }
-        this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
-        this.fromDate = this.currentPeriod.from;
-        this.toDate = this.currentPeriod.to;
-
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
+                this.isUKCompany = this.activeCompany.countryV2.alpha2CountryCode === 'GB' ? true : false;
             }
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -163,9 +186,17 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        if (this.taxNumber) {
-            this.getVatReport();
-        }
+        // Refresh report data according to universal date
+        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
+            if (dateObj) {
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedMonth = "";
+                this.loadTaxDetails();
+            }
+        });
     }
 
     public ngOnDestroy() {
@@ -175,29 +206,52 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.asideGstSidebarMenuState === 'out'
     }
 
-    public getVatReport(event?: any) {
+    /**
+     * This will use for get vat report for uae and uk according to country code
+     *
+     * @param {*} [event]
+     * @memberof VatReportComponent
+     */
+    public getVatReport(event?: any): void {
         if (event && event.value) {
             this.taxNumber = event.value;
         }
 
         if (this.taxNumber) {
             let vatReportRequest = new VatReportRequest();
+            console.log(this.fromDate, this.toDate);
+
             vatReportRequest.from = this.fromDate;
             vatReportRequest.to = this.toDate;
             vatReportRequest.taxNumber = this.taxNumber;
             vatReportRequest.branchUniqueName = this.currentBranch?.uniqueName;
             this.vatReport = [];
-
-            this.vatService.getVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res) {
-                    if (res.status === 'success') {
-                        this.vatReport = res.body?.sections;
-                        this.cdRef.detectChanges();
-                    } else {
-                        this.toasty.errorToast(res.message);
+            this.isLoading = true;
+            if (this.activeCompany.countryV2.alpha2CountryCode !== 'GB') {
+                this.vatService.getVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    if (res) {
+                        this.isLoading = false;
+                        if (res.status === 'success') {
+                            this.vatReport = res.body?.sections;
+                            this.cdRef.detectChanges();
+                        } else {
+                            this.toasty.errorToast(res.message);
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                this.vatService.getUKVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    if (res) {
+                        this.isLoading = false;
+                        if (res.status === 'success') {
+                            this.vatReport = res.body?.sections;
+                            this.cdRef.detectChanges();
+                        } else {
+                            this.toasty.errorToast(res.message);
+                        }
+                    }
+                });
+            }
         }
     }
 
@@ -218,78 +272,27 @@ export class VatReportComponent implements OnInit, OnDestroy {
         });
     }
 
-    public onOpenChange(data: boolean) {
-        this.openMonthWiseCalendar(data);
-    }
+    /**
+     * This will use for get month start date and end date
+     *
+     * @param {number} selectedMonth
+     * @memberof VatReportComponent
+     */
+    public getMonthStartAndEndDate(selectedMonth: any) {
+        if (selectedMonth) {
+            this.selectedMonth = selectedMonth.label;
+            const currentDate = new Date();
+            const year = currentDate.getFullYear();
 
-    public openMonthWiseCalendar(ev) {
-        if (ev && this.monthWise) {
-            ev ? this.monthWise.show() : this.monthWise.hide();
+            // Month is zero-based, so subtract 1 from the selected month
+            const startDate = new Date(year, selectedMonth.value - 1, 1);
+            const endDate = new Date(year, selectedMonth.value, 0);
+            this.selectedDateRange = { startDate: dayjs(startDate), endDate: dayjs(endDate) };
+            this.selectedDateRangeUi = dayjs(startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(endDate).format(GIDDH_DATE_FORMAT);
+            this.getVatReport();
         }
-    }
-
-    public periodChanged(ev) {
-        if (ev && ev.picker) {
-            this.currentPeriod = {
-                from: dayjs(ev.picker.startDate.d).format(GIDDH_DATE_FORMAT),
-                to: dayjs(ev.picker.endDate.d).format(GIDDH_DATE_FORMAT)
-            };
-            this.fromDate = dayjs(ev.picker.startDate.d).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(ev.picker.endDate.d).format(GIDDH_DATE_FORMAT);
-            this.isMonthSelected = false;
-        } else {
-            this.currentPeriod = {
-                from: dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT),
-                to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
-            };
-            this.fromDate = dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT);
-            this.selectedMonth = ev;
-            this.isMonthSelected = true;
-        }
-        this.showCalendar = false;
-
-        this.getVatReport();
-    }
-
-    /**
-     * This function will update the visibility of datepicker
-     *
-     * @param {*} visibility
-     * @memberof VatReportComponent
-     */
-    public updateDatepickerVisibility(visibility) {
-        this.datepickerVisibility = visibility;
-
-        setTimeout(() => {
-            if (this.datepickerVisibility === "hidden" && this.monthWise && this.monthWise.isOpen === false) {
-                this.hidePeriodDropdown();
-            }
-        }, 500);
-    }
-
-    /**
-     * This function will hide datepicker dropdown if month and datepicker options are closed
-     *
-     * @memberof VatReportComponent
-     */
-    public checkIfDatepickerVisible() {
-        setTimeout(() => {
-            if (this.datepickerVisibility === "hidden") {
-                this.hidePeriodDropdown();
-            }
-        }, 500);
-    }
-
-    /**
-     * This will hide the datepicker dropdown
-     *
-     * @memberof VatReportComponent
-     */
-    public hidePeriodDropdown() {
-        this.periodDropdown.hide();
-        document.querySelector(".btn-group.dropdown").classList.remove("open");
-        document.querySelector(".btn-group.dropdown").classList.remove("show");
     }
 
     /**
@@ -299,7 +302,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
      * @memberof VatReportComponent
      */
     public viewVatReportTransactions(section) {
-        this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to, taxNumber: this.taxNumber } });
+        this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber } });
     }
 
     /**
@@ -328,6 +331,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 }));
             }
             this.isTaxApiInProgress = false;
+            this.taxNumber = this.taxes[0]?.value;
+            this.getVatReport();
         });
     }
 
@@ -338,5 +343,55 @@ export class VatReportComponent implements OnInit, OnDestroy {
      */
     public handleNavigation(): void {
         this.route.navigate(['pages', 'gstfiling']);
+    }
+    /**
+     * To show the datepicker
+     *
+     * @param {*} element
+     * @memberof VatReportComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof VatReportComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof VatReportComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+        this.selectedMonth = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).startOf('month').format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).endOf('month').format(GIDDH_DATE_FORMAT);
+            this.getVatReport();
+        }
     }
 }
