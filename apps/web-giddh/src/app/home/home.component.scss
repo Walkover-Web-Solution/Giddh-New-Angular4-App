@@ -81,3 +81,11 @@ span.icon-info-icon {
         margin-bottom: 40px;
     }
 }
+
+@media (max-width: 1299px) {
+    .dashboard-container {
+        mat-card {
+            min-height: 446px;
+        }
+    }
+}

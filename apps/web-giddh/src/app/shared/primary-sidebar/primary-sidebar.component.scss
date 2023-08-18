@@ -210,7 +210,7 @@
                 }
             }
             .left-fixed-header > li a.active {
-                @include highlight-color(var(--color-sidebar-background), var(--color-sidebar-anchor-text-hover));
+                @include highlight-color(var(--color-sidebar-background), var(--color-giddh-blue));
             }
         }
         p {
@@ -234,7 +234,7 @@
                         font-size: var(--font-size-12);
                     }
                     &:hover {
-                        color: var(--color-sidebar-anchor-text-hover);
+                        color: var(--color-giddh-blue);
                     }
                 }
             }
@@ -289,13 +289,13 @@
                         justify-content: space-between;
                         align-items: center;
                         &:hover {
-                            color: var(--color-sidebar-anchor-text-hover);
+                            color: var(--color-giddh-blue);
                         }
                         &.dropdown-toggle {
                             padding: 0 20px;
                         }
                         &.active {
-                            color: var(--color-sidebar-anchor-text-hover) !important;
+                            color: var(--color-giddh-blue) !important;
                             background-color: transparent;
                         }
                         &:first-child {
@@ -368,7 +368,7 @@
                                 }
                                 &.active {
                                     @include highlight-color(
-                                        var(--color-sidebar-anchor-text-hover),
+                                        var(--color-giddh-blue),
                                         var(--color-sidebar-menu-list-items)
                                     );
                                 }
@@ -376,12 +376,12 @@
                             &:hover {
                                 a {
                                     @include highlight-color(
-                                        var(--color-sidebar-anchor-text-hover),
+                                        var(--color-giddh-blue),
                                         var(--color-sidebar-menu-list-items)
                                     );
                                     &.active {
                                         @include highlight-color(
-                                            var(--color-sidebar-anchor-text-hover),
+                                            var(--color-giddh-blue),
                                             var(--color-sidebar-menu-list-items)
                                         );
                                     }
@@ -586,7 +586,7 @@
                             &:hover,
                             &.active {
                                 @include highlight-color(
-                                    var(--color-primary-sidebar-menu-item-anchor-active-hover-highlight),
+                                    var(--color-giddh-blue),
                                     var(--color-white)
                                 );
                             }
