@@ -211,7 +211,7 @@
                         <div class="row">
                             <div class="consumption-details-wrapper w-100">
                                 <h1 class="section-head">{{ localeData?.raw_stock }}</h1>
-                                <div class="mt-2">
+                                <div class="mt-2 table-responsive">
                                     <table id="table-raw-stock">
                                         <thead>
                                             <tr>
@@ -327,10 +327,10 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <div>
+                                                        <div class="text-field-right">
                                                             <div>
                                                                 <select-field
-                                                                    [cssClass]="'disable-bg ' + linkedStock.cssClass"
+                                                                    [cssClass]="'disable-bg' + linkedStock.cssClass"
                                                                     [name]="'variantUnit' + i"
                                                                     [scrollableElementId]="'variantUnit' + i"
                                                                     [placeholder]="commonLocaleData?.app_unit"

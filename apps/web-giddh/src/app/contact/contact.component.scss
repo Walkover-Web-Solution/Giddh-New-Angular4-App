@@ -25,6 +25,11 @@
 
 .dis {
     display: flex;
+    .btn-group{
+        button{
+            min-width: 135px;
+        }
+    }
 }
 
 .pd-1 {
@@ -576,6 +581,13 @@ button.btn.btn-filter {
     width: 489px;
 }
 /*responsive*/
+
+@media screen and (max-width: 1280px) {
+    .min-width-230 {
+        min-width: 195px !important;
+    }
+}
+
 @media (max-width: 1024px) {
     .customer-img {
         height: 360px;

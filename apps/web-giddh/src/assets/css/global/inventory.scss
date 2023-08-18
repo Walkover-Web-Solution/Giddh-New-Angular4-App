@@ -95,3 +95,19 @@ inventory-sidebar{
         }
     }
 }
+body{
+    &.fixed{
+        .mat-grid-wrapper{
+            .inventory-search {
+                z-index: 99 !important;
+            }
+        } 
+    }
+}
+.text-field-right{
+    .select-field-input{
+        text-align: right !important;
+        border: 0;
+        padding: 6px;
+    }
+}
