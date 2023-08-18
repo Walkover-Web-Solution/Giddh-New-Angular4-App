@@ -45,6 +45,7 @@
                                             (click)="addItemToSelectedArr(item)"
                                         >
                                             <h5>{{ item?.name }}</h5>
+                                            {{ name || json }}
                                         </button>
                                         <ng-container *ngIf="item.variants?.length > 1">
                                             <button

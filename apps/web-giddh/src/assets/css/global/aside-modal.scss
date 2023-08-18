@@ -17,9 +17,6 @@ body {
     &.ledger-aside-pane,
     &.aside-menu-product-service-page,
     &.custom-units {
-        .cdk-overlay-pane {
-            transform: unset !important;
-        }
         .mat-dialog-container {
             border-radius: unset !important;
         }

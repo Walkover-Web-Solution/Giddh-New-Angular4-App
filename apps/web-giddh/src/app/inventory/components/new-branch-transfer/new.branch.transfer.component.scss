@@ -481,6 +481,11 @@ tfoot td .table-sec.form-group {
         }
     }
 }
+.fields-gap{
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+}
 @media (max-width: 767px) {
     .date-advance-search {
         margin-top: 15px;

@@ -35,7 +35,7 @@
                             <div class="customer-form-inline">
                                 <div class="wrap-search-entity d-flex">
                                     <div class="dis mr-r15 pull-left on-desktop-view">
-                                        <div class="btn-group pull-right">
+                                        <div class="btn-group pull-right d-flex column-gap15">
                                             <button
                                                 mat-stroked-button
                                                 color="primary"
@@ -196,7 +196,7 @@
                                             </select-table-column>
                                         </div>
                                     </div>
-                                    <div class="btn-group pull-right on-mobile-view mr-t1">
+                                    <div class="btn-group pull-right on-mobile-view mr-t1 d-flex column-gap15">
                                         <button
                                             mat-stroked-button
                                             color="primary"
@@ -1324,29 +1324,31 @@
                             {{ commonLocaleData?.app_action }}
                         </th>
                         <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_action">
-                            <button
-                                mat-stroked-button
-                                *ngIf="isGetAllIntegratedBankInProgress"
-                                class="btn-small min-width-137 contact-ipad-responsive"
-                            >
-                                {{ commonLocaleData?.app_loading }}
-                            </button>
-                            <button
-                                mat-stroked-button
-                                *ngIf="!isGetAllIntegratedBankInProgress && isIciciAccountPendingForApproval"
-                                class="btn-small min-width-137 pending-approval-button contact-ipad-responsive"
-                                (click)="showIntegrationProcess()"
-                            >
-                                {{ localeData?.pending_approval }}
-                            </button>
-                            <button
-                                mat-stroked-button
-                                *ngIf="!isICICIIntegrated && !isGetAllIntegratedBankInProgress"
-                                class="btn-small min-width-137 contact-ipad-responsive"
-                                [routerLink]="['/pages/settings/integration/payment']"
-                            >
-                                {{ localeData?.connect_icici_bank }}
-                            </button>
+                            <div class="d-flex column-gap15">
+                                <button
+                                    mat-stroked-button
+                                    *ngIf="isGetAllIntegratedBankInProgress"
+                                    class="btn-small min-width-137 contact-ipad-responsive"
+                                >
+                                    {{ commonLocaleData?.app_loading }}
+                                </button>
+                                <button
+                                    mat-stroked-button
+                                    *ngIf="!isGetAllIntegratedBankInProgress && isIciciAccountPendingForApproval"
+                                    class="btn-small min-width-137 pending-approval-button contact-ipad-responsive"
+                                    (click)="showIntegrationProcess()"
+                                >
+                                    {{ localeData?.pending_approval }}
+                                </button>
+                                <button
+                                    mat-stroked-button
+                                    *ngIf="!isICICIIntegrated && !isGetAllIntegratedBankInProgress"
+                                    class="btn-small min-width-137 contact-ipad-responsive"
+                                    [routerLink]="['/pages/settings/integration/payment']"
+                                >
+                                    {{ localeData?.connect_icici_bank }}
+                                </button>
+                            </div>
                             <ng-container
                                 *ngIf="
                                     isICICIIntegrated &&
@@ -1354,23 +1356,25 @@
                                     !isIciciAccountPendingForApproval
                                 "
                             >
-                                <button
-                                    mat-stroked-button
-                                    color="primary"
-                                    *ngIf="account?.bankPaymentDetails && account?.country?.code === 'IN'"
-                                    class="btn-small min-width-137 contact-ipad-responsive"
-                                    (click)="openBulkPaymentModal(account)"
-                                >
-                                    {{ commonLocaleData?.app_pay_now }}
-                                </button>
-                                <button
-                                    mat-stroked-button
-                                    *ngIf="!account?.bankPaymentDetails"
-                                    class="btn-small min-width-137 contact-ipad-responsive"
-                                    (click)="updateCustomerAcc('vendor', account)"
-                                >
-                                    {{ commonLocaleData?.app_add_bank_details }}
-                                </button>
+                                <div class="d-flex column-gap15">
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        *ngIf="account?.bankPaymentDetails && account?.country?.code === 'IN'"
+                                        class="btn-small min-width-137 contact-ipad-responsive"
+                                        (click)="openBulkPaymentModal(account)"
+                                    >
+                                        {{ commonLocaleData?.app_pay_now }}
+                                    </button>
+                                    <button
+                                        mat-stroked-button
+                                        *ngIf="!account?.bankPaymentDetails"
+                                        class="btn-small min-width-137 contact-ipad-responsive"
+                                        (click)="updateCustomerAcc('vendor', account)"
+                                    >
+                                        {{ commonLocaleData?.app_add_bank_details }}
+                                    </button>
+                                </div>
                             </ng-container>
                         </td>
                     </ng-container>
@@ -1445,7 +1449,7 @@
         >
             <div class="align-item-center">
                 <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
-                <div class="btn-group pull-right">
+                <div class="btn-group pull-right d-flex column-gap15">
                     <button
                         mat-stroked-button
                         color="primary"

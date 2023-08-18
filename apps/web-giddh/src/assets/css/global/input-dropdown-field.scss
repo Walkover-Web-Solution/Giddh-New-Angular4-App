@@ -141,6 +141,11 @@ stock-balance {
             border-width: 1px;
         }
     }
+    .mdc-text-field--disabled {
+        .mdc-notched-outline__leading{
+            border-color: var(--color-fields-border) !important;
+        }
+    }
     mat-select {
         padding: 0 14px;
         .mat-mdc-select-arrow {
@@ -151,7 +156,7 @@ stock-balance {
     }
     .mdc-notched-outline {
         .mdc-notched-outline__leading {
-            border-color: var(--color-field-hover) !important;
+            border-color: var(--color-field-hover);
         }
     }
     .mat-mdc-select-placeholder, .mat-mdc-select {
@@ -267,6 +272,26 @@ voucher-component {
                 border: 0 !important;
             }
         }
+    }
+}
+
+add-company{
+    .readflag{
+        .mat-mdc-text-field-wrapper{
+            &.mdc-text-field--outlined {
+                .mdc-text-field__input{
+                    padding-left: 32px;
+                }
+            }
+        }
+    }
+}
+
+/*--- default select checkbox color ---*/
+.mat-pseudo-checkbox-checked,
+.mat-pseudo-checkbox-indeterminate{
+    &.mat-pseudo-checkbox-full {
+        background: var(--color-primary-common) !important;
     }
 }
 

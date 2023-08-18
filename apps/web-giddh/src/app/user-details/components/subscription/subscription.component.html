@@ -82,12 +82,6 @@
                 <div class="menu-two-button" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <a
                         class="mat-body-2"
-                        *ngIf="
-                            searchSubscription?.value ||
-                            filters?.plan ||
-                            filters?.expiration ||
-                            filters?.transactionBalance
-                        "
                         (click)="clearFilters()"
                         >{{ commonLocaleData?.app_clear }}</a
                     >
