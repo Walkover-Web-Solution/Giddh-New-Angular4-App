@@ -14,13 +14,39 @@ export class VatService {
     private companyUniqueName: string;
 
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
-        
+
+    }
+
+    /**
+     * This function will use for UK vat report 
+     *
+     * @param {VatReportRequest} request
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VatService
+     */
+    public getUKVatReport(request: VatReportRequest): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+
+        let url = this.config.apiUrl + VAT_API.VIEW_REPORT;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url?.replace(':from', request.from);
+        url = url?.replace(':to', request.to);
+        url = url?.replace(':taxNumber', request.taxNumber);
+        if (request.branchUniqueName) {
+            request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
+        }
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<VatReportResponse, any> = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 
     public getVatReport(request: VatReportRequest): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        let url = this.config.apiUrl + VAT_API.VIEW_REPORT;
+        let url = this.config.apiUrl + VAT_API.VIEW_REPORT_V2;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);

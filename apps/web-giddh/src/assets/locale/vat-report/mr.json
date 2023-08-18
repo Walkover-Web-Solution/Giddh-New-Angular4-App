@@ -17,5 +17,6 @@
     "invoice_date": "बीजक तारीख",
     "invoice_number": "बील क्रमांक",
     "customer_name": "ग्राहकाचे नाव",
-    "reverse_charge": "उलट शुल्क"
+    "reverse_charge": "उलट शुल्क",
+    "select_month_label": "महिना निवडा"
 }
