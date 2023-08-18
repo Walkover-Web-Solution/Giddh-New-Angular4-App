@@ -1,5 +1,4 @@
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
-
 import { checkForUpdates } from './AppUpdater';
 import WindowManager from './WindowManager';
 

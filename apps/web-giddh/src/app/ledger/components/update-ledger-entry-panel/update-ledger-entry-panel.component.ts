@@ -20,7 +20,6 @@ import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
 import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, BehaviorSubject } from 'rxjs';
 import { debounceTime, map, take, takeUntil } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
@@ -152,8 +151,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public entryUniqueName$: Observable<string>;
     public editAccUniqueName$: Observable<string>;
     public entryUniqueName: string;
-    public uploadInput: EventEmitter<UploadInput>;
-    public fileUploadOptions: UploaderOptions;
     public isDeleteTrxEntrySuccess$: Observable<boolean>;
     public isTxnUpdateInProcess$: Observable<boolean>;
     public isTxnUpdateSuccess$: Observable<boolean>;
@@ -285,7 +282,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Stores the stock variants */
     public stockVariants: BehaviorSubject<Array<IOption>> = new BehaviorSubject([]);
     /** Stores the selected stock variant */
-    public selectedStockVariant: IVariant = {name: '', uniqueName: ''};
+    public selectedStockVariant: IVariant = { name: '', uniqueName: '' };
     /** Stores the stock uniquename */
     private selectedStockUniquenName: string;
 
@@ -407,11 +404,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.store.dispatch(this.ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
             }
         });
-
-        // emit upload event
-        this.uploadInput = new EventEmitter<UploadInput>();
-        // set file upload options
-        this.fileUploadOptions = { concurrency: 0 };
 
         observableCombineLatest([this.activeAccountSubject]).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response[0]) {
@@ -551,37 +543,34 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
-    public onUploadOutputUpdate(output: UploadOutput): void {
-        if (output.type === 'allAddedToQueue') {
-            let sessionKey = null;
-            let companyUniqueName = null;
-            this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
-            this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
-            const event: UploadInput = {
-                type: 'uploadAll',
-                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', companyUniqueName),
-                method: 'POST',
-                fieldName: 'file',
-                data: { company: companyUniqueName },
-                headers: { 'Session-Id': sessionKey },
-            };
-            this.uploadInput.emit(event);
-        } else if (output.type === 'start') {
-            this.isFileUploading = true;
-            this.loaderService.show();
-        } else if (output.type === 'done') {
-            this.loaderService.hide();
-            if (output.file.response?.status === 'success') {
-                this.isFileUploading = false;
-                this.vm.selectedLedger.attachedFile = output.file.response.body?.uniqueName;
-                this.vm.selectedLedger.attachedFileName = output.file.response.body?.name;
-                this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
-            } else {
-                this.isFileUploading = false;
-                this.vm.selectedLedger.attachedFile = '';
-                this.vm.selectedLedger.attachedFileName = '';
-                this.toaster.showSnackBar("error", output.file.response.message);
-            }
+    /**
+     * Uploads attachment
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public uploadFile(): void {
+        const selectedFile: any = document.getElementById("invoiceFile");
+        if (selectedFile?.files?.length) {
+            const file = selectedFile?.files[0];
+
+            this.generalService.getSelectedFile(file, (blob, file) => {
+                this.isFileUploading = true;
+                this.loaderService.show();
+
+                this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.loaderService.hide();
+                    this.isFileUploading = false;
+                    if (response?.status === 'success') {
+                        this.vm.selectedLedger.attachedFile = response.body?.uniqueName;
+                        this.vm.selectedLedger.attachedFileName = response.body?.name;
+                        this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
+                    } else {
+                        this.vm.selectedLedger.attachedFile = '';
+                        this.vm.selectedLedger.attachedFileName = '';
+                        this.toaster.showSnackBar("error", response.message);
+                    }
+                });
+            });
         }
     }
 
@@ -2249,7 +2238,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }
             if (t.inventory) {
-                this.selectedStockVariant = {name: t.inventory.variant?.name, uniqueName: t.inventory.variant?.uniqueName};
+                this.selectedStockVariant = { name: t.inventory.variant?.name, uniqueName: t.inventory.variant?.uniqueName };
                 if (this.selectedStockUniquenName !== t.inventory.stock?.uniqueName) {
                     /** Load stock variant only when stock has changed (stock will not be changed if the
                      user only updates the entry) */
@@ -2471,7 +2460,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public variantChanged(event: IOption): void {
-        this.selectedStockVariant = {name: event.label, uniqueName: event.value};
+        this.selectedStockVariant = { name: event.label, uniqueName: event.value };
         const stockEntry = this.vm.selectedLedger.transactions.find(transaction => transaction.inventory);
         const stockLinkedAcccount = stockEntry?.particular?.uniqueName?.split('#')?.shift();
         const eventDetails = {
@@ -2494,7 +2483,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private loadStockVariants(stockUniqueName: string): void {
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(
-            map((variants: IVariant[]) => (variants ?? []).map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))), takeUntil(this.destroyed$)).subscribe(res => {
+            map((variants: IVariant[]) => (variants ?? []).map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName }))), takeUntil(this.destroyed$)).subscribe(res => {
                 this.stockVariants.next(res);
                 this.changeDetectorRef.detectChanges();
             });
@@ -2510,7 +2499,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.length && res.findIndex(variant => variant.value === this.selectedStockVariant.uniqueName) === -1) {
                 // Only reset the stock variant when the stock is changed
-                this.selectedStockVariant = {name: res[0].label, uniqueName: res[0].value};
+                this.selectedStockVariant = { name: res[0].label, uniqueName: res[0].value };
             }
         });
     }

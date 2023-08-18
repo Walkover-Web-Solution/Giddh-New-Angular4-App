@@ -8,7 +8,7 @@
 
 4. Run `npm i` for installation of dependencies.
 
-5. You need to add a ```.env``` file at the root of the project (similar to ```.env.example``` already present at the root) which is  used to store credentials related to Google, Razorpay, LinkedIn, Twitter. You can get the ```.env``` file from any of the contributors of this project.
+5. You need to add a ```.env``` file at the root of the project (similar to ```.env.example``` already present at the root) which is  used to store credentials related to Google, Razorpay. You can get the ```.env``` file from any of the contributors of this project.
 
 5. Run `npm run start` to local serve the project.
 

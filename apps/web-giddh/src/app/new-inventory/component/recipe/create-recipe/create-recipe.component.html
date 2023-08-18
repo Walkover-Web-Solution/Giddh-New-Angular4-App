@@ -286,7 +286,7 @@
                 </div>
             </ng-container>
             <div class="row mt-2 add-recipe" *ngIf="recipeObject.manufacturingDetails?.length < variantsList?.length">
-                <button mat-button class="mb-2" (click)="addNewRecipe()">
+                <button mat-button class="mb-2 ml-2" color="primary" (click)="addNewRecipe()">
                     <span>+</span> {{ localeData?.add_recipe }}
                 </button>
             </div>

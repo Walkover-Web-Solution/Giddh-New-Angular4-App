@@ -86,7 +86,7 @@
                                         ></mat-checkbox>
                                         {{ commonLocaleData?.app_select_all }}
                                     </div>
-                                    <div class="d-flex mr-l15">
+                                    <div class="d-flex mr-l15 column-gap1">
                                         <button
                                             mat-stroked-button
                                             color="warn"
@@ -139,10 +139,7 @@
                                         class="d-none"
                                         name="BulkUploadfileInput"
                                         id="BulkUploadfileInput"
-                                        [options]="fileUploadOptions"
-                                        ngFileSelect
-                                        [uploadInput]="uploadInput"
-                                        (uploadOutput)="onUploadOutput($event)"
+                                        (change)="uploadFile()"
                                     />
                                 </div>
                                 <div class="single-search-box d-flex" *ngIf="checkedTrxWhileHovering?.length === 0">
@@ -199,7 +196,7 @@
                                     <img (click)="showGiddhDatepicker($event)" src="{{ imgPath }}calender-icon.svg" />
                                 </div>
                                 <span class="input-wrapper ipad-view-datepicker" (click)="showGiddhDatepicker($event)">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field appearance="fill" class="w-100">
                                         <input
                                             matInput
                                             id="giddh-datepicker-ipad-view"
@@ -235,7 +232,7 @@
                                     <i aria-hidden="true" class="icon-refresh"></i>
                                 </button>
                                 <div
-                                    class="d-flex xs-mb-1"
+                                    class="d-flex xs-mb-1 column-gap1"
                                     *ngIf="checkedTrxWhileHovering?.length > 0 && !isMobileScreen"
                                 >
                                     <button
@@ -287,10 +284,7 @@
                                         #BulkUploadfileInput
                                         name="BulkUploadfileInput"
                                         id="BulkUploadfileInput"
-                                        [options]="fileUploadOptions"
-                                        ngFileSelect
-                                        [uploadInput]="uploadInput"
-                                        (uploadOutput)="onUploadOutput($event)"
+                                        (change)="uploadFile()"
                                         class="d-none"
                                     />
                                 </div>
@@ -359,7 +353,7 @@
                                 (click)="showGiddhDatepicker($event)"
                             >
                                 <span class="input-wrapper">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field appearance="fill" class="w-100 custom-input-field share-input-width">
                                         <input
                                             matInput
                                             id="giddh-datepicker"
@@ -641,8 +635,8 @@
                                                             }"
                                                         >
                                                             <mat-grid-tile colspan="1">
-                                                                <div class="d-flex align-items-center">
-                                                                    <span class="checkbox-span">
+                                                                <div class="d-flex align-items-center column-gap5">
+                                                                    <span class="checkbox-span ">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -658,7 +652,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span>
+                                                                    <span class="custom-input-field pd-t1">
                                                                         <giddh-datepicker
                                                                             name="bsdateledger"
                                                                             [(ngModel)]="item.entryDate"
@@ -944,8 +938,8 @@
                                                             }"
                                                         >
                                                             <mat-grid-tile colspan="1">
-                                                                <div class="d-flex align-items-center">
-                                                                    <span class="checkbox-span">
+                                                                <div class="d-flex align-items-center column-gap5">
+                                                                    <span class="checkbox-span ">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -962,7 +956,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span>
+                                                                    <span class="custom-input-field pd-t1">
                                                                         <giddh-datepicker
                                                                             name="bsDates"
                                                                             [(ngModel)]="item.entryDate"
@@ -1598,7 +1592,7 @@
                                 (mouseout)="selectedTrxWhileHovering = ''"
                             >
                                 <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date" colspan="1">
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center column-gap5">
                                         <span class="float-left">
                                             <mat-checkbox
                                                 color="primary"
@@ -1726,9 +1720,10 @@
                                                     colspan="1"
                                                     [attr.data-title]="commonLocaleData?.app_date"
                                                 >
-                                                    <div class="d-flex align-items-center">
+                                                    <div class="d-flex align-items-center column-gap5">
                                                         <span class="ledger-checkbox pull-left"> </span>
                                                         <giddh-datepicker
+                                                            class="custom-input-field pd-t1"
                                                             name="ledgDate"
                                                             [(ngModel)]="lc.blankLedger.entryDate"
                                                             [placeholder]="lc.formatPlaceholder"
@@ -2065,7 +2060,7 @@
                                 (mouseout)="selectedTrxWhileHovering = ''"
                             >
                                 <mat-grid-tile colspan="1" [attr.data-title]="commonLocaleData?.app_date">
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center column-gap5">
                                         <span class="ledger-checkbox pull-left">
                                             <mat-checkbox
                                                 color="primary"
@@ -2187,9 +2182,10 @@
                                                     class="new-entry-date"
                                                     [attr.data-title]="commonLocaleData?.app_date"
                                                 >
-                                                    <div class="d-flex align-items-center">
+                                                    <div class="d-flex align-items-center column-gap5 custom-input-field pd-t1">
                                                         <span class="ledger-checkbox pull-left"> </span>
                                                         <giddh-datepicker
+                                                            class="custom-input-field"
                                                             name="bsdateledger"
                                                             (datepickerState)="datepickerState($event)"
                                                             [(ngModel)]="lc.blankLedger.entryDate"

@@ -547,7 +547,6 @@
 
     <!-- setting aside pane -->
     <div class="help-support-aside setting-sidebar-wrapper">
-        <perfect-scrollbar [scrollIndicators]="true">
             <aside-setting
                 [ngClass]="{
                     'setting-sidebar': isMobileSidebar,
@@ -555,7 +554,6 @@
                 }"
                 (closeAsideEvent)="toggleSidebarPane(false, false)"
             ></aside-setting>
-        </perfect-scrollbar>
     </div>
     <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
         <inventory-sidebar

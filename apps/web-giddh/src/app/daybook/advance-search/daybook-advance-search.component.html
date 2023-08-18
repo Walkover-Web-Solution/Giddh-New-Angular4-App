@@ -3,347 +3,349 @@
         <h3 class="modal-title bg" id="modal-title" mat-dialog-title>{{ commonLocaleData?.app_advance_search }}</h3>
         <button aria-hidden="true" class="close" (click)="onCancel()">×</button>
     </div>
-    <div class="modal-body clearfix" id="export-body">
-        <form [formGroup]="advanceSearchForm" class="daybook-advance-search">
-            <div class="row">
-                <div class="col-xs-12 col-sm-12">
-                    <div class="row">
-                        <div class="col-sm-3 col-xs-12">
-                            <label>{{ commonLocaleData?.app_date_range }}</label>
-                        </div>
-                        <div class="col-sm-9 col-xs-12 custom-datepicker">
-                            <input
-                                matInput
-                                type="text"
-                                name="selectedDateRange"
-                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                class="giddh-datepicker date-range-picker border-radius-2 form-control"
-                                (click)="showGiddhDatepicker($event)"
-                            />
+    <mat-dialog-content>
+        <div class="modal-body clearfix" id="export-body">
+            <form [formGroup]="advanceSearchForm" class="daybook-advance-search">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3 col-xs-12">
+                                <label>{{ commonLocaleData?.app_date_range }}</label>
+                            </div>
+                            <div class="col-sm-9 col-xs-12 custom-datepicker">
+                                <input
+                                    matInput
+                                    type="text"
+                                    name="selectedDateRange"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker border-radius-2 form-control"
+                                    (click)="showGiddhDatepicker($event)"
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-xs-12 col-sm-12 mr-t2 pd-t2 bd-rt">
-                    <div class="row">
-                        <div class="col-sm-5 col-xs-12">
-                            <label>{{ commonLocaleData?.app_particulars }}</label>
-                            <p>
-                                <small>{{ localeData?.accounts_selected_message }}</small>
-                            </p>
-                        </div>
-                        <div class="col-sm-7 col-xs-12">
-                            <div class="row">
-                                <div class="col-6 col-sm-6">
-                                    <mat-slide-toggle
-                                        color="primary"
-                                        id="includeParticulars"
-                                        formControlName="includeParticulars"
-                                    >
-                                        <span
-                                            class="pull-left"
-                                            *ngIf="advanceSearchForm.get('includeParticulars')?.value"
-                                            >{{ commonLocaleData?.app_include }}</span
+    
+                    <div class="col-xs-12 col-sm-12 mr-t2 pd-t2 bd-rt">
+                        <div class="row">
+                            <div class="col-sm-5 col-xs-12">
+                                <label>{{ commonLocaleData?.app_particulars }}</label>
+                                <p>
+                                    <small>{{ localeData?.accounts_selected_message }}</small>
+                                </p>
+                            </div>
+                            <div class="col-sm-7 col-xs-12">
+                                <div class="row">
+                                    <div class="col-6 col-sm-6">
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            id="includeParticulars"
+                                            formControlName="includeParticulars"
                                         >
-                                        <span
-                                            class="pull-right"
-                                            *ngIf="!advanceSearchForm.get('includeParticulars')?.value"
-                                            >{{ commonLocaleData?.app_exclude }}</span
-                                        >
-                                    </mat-slide-toggle>
-                                </div>
-                                <div class="col-6 col-sm-6">
-                                    <div class="form-group">
-                                        <sh-select
-                                            [options]="accounts$ | async"
-                                            name="particulars"
-                                            formControlName="particulars"
-                                            (onClear)="onDDClear('particulars')"
-                                            (selected)="onDDElementSelect('particulars', $event)"
-                                            [isFilterEnabled]="true"
-                                            [multiple]="true"
-                                            [placeholder]="commonLocaleData?.app_select_accounts"
-                                            [doNotResetSelectedValues]="true"
-                                            [enableDynamicSearch]="true"
-                                            [isPaginationEnabled]="true"
-                                            (scrollEnd)="handleScrollEnd()"
-                                            (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                            [ItemHeight]="33"
-                                        ></sh-select>
+                                            <span
+                                                class="pull-left"
+                                                *ngIf="advanceSearchForm.get('includeParticulars')?.value"
+                                                >{{ commonLocaleData?.app_include }}</span
+                                            >
+                                            <span
+                                                class="pull-right"
+                                                *ngIf="!advanceSearchForm.get('includeParticulars')?.value"
+                                                >{{ commonLocaleData?.app_exclude }}</span
+                                            >
+                                        </mat-slide-toggle>
+                                    </div>
+                                    <div class="col-6 col-sm-6">
+                                        <div class="form-group">
+                                            <sh-select
+                                                [options]="accounts$ | async"
+                                                name="particulars"
+                                                formControlName="particulars"
+                                                (onClear)="onDDClear('particulars')"
+                                                (selected)="onDDElementSelect('particulars', $event)"
+                                                [isFilterEnabled]="true"
+                                                [multiple]="true"
+                                                [placeholder]="commonLocaleData?.app_select_accounts"
+                                                [doNotResetSelectedValues]="true"
+                                                [enableDynamicSearch]="true"
+                                                [isPaginationEnabled]="true"
+                                                (scrollEnd)="handleScrollEnd()"
+                                                (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                                [ItemHeight]="33"
+                                            ></sh-select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-xs-12 col-sm-12">
-                    <div class="row">
-                        <div class="col-sm-5 col-xs-12">
-                            <label>{{ commonLocaleData?.app_voucher_type }}</label>
-                            <p>
-                                <small>{{ localeData?.vouchers_selected_message }}</small>
-                            </p>
-                        </div>
-                        <div class="col-sm-7 col-xs-12">
-                            <div class="row">
-                                <div class="col-6 col-sm-6">
-                                    <mat-slide-toggle
-                                        color="primary"
-                                        id="includeVouchers"
-                                        formControlName="includeVouchers"
-                                    >
-                                        <span
-                                            class="pull-left"
-                                            *ngIf="advanceSearchForm.get('includeVouchers')?.value"
-                                            >{{ commonLocaleData?.app_include }}</span
+    
+                    <div class="col-xs-12 col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-5 col-xs-12">
+                                <label>{{ commonLocaleData?.app_voucher_type }}</label>
+                                <p>
+                                    <small>{{ localeData?.vouchers_selected_message }}</small>
+                                </p>
+                            </div>
+                            <div class="col-sm-7 col-xs-12">
+                                <div class="row">
+                                    <div class="col-6 col-sm-6">
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            id="includeVouchers"
+                                            formControlName="includeVouchers"
                                         >
-                                        <span
-                                            class="pull-right"
-                                            *ngIf="!advanceSearchForm.get('includeVouchers')?.value"
-                                            >{{ commonLocaleData?.app_exclude }}</span
-                                        >
-                                    </mat-slide-toggle>
-                                </div>
-                                <div class="col-6 col-sm-6">
-                                    <div class="form-group">
-                                        <sh-select
-                                            [options]="voucherTypeList | async"
-                                            name="vouchers"
-                                            formControlName="vouchers"
-                                            (onClear)="onDDClear('vouchers')"
-                                            (selected)="onDDElementSelect('vouchers', $event)"
-                                            [isFilterEnabled]="true"
-                                            [multiple]="true"
-                                            [placeholder]="commonLocaleData?.app_select_accounts"
-                                            [ItemHeight]="33"
-                                        >
-                                        </sh-select>
+                                            <span
+                                                class="pull-left"
+                                                *ngIf="advanceSearchForm.get('includeVouchers')?.value"
+                                                >{{ commonLocaleData?.app_include }}</span
+                                            >
+                                            <span
+                                                class="pull-right"
+                                                *ngIf="!advanceSearchForm.get('includeVouchers')?.value"
+                                                >{{ commonLocaleData?.app_exclude }}</span
+                                            >
+                                        </mat-slide-toggle>
+                                    </div>
+                                    <div class="col-6 col-sm-6">
+                                        <div class="form-group">
+                                            <sh-select
+                                                [options]="voucherTypeList | async"
+                                                name="vouchers"
+                                                formControlName="vouchers"
+                                                (onClear)="onDDClear('vouchers')"
+                                                (selected)="onDDElementSelect('vouchers', $event)"
+                                                [isFilterEnabled]="true"
+                                                [multiple]="true"
+                                                [placeholder]="commonLocaleData?.app_select_accounts"
+                                                [ItemHeight]="33"
+                                            >
+                                            </sh-select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xs-12 col-sm-12">
-                    <div class="row">
-                        <div class="col-sm-5 col-xs-12">
-                            <label>{{ commonLocaleData?.app_amount }}</label>
-                        </div>
-                        <div class="col-sm-7 col-xs-12">
-                            <div class="row">
-                                <div class="col-6 col-sm-6">
-                                    <div class="form-group">
-                                        <sh-select
-                                            [showClear]="false"
-                                            [width]="'100%'"
-                                            (selected)="onRangeSelect('amount', $event)"
-                                            [options]="comparisonFilterDropDown$ | async"
-                                            name="amountRange"
-                                            formControlName="amountRange"
-                                            [placeholder]="commonLocaleData?.app_select_range"
-                                            [ItemHeight]="33"
-                                        >
-                                        </sh-select>
+                    <div class="col-xs-12 col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-5 col-xs-12">
+                                <label>{{ commonLocaleData?.app_amount }}</label>
+                            </div>
+                            <div class="col-sm-7 col-xs-12">
+                                <div class="row">
+                                    <div class="col-6 col-sm-6">
+                                        <div class="form-group">
+                                            <sh-select
+                                                [showClear]="false"
+                                                [width]="'100%'"
+                                                (selected)="onRangeSelect('amount', $event)"
+                                                [options]="comparisonFilterDropDown$ | async"
+                                                name="amountRange"
+                                                formControlName="amountRange"
+                                                [placeholder]="commonLocaleData?.app_select_range"
+                                                [ItemHeight]="33"
+                                            >
+                                            </sh-select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-6 col-sm-6">
-                                    <div class="form-group">
-                                        <mat-form-field appearance="fill" class="w-100">
-                                            <input
-                                                matInput
-                                                decimalDigitsDirective
-                                                [mask]="inputMaskFormat"
-                                                formControlName="amount"
-                                                class="form-control mat-field-border"
-                                            />
-                                        </mat-form-field>
+                                    <div class="col-6 col-sm-6">
+                                        <div class="form-group">
+                                            <mat-form-field appearance="fill" class="w-100">
+                                                <input
+                                                    matInput
+                                                    decimalDigitsDirective
+                                                    [mask]="inputMaskFormat"
+                                                    formControlName="amount"
+                                                    class="form-control mat-field-border"
+                                                />
+                                            </mat-form-field>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <mat-accordion class="w-100 m-10" multi>
-                    <mat-expansion-panel [expanded]="isExpanded" class="mr-t1">
-                        <mat-expansion-panel-header>
-                            <mat-panel-title (click)="toggleOtherDetails()">{{
-                                commonLocaleData?.app_other_details
-                            }}</mat-panel-title>
-                        </mat-expansion-panel-header>
-
-                        <div class="col-xs-12 col-sm-12 mr-t2">
-                            <div class="mr-b1 clearfix">
+    
+                    <mat-accordion class="w-100 m-10" multi>
+                        <mat-expansion-panel [expanded]="isExpanded" class="mr-t1">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title (click)="toggleOtherDetails()">{{
+                                    commonLocaleData?.app_other_details
+                                }}</mat-panel-title>
+                            </mat-expansion-panel-header>
+    
+                            <div class="col-xs-12 col-sm-12 mr-t2">
+                                <div class="mr-b1 clearfix">
+                                    <div class="row">
+                                        <div class="col-sm-5 col-xs-12">
+                                            <label>{{ commonLocaleData?.app_inventory }}</label>
+                                        </div>
+                                        <div class="col-sm-7 col-xs-12" formGroupName="inventory">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <mat-slide-toggle
+                                                        color="primary"
+                                                        id="includeInventory"
+                                                        formControlName="includeInventory"
+                                                    >
+                                                        <span
+                                                            class="pull-left"
+                                                            *ngIf="
+                                                                advanceSearchForm.get('inventory.includeInventory')?.value
+                                                            "
+                                                            >{{ commonLocaleData?.app_include }}</span
+                                                        >
+                                                        <span
+                                                            class="pull-right"
+                                                            *ngIf="
+                                                                !advanceSearchForm.get('inventory.includeInventory')?.value
+                                                            "
+                                                            >{{ commonLocaleData?.app_exclude }}</span
+                                                        >
+                                                    </mat-slide-toggle>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <sh-select
+                                                            [options]="stockListDropDown$ | async"
+                                                            name="inventory"
+                                                            formControlName="inventories"
+                                                            (onClear)="onDDClear('inventory')"
+                                                            (selected)="onDDElementSelect('inventory', $event)"
+                                                            [isFilterEnabled]="true"
+                                                            [multiple]="true"
+                                                            [placeholder]="commonLocaleData?.app_select_accounts"
+                                                            [ItemHeight]="33"
+                                                            [doNotResetSelectedValues]="true"
+                                                            [enableDynamicSearch]="true"
+                                                            [isPaginationEnabled]="true"
+                                                            (scrollEnd)="handleStockScrollEnd()"
+                                                            (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
+                                                        >
+                                                        </sh-select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <sh-select
+                                                            [showClear]="false"
+                                                            [width]="'100%'"
+                                                            (selected)="onRangeSelect('inventoryQty', $event)"
+                                                            [options]="comparisonFilterDropDown$ | async"
+                                                            name="inventoryQuantity"
+                                                            formControlName="inventoryQuantity"
+                                                            [placeholder]="commonLocaleData?.app_select_range"
+                                                            [ItemHeight]="33"
+                                                        ></sh-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <mat-form-field appearance="fill" class="w-100">
+                                                            <input
+                                                                matInput
+                                                                type="text"
+                                                                class="form-control mat-field-border"
+                                                                decimalDigitsDirective
+                                                                [DecimalPlaces]="4"
+                                                                formControlName="quantity"
+                                                                [mask]="inputMaskFormat"
+                                                                [placeholder]="commonLocaleData?.app_quantity"
+                                                            />
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <sh-select
+                                                            [showClear]="false"
+                                                            [width]="'100%'"
+                                                            (selected)="onRangeSelect('inventoryVal', $event)"
+                                                            [options]="comparisonFilterDropDown$ | async"
+                                                            name="inventoryValue"
+                                                            formControlName="inventoryValue"
+                                                            [placeholder]="commonLocaleData?.app_select_range"
+                                                            [ItemHeight]="33"
+                                                        ></sh-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <mat-form-field appearance="fill" class="w-100">
+                                                            <input
+                                                                matInput
+                                                                type="text"
+                                                                decimalDigitsDirective
+                                                                [DecimalPlaces]="3"
+                                                                class="form-control mat-field-border"
+                                                                formControlName="itemValue"
+                                                                [mask]="inputMaskFormat"
+                                                                [placeholder]="commonLocaleData?.app_value"
+                                                            />
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-sm-5 col-xs-12">
-                                        <label>{{ commonLocaleData?.app_inventory }}</label>
+                                        <label>{{ localeData?.cheque_details }}</label>
                                     </div>
-                                    <div class="col-sm-7 col-xs-12" formGroupName="inventory">
+                                    <div class="col-sm-7 col-xs-12">
                                         <div class="row">
-                                            <div class="col-sm-6">
-                                                <mat-slide-toggle
-                                                    color="primary"
-                                                    id="includeInventory"
-                                                    formControlName="includeInventory"
-                                                >
-                                                    <span
-                                                        class="pull-left"
-                                                        *ngIf="
-                                                            advanceSearchForm.get('inventory.includeInventory')?.value
-                                                        "
-                                                        >{{ commonLocaleData?.app_include }}</span
-                                                    >
-                                                    <span
-                                                        class="pull-right"
-                                                        *ngIf="
-                                                            !advanceSearchForm.get('inventory.includeInventory')?.value
-                                                        "
-                                                        >{{ commonLocaleData?.app_exclude }}</span
-                                                    >
-                                                </mat-slide-toggle>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="form-group">
-                                                    <sh-select
-                                                        [options]="stockListDropDown$ | async"
-                                                        name="inventory"
-                                                        formControlName="inventories"
-                                                        (onClear)="onDDClear('inventory')"
-                                                        (selected)="onDDElementSelect('inventory', $event)"
-                                                        [isFilterEnabled]="true"
-                                                        [multiple]="true"
-                                                        [placeholder]="commonLocaleData?.app_select_accounts"
-                                                        [ItemHeight]="33"
-                                                        [doNotResetSelectedValues]="true"
-                                                        [enableDynamicSearch]="true"
-                                                        [isPaginationEnabled]="true"
-                                                        (scrollEnd)="handleStockScrollEnd()"
-                                                        (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
-                                                    >
-                                                    </sh-select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="form-group">
-                                                    <sh-select
-                                                        [showClear]="false"
-                                                        [width]="'100%'"
-                                                        (selected)="onRangeSelect('inventoryQty', $event)"
-                                                        [options]="comparisonFilterDropDown$ | async"
-                                                        name="inventoryQuantity"
-                                                        formControlName="inventoryQuantity"
-                                                        [placeholder]="commonLocaleData?.app_select_range"
-                                                        [ItemHeight]="33"
-                                                    ></sh-select>
-                                                </div>
-                                            </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <mat-form-field appearance="fill" class="w-100">
                                                         <input
                                                             matInput
                                                             type="text"
+                                                            [placeholder]="localeData?.cheque_number"
+                                                            formControlName="chequeNumber"
                                                             class="form-control mat-field-border"
-                                                            decimalDigitsDirective
-                                                            [DecimalPlaces]="4"
-                                                            formControlName="quantity"
-                                                            [mask]="inputMaskFormat"
-                                                            [placeholder]="commonLocaleData?.app_quantity"
                                                         />
                                                     </mat-form-field>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <sh-select
-                                                        [showClear]="false"
-                                                        [width]="'100%'"
-                                                        (selected)="onRangeSelect('inventoryVal', $event)"
-                                                        [options]="comparisonFilterDropDown$ | async"
-                                                        name="inventoryValue"
-                                                        formControlName="inventoryValue"
-                                                        [placeholder]="commonLocaleData?.app_select_range"
-                                                        [ItemHeight]="33"
-                                                    ></sh-select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="form-group">
-                                                    <mat-form-field appearance="fill" class="w-100">
-                                                        <input
-                                                            matInput
-                                                            type="text"
-                                                            decimalDigitsDirective
-                                                            [DecimalPlaces]="3"
-                                                            class="form-control mat-field-border"
-                                                            formControlName="itemValue"
-                                                            [mask]="inputMaskFormat"
-                                                            [placeholder]="commonLocaleData?.app_value"
-                                                        />
-                                                    </mat-form-field>
+                                                    <giddh-datepicker
+                                                        [placeholder]="localeData?.clearance_date"
+                                                        name="from"
+                                                        [cssClass]="'mat-field-border bdr form-control w-100'"
+                                                        formControlName="dateOnCheque"
+                                                        [showToggleIcon]="false"
+                                                    >
+                                                    </giddh-datepicker>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-5 col-xs-12">
-                                    <label>{{ localeData?.cheque_details }}</label>
-                                </div>
-                                <div class="col-sm-7 col-xs-12">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <mat-form-field appearance="fill" class="w-100">
-                                                    <input
-                                                        matInput
-                                                        type="text"
-                                                        [placeholder]="localeData?.cheque_number"
-                                                        formControlName="chequeNumber"
-                                                        class="form-control mat-field-border"
-                                                    />
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <giddh-datepicker
-                                                    [placeholder]="localeData?.clearance_date"
-                                                    name="from"
-                                                    [cssClass]="'mat-field-border bdr form-control w-100'"
-                                                    formControlName="dateOnCheque"
-                                                    [showToggleIcon]="false"
-                                                >
-                                                </giddh-datepicker>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </mat-expansion-panel>
-                </mat-accordion>
-
-                <div class="col-xs-12 col-sm-12 text-right">
-                    <button
-                        mat-stroked-button
-                        color="primary"
-                        class="mr-0"
-                        type="button"
-                        (click)="emitAdvanceSearchParams()"
-                    >
-                        {{ commonLocaleData?.app_search }}
-                    </button>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+    
+                    <div class="col-xs-12 col-sm-12 text-right">
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            class="mr-0"
+                            type="button"
+                            (click)="emitAdvanceSearchParams()"
+                        >
+                            {{ commonLocaleData?.app_search }}
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
+    </mat-dialog-content>
 </div>
 
 <ng-template #datepickerTemplate>

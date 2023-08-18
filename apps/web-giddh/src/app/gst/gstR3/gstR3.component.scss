@@ -9,9 +9,11 @@ a {
 
 svg.icon.icon-lg {
     height: 18px;
-    width: 18px;
+    width: 12px;
     filter: invert(0);
     color: var(--color-primary-checkbox-and-expansion-panel-arrow);
+    position: relative;
+    top: -1px;
 }
 
 .text-middle {

@@ -1,0 +1,73 @@
+.payment-mode{
+    dropdown-field{
+            .mat-mdc-form-field {
+            .mat-mdc-text-field-wrapper {
+                .mat-mdc-form-field-infix{
+                    .dropdown-bg{
+                        background-color: transparent;
+                    }
+                }
+            } 
+        }
+    }
+}
+.voucher-preview-edit{
+    .mat-mdc-menu-item-text{
+        width: 100%;
+    }
+}
+.deposit-section{
+    dropdown-field, input-field{
+        .mat-mdc-form-field{
+            .mat-mdc-text-field-wrapper{
+                background-color: var(--color-white);
+            }
+        }
+    }
+}
+
+.wrap-billing-address {
+    .mat-mdc-checkbox.mat-primary {
+        line-height: 37px;
+        .mdc-checkbox{
+            padding: 0;
+            .mdc-checkbox__background{
+                margin-top: -9px;
+            }
+        }
+        .mdc-label{
+            margin-left: 10px;
+        }
+    }
+}
+
+.collapse-pane{
+    .mat-mdc-form-field-flex {
+        min-height: 51px;
+    }
+}
+.custom-date-entries {
+    giddh-datepicker{
+        mat-datepicker-toggle{
+            .mdc-icon-button{
+                svg{
+                    position: absolute;
+                    top: 0;
+                    z-index: 9999;
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}
+
+/*---- inventiry-stock ----*/
+.back-btn-align{
+    .mdc-button {
+        .mdc-button__label{
+            display: flex;
+            align-items: center;
+            column-gap: 2px;
+        }
+    }
+}

@@ -1,14 +1,13 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
@@ -24,7 +23,6 @@ import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, Expor
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/advance-search-request';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
-import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { GeneralService } from '../services/general.service';
 import { LedgerService } from '../services/ledger.service';
 import { ToasterService } from '../services/toaster.service';
@@ -50,6 +48,7 @@ import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/s
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'ledger',
@@ -87,7 +86,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Instance of advance search modal */
     @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
     /** datepicker element reference  */
-    @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: TemplateRef<any>;
     /** Instance of entry confirmation modal */
     @ViewChild('entryConfirmModal', { static: false }) public entryConfirmModal: any;
     /** Instance of ledger aside pane modal */
@@ -100,11 +99,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public eDrBalAmnt: number;
     public eCrBalAmnt: number;
     public isBankOrCashAccount: boolean;
-    public sessionKey$: Observable<string>;
-    public companyName$: Observable<string>;
     public failedBulkEntries$: Observable<string[]>;
-    public uploadInput: EventEmitter<UploadInput>;
-    public fileUploadOptions: UploaderOptions;
     public isFileUploading: boolean = false;
     /** Boolean for mobile screen or not  */
     public isMobileScreen: boolean = true;
@@ -320,8 +315,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.isTransactionRequestInProcess$ = this.store.pipe(select(p => p.ledger.transactionInprogress), takeUntil(this.destroyed$));
         this.ledgerBulkActionSuccess$ = this.store.pipe(select(p => p.ledger.ledgerBulkActionSuccess), takeUntil(this.destroyed$));
-        this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
-        this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
         this.failedBulkEntries$ = this.store.pipe(select(p => p.ledger.ledgerBulkActionFailedEntries), takeUntil(this.destroyed$));
         this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(null));
@@ -528,8 +521,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         } else {
             this.showBranchSwitcher = false;
         }
-        this.uploadInput = new EventEmitter<UploadInput>();
-        this.fileUploadOptions = { concurrency: 0 };
         this.shouldShowItcSection = false;
         this.shouldShowRcmTaxableAmount = false;
         observableCombineLatest([this.universalDate$, this.route.params, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
@@ -1767,41 +1758,32 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public onUploadOutput(output: UploadOutput): void {
-        if (output.type === 'allAddedToQueue') {
-            let sessionKey = null;
-            let companyUniqueName = null;
-            let branchUniqueName = this.generalService.currentBranchUniqueName;
-            this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
-            this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
-            let url = Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', companyUniqueName);
-            if (this.generalService.voucherApiVersion === 2) {
-                url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
-                url = url.concat(`&branchUniqueName=${branchUniqueName}`);
-            }
-            const event: UploadInput = {
-                type: 'uploadAll',
-                url: url,
-                method: 'POST',
-                fieldName: 'file',
-                data: { entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join() },
-                headers: { 'Session-Id': sessionKey },
-            };
-            this.uploadInput.emit(event);
-        } else if (output.type === 'start') {
-            this.isFileUploading = true;
-            this.loaderService.show();
-        } else if (output.type === 'done') {
-            this.loaderService.hide();
-            if (output.file.response?.status === 'success') {
-                this.entryUniqueNamesForBulkAction = [];
-                this.getTransactionData();
-                this.isFileUploading = false;
-                this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
-            } else {
-                this.isFileUploading = false;
-                this.toaster.showSnackBar("error", output.file.response.message);
-            }
+    /**
+     * Uploads attachment
+     *
+     * @memberof LedgerComponent
+     */
+    public uploadFile(): void {
+        const selectedFile: any = document.getElementById("BulkUploadfileInput");
+        if (selectedFile?.files?.length) {
+            const file = selectedFile?.files[0];
+
+            this.generalService.getSelectedFile(file, (blob, file) => {
+                this.isFileUploading = true;
+                this.loaderService.show();
+
+                this.commonService.uploadFile({ file: blob, fileName: file.name, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join() }, true).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.isFileUploading = false;
+                    this.loaderService.hide();
+                    if (response?.status === 'success') {
+                        this.entryUniqueNamesForBulkAction = [];
+                        this.getTransactionData();
+                        this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
+                    } else {
+                        this.toaster.showSnackBar("error", response.message);
+                    }
+                });
+            });
         }
     }
 
@@ -1840,9 +1822,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, {
             position: {
                 right: '0',
+                top: '0',
             },
             width: '760px',
-            height: '100vh !important',
             disableClose: true
         });
 
@@ -2558,7 +2540,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.selectedItem = transaction;
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',
-            height: '650px'
+            height: '790px'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {

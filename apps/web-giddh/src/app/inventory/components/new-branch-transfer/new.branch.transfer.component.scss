@@ -292,6 +292,9 @@ tfoot td .table-sec.form-group {
     display: flex;
     justify-content: center;
     align-items: center;
+    i{
+        font-size: var(--font-size-12);
+    }
 }
 .add-new-line.mr-t1 {
     position: absolute;
@@ -477,6 +480,11 @@ tfoot td .table-sec.form-group {
             border-right: 1px solid var(--color-new-branch-table-delivery-basic-thead-tbody-tr-th-last-child) !important;
         }
     }
+}
+.fields-gap{
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
 }
 @media (max-width: 767px) {
     .date-advance-search {

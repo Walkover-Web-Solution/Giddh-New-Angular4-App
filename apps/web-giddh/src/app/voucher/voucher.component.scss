@@ -338,7 +338,7 @@ textarea:focus {
         > tr {
             > td {
                 border: 1px solid var(--color-table-primary-content-bar-border) !important;
-                padding: 10px 8px;
+                padding: 10px 8px 20px;
                 white-space: nowrap;
                 position: relative;
 
@@ -362,6 +362,13 @@ textarea:focus {
 
 .max-width-600 {
     max-width: 600px;
+}
+.delete-image {
+    width: 3%;
+    position: absolute;
+    right: 25%;
+    top: 58px;
+    cursor: pointer;
 }
 
 .more-btn-dropdown {
@@ -600,6 +607,7 @@ span.edit-icon {
     line-height: 17px;
     position: relative;
     top: -2px;
+    right: -5px;
 }
 
 .sales-invoice-table th:nth-child(2) {
@@ -618,7 +626,7 @@ span.edit-icon {
     width: 100%;
     min-width: 250px;
     left: auto;
-    top: 31px;
+    top: 47px;
     box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
     right: 0;
     z-index: 4;
@@ -725,13 +733,16 @@ section.static-invoice-table {
     padding-left: 15px;
 }
 
-.wrap-billing-address.clearfix {
-    margin-top: 15px;
-    margin-bottom: 5px;
-
-    .bottom-border-only {
-        padding-left: 0 !important;
+.wrap-billing-address {
+    &.clearfix {
+        margin-top: 15px;
+        margin-bottom: 5px;
+    
+        .bottom-border-only {
+            padding-left: 0 !important;
+        }
     }
+
 }
 
 .customer-invoice-table.bg-white {
@@ -1035,7 +1046,7 @@ table.table.table-custom-invoice.basic,
 .switch-currency {
     font-size: var(--font-size-15);
     color: var(--color-nero);
-    max-width: 1000px;
+    max-width: 1020px;
     text-align: right;
     margin-bottom: 10px;
     width: 100%;
@@ -1231,6 +1242,11 @@ label.checkbox-custom-label {
 .bill-add {
     label {
         min-width: 110px;
+    }
+    .mat-mdc-checkbox {
+        .mdc-form-field{
+            height: 32px;
+        }
     }
 }
 

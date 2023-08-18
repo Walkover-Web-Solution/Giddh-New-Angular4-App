@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityLogsService } from '../services/activity-logs.service';
@@ -98,11 +98,11 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     /** Selected to date */
     public selectedToDate: Date;
     /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Directive to get reference of element */
-    @ViewChild('datepickerEntryTemplate') public datepickerEntryTemplate: ElementRef;
+    @ViewChild('datepickerEntryTemplate') public datepickerEntryTemplate: TemplateRef<any>;
     /** Directive to get reference of element */
-    @ViewChild('datepickerVoucherTemplate') public datepickerVoucherTemplate: ElementRef;
+    @ViewChild('datepickerVoucherTemplate') public datepickerVoucherTemplate: TemplateRef<any>;
     /** Universal date observer */
     public universalDate$: Observable<any>;
     /** This will store selected date range to use in api */

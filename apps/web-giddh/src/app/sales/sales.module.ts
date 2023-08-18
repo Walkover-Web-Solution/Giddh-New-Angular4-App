@@ -10,7 +10,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { NgxUploaderModule } from 'ngx-uploader';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
@@ -21,6 +20,7 @@ import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { AsideMenuSalesOtherTaxesModule } from './aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
 import { DiscountListComponent } from './discount-list/discountList.component';
+import { FileUploadModule } from '@iplab/ngx-file-upload';
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
 @NgModule({
@@ -34,10 +34,10 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
         SelectModule.forRoot(),
         ElementViewChildModule,
         TaxControlModule,
-        ModalModule,
+        ModalModule.forRoot(),
         TooltipModule.forRoot(),
         TypeaheadModule.forRoot(),
-        CollapseModule,
+        CollapseModule.forRoot(),
         SharedModule,
         LaddaModule.forRoot({
             style: 'slide-left',
@@ -51,7 +51,7 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
         BsDropdownModule.forRoot(),
         AsideMenuRecurringEntryModule,
         ClickOutsideModule,
-        NgxUploaderModule,
+        FileUploadModule,
         AsideMenuSalesOtherTaxesModule
     ],
     exports: [
