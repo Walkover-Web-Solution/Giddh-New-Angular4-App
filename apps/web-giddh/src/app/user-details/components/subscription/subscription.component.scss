@@ -60,13 +60,18 @@
 }
 
 .menu-two-list {
-    width: 100%;
+    width: 95%;
     height: inherit;
     display: flex;
     justify-content: space-around;
     align-items: center;
     background-color: var(--color-primary-subscription-plans-top-bar-background);
     .menu-two-list-items {
+        display: flex;
+        align-items: center;
+        .mat-body-1{
+            margin: 0 !important;
+        }
         mat-select {
             background: var(--color-primary-subscription-dropdown-background);
             height: 26px;
@@ -85,7 +90,7 @@
 }
 
 .menu-two-button {
-    width: 14%;
+    width: 5%;
     height: inherit;
     background-color: var(--color-primary-subscription-plans-top-bar-background);
     a {

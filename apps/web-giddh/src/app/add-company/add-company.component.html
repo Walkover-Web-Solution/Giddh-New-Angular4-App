@@ -67,6 +67,7 @@
                                     [name]="'mobile'"
                                     [type]="'tel'"
                                     #mobileNo
+                                    class="flag-input"
                                     [id]="'init-contact-proforma'"
                                     (keydown.enter)="$event.preventDefault()"
                                     [label]="commonLocaleData?.app_mobile_number + '*'"
@@ -83,7 +84,7 @@
                                 <span id="init-contact-proforma-error-msg" class="d-none"></span>
                             </div>
                         </div>
-                        <div>
+                        <div class="d-flex column-gap15">
                             <button mat-stroked-button color="primary" (click)="nextStepForm()">
                                 {{ commonLocaleData?.app_next }}
                             </button>
@@ -148,6 +149,7 @@
                                     [floatLabel]="'always'"
                                     [readonly]="true"
                                     [ngClass]="{ 'readonly-field': firstStepForm.get('mobile')?.value }"
+                                    class="readflag"
                                 >
                                 </input-field>
                             </div>
@@ -287,8 +289,8 @@
                                 ></p>
                             </div>
                         </div>
-                        <div class="pt-2">
-                            <button mat-stroked-button matStepperPrevious class="mr-3" (click)="selectedStep = 0">
+                        <div class="pt-2 d-flex column-gap15">
+                            <button mat-stroked-button matStepperPrevious (click)="selectedStep = 0">
                                 {{ commonLocaleData?.app_back }}
                             </button>
                             <button mat-stroked-button color="primary" (click)="onSubmit()">
