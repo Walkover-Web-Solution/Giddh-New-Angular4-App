@@ -43,6 +43,13 @@ export class VatService {
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 
+    /**
+     * This will use for UAE vat report
+     *
+     * @param {VatReportRequest} request
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VatService
+     */
     public getVatReport(request: VatReportRequest): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 

@@ -219,6 +219,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
         if (this.taxNumber) {
             let vatReportRequest = new VatReportRequest();
+            console.log(this.fromDate, this.toDate);
+
             vatReportRequest.from = this.fromDate;
             vatReportRequest.to = this.toDate;
             vatReportRequest.taxNumber = this.taxNumber;
