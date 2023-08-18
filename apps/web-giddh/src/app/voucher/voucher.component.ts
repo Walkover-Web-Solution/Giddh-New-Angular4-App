@@ -8432,6 +8432,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public addBulkItems(): void {
         this.dialog.open(this.bulkItemsModal, {
             width: '1000px',
+            height: 'auto',
+            maxHeight: '90vh',
+            maxWidth: '80vw'
         });
     }
     /**
