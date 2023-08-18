@@ -139,48 +139,52 @@
                                 <div class="col-8">
                                     <div class="d-flex align-items-center justify-content-space-between">
                                         <ng-container *ngIf="customFieldUniqueName">
-                                            <button
-                                                mat-stroked-button
-                                                color="primary"
-                                                class="min-width-100"
-                                                [disabled]="
-                                                    customFieldCreateEditForm.invalid ||
-                                                    !customFieldRequest.fieldType?.type ||
-                                                    !customFieldRequest.modules?.length
-                                                "
-                                                (click)="updateCustomField(customFieldCreateEditForm)"
-                                            >
-                                                {{ commonLocaleData?.app_update }}
-                                            </button>
-                                            <button
-                                                mat-stroked-button
-                                                class="min-width-100 mr-0"
-                                                (click)="redirectToGetAllPage()"
-                                            >
-                                                {{ commonLocaleData?.app_cancel }}
-                                            </button>
+                                            <div class="d-flex">
+                                                <button
+                                                    mat-stroked-button
+                                                    color="primary"
+                                                    class="min-width-100"
+                                                    [disabled]="
+                                                        customFieldCreateEditForm.invalid ||
+                                                        !customFieldRequest.fieldType?.type ||
+                                                        !customFieldRequest.modules?.length
+                                                    "
+                                                    (click)="updateCustomField(customFieldCreateEditForm)"
+                                                >
+                                                    {{ commonLocaleData?.app_update }}
+                                                </button>
+                                                <button
+                                                    mat-stroked-button
+                                                    class="min-width-100 mr-0"
+                                                    (click)="redirectToGetAllPage()"
+                                                >
+                                                    {{ commonLocaleData?.app_cancel }}
+                                                </button>
+                                            </div>
                                         </ng-container>
                                         <ng-container *ngIf="!customFieldUniqueName">
-                                            <button
-                                                mat-stroked-button
-                                                color="primary"
-                                                class="min-width-100"
-                                                [disabled]="
-                                                    customFieldCreateEditForm.invalid ||
-                                                    !customFieldRequest.fieldType?.type ||
-                                                    !customFieldRequest.modules?.length
-                                                "
-                                                (click)="createCustomField(customFieldCreateEditForm)"
-                                            >
-                                                {{ commonLocaleData?.app_save }}
-                                            </button>
-                                            <button
-                                                mat-stroked-button
-                                                class="min-width-100 mr-0"
-                                                (click)="resetForm(customFieldCreateEditForm)"
-                                            >
-                                                {{ commonLocaleData?.app_clear }}
-                                            </button>
+                                            <div class="d-flex column-gap15">
+                                                <button
+                                                    mat-stroked-button
+                                                    color="primary"
+                                                    class="min-width-100"
+                                                    [disabled]="
+                                                        customFieldCreateEditForm.invalid ||
+                                                        !customFieldRequest.fieldType?.type ||
+                                                        !customFieldRequest.modules?.length
+                                                    "
+                                                    (click)="createCustomField(customFieldCreateEditForm)"
+                                                >
+                                                    {{ commonLocaleData?.app_save }}
+                                                </button>
+                                                <button
+                                                    mat-stroked-button
+                                                    class="min-width-100 mr-0"
+                                                    (click)="resetForm(customFieldCreateEditForm)"
+                                                >
+                                                    {{ commonLocaleData?.app_clear }}
+                                                </button>
+                                            </div>
                                         </ng-container>
                                     </div>
                                 </div>

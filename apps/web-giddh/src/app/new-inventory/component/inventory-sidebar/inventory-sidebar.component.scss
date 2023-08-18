@@ -62,7 +62,7 @@
 
                     mat-tree-node {
                         min-height: 30px;
-                        align-items: baseline;
+                        // align-items: baseline;
                         .sidebar-menu-icons {
                             position: relative;
                             right: 7px;
@@ -79,7 +79,7 @@
 
                     .sidebar-list-icon {
                         position: absolute;
-                        bottom: 18px;
+                        bottom: 15px;
                         left: 220px;
                     }
                     .sub-option {

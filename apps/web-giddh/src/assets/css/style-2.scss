@@ -784,6 +784,7 @@ textarea {
     position: absolute;
     right: 3px;
     bottom: 2px;
+    top: 3px;
 
     &:hover {
         background: var(--color-filter-background-hover);
@@ -2412,7 +2413,7 @@ modal-container.modal {
     min-width: 73px;
     margin-right: 2px;
     width: 95px;
-    color: var(--color-secondary-button-text);
+    color: var(--color-secondary-button-text) !important;
 }
 
 .table-no-border tr th,
@@ -2861,9 +2862,9 @@ fieldset[disabled] .btn-primary:hover {
 .btn-default:active:focus,
 .open > .dropdown-toggle.btn-default,
 .btn-default:not(:disabled):not(.disabled):active {
-    background: var(--color-secondary-button-background-hover) !important;
-    color: var(--color-secondary-button-text) !important;
-    border-color: var(--color-secondary-button-background-hover) !important;
+    // background: var(--color-secondary-button-background-hover) !important;
+    // color: var(--color-secondary-button-text) !important;
+    // border-color: var(--color-secondary-button-background-hover) !important;
 }
 
 .success-btn {
@@ -4312,6 +4313,7 @@ select.form-control {
 .grp-col {
     float: left;
     overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .col-wrapper {
@@ -4415,7 +4417,7 @@ label {
     height: calc(100% - 58px);
     min-height: 0;
     width: 255px;
-    z-index: 9;
+    z-index: 99;
 }
 
 .col-wrapper:nth-child(2) {
@@ -4685,6 +4687,7 @@ label {
     top: 0;
     padding: 4px 0;
     width: 100%;
+    z-index: 9;
 }
 
 .fix ul li:nth-last-child(2) {
@@ -6063,6 +6066,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     padding: 0 !important;
     margin: 0 !important;
     min-width: auto !important;
+    background: transparent !important;
 }
 
 /**new modal design**/
@@ -9540,6 +9544,7 @@ span#HW_badge_cont:nth-child(3) {
         background-color: var(--color-common-primary-background-for-all-components);
         box-shadow: none !important;
         padding: 0 !important;
+        overflow: hidden;
     }
     mat-card-content {
         display: flex;
@@ -10965,10 +10970,6 @@ body.update-scroll-hidden {
         padding-bottom: 2px !important;
     }
 }
-// .cdk-overlay-pane {
-//     height: auto !important;
-//     transform: translateX(-5px) translateY(-13px) !important;
-// }
 
 /*---- inventory-master ----*/
 
@@ -13933,7 +13934,7 @@ hamburger-menu {
             }
 
             .customise-filter-button {
-                border-left: 1px solid var(--color-gray);
+                border-left: 1px solid var(--color-fields-border);
                 border-radius: 0;
                 margin-right: 0 !important;
                 height: 100%;
@@ -13943,7 +13944,7 @@ hamburger-menu {
                 position: relative;
                 i{
                     position: absolute;
-                    left: 22px;
+                    left: 16px;
                     top: 50%;
                     transform: translateY(-50%);
                 }
@@ -14436,6 +14437,7 @@ voucher-component {
 
 .cdk-virtual-scroll-content-wrapper {
     width: 100%;
+    height: 100%;
 }
 
 .icon-font-14 {
@@ -14554,4 +14556,9 @@ activity-compare-json{
 }
 .mat-mdc-dialog-content{
     max-height: 70vh !important;
+}
+
+.flag-input{
+    position: relative;
+    z-index: 1;
 }
