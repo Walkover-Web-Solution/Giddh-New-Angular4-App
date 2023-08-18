@@ -248,7 +248,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                     item.rate = unitRates[0]?.rate ?? 0;
                     item.quantity = 1;
                     if (!data.body.stock || item.variants?.length === 1 || item.variant?.uniqueName) {
-                        this.selectedItems.unshift({ ...item });
+                        this.selectedItems = [...this.selectedItems, item];
                     }
                     this.isLoading = false;
                     this.changeDetectorRef.detectChanges();
