@@ -429,12 +429,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 name: [''],
                 stateGstCode: ['']
             }),
-            stateCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
+            stateCode: [{ value: '', disabled: false }, (this.stateList?.length ? (this.isStateRequired ? Validators.required:""):"")],
             county: this._fb.group({
                 code: [''],
                 name: ['']
             }),
-            countyCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
+            countyCode: [{ value: '', disabled: false }, (this.countyList?.length ? (this.isStateRequired ? Validators.required : "") : "")],
             isDefault: [false],
             isComposite: [false],
             partyType: ['NOT APPLICABLE'],

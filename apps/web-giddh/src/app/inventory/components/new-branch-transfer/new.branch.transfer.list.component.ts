@@ -5,10 +5,7 @@ import {
     OnInit,
     ViewChild,
     ElementRef,
-    HostListener,
-    Input,
-    OnChanges,
-    SimpleChanges
+    HostListener
 } from "@angular/core";
 import { BsModalService, BsModalRef, ModalDirective } from "ngx-bootstrap/modal";
 import { InventoryService } from '../../../services/inventory.service';
@@ -51,7 +48,7 @@ import { Router } from "@angular/router";
     ]
 })
 
-export class NewBranchTransferListComponent implements OnInit, OnDestroy, OnChanges {
+export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: ElementRef;
     @ViewChild('deleteBranchTransferModal', { static: true }) public deleteBranchTransferModal: ModalDirective;
@@ -133,8 +130,6 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy, OnChan
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
-    /** Hold branch transfer report type */
-    @Input() public reportType: string
 
     constructor(
         private _generalService: GeneralService,
@@ -224,22 +219,6 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy, OnChan
                 }
             }
         });
-    }
-
-    /**
-     *Thiis hook will use for on changes in component
-     *
-     * @param {SimpleChanges} changes
-     * @memberof NewBranchTransferListComponent
-     */
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.reportType) {
-            setTimeout(() => {
-                if (this.reportType) {
-                    this.toggleTransferAsidePane();
-                }
-            }, 500);
-        }
     }
 
     public ngOnDestroy(): void {

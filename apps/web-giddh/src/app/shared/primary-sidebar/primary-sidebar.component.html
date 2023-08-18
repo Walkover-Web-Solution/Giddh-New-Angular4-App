@@ -16,7 +16,7 @@
                 class="list-style-none branch-connection dropdown-toggle"
                 id="button-company-branch"
                 dropdownToggle
-                (click)="openCompanyBranchDropdown()"
+                (click)="openCompanyBranchDropdown(); isGoToBranch = false"
             >
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
                     <span class="inner-span"></span>
@@ -64,7 +64,11 @@
                 </li>
             </ul>
             <div class="dropdown-menu company-branch-nav" *ngIf="showCompanyBranchSwitch">
-                <company-branch [localeData]="localeData" [commonLocaleData]="commonLocaleData"></company-branch>
+                <company-branch
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    [isGoToBranch]="isGoToBranch"
+                ></company-branch>
             </div>
         </div>
         <div>
@@ -245,27 +249,23 @@
     </div>
     <!--CMD + G modal  -->
     <ng-template #navigationModal>
-        <div class="modal-body" #mdl>
-            <command-k
-                (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
-                (groupEmitter)="makeGroupEntryInDB($event)"
-                (selectedItemEmitter)="onItemSelected($event)"
-                [parentEle]="mdl"
-                [isOpen]="true"
-                [setParentWidth]="true"
-                (closeEmitter)="modelRef.hide()"
-            ></command-k>
-
-            <div class="shortcuts">
-                <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
-                <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
-                {{ localeData?.to_select }}
-                <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
-                    commonLocaleData?.app_esc
-                }}</strong
-                >&nbsp;
-                {{ localeData?.to_dismiss }}
-            </div>
+        <command-k
+            (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
+            (groupEmitter)="makeGroupEntryInDB($event)"
+            (selectedItemEmitter)="onItemSelected($event)"
+            [parentEle]="mdl"
+            [isOpen]="true"
+            [setParentWidth]="true"
+        ></command-k>
+        <div class="shortcuts">
+            <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
+            <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
+            {{ localeData?.to_select }}
+            <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
+                commonLocaleData?.app_esc
+            }}</strong
+            >&nbsp;
+            {{ localeData?.to_dismiss }}
         </div>
     </ng-template>
 </ng-container>

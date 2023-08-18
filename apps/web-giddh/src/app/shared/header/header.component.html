@@ -12,7 +12,8 @@
         (clickOutside)="closeSidebarMobile($event)"
     >
         <div class="menu-wrapper">
-            <primary-sidebar [isOpen]="sideMenu?.isopen" [apiMenuItems]="apiMenuItems"> </primary-sidebar>
+            <primary-sidebar [isOpen]="sideMenu?.isopen" [apiMenuItems]="apiMenuItems" [isGoToBranch]="isGoToBranch">
+            </primary-sidebar>
         </div>
         <div class="mobile-menu-icon" (click)="sideBarStateChange((sideMenu.isopen = !sideMenu.isopen))">
             <span
@@ -58,6 +59,7 @@
                 </div>
                 <ul class="nav universal-date mr-r1" *ngIf="selectedCompany | async">
                     <button
+                        *ngIf="voucherApiVersion === 2"
                         mat-icon-button
                         #menuTrigger="matMenuTrigger"
                         [matMenuTriggerFor]="menu"
@@ -71,7 +73,12 @@
                                 {{ commonLocaleData?.app_create_new }}
                             </span>
                             <div class="menu-dropdown-wrapper">
-                                <div>
+                                <div
+                                    *ngIf="
+                                        currentOrganizationType === 'BRANCH' ||
+                                        (currentCompanyBranches?.length <= 1 && currentOrganizationType === 'COMPANY')
+                                    "
+                                >
                                     <div class="mr-t2 mr-b05 d-flex justify-content-between">
                                         <div class="d-flex align-items-center">
                                             <span class="d-flex">
@@ -127,10 +134,15 @@
                                         </mat-list-item>
                                     </mat-list>
                                 </div>
-                                <div>
+                                <div
+                                    *ngIf="
+                                        currentOrganizationType === 'BRANCH' ||
+                                        (currentCompanyBranches?.length <= 1 && currentOrganizationType === 'COMPANY')
+                                    "
+                                >
                                     <div class="mr-t2 mr-b05 d-flex align-items-center">
                                         <span class="d-flex">
-                                            <i class="icon-credit-note-new mr-r1"></i>
+                                            <i class="icon-invoice-new mr-r1"></i>
                                         </span>
                                         <span
                                             >{{ localeData?.cash }}
@@ -184,7 +196,12 @@
                                         </mat-list-item>
                                     </mat-list>
                                 </div>
-                                <div>
+                                <div
+                                    *ngIf="
+                                        currentOrganizationType === 'BRANCH' ||
+                                        (currentCompanyBranches?.length <= 1 && currentOrganizationType === 'COMPANY')
+                                    "
+                                >
                                     <div class="mr-t2 mr-b05 d-flex align-items-center">
                                         <span class="d-flex">
                                             <i class="icon-branch-transfer mr-r1"></i>
@@ -248,58 +265,76 @@
                                         </mat-list-item>
                                     </mat-list>
                                 </div>
-                                <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
-                                    <span class="d-flex">
-                                        <i class="icon-estimate-new mr-r1"></i>
-                                    </span>
-                                    <span>
-                                        <a
-                                            class="cursor-pointer"
-                                            (click)="navigateToSubItemLink('/proforma-invoice/invoice/estimate')"
-                                        >
-                                            {{ localeData?.estimate }}
-                                        </a>
-                                    </span>
+                                <div
+                                    class="mr-t2 mr-b05 align-items-center"
+                                    *ngIf="currentCompanyBranches?.length > 1 && currentOrganizationType === 'COMPANY'"
+                                >
+                                    <span>{{ localeData?.go_to_branch_information }} </span>
+                                    <button mat-stroked-button color="primary" class="mr-t2" (click)="gotToBranchTab()">
+                                        {{ localeData?.go_to_branch }}
+                                    </button>
                                 </div>
-                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
-                                    <span class="d-flex">
-                                        <i class="icon-proforma mr-r1"></i>
-                                    </span>
-                                    <span>
-                                        <a
-                                            class="cursor-pointer"
-                                            (click)="navigateToSubItemLink('/proforma-invoice/invoice/proforma')"
-                                        >
-                                            {{ localeData?.proforma }}
-                                        </a>
-                                    </span>
-                                </div>
-                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
-                                    <span class="d-flex">
-                                        <i class="icon-purchase-order mr-r1"></i>
-                                    </span>
-                                    <span>
-                                        <a
-                                            class="cursor-pointer"
-                                            (click)="navigateToSubItemLink('/purchase-management/purchase-order/new')"
-                                        >
-                                            {{ localeData?.purchase_order }}
-                                        </a>
-                                    </span>
-                                </div>
-                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
-                                    <span class="d-flex">
-                                        <i class="icon-manufacturing1 mr-r1"></i>
-                                    </span>
-                                    <span>
-                                        <a
-                                            class="cursor-pointer"
-                                            (click)="navigateToSubItemLink('/inventory/v2/manufacturing/create')"
-                                        >
-                                            {{ localeData?.manufacturing }}
-                                        </a>
-                                    </span>
-                                </div>
+                                <ng-container
+                                    *ngIf="
+                                        currentOrganizationType === 'BRANCH' ||
+                                        (currentCompanyBranches?.length <= 1 && currentOrganizationType === 'COMPANY')
+                                    "
+                                >
+                                    <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
+                                        <span class="d-flex">
+                                            <i class="icon-estimate-new mr-r1"></i>
+                                        </span>
+                                        <span>
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="navigateToSubItemLink('/proforma-invoice/invoice/estimates')"
+                                            >
+                                                {{ localeData?.estimate }}
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                        <span class="d-flex">
+                                            <i class="icon-proforma mr-r1"></i>
+                                        </span>
+                                        <span>
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="navigateToSubItemLink('/proforma-invoice/invoice/proformas')"
+                                            >
+                                                {{ localeData?.proforma }}
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                        <span class="d-flex">
+                                            <i class="icon-purchase-order mr-r1"></i>
+                                        </span>
+                                        <span>
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="
+                                                    navigateToSubItemLink('/purchase-management/purchase-order/new')
+                                                "
+                                            >
+                                                {{ localeData?.purchase_order }}
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                        <span class="d-flex">
+                                            <i class="icon-manufacturing1 mr-r1"></i>
+                                        </span>
+                                        <span>
+                                            <a
+                                                class="cursor-pointer"
+                                                (click)="navigateToSubItemLink('/inventory/v2/manufacturing/create')"
+                                            >
+                                                {{ localeData?.manufacturing }}
+                                            </a>
+                                        </span>
+                                    </div>
+                                </ng-container>
                             </div>
                         </div>
                     </mat-menu>
@@ -505,13 +540,11 @@
     </ng-template>
 
     <!--help & support sidebar  -->
-    <div
-        class="help-support-aside"
-        *ngIf="asideHelpSupportMenuState === 'in'"
-        (clickOutside)="closeHelpPaneOnOutsideClick()"
-    >
+
+    <ng-template #asideHelpSupportMenuStateRef>
         <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
-    </div>
+    </ng-template>
+
     <!-- setting aside pane -->
     <div class="help-support-aside setting-sidebar-wrapper">
         <perfect-scrollbar [scrollIndicators]="true">

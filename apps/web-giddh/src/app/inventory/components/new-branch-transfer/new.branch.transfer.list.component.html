@@ -410,7 +410,6 @@
     *ngIf="asideTransferPaneState === 'in'"
     [class]="asideTransferPaneState"
     [@slideInOut]="asideTransferPaneState"
-    [reportType]="reportType"
     (transferType)="openBranchTransferPopup($event)"
     (closeAsideEvent)="toggleTransferAsidePane()"
 ></aside-branch-transfer-pane>

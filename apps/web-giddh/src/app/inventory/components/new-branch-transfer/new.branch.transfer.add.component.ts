@@ -165,7 +165,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public ngOnInit(): void {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this.invoiceActions.resetTransporterListResponse());
-
         this.getTransportersList();
         this.getStock();
 

@@ -16,8 +16,18 @@
           }
         },
         {
-          "label": "इनवॉइस",
-          "link": "/pages/invoice/preview/sales",
+          "label": "ग्राहक",
+          "link": "/pages/contact/customer",
+          "icon": "icon-customer",
+          "description": "ग्राहकों को प्रबंधित करें, एसएमएस/ईमेल के माध्यम से अनुस्मारक भेजें",
+          "additional": {
+            "tab": "customer",
+            "tabIndex": 0
+          }
+        },
+        {
+          "label": "नया चालान",
+          "link": "/pages/proforma-invoice/invoice/cash",
           "icon": "icon-invoice-new",
           "description": "ग्राहकों के लिए नकद/क्रेडिट चालान बनाएं।",
           "submenu": [
@@ -36,8 +46,20 @@
           ]
         },
         {
-          "label": "क्रेडिट नोट",
-          "link": "/pages/invoice/preview/credit note",
+          "label": "चालान",
+          "link": "/pages/invoice/preview/sales",
+          "icon": "icon-invoice-new",
+          "description": "बहुमुद्रा, आवर्ती चालान, नकद चालान"
+        },
+        {
+          "label": "अनुमान (बीटा)",
+          "link": "/pages/invoice/preview/estimates",
+          "icon": "icon-sales-order1",
+          "description": "अंतिम बिक्री आदेश"
+        },
+        {
+          "label": "नया क्रेडिट नोट",
+          "link": "/pages/proforma-invoice/invoice/cash",
           "icon": "icon-credit-note-new",
           "description": "क्रेडिट नोट वाउचर जनरेट करें।",
           "submenu": [
@@ -45,43 +67,27 @@
               "label": "नकद क्रेडिट नोट",
               "link": "/pages/proforma-invoice/invoice/cash credit note",
               "icon": "icon-invoice-new",
-              "description": "विक्रेताओं को प्रबंधित किए बिना (अलग खाते/खाता के बिना) तत्काल भुगतान किया गया क्रेडिट उत्पन्न करें।"
+              "description": "विक्रेताओं को प्रबंधित किए बिना तत्काल भुगतान किए गए क्रेडिट नोट जेनरेट करें (अलग खाते/खाता के बिना)"
             },
             {
               "label": "क्रेडिट नोट",
-              "link": "/pages/invoice/preview/credit note",
+              "link": "/pages/proforma-invoice/invoice/credit note",
               "icon": "icon-credit-note-new",
-              "description": "क्रेडिट नोट बनाएं और ग्राहकों को प्रबंधित करें (ग्राहक खाते/खाता अलग से)।"
+              "description": "क्रेडिट नोट बनाएं और ग्राहकों को प्रबंधित करें (ग्राहक खाते/खाता अलग से)"
             }
           ]
         },
         {
-          "label": "ग्राहक",
-          "link": "/pages/contact/customer",
-          "icon": "icon-customer",
-          "description": "ग्राहकों को प्रबंधित करें, एसएमएस/ईमेल के माध्यम से अनुस्मारक भेजें",
-          "additional": {
-            "tab": "customer",
-            "tabIndex": 0
-          }
-        },
-        {
-          "label": "बिक्री चालान",
-          "link": "/pages/proforma-invoice/invoice/sales",
-          "icon": "icon-invoice-new",
-          "description": "बिक्री चालान उत्पन्न करें"
+          "label": "क्रेडिट नोट",
+          "link": "/pages/invoice/preview/credit note",
+          "icon": "icon-credit-note-new",
+          "description": "क्रेडिट नोट जेनरेट करें और खाता अपडेट करें"
         },
         {
           "label": "रसीद",
           "link": "/pages/reports/receipt",
           "icon": "icon-reciept-new",
           "description": "अग्रिम, सामान्य, कुल, और अप्रयुक्त रसीदें"
-        },
-        {
-          "label": "बिक्री आदेश",
-          "link": "/pages/invoice/preview/estimates",
-          "icon": "icon-sales-order1",
-          "description": "अंतिम बिक्री आदेश"
         },
         {
           "label": "बिक्री रजिस्टर",
@@ -106,28 +112,14 @@
       "icon": "icon-vendor",
       "items": [
         {
-          "label": "डेबिट नोट",
-          "link": "/pages/invoice/preview/debit note",
-          "icon": "icon-debit-note-new",
-          "description": "डेबिट नोट वाउचर जोड़ें",
-          "submenu": [
-            {
-              "label": "नकद डेबिट नोट",
-              "link": "/pages/proforma-invoice/invoice/cash debit note",
-              "icon": "icon-invoice-new",
-              "description": "विक्रेताओं को प्रबंधित किए बिना (अलग खाते/खाता के बिना) तत्काल भुगतान डेबिट नोट जोड़ें।"
-            },
-            {
-              "label": "डेबिट नोट",
-              "link": "/pages/invoice/preview/debit note",
-              "icon": "icon-debit-note-new",
-              "description": "डेबिट नोट जोड़ें और विक्रेताओं को प्रबंधित करें (विक्रेता खाते/खाता अलग से)।"
-            }
-          ]
+          "label": "विक्रेता",
+          "link": "/pages/contact/vendor",
+          "icon": "icon-vendor",
+          "description": "बल्क एसएमएस/ईमेल भेजें, रिमाइंडर सेट करें"
         },
         {
-          "label": "बिल",
-          "link": "/pages/proforma-invoice/invoice/purchase",
+          "label": "नया बिल",
+          "link": "/pages/proforma-invoice/invoice/cash",
           "icon": "icon-invoice-new",
           "description": "विक्रेताओं के लिए नकद/क्रेडिट बिल जोड़ें।",
           "submenu": [
@@ -146,31 +138,42 @@
           ]
         },
         {
-          "label": "खरीद प्रबंधन",
+          "label": "विधेयकों",
           "link": "/pages/purchase-management/purchase/bill",
           "icon": "icon-purchase-management1",
           "description": "खरीद अनुरोध, खरीद बिल, पीओ संशोधित करें"
         },
         {
-          "label": "खरीद आदेश",
+          "label": "नया खरीद आदेश",
           "link": "/pages/purchase-management/purchase-order/new",
           "icon": "icon-purchase-order",
           "description": "खरीद अनुरोध, खरीद बिल, पीओ संशोधित करें"
         },
         {
-          "label": "खरीद रजिस्टर",
-          "link": "/pages/reports/purchase-register",
-          "icon": "icon-register-new",
-          "description": "शुद्ध और संचयी खरीदारी",
-          "additionalRoutes": [
-            "/pages/reports/purchase-detailed-expand"
+          "label": "नया डेबिट नोट",
+          "link": "/pages/proforma-invoice/invoice/cash",
+          "icon": "icon-debit-note-new",
+          "description": "डेबिट नोट वाउचर जोड़ें",
+          "submenu": [
+            {
+              "label": "नकद डेबिट नोट",
+              "link": "/pages/proforma-invoice/invoice/cash debit note",
+              "icon": "icon-invoice-new",
+              "description": "विक्रेताओं को प्रबंधित किए बिना (अलग खाते/खाता के बिना) तत्काल भुगतान डेबिट नोट जोड़ें।"
+            },
+            {
+              "label": "डेबिट नोट",
+              "link": "/pages/proforma-invoice/invoice/debit note",
+              "icon": "icon-debit-note-new",
+              "description": "डेबिट नोट जोड़ें और विक्रेताओं को प्रबंधित करें (विक्रेता खाते/खाता अलग से)।"
+            }
           ]
         },
         {
-          "label": "विक्रेता",
-          "link": "/pages/contact/vendor",
-          "icon": "icon-vendor",
-          "description": "बल्क एसएमएस/ईमेल भेजें, रिमाइंडर सेट करें"
+          "label": "डेबिट नोट",
+          "link": "/pages/invoice/preview/debit note",
+          "icon": "icon-debit-note-new",
+          "description": "डेबिट नोट रिकॉर्ड करें और खाता अपडेट करें"
         },
         {
           "label": "भुगतान",
@@ -180,6 +183,15 @@
           "additional": {
             "voucherVersion": 2
           }
+        },
+        {
+          "label": "खरीद रजिस्टर",
+          "link": "/pages/reports/purchase-register",
+          "icon": "icon-register-new",
+          "description": "शुद्ध और संचयी खरीदारी",
+          "additionalRoutes": [
+            "/pages/reports/purchase-detailed-expand"
+          ]
         }
       ]
     },
@@ -187,18 +199,6 @@
       "label": "कर",
       "icon": "icon-tax-new",
       "items": [
-        {
-          "label": "ई-वे बिल",
-          "link": "/pages/invoice/ewaybill",
-          "icon": "icon-eway-bill-new",
-          "description": "बाद में गिद्ध से सीधे उत्पन्न करें",
-          "hide": "sidebar",
-          "additional": {
-            "countrySpecific": [
-              "IN"
-            ]
-          }
-        },
         {
           "label": "जीएसटीआर 1",
           "icon": "icon-GSTR",
@@ -239,6 +239,38 @@
           }
         },
         {
+          "label": "ई-वे बिल",
+          "link": "/pages/invoice/ewaybill",
+          "icon": "icon-eway-bill-new",
+          "description": "बाद में गिद्ध से सीधे उत्पन्न करें",
+          "hide": "sidebar",
+          "additional": {
+            "countrySpecific": [
+              "IN"
+            ]
+          }
+        },
+        {
+          "label": "यूनिट मैपिंग",
+          "link": "/pages/gstfiling/unit-mapping",
+          "icon": "unit-mapping-icon",
+          "description": "यूनिट मैपिंग",
+          "alwaysPresent": true,
+          "hide": "sidebar",
+          "additional": {
+            "countrySpecific": [
+              "IN"
+            ]
+          }
+        },
+        {
+          "label": "सेटिंग्स",
+          "link": "/pages/settings/taxes",
+          "icon": "icon-settings-cog",
+          "description": "कर सेटिंग्स",
+          "hide": "sidebar"
+        },
+        {
           "label": "रिवर्स चार्ज",
           "link": "/pages/reports/reverse-charge",
           "icon": "icon-reverse-charge",
@@ -257,26 +289,6 @@
               "AE"
             ]
           }
-        },
-        {
-          "label": "सेटिंग्स",
-          "link": "/pages/settings/taxes",
-          "icon": "icon-settings-cog",
-          "description": "कर सेटिंग्स",
-          "hide": "sidebar"
-        },
-        {
-          "label": "यूनिट मैपिंग",
-          "link": "/pages/gstfiling/unit-mapping",
-          "icon": "unit-mapping-icon",
-          "description": "यूनिट मैपिंग",
-          "alwaysPresent": true,
-          "hide": "sidebar",
-          "additional": {
-            "countrySpecific": [
-              "IN"
-            ]
-          }
         }
       ]
     },
@@ -284,6 +296,26 @@
       "label": "रिपोर्ट्स",
       "icon": "icon-reports",
       "items": [
+        {
+          "label": "संतुलन परीक्षण",
+          "link": "/pages/trial-balance-and-profit-loss",
+          "icon": "icon-trial-balance-new",
+          "description": "सभी क्रेडिट और डेबिट बैलेंस डाउनलोड करें",
+          "additional": {
+            "tab": "trial-balance",
+            "tabIndex": 0
+          }
+        },
+        {
+          "label": "लाभ और हानि",
+          "link": "/pages/trial-balance-and-profit-loss",
+          "icon": "icon-proft-loss-new",
+          "description": "एक्सेल में डेटा डाउनलोड करें, प्रोजेक्ट वार रिपोर्ट",
+          "additional": {
+            "tab": "profit-loss",
+            "tabIndex": 1
+          }
+        },
         {
           "label": "बैलेंस शीट",
           "link": "/pages/trial-balance-and-profit-loss",
@@ -301,30 +333,10 @@
           "description": "दैनिक प्रविष्टियाँ जिन्हें निर्यात किया जा सकता है"
         },
         {
-          "label": "लाभ और हानि",
-          "link": "/pages/trial-balance-and-profit-loss",
-          "icon": "icon-proft-loss-new",
-          "description": "एक्सेल में डेटा डाउनलोड करें, प्रोजेक्ट वार रिपोर्ट",
-          "additional": {
-            "tab": "profit-loss",
-            "tabIndex": 1
-          }
-        },
-        {
           "label": "बिक्री द्विभाजन",
           "link": "/pages/new-vs-old-invoices",
           "icon": "icon-sale-bifurcation",
           "description": "नए बनाम पुराने इनवॉइस की तुलना करें"
-        },
-        {
-          "label": "संतुलन परीक्षण",
-          "link": "/pages/trial-balance-and-profit-loss",
-          "icon": "icon-trial-balance-new",
-          "description": "सभी क्रेडिट और डेबिट बैलेंस डाउनलोड करें",
-          "additional": {
-            "tab": "trial-balance",
-            "tabIndex": 0
-          }
         },
         {
           "label": "स्तंभकार रिपोर्ट",
@@ -339,25 +351,10 @@
       "icon": "icon-inventory",
       "items": [
         {
-          "label": "शाखा स्थानांतरण",
-          "link": "/pages/inventory/report",
-          "icon": "icon-branch-transfer",
-          "description": "इन्वेंट्री प्रबंधित करें और ट्रांसफर करें"
-        },
-        {
           "label": "इन्वेंटरी",
           "link": "/pages/inventory",
           "icon": "icon-inventory",
           "description": "स्टॉक, समूह और इकाई आयात/बनाएं",
-          "additional": {
-            "voucherVersion": 1
-          }
-        },
-        {
-          "label": "विनिर्माण",
-          "link": "/pages/inventory/manufacturing",
-          "icon": "icon-manufacturing1",
-          "description": "एमएफजी खोजें। माल सूची स्थिति",
           "additional": {
             "voucherVersion": 1
           }
@@ -373,12 +370,27 @@
         },
         {
           "label": "विनिर्माण",
+          "link": "/pages/inventory/manufacturing",
+          "icon": "icon-manufacturing1",
+          "description": "एमएफजी खोजें। माल सूची स्थिति",
+          "additional": {
+            "voucherVersion": 1
+          }
+        },
+        {
+          "label": "विनिर्माण",
           "link": "/pages/inventory/v2/manufacturing/list",
           "icon": "icon-manufacturing1",
           "description": "एमएफजी खोजें। माल सूची स्थिति",
           "additional": {
             "voucherVersion": 2
           }
+        },
+        {
+          "label": "शाखा स्थानांतरण",
+          "link": "/pages/inventory/report",
+          "icon": "icon-branch-transfer",
+          "description": "इन्वेंट्री प्रबंधित करें और ट्रांसफर करें"
         },
         {
           "label": "गोदाम",
@@ -392,6 +404,12 @@
       "label": "अन्य",
       "icon": "icon-other",
       "items": [
+        {
+          "label": "डैशबोर्ड",
+          "link": "/pages/home",
+          "icon": "icon-dashboard-new",
+          "description": "अतिदेय, पी एंड एल, बैंक खाता, अनुपात विश्लेषण"
+        },
         {
           "label": "लेखापरीक्षा",
           "link": "/pages/audit-logs/new",
@@ -415,12 +433,6 @@
           "link": "/pages/reports/cash-flow-statement",
           "icon": "icon-cash-flow-statement",
           "description": "कैश फ्लो रिपोर्ट डाउनलोड करें"
-        },
-        {
-          "label": "डैशबोर्ड",
-          "link": "/pages/home",
-          "icon": "icon-dashboard-new",
-          "description": "अतिदेय, पी एंड एल, बैंक खाता, अनुपात विश्लेषण"
         },
         {
           "label": "पत्रिका की रसीद *",
