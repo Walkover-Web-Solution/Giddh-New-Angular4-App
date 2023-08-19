@@ -142,7 +142,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
-                this.isUKCompany = this.activeCompany.countryV2.alpha2CountryCode === 'GB' ? true : false;
+                this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB' ? true : false;
             }
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -217,8 +217,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
         if (this.taxNumber) {
             let vatReportRequest = new VatReportRequest();
-            console.log(this.fromDate, this.toDate);
-
             vatReportRequest.from = this.fromDate;
             vatReportRequest.to = this.toDate;
             vatReportRequest.taxNumber = this.taxNumber;

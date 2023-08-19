@@ -18,5 +18,6 @@
     "invoice_number": "Invoice Number",
     "customer_name": "Customer Name",
     "reverse_charge": "Reverse Charge",
-    "select_month_label": "Select Month"
+    "select_month_label": "Select Month",
+    "box": "Box"
 }
