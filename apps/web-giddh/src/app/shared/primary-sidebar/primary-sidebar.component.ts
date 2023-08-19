@@ -82,6 +82,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public allItems: AllItems[] = [];
     /** True, if sidebar needs to be shown */
     @Input() public isOpen: boolean = false;
+    /** True, if sidebar needs to be shown */
+    @Input() public isGoToBranch: boolean = false;
     /** API menu items, required to show permissible items only in the menu */
     @Input() public apiMenuItems: Array<any> = [];
     /** Stores the instance of CMD+K dropdown */
@@ -195,6 +197,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.isGoToBranch?.currentValue) {
+            this.openCompanyBranchDropdown();
+        }
         if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length && this.localeData?.page_heading) {
             this.allItems = this.generalService.getVisibleMenuItems("sidebar", changes.apiMenuItems.currentValue, this.localeData?.items);
             this.allItems?.map(items => {
@@ -296,7 +301,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
                 this.changeDetectorRef.detectChanges();
             }
-
             if (event instanceof NavigationStart) {
                 if (this.companyDetailsDropDownWeb.isOpen) {
                     this.companyDetailsDropDownWeb.hide();

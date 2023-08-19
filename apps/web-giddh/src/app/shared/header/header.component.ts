@@ -45,6 +45,7 @@ import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'app-header',
@@ -90,6 +91,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
     /** Instance of mat dialog */
     @ViewChild('asideHelpSupportMenuStateRef', { static: true }) public asideHelpSupportMenuStateRef: TemplateRef<any>;
+    /** Instance of menu trigger */
+    @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
 
     public hideAsDesignChanges: boolean = false;
     public title: Observable<string>;
@@ -230,6 +233,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCalendlyModelActivate: boolean = false;
     /** Calendly url */
     public calendlyUrl: any = '';
+    /* True if it is redirect to go to branch mode */
+    public isGoToBranch: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -423,6 +430,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
+                this.voucherApiVersion = this.generalService.voucherApiVersion;
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
@@ -483,7 +491,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnInit() {
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
-
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let branches = [];
@@ -1029,6 +1036,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public sideBarStateChange(event: boolean) {
+        this.isGoToBranch = false;
         if (this.sideMenu) {
             this.sideMenu.isopen = event;
         }
@@ -1083,6 +1091,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public openDateRangePicker() {
         this.isTodaysDateSelected = false;
+    }
+
+    /**
+     * This will use for navigae to subitem link
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    public navigateToSubItemLink(event: any): void {
+        if (event) {
+            this.trigger?.closeMenu();
+            if (event === 'deliverychallan' || event === 'receiptnote') {
+                this.router.navigate(['/pages/inventory/report/' + event]);
+            } else {
+                this.router.navigate(['/pages' + event]);
+            }
+        }
     }
 
     public ngOnDestroy() {
@@ -1165,6 +1190,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 showPlans: true
             }
         });
+    }
+
+    /**
+     * This will use for go to branch mode
+     *
+     * @memberof HeaderComponent
+     */
+    public gotToBranchTab(): void {
+        this.trigger?.closeMenu();
+        this.expandSidebar(false);
+        this.isGoToBranch = true;
     }
 
     public onRight(nodes) {
@@ -1441,6 +1477,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
+        this.isGoToBranch = false;
         if (closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
             return;
         }

@@ -4,7 +4,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatListModule } from "@angular/material/list";
+import { MatMenuModule } from "@angular/material/menu";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatTreeModule } from "@angular/material/tree";
 import { RouterModule } from "@angular/router";
 import { LaddaModule } from "angular2-ladda";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
@@ -49,7 +51,9 @@ import { HeaderComponent } from "./header.component";
         RouterModule,
         MatDialogModule,
         MatListModule,
-        MatButtonModule
+        MatButtonModule,
+        MatMenuModule,
+        MatTreeModule
     ],
     exports: [
         HeaderComponent,
