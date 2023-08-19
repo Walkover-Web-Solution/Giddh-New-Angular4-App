@@ -254,7 +254,7 @@
                                             <ng-container matColumnDef="number">
                                                 <th mat-header-cell *matHeaderCellDef></th>
                                                 <td mat-cell *matCellDef="let element" width="5%">
-                                                    Box {{ element.order }}
+                                                    {{ localeData?.box }} {{ element.order }}
                                                 </td>
                                             </ng-container>
                                             <ng-container matColumnDef="name">
@@ -297,7 +297,9 @@
                                         >
                                             <ng-container matColumnDef="number">
                                                 <th mat-header-cell *matHeaderCellDef></th>
-                                                <td mat-cell *matCellDef="let element">Box {{ element.order }}</td>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{ localeData?.box }} {{ element.order }}
+                                                </td>
                                             </ng-container>
                                             <ng-container matColumnDef="name">
                                                 <th mat-header-cell *matHeaderCellDef></th>
