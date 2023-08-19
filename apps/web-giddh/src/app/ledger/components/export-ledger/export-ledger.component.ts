@@ -189,7 +189,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 this.changeDetectorRef.detectChanges();
                 if (response?.status === 'success') {
                     if (response.body) {
-                        if (this.emailTypeSelected === 'admin-detailed') {
+                        if (this.emailTypeSelected === 'admin-detailed' || this.emailTypeSelected === 'view-detailed') {
                             if (response.body.encodedData) {
                                 let blob = this.generalService.base64ToBlob(response.body.encodedData, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'), 512);
                                 return download(response.body.name, blob, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'));
