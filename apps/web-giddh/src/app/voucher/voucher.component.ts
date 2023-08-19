@@ -1485,9 +1485,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
                 if (this.isEinvoiceGenerated || (this.invFormData.accountDetails.billingDetails?.gstNumber && this.purchaseBillCompany.billingDetails
                     .gstNumber)) {
-                    this.statesBilling.readonly = true;
+                    this.makeFieldReadonly("billingState", true);
                 } else {
-                    this.statesBilling.readonly = false;
+                    this.makeFieldReadonly("billingState", false);
                 }
                 // create account success then close sidebar, and add customer details
                 if (results[1] && this.isCreatingNewAccount) {
@@ -1522,9 +1522,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         }
                         if (this.isEinvoiceGenerated || (this.invFormData.accountDetails.billingDetails?.gstNumber && this.purchaseBillCompany.billingDetails.gstNumber)) {
-                            this.statesBilling.readonly = true;
+                            this.makeFieldReadonly("billingState", true);
                         } else {
-                            this.statesBilling.readonly = false;
+                            this.makeFieldReadonly("billingState", false);
                         }
                     } else {
                         this.isCustomerSelected = false;
@@ -8906,5 +8906,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public onFocusEntryDate(event: any): void {
         this.isEntryDatepickerOpen = event;
+    }
+
+    public makeFieldReadonly(fieldType: string, isReadonly: boolean): void {
+        let interval = setInterval(() => {
+            if (fieldType === "billingState" && this.statesBilling) {
+                clearInterval(interval);
+                this.statesBilling.readonly = isReadonly;
+            }
+        }, 300);
     }
 }
