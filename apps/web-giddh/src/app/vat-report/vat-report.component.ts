@@ -11,7 +11,6 @@ import { VatService } from "../services/vat.service";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/defaultDateFormat";
 import { saveAs } from "file-saver";
-import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReconcileService } from '../services/gst-reconcile.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
@@ -34,7 +33,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public fromDate: string = '';
     public toDate: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    @ViewChild('monthWise', { static: true }) public monthWise: BsDropdownDirective;
     @ViewChild('periodDropdown', { static: true }) public periodDropdown;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
