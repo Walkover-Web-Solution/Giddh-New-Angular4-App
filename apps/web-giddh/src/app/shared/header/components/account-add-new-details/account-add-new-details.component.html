@@ -73,13 +73,13 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-4 cr-dr-account">
+                    <div class="form-group col-xs-12 col-sm-4">
                         <label>{{ localeData?.opening_balance }}</label>
                         <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }">
                             <input
                                 type="tel"
                                 min="0"
-                                class="form-control text-right"
+                                class="form-control text-right mr-1"
                                 decimalDigitsDirective
                                 formControlName="openingBalance"
                                 [placeholder]="
@@ -130,7 +130,7 @@
                                 <input
                                     type="tel"
                                     min="0"
-                                    class="form-control text-right"
+                                    class="form-control text-right mr-1"
                                     formControlName="foreignOpeningBalance"
                                     [placeholder]="
                                         commonLocaleData?.app_numbers?.zero +
