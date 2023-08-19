@@ -624,9 +624,6 @@ textarea {
         }
     }
 }
-.mat-mdc-icon-button {
-    font-size: var(--font-size-15) !important;
-}
 
 .inventory-units-mapped {
     .icon-visibility {
@@ -2814,6 +2811,7 @@ header .navbar {
     color: var(--color-secondary-button-text) !important;
     border-color: var(--color-secondary-button-background) !important;
     background: var(--color-secondary-button-background) !important;
+    box-shadow: none;
 }
 
 .btn-primary.disabled.focus,

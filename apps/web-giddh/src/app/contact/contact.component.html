@@ -196,26 +196,6 @@
                                             </select-table-column>
                                         </div>
                                     </div>
-                                    <div class="btn-group pull-right on-mobile-view mr-t1 d-flex column-gap15">
-                                        <button
-                                            mat-stroked-button
-                                            color="primary"
-                                            *ngIf="activeTab == 'customer' && sundryDebtorsAccounts?.length"
-                                            class="mr-r05 w-100"
-                                            (click)="openAddAndManage('customer')"
-                                        >
-                                            {{ localeData?.new_customer }}
-                                        </button>
-                                        <button
-                                            mat-stroked-button
-                                            color="primary"
-                                            *ngIf="activeTab == 'vendor' && sundryCreditorsAccounts?.length"
-                                            class="w-100"
-                                            (click)="openAddAndManage('vendor')"
-                                        >
-                                            {{ localeData?.new_vendor }}
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
