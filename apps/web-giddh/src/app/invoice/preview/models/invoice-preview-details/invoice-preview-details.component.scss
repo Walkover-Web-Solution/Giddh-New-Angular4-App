@@ -1261,3 +1261,11 @@ strong {
         }
     }
 }
+
+@media screen and (max-width: 1280px) {
+    .invoice-search-box {
+        button {
+            padding: 7px 7px !important;
+        }
+    } 
+}
