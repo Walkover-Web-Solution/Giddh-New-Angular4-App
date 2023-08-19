@@ -57,7 +57,7 @@ export class VoucherUtilityService {
             delete data.account.name;
             delete data.account.country;
             if (data.account.billingDetails) {
-                data.account.billingDetails.taxNumber = (data.account.billingDetails.gstNumber) ? data.account.billingDetails.gstNumber : "";
+                data.account.billingDetails.taxNumber = data.account.billingDetails.gstNumber || data.account.billingDetails.taxNumber || '';
                 data.account.billingDetails.country = {
                     code: data.account.billingDetails.countryCode,
                     name: data.account.billingDetails.countryName
@@ -69,7 +69,7 @@ export class VoucherUtilityService {
                 delete data.account.billingDetails.countryCode;
             }
             if (data.account.shippingDetails) {
-                data.account.shippingDetails.taxNumber = (data.account.shippingDetails.gstNumber) ? data.account.shippingDetails.gstNumber : "";
+                data.account.shippingDetails.taxNumber = data.account.shippingDetails.gstNumber || data.account.shippingDetails.taxNumber || '';
                 data.account.shippingDetails.country = {
                     code: data.account.shippingDetails.countryCode,
                     name: data.account.shippingDetails.countryName
@@ -94,7 +94,7 @@ export class VoucherUtilityService {
                 });
             });
         }
-        if(data?.company) {
+        if (data?.company) {
             if (data.company.billingDetails) {
                 data.company.billingDetails.taxNumber = data.company.billingDetails.gstNumber;
             }
@@ -102,7 +102,7 @@ export class VoucherUtilityService {
                 data.company.shippingDetails.taxNumber = data.company.shippingDetails.gstNumber;
             }
         }
-        if([VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote].includes(data.type)) {
+        if ([VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote].includes(data.type)) {
             data.number = data.invoiceNumberAgainstVoucher || data.number || '';
         }
         return data;
