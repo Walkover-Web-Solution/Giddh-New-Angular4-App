@@ -49,15 +49,14 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/d
 import { SettingsBranchActions } from "../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../models/user-login-state";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { Lightbox } from "ngx-lightbox";
-import { MatCheckboxChange } from "@angular/material/checkbox/checkbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { CustomFieldsService } from "../services/custom-fields.service";
 import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 @Component({
     selector: "contact-detail",
@@ -123,7 +122,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("staticTabs", { static: true }) public staticTabs: MatTableModule;
     @Output() selectedTabChange: EventEmitter<MatTabChangeEvent>;
     @ViewChild("messageBox", { static: false }) public messageBox: ElementRef;
-    @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: ElementRef;
+    @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: TemplateRef<any>;
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public universalDate$: Observable<any>;
     public messageBody = {
@@ -207,7 +206,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** This will store screen size */
     public isMobileView: boolean = false;
     /** Stores the searched name value for the Name filter */
-    public searchedName: FormControl = new FormControl();
+    public searchedName: UntypedFormControl = new UntypedFormControl();
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
     /** True if today selected */

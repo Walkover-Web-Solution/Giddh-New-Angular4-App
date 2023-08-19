@@ -10,7 +10,7 @@ import { AppState } from '../../../store';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { CompanyActions } from '../../../actions/company.actions';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -57,7 +57,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         userUniqueName: '',
         licenceKey: ''
     };
-    public licenceKey = new FormControl();
+    public licenceKey = new UntypedFormControl();
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isUpdateCompanySuccess$: Observable<boolean>;
     public isSwitchPlanInProcess: boolean = false;

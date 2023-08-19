@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
 import { Store, select } from "@ngrx/store";
@@ -57,7 +57,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     /** Holds temporarily list of taxes */
     public taxTempArray: any[] = [];
     /** Form Group for group form */
-    public groupForm: FormGroup;
+    public groupForm: UntypedFormGroup;
     /** True if loader is visible */
     public showLoader: boolean = false;
     /** True if translations loaded */
@@ -74,14 +74,12 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public get showPageLeaveConfirmation(): boolean {
         return this.groupForm?.dirty;
     }
-    /** Holds if group is sub group */
-    public isSubGroup: boolean = false;
 
     constructor(
         private store: Store<AppState>,
         private inventoryService: InventoryService,
         private companyAction: CompanyActions,
-        private formBuilder: FormBuilder,
+        private formBuilder: UntypedFormBuilder,
         private toaster: ToasterService,
         private route: ActivatedRoute,
         private changeDetection: ChangeDetectorRef,
@@ -318,9 +316,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                         this.getStockGroups();
                         this.backClicked();
                     } else {
-                        this.groupForm.markAsPristine();
-                        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-                        this.closeAsideEvent.emit(this.isSubGroup === this.groupForm.get('isSubGroup').value);
+                        this.resetGroupForm();
+                        this.closeAsideEvent.emit();
                     }
                 } else {
                     this.toggleLoader(false);
@@ -342,7 +339,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                         this.resetGroupForm();
                     } else {
                         this.resetGroupForm();
-                        this.closeAsideEvent.emit(false);
+                        this.closeAsideEvent.emit();
                     }
                 } else {
                     this.toggleLoader(false);
@@ -503,7 +500,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     isSubGroup: (response.body.parentStockGroup?.uniqueName) ? true : false,
                     taxes: response.body.taxes
                 });
-                this.isSubGroup = (response.body.parentStockGroup?.uniqueName) ? true : false;
                 this.groupForm.updateValueAndValidity();
                 this.changeDetection.detectChanges();
             } else {
@@ -521,7 +517,11 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof CreateUpdateGroupComponent
      */
     public cancelEdit(): void {
-        this.backClicked();
+        if (this.addGroup) {
+            this.closeAsideEvent.emit(true);
+        } else {
+            this.backClicked();
+        }
     }
 
     /**
@@ -549,7 +549,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     if (response?.status === "success") {
                         this.toaster.showSnackBar("success", this.localeData?.group_delete);
                         if (this.addGroup) {
-                            this.closeAsideEvent.emit(false);
+                            this.closeAsideEvent.emit();
                         } else {
                             this.cancelEdit();
                         }

@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ESCAPE } from '@angular/cdk/keycodes';
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, Input, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -58,7 +58,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     @ViewChild('shCategory', { static: false }) public shCategory: ShSelectComponent;
     @ViewChild('shCategoryType', { static: false }) public shCategoryType: ShSelectComponent;
     @ViewChild('shValueCondition', { static: false }) public shValueCondition: ShSelectComponent;
-    @ViewChild('template', { static: true }) public template: ElementRef;
+    @ViewChild('template', { static: true }) public template: TemplateRef<any>;
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
@@ -89,12 +89,12 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public showAdvanceSearchIcon: boolean = false;
     public showProductSearch: boolean = false;
     public showSourceSearch: boolean = false;
-    public productUniqueNameInput: FormControl = new FormControl();
-    public sourceUniqueNameInput: FormControl = new FormControl();
+    public productUniqueNameInput: UntypedFormControl = new UntypedFormControl();
+    public sourceUniqueNameInput: UntypedFormControl = new UntypedFormControl();
     public entities$: Observable<CompanyResponse[]>;
     public selectedEntity: string = null;
     // modal advance search
-    public advanceSearchForm: FormGroup;
+    public advanceSearchForm: UntypedFormGroup;
     public filterCategory: string = null;
     public filterCategoryType: string = null;
     public filterValueCondition: string = null;
@@ -221,7 +221,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -238,7 +238,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         private store: Store<AppState>,
         private stockReportActions: StockReportActions,
         private inventoryService: InventoryService,
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         private _toasty: ToasterService,
         private inventoryAction: InventoryAction,
         private invViewService: InvViewService,

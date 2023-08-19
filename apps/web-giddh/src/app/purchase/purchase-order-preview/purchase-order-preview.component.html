@@ -14,11 +14,11 @@
                         </button>
                     </div>
                     <ul class="invoice-sidebar">
-                        <perfect-scrollbar #perfectScrollbar *ngIf="filteredData && filteredData.length > 0">
+                        <cdk-virtual-scroll-viewport [itemSize]="62" *ngIf="filteredData && filteredData.length > 0">
                             <li
                                 class="single-invoice-detail cp"
                                 [ngClass]="{ 'activeItem': row?.uniqueName === purchaseOrderUniqueName }"
-                                *ngFor="let row of filteredData; let i = index"
+                                *cdkVirtualFor="let row of filteredData; let i = index"
                             >
                                 <div class="row" (click)="showPurchaseOrderPreview(row?.uniqueName)">
                                     <div class="col-7 col-sm-7">
@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                             </li>
-                        </perfect-scrollbar>
+                        </cdk-virtual-scroll-viewport>
                     </ul>
                 </div>
             </div>

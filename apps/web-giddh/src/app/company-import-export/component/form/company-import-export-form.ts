@@ -1,5 +1,5 @@
 import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import * as dayjs from 'dayjs';
 import { CompanyImportExportFileTypes } from '../../../models/interfaces/company-import-export.interface';
@@ -14,6 +14,7 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { OrganizationType } from '../../../models/user-login-state';
 import { CompanyImportExportService } from '../../../services/company-import-export-service';
 import { ToasterService } from '../../../services/toaster.service';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'company-import-export-form-component',
@@ -39,7 +40,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* This will store selected date range to use in api */

@@ -58,15 +58,16 @@ import { ReverseChargeService } from './reversecharge.service';
 import { CashFlowStatementService } from './cashflowstatement.service';
 import { PurchaseOrderService } from './purchase-order.service';
 import { LocaleService } from './locale.service';
-import { BulkVoucherExportService } from './bulkvoucherexport.service';
-import { CustomFieldsService } from "./custom-fields.service";
-import { ThermalService } from "./thermal.service";
 import { PrinterFormatService } from "./printer.format.service";
+//import { ThermalService } from "./thermal.service";
 import { ActivityLogsService } from "./activity-logs.service";
 import { DownloadsService } from "./downloads.service";
 import { ImportsService } from "./imports.service";
 import { CampaignIntegrationService } from "./campaign.integration.service";
 import { PageLeaveUtilityService } from "./page-leave-utility.service";
+import { LedgerService } from "./ledger.service";
+import { BulkVoucherExportService } from "./bulkvoucherexport.service";
+import { CustomFieldsService } from "./custom-fields.service";
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -140,12 +141,15 @@ export class ServiceModule {
                 PurchaseOrderService,
                 BulkVoucherExportService,
                 LocaleService,
+                DownloadsService,
+                PrinterFormatService,
+                //ThermalService,
                 CustomFieldsService,
-                ThermalService,
                 PrinterFormatService,
                 DownloadsService,
                 ImportsService,
-                PageLeaveUtilityService
+                PageLeaveUtilityService,
+                LedgerService
             ]
         };
     }

@@ -1,7 +1,6 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
-
 import { throwIfAlreadyLoaded } from '@giddh-workspaces/utils';
-import { ELECTRON_PROVIDERS, ElectronService } from './services';
+import { ELECTRON_PROVIDERS } from './services';
 
 @NgModule({
     providers: [...ELECTRON_PROVIDERS]
@@ -10,8 +9,7 @@ export class FooElectronCoreModule {
     constructor(
         @Optional()
         @SkipSelf()
-        parentModule: FooElectronCoreModule,
-        private _electronService: ElectronService
+        parentModule: FooElectronCoreModule
     ) {
         throwIfAlreadyLoaded(parentModule, 'FooElectronCoreModule');
     }

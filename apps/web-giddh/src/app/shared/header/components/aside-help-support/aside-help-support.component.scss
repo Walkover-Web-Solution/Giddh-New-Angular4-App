@@ -19,6 +19,9 @@
         z-index: 1;
         transform: rotate(45deg);
     }
+    .aside-pane{
+        overflow: auto;
+    }
 }
 :host.in #close {
     display: block;

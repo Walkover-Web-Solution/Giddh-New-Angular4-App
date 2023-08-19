@@ -13,14 +13,11 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 import { UploadSuccessComponent } from './upload-success/upload-success.component';
 import { ImportReportComponent } from './import-report/import-report.component';
 import { SharedModule } from '../shared/shared.module';
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-    suppressScrollX: true
-};
+import { ScrollingModule } from '@angular/cdk/scrolling';
+
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
@@ -34,10 +31,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ImportReportComponent
     ],
     exports: [ImportComponent],
-    providers: [{
-        provide: PERFECT_SCROLLBAR_CONFIG,
-        useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-    }],
+    providers: [],
     imports: [
         CommonModule,
         FormsModule,
@@ -49,7 +43,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ShSelectModule,
         TooltipModule.forRoot(),
         BsDropdownModule.forRoot(),
-        PerfectScrollbarModule,
+        ScrollingModule,
         PaginationModule.forRoot(),
         SharedModule
     ],
