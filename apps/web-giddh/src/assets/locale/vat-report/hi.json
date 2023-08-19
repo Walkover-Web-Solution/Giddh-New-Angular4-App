@@ -18,5 +18,6 @@
     "invoice_number": "बिल संख्या",
     "customer_name": "ग्राहक का नाम",
     "reverse_charge": "उल्टा चार्ज",
-    "select_month_label": "महीना चुनिए"
+    "select_month_label": "महीना चुनिए",
+    "box":"बॉक्स"
 }
