@@ -32,19 +32,3 @@ body {
         }
     }
 }
-// body {
-//     &.cmd-k {
-//         .cdk-overlay-container {
-//             z-index: 9999 !important;
-//             .cdk-global-overlay-wrapper{
-//                 z-index: 10001!important;
-//             }
-//         }
-//         .cdk-overlay-backdrop {
-//             z-index: 10000;
-//         }
-//         .cdk-overlay-pane {
-//             z-index: 99999;
-//         }
-//     }
-// }
