@@ -23,3 +23,17 @@
 .mat-menu-content:not(:empty) {
     padding: 0 !important;
 }
+
+body {
+    &.cmd-k {
+        .cdk-overlay-container {
+            z-index: 9999 !important;
+        }
+        .cdk-overlay-backdrop {
+            z-index: 999;
+        }
+        .cdk-overlay-pane {
+            z-index: 99999;
+        }
+    }
+}

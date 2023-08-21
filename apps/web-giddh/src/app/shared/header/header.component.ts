@@ -853,14 +853,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         top: '0'
                     }
                 });
-
-                this.asideHelpSupportDialogRef.afterOpened().pipe(take(1)).subscribe(response => {
-                    document.querySelector('body')?.classList?.add('fixed');
-                });
-
-                this.asideHelpSupportDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-                    document.querySelector('body')?.classList?.remove('fixed');
-                });
             }
         } else {
             this.asideHelpSupportDialogRef?.close();
