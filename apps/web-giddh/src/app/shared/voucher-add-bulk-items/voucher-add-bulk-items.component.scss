@@ -78,7 +78,7 @@
         position: relative;
         display: table;
         border-collapse: separate;
-        width: 138px;
+        width: 160px;
         &.add-item-btn {
             display: flex !important;
             flex-wrap: nowrap;
@@ -87,7 +87,6 @@
                 border-left: 1px solid var(--color-common-secondary-border);
             }
             .btn-number {
-                margin-right: 1px !important;
                 min-width: 42px;
                 border: 1px solid var(--color-common-secondary-border);
             }
@@ -96,7 +95,7 @@
             }
         }
         .input-number {
-            margin-right: 3px;
+            margin: 0 8px 0 6px;
             min-width: 65px;
             text-align: center;
         }

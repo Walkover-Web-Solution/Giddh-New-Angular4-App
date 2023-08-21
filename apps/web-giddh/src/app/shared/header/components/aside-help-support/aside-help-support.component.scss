@@ -1,8 +1,8 @@
 :host {
     position: fixed;
     left: auto;
-    top: 57px;
-    right: 0;
+    top: 60px;
+    right: -5px;
     bottom: 0;
     max-width: 330px;
     width: 100%;
@@ -58,9 +58,13 @@
         top: 0;
         background-color: inherit;
         h2 {
-            font-family: var(--font-semibold);
-            font-size: var(--font-size-16);
-            color: var(--color-giddh-blue);
+            font-family: var(--font-semibold) !important;
+            font-size: var(--font-size-16) !important;
+            color: var(--color-giddh-blue) !important;
+            line-height: 20px !important;
+            &::before{
+                display: none !important;
+            }
         }
     }
     .help-aside-body {
@@ -140,6 +144,14 @@
                 a {
                     color: var(--color-nero);
                 }
+            }
+        }
+    }
+    mat-dialog-content {
+        .mdc-list-item{
+            &.mdc-list-item--with-one-line{
+                height: unset !important;
+                margin-bottom: 10px;
             }
         }
     }

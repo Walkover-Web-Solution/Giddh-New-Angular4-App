@@ -94,13 +94,13 @@
         }
     }
 
-    mat-list {
+    ul {
         display: flex;
-        // justify-content: space-between;
         column-gap: 24px;
         margin-left: 28px;
+        list-style-type: unset;
 
-        mat-list-item {
+        li {
             display: flex;
             align-items: center;
             column-gap: 8px;
