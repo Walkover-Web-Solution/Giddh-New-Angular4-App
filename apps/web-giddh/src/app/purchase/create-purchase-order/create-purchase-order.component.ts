@@ -2711,8 +2711,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     }
 
                     this.isRcmEntry = (this.purchaseOrderDetails.subVoucher && this.purchaseOrderDetails.subVoucher === SubVoucher.ReverseCharge) ? true : false;
-                    console.log(this.purchaseOrderDetails);
-
                     this.purchaseOrder.company = this.purchaseOrderDetails.company;
 
                     this.purchaseOrder.company.billingDetails.state = { name: '', code: '' };

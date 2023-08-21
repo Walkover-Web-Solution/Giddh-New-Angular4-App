@@ -2262,7 +2262,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {SalesShSelectComponent} statesEle state input box
      * @memberof VoucherComponent
      */
-    public getStateCode(type: string, statesEle: SelectFieldComponent) {
+    public getStateCode(type: string) {
         let gstVal = cloneDeep(this.invFormData.accountDetails[type].gstNumber)?.toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.statesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
@@ -2270,7 +2270,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.invFormData.accountDetails[type].stateCode = selectedState.value;
                 this.invFormData.accountDetails[type].state.code = selectedState.value;
                 this.invFormData.accountDetails[type].state.name = selectedState.label;
-                statesEle.readonly = true;
+                if (type === 'billingDetails') {
+                    this.makeFieldReadonly("billingState", true);
+                }
+                if (type === 'shippingDetails') {
+                    this.makeFieldReadonly("shippingState", true);
+                }
+
             } else {
                 this._toasty.clearAllToaster();
                 this.checkGstNumValidation(gstVal);
@@ -2281,10 +2287,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.invFormData.accountDetails[type].state.code = null;
                     this.invFormData.accountDetails[type].state.name = null;
                 }
-                statesEle.readonly = this.isEinvoiceGenerated ? true : false;
+                if (this.isEinvoiceGenerated) {
+                    this.makeFieldReadonly("stateEle", true);
+                } else {
+                    this.makeFieldReadonly("stateEle", false);
+                }
             }
         } else {
-            statesEle.readonly = this.isEinvoiceGenerated ? true : false;
+            if (this.isEinvoiceGenerated) {
+                this.makeFieldReadonly("stateEle", true);
+            } else {
+                this.makeFieldReadonly("stateEle", false);
+            }
 
         }
         this.checkGstNumValidation(gstVal);
@@ -2464,7 +2478,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.userDeposit = 0;
         }
         let data: VoucherClass = cloneDeep(this.invFormData);
-
         // special check if gst no filed is visible then and only then check for gst validation
         if (data.accountDetails && data.accountDetails.billingDetails && data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
             this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, this.localeData?.billing_address);
@@ -2657,18 +2670,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let voucherDate: any;
         const deposit = this.getDeposit();
         data.accountDetails.mobileNumber = this.intl?.getNumber();
-        if (this.showGSTINNo) {
-            delete data.accountDetails.billingDetails.county;
-            delete data.accountDetails.shippingDetails.county;
-        }
-        if (this.showVATNo) {
-            delete data.accountDetails.billingDetails.state;
-            delete data.accountDetails.billingDetails.stateCode;
-            delete data.accountDetails.billingDetails.stateName;
-            delete data.accountDetails.shippingDetails.state;
-            delete data.accountDetails.shippingDetails.stateCode;
-            delete data.accountDetails.shippingDetails.stateName;
-        }
         if (!this.isPurchaseInvoice) {
             voucherDate = data.voucherDetails.voucherDate;
             requestObject = {
@@ -2696,7 +2697,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             requestObject.account.shippingDetails.countryCode = this.customerCountryCode;
             requestObject.account.shippingDetails.stateCode = requestObject.account.shippingDetails.state?.code;
             requestObject.account.shippingDetails.stateName = requestObject.account.shippingDetails.state?.name;
-
+            requestObject = this.deleteUnusedVoucherUpdateObjectKey(requestObject);
             /** Tourist scheme is applicable only for voucher type 'sales invoice' and 'Cash Invoice' and company country code 'AE'   */
             if (this.isSalesInvoice || this.isCashInvoice) {
                 if (this.invFormData.touristSchemeApplicable) {
@@ -2753,7 +2754,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 purchaseOrders: purchaseOrders,
                 company: this.purchaseBillCompany
             } as PurchaseRecordRequest;
-
+            requestObject = this.deleteUnusedVoucherUpdateObjectKey(requestObject);
             /** Advance receipts adjustment */
             if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
                 if (this.advanceReceiptAdjustmentData.adjustments.length) {
@@ -2800,7 +2801,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             requestObject.date = dayjs(voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             requestObject.type = VoucherTypeEnum.sales;
-
             let updatedData = requestObject;
             updatedData = this.updateData(requestObject, data);
             if (!updatedData.voucherDetails) {
@@ -2819,6 +2819,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             this.store.dispatch(this.proformaActions.generateProforma(updatedData));
         } else {
+            requestObject = this.deleteUnusedVoucherUpdateObjectKey(requestObject);
             let updatedData = requestObject;
             let isVoucherV4 = false;
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote || this.isPurchaseInvoice) {
@@ -2892,7 +2893,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     if (this.voucherApiVersion === 2) {
                         updatedData = this.voucherUtilityService.cleanObject(updatedData);
                     }
-
                     this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
                         this.handleGenerateResponse(response, form);
                     }, () => {
@@ -4309,23 +4309,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             let data = requestObject.voucher;
             let exRate = this.originalExchangeRate;
             let unqName = this.invoiceUniqueName || this.accountUniqueName;
-
+            data = this.deleteUnusedVoucherUpdateObjectKey(data);
             let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
             let entries = data.entries;
-
-            if (this.showGSTINNo) {
-                delete data.accountDetails.billingDetails.county;
-                delete data.accountDetails.shippingDetails.county;
-            }
-            if (this.showVATNo) {
-                delete data.accountDetails.billingDetails.state;
-                delete data.accountDetails.billingDetails.stateCode;
-                delete data.accountDetails.billingDetails.stateName;
-                delete data.accountDetails.shippingDetails.state;
-                delete data.accountDetails.shippingDetails.stateCode;
-                delete data.accountDetails.shippingDetails.stateName;
-            }
-
             entries.forEach(entry => {
                 let salesEntryClass = new SalesEntryClassMulticurrency();
                 salesEntryClass.voucherType = entry?.voucherType;
@@ -4371,6 +4357,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 salesEntryClassArray.push(salesEntryClass);
             });
+            data = this.deleteUnusedVoucherUpdateObjectKey(data);
             requestObject = {
                 account: data.accountDetails,
                 updateAccountDetails: this.updateAccount,
@@ -4404,7 +4391,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             let data = requestObject.voucher;
             let exRate = this.originalExchangeRate;
             let unqName = this.invoiceUniqueName || this.accountUniqueName;
-
+            data = this.deleteUnusedVoucherUpdateObjectKey(data);
             // sales and cash invoice uses v4 api so need to parse main object to regarding that
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
                 if (this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
@@ -4413,18 +4400,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
                 data.accountDetails.mobileNumber = this.intl?.getNumber();
                 const deposit = this.getDeposit();
-                if (this.showGSTINNo) {
-                    delete data.accountDetails.billingDetails.county;
-                    delete data.accountDetails.shippingDetails.county;
-                }
-                if (this.showVATNo) {
-                    delete data.accountDetails.billingDetails.state;
-                    delete data.accountDetails.billingDetails.stateCode;
-                    delete data.accountDetails.billingDetails.stateName;
-                    delete data.accountDetails.shippingDetails.state;
-                    delete data.accountDetails.shippingDetails.stateCode;
-                    delete data.accountDetails.shippingDetails.stateName;
-                }
                 requestObject = {
                     account: data.accountDetails,
                     updateAccountDetails: this.updateAccount,
@@ -4494,6 +4469,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         requestObject = this.adjustmentUtilityService.getAdjustmentObjectVoucherModule(requestObject);
                     }
                 }
+                requestObject = this.deleteUnusedVoucherUpdateObjectKey(requestObject);
                 let updatedData = <GenericRequestForGenerateSCD>this.updateData(requestObject, requestObject.voucher);
                 if (this.voucherApiVersion === 2) {
                     updatedData = this.voucherUtilityService.getVoucherRequestObjectForInvoice(updatedData);
@@ -4521,6 +4497,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         purchaseOrders.push({ name: this.linkedPoNumbers[order]?.voucherNumber, uniqueName: order });
                     });
                 }
+
                 requestObject = {
                     account: data.accountDetails,
                     number: this.invFormData.voucherDetails.voucherNumber,
@@ -4536,7 +4513,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     purchaseOrders: purchaseOrders,
                     company: this.purchaseBillCompany
                 } as PurchaseRecordRequest;
-
+                requestObject = this.deleteUnusedVoucherUpdateObjectKey(requestObject);
                 if (this.voucherApiVersion === 2) {
                     requestObject = <GenericRequestForGenerateSCD>this.updateData(requestObject, data);
                     requestObject = this.voucherUtilityService.getVoucherRequestObjectForInvoice(requestObject);
@@ -4555,7 +4532,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (this.voucherApiVersion === 2) {
                     requestObject = this.voucherUtilityService.cleanObject(requestObject);
                 }
-
+                requestObject = this.deleteUnusedVoucherUpdateObjectKey(requestObject);
                 this.salesService.updateVoucher(requestObject).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
                         this.actionsAfterVoucherUpdate(response, form);
@@ -4565,6 +4542,83 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     });
             }
         }
+    }
+
+    /**
+     * This will delete key of unused in voucher object
+     *
+     * @param {*} data
+     * @return {*}  {void}
+     * @memberof VoucherComponent
+     */
+    public deleteUnusedVoucherUpdateObjectKey(data: any): void {
+        if (this.showGSTINNo) {
+            if (data?.account) {
+                delete data.account?.billingDetails?.county;
+                delete data.account?.shippingDetails?.county;
+            }
+            if (data?.accountDetails) {
+                delete data.accountDetails?.billingDetails?.county;
+                delete data.accountDetails?.shippingDetails?.county;
+            }
+
+            if (data?.company) {
+                delete data.company?.billingDetails?.county;
+                delete data.company?.shippingDetails?.county;
+            }
+            if (data?.companyDetails) {
+                delete data.companyDetails?.billingDetails?.county;
+                delete data.companyDetails?.shippingDetails?.county;
+            }
+        }
+        if (this.showVATNo) {
+            if (data?.account) {
+                delete data.account?.billingDetails?.state;
+                delete data.account?.billingDetails?.stateCode;
+                delete data.account?.billingDetails?.stateName;
+                delete data.account?.billingDetails?.stateName;
+
+                delete data.account?.shippingDetails?.state;
+                delete data.account?.shippingDetails?.stateCode;
+                delete data.account?.shippingDetails?.stateName;
+                delete data.account?.shippingDetails?.gstNumber;
+            }
+            if (data?.accountDetails) {
+                delete data.accountDetails?.billingDetails?.state;
+                delete data.accountDetails?.billingDetails?.stateCode;
+                delete data.accountDetails?.billingDetails?.stateName;
+                delete data.accountDetails?.billingDetails?.gstNumber;
+
+                delete data.accountDetails?.shippingDetails?.state;
+                delete data.accountDetails?.shippingDetails?.stateCode;
+                delete data.accountDetails?.shippingDetails?.stateName;
+                delete data.accountDetails?.shippingDetails?.gstNumber;
+            }
+
+            if (data?.company) {
+                delete data.company?.billingDetails?.state;
+                delete data.company?.billingDetails?.stateCode;
+                delete data.company?.billingDetails?.stateName;
+                delete data.company?.billingDetails?.gstNumber;
+
+                delete data.company?.shippingDetails?.state;
+                delete data.company?.shippingDetails?.stateCode;
+                delete data.company?.shippingDetails?.stateName;
+                delete data.company?.shippingDetails?.gstNumber;
+            }
+            if (data?.companyDetails) {
+                delete data.companyDetails?.billingDetails?.state;
+                delete data.companyDetails?.billingDetails?.stateCode;
+                delete data.companyDetails?.billingDetails?.stateName;
+                delete data.companyDetails?.billingDetails?.gstNumber;
+
+                delete data.companyDetails?.shippingDetails?.state;
+                delete data.companyDetails?.shippingDetails?.stateCode;
+                delete data.companyDetails?.shippingDetails?.stateName;
+                delete data.companyDetails?.shippingDetails?.gstNumber;
+            }
+        }
+        return data;
     }
 
     /**
@@ -5757,13 +5811,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     if (!isCompanyStates) {
                         if (countryCode !== 'GB') {
                             this.statesSource = this.countryStates[countryCode];
+                        } else {
+                            this.regionsSource = this.countryStates[countryCode];
                         }
-                        this.regionsSource = this.countryStates[countryCode];
                     } else {
                         if (countryCode !== 'GB') {
                             this.companyStatesSource = this.countryStates[countryCode];
+                        } else {
+                            this.companyRegionsSource = this.countryStates[countryCode];
                         }
-                        this.companyRegionsSource = this.countryStates[countryCode];
                     }
                     this.startLoader(false);
                     resolve();
@@ -5773,13 +5829,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         if (!isCompanyStates) {
                             if (countryCode !== 'GB') {
                                 this.statesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
+                            } else {
+                                this.regionsSource = this.modifyStateResp((resp.body) ? resp.body?.countyList : [], countryCode);
                             }
-                            this.regionsSource = this.modifyStateResp((resp.body) ? resp.body?.countyList : [], countryCode);
                         } else {
                             if (countryCode !== 'GB') {
                                 this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
+                            } else {
+                                this.companyRegionsSource = this.modifyStateResp((resp.body) ? resp.body?.countyList : [], countryCode);
                             }
-                            this.companyRegionsSource = this.modifyStateResp((resp.body) ? resp.body?.countyList : [], countryCode);
                         }
                         resolve();
                     }, () => {
@@ -8317,12 +8375,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
-     * Updates account details
-     *
-     * @private
-     * @param {*} data
-     * @memberof VoucherComponent
-     */
+    * Updates account details
+    *
+    * @private
+    * @param {*} data
+    * @memberof VoucherComponent
+    */
     private updateAccountDetails(data: any): void {
         this.getUpdatedStateCodes(data.country.countryCode).then(() => {
             if (data.addresses && data.addresses.length) {
@@ -8333,16 +8391,24 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.invFormData.accountDetails = new AccountDetailsClass(data);
             }
             if (this.invFormData.accountDetails) {
-                this.getStateCode('billingDetails', this.statesBilling);
+                this.getStateCode('billingDetails');
                 this.autoFillShippingDetails();
             } else {
-                this.statesBilling.readonly = (this.isEinvoiceGenerated) ? true : false;
+                if (this.isEinvoiceGenerated) {
+                    this.makeFieldReadonly("billingState", true);
+                } else {
+                    this.makeFieldReadonly("billingState", false);
+                }
                 this._cdr.detectChanges();
             }
             if (this.invFormData.accountDetails.shippingDetails?.gstNumber) {
-                this.getStateCode('shippingDetails', this.statesShipping);
+                this.getStateCode('shippingDetails');
             } else {
-                this.statesShipping.readonly = (this.isEinvoiceGenerated) ? true : false;
+                if (this.isEinvoiceGenerated) {
+                    this.makeFieldReadonly("shippingState", true);
+                } else {
+                    this.makeFieldReadonly("shippingState", false);
+                }
                 this._cdr.detectChanges();
             }
 
@@ -8898,6 +8964,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let interval = setInterval(() => {
             if (fieldType === "billingState" && this.statesBilling) {
                 clearInterval(interval);
+                this.statesBilling.readonly = isReadonly;
+            }
+            if (fieldType === "shippingState" && this.statesShipping) {
+                clearInterval(interval);
+                this.statesShipping.readonly = isReadonly;
+            }
+            if (fieldType === "stateEle" && (this.statesShipping || this.statesBilling)) {
+                clearInterval(interval);
+                this.statesShipping.readonly = isReadonly;
                 this.statesBilling.readonly = isReadonly;
             }
         }, 300);
