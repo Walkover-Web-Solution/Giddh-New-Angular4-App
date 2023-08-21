@@ -37,3 +37,12 @@
 .mat-menu-content:not(:empty) {
     padding: 0 !important;
 }
+
+body {
+    &.master-page,
+    .cmd-k {
+        .cdk-overlay-container {
+            z-index: 99999 !important;
+        }
+    }
+}

@@ -114,7 +114,12 @@
                                 <p class="block text-center mr-b2">{{ localeData?.no_records_found }}</p>
                                 <ng-container *ngIf="showChannelCreateBtn">
                                     <div class="d-flex column-gap15 justify-content-center">
-                                        <button mat-stroked-button color="primary" (click)="triggerAddManage('group')">
+                                        <button
+                                            mat-stroked-button
+                                            mat-dialog-close
+                                            color="primary"
+                                            (click)="triggerAddManage('group')"
+                                        >
                                             {{ commonLocaleData?.app_create_group }}
                                         </button>
                                         <button
