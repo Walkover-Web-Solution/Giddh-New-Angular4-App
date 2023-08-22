@@ -334,9 +334,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_create);
 
                     if (!this.addGroup) {
+                        this.resetGroupForm();
                         this.getStockGroups();
                         this.resetTaxes();
-                        this.resetGroupForm();
                     } else {
                         this.resetGroupForm();
                         this.closeAsideEvent.emit();
