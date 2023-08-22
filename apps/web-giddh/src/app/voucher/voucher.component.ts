@@ -2374,6 +2374,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.fillDeliverToAddress();
         this.createEmbeddedViewAtIndex(0);
         this.onSearchQueryChanged('', 1, 'customer');
+        this.invFormData.voucherDetails.customerName = "";
 
         if (this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint && this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndRecurring && this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend && !this.isUpdateMode) {
             setTimeout(() => {
