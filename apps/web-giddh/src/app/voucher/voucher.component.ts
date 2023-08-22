@@ -8385,7 +8385,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     * @param {*} data
     * @memberof VoucherComponent
     */
-        private updateAccountDetails(data: any): void {
+    private updateAccountDetails(data: any): void {
         this.getUpdatedStateCodes(data.country.countryCode).then(() => {
             if (data.addresses && data.addresses.length) {
                 data.addresses = [find(data.addresses, (tax) => tax.isDefault)];
@@ -8403,7 +8403,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 } else {
                     this.makeFieldReadonly("billingState", false);
                 }
-                this._cdr.detectChanges();
+                this.changeDetectorRef.detectChanges();
             }
             if (this.invFormData.accountDetails.shippingDetails?.gstNumber) {
                 this.getStateCode('shippingDetails');
@@ -8413,14 +8413,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 } else {
                     this.makeFieldReadonly("shippingState", false);
                 }
-                this._cdr.detectChanges();
+                this.changeDetectorRef.detectChanges();
             }
 
             setTimeout(() => {
                 if (this.customerBillingAddress && this.customerBillingAddress.nativeElement) {
                     this.customerBillingAddress.nativeElement.focus();
                 }
-                this._cdr.detectChanges();
+                this.changeDetectorRef.detectChanges();
             }, 500);
         });
     }
