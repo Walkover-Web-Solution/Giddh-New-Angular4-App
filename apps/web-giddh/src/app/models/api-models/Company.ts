@@ -338,6 +338,7 @@ export class PlanDetails {
     companiesLimit: number;
     durationUnit: string;
     transactionLimit: number;
+    currency?: any;
 }
 
 export class UserDetail {
