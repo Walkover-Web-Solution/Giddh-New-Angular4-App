@@ -159,7 +159,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isGstSideMenuOpened: boolean = false;
     /** VAT supported countries to show the Vat Report section in all modules */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
-    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
 
     /* This will store modal reference */
     public modalRef: BsModalRef;
@@ -838,14 +838,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         right: '0',
                         top: '0'
                     }
-                });
-
-                this.asideHelpSupportDialogRef.afterOpened().pipe(take(1)).subscribe(response => {
-                    document.querySelector('body')?.classList?.add('fixed');
-                });
-
-                this.asideHelpSupportDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-                    document.querySelector('body')?.classList?.remove('fixed');
                 });
             }
         } else {
@@ -1566,15 +1558,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             };
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         }
-    }
-
-    /**
-     * This will navigate user to mobile home page
-     *
-     * @memberof HeaderComponent
-     */
-    public redirectToMobileHome(): void {
-        this.router.navigate(['/pages/mobile/home']);
     }
 
     /**

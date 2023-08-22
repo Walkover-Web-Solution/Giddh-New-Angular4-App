@@ -3,10 +3,10 @@ import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
 dayjs.extend(quarterOfYear) // use plugin
 
 export const Configuration = {
-    AppUrl,
-    ApiUrl,
-    isElectron,
-    APP_FOLDER
+    'AppUrl': AppUrl,
+    'ApiUrl': ApiUrl,
+    'isElectron': isElectron,
+    'APP_FOLDER': APP_FOLDER
 };
 
 /** Add Company business type*/
@@ -509,7 +509,7 @@ export const GIDDH_VOUCHER_FORM = [
         attachmentAllowed: false
     }
 ];
-export const CALENDLY_URL = "https://calendly.com/falcon-3/15min";
+export const CALENDLY_URL = "https://calendly.com/sales-accounting-software/talk-to-sale";
 export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
     'giddh.com',
     'walkover.in',

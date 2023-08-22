@@ -1,6 +1,6 @@
 <mat-form-field floatLabel="never">
-    <mat-chip-list #matChipList>
-        <mat-chip
+    <mat-chip-grid #matChipList>
+        <mat-chip-row
             *ngFor="let chip of chipList; let indx = index"
             [selectable]="true"
             [removable]="true"
@@ -8,7 +8,7 @@
         >
             {{ chip }}
             <i class="icon-cross" matChipRemove></i>
-        </mat-chip>
+        </mat-chip-row>
         <input
             type="text"
             matInput
@@ -27,7 +27,7 @@
             class="select-multiple-field-input"
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
         />
-    </mat-chip-list>
+    </mat-chip-grid>
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''">
         <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
             {{ option.label }}

@@ -1,4 +1,4 @@
-import { CanDeactivate } from '@angular/router';
+
 import { Injectable } from '@angular/core';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { AppState } from '../store';
@@ -10,7 +10,7 @@ export interface ComponentCanDeactivate {
 }
 
 @Injectable()
-export class PageLeaveConfirmationGuard implements CanDeactivate<ComponentCanDeactivate> {
+export class PageLeaveConfirmationGuard  {
     /** Maintains if we can by pass all unsaved changes */
     private bypassAllUnsavedChanges: boolean = false;
 

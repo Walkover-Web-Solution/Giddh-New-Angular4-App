@@ -14,7 +14,7 @@ import { KeyboardShortutModule } from '../helpers/directives/keyboardShortcut/ke
         CommonModule, FormsModule, ReactiveFormsModule, ShSelectModule, LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
-        }), DecimalDigitsModule, BsDatepickerModule, KeyboardShortutModule
+        }), DecimalDigitsModule, BsDatepickerModule.forRoot(), KeyboardShortutModule
     ],
     exports: [AsideMenuCreateTaxComponent],
     declarations: [AsideMenuCreateTaxComponent],

@@ -109,14 +109,14 @@
                                         />
                                     </a>
                                     <div class="position-absolute datepicker-account">
-                                        <datepicker
+                                        <bs-datepicker-inline
                                             *ngIf="card.isDatePickerOpen"
                                             name="fromDate"
                                             [(ngModel)]="card.transactionDate"
                                             (selectionDone)="onUpdateDate($event, card)"
-                                            [showWeeks]="true"
+                                            [bsConfig]="{ startView: 'week' }"
                                         >
-                                        </datepicker>
+                                        </bs-datepicker-inline>
                                     </div>
                                 </div>
                                 <div class="balance text-left">{{ card.balanceCurrencyCode }} {{ card.balance }}</div>

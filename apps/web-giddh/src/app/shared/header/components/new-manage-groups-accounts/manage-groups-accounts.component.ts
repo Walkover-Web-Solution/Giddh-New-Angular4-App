@@ -3,9 +3,7 @@ import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitte
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
-import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { GeneralService } from "../../../../services/general.service";
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
@@ -27,8 +25,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public headerRect: any;
     public showForm: boolean = false;
     @ViewChild('myModel', { static: true }) public myModel: ElementRef;
-    public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
-    @ViewChild('perfectdirective', { static: true }) public directiveScroll: PerfectScrollbarComponent;
     public breadcrumbPath: string[] = [];
     public breadcrumbUniquePath: string[] = [];
     public myModelRect: any;
@@ -228,8 +224,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     }
 
     public scrollToRight(): void {
-        if (this.directiveScroll) {
-            this.directiveScroll.directiveRef.scrollToRight();
+        let element = document.querySelector('#horizontal-master-scroll');
+        if (element) {
+            element.scrollLeft = element.scrollWidth;
         }
     }
 

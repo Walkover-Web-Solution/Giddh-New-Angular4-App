@@ -1,0 +1,27 @@
+#tab-integration {
+    .mat-tab-body-wrapper {
+        overflow: auto !important;
+        min-height: calc(100vh - 118px);
+    }
+}
+
+@media screen and (max-width: 1440px) {
+    /*--- subscription ---*/
+    .menu-two-list {
+        .menu-two-list-items {
+            .mat-body-1{
+                font-size: 13px;
+            }
+        }
+    }
+    .main-content-subscription{
+        .mat-mdc-text-field-wrapper{
+            padding: 0 5px 0 5px;
+        }
+    }
+    .main-content{
+        .expand-button {
+            left: 75% !important;
+        }
+    } 
+}

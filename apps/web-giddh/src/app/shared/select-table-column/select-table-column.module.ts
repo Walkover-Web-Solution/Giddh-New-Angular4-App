@@ -6,7 +6,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { SelectTableColumnComponent } from './select-table-column.component';
 
 @NgModule({
