@@ -2698,7 +2698,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             requestObject.account.shippingDetails.countryCode = this.customerCountryCode;
             requestObject.account.shippingDetails.stateCode = requestObject.account.shippingDetails.state?.code;
             requestObject.account.shippingDetails.stateName = requestObject.account.shippingDetails.state?.name;
-            requestObject = this.deleteUnusedVoucherUpdateObjectKey(requestObject);
             /** Tourist scheme is applicable only for voucher type 'sales invoice' and 'Cash Invoice' and company country code 'AE'   */
             if (this.isSalesInvoice || this.isCashInvoice) {
                 if (this.invFormData.touristSchemeApplicable) {
@@ -2755,7 +2754,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 purchaseOrders: purchaseOrders,
                 company: this.purchaseBillCompany
             } as PurchaseRecordRequest;
-            requestObject = this.deleteUnusedVoucherUpdateObjectKey(requestObject);
             /** Advance receipts adjustment */
             if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
                 if (this.advanceReceiptAdjustmentData.adjustments.length) {
@@ -2817,10 +2815,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.voucherApiVersion === 2) {
                 updatedData = this.voucherUtilityService.cleanObject(updatedData);
             }
+            updatedData = this.deleteUnusedVoucherUpdateObjectKey(updatedData);
 
             this.store.dispatch(this.proformaActions.generateProforma(updatedData));
         } else {
-            requestObject = this.deleteUnusedVoucherUpdateObjectKey(requestObject);
             let updatedData = requestObject;
             let isVoucherV4 = false;
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote || this.isPurchaseInvoice) {
@@ -2854,7 +2852,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     if (this.voucherApiVersion === 2) {
                         updatedData = this.voucherUtilityService.cleanObject(updatedData);
                     }
-
                     this.generatePurchaseRecord(updatedData);
                 } else {
                     if (this.shippingState && this.shippingState.nativeElement && (!this.invFormData.accountDetails.shippingDetails.state.code || !this.invFormData.accountDetails.shippingDetails.county.code)) {
@@ -2871,6 +2868,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             } else {
                 if (this.isPendingVoucherType) {
                     let apiCallObservable;
+                    updatedData = this.deleteUnusedVoucherUpdateObjectKey(updatedData);
 
                     if (this.voucherApiVersion === 2) {
                         updatedData = this.voucherUtilityService.cleanObject(updatedData);
@@ -2894,6 +2892,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     if (this.voucherApiVersion === 2) {
                         updatedData = this.voucherUtilityService.cleanObject(updatedData);
                     }
+                    updatedData = this.deleteUnusedVoucherUpdateObjectKey(updatedData);
+
                     this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
                         this.handleGenerateResponse(response, form);
                     }, () => {
@@ -4319,7 +4319,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             let data = requestObject.voucher;
             let exRate = this.originalExchangeRate;
             let unqName = this.invoiceUniqueName || this.accountUniqueName;
-            data = this.deleteUnusedVoucherUpdateObjectKey(data);
             let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
             let entries = data.entries;
             entries.forEach(entry => {
@@ -4367,7 +4366,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 salesEntryClassArray.push(salesEntryClass);
             });
-            data = this.deleteUnusedVoucherUpdateObjectKey(data);
             requestObject = {
                 account: data.accountDetails,
                 updateAccountDetails: this.updateAccount,
@@ -4401,7 +4399,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             let data = requestObject.voucher;
             let exRate = this.originalExchangeRate;
             let unqName = this.invoiceUniqueName || this.accountUniqueName;
-            data = this.deleteUnusedVoucherUpdateObjectKey(data);
             // sales and cash invoice uses v4 api so need to parse main object to regarding that
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
                 if (this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
@@ -4479,13 +4476,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         requestObject = this.adjustmentUtilityService.getAdjustmentObjectVoucherModule(requestObject);
                     }
                 }
-                requestObject = this.deleteUnusedVoucherUpdateObjectKey(requestObject);
                 let updatedData = <GenericRequestForGenerateSCD>this.updateData(requestObject, requestObject.voucher);
                 if (this.voucherApiVersion === 2) {
                     updatedData = this.voucherUtilityService.getVoucherRequestObjectForInvoice(updatedData);
                     updatedData = this.voucherUtilityService.cleanObject(updatedData);
                 }
-                this.salesService.updateVoucherV4(updatedData).pipe(takeUntil(this.destroyed$))
+                let updatedNewData = this.deleteUnusedVoucherUpdateObjectKey(updatedData);
+
+                this.salesService.updateVoucherV4(updatedNewData).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
                         this.actionsAfterVoucherUpdate(response, form);
                     }, (err) => {
@@ -4523,7 +4521,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     purchaseOrders: purchaseOrders,
                     company: this.purchaseBillCompany
                 } as PurchaseRecordRequest;
-                requestObject = this.deleteUnusedVoucherUpdateObjectKey(requestObject);
                 if (this.voucherApiVersion === 2) {
                     requestObject = <GenericRequestForGenerateSCD>this.updateData(requestObject, data);
                     requestObject = this.voucherUtilityService.getVoucherRequestObjectForInvoice(requestObject);
@@ -4586,7 +4583,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 delete data.account?.billingDetails?.state;
                 delete data.account?.billingDetails?.stateCode;
                 delete data.account?.billingDetails?.stateName;
-                delete data.account?.billingDetails?.stateName;
+                delete data.account?.billingDetails?.gstNumber;
 
                 delete data.account?.shippingDetails?.state;
                 delete data.account?.shippingDetails?.stateCode;
@@ -6298,6 +6295,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     private createPurchaseRecord(request: PurchaseRecordRequest): void {
         // Create a new puchase record with voucher API for voucher version 2 else create a new purchase record with its own API
+        if (this.showVATNo) {
+            delete request['company'].billingDetails.gstNumber;
+            delete request['company'].shippingDetails.gstNumber;
+        }
         const apiCallObservable = this.voucherApiVersion === 2 ?
             this.salesService.generateGenericItem(request, true) : this.purchaseRecordService.generatePurchaseRecord(request);
         apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
