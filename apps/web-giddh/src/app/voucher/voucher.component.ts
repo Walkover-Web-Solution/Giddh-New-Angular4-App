@@ -8961,6 +8961,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.isEntryDatepickerOpen = event;
     }
 
+    /**
+     * This will be use for field read only 
+     *
+     * @param {string} fieldType
+     * @param {boolean} isReadonly
+     * @memberof VoucherComponent
+     */
     public makeFieldReadonly(fieldType: string, isReadonly: boolean): void {
         let interval = setInterval(() => {
             if (fieldType === "billingState" && this.statesBilling) {
