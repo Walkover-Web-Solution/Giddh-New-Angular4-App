@@ -5,6 +5,13 @@
     }
 }
 
+/*--- select-chip ---*/
+select-multiple-fields{
+    .mat-mdc-standard-chip.mdc-evolution-chip--with-trailing-action .mdc-evolution-chip__action--trailing i{
+        font-size: 12px;
+    }
+}
+
 @media screen and (max-width: 1440px) {
     /*--- subscription ---*/
     .menu-two-list {
