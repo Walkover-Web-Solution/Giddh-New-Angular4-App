@@ -682,7 +682,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     // Deletion case, item was deleted and no current entry is active
                     return;
                 }
-                const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params.variantUniqueName;
+                const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params?.variantUniqueName;
                 let stockAllVariants;
                 res[this.currentlyLoadedStockVariantIndex ?? this.activeIndex].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
                 if (stockAllVariants.findIndex(variant => variant.value === currentEntryStockVariantUniqueName) === -1) {
@@ -692,8 +692,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             otherwise the user has opened the invoice for edit flow
                         */
                         currentlyLoadedVariantRequest.txn.variant = { name: stockAllVariants[0].label, uniqueName: stockAllVariants[0].value };
-                        // include the variant unique name for the API call
-                        currentlyLoadedVariantRequest.params.variantUniqueName = stockAllVariants[0].value;
+                        if (currentlyLoadedVariantRequest.params) {
+                            // include the variant unique name for the API call
+                            currentlyLoadedVariantRequest.params.variantUniqueName = stockAllVariants[0].value;
+                        }
                         this.loadDetails(currentlyLoadedVariantRequest);
                     }
                 }
@@ -1424,11 +1426,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 };
             }
             this.currentTxnRequestObject[this.activeIndex] = {
-                selectedAcc,
-                txn,
-                entry,
-                params,
-                entryIndex
+                selectedAcc: selectedAcc,
+                txn: txn,
+                entry: entry,
+                params: params,
+                entryIndex: entryIndex
             };
             if (isBulkItem) {
                 const allStockVariants = this.stockVariants.getValue();
