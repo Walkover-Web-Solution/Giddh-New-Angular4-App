@@ -1500,4 +1500,15 @@ export class GeneralService {
             callback(blob, file);
         };
     }
+
+    /**
+     * Check if is cidr range
+     *
+     * @param {string} cidr
+     * @return {*}  {boolean}
+     * @memberof GeneralService
+     */
+    public isCidr(cidr: string): boolean {
+        return (/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))?$/g).test(cidr);
+    };
 }

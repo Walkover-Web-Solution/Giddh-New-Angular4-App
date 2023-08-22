@@ -292,6 +292,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      */
     public periodChanged(event?: any): void {
         if (event) {
+            this.selectedMonth = event;
             this.currentPeriod = {
                 from: dayjs(event).startOf('month').format(GIDDH_DATE_FORMAT),
                 to: dayjs(event).endOf('month').format(GIDDH_DATE_FORMAT)

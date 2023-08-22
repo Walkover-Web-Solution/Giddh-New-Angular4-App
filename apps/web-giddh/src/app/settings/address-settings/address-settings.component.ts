@@ -1,9 +1,9 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { combineLatest, of, ReplaySubject } from 'rxjs';
+import { combineLatest, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { PAGINATION_LIMIT } from '../../app.constant';
@@ -200,7 +200,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof AddressSettingsComponent
      */
-    public ngOnChanges(): void {
+    public ngOnChanges(changes: SimpleChanges): void {
         this.hideLinkEntity = true;
 
         if (this.addresses?.length > 1) {
@@ -213,6 +213,12 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 }
             });
+        }
+
+        if (changes.closeSidePane?.currentValue) {
+            if (this.accountAsideMenuState === 'in') {
+                this.toggleAccountAsidePane();
+            }
         }
     }
 
