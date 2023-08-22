@@ -8,7 +8,7 @@
     <div id="main" class="welcome-container clearfix">
         <div>
             <div class="row mt-2 mr-0 ml-0">
-                <div class="col-xs-12 col-md-5 col-sm-6">
+                <div class="col-xl-5 col-lg-12 order-1 order-xl-0">
                     <h1 class="border-btm">{{ localeData?.try_things }}</h1>
                     <mat-list role="list" class="manage-invoice pt-0">
                         <mat-list-item role="listitem" class="mr-b1 px-0">
@@ -78,6 +78,20 @@
                                 <img src="{{ imgPath }}Schedule.png" alt="" />
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="col-xl-7 col-lg-12 order-0 order-xl-1 mb-5">
+                    <h1 class="border-btm">{{ localeData?.watch_onboarding }}</h1>
+                    <div class="onboarding-video">
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            src="https://www.youtube-nocookie.com/embed/UiqdOuYpZrA?rel=0"
+                            title="YouTube video player"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen
+                        ></iframe>
                     </div>
                 </div>
             </div>

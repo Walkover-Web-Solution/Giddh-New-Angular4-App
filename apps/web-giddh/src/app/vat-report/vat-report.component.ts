@@ -1,6 +1,6 @@
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { VatReportRequest } from '../models/api-models/Vat';
 import { Store, select } from '@ngrx/store';
@@ -11,7 +11,6 @@ import { VatService } from "../services/vat.service";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/defaultDateFormat";
 import { saveAs } from "file-saver";
-import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReconcileService } from '../services/gst-reconcile.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
@@ -34,10 +33,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public fromDate: string = '';
     public toDate: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    @ViewChild('monthWise', { static: true }) public monthWise: BsDropdownDirective;
     @ViewChild('periodDropdown', { static: true }) public periodDropdown;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     public isMonthSelected: boolean = true;
     public currentPeriod: any = {};
     public showCalendar: boolean = false;
@@ -144,7 +142,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
-                this.isUKCompany = this.activeCompany.countryV2.alpha2CountryCode === 'GB' ? true : false;
+                this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB' ? true : false;
             }
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -219,8 +217,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
         if (this.taxNumber) {
             let vatReportRequest = new VatReportRequest();
-            console.log(this.fromDate, this.toDate);
-
             vatReportRequest.from = this.fromDate;
             vatReportRequest.to = this.toDate;
             vatReportRequest.taxNumber = this.taxNumber;
