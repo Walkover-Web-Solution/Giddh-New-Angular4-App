@@ -3931,7 +3931,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             case ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint: {
                 this.startLoader(false);
                 this.dialog.open(this.printVoucherModal, {
-                    width: '100%'
+                    width: '100%',
+                    maxHeight: '80vh'
                 });
                 break;
             }
