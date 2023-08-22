@@ -775,7 +775,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceActions: InvoiceActions,
         private _breakpointObserver: BreakpointObserver,
-        private _cdr: ChangeDetectorRef,
+        private changeDetectorRef: ChangeDetectorRef,
         private proformaActions: ProformaActions,
         private _ledgerService: LedgerService,
         private voucherUtilityService: VoucherUtilityService,
@@ -944,7 +944,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         setTimeout(() => {
                             this.openAccountSelectionDropdown?.openDropdownPanel();
                         }, 500);
-                        this._cdr.detectChanges();
+                        this.changeDetectorRef.detectChanges();
                         this.prepareCompanyCountryAndCurrencyFromProfile(profile);
                     });
 
@@ -1362,7 +1362,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         } else {
                             this.isInvoiceAdjustedWithAdvanceReceipts = false;
                         }
-                        this._cdr.detectChanges();
+                        this.changeDetectorRef.detectChanges();
                     }
 
                     if (obj.voucherDetails) {
@@ -1575,7 +1575,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.calculateBalanceDue();
                 this.calculateTotalDiscount();
                 this.calculateTotalTaxSum();
-                this._cdr.detectChanges();
+                this.changeDetectorRef.detectChanges();
             });
         // endregion
 
@@ -1885,7 +1885,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public startLoader(shouldStartLoader: boolean): void {
         this.showLoader = shouldStartLoader;
-        this._cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -1927,14 +1927,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             setTimeout(() => {
                 this.openAccountSelectionDropdown?.openDropdownPanel();
             }, 500);
-            this._cdr.detectChanges();
+            this.changeDetectorRef.detectChanges();
         }
         if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
             setTimeout(() => {
                 this.openAccountSelectionDropdown?.openDropdownPanel();
             }, 500);
-            this._cdr.detectChanges();
+            this.changeDetectorRef.detectChanges();
         }
     }
 
@@ -2048,7 +2048,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     }
                     uniqBy(this.invoiceList, 'value');
                     this.invoiceList$ = observableOf(this.invoiceList);
-                    this._cdr.detectChanges();
+                    this.changeDetectorRef.detectChanges();
                 }
             });
         }
@@ -2474,7 +2474,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public onSubmitInvoiceForm(form?: NgForm) {
 
         this.isShowLoader = true;
-        this._cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
         let invoiceType = this.getVoucherType(this.invoiceType);
         if ((this.isSalesInvoice || this.isPurchaseInvoice) && this.depositAccountUniqueName && (this.userDeposit === null || this.userDeposit === undefined)) {
             this.userDeposit = 0;
@@ -3730,7 +3730,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         }
         if (!isBulkItem) {
-            this._cdr.detectChanges();
+            this.changeDetectorRef.detectChanges();
         }
         return transaction;
     }
@@ -5733,7 +5733,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.previousExchangeRate = this.exchangeRate;
                     this.originalExchangeRate = rate;
                     this.exchangeRate = rate;
-                    this._cdr.detectChanges();
+                    this.changeDetectorRef.detectChanges();
                     if (from !== to) {
                         // Multi currency case
                         this.recalculateEntriesTotal();
@@ -6674,11 +6674,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 } else {
                     this.isAccountHaveAdvanceReceipts = false;
                 }
-                this._cdr.detectChanges();
+                this.changeDetectorRef.detectChanges();
             });
         } else {
             this.isAccountHaveAdvanceReceipts = false;
-            this._cdr.detectChanges();
+            this.changeDetectorRef.detectChanges();
         }
     }
 
@@ -6761,7 +6761,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.prepareSearchLists(data.body.results, page, searchType);
                     this.makeCustomerList();
                     this.noResultsFoundLabel = SearchResultText.NotFound;
-                    this._cdr.detectChanges();
+                    this.changeDetectorRef.detectChanges();
                     if (searchType === SEARCH_TYPE.CUSTOMER) {
                         this.searchCustomerResultsPaginationData.page = data.body.page;
                         this.searchCustomerResultsPaginationData.totalPages = data.body.totalPages;
@@ -7177,7 +7177,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.removePoItem();
             }
         }
-        this._cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -7415,7 +7415,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.purchaseBillCompany.shippingDetails.county.code = stateCode;
             }
         }
-        this._cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -7441,7 +7441,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.purchaseBillCompany[type].state.code = null;
         }
         this.checkGstNumValidation(gstVal);
-        this._cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -7514,7 +7514,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
         });
-        this._cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -7917,7 +7917,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (index === (this.invFormData.entries?.length - 1)) {
                     this.showBulkLoader = false;
                 }
-                this._cdr.detectChanges();
+                this.changeDetectorRef.detectChanges();
             }, 30 * index);
         }
     }
@@ -7997,7 +7997,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.giddhBalanceDecimalPlaces);
             }
         }
-        this._cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -8317,7 +8317,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (this.attachmentDeleteConfirmationModel) {
                     this.dialog.closeAll();
                 }
-                this._cdr.detectChanges();
+                this.changeDetectorRef.detectChanges();
             } else {
                 this._toasty.errorToast(response?.message)
             }
@@ -8408,7 +8408,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 } else {
                     this.makeFieldReadonly("billingState", false);
                 }
-                this._cdr.detectChanges();
+                this.changeDetectorRef.detectChanges();
             }
             if (this.invFormData.accountDetails.shippingDetails?.gstNumber) {
                 this.getStateCode('shippingDetails');
@@ -8418,14 +8418,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 } else {
                     this.makeFieldReadonly("shippingState", false);
                 }
-                this._cdr.detectChanges();
+                this.changeDetectorRef.detectChanges();
             }
 
             setTimeout(() => {
                 if (this.customerBillingAddress && this.customerBillingAddress.nativeElement) {
                     this.customerBillingAddress.nativeElement.focus();
                 }
-                this._cdr.detectChanges();
+                this.changeDetectorRef.detectChanges();
             }, 500);
         });
     }
@@ -8641,7 +8641,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.calculateGrandTotal();
             this.calculateBalanceDue();
         }
-        this._cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -8689,7 +8689,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 transaction.sacNumber = cloneDeep(transaction.hsnNumber);;
                 transaction.hsnNumber = null;
             }
-            this._cdr.detectChanges();
+            this.changeDetectorRef.detectChanges();
         }, 100);
     }
 
@@ -8737,7 +8737,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     private toggleAccountSelectionDropdown(status: boolean): void {
         if (status) {
             this.openAccountSelectionDropdown?.openDropdownPanel();
-            this._cdr.detectChanges();
+            this.changeDetectorRef.detectChanges();
         }
     }
 
