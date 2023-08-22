@@ -168,6 +168,11 @@
     background-color: var(--color-white);
     border: 1px solid var(--color-blue);
 }
+.permission-btn{
+    color: var(--color-white) !important;
+}
+
+
 @media (max-width: 767px) {
     .role {
         ul {
