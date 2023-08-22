@@ -20,7 +20,7 @@ stock-balance {
                 padding: 12px 0 !important;
                 .mat-mdc-input-element{
                     &::placeholder{
-                        color: var(--color-popup-list-input-text) !important;
+                        color: var(--color-gray) !important;
                     }
                 }
             }
@@ -46,6 +46,7 @@ stock-balance {
         }
         .mdc-notched-outline__notch{
             border-color: var(--color-fields-border) !important;
+            border-left: 0 !important;
         }
     }
     .mat-form-field-appearance-outline {
@@ -333,6 +334,13 @@ input {
     }
     .mdc-checkbox__native-control {
         margin: 0 !important;
+    }
+    input[type=checkbox][disabled] {
+        opacity: 0;
+    }
+    input[type=checkbox]::before, 
+    input[type=checkbox]::after {
+        display: none;
     }
 }
 .mat-mdc-checkbox-touch-target {
