@@ -1,6 +1,5 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
-import * as isCidr from 'is-cidr';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -299,7 +298,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             }
             // match cidr
             if (type === 'allowedCidrs') {
-                if (!isCidr(val)) {
+                if (!this.generalService.isCidr(val)) {
                     errFound = true;
                     msg = this.localeData?.invalid_cidr_range;
                 }

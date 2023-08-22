@@ -110,16 +110,14 @@
                                 <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
                                     <li role="menuitem">
                                         <a class="dropdown-item" href="javascript:void(0)">
-                                            <datepicker
-                                                [datepickerMode]="'month'"
+                                            <bs-datepicker-inline
                                                 name="fromDate"
                                                 (click)="$event.stopPropagation()"
-                                                [showWeeks]="false"
-                                                [minMode]="'month'"
-                                                (selectionDone)="periodChanged($event); monthWise?.hide()"
-                                                [ngModel]="selectedMonth"
+                                                (bsValueChange)="periodChanged($event); monthWise.hide()"
+                                                [bsConfig]="{ startView: 'month', dateInputFormat: 'MM/YYYY', adaptivePosition: true, minMode:'month' }"
+                                                [ngModelOptions]="{standalone: true}"
                                             >
-                                            </datepicker>
+                                            </bs-datepicker-inline>
                                         </a>
                                     </li>
                                 </ul>
