@@ -3613,7 +3613,7 @@
                                     {{ commonLocaleData?.app_clear }}
                                 </button>
                                 <!-- region purchase invoice -->
-                                <span class="d-flex column-gap15" *ngIf="isPurchaseInvoice">
+                                <span *ngIf="isPurchaseInvoice">
                                     <button
                                         mat-stroked-button
                                         color="primary"
@@ -3779,7 +3779,7 @@
                             </div>
                             <!-- endregion -->
                             <!-- region update mode -->
-                            <div class="pull-right pr" *ngIf="isUpdateMode">
+                            <div class="pull-right pr d-flex column-gap15" *ngIf="isUpdateMode">
                                 <button mat-stroked-button class="d-inline-block" (click)="cancelUpdate()">
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
@@ -3919,24 +3919,22 @@
     </ng-template>
     <!-- region  adjust payment  popup -->
     <ng-template #adjustPaymentModal>
-        <div class="modal-content">
-            <advance-receipt-adjustment-component
-                *ngIf="showAdvanceReceiptAdjust"
-                #advanceReceiptComponent
-                [adjustedVoucherType]="
-                    voucherApiVersion === 2 && isPendingVoucherType ? invoiceType : selectedVoucherType
-                "
-                [isUpdateMode]="isUpdateMode"
-                [depositAmount]="depositAmount"
-                [invoiceFormDetails]="invFormData"
-                [isVoucherModule]="true && voucherApiVersion !== 2"
-                [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
-                (closeModelEvent)="closeAdvanceReceiptModal()"
-                (submitClicked)="getAdvanceReceiptAdjustData($event)"
-                [voucherForAdjustment]="voucherForAdjustment"
-            >
-            </advance-receipt-adjustment-component>
-        </div>
+        <advance-receipt-adjustment-component
+            *ngIf="showAdvanceReceiptAdjust"
+            #advanceReceiptComponent
+            [adjustedVoucherType]="
+                voucherApiVersion === 2 && isPendingVoucherType ? invoiceType : selectedVoucherType
+            "
+            [isUpdateMode]="isUpdateMode"
+            [depositAmount]="depositAmount"
+            [invoiceFormDetails]="invFormData"
+            [isVoucherModule]="true && voucherApiVersion !== 2"
+            [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
+            (closeModelEvent)="closeAdvanceReceiptModal()"
+            (submitClicked)="getAdvanceReceiptAdjustData($event)"
+            [voucherForAdjustment]="voucherForAdjustment"
+        >
+        </advance-receipt-adjustment-component>
     </ng-template>
     <!-- region  date change confirmation popup -->
     <ng-template #dateChangeConfirmationModel>

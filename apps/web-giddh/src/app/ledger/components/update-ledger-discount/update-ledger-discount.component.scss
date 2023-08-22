@@ -27,6 +27,9 @@
 }
 .my-dropdown-menu {
     padding: 10px;
+    label{
+        font-size: var(--font-size-15) !important;
+    }
 }
 .percent-label,
 .value-label {
