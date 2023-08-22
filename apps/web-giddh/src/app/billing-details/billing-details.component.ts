@@ -294,7 +294,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
      * @memberof BillingDetailComponent
      */
     public onRegionChange(event: any): void {
-        if (event.value) {
+        if (event?.value) {
             this.billingDetailsObj.county.name = event?.label;
             this.billingDetailsObj.county.code = event?.value;
         }
