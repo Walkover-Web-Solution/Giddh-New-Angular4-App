@@ -128,6 +128,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
 
         if (this.fromSubscription && this.selectedPlans) {
             this.prepareSelectedPlanFromSubscriptions(this.selectedPlans);
+        } else {
+            this.route.navigate(['pages', 'user-details', 'subscription'], { queryParams: { showPlans: true } });
         }
 
         this.cdRef.detectChanges();
