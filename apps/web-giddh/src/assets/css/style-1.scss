@@ -375,7 +375,6 @@ aside-menu-account .container-fluid {
 }
 .mr-t1 {
     margin-top: 10px !important;
-    color: var(--color-common-primary-text) !important;
 }
 .mr-t15 {
     margin-top: 15px !important;
@@ -1629,7 +1628,8 @@ ul.pills li {
     color: var(--color-abbey);
 }
 .pos-abs {
-    position: absolute;
+    position: absolute !important;
+    z-index: 9;
 }
 .verified {
     right: 10px;
