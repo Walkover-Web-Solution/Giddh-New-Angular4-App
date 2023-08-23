@@ -8,6 +8,7 @@ import { LedgerService } from '../../services/ledger.service';
 import { IVariant } from '../../models/api-models/Ledger';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GeneralService } from '../../services/general.service';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'voucher-add-bulk-items-component',
@@ -300,16 +301,17 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
      * @memberof VoucherAddBulkItemsComponent
      */
     public variantChanged(item: SalesAddBulkStockItems, event: IOption): void {
-        item.variant = {name: event.label, uniqueName: event.value};
-        const index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${item.uniqueName}#${event.value}`);
+        let selectedItem = cloneDeep(item);
+        selectedItem.variant = {name: event.label, uniqueName: event.value};
+        const index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${selectedItem.uniqueName}#${event.value}`);
         if (index > -1) {
             this.toaster.warningToast(this.localeData?.item_selected);
             return;
         }
         const requestObj = {
-            stockUniqueName: item.additional?.stock?.uniqueName ?? '',
+            stockUniqueName: selectedItem.additional?.stock?.uniqueName ?? '',
             variantUniqueName: event.value
         };
-        this.loadDetails(item, requestObj);
+        this.loadDetails(selectedItem, requestObj);
     }
 }

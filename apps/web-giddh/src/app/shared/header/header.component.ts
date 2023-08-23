@@ -828,11 +828,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public toggleHelpSupportPane(event: boolean): void {
         if (event) {
+            this.toggleSidebarPane(false, false);
             if (this.asideHelpSupportDialogRef?.id && this.dialog.getDialogById(this.asideHelpSupportDialogRef?.id)) {
                 this.asideHelpSupportDialogRef?.close();
             } else {
                 this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
                     width: '1000px',
+                    panelClass: 'aside-help-panel',
                     hasBackdrop: false,
                     position: {
                         right: '0',

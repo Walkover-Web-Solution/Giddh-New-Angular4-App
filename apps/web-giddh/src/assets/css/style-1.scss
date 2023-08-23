@@ -1299,7 +1299,7 @@ table:focus {
     border-right: 0;
 }
 .all-table {
-    .mat-header-cell {
+    .mat-mdc-header-cell {
         padding: 0px 6px !important;
         height: 51.5px;
         &:last-child {
@@ -2766,7 +2766,7 @@ tr.mat-footer-row {
     border-bottom: 1px solid var(--color-table-primary-content-bar-border);
 }
 .mat-mdc-header-cell,
-.mat-cell {
+.mat-mdc-cell {
     font-weight: 400;
     padding: 5px 10px !important;
     text-transform: capitalize;
@@ -2800,7 +2800,7 @@ tr.mat-footer-row {
     tr.mat-footer-row {
         border-top: 1px solid var(--color-table-primary-content-bar-border);
     }
-    td.mat-cell {
+    td.mat-mdc-cell {
         border-bottom-width: 0px !important;
         border-top: 1px solid var(--color-table-primary-content-bar-border);
     }
@@ -2826,23 +2826,23 @@ table.mat-table {
     font-family: var(--font-regular);
 }
 
-th.mat-header-cell:first-of-type,
-td.mat-cell:first-of-type,
+th.mat-mdc-header-cell:first-of-type,
+td.mat-mdc-cell:first-of-type,
 td.mat-footer-cell:first-of-type {
     border-left: none;
     white-space: normal !important;
     word-break: inherit;
 }
 .manufacturing-table {
-    th.mat-header-cell:first-of-type,
-    td.mat-cell:first-of-type,
-    td.mat-footer-cell:first-of-type {
+    th.mat-mdc-header-cell:first-of-type,
+    td.mat-mdc-cell:first-of-type,
+    td.mat-mdc-footer-cell:first-of-type {
         white-space: nowrap !important;
     }
 }
 
-th.mat-header-cell,
-td.mat-cell,
+th.mat-mdc-header-cell,
+td.mat-mdc-cell,
 td.mat-footer-cell {
     vertical-align: middle !important;
     word-break: break-word;
