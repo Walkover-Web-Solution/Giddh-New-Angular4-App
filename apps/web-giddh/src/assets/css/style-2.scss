@@ -7706,7 +7706,7 @@ footer#footer.absolute-footer {
                     .top-bar {
                         border-color: var(--color-common-secondary-border) !important;
                     }
-                }
+                };
             }
         }
     }
@@ -10171,6 +10171,10 @@ body {
         }
     }
 }
+
+// .cdk-overlay-connected-position-bounding-box {
+//     z-index: 9999;
+// }
 
 .cmd-k {
     .cdk-overlay-container {
