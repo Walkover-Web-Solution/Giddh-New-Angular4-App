@@ -168,7 +168,7 @@
 <!-- endregion -->
 
 <!-- region other taxes aside menu -->
-<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
+<!-- <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
 <app-aside-menu-sales-other-taxes
     *ngIf="asideMenuStateForOtherTaxes === 'in'"
     [class]="asideMenuStateForOtherTaxes"
@@ -179,5 +179,18 @@
     (closeModal)="toggleOtherTaxesAsidePane()"
     (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event); toggleOtherTaxesAsidePane()"
 >
-</app-aside-menu-sales-other-taxes>
+</app-aside-menu-sales-other-taxes> -->
+<!-- endregion -->
+<!-- region other taxes aside menu -->
+<ng-template #asideMenuStateForOtherTaxes>    
+    <app-aside-menu-sales-other-taxes
+        [class]="asideMenuStateForOtherTaxes"
+        [taxes]="companyTaxesList"
+        [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
+        [commonLocaleData]="commonLocaleData"
+        (closeModal)="asideMenuStateForOtherTaxesDialogRef.close()"
+        (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event); toggleOtherTaxesAsidePane()"
+    >
+    </app-aside-menu-sales-other-taxes>
+</ng-template>
 <!-- endregion -->
