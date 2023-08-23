@@ -9,35 +9,37 @@
         </div>
     </div>
     <cdk-virtual-scroll-viewport [itemSize]="100">
-        <table class="table basic table-bordered mr-t1">
-            <thead>
-                <tr>
-                    <th *ngFor="let col of sheetHeaders; let i = index">
-                        <sh-select
-                            [options]="giddhHeaders"
-                            name="giddhHeaders_{{ i }}"
-                            [defaultValue]="mappings[i]?.mappedColumn || unmapHeader"
-                            [(ngModel)]="mappings[i].mappedColumn"
-                        >
-                        </sh-select>
-                    </th>
-                </tr>
-                <tr>
-                    <th *ngFor="let col of sheetHeaders; let i = index">
-                        {{ col }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of importData.data.items">
-                    <td *ngFor="let row of item.row">
-                        <div class="text-ellipsis" container="body" [tooltip]="row.columnValue">
-                            {{ row.columnValue }}
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table basic table-bordered mr-t1">
+                <thead>
+                    <tr>
+                        <th *ngFor="let col of sheetHeaders; let i = index">
+                            <sh-select
+                                [options]="giddhHeaders"
+                                name="giddhHeaders_{{ i }}"
+                                [defaultValue]="mappings[i]?.mappedColumn || unmapHeader"
+                                [(ngModel)]="mappings[i].mappedColumn"
+                            >
+                            </sh-select>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th *ngFor="let col of sheetHeaders; let i = index">
+                            {{ col }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of importData.data.items">
+                        <td *ngFor="let row of item.row">
+                            <div class="text-ellipsis" container="body" [tooltip]="row.columnValue">
+                                {{ row.columnValue }}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </cdk-virtual-scroll-viewport>
 </div>
 <!-- Review Field end-->
