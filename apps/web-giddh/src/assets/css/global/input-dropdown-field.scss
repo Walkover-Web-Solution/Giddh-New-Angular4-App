@@ -358,6 +358,7 @@ input {
 
 .mat-mdc-radio-button {
     .mdc-radio {
+        padding: 0 !important;
         .mdc-radio__native-control:enabled:checked+.mdc-radio__background {
             .mdc-radio__outer-circle {
                 border-color: var(--color-giddh-blue) !important;
@@ -366,8 +367,14 @@ input {
                 background-color: var(--color-giddh-blue) !important;
             }
         }
+        &:hover{
+            .mdc-radio__native-control:not([disabled]):not(:focus)~.mdc-radio__background::before {
+                opacity: 0 !important;
+            }
+        }
     }
 }
+
 
 /*---- custom ----*/
 .custom-input-field{
@@ -392,6 +399,17 @@ input {
         }
         .mat-datepicker-input{
             padding: 5px 15px !important;
+        }
+    }
+}
+
+/*----- dropdown-color ----*/
+body{
+    .cdk-overlay-container {
+        .cdk-overlay-pane {
+            .mat-mdc-autocomplete-panel {
+                background-color: var(--color-body-background);
+            }
         }
     }
 }
