@@ -44,6 +44,8 @@ import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-serv
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
     declarations: [
@@ -96,7 +98,9 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         PurchaseOrderPreviewModule,
         GenericAsideMenuAccountModule,
         AsideMenuOtherTaxesModule,
-        AsideMenuProductServiceModule
+        AsideMenuProductServiceModule,
+        FormFieldsModule,
+        MatFormFieldModule
     ]
 })
 export class PurchaseModule {

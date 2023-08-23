@@ -24,6 +24,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/input-dropdown-field.scss";
 @import "../css/global/voucher.scss";
 @import "../css/global/tabs.scss";
+@import "../css/global/table.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -519,7 +520,7 @@ textarea {
     }
 
     .select-multiple-chiplist {
-        .mat-chip.mat-standard-chip {
+        .mat-mdc-chip.mat-mdc-chip-row {
             color: var(--color-chips-primary) !important;
             background-color: var(--color-body-background) !important;
             border: 1px solid var(--color-primary-login-box-body-text) !important;
@@ -533,7 +534,7 @@ textarea {
                 background-color: var(--color-sidebar-company-background) !important;
             }
 
-            .mat-chip-remove {
+            .mat-mdc-chip-remove {
                 font-size: 12px;
                 margin-top: 6px;
                 color: var(--color-chips-primary) !important;
@@ -1055,7 +1056,7 @@ aside-create-group {
             .mdc-list-item__content {
                 padding: 0;
                 a {
-                    color: var(--color-black);
+                    color: var(--color-common-primary-text);
                 }
             }
             &.mat-left {
@@ -4092,8 +4093,10 @@ a.btn.btn-xs.btn-link.pull-right {
     border-color: var(--color-primary-popup-list-header-bottom-border);
 }
 
-.modal-body {
+.modal-body,
+.modal-footer {
     background-color: var(--color-popup-background) !important;
+    width: 100%;
 }
 
 .close-modal {
@@ -10074,7 +10077,7 @@ giddh-datepicker {
                 align-items: center;
             }
             .mdc-button__label{
-                color: var(--color-white);
+                color: var(--color-toast-primary-text);
             }
         }
     }
@@ -10790,7 +10793,7 @@ body.update-scroll-hidden {
 }
 
 .trial-balance-viewport {
-    height: 500px;
+    height: 500px !important;
 }
 
 .gst-sidebar-open {
@@ -14345,7 +14348,7 @@ voucher-component {
 }
 .cdk-virtual-scroll-content-wrapper {
     width: 100%;
-    height: 100%;
+    height: auto;
 }
 
 .icon-font-14 {
@@ -14423,10 +14426,14 @@ voucher-component {
 
 /*----- dialog-box ------*/
 .mat-mdc-dialog-container{
+    .mat-mdc-dialog-content,
+    .mdc-dialog__surface{
+        background-color: var(--color-body-background) !important;
+    }
     .mdc-dialog__title{
         font-size: var(--font-size-16) !important;
         font-family: var(--font-semibold) !important;
-        color: var(--color-white) !important;
+        color: var(--color-toast-primary-text) !important;
         padding: 0;
         line-height: 55px !important;
     }
@@ -14464,4 +14471,11 @@ activity-compare-json{
 .flag-input{
     position: relative;
     z-index: 1;
+}
+
+.reject-textarea,
+.billing-wrapper {
+    .mdc-text-field {
+        padding: 0;
+    }
 }
