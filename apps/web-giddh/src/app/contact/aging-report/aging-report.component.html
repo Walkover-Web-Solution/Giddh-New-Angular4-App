@@ -262,12 +262,11 @@
         >
             <ng-container matColumnDef="customerName">
                 <th
-                    class="mat-customer-name"
+                    class="mat-customer-name mat-column-name"
                     mat-header-cell
                     *matHeaderCellDef
                     #searchCustomerContainer
                     (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
-                    width="15%"
                 >
                     <div class="d-flex align-items-center">
                         <ng-container
@@ -292,7 +291,7 @@
             </ng-container>
 
             <ng-container matColumnDef="parentGroup">
-                <th class="mat-parent-group" mat-header-cell *matHeaderCellDef  width="15%">
+                <th class="mat-parent-group mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center">
                         {{ commonLocaleData?.app_parent_group }}
                         <ng-container
@@ -306,7 +305,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_upcoming_due">
-                <th mat-header-cell *matHeaderCellDef  width="10%">
+                <th mat-header-cell *matHeaderCellDef class="mat-column-upcoming">
                     <div class="d-flex align-items-center justify-content-end">
                         {{ commonLocaleData?.app_upcoming_due }}
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'futureDueAmount' }">
@@ -326,7 +325,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_1">
-                <th class="mat-app-days-1" mat-header-cell *matHeaderCellDef  width="10%">
+                <th class="mat-app-days-1 mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             mat-button
@@ -361,7 +360,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_2">
-                <th class="mat-app-days-2" mat-header-cell *matHeaderCellDef  width="10%">
+                <th class="mat-app-days-2 mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             [matMenuTriggerFor]="agingDropdown"
@@ -404,7 +403,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_3">
-                <th class="mat-app-days-3" mat-header-cell *matHeaderCellDef  width="10%">
+                <th class="mat-app-days-3 mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             mat-button
@@ -445,7 +444,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_4">
-                <th class="mat-app-days-4" mat-header-cell *matHeaderCellDef  width="10%">
+                <th class="mat-app-days-4 mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             mat-button
@@ -476,7 +475,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_total_due">
-                <th mat-header-cell *matHeaderCellDef  width="10%">
+                <th mat-header-cell *matHeaderCellDef class="mat-column-group">
                     <div class="d-flex align-items-center justify-content-end">
                         {{ commonLocaleData?.app_total_due }}
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'totalDueAmount' }">
