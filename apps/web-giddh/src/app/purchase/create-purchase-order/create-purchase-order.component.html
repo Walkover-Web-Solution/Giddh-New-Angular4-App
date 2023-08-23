@@ -1973,7 +1973,7 @@
                                     </div>
                                     <div [collapse]="isOthrDtlCollapsed" class="clearfix max-width-600 pd-l3 m-0">
                                         <div class="row">
-                                            <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                            <div class="form-group col-xs-4 col-sm-4 mb-0 custom-input-field new-datepicker">
                                                 <giddh-datepicker
                                                     #shippingDate="ngModel"
                                                     [placeholder]="localeData?.ship_date"
@@ -1996,7 +1996,7 @@
                                                     {{ localeData?.invalid_date }}
                                                 </p>
                                             </div>
-                                            <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                            <div class="form-group col-xs-4 col-sm-4 mb-0 custom-input-field new-datepicker">
                                                 <input
                                                     type="text"
                                                     name="shippedVia"
@@ -2005,7 +2005,7 @@
                                                     [placeholder]="localeData?.ship_via"
                                                 />
                                             </div>
-                                            <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                            <div class="form-group col-xs-4 col-sm-4 mb-0 custom-input-field new-datepicker">
                                                 <input
                                                     type="text"
                                                     name="trackingNumber"
@@ -3357,7 +3357,7 @@
                 <!-- endregion -->
 
                 <!-- region update mode -->
-                <div class="pull-right pr" *ngIf="isUpdateMode">
+                <div class="pull-right pr d-flex column-gap15" *ngIf="isUpdateMode">
                     <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>

@@ -64,7 +64,7 @@
                     }
                     &:hover,
                     &.active {
-                        background-color: var(--color-giddh-blue);
+                        background-color: var(--color-giddh-blue) !important;
                         h4,
                         p {
                             color: var(--color-white);
