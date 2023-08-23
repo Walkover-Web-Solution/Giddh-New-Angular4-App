@@ -14577,3 +14577,7 @@ activity-compare-json {
         white-space: nowrap;
     }
 }
+
+.mat-snack-bar-wrapper {
+    z-index: 99999 !important;
+}
