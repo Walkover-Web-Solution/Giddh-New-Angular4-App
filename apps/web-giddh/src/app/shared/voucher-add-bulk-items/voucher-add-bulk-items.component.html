@@ -36,7 +36,7 @@
                             </div>
 
                             <div class="product-list">
-                                <cdk-virtual-scroll-viewport [itemSize]="36">
+                                <cdk-virtual-scroll-viewport [itemSize]="36" [appendOnly]="true">
                                     <ng-container *cdkVirtualFor="let item of filteredData">
                                         <button
                                             mat-button
