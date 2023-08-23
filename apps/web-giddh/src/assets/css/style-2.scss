@@ -8447,6 +8447,12 @@ button.btn.btn-filter {
     }
 }
 
+.modal-open.cmd-k {
+    .modal-backdrop + .modal {
+        z-index: 999999 !important;
+    }
+}
+
 .modal-backdrop + .modal.fade .modal-dialog {
     transform: translate(0);
 }
@@ -10171,6 +10177,10 @@ body {
         }
     }
 }
+
+// .cdk-overlay-connected-position-bounding-box {
+//     z-index: 9999;
+// }
 
 .cmd-k {
     .cdk-overlay-container {
