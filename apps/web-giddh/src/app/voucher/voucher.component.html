@@ -2743,11 +2743,13 @@
                                                                     [(ngModel)]="entry.entryDate"
                                                                     [appearance]="'fill'"
                                                                     (datepickerState)="onFocusEntryDate($event)"
+                                                                    [isOpened]="isEntryDatepickerOpen"
                                                                 >
                                                                 </giddh-datepicker>
                                                                 <span
                                                                     class="edit-icon-custom-entry-date cp"
                                                                     [attr.aria-expanded]="dp.isOpen"
+                                                                    (click)="isEntryDatepickerOpen = true"
                                                                 >
                                                                     <img src="{{ imgPath }}edit-pencilicon.svg" />
                                                                 </span>
