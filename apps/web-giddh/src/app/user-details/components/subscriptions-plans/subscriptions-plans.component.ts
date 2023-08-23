@@ -165,10 +165,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionsPlansComponent
      */
     public openDialog(): void {
-        this.dialog.open(AllFeaturesComponent, {
-            height: '40%',
-            width: '60%'
-        });
+        this.dialog.open(AllFeaturesComponent);
     }
 
     /**
