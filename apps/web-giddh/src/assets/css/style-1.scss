@@ -374,7 +374,6 @@ aside-menu-account .container-fluid {
 }
 .mr-t1 {
     margin-top: 10px !important;
-    color: var(--color-common-primary-text) !important;
 }
 .mr-t15 {
     margin-top: 15px !important;
@@ -789,6 +788,9 @@ aside-menu-account .container-fluid {
         i {
             font-size: 24px;
             line-height: 34px;
+        }
+        .icon-trash{
+            vertical-align: middle;
         }
     }
 }
@@ -1625,7 +1627,8 @@ ul.pills li {
     color: var(--color-abbey);
 }
 .pos-abs {
-    position: absolute;
+    position: absolute !important;
+    z-index: 9;
 }
 .verified {
     right: 10px;
@@ -2040,6 +2043,16 @@ strong {
 bs-daterangepicker-container,
 bs-datepicker-container {
     z-index: 99999;
+    bs-days-calendar-view {
+        display: inline-block;
+        & + bs-days-calendar-view {
+            margin-left: 10px;
+        }
+    }
+    // .bs-media-container {
+    //     display: flex;
+    //     column-gap: 15px;
+    // }
 }
 
 .setting-sidebar-open.voucher-preview-edit {
@@ -2919,8 +2932,8 @@ td.mat-footer-cell {
 }
 
 .other-tax {
-    .mat-checkbox-layout {
-        .mat-checkbox-label {
+    .mat-mdc-checkbox {
+        .mdc-label {
             font-size: var(--font-size-15) !important;
             color: var(--color-common-primary-text) !important;
         }

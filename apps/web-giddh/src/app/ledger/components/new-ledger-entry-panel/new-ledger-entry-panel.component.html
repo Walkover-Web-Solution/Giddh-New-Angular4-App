@@ -1147,19 +1147,15 @@
     </div>
 </ng-template>
 <ng-template #adjustPaymentModal>
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <advance-receipt-adjustment-component
-                [adjustedVoucherType]="blankLedger.voucherType"
-                [invoiceFormDetails]="adjustVoucherConfiguration"
-                [advanceReceiptAdjustmentUpdatedData]="currentTxn?.voucherAdjustments"
-                [invoiceListRequestParams]="invoiceListRequestParams"
-                (closeModelEvent)="closeAdjustmentModal($event)"
-                (submitClicked)="getAdjustedPaymentData($event)"
-            >
-            </advance-receipt-adjustment-component>
-        </div>
-    </div>
+    <advance-receipt-adjustment-component
+        [adjustedVoucherType]="blankLedger.voucherType"
+        [invoiceFormDetails]="adjustVoucherConfiguration"
+        [advanceReceiptAdjustmentUpdatedData]="currentTxn?.voucherAdjustments"
+        [invoiceListRequestParams]="invoiceListRequestParams"
+        (closeModelEvent)="closeAdjustmentModal($event)"
+        (submitClicked)="getAdjustedPaymentData($event)"
+    >
+    </advance-receipt-adjustment-component>
 </ng-template>
 <ng-template #variantAndWarehouseDropdown>
     <div class="d-flex justify-content-between mb-2">

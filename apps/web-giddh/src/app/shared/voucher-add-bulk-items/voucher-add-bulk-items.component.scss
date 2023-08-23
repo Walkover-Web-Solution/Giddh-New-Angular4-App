@@ -34,6 +34,8 @@
         }
     }
     .product-variant {
+        padding: 12px;
+        justify-content: start !important;
         &:hover {
             @include hover-state;
         }

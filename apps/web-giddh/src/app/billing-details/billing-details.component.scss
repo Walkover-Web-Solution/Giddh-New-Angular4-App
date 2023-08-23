@@ -177,6 +177,7 @@
                 color: var(--color-primary-card-text);
                 background-color: var(--color-primary-card-background);
                 box-shadow: 1px 0px 4px var(--color-primary-card-box-shadow);
+                padding: 16px;
             }
             .renewal-off {
                 color: var(--color-slate);
@@ -383,6 +384,7 @@
         padding-left: 0px;
     }
 }
+
 @media (max-width: 480px) and (orientation: portrait) {
     #main {
         .main-heading-billing {

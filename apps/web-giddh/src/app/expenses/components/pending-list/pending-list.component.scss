@@ -49,6 +49,18 @@
         min-width: 90px;
     }
 }
+table{
+    .mat-mdc-number{
+        width: 2%;
+    }
+    .mat-mdc-entry{
+        width: 12%;
+    }
+    .mat-mdc-submit{
+        width: 10%;
+    }
+}
+
 @media (min-width: 769px) {
     .table-responsive {
         max-height: calc(100vh - 245px);
