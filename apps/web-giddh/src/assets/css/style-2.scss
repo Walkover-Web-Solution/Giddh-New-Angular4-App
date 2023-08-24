@@ -10172,12 +10172,6 @@ body {
     }
 }
 
-.cmd-k {
-    .cdk-overlay-container {
-        z-index: 999 !important;
-    }
-}
-
 giddh-datepicker {
     &:not(.date-border) {
         .mat-form-field-appearance-fill .mat-form-field-flex {
