@@ -91,6 +91,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('entryConfirmModal', { static: false }) public entryConfirmModal: any;
     /** Instance of ledger aside pane modal */
     @ViewChild("ledgerAsidePane") public ledgerAsidePane: TemplateRef<any>;
+    /** Instance of Aside Menu State For Other Taxes dialog */
+    @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
     public searchTermStream: Subject<string> = new Subject();
@@ -130,7 +132,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public companyTaxesList: TaxResponse[] = [];
     public selectedTxnAccUniqueName: string = '';
     public tcsOrTds: 'tcs' | 'tds' = 'tcs';
-    public asideMenuStateForOtherTaxes: string = 'out';
     public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
     @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
     public isLedgerAccountAllowsMultiCurrency: boolean = false;
@@ -277,6 +278,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
         return (hasParticularSelected?.length) ? true : false;
     }
+    /** Holds Aside Menu State For Other Taxes DialogRef */
+    public asideMenuStateForOtherTaxesDialogRef: any;
 
     constructor(
         private store: Store<AppState>,
@@ -1805,14 +1808,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         fileInput.click();
     }
 
-    public toggleBodyClass() {
-        if (this.asideMenuState === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
-            document.querySelector('body')?.classList?.add('fixed');
-        } else {
-            document.querySelector('body')?.classList?.remove('fixed');
-        }
-    }
-
     public toggleAsidePane(event?, shSelectElement?: ShSelectComponent): void {
         if (event) {
             event.preventDefault();
@@ -1841,10 +1836,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public toggleOtherTaxesAsidePane(updateLedgerModalVm: any): void {
-        this.updateLedgerModalVm = updateLedgerModalVm;
-        this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-        this.cdRf.detectChanges();
+        if (updateLedgerModalVm) {
+            this.updateLedgerModalVm = updateLedgerModalVm;
+            this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, {
+                position: {
+                    right: '0'
+                },
+                maxWidth: '760px',
+                width: '100%',
+                height: '100vh',
+                maxHeight: '100vh'
+            });
+            this.cdRf.detectChanges();
+        } else {
+            this.asideMenuStateForOtherTaxesDialogRef?.close();
+        }
     }
 
     public calculateOtherTaxes(modal: SalesOtherTaxesModal): void {

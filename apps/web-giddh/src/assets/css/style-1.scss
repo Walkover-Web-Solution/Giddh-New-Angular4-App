@@ -1689,7 +1689,7 @@ ul.pills li {
     height: auto;
 }
 .modal {
-    z-index: 1200;
+    z-index: 992;
 }
 .popover {
     z-index: 100;
@@ -2477,7 +2477,7 @@ form#groupDetailForm {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 9999;
+    z-index: 991;
     background: var(--color-primary-aside-pane-unactive-background);
     opacity: 0.5;
     -webkit-transition: opacity 0.15s linear;
