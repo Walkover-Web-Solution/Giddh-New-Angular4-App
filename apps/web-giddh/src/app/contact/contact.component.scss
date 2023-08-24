@@ -943,9 +943,12 @@ button.btn.btn-filter {
 }
 
 .close-btn-in-mat-model {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
     right: 9px;
-    top: 9px;
+    top: 10px;
     font-size: 25px;
     color: var(--color-popup-list-head-text);
 }
@@ -981,8 +984,8 @@ button.btn.btn-filter {
     border: unset;
     margin-top: 20px;
 }
-.min-width-137 {
-    min-width: 137px;
+.min-width-150 {
+    min-width: 150px;
 }
 
 .btn-light:not(:disabled):not(.disabled).active,

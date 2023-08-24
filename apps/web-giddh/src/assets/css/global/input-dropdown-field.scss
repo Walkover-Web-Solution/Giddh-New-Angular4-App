@@ -340,6 +340,7 @@ add-company{
 .mat-mdc-checkbox-touch-target {
     height: 18px !important;
     width: 18px !important;
+    left: 60% !important;
 }
 .mdc-checkbox .mdc-checkbox__native-control {
     width: 18px !important;
@@ -350,6 +351,10 @@ add-company{
 }
 /*----- radio-button -----*/
 
+.mat-mdc-radio-group{
+    display: flex;
+    column-gap: 15px;
+}
 .mat-mdc-radio-button {
     .mdc-radio {
         padding: 0 !important;
@@ -403,6 +408,44 @@ body{
         .cdk-overlay-pane {
             .mat-mdc-autocomplete-panel {
                 background-color: var(--color-body-background);
+            }
+        }
+    }
+}
+
+.mat-mdc-menu-item{
+    min-height: 40px !important;
+    .mat-mdc-menu-item-text {
+        display: block;
+        width: 100%;
+        .mat-mdc-checkbox{
+            .mdc-form-field{
+                width: 100%;
+                .mdc-label{
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+activity-logs {
+    .activity-container {
+        .mat-mdc-table {
+            .mdc-data-table__content {
+                .mat-mdc-row {
+                    .mat-mdc-cell {
+                        .mat-mdc-checkbox  {
+                            .mdc-checkbox {
+                                padding-top: 0px;
+                                .mdc-checkbox__background {
+                                    position: absolute;
+                                    top: 5px;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
