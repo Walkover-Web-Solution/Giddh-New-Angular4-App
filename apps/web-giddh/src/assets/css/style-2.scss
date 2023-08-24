@@ -13744,11 +13744,11 @@ hamburger-menu {
         z-index: 99999;
     }
 
-    .mat-table tbody > tr > td:first-child {
+    .mat-mdc-table tbody > tr > td:first-child {
         color: var(--color-table-tertiary-content) !important;
     }
 
-    .giddh-table.mat-table {
+    .giddh-table.mat-mdc-table {
         tbody {
             > tr.history-child-row {
                 > td {
