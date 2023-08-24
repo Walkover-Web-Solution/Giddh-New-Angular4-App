@@ -43,6 +43,7 @@ import { CommonService } from '../../../services/common.service';
 export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of approve confirm dialog */
     @ViewChild("approveConfirm") public approveConfirm;
+    /** Instance of Aside Menu State For Other Taxes dialog */
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** Instance of approve confirm dialog */
     @ViewChild("rejectionReason") public rejectionReason;
@@ -70,7 +71,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public imageURL: any[] = [];
     public companyUniqueName: string;
     public signatureSrc: string = '';
-    // public asideMenuStateForOtherTaxes: string = 'out';
     public accountType: string;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public DownloadAttachedImgResponse: DownloadLedgerAttachmentResponse[] = [];
