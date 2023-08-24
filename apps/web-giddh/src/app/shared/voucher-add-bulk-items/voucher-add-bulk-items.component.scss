@@ -14,6 +14,9 @@
     .single-product-wrapper {
         padding: 12px;
         justify-content: start !important;
+        margin-bottom: 0px;
+        height: auto !important;
+        text-align: left !important;
         &.mb-20 {
             margin-bottom: 20px;
         }

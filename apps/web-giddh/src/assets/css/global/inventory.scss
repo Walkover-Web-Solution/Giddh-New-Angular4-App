@@ -40,6 +40,7 @@ report-filters{
                 background-color: var(--color-body-background) !important;
                 border: 1px solid var(--color-primary-login-box-body-text) !important;
                 font-size: var(--font-size-12) !important;
+                border-radius: 5px !important;
             }
         }
     }
@@ -122,5 +123,12 @@ body{
                 }
             }
         }
+    }
+}
+
+.field-m-width{
+    max-width: 170px;
+    .select-field-input {
+        width: 100% !important;
     }
 }

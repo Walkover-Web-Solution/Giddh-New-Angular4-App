@@ -46,6 +46,7 @@ import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
     declarations: [
@@ -100,7 +101,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         AsideMenuOtherTaxesModule,
         AsideMenuProductServiceModule,
         FormFieldsModule,
-        MatFormFieldModule
+        MatFormFieldModule,
+        MatInputModule
     ]
 })
 export class PurchaseModule {
