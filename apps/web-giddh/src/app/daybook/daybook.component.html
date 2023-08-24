@@ -710,7 +710,7 @@
         [otherTaxesModal]="updateLedgerComponent?.vm?.selectedLedger?.otherTaxModal"
         [commonLocaleData]="commonLocaleData"
         (closeModal)="asideMenuStateForOtherTaxesDialogRef.close()"
-        (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane(null)"
+        (applyTaxes)="calculateOtherTaxes($event); asideMenuStateForOtherTaxesDialogRef.close()"
     >
     </app-aside-menu-sales-other-taxes>
 </ng-template>
