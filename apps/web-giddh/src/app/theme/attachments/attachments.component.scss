@@ -9,6 +9,7 @@
         height: 50px;
         .attachment-back-button {
             width: 64px;
+            color: var(--color-toast-primary-text) !important;
             i {
                 margin-right: 2px;
             }
