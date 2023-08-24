@@ -463,37 +463,20 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Toggles the fixed class on body
-     *
-     * @memberof ExpenseDetailsComponent
-     */
-    public toggleBodyClass(): void {
-        // if (this.asideMenuStateForOtherTaxes === 'in') {
-        //     document.querySelector('.petty-cash')?.classList?.add('sidebar-overlay');
-        //     document.querySelector('body')?.classList?.add('fixed');
-        // } else {
-        //     document.querySelector('.petty-cash')?.classList?.remove('sidebar-overlay');
-        //     document.querySelector('body')?.classList?.remove('fixed');
-        // }
-    }
-
-    /**
      * Toggles other tax aside pane
      *
      * @memberof ExpenseDetailsComponent
      */
     public toggleOtherTaxesAsidePane(): void {
-        // this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes,{
             position: {
-                left: '0'
+                right: '0'
             },
             maxWidth: '760px',
             width:'100%',
             height:'100vh',
             maxHeight:'100vh'
         });
-        this.toggleBodyClass();
     }
 
     /**
