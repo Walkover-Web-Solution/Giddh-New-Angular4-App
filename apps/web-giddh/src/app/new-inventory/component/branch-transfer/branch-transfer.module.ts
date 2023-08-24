@@ -20,6 +20,9 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
+import { CurrencyModule } from '../../../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { MatSortModule } from '@angular/material/sort';
 @NgModule({
     imports: [
         CommonModule,
@@ -39,7 +42,10 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
         ClickOutsideModule,
         MatFormFieldModule,
         MatInputModule,
-        PaginationModule.forRoot()
+        PaginationModule.forRoot(),
+        GiddhPageLoaderModule,
+        CurrencyModule,
+        MatSortModule
 
     ],
     exports: [

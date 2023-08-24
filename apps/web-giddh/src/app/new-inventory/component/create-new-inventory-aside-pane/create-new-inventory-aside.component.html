@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" vr-item>
-            <ng-container *ngIf="moduleType === 'branchtransfer'">
+            <ng-container *ngIf="moduleType === 'branch-transfer'">
                 <div class="pb-3">
                     <button mat-stroked-button color="primary" (click)="openCreateBranchTransfer('receipt-note')">
                         Receipt Note
@@ -25,7 +25,7 @@
                     </button>
                 </div>
             </ng-container>
-            <ng-container *ngIf="moduleType !== 'branchtransfer'">
+            <ng-container *ngIf="moduleType !== 'branch-transfer'">
                 <div class="pb-3">
                     <button mat-stroked-button color="primary" (click)="createNewByAsidePanel('stock')">
                         {{ commonLocaleData?.app_create_stock }}

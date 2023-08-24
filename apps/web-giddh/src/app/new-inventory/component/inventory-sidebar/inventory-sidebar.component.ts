@@ -267,7 +267,10 @@ export class InventorySidebarComponent implements OnDestroy {
                 {
                     name: this.localeData?.sidebar?.branch_transfer,
                     icons: 'branch-transfer.svg',
-                    link: '/pages/inventory/report',
+                    children: [
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', moduleType: 'branch-transfer', openActiveMenu: true, hiddenLink: ['/pages/inventory/v2/branch-transfer/create'] },
+                               { name: this.localeData?.sidebar?.report, icons: 'group-wise.svg', link: '/pages/inventory/v2/branch-transfer/list' }
+                    ],
                 },
                 {
                     name: this.localeData?.sidebar?.warehouse_balance,

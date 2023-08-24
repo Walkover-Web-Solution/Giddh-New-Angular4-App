@@ -662,6 +662,31 @@ export class GeneralService {
         };
     }
 
+    public getDeleteBranchTransferConfiguration(localeData: any, commonLocaleData: any, selectedBranchTransferType: string): ConfirmationModalConfiguration {
+        console.log(selectedBranchTransferType);
+
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: 'Yes',
+            color: 'primary'
+        },
+        {
+            text: 'No'
+        }];
+        const headerText: string = 'Delete' + selectedBranchTransferType;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: 'Are you sure you want to delete this' + selectedBranchTransferType +'?' ,
+            messageCssClass,
+            footerText: 'It will be deleted permanently and will no longer be accessible from any other module.',
+            footerCssClass,
+            buttons
+        };
+    }
+
     /**
      * This will use for confirmation delete attachment in vocher
      *

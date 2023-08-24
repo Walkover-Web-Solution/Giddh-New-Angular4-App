@@ -10,17 +10,19 @@ const routes: Routes = [
         component: MainComponent,
         children: [
             {
-                path: "",
-                redirectTo: 'list'
+                path: ":type/create",
+                component: BranchTransferCreateComponent,
+                pathMatch: 'full'
+            },
+            {
+                path: ":type/edit/:uniqueName",
+                component: BranchTransferCreateComponent,
+                pathMatch: 'full'
             },
             {
                 path: "list",
                 component: BranchTransferListComponent
             },
-            {
-                path: "create",
-                component: BranchTransferCreateComponent
-            }
         ]
     }
 ];
