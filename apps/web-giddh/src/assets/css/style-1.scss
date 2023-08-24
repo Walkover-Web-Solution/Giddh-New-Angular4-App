@@ -2541,7 +2541,7 @@ form#groupDetailForm {
 }
 
 giddh-datepicker {
-    .mat-form-field {
+    .mat-mdc-form-field {
         width: 100% !important;
     }
 }
@@ -2550,7 +2550,7 @@ giddh-datepicker {
 .left-col-new,
 .right-col-new {
     giddh-datepicker {
-        .mat-form-field {
+        .mat-mdc-form-field {
             min-width: 100% !important;
         }
     }

@@ -1,25 +1,26 @@
-.payment-mode{
-    dropdown-field{
-            .mat-mdc-form-field {
+.payment-mode {
+    dropdown-field {
+        .mat-mdc-form-field {
             .mat-mdc-text-field-wrapper {
-                .mat-mdc-form-field-infix{
-                    .dropdown-bg{
+                .mat-mdc-form-field-infix {
+                    .dropdown-bg {
                         background-color: transparent;
                     }
                 }
-            } 
+            }
         }
     }
 }
-.voucher-preview-edit{
-    .mat-mdc-menu-item-text{
+.voucher-preview-edit {
+    .mat-mdc-menu-item-text {
         width: 100%;
     }
 }
-.deposit-section{
-    dropdown-field, input-field{
-        .mat-mdc-form-field{
-            .mat-mdc-text-field-wrapper{
+.deposit-section {
+    dropdown-field,
+    input-field {
+        .mat-mdc-form-field {
+            .mat-mdc-text-field-wrapper {
                 background-color: var(--color-white);
             }
         }
@@ -29,28 +30,50 @@
 .wrap-billing-address {
     .mat-mdc-checkbox.mat-primary {
         line-height: 37px;
-        .mdc-checkbox{
+        .mdc-checkbox {
             padding: 0;
-            .mdc-checkbox__background{
+            .mdc-checkbox__background {
                 margin-top: -9px;
             }
         }
-        .mdc-label{
+        .mdc-label {
             margin-left: 10px;
         }
     }
 }
 
-.collapse-pane{
+.collapse-pane {
     .mat-mdc-form-field-flex {
-        min-height: 51px;
+        min-height: 56px;
     }
 }
+.create-purchase-order-form {
+    .collapse-pane {
+        giddh-datepicker {
+            .mat-mdc-form-field-flex {
+                min-height: 36px !important;
+                height: 36px !important;
+            }
+            .mdc-text-field--no-label {
+                &:not(.mdc-text-field--textarea) {
+                    .mat-mdc-form-field-input-control {
+                        &.mdc-text-field__input,
+                        .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+                            height: 35px;
+                            padding-left: 6px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 .custom-date-entries {
-    giddh-datepicker{
-        mat-datepicker-toggle{
-            .mdc-icon-button{
-                svg{
+    giddh-datepicker {
+        mat-datepicker-toggle {
+            .mdc-icon-button {
+                svg {
                     position: absolute;
                     top: 0;
                     z-index: 9999;
@@ -62,12 +85,22 @@
 }
 
 /*---- inventiry-stock ----*/
-.back-btn-align{
+.back-btn-align {
     .mdc-button {
-        .mdc-button__label{
+        .mdc-button__label {
             display: flex;
             align-items: center;
             column-gap: 2px;
+        }
+    }
+}
+
+aside-menu-product-service {
+    stock-create-edit {
+        create-recipe {
+            .less-than-text {
+                display: none;
+            }
         }
     }
 }
