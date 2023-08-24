@@ -91,8 +91,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('entryConfirmModal', { static: false }) public entryConfirmModal: any;
     /** Instance of ledger aside pane modal */
     @ViewChild("ledgerAsidePane") public ledgerAsidePane: TemplateRef<any>;
-     /** Instance of Aside Menu State For Other Taxes dialog */
-     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
+    /** Instance of Aside Menu State For Other Taxes dialog */
+    @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
     public searchTermStream: Subject<string> = new Subject();
@@ -279,7 +279,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         return (hasParticularSelected?.length) ? true : false;
     }
     /** Holds Aside Menu State For Other Taxes DialogRef */
-    public asideMenuStateForOtherTaxesDialogRef:any;
+    public asideMenuStateForOtherTaxesDialogRef: any;
 
     constructor(
         private store: Store<AppState>,
@@ -1836,17 +1836,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public toggleOtherTaxesAsidePane(updateLedgerModalVm: any): void {
-        this.updateLedgerModalVm = updateLedgerModalVm;
-        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes,{
-            position: {
-                right: '0'
-            },
-            maxWidth: '760px',
-            width:'100%',
-            height:'100vh',
-            maxHeight:'100vh'
-        });
-        this.cdRf.detectChanges();
+        if (updateLedgerModalVm) {
+            this.updateLedgerModalVm = updateLedgerModalVm;
+            this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, {
+                position: {
+                    right: '0'
+                },
+                maxWidth: '760px',
+                width: '100%',
+                height: '100vh',
+                maxHeight: '100vh'
+            });
+            this.cdRf.detectChanges();
+        } else {
+            this.asideMenuStateForOtherTaxesDialogRef?.close();
+        }
     }
 
     public calculateOtherTaxes(modal: SalesOtherTaxesModal): void {
