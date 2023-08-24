@@ -112,6 +112,9 @@ span.close-modal.cp.pull-right {
 }
 .petty-cash {
     background: var(--color-white);
+    .bg-color{
+        background-color: var(--color-white) !important;
+    }
 }
 
 .list-item {

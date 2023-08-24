@@ -294,3 +294,8 @@
         background-color: transparent;
     }
 }
+.chip-gap {
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+}

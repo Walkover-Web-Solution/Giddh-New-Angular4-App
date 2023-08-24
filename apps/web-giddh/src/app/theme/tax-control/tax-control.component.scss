@@ -37,4 +37,7 @@ sup.mandatory-asterisk {
 .dropdown-menu {
     left: unset !important;
     top: 0px;
+    li{
+        padding: 0 10px;
+    }
 }

@@ -5565,6 +5565,7 @@ fieldset[disabled] .disable-bg {
 }
 .disable-bg {
     border: 0;
+    background-color: transparent !important;
     &.mat-datepicker-input {
         &:disabled {
             background-color: transparent !important;
@@ -10080,18 +10081,6 @@ giddh-datepicker {
                             z-index: 6;
                         }
                     }
-
-                    .ledger-main {
-                        .new-entry-ledger {
-                            .ledger-account-label {
-                                sh-select-menu {
-                                    .menu {
-                                        z-index: 7;
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
 
                 .ledger-head-top {
@@ -10117,7 +10106,7 @@ giddh-datepicker {
                 align-items: center;
             }
             .mdc-button__label {
-                color: var(--color-white);
+                color: var(--color-toast-primary-text);
             }
         }
     }
@@ -14507,6 +14496,9 @@ voucher-component {
         color: var(--color-toast-primary-text) !important;
         padding: 0;
         line-height: 55px !important;
+    }
+    .mdc-dialog__surface {
+        background-color: var(--color-white) !important;
     }
 }
 .mdc-dialog {

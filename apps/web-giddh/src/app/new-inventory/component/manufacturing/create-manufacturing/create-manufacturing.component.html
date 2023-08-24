@@ -211,16 +211,16 @@
                         <div class="row">
                             <div class="consumption-details-wrapper w-100">
                                 <h1 class="section-head">{{ localeData?.raw_stock }}</h1>
-                                <div class="mt-2">
+                                <div class="mt-2 ">
                                     <table id="table-raw-stock">
                                         <thead>
                                             <tr>
-                                                <th width="25%">{{ commonLocaleData?.app_name }}</th>
-                                                <th width="20%">{{ commonLocaleData?.app_variant }}</th>
-                                                <th width="10%">{{ commonLocaleData?.app_quantity }}</th>
-                                                <th width="20%">{{ commonLocaleData?.app_unit }}</th>
-                                                <th width="10%">{{ commonLocaleData?.app_rate }}</th>
-                                                <th width="15%">{{ commonLocaleData?.app_amount }}</th>
+                                                <th class="table-name">{{ commonLocaleData?.app_name }}</th>
+                                                <th class="table-variant">{{ commonLocaleData?.app_variant }}</th>
+                                                <th class="table-quantity">{{ commonLocaleData?.app_quantity }}</th>
+                                                <th class="table-unit">{{ commonLocaleData?.app_unit }}</th>
+                                                <th class="table-rate">{{ commonLocaleData?.app_rate }}</th>
+                                                <th class="table-amount">{{ commonLocaleData?.app_amount }}</th>
                                                 <th>&nbsp;</th>
                                             </tr>
                                         </thead>
@@ -238,8 +238,8 @@
                                                         activeLinkedStockIndex = null; hideBorder(linkedStock)
                                                     "
                                                 >
-                                                    <td>
-                                                        <div>
+                                                    <td class="table-name">
+                                                        <div class="field-m-width">
                                                             <select-field
                                                                 [cssClass]="
                                                                     'disable-bg ' +
@@ -278,8 +278,8 @@
                                                             </select-field>
                                                         </div>
                                                     </td>
-                                                    <td>
-                                                        <div>
+                                                    <td class="table-variant">
+                                                        <div class="field-m-width">
                                                             <select-field
                                                                 [cssClass]="
                                                                     'disable-bg ' +
@@ -304,8 +304,8 @@
                                                             </select-field>
                                                         </div>
                                                     </td>
-                                                    <td>
-                                                        <div>
+                                                    <td class="table-quantity">
+                                                        <div class="field-m-width">
                                                             <text-field
                                                                 [cssClass]="
                                                                     'disable-bg ' +
@@ -326,9 +326,9 @@
                                                             </text-field>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td class="table-unit">
                                                         <div class="text-field-right">
-                                                            <div>
+                                                            <div class="field-m-width">
                                                                 <select-field
                                                                     [cssClass]="'disable-bg' + linkedStock.cssClass"
                                                                     [name]="'variantUnit' + i"
@@ -349,8 +349,8 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td>
-                                                        <div>
+                                                    <td class="table-rate">
+                                                        <div class="field-m-width">
                                                             <text-field
                                                                 [cssClass]="'disable-bg ' + linkedStock.cssClass"
                                                                 [type]="'number'"
@@ -364,7 +364,7 @@
                                                         </div>
                                                     </td>
                                                     <td>{{ linkedStock.amount }}</td>
-                                                    <td>
+                                                    <td class="table-amount">
                                                         <i
                                                             [ngClass]="{
                                                                 'unvisible':
