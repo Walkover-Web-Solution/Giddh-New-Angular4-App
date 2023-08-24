@@ -5550,6 +5550,7 @@ fieldset[disabled] .disable-bg {
 }
 .disable-bg {
     border: 0;
+    background-color: transparent !important;
     &.mat-datepicker-input {
         &:disabled {
             background-color: transparent !important;
@@ -10040,18 +10041,6 @@ giddh-datepicker {
                             z-index: 6;
                         }
                     }
-
-                    .ledger-main {
-                        .new-entry-ledger {
-                            .ledger-account-label {
-                                sh-select-menu {
-                                    .menu {
-                                        z-index: 7;
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
 
                 .ledger-head-top {
@@ -10077,7 +10066,7 @@ giddh-datepicker {
                 align-items: center;
             }
             .mdc-button__label {
-                color: var(--color-white);
+                color: var(--color-toast-primary-text);
             }
         }
     }
@@ -13742,11 +13731,11 @@ hamburger-menu {
         z-index: 99999;
     }
 
-    .mat-table tbody > tr > td:first-child {
+    .mat-mdc-table tbody > tr > td:first-child {
         color: var(--color-table-tertiary-content) !important;
     }
 
-    .giddh-table.mat-table {
+    .giddh-table.mat-mdc-table {
         tbody {
             > tr.history-child-row {
                 > td {
@@ -14428,6 +14417,9 @@ voucher-component {
         color: var(--color-toast-primary-text) !important;
         padding: 0;
         line-height: 55px !important;
+    }
+    .mdc-dialog__surface {
+        background-color: var(--color-white) !important;
     }
 }
 .mdc-dialog {
