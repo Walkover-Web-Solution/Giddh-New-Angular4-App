@@ -125,3 +125,10 @@ body{
         }
     }
 }
+
+.field-m-width{
+    max-width: 170px;
+    .select-field-input {
+        width: 100% !important;
+    }
+}

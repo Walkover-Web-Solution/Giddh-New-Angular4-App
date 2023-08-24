@@ -67,6 +67,24 @@
                             color: var(--color-primary-button-text);
                             font-weight: 500;
                         }
+                        .table-name{
+                            width: 25%;
+                        }
+                        .table-variant{
+                            width: 20%;
+                        }
+                        .table-quantity{
+                            width: 10%;
+                        }
+                        .table-unit{
+                            width: 20%;
+                        }
+                        .table-rate{
+                            width: 10%;
+                        }
+                        .table-amount{
+                            width: 15%;
+                        }
                     }
                 }
                 tbody {
@@ -178,13 +196,15 @@
     }
 }
 
-
 @media screen and (max-width: 1440px){
     .consumption-details-wrapper {
         .manufacturing-table-responsive{
             width: 100%;
             overflow-x: auto;
         }
+    }
+    .manufacturing-table-responsive{
+        overflow-x: auto;
     }
 }
 

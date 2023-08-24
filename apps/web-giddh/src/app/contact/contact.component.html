@@ -900,7 +900,7 @@
                                     [(ngModel)]="allSelectionModel"
                                     (ngModelChange)="toggleAllSelection(allSelectionModel)"
                                 ></mat-checkbox>
-                                <div class="d-flex align-items-center" [ngClass]="{ 'padding-left-25' : !(selectedCheckedContacts?.length || showSelectAll) }">
+                                <div class="d-flex align-items-center">
                                     <div>
                                         <ng-container
                                             *ngTemplateOutlet="
