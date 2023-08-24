@@ -2456,6 +2456,7 @@
                                                             <label>{{ localeData?.entry_date }}: </label>
                                                             <span *ngIf="!isUpdateMode" class="custom-date-entries custom-input-field">
                                                                 <giddh-datepicker
+                                                                    class="date-border"
                                                                     [showToggleIcon]="true"
                                                                     #dp="ngModel"
                                                                     (keydown.enter)="$event.preventDefault()"
