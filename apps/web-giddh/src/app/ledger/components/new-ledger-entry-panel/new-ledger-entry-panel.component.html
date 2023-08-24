@@ -1071,18 +1071,17 @@
 </div>
 
 <!-- aside menu section -->
-<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
-<app-aside-menu-sales-other-taxes
-    *ngIf="asideMenuStateForOtherTaxes === 'in'"
-    [class]="asideMenuStateForOtherTaxes"
-    [otherTaxesModal]="blankLedger.otherTaxModal"
-    [@slideInOut]="asideMenuStateForOtherTaxes"
-    [taxes]="companyTaxesList"
-    [commonLocaleData]="commonLocaleData"
-    (closeModal)="closeAsideMenuStateForOtherTax()"
-    (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane(true); emitOtherTaxes()"
->
-</app-aside-menu-sales-other-taxes>
+<ng-template #asideMenuStateForOtherTaxes>
+    <app-aside-menu-sales-other-taxes
+        [class]="asideMenuStateForOtherTaxes"
+        [otherTaxesModal]="blankLedger.otherTaxModal"
+        [taxes]="companyTaxesList"
+        [commonLocaleData]="commonLocaleData"
+        (closeModal)="closeAsideMenuStateForOtherTax()"
+        (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane(true); emitOtherTaxes()"
+    >
+    </app-aside-menu-sales-other-taxes>
+</ng-template>
 
 <ng-template #totalWithCurrencySymbol>
     <span>

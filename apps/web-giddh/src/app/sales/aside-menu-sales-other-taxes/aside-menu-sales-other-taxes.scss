@@ -1,15 +1,8 @@
 :host {
     position: relative;
-    // left: auto;
-    // top: 0;
-    // right: 0;
-    // bottom: 0;
-    // width: 100%;
     max-width: 760px;
-    // z-index: 992;
 }
-
-:host.in #close {
+#close {
     display: block;
     position: absolute;
     right: 10px;

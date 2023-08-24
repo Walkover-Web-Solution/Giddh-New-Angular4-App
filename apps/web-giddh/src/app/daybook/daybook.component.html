@@ -703,15 +703,14 @@
 </ng-template>
 
 <!-- aside menu section -->
-<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
-<app-aside-menu-sales-other-taxes
-    *ngIf="asideMenuStateForOtherTaxes === 'in'"
-    [class]="asideMenuStateForOtherTaxes"
-    [taxes]="companyTaxesList"
-    [otherTaxesModal]="updateLedgerComponent?.vm?.selectedLedger?.otherTaxModal"
-    [commonLocaleData]="commonLocaleData"
-    [@slideInOut]="asideMenuStateForOtherTaxes"
-    (closeModal)="toggleOtherTaxesAsidePane(null)"
-    (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane(null)"
->
-</app-aside-menu-sales-other-taxes>
+<ng-template #asideMenuStateForOtherTaxes>
+    <app-aside-menu-sales-other-taxes
+        [class]="asideMenuStateForOtherTaxes"
+        [taxes]="companyTaxesList"
+        [otherTaxesModal]="updateLedgerComponent?.vm?.selectedLedger?.otherTaxModal"
+        [commonLocaleData]="commonLocaleData"
+        (closeModal)="asideMenuStateForOtherTaxesDialogRef.close()"
+        (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane(null)"
+    >
+    </app-aside-menu-sales-other-taxes>
+</ng-template>

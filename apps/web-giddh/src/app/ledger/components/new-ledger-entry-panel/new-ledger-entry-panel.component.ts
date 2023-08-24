@@ -133,6 +133,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
+     /** Instance of Aside Menu State For Other Taxes dialog */
+     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
 
     public sourceWarehouse: true;
     public companyTaxesList$: Observable<TaxResponse[]>;
@@ -154,7 +156,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public taxListForStock = []; // New
     public companyIsMultiCurrency: boolean;
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    public asideMenuStateForOtherTaxes: string = 'out';
     public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
     public companyTaxesList: TaxResponse[] = [];
     /** Amount of invoice select for credit note */
@@ -255,6 +256,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public fixedAssetTaxInclusive: boolean;
     /** Stores the value of selected stock variant */
     public selectedStockVariant: IOption = { label: '', value: '' };
+    /** Holds Aside Menu State For Other Taxes DialogRef */
+    public asideMenuStateForOtherTaxesDialogRef:any;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -284,7 +287,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnInit() {
-
         this.voucherTypeList = observableOf([{
             label: this.commonLocaleData?.app_voucher_types.sales,
             value: 'sal'
@@ -1136,30 +1138,22 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.calculateTotal();
     }
 
-    public toggleBodyClass() {
-        if (this.asideMenuStateForOtherTaxes === 'in') {
-
-            document.querySelector('body')?.classList?.add('fixed');
-        } else {
-            document.querySelector('body')?.classList?.remove('fixed');
-        }
-    }
-
     /**
      *Closes the other taxes side menu panel on click of overlay
      *
      * @memberof NewLedgerEntryPanelComponent
      */
     public closeAsideMenuStateForOtherTax(): void {
-        if (this.asideMenuStateForOtherTaxes === 'in') {
-            this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
-            if (this.blankLedger.otherTaxesSum > 0) {
-                this.blankLedger.isOtherTaxesApplicable = true;
-            } else {
-                this.blankLedger.isOtherTaxesApplicable = false;
-            }
-            this.toggleOtherTaxesAsidePane(true);
-        }
+        // Pahle aise likha tha--> if (this.asideMenuStateForOtherTaxes === 'in') {
+            if(this.dialog?.openDialogs){
+                this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
+                if (this.blankLedger.otherTaxesSum > 0) {
+                    this.blankLedger.isOtherTaxesApplicable = true;
+                } else {
+                    this.blankLedger.isOtherTaxesApplicable = false;
+                }
+                this.toggleOtherTaxesAsidePane(true);
+            }        
     }
 
     public toggleOtherTaxesAsidePane(modalBool: boolean) {
@@ -1174,8 +1168,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
         }
         this.blankLedger.otherTaxModal.itemLabel = this.currentTxn?.selectedAccount ? this.currentTxn.selectedAccount?.stock ? `${this.currentTxn?.selectedAccount?.name}(${this.currentTxn?.selectedAccount?.stock?.name})` : this.currentTxn?.selectedAccount?.name : '';
-        this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+        // Pahle aise likha tha--> this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
+           this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes,{
+               position: {
+                   right: '0'
+               },
+               maxWidth: '760px',
+               width:'100%',
+               height:'100vh',
+               maxHeight:'100vh'
+           });        
     }
 
     public calculateOtherTaxes(modal: SalesOtherTaxesModal, index: number = null) {
