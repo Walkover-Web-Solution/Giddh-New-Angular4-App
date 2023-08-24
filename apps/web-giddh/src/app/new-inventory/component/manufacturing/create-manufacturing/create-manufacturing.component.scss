@@ -196,18 +196,6 @@
     }
 }
 
-@media screen and (max-width: 1440px){
-    .consumption-details-wrapper {
-        .manufacturing-table-responsive{
-            width: 100%;
-            overflow-x: auto;
-        }
-    }
-    .manufacturing-table-responsive{
-        overflow-x: auto;
-    }
-}
-
 @media screen and (max-width: 1280px) {
     #create-manufacturing{
         .manufacturing-wrapper {
