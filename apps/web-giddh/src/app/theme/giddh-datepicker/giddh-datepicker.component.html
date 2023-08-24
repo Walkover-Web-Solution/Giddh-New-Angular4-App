@@ -23,5 +23,5 @@
         >
         </mat-datepicker-toggle>
     </ng-container>
-    <mat-datepicker (closed)="isDatepickerOpen = false; emitDatepickerState(false)" #picker></mat-datepicker>
+    <mat-datepicker [opened]="isOpened" (closed)="isDatepickerOpen = false; emitDatepickerState(false)" #picker></mat-datepicker>
 </mat-form-field>

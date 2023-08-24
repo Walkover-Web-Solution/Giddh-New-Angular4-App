@@ -385,7 +385,7 @@
                         class="grid-box grid-box-content campaign-grid-tile"
                         *ngFor="let variable of createTrigger.campaignDetails.argsMapping; let i = index"
                     >
-                        <div class="unit-value">{{ variable.name }}</div>
+                        <div class="unit-value" [ngClass]="{ 'mt-2': i > 0 }">{{ variable.name }}</div>
                         <div class="map-unit-value">
                             <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_suggestions"

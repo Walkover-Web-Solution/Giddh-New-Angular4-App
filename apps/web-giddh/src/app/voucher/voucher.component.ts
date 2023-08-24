@@ -1696,7 +1696,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     // Deletion case, item was deleted and no current entry is active
                     return;
                 }
-                const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params.variantUniqueName;
+                const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params?.variantUniqueName;
                 let stockAllVariants;
                 res[this.currentlyLoadedStockVariantIndex ?? this.activeIndx].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
                 if (stockAllVariants.findIndex(variant => variant.value === currentEntryStockVariantUniqueName) === -1) {
@@ -1706,8 +1706,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             otherwise the user has opened the invoice for edit flow
                         */
                         currentlyLoadedVariantRequest.txn.variant = { name: stockAllVariants[0].label, uniqueName: stockAllVariants[0].value };
-                        // include the variant unique name for the API call
-                        currentlyLoadedVariantRequest.params.variantUniqueName = stockAllVariants[0].value;
+                        if (currentlyLoadedVariantRequest.params) {
+                            // include the variant unique name for the API call
+                            currentlyLoadedVariantRequest.params.variantUniqueName = stockAllVariants[0].value;
+                        }
                         this.loadDetails(currentlyLoadedVariantRequest);
                     }
                 }
@@ -2429,7 +2431,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.isShowLoader = true;
         this.changeDetectorRef.detectChanges();
         let invoiceType = this.getVoucherType(this.invoiceType);
-        
+
         if ((this.isSalesInvoice || this.isPurchaseInvoice) && this.depositAccountUniqueName && (this.userDeposit === null || this.userDeposit === undefined)) {
             this.userDeposit = 0;
         }
@@ -3416,12 +3418,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 };
             }
             this.currentTxnRequestObject[this.activeIndx] = {
-                selectedAcc,
-                isLinkedPoItem,
-                txn,
-                entry,
-                params,
-                entryIndex
+                selectedAcc: selectedAcc,
+                isLinkedPoItem: isLinkedPoItem,
+                txn: txn,
+                entry: entry,
+                params: params,
+                entryIndex: entryIndex
             };
             if (isBulkItem) {
                 const allStockVariants = this.stockVariants.getValue();
