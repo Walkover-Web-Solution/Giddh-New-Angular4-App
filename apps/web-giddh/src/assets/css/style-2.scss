@@ -7706,7 +7706,7 @@ footer#footer.absolute-footer {
                     .top-bar {
                         border-color: var(--color-common-secondary-border) !important;
                     }
-                }
+                };
             }
         }
     }
@@ -10169,12 +10169,6 @@ body {
         .page-leave-confirmation-modal-backdrop {
             z-index: 99999 !important;
         }
-    }
-}
-
-.cmd-k {
-    .cdk-overlay-container {
-        z-index: 999 !important;
     }
 }
 
@@ -13802,7 +13796,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
 
 hamburger-menu {
     position: relative;
-    z-index: 99999;
+    z-index: 990;
 }
 
 .activity-log-page {
