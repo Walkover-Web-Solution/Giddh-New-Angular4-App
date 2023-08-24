@@ -8432,18 +8432,18 @@ button.btn.btn-filter {
 
 .modal-backdrop + .modal {
     margin-top: 70px;
-    z-index: 99999;
+    z-index: 992;
 }
 
 .invoice-preview-page {
     .modal-backdrop + .modal {
-        z-index: 9999 !important;
+        z-index: 992 !important;
     }
 }
 
 .new-branch-list-page {
     .modal-backdrop + .modal {
-        z-index: 9999 !important;
+        z-index: 992 !important;
     }
 }
 
@@ -8507,12 +8507,12 @@ button.btn.btn-filter {
 }
 
 .modal-backdrop {
-    z-index: 9991;
+    z-index: 991;
     opacity: 0.5;
 }
 
 .modal {
-    z-index: 9999;
+    z-index: 992;
 }
 
 .select2-ledger .menu .list-item:hover {
@@ -10172,10 +10172,6 @@ body {
     }
 }
 
-.cdk-overlay-connected-position-bounding-box {
-    z-index: 9999;
-}
-
 .cmd-k {
     .cdk-overlay-container {
         z-index: 999 !important;
@@ -10627,7 +10623,7 @@ giddh-datepicker {
 
     .nav-left-bar {
         display: block;
-        z-index: 9991 !important;
+        z-index: 990 !important;
         -moz-transform: translate3d(0px, 0px, 0px);
         -webkit-transform: translate3d(0px, 0px, 0px);
         -o-transform: translate(0px, 0px);
@@ -12439,7 +12435,7 @@ inventory-master {
     }
 
     .hide-scroll-body:last-child .modal {
-        z-index: 9993;
+        z-index: 992;
     }
 
     .page-has-tabs .invoice-generate-container,
