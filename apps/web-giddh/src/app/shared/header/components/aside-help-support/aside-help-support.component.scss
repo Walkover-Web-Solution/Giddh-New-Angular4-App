@@ -50,6 +50,7 @@
 .aside-pane {
     padding: 0;
     background-color: var(--color-primary-aside-help-support-aside-header-pane-background);
+    z-index: 9;
     .aside-help-header {
         display: flex;
         justify-content: space-between;
@@ -174,6 +175,9 @@
     scroll-behavior: smooth;
     position: relative;
     margin-top: 15px;
+}
+.mat-mdc-dialog-content{
+    max-height: 100vh !important;
 }
 @media (max-height: 900px) {
     .aside-pane {
