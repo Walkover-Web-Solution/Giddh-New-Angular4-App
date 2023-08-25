@@ -134,8 +134,7 @@
                                 [(ngModel)]="receivedOtp"
                             ></text-field>
                         </div>
-                        <div class="form-group mr-r15 align-payment d-flex column-gap15">
-                            <label class="d-flex"> &nbsp; </label>
+                        <div class="form-group mr-r15 align-payment d-flex column-gap15 align-items-center">
                             <button
                                 mat-stroked-button
                                 color="primary"
@@ -148,6 +147,7 @@
                                 [disabled]="!isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData"
                                 [ladda]="isRequestInProcess"
                                 (click)="payClicked()"
+                                class="mr-t05"
                             >
                                 {{ commonLocaleData?.app_pay }}
                             </button>
