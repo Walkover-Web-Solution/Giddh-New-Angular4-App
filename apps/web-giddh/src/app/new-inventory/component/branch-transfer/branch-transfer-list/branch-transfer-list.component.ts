@@ -13,12 +13,13 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { branchTransferVoucherTypes, branchTransferAmountOperators } from "../../../../shared/helpers/branchTransferFilters";
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { ConfirmationModalConfiguration } from 'apps/web-giddh/src/app/theme/confirmation-modal/confirmation-modal.interface';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
+import { FormBuilder, FormControl, FormGroup, NgForm } from '@angular/forms';
 
 @Component({
     selector: 'branch-transfer-list',
@@ -34,8 +35,6 @@ export class BranchTransferListComponent implements OnInit {
     @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
-    @ViewChild('senderReceiverField', { static: true }) public senderReceiverField;
-    @ViewChild('warehouseNameField', { static: true }) public warehouseNameField;
     public selectedDateRange: any;
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
@@ -86,24 +85,12 @@ export class BranchTransferListComponent implements OnInit {
         totalItems: 0,
         count: PAGINATION_LIMIT
     }
-    public branchTransferPostRequestParams: NewBranchTransferListPostRequestParams = {
-        amountOperator: null,
-        amount: null,
-        voucherType: null,
-        date: null,
-        voucherNo: null,
-        senderReceiver: null,
-        warehouseName: null,
-        sender: null,
-        receiver: null
-    };
-    public branchTransferTempPostRequestParams: any = {
+    public branchTransferAdvanceSearchFormObj: any = {
         amountOperator: null,
         amount: null,
         voucherType: null
     };
-    public clearFilter: boolean = false;
-    public branchTransferResponse = null;
+    public branchTransferResponse: any[] = [];
     public voucherTypes: IOption[] = [];
     public amountOperators: IOption[] = [];
     public inlineSearch: any = '';
@@ -114,6 +101,33 @@ export class BranchTransferListComponent implements OnInit {
     public selectedBranchTransferType: any = '';
     /** Branch Transfer confirmation popup configuration */
     public branchTransferConfirmationConfiguration: ConfirmationModalConfiguration;
+    /** Form Group for group form */
+    public branchTransferForm: FormGroup;
+    /** Form Group for group form */
+    public branchTransferAdvanceSearchForm: FormGroup;
+    /** True, if custom date filter is selected or custom searching or sorting is performed */
+    public showClearFilter: boolean = false;
+    public get shouldShowElement(): boolean {
+        const hasResponse = this.branchTransferResponse.length > 0;
+        return (
+            (hasResponse && this.inlineSearch !== 'sender') ||
+            (this.inlineSearch === 'sender' && !hasResponse) ||
+            (hasResponse && this.inlineSearch === 'sender') ||
+            (hasResponse && this.inlineSearch !== 'receiver') ||
+            (this.inlineSearch === 'receiver' && !hasResponse) ||
+            (hasResponse && this.inlineSearch === 'receiver') ||
+            (hasResponse && this.inlineSearch !== 'senderReceiver') ||
+            (this.inlineSearch === 'senderReceiver' && !hasResponse) ||
+            (hasResponse && this.inlineSearch === 'senderReceiver') ||
+            (hasResponse && this.inlineSearch !== 'fromWarehouse') ||
+            (this.inlineSearch === 'fromWarehouse' && !hasResponse) ||
+            (hasResponse && this.inlineSearch === 'fromWarehouse') ||
+            (hasResponse && this.inlineSearch !== 'toWarehouse') ||
+            (this.inlineSearch === 'toWarehouse' && !hasResponse) ||
+            (hasResponse && this.inlineSearch === 'toWarehouse')
+        );
+    }
+    public advanceSearchAmountValue: any = '';
 
     constructor(
         public dialog: MatDialog,
@@ -123,7 +137,8 @@ export class BranchTransferListComponent implements OnInit {
         private settingsBranchAction: SettingsBranchActions,
         private inventoryService: InventoryService,
         private changeDetection: ChangeDetectorRef,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        private formBuilder: FormBuilder
     ) {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         if (this.currentOrganizationType === 'BRANCH') {
@@ -148,6 +163,8 @@ export class BranchTransferListComponent implements OnInit {
         branchTransferAmountOperators.map(amountOperator => {
             this.amountOperators.push({ label: amountOperator.label, value: amountOperator.value });
         });
+
+        this.initAllForms();
         this.store.pipe(select(stateStore => stateStore.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
@@ -200,33 +217,99 @@ export class BranchTransferListComponent implements OnInit {
                 }
             }
         });
-
-    }
-
-    public focusOnColumnSearch(inlineSearch) {
-        this.inlineSearch = inlineSearch;
-
-        setTimeout(() => {
-            if (this.inlineSearch === 'senderReceiver') {
-                if (this.senderReceiverField && this.senderReceiverField.nativeElement) {
-                    this.senderReceiverField.nativeElement.focus();
-                }
-            } else if (this.inlineSearch === 'warehouseName') {
-                if (this.warehouseNameField && this.warehouseNameField.nativeElement) {
-                    this.warehouseNameField.nativeElement.focus();
-                }
+        this.branchTransferForm?.controls['sender'].valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                this.showClearFilter = true;
+                this.getBranchTransferList(true);
             }
-        }, 200);
+        });
+        this.branchTransferForm?.controls['receiver'].valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                this.showClearFilter = true;
+                this.getBranchTransferList(true);
+            }
+        });
+        this.branchTransferForm?.controls['senderReceiver'].valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                this.showClearFilter = true;
+                this.getBranchTransferList(true);
+            }
+        });
+        this.branchTransferForm?.controls['fromWarehouse'].valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                this.showClearFilter = true;
+                this.getBranchTransferList(true);
+            }
+        });
+        this.branchTransferForm?.controls['toWarehouse'].valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                this.showClearFilter = true;
+                this.getBranchTransferList(true);
+            }
+        });
     }
 
-    public columnSearch(): void {
-        if (this.timeout) {
-            clearTimeout(this.timeout);
-        }
+    public toggleSearch(fieldName: string): void {
+        this.inlineSearch = fieldName;
+    }
 
-        this.timeout = setTimeout(() => {
-            this.getBranchTransferList(true);
-        }, 700);
+    private initAllForms(): void {
+        this.branchTransferForm = this.formBuilder.group({
+            amountOperator: null,
+            amount: null,
+            voucherType: null,
+            date: null,
+            voucherNo: null,
+            senderReceiver: null,
+            fromWarehouse: null,
+            toWarehouse: null,
+            warehouseName: null,
+            sender: null,
+            receiver: null
+        });
+    }
+
+    public getBranchTransferList(resetPage: boolean): void {
+        this.isLoading = true;
+        if (resetPage) {
+            this.branchTransferPaginationObject.page = 1;
+        }
+        this.changeDetection.detectChanges();
+        this.branchTransferGetRequestParams.page = this.branchTransferPaginationObject.page;
+        this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferForm.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            this.isLoading = false;
+            if (response && response?.status === "success") {
+                this.branchTransferPaginationObject.page = response.body.page;
+                this.branchTransferPaginationObject.totalPages = response.body.totalPages;
+                this.branchTransferPaginationObject.totalItems = response.body.totalItems;
+                this.branchTransferPaginationObject.count = response.body.count;
+                this.branchTransferResponse = response.body?.items;
+            } else {
+                this.branchTransferResponse = [];
+                this.branchTransferPaginationObject.totalItems = 0;
+            }
+            this.changeDetection.detectChanges();
+        });
     }
 
     public downloadBranchTransfer(item): void {
@@ -264,7 +347,6 @@ export class BranchTransferListComponent implements OnInit {
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            console.log(response);
             if (response === 'Yes') {
                 this.deleteNewBranchTransfer()
             } else {
@@ -295,7 +377,6 @@ export class BranchTransferListComponent implements OnInit {
     }
 
     public pageChanged(event: any): void {
-        this.branchTransferResponse = [];
         this.branchTransferPaginationObject.page = event?.page;
         this.getBranchTransferList(false);
     }
@@ -372,67 +453,51 @@ export class BranchTransferListComponent implements OnInit {
         this.branchTransferGetRequestParams.sort = event?.direction ? event?.direction : 'asc';
         this.branchTransferGetRequestParams.sortBy = event?.active;
         this.branchTransferGetRequestParams.page = 1;
+        this.showClearFilter = true;
         this.getBranchTransferList(false);
     }
 
     public clearFilters(): void {
-        this.branchTransferPostRequestParams.senderReceiver = null;
-        this.branchTransferPostRequestParams.warehouseName = null;
-        this.branchTransferPostRequestParams.voucherType = null;
-        this.branchTransferPostRequestParams.amountOperator = null;
-        this.branchTransferPostRequestParams.amount = null;
-        this.branchTransferPostRequestParams.sender = null;
-        this.branchTransferPostRequestParams.receiver = null;
-        this.branchTransferPostRequestParams.fromWarehouse = null;
-        this.branchTransferPostRequestParams.toWarehouse = null;
-        this.branchTransferTempPostRequestParams.voucherType = null;
-        this.branchTransferTempPostRequestParams.amountOperator = null;
-        this.branchTransferTempPostRequestParams.amount = null;
+        this.branchTransferAdvanceSearchFormObj.voucherType = null;
+        this.branchTransferAdvanceSearchFormObj.amountOperator = null;
+        this.branchTransferAdvanceSearchFormObj.amount = null;
         this.branchTransferGetRequestParams.sort = "";
         this.branchTransferGetRequestParams.sortBy = "";
-
-        this.clearFilter = true;
+        this.showClearFilter = false;
+        this.initAllForms();
+        this.inlineSearch = '';
         this.getBranchTransferList(true);
     }
 
-    public getBranchTransferList(resetPage: boolean): void {
-        this.isLoading = true;
-
-        if (resetPage) {
-            this.branchTransferPaginationObject.page = 1;
-        }
-        this.branchTransferGetRequestParams.page = this.branchTransferPaginationObject.page;
-        this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferPostRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            this.isLoading = false;
-            if (response && response?.status === "success") {
-                console.log(response);
-                this.branchTransferPaginationObject.page = response.body.page;
-                this.branchTransferPaginationObject.totalPages = response.body.totalPages;
-                this.branchTransferPaginationObject.totalItems = response.body.totalItems;
-                this.branchTransferPaginationObject.count = response.body.count;
-                this.branchTransferResponse = response.body?.items;
-            } else {
-                this.branchTransferResponse = [];
-                this.branchTransferPaginationObject.totalItems = 0;
-            }
-            this.changeDetection.detectChanges();
-        });
+    public selectVoucherType(event: any): void {
+        this.branchTransferAdvanceSearchFormObj.voucherType = event?.value;
+        this.branchTransferForm.controls['voucherType'].setValue(event?.value);
     }
-    public checkIfFiltersApplied(): boolean {
-        if (
-            this.branchTransferPostRequestParams.senderReceiver ||
-            this.branchTransferPostRequestParams.fromWarehouse ||
-            this.branchTransferPostRequestParams.toWarehouse ||
-            this.branchTransferPostRequestParams.sender ||
-            this.branchTransferPostRequestParams.receiver ||
-            this.branchTransferPostRequestParams.voucherType ||
-            this.branchTransferPostRequestParams.amountOperator ||
-            this.branchTransferPostRequestParams.amount) {
-            return true;
-        } else {
-            return false;
-        }
-        return
+
+    public selectOperator(event: any): void {
+        this.branchTransferAdvanceSearchFormObj.amountOperator = event?.value;
+        this.branchTransferForm.controls['amountOperator'].setValue(event?.value);
+    }
+
+    public search(): void {
+        this.branchTransferForm.controls['amount'].setValue(this.branchTransferAdvanceSearchFormObj.amount);
+        this.getBranchTransferList(true);
+        this.dialog?.closeAll();
+    }
+
+
+    public resetVoucherType(): void {
+        this.branchTransferAdvanceSearchFormObj.voucherType = null
+    }
+    public resetOperators(): void {
+        this.branchTransferAdvanceSearchFormObj.amountOperator = null
+    }
+
+    public cancel(): void {
+        this.branchTransferForm.controls['voucherType'].setValue(null);
+        this.branchTransferForm.controls['amountOperator'].setValue(null);
+        this.branchTransferForm.controls['amount'].setValue(null);
+        this.dialog.closeAll();
     }
 
     public ngOnDestroy() {
