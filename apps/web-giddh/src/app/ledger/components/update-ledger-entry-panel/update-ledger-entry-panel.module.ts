@@ -27,7 +27,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AttachmentsModule } from '../../../theme/attachments/attachments.module';
 import { LaddaModule } from 'angular2-ladda';
-import { FileUploadModule } from '@iplab/ngx-file-upload';
 
 @NgModule({
     declarations: [
@@ -50,7 +49,6 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
         DecimalDigitsModule,
         ClickOutsideModule,
         ReplacePipeModule,
-        FileUploadModule,
         AsideMenuSalesOtherTaxesModule,
         MatInputModule,
         MatCheckboxModule,

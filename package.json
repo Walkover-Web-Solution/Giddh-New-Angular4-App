@@ -67,7 +67,6 @@
         "@giddh-workspaces/scss": "file:libs/scss",
         "@giddh-workspaces/utils": "file:libs/utils",
         "@giddh-workspaces/web": "file:xplat/web",
-        "@iplab/ngx-file-upload": "^16.0.1",
         "@ngrx/effects": "16.1.0",
         "@ngrx/router-store": "16.1.0",
         "@ngrx/store": "16.1.0",
