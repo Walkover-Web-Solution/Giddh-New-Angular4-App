@@ -110,7 +110,7 @@
         "@angular/cli": "16.1.8",
         "@angular/compiler-cli": "16.1.8",
         "@angular/language-service": "16.1.8",
-        "@electron/notarize": "^2.1.0",
+        "@electron/notarize": "^1.2.4",
         "@ngrx/store-devtools": "16.1.0",
         "@types/file-saver": "^2.0.1",
         "@types/jquery": "3.5.1",
