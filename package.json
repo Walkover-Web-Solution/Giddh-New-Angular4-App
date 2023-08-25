@@ -118,7 +118,7 @@
         "compression-webpack-plugin": "^10.0.0",
         "cross-env": "^7.0.2",
         "dotenv": "^10.0.0",
-        "electron": "^24.6.5",
+        "electron": "^20.3.12",
         "electron-builder": "^24.6.3",
         "electron-installer-dmg": "^4.0.0",
         "electron-is-dev": "^2.0.0",
