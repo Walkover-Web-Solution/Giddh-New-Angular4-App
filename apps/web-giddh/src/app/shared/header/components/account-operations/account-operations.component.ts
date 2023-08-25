@@ -14,11 +14,10 @@ import { GroupResponse, GroupsTaxHierarchyResponse } from '../../../../models/ap
 import { AppState } from '../../../../store';
 import { Store, select } from '@ngrx/store';
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponseV2, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { IAccountsInfo } from '../../../../models/interfaces/account-info.interface';
 import { ToasterService } from '../../../../services/toaster.service';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -63,10 +62,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public isTaxableAccount$: Observable<boolean>;
     public isDiscountableAccount$: Observable<boolean>;
     public activeAccountSharedWith$: Observable<ShareRequestForm[]>;
-    public shareAccountForm: FormGroup;
-    public moveAccountForm: FormGroup;
+    public shareAccountForm: UntypedFormGroup;
+    public moveAccountForm: UntypedFormGroup;
     public activeGroupSelected$: Observable<string[]>;
-    public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
     @ViewChild('shareGroupModal', { static: true }) public shareGroupModal: ModalDirective;
     @ViewChild('shareAccountModal', { static: true }) public shareAccountModal: ModalDirective;
     @ViewChild('shareAccountModalComp', { static: true }) public shareAccountModalComp: ShareAccountModalComponent;
@@ -88,9 +86,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     // tslint:disable-next-line:no-empty
     public showNewForm$: Observable<boolean>;
-    public groupDetailForm: FormGroup;
-    public taxGroupForm: FormGroup;
-    public discountAccountForm: FormGroup;
+    public groupDetailForm: UntypedFormGroup;
+    public taxGroupForm: UntypedFormGroup;
+    public discountAccountForm: UntypedFormGroup;
     public showGroupForm: boolean = false;
     public activeGroup$: Observable<GroupResponse>;
     public activeGroupUniqueName$: Observable<string>;
@@ -134,7 +132,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     /** List of discounts */
     public discounts: any[] = [];
 
-    constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
+    constructor(private _fb: UntypedFormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
         private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions, private generalAction: GeneralActions) {
         this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     }

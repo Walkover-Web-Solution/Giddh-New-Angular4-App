@@ -27,6 +27,9 @@
 }
 .my-dropdown-menu {
     padding: 10px;
+    label{
+        font-size: var(--font-size-15) !important;
+    }
 }
 .percent-label,
 .value-label {
@@ -54,8 +57,7 @@
     overflow: auto;
     max-height: 100px;
     .discount-item {
-        padding: 5px;
-        margin-bottom: 5px;
+        height: 40px;
     }
 }
 .adjust {

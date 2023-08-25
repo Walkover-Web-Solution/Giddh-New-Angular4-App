@@ -1341,6 +1341,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, {
             position: {
                 right: '0',
+                top: '0'
             },
             width: '760px',
             height: '100vh !important'

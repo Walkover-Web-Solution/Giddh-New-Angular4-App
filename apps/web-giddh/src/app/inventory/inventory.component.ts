@@ -9,7 +9,7 @@ import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rx
 import { map, take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { select, Store } from '@ngrx/store';
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -29,7 +29,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
-import { cloneDeep, each, find, isEmpty, orderBy } from '../lodash-optimized';
+import { cloneDeep, each, find, orderBy } from '../lodash-optimized';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -54,7 +54,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Warehouse filter instance */
     @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ShSelectComponent;
     /** Instance of branch transfer template */
-    @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: ElementRef;
+    @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: TemplateRef<any>;
 
     public dataSyncOption = IsyncData;
     public companies$: Observable<CompanyResponse[]>;
@@ -201,7 +201,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.universalDate$ = this.store.pipe(select(appStore => appStore.session.applicationDate), takeUntil(this.destroyed$));
 
-        this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : ((this.router.url?.indexOf('inventory/report')) || (this.router.url?.indexOf('inventory/report/receiptnote')) || (this.router.url?.indexOf('inventory/report/deliverychallan'))) > -1 ? 3 : 0;
+        if (this.voucherApiVersion === 2) {
+            this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : ((this.router.url?.indexOf('inventory/report')) || (this.router.url?.indexOf('inventory/report/receiptnote')) || (this.router.url?.indexOf('inventory/report/deliverychallan'))) > -1 ? 3 : 0;
+        } else {
+            this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : this.router.url?.indexOf('inventory/report') > -1 ? 3 : (this.router.url?.indexOf('inventory/report/receipt') > -1 || this.router.url?.indexOf('inventory/report/delivery') > -1) ? 3 : 0;
+        }
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
             if (params.type) {
                 if (params?.type === 'deliverychallan') {
@@ -214,10 +218,14 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     Object.assign({}, { class: 'modal-lg receipt-note-modal  mb-0 pd-t85' })
                 );
             }
-        })
+        });
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
-                this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : ((this.router.url?.indexOf('inventory/report')) || (this.router.url?.indexOf('inventory/report/receiptnote')) || (this.router.url?.indexOf('inventory/report/deliverychallan'))) > -1 ? 3 : 0;
+                if (this.voucherApiVersion === 2) {
+                    this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : ((this.router.url?.indexOf('inventory/report')) || (this.router.url?.indexOf('inventory/report/receiptnote')) || (this.router.url?.indexOf('inventory/report/deliverychallan'))) > -1 ? 3 : 0;
+                } else {
+                    this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : this.router.url?.indexOf('inventory/report') > -1 ? 3 : (this.router.url?.indexOf('inventory/report/receipt') > -1 || this.router.url?.indexOf('inventory/report/delivery') > -1) ? 3 : 0;
+                }
             }
         });
         this.shouldShowInventoryReport$ = combineLatest([this.store.pipe(select(appStore => appStore.inventory.activeStockUniqueName)), this.store.pipe(select(appStore => appStore.inventory.activeGroupUniqueName))]).pipe(map(values => values[0] || values[1]));
@@ -276,26 +284,45 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         if (currentUrl) {
             this.router.navigateByUrl(currentUrl);
         } else {
-            switch (type) {
-                case 'inventory':
-                    this.navigateToInventoryTab();
-                    break;
-                case 'jobwork':
-                    this.router.navigate(['/pages', 'inventory', 'jobwork'], { relativeTo: this.route });
-                    this.activeTabIndex = 1;
-                    break;
-                case 'manufacturing':
-                    this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
-                    this.activeTabIndex = 2;
-                    break;
-                case 'report/receiptnote':
-                    this.router.navigate(['/pages', 'inventory', 'report', 'receiptnote'], { relativeTo: this.route });
-                    this.activeTabIndex = 3;
-                    break;
-                case 'report/deliverychallan':
-                    this.router.navigate(['/pages', 'inventory', 'report', 'deliverychallan'], { relativeTo: this.route });
-                    this.activeTabIndex = 3;
-                    break;
+            if (this.voucherApiVersion === 2) {
+                switch (type) {
+                    case 'inventory':
+                        this.navigateToInventoryTab();
+                        break;
+                    case 'jobwork':
+                        this.router.navigate(['/pages', 'inventory', 'jobwork'], { relativeTo: this.route });
+                        this.activeTabIndex = 1;
+                        break;
+                    case 'manufacturing':
+                        this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
+                        this.activeTabIndex = 2;
+                        break;
+                    case 'report/receiptnote':
+                        this.router.navigate(['/pages', 'inventory', 'report', 'receiptnote'], { relativeTo: this.route });
+                        this.activeTabIndex = 3;
+                        break;
+                    case 'report/deliverychallan':
+                        this.router.navigate(['/pages', 'inventory', 'report', 'deliverychallan'], { relativeTo: this.route });
+                        this.activeTabIndex = 3;
+                        break;
+                }
+            } else {
+                switch (type) {
+                    case 'inventory':
+                        this.navigateToInventoryTab();
+                        break;
+                    case 'jobwork':
+                        this.router.navigate(['/pages', 'inventory', 'jobwork'], { relativeTo: this.route });
+                        this.activeTabIndex = 1;
+                        break;
+                    case 'manufacturing':
+                        this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
+                        this.activeTabIndex = 2;
+                        break;
+
+                    case 'report':
+                        this.router.navigate(['/pages', 'inventory', 'report'], { relativeTo: this.route });
+                }
             }
         }
 

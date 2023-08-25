@@ -15,6 +15,7 @@ import { ReceiptService } from "../../../services/receipt.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { AppState } from "../../../store";
 import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: "preview",

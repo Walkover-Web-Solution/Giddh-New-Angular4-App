@@ -25,6 +25,11 @@
 
 .dis {
     display: flex;
+    .btn-group{
+        button{
+            min-width: 135px;
+        }
+    }
 }
 
 .pd-1 {
@@ -114,6 +119,7 @@ button.mat-menu-item {
     text-transform: none !important;
     img {
         filter: var(--color-image-filter);
+        width: 15px;
     }
 }
 
@@ -535,7 +541,7 @@ button.btn.btn-filter {
         bottom: 2px;
     }
     .mat-vendor-name {
-        padding-left: 28px !important;
+        padding-left: 10px !important;
     }
     .mat-customer-name {
         padding-left: 10px !important;
@@ -564,12 +570,29 @@ button.btn.btn-filter {
 
 .customer-vendor-name-search-icon {
     top: 2px;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    .mat-mdc-icon-button .mat-mdc-button-touch-target {
+        width: 25px !important;
+        height: 25px !important;
+    }
 }
 .customer-img {
     height: 360px;
     width: 489px;
 }
 /*responsive*/
+
+@media screen and (max-width: 1280px) {
+    .min-width-230 {
+        min-width: 195px !important;
+    }
+}
+
 @media (max-width: 1024px) {
     .customer-img {
         height: 360px;
@@ -578,7 +601,7 @@ button.btn.btn-filter {
     .customer-form-inline {
         position: relative;
         display: flex;
-        align-items: initial;
+        align-items: start;
 
         .wrap-search-entity {
             display: flex;
@@ -900,6 +923,10 @@ button.btn.btn-filter {
     visibility: visible !important;
 }
 
+.padding-left-25{
+    padding-left: 25px;
+}
+
 ::ng-deep.search-table {
     position: relative;
     right: 8px;
@@ -922,9 +949,12 @@ button.btn.btn-filter {
 }
 
 .close-btn-in-mat-model {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
     right: 9px;
-    top: 9px;
+    top: 6px;
     font-size: 25px;
     color: var(--color-popup-list-head-text);
 }
@@ -932,7 +962,8 @@ button.btn.btn-filter {
     min-width: 230px;
 }
 .arrow-icon {
-    right: -3px;
+    right: 14px;
+    top: 20px;
     width: 30px;
     height: 30px;
     border: 2px solid var(--color-primary-button-border);
@@ -946,9 +977,9 @@ button.btn.btn-filter {
 }
 .select-all-checkbox-wrapper {
     align-items: center;
-    padding-left: 25px;
-    .mat-checkbox {
-        left: 12px;
+    margin-left: 25px;
+    .mat-mdc-checkbox {
+        left: 20px;
     }
 }
 .select-single-checkbox-wrapper {
@@ -959,8 +990,8 @@ button.btn.btn-filter {
     border: unset;
     margin-top: 20px;
 }
-.min-width-137 {
-    min-width: 137px;
+.min-width-150 {
+    min-width: 150px;
 }
 
 .btn-light:not(:disabled):not(.disabled).active,

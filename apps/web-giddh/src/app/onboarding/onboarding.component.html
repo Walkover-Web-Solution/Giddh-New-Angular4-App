@@ -8,31 +8,31 @@
     <div id="main" class="welcome-container clearfix">
         <div>
             <div class="row mt-2 mr-0 ml-0">
-                <div class="col-xs-12 col-md-5 col-sm-6">
+                <div class="col-xl-5 col-lg-12 order-1 order-xl-0">
                     <h1 class="border-btm">{{ localeData?.try_things }}</h1>
                     <mat-list role="list" class="manage-invoice pt-0">
-                        <mat-list-item role="listitem" class="no-margin">
+                        <mat-list-item role="listitem" class="mr-b1 px-0">
                             <a [routerLink]="['/pages', 'proforma-invoice', 'invoice', 'sales']">
                                 <img src="{{ imgPath }}create-invoice.svg" alt="" class="mr-r1" />{{
                                     localeData?.create_send_invoice
                                 }}</a
                             >
                         </mat-list-item>
-                        <mat-list-item role="listitem">
+                        <mat-list-item role="listitem" class="mr-b1 px-0">
                             <a [routerLink]="['/pages', 'contact', 'customer']">
                                 <img src="{{ imgPath }}add-customer.svg" alt="" class="mr-r1" />{{
                                     localeData?.add_customer
                                 }}</a
                             >
                         </mat-list-item>
-                        <mat-list-item role="listitem">
+                        <mat-list-item role="listitem" class="mr-b1 px-0">
                             <a [routerLink]="['/pages', 'settings', 'taxes']">
                                 <img src="{{ imgPath }}updateGST.svg" alt="" class="mr-r1" />{{
                                     localeData?.update_taxes
                                 }}</a
                             >
                         </mat-list-item>
-                        <mat-list-item role="listitem">
+                        <mat-list-item role="listitem" class="mr-b1 px-0">
                             <a href="javascript:;" (click)="selectConfigureBank()">
                                 <img src="{{ imgPath }}configure-bank-account.svg" alt="" class="mr-r1" />{{
                                     localeData?.configure_bank_account
@@ -42,23 +42,25 @@
                     </mat-list>
                     <h1 class="border-btm mr-t5">{{ localeData?.have_data_tally }}</h1>
                     <p [innerHTML]="localeData?.giddh_usage"></p>
-                    <a
-                        mat-stroked-button
-                        color="primary"
-                        class="mt-2"
-                        target="_blank"
-                        href="https://giddh.com/help/sync-with-tally-1591360375828781"
-                    >
-                        {{ localeData?.sync_with_tally }}
-                    </a>
-                    <a
-                        mat-stroked-button
-                        color="primary"
-                        class="mt-2"
-                        href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp"
-                    >
-                        {{ localeData?.download_tcp }}
-                    </a>
+                    <div class="d-flex column-gap15">
+                        <a
+                            mat-stroked-button
+                            color="primary"
+                            class="mt-2"
+                            target="_blank"
+                            href="https://giddh.com/help/sync-with-tally-1591360375828781"
+                        >
+                            {{ localeData?.sync_with_tally }}
+                        </a>
+                        <a
+                            mat-stroked-button
+                            color="primary"
+                            class="mt-2"
+                            href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp"
+                        >
+                            {{ localeData?.download_tcp }}
+                        </a>
+                    </div>
 
                     <div class="mt-2 right-section">
                         <h1 class="border-btm">{{ localeData?.ask_question }}</h1>
@@ -78,25 +80,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-5 col-sm-6">
-                    <div class="right-section">
-                        <h1 class="border-btm">{{ commonLocaleData?.app_select_inventory_type }}</h1>
-                        <span>{{ commonLocaleData?.app_inventory_type }}</span>
-                        <div class="mt-1 clearfix">
-                            <mat-radio-group
-                                color="primary"
-                                name="inventoryType"
-                                [(ngModel)]="inventoryTypeStatus"
-                                (change)="updateInventorySetting()"
-                            >
-                                <mat-radio-button [value]="true">
-                                    {{ commonLocaleData?.app_product }}
-                                </mat-radio-button>
-                                <mat-radio-button class="ml-2" [value]="false">
-                                    {{ commonLocaleData?.app_service }}
-                                </mat-radio-button>
-                            </mat-radio-group>
-                        </div>
+                <div class="col-xl-7 col-lg-12 order-0 order-xl-1 mb-5">
+                    <h1 class="border-btm">{{ localeData?.watch_onboarding }}</h1>
+                    <div class="onboarding-video">
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            src="https://www.youtube-nocookie.com/embed/UiqdOuYpZrA?rel=0"
+                            title="YouTube video player"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen
+                        ></iframe>
                     </div>
                 </div>
             </div>
