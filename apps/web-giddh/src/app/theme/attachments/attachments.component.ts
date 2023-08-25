@@ -1,14 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { select, Store } from "@ngrx/store";
-import { UploaderOptions, UploadInput, UploadOutput } from "ngx-uploader";
-import { Observable, ReplaySubject } from "rxjs";
+import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
-// import { LedgerActions } from "../../actions/ledger/ledger.actions";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
-import { Configuration, FILE_ATTACHMENT_TYPE } from "../../app.constant";
+import { FILE_ATTACHMENT_TYPE } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
-import { LEDGER_API } from "../../services/apiurls/ledger.api";
 import { CommonService } from "../../services/common.service";
 import { GeneralService } from "../../services/general.service";
 import { ToasterService } from "../../services/toaster.service";
@@ -20,7 +17,6 @@ import { ConfirmModalComponent } from "../new-confirm-modal/confirm-modal.compon
 import { InvoiceSetting } from "../../models/interfaces/invoice.setting.interface";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.service";
-import { BreakpointObserver } from "@angular/cdk/layout";
 import * as printJS from 'print-js';
 import { OrganizationType } from "../../models/user-login-state";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
@@ -56,24 +52,12 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public voucherPdf: any;
     /** Stores the current organization type */
     public currentOrganizationType: string;
-    /** Upload input */
-    public uploadInput: EventEmitter<UploadInput>;
-    /** File upload options */
-    public fileUploadOptions: UploaderOptions;
-    /** True/false for file uploading */
-    public isFileUploading: boolean = false;
-    /** Holds active company data */
-    public activeCompany: any = {};
-    /** Holds session key observable */
-    public sessionKey$: Observable<string>;
     /** Holds invoice settings */
     public invoiceSettings: any;
     /** True/false for select all checkbox */
     public selectAll: boolean = false;
     /** True/false if get api call in progress */
     public isLoading: boolean = true;
-    /** True/false if mobile view */
-    public isMobileView: boolean = false;
     /** Holds images folder path */
     public imgPath: string = "";
     /** True if needs to refresh entry */
@@ -88,15 +72,13 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private settingsBranchAction: SettingsBranchActions,
         private store: Store<AppState>,
-        //private ledgerAction: LedgerActions,
         private changeDetectionRef: ChangeDetectorRef,
         private dialog: MatDialog,
         private ledgerService: LedgerService,
         private invoiceAction: InvoiceActions,
-        private invoiceBulkUpdateService: InvoiceBulkUpdateService,
-        private breakpointObserver: BreakpointObserver
+        private invoiceBulkUpdateService: InvoiceBulkUpdateService
     ) {
-        this.sessionKey$ = this.store.pipe(select(state => state.session.user.session.id), takeUntil(this.destroyed$));
+        
     }
 
     /**
@@ -123,31 +105,13 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.activeCompany = activeCompany;
+        if (!this.previewedFile) {
+            if (this.voucherPdf?.type) {
+                this.showVoucherPreview();
+            } else if (this.attachments?.length > 0) {
+                this.showFilePreview(this.attachments[0]);
             }
-        });
-
-        // emit upload event
-        this.uploadInput = new EventEmitter<UploadInput>();
-        // set file upload options
-        this.fileUploadOptions = { concurrency: 0 };
-
-        this.breakpointObserver.observe([
-            '(max-width: 767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileView = result.matches;
-            this.changeDetectionRef.detectChanges();
-
-            if (!this.isMobileView && !this.previewedFile) {
-                if (this.voucherPdf?.type) {
-                    this.showVoucherPreview();
-                } else if (this.attachments?.length > 0) {
-                    this.showFilePreview(this.attachments[0]);
-                }
-            }
-        });
+        }
 
         this.getFiles();
         document.querySelector('body')?.classList?.add('ledger-attachments-popup');
@@ -207,9 +171,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 if (response.body?.data) {
                     let objectURL = this.generalService.base64ToBlob(response.body?.data, 'application/pdf', 512);
                     this.voucherPdf = { name: this.selectedItem?.voucherNumber, uniqueName: this.selectedItem?.voucherUniqueName, type: "pdf", src: objectURL, originalSrc: objectURL, encodedData: response.body?.data, isChecked: false, originalFileExtension: "pdf" };
-                    if (!this.isMobileView) {
-                        this.showVoucherPreview();
-                    }
+                    this.showVoucherPreview();
                 } else {
                     this.showFilePreview(this.attachments[0]);
                 }
@@ -235,24 +197,12 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      */
     public showFilePreview(attachment: any): void {
         this.previewedFile = cloneDeep(attachment);
-        if (!this.isMobileView) {
-            if (attachment?.type === "pdf") {
-                const file = new Blob([attachment?.src], { type: 'application/pdf' });
-                let pdfFileURL = URL.createObjectURL(file);
-                this.previewedFile.src = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfFileURL);
-            }
-            this.changeDetectionRef.detectChanges();
-        } else {
-            if (this.previewedFile?.type === "pdf") {
-                const file = new Blob([this.previewedFile?.src], { type: 'application/pdf' });
-                let pdfFileURL = URL.createObjectURL(file);
-                window.open(pdfFileURL);
-            } else if (this.previewedFile?.type === "image") {
-                this.openPreview();
-            } else {
-                this.toaster.showSnackBar("error", this.localeData?.preview_unavailable);
-            }
+        if (attachment?.type === "pdf") {
+            const file = new Blob([attachment?.src], { type: 'application/pdf' });
+            let pdfFileURL = URL.createObjectURL(file);
+            this.previewedFile.src = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfFileURL);
         }
+        this.changeDetectionRef.detectChanges();
     }
 
     /**
@@ -262,16 +212,10 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      */
     public showVoucherPreview(): void {
         this.previewedFile = cloneDeep(this.voucherPdf);
-        if (!this.isMobileView) {
-            const file = new Blob([this.voucherPdf?.src], { type: 'application/pdf' });
-            let pdfFileURL = URL.createObjectURL(file);
-            this.previewedFile.src = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfFileURL);
-            this.changeDetectionRef.detectChanges();
-        } else {
-            const file = new Blob([this.voucherPdf?.src], { type: 'application/pdf' });
-            let pdfFileURL = URL.createObjectURL(file);
-            window.open(pdfFileURL);
-        }
+        const file = new Blob([this.voucherPdf?.src], { type: 'application/pdf' });
+        let pdfFileURL = URL.createObjectURL(file);
+        this.previewedFile.src = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfFileURL);
+        this.changeDetectionRef.detectChanges();
     }
 
     /**
@@ -285,43 +229,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         let windowObject = window.open("");
         if (windowObject?.document) {
             windowObject.document.write(file.outerHTML);
-        }
-    }
-
-    /**
-     * Uploads the file
-     *
-     * @param {UploadOutput} output
-     * @memberof AttachmentsComponent
-     */
-    public onUploadOutput(output: UploadOutput): void {
-        if (output.type === 'allAddedToQueue') {
-            let sessionKey = null;
-            let companyUniqueName = this.activeCompany?.uniqueName;
-            this.sessionKey$.pipe(take(1)).subscribe(key => sessionKey = key);
-            const event: UploadInput = {
-                type: 'uploadAll',
-                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
-                method: 'POST',
-                fieldName: 'file',
-                data: { company: companyUniqueName },
-                headers: { 'Session-Id': sessionKey },
-            };
-            this.uploadInput.emit(event);
-        } else if (output.type === 'start') {
-            this.isFileUploading = true;
-        } else if (output.type === 'done') {
-            if (output.file.response?.status === 'success') {
-                this.isFileUploading = false;
-                this.selectedItem.attachedFiles = [output.file.response?.body?.uniqueName];
-                this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
-
-                //this.store.dispatch(this.ledgerAction.updateTxnEntry(this.selectedItem, this.selectedItem.particular?.uniqueName, this.selectedItem.entryUniqueName));
-            } else {
-                this.isFileUploading = false;
-                this.selectedItem.attachedFiles = [];
-                this.toaster.showSnackBar("error", output.file.response?.message);
-            }
         }
     }
 

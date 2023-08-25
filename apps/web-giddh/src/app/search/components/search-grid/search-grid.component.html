@@ -230,7 +230,7 @@
                 <small class="mr-t05 mr-b05 grey">{{ localeData?.message_body_tips }}</small>
                 <div class="row mr-t2">
                     <div class="mx-3">
-                        <mat-chip-list>
+                        <mat-chip-listbox>
                             <mat-chip
                                 *ngFor="let val of dataVariables"
                                 (click)="addValueToMsg(val?.value)"
@@ -238,7 +238,7 @@
                             >
                                 {{ val?.name }}
                             </mat-chip>
-                        </mat-chip-list>
+                        </mat-chip-listbox>
                     </div>
                 </div>
                 <div class="mr-t4">

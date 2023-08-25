@@ -9,7 +9,7 @@ import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rx
 import { map, take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { select, Store } from '@ngrx/store';
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -29,7 +29,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
-import { cloneDeep, each, find, isEmpty, orderBy } from '../lodash-optimized';
+import { cloneDeep, each, find, orderBy } from '../lodash-optimized';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -54,7 +54,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Warehouse filter instance */
     @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ShSelectComponent;
     /** Instance of branch transfer template */
-    @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: ElementRef;
+    @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: TemplateRef<any>;
 
     public dataSyncOption = IsyncData;
     public companies$: Observable<CompanyResponse[]>;

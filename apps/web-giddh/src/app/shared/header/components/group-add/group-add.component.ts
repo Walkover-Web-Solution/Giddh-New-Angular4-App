@@ -1,6 +1,6 @@
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
@@ -22,7 +22,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     @Input() public commonLocaleData: any = {};
     @Input() public path: string[] = [];
     public activeGroupUniqueName$: Observable<string>;
-    public groupDetailForm: FormGroup;
+    public groupDetailForm: UntypedFormGroup;
     public showAddNewGroup$: Observable<boolean>;
     public isCreateGroupInProcess$: Observable<boolean>;
     public isCreateGroupSuccess$: Observable<boolean>;
@@ -31,7 +31,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private _fb: FormBuilder, 
+        private _fb: UntypedFormBuilder, 
         private store: Store<AppState>, 
         private groupWithAccountsAction: GroupWithAccountsAction,
         private accountsAction: AccountsAction

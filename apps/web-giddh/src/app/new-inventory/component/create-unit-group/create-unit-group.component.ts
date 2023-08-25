@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, Input, OnDestroy, OnChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ReplaySubject } from 'rxjs';
 import { InventoryService } from '../../../services/inventory.service';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
@@ -24,7 +24,7 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** Form Group for unit group form */
-    public unitGroupForm: FormGroup;
+    public unitGroupForm: UntypedFormGroup;
     /** Holds if form is valid or not */
     public isValidForm: boolean = true;
     /** True if need to generate unique name from name */
@@ -33,7 +33,7 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private formBuilder: FormBuilder,
+        private formBuilder: UntypedFormBuilder,
         private inventoryService: InventoryService,
         private toaster: ToasterService,
         private dialog: MatDialog

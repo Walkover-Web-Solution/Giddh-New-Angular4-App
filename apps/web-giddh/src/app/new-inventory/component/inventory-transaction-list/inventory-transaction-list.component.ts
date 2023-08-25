@@ -6,7 +6,7 @@ import { ReplaySubject } from "rxjs";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { cloneDeep } from "../../../lodash-optimized";
@@ -37,7 +37,7 @@ export class InventoryTransactionListComponent implements OnInit {
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** This will use for searching for column */
-    public searchAccountName: FormControl = new FormControl();
+    public searchAccountName: UntypedFormControl = new UntypedFormControl();
     /* dayjs object */
     public dayjs = dayjs;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */

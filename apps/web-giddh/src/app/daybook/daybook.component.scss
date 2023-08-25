@@ -75,8 +75,8 @@
 }
 
 .expand-collapse-btn a {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     background-color: var(--color-white);
     border: 1px solid var(--color-common-secondary-border);
     border-radius: 5px;
@@ -114,6 +114,7 @@ button.btn.btn-filter {
 .daybook-w-200 {
     width: 200px;
     white-space: normal !important;
+    text-transform: capitalize;
 }
 
 .daybook-w-300 {

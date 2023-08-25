@@ -234,7 +234,6 @@
 
         .unit-value {
             font-size: var(--font-size-15);
-            margin-bottom: -18px;
         }
 
         .variables-bottom-border {
@@ -287,4 +286,16 @@
             padding-right: 20px;
         }
     }
+}
+
+.verify-page{
+    .msg-btn{
+        border: 0;
+        background-color: transparent;
+    }
+}
+.chip-gap {
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
 }

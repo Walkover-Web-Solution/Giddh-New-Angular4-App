@@ -103,7 +103,7 @@
                 <datepicker name="toDate" [(ngModel)]="toDate" (selectionDone)="showToDatePicker=!showToDatePicker" [showWeeks]="false"></datepicker>
             </div>
         </div> -->
-                <div>
+                <div class="d-flex column-gap15">
                     <button
                         [disabled]="!groupUniqueName"
                         mat-stroked-button
@@ -112,8 +112,6 @@
                     >
                         {{ commonLocaleData?.app_search }}
                     </button>
-                </div>
-                <div>
                     <button [disabled]="!groupUniqueName" mat-stroked-button (click)="getClosingBalance(true, $event)">
                         {{ commonLocaleData?.app_refresh }}
                     </button>

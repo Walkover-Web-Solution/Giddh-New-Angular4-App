@@ -1,6 +1,6 @@
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
-import { FormControl } from "@angular/forms";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
+import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { Observable, ReplaySubject, of as observableOf, Subject } from "rxjs";
@@ -29,7 +29,7 @@ import { InventoryModuleName } from "../../inventory.enum";
 })
 export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of datepicker */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -65,11 +65,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /** True if show advance search model*/
     public showAdvanceSearchModal: boolean = false;
     /** This will use for instance of warehouses Dropdown */
-    public warehousesDropdown: FormControl = new FormControl();
+    public warehousesDropdown: UntypedFormControl = new UntypedFormControl();
     /** This will use for instance of branches Dropdown */
-    public branchesDropdown: FormControl = new FormControl();
+    public branchesDropdown: UntypedFormControl = new UntypedFormControl();
     /** Search field form control */
-    public searchFilters: FormControl = new FormControl();
+    public searchFilters: UntypedFormControl = new UntypedFormControl();
     /* This will store datepicker modal reference */
     public modalRef: BsModalRef;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
