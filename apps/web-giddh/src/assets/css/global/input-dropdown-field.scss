@@ -411,6 +411,9 @@ body{
             }
         }
     }
+    div.mat-mdc-select-panel {
+        background-color: var(--color-body-background);
+    }
 }
 
 .mat-mdc-menu-item{
@@ -482,6 +485,21 @@ report-filters{
     &.mdc-list-item--disabled {
         .mdc-list-item__primary-text{
             opacity: .78 !important;
+        }
+    }
+}
+
+app-cdk-scroll {
+    .mat-mdc-option{
+        &:focus{
+            &.mdc-list-item {
+                background-color: var(--color-mat-option) !important;
+            }
+        }
+        &.mat-mdc-option-active{
+            &.mdc-list-item {
+                background-color: var(--color-mat-option) !important;
+            }
         }
     }
 }

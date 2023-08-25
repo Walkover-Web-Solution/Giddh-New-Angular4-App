@@ -132,3 +132,28 @@ body{
         width: 100% !important;
     }
 }
+
+inventory-master{
+    .mat-grid-wrapper {
+        .mat-list-wrap {
+            .inventory-sub-sideabar {
+                .item-list {
+                    a {
+                        mat-list-item {
+                            .mdc-list-item__primary-text {
+                                color: var(--color-field-hover) !important;
+                            }
+                        }
+                        &.isActive{
+                            mat-list-item {
+                                .mdc-list-item__primary-text {
+                                    color: var(--color-list) !important;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

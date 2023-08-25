@@ -2827,20 +2827,6 @@ fieldset[disabled] .btn-primary:hover {
     color: var(--color-common-primary-blue-border) !important;
 }
 
-.btn-default:hover,
-.btn-default:disabled,
-.open > .dropdown-toggle.btn-default:focus,
-.open > .dropdown-toggle.btn-default:hover,
-.btn-default:active,
-.btn-default.active,
-.btn-default:active:focus,
-.open > .dropdown-toggle.btn-default,
-.btn-default:not(:disabled):not(.disabled):active {
-    // background: var(--color-secondary-button-background-hover) !important;
-    // color: var(--color-secondary-button-text) !important;
-    // border-color: var(--color-secondary-button-background-hover) !important;
-}
-
 .success-btn {
     font-size: var(--font-size-15);
     background-color: var(--color-success-enable);
