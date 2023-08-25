@@ -22,7 +22,7 @@ import { GeneralService } from '../../services/general.service';
 import { LocaleService } from '../../services/locale.service';
 import { AppState } from '../../store';
 import { AllItem, AllItems } from '../helpers/allItems';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'primary-sidebar',
@@ -112,6 +112,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public isActiveRoute: string;
     /** True if account has unsaved changes */
     public hasUnsavedChanges: boolean = false;
+    public commandkDialogRef: MatDialogRef<any>;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -181,7 +182,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             event.preventDefault();
             event.stopPropagation();
             if (this.companyList?.length > 0) {
-                this.dialog.open(this.navigationModal, {
+                if(this.commandkDialogRef && this.dialog.getDialogById(this.commandkDialogRef.id)){
+                    this.commandkDialogRef.close()
+                }
+                this.commandkDialogRef = this.dialog.open(this.navigationModal, {
                     width:'630px',
                     height: '600'
                 });

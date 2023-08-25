@@ -997,17 +997,6 @@ aside-create-group {
                     }
                 }
             }
-            div {
-                &:first-child {
-                    .mat-grid-tile {
-                        .mat-grid-tile-content {
-                            .item-list {
-                                margin-left: 0;
-                            }
-                        }
-                    }
-                }
-            }
         }
         mat-list {
             .cdk-virtual-scroll-viewport {
