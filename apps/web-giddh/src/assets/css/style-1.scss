@@ -2447,6 +2447,13 @@ form#groupDetailForm {
     color: var(--color-right-sidebar-settings);
     background-color: var(--color-primary-right-side-popup-body-background) !important;
 }
+.help-support-aside {
+    &.setting-sidebar-wrapper{
+        .aside-pane {
+            height: calc(100vh - 60px) !important;
+        } 
+    }
+}
 .aside-pane {
     max-width: 760px;
     width: 100%;
