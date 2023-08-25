@@ -55,7 +55,7 @@
                     <p class="attachment">{{ localeData?.attachments }}</p>
                     <div class="attachment-list">
                         <mat-list role="list" *ngFor="let attachment of attachments; let i = index">
-                            <mat-list-item role="listitem">
+                            <mat-list-item role="listitem" class="p-0">
                                 <mat-checkbox
                                     color="primary"
                                     [(ngModel)]="attachment.isChecked"
