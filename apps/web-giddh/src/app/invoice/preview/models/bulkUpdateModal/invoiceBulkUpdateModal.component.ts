@@ -110,10 +110,10 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
         if (selectedFile?.files?.length) {
             const file = selectedFile?.files[0];
 
-            this.generalService.getSelectedFile(file, (blob, file) => {
+            this.generalService.getSelectedFileBase64(file, (base64) => {
                 this.loaderService.show();
 
-                this.commonService.uploadImage({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.commonService.uploadImageBase64({ base64: base64, format: file.type, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.loaderService.hide();
 
                     if (response?.status === 'success') {
