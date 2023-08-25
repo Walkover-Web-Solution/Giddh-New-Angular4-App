@@ -80,7 +80,6 @@ import { FormsModule } from "@angular/forms";
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
-import { FileUploadModule } from "@iplab/ngx-file-upload";
 
 @NgModule({
     declarations: [
@@ -136,7 +135,6 @@ import { FileUploadModule } from "@iplab/ngx-file-upload";
         ModalModule.forRoot(),
         FormFieldsModule,
         TranslateDirectiveModule,
-        FileUploadModule,
         DecimalDigitsModule,
         MatButtonModule,
         MatIconModule,
