@@ -2469,9 +2469,11 @@ form#groupDetailForm {
 }
 .help-support-aside {
     &.setting-sidebar-wrapper{
-        .aside-pane {
-            height: calc(100vh - 60px) !important;
-        } 
+        aside-setting {
+            .aside-pane {
+                height: calc(100vh - 60px) !important;
+            } 
+        }
     }
 }
 .aside-pane {

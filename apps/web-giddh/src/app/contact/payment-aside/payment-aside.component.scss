@@ -187,6 +187,12 @@ form label {
 .modal-header {
     height: 63px !important;
 }
+.confirm-btn {
+    height: auto !important;
+}
+.pay-btn{
+    margin-bottom: 25px;
+}
 @media (max-width: 1100px) {
     .payment-top-form {
         .otp-success-msg {
