@@ -209,4 +209,19 @@ export class CommonService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
+
+    /**
+     * Uploads base64 image
+     *
+     * @param {*} postRequest
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof CommonService
+     */
+    public uploadImageBase64(postRequest: any): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMMON_API.UPLOAD_IMAGE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        return this.http.post(url, postRequest).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
 }
