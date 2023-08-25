@@ -37,7 +37,7 @@
         >
             <li *ngFor="let tax of taxRenderData; trackBy: trackByFn; let i = index">
                 <label
-                    class="checkbox d-flex align-items-center width-100 m-0 bd-rb pd-l1 mr-b05"
+                    class="checkbox d-flex align-items-center width-100 m-0 pd-0"
                     (click)="$event.stopPropagation()"
                     [ngClass]="{ 'disabled-label': tax.isDisabled }"
                     #taxLabel

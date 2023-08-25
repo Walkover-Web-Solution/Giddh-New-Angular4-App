@@ -11,7 +11,7 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<mat-dialog-content class="all-payment-side w-100">
+<mat-dialog-content class="all-payment-side  w-100">
     <div class="clearfix">
         <form #adjustAdvancePaymentForm="ngForm" autocomplete="off">
             <div class="row d-flex align-items-center payment-top-form">
@@ -66,6 +66,12 @@
                                     </ng-template>
                                 </sh-select>
                             </div>
+                            <p *ngIf="totalAvailableBalance">
+                                <small class="text-gray"
+                                    >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
+                                    {{ commonLocaleData?.app_dr }}</small
+                                >
+                            </p>
                         </div>
                         <div class="form-group mr-r15">
                             <label>{{ localeData?.select_payor }}<span class="red-text">*</span></label>
@@ -94,7 +100,7 @@
                                 >
                             </p>
                         </div>
-                        <div class="form-group mr-r15">
+                        <div class="form-group mr-r15 ">
                             <label>{{ commonLocaleData?.app_total_amount }}<span class="red-text">*</span></label>
                             <text-field
                                 type="text"
@@ -106,7 +112,7 @@
                                 name="amount"
                             ></text-field>
                         </div>
-                        <div class="form-group mr-r15" *ngIf="isPayClicked">
+                        <div class="form-group mr-r15 " *ngIf="isPayClicked">
                             <label class="relative d-flex"
                                 >{{ commonLocaleData?.app_enter_otp }}<span class="red-text">*</span>
                                 <p class="resend-btn" *ngIf="!timerOn">
@@ -128,7 +134,7 @@
                                 [(ngModel)]="receivedOtp"
                             ></text-field>
                         </div>
-                        <div class="form-group mr-r15 d-flex column-gap15 mr-t1">
+                        <div class="form-group mr-r15  d-flex column-gap15 align-items-center">
                             <button
                                 mat-stroked-button
                                 color="primary"
@@ -141,21 +147,11 @@
                                 [disabled]="!isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData"
                                 [ladda]="isRequestInProcess"
                                 (click)="payClicked()"
+                                class="mr-t05"
                             >
                                 {{ commonLocaleData?.app_pay }}
                             </button>
-                            </div>
-                        </div>
-                </div>
-                <div class="col-12">
-                    <div class="d-flex column-gap15">
-                        <p *ngIf="totalAvailableBalance">
-                            <small class="text-gray"
-                                >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
-                                {{ commonLocaleData?.app_dr }}</small
-                            >
-                        </p>
-                        <div class="d-flex column-gap1">
+
                             <button
                                 mat-stroked-button
                                 color="primary"
