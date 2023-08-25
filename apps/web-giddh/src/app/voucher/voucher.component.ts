@@ -8401,6 +8401,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public copyInvoice(item: PreviousInvoicesVm): void {
+        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.getLastInvoiceDetails({ accountUniqueName: item.account?.uniqueName, invoiceNo: item.versionNumber, uniqueName: item?.uniqueName });
     }
 
