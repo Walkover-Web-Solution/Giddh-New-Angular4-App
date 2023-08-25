@@ -38,8 +38,6 @@ import { VoucherRendererComponent } from "./voucher-renderer.component";
 import { VoucherComponent } from "./voucher.component";
 import { VoucherRoutingModule } from "./voucher.routing.module";
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { FileUploadModule } from "@iplab/ngx-file-upload";
-
 
 @NgModule({
     imports: [
@@ -50,7 +48,6 @@ import { FileUploadModule } from "@iplab/ngx-file-upload";
         KeyboardShortutModule,
         DecimalDigitsModule,
         CollapseModule.forRoot(),
-        FileUploadModule,
         BsDropdownModule.forRoot(),
         DigitsOnlyModule,
         SharedModule,

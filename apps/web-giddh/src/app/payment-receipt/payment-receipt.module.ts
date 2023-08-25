@@ -29,7 +29,6 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { AsideMenuOtherTaxesModule } from "../shared/aside-menu-other-taxes/aside-menu-other-taxes.module";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { AdvanceReceiptAdjustmentModule } from "../shared/advance-receipt-adjustment/advance-receipt-adjustment.module";
-import { FileUploadModule } from "@iplab/ngx-file-upload";
 
 @NgModule({
     declarations: [
@@ -48,7 +47,6 @@ import { FileUploadModule } from "@iplab/ngx-file-upload";
         GiddhDatepickerModule,
         MatSelectModule,
         MatInputModule,
-        FileUploadModule,
         MatCheckboxModule,
         MatMenuModule,
         AmountFieldComponentModule,

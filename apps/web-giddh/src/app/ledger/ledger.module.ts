@@ -58,7 +58,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { AttachmentsModule } from '../theme/attachments/attachments.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { StockCreateEditModule } from '../new-inventory/component/stock-create-edit/stock-create-edit.module';
-import { FileUploadModule } from '@iplab/ngx-file-upload';
 
 @NgModule({
     declarations: [
@@ -85,7 +84,6 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
         LedgerRoutingModule,
         ModalModule.forRoot(),
         PaginationModule.forRoot(),
-        FileUploadModule,
         ClipboardModule,
         LaddaModule.forRoot({
             style: 'slide-left',
