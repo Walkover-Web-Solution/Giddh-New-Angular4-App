@@ -31,7 +31,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { LightboxModule } from 'ngx-lightbox';
 import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-petty-cash-entry-confirm-dialog/reject-petty-cash-entry-confirm-dialog.component';
-import { FileUploadModule } from '@iplab/ngx-file-upload';
 
 @NgModule({
     declarations: [
@@ -52,7 +51,6 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
         TabsModule.forRoot(),
         LedgerModule,
         CurrencyModule,
-        FileUploadModule,
         PaginationModule.forRoot(),
         SharedModule,
         ShSelectModule,

@@ -74,7 +74,6 @@ import { DeleteTemplateConfirmationModalModule } from './templates/edit-template
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { VoucherModule } from '../voucher/voucher.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatDialogModule } from '@angular/material/dialog';
 
@@ -120,7 +119,6 @@ import { MatDialogModule } from '@angular/material/dialog';
         InvoiceTemplatesModule,
         KeyboardShortutModule,
         CollapseModule.forRoot(),
-        FileUploadModule,
         SelectModule,
         LaddaModule.forRoot({
             style: 'slide-left',

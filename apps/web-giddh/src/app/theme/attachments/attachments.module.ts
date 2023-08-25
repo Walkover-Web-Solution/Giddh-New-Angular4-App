@@ -10,7 +10,6 @@ import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page
 import { FormsModule } from "@angular/forms";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { FileUploadModule } from "@iplab/ngx-file-upload";
 
 @NgModule({
     declarations: [
@@ -21,7 +20,6 @@ import { FileUploadModule } from "@iplab/ngx-file-upload";
         MatCheckboxModule,
         MatListModule,
         CommonModule,
-        FileUploadModule,
         NewConfirmModalModule,
         GiddhPageLoaderModule,
         FormsModule,

@@ -8,7 +8,6 @@ import { GstTemplateAComponent } from './edit-template/out-tempate/templates/gst
 import { GstTemplateEComponent } from './edit-template/out-tempate/templates/gst-template-e/gst-template-e.component';
 import { HasFocusDirectiveModule } from '../../shared/helpers/directives/has-focus/has-focus.module';
 import { ThermalTemplateComponent } from './edit-template/out-tempate/templates/thermal-template/thermal-template.component';
-import { FileUploadModule } from '@iplab/ngx-file-upload';
 
 @NgModule({
     imports: [
@@ -16,7 +15,6 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
         FormsModule,
         ReactiveFormsModule,
         CollapseModule.forRoot(),
-        FileUploadModule,
         HasFocusDirectiveModule
     ],
     declarations: [
