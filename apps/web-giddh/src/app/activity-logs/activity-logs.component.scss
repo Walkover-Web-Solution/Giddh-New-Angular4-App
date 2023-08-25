@@ -107,7 +107,8 @@
         }
 
         .history-icon {
-            display: none;
+            visibility: hidden;
+            transition: 0ms;
         }
 
         .mat-column-history {
@@ -118,7 +119,7 @@
         tr {
             &:hover {
                 .history-icon {
-                    display: inline-block !important;
+                    visibility: visible;
                     z-index: 9999;
                 }
             }
