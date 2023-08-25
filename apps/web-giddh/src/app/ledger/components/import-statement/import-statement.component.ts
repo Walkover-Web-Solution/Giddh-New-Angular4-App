@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Router } from '@angular/router';
 import { SAMPLE_FILES_URL } from '../../../app.constant';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'import-statement',

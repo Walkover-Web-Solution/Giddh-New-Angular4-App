@@ -1,12 +1,12 @@
 :host {
     position: fixed;
     left: auto;
-    top: 57px;
-    right: 0;
+    top: 60px;
+    right: -5px;
     bottom: 0;
     max-width: 330px;
     width: 100%;
-    z-index: 99999;
+    z-index: 990;
     box-shadow: -3px 0 6px var(--color-primary-common-box-shadow);
     &:after {
         position: absolute;
@@ -18,6 +18,9 @@
         right: 18px;
         z-index: 1;
         transform: rotate(45deg);
+    }
+    .aside-pane{
+        overflow: auto;
     }
 }
 :host.in #close {
@@ -46,6 +49,7 @@
 .aside-pane {
     padding: 0;
     background-color: var(--color-primary-aside-help-support-aside-header-pane-background);
+    z-index: 9;
     .aside-help-header {
         display: flex;
         justify-content: space-between;
@@ -55,9 +59,13 @@
         top: 0;
         background-color: inherit;
         h2 {
-            font-family: var(--font-semibold);
-            font-size: var(--font-size-16);
-            color: var(--color-giddh-blue);
+            font-family: var(--font-semibold) !important;
+            font-size: var(--font-size-16) !important;
+            color: var(--color-giddh-blue) !important;
+            line-height: 20px !important;
+            &::before{
+                display: none !important;
+            }
         }
     }
     .help-aside-body {
@@ -140,6 +148,14 @@
             }
         }
     }
+    mat-dialog-content {
+        .mdc-list-item{
+            &.mdc-list-item--with-one-line{
+                height: unset !important;
+                margin-bottom: 10px;
+            }
+        }
+    }
 }
 .aside-pane-form {
     background-color: var(--color-white);
@@ -150,6 +166,9 @@
     scroll-behavior: smooth;
     position: relative;
     margin-top: 15px;
+}
+.mat-mdc-dialog-content{
+    max-height: 100vh !important;
 }
 @media (max-height: 900px) {
     .aside-pane {

@@ -42,11 +42,11 @@
                             <div class="col-sm-4 col-xs-6">
                                 <text-field
                                     [cssClass]="'form-control mat-field-border'"
-                                    type="tel"
+                                    [type]="'text'"
                                     [placeholder]="
                                         commonLocaleData?.app_numbers?.zero + '' + commonLocaleData?.app_numbers?.zero
                                     "
-                                    name="total"
+                                    [name]="'total'"
                                     [(ngModel)]="request.amount"
                                 ></text-field>
                             </div>

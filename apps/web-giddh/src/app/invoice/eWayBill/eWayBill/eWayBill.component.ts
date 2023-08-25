@@ -14,7 +14,7 @@ import { saveAs } from 'file-saver';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
-import { NgForm, FormControl } from '@angular/forms';
+import { NgForm, UntypedFormControl } from '@angular/forms';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
@@ -63,8 +63,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     // searching
     @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
     @ViewChild('customerSearch', { static: true }) public customerSearch: ElementRef;
-    public voucherNumberInput: FormControl = new FormControl();
-    public customerNameInput: FormControl = new FormControl();
+    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
+    public customerNameInput: UntypedFormControl = new UntypedFormControl();
     public showSearchInvoiceNo: boolean = false;
     public showSearchCustomer: boolean = false;
     public EwayBillfilterRequest: IEwayBillfilter = new IEwayBillfilter();
@@ -91,7 +91,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public selectedEway: Result;
     public states: any[] = [];
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */

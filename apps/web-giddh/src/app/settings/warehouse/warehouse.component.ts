@@ -25,7 +25,6 @@ import { SettingsProfileService } from '../../services/settings.profile.service'
 import { SettingsWarehouseService } from '../../services/settings.warehouse.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { OnBoardingComponent } from '../../shared/on-boarding/on-boarding.component';
 import { ItemOnBoardingState } from '../../store/item-on-boarding/item-on-boarding.reducer';
 import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';

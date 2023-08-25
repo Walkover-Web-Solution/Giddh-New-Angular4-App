@@ -753,15 +753,17 @@
                                             <label class="default-color">{{
                                                 commonLocaleData?.app_cheque_clearance_date
                                             }}</label>
-                                            <giddh-datepicker
-                                                class="db"
-                                                [showToggleIcon]="false"
-                                                [cssClass]="'mat-field-border bdr form-control'"
-                                                [disabled]="isReadOnly"
-                                                id="cheque-clearance-date"
-                                                (datepickerState)="datepickerState($event)"
-                                                [(ngModel)]="blankLedger.chequeClearanceDate"
-                                            ></giddh-datepicker>
+                                            <div class="custom-input-field">
+                                                <giddh-datepicker
+                                                    class="db"
+                                                    [showToggleIcon]="false"
+                                                    [cssClass]="'mat-field-border bdr form-control'"
+                                                    [disabled]="isReadOnly"
+                                                    id="cheque-clearance-date"
+                                                    (datepickerState)="datepickerState($event)"
+                                                    [(ngModel)]="blankLedger.chequeClearanceDate"
+                                                ></giddh-datepicker>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -995,12 +997,8 @@
                         [hidden]="true"
                         name="invoiceFile"
                         id="invoiceFile"
-                        [options]="fileUploadOptions"
-                        ngFileSelect
-                        [uploadInput]="uploadInput"
-                        (uploadOutput)="onWebUpload($event)"
                         #webFileInput
-                        (click)="onUploadOutput()"
+                        (change)="uploadFile()"
                     />
                     <label
                         class="upload-div pd-r15"
@@ -1035,7 +1033,7 @@
                     {{ commonLocaleData?.app_reset }}
                 </button>
 
-                <div class="pull-right xs-d-block">
+                <div class="pull-right xs-d-block d-flex column-gap15">
                     <button
                         mat-stroked-button
                         id="ledger-add-button-dr"
@@ -1073,18 +1071,17 @@
 </div>
 
 <!-- aside menu section -->
-<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
-<app-aside-menu-sales-other-taxes
-    *ngIf="asideMenuStateForOtherTaxes === 'in'"
-    [class]="asideMenuStateForOtherTaxes"
-    [otherTaxesModal]="blankLedger.otherTaxModal"
-    [@slideInOut]="asideMenuStateForOtherTaxes"
-    [taxes]="companyTaxesList"
-    [commonLocaleData]="commonLocaleData"
-    (closeModal)="closeAsideMenuStateForOtherTax()"
-    (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane(true); emitOtherTaxes()"
->
-</app-aside-menu-sales-other-taxes>
+<ng-template #asideMenuStateForOtherTaxes>
+    <app-aside-menu-sales-other-taxes
+        [class]="asideMenuStateForOtherTaxes"
+        [otherTaxesModal]="blankLedger.otherTaxModal"
+        [taxes]="companyTaxesList"
+        [commonLocaleData]="commonLocaleData"
+        (closeModal)="closeAsideMenuStateForOtherTax()"
+        (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane(true); emitOtherTaxes()"
+    >
+    </app-aside-menu-sales-other-taxes>
+</ng-template>
 
 <ng-template #totalWithCurrencySymbol>
     <span>
@@ -1149,19 +1146,15 @@
     </div>
 </ng-template>
 <ng-template #adjustPaymentModal>
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <advance-receipt-adjustment-component
-                [adjustedVoucherType]="blankLedger.voucherType"
-                [invoiceFormDetails]="adjustVoucherConfiguration"
-                [advanceReceiptAdjustmentUpdatedData]="currentTxn?.voucherAdjustments"
-                [invoiceListRequestParams]="invoiceListRequestParams"
-                (closeModelEvent)="closeAdjustmentModal($event)"
-                (submitClicked)="getAdjustedPaymentData($event)"
-            >
-            </advance-receipt-adjustment-component>
-        </div>
-    </div>
+    <advance-receipt-adjustment-component
+        [adjustedVoucherType]="blankLedger.voucherType"
+        [invoiceFormDetails]="adjustVoucherConfiguration"
+        [advanceReceiptAdjustmentUpdatedData]="currentTxn?.voucherAdjustments"
+        [invoiceListRequestParams]="invoiceListRequestParams"
+        (closeModelEvent)="closeAdjustmentModal($event)"
+        (submitClicked)="getAdjustedPaymentData($event)"
+    >
+    </advance-receipt-adjustment-component>
 </ng-template>
 <ng-template #variantAndWarehouseDropdown>
     <div class="d-flex justify-content-between mb-2">

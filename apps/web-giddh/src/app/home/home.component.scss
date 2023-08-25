@@ -10,9 +10,6 @@
     }
 }
 
-:host ::ng-deep perfect-scrollbar {
-    height: auto;
-}
 // new dashboard css
 .white-row {
     background-color: var(--color-white);
@@ -83,5 +80,13 @@ span.icon-info-icon {
 @media (max-width: 1500px) {
     .dashboard-container {
         margin-bottom: 40px;
+    }
+}
+
+@media (max-width: 1299px) {
+    .dashboard-container {
+        mat-card {
+            min-height: 446px;
+        }
     }
 }

@@ -37,7 +37,6 @@ import { DashboardSellingReport } from "./component/inventory-dashboard/dashboar
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
 import { CommonModule } from "@angular/common";
-import { NgxUploaderModule } from "ngx-uploader";
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -66,7 +65,6 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { ReportFiltersComponent } from "./component/report-filters/report-filters.component";
 import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
-import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatListModule } from "@angular/material/list";
@@ -105,7 +103,6 @@ import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.modu
         AdjustProductServiceComponent,
         InventoryAdjustmentReasonAside,
         InventoryAdjustmentBulkEntryComponent,
-        InventoryCreateUpdateGroupComponent,
         CreateNewInventoryComponent,
         NewInventoryAdvanceSearch,
         InventoryDashboardComponent,
@@ -135,10 +132,9 @@ import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.modu
         TabsModule.forRoot(),
         BsDropdownModule.forRoot(),
         CommonModule,
-        ModalModule,
+        ModalModule.forRoot(),
         FormFieldsModule,
         TranslateDirectiveModule,
-        NgxUploaderModule,
         DecimalDigitsModule,
         MatButtonModule,
         MatIconModule,
@@ -156,7 +152,7 @@ import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.modu
         StockCreateEditModule,
         NgxMatSelectSearchModule,
         GiddhPageLoaderModule,
-        PaginationModule,
+        PaginationModule.forRoot(),
         MatDialogModule,
         MatAutocompleteModule,
         MatTooltipModule,

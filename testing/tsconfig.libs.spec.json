@@ -3,7 +3,6 @@
     "compilerOptions": {
         "outDir": "../dist/out-tsc/libs",
         "types": [
-            "jasmine",
             "node"
         ]
     },

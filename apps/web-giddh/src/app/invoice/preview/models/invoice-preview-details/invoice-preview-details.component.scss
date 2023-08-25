@@ -39,6 +39,10 @@
     background-color: var(--color-white);
     padding: 0;
     height: calc(100vh - 120px);
+
+    cdk-virtual-scroll-viewport {
+        height: 100%;
+    }
 }
 
 .d-flex {
@@ -1256,4 +1260,12 @@ strong {
             }
         }
     }
+}
+
+@media screen and (max-width: 1280px) {
+    .invoice-search-box {
+        button {
+            padding: 7px 7px !important;
+        }
+    } 
 }

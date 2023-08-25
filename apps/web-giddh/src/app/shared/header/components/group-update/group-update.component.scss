@@ -39,6 +39,7 @@
         .ladda-button[type="submit"] {
             border-color: var(--color-secondary-button-background) !important;
             background-color: var(--color-secondary-button-background) !important;
+            color: var(--color-white) !important;
             &:hover {
                 border-color: var(--color-secondary-button-background-hover) !important;
                 background-color: var(--color-secondary-button-background-hover) !important;
