@@ -216,10 +216,10 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         if (selectedFile?.files?.length) {
             const file = selectedFile?.files[0];
 
-            this.generalService.getSelectedFileBase64(file, (base64) => {
+            this.generalService.getSelectedFile(file, (blob, file) => {
                 this.isSignatureUploadInProgress = true;
 
-                this.commonService.uploadImageBase64({ base64: base64, format: file.type, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.commonService.uploadImage({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isSignatureUploadInProgress = false;
 
                     if (response?.status === 'success') {
