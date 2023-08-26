@@ -236,13 +236,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             }
         });
-
-        this.store.pipe(select(state => state.session.user), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.user) {
-                this.mobileNo = response.user.contactNo;
-            }
-        });
-
         this.changeDetection.detectChanges();
     }
 
@@ -510,7 +503,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.selectedStep = 0;
             return;
         }
-        this.firstStepForm.controls['mobile'].setValue(this.mobileNo);
         this.selectedStep = 1;
         this.company.name = this.firstStepForm.controls['name'].value;
         this.company.country = this.firstStepForm.controls['country'].value.value;
@@ -598,7 +590,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         let newUserInfo = {
             name: this.company.name,
             currency: this.company.baseCurrency,
-            contactNo: this.firstStepForm.controls['mobile'].value,
             source: this.generalService.getUtmParameter('utm_source'),
             medium: this.generalService.getUtmParameter('utm_medium'),
             campaign: this.generalService.getUtmParameter('utm_campaign'),
@@ -635,16 +626,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             return;
         }
 
-        let parsedMobileNo = window['libphonenumber']?.parsePhoneNumber("+" + this.mobileNo);
-        let number = parsedMobileNo?.nationalNumber ?? this.mobileNo;
-        let countryCode = parsedMobileNo?.countryCallingCode;
         let taxDetails = this.prepareTaxDetail(this.companyForm);
         this.company.name = this.firstStepForm.value.name;
         this.company.country = this.firstStepForm.value.country.value;
         this.company.businessNature = this.secondStepForm.value.businessNature;
         this.company.businessType = this.secondStepForm.value.businessType;
-        this.company.contactNo = number;
-        this.company.phoneCode = countryCode;
+        this.company.contactNo = '';
+        this.company.phoneCode = '';
         this.company.addresses = [taxDetails];
         this.company.pincode = taxDetails[0]?.pincode;
         this.company.address = taxDetails[0]?.address;
