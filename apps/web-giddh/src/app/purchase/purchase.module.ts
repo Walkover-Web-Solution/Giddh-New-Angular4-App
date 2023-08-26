@@ -7,7 +7,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -24,7 +23,6 @@ import { PurchaseRecordComponent } from './purchase-record/component/purchase-re
 import { PurchaseSettingComponent } from './purchase-setting/purchase-setting.component';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
-import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/voucher-add-bulk-items.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
@@ -43,7 +41,12 @@ import { InvoiceModule } from '../invoice/invoice.module';
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic.aside.menu.account.module';
 import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
-
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
     declarations: [
@@ -53,12 +56,13 @@ import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-serv
         PurchaseComponent,
         PurchaseRecordComponent,
         PurchaseSettingComponent,
-        PurchaseAdvanceSearchComponent
+        PurchaseAdvanceSearchComponent,
+        BulkConvertComponent
     ],
     imports: [
         PurchaseRoutingModule,
         InvoiceModule,
-        CollapseModule,
+        CollapseModule.forRoot(),
         PaginationModule.forRoot(),
         BsDropdownModule.forRoot(),
         LaddaModule.forRoot({
@@ -69,7 +73,7 @@ import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-serv
         ClickOutsideModule,
         TabsModule.forRoot(),
         ElementViewChildModule,
-        PerfectScrollbarModule,
+        ScrollingModule,
         ShSelectModule,
         SalesShSelectModule,
         CurrencyModule,
@@ -77,12 +81,12 @@ import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-serv
         TaxControlModule,
         DiscountControlModule,
         NoDataModule,
-        NgxBootstrapSwitchModule.forRoot(),
+        MatSlideToggleModule,
         VoucherAddBulkItemsModule,
         TranslateDirectiveModule,
         KeyboardShortutModule,
         DecimalDigitsModule,
-        ModalModule,
+        ModalModule.forRoot(),
         HamburgerMenuModule,
         BsDatepickerModule.forRoot(),
         DeleteVoucherConfirmationModalModule,
@@ -95,7 +99,10 @@ import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-serv
         PurchaseOrderPreviewModule,
         GenericAsideMenuAccountModule,
         AsideMenuOtherTaxesModule,
-        AsideMenuProductServiceModule
+        AsideMenuProductServiceModule,
+        FormFieldsModule,
+        MatFormFieldModule,
+        MatInputModule
     ]
 })
 export class PurchaseModule {

@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChanges, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChanges, ChangeDetectorRef, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import {
     CompanyResponse
@@ -33,6 +33,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep, isEmpty } from '../../../lodash-optimized';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'new-branch-transfer',
@@ -75,6 +76,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('destinationQuantity', { static: false }) public destinationQuantity;
     @ViewChild('senderGstNumberField', { static: false }) public senderGstNumberField: HTMLInputElement;
     @ViewChild('receiverGstNumberField', { static: false }) public receiverGstNumberField: HTMLInputElement;
+    @ViewChild("asideMenuProductService") public asideMenuProductService: TemplateRef<any>;
 
     public hsnPopupShow: boolean = false;
     public skuNumberPopupShow: boolean = false;
@@ -149,8 +151,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public branchTransferInfoText: string = '';
     /** True if it's default load */
     private isDefaultLoad: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
+    /** Hold aside menu state for product service  */
+    public asideMenuStateForProductService: any;
 
-    constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig) {
+    constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig, public dialog: MatDialog) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.getInventorySettings();
         this.initFormFields();
@@ -159,7 +165,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public ngOnInit(): void {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this.invoiceActions.resetTransporterListResponse());
-
         this.getTransportersList();
         this.getStock();
 
@@ -168,8 +173,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 let companyInfo = cloneDeep(o);
                 this.activeCompany = companyInfo;
                 this.inputMaskFormat = this.activeCompany.balanceDisplayFormat ? this.activeCompany.balanceDisplayFormat.toLowerCase() : '';
-                this.getOnboardingForm(companyInfo.countryV2.alpha2CountryCode);
-                this.assignCurrentCompany();
+                this.getOnboardingForm(companyInfo?.countryV2?.alpha2CountryCode);
+                this.giddhBalanceDecimalPlaces = o.balanceDecimalPlaces;
             }
         });
 
@@ -254,6 +259,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     taxNumber: null,
                     address: null,
                     stockDetails: {
+                        stockUnitUniqueName: null,
                         stockUnit: null,
                         amount: null,
                         rate: null,
@@ -270,6 +276,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     taxNumber: null,
                     address: null,
                     stockDetails: {
+                        stockUnitUniqueName: null,
                         stockUnit: null,
                         amount: null,
                         rate: null,
@@ -285,6 +292,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 skuCode: null,
                 uniqueName: null,
                 stockDetails: {
+                    stockUnitUniqueName: null,
                     stockUnit: null,
                     amount: null,
                     rate: null,
@@ -329,6 +337,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this.branchTransfer.sources[index].warehouse.address = "";
                         if (!this.branchTransfer.sources[index].warehouse.stockDetails) {
                             this.branchTransfer.sources[index].warehouse.stockDetails = {
+                                stockUnitUniqueName: null,
                                 stockUnit: null,
                                 amount: null,
                                 rate: null,
@@ -351,6 +360,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
                         if (!this.branchTransfer.destinations[index].warehouse.stockDetails) {
                             this.branchTransfer.destinations[index].warehouse.stockDetails = {
+                                stockUnitUniqueName: null,
                                 stockUnit: null,
                                 amount: null,
                                 rate: null,
@@ -417,6 +427,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 taxNumber: null,
                 address: null,
                 stockDetails: {
+                    stockUnitUniqueName: (this.branchTransfer.products[0].stockDetails.stockUnitUniqueName) ? this.branchTransfer.products[0].stockDetails.stockUnitUniqueName : null,
                     stockUnit: (this.branchTransfer.products[0].stockDetails.stockUnit) ? this.branchTransfer.products[0].stockDetails.stockUnit : null,
                     amount: null,
                     rate: null,
@@ -439,6 +450,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 taxNumber: null,
                 address: null,
                 stockDetails: {
+                    stockUnitUniqueName: (this.branchTransfer.products[0].stockDetails.stockUnitUniqueName) ? this.branchTransfer.products[0].stockDetails.stockUnitUniqueName : null,
                     stockUnit: (this.branchTransfer.products[0].stockDetails.stockUnit) ? this.branchTransfer.products[0].stockDetails.stockUnit : null,
                     amount: null,
                     rate: null,
@@ -460,6 +472,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             skuCode: null,
             uniqueName: null,
             stockDetails: {
+                stockUnitUniqueName: null,
                 stockUnit: null,
                 amount: null,
                 rate: null,
@@ -580,14 +593,17 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         if (event && event.additional) {
             product.name = event.additional.name;
             product.stockDetails.stockUnit = event.additional.stockUnit.code;
+            product.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
             product.stockDetails.rate = 0;
 
             this.inventoryService.GetStockDetails(event.additional.stockGroup?.uniqueName, event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response?.status === 'success') {
                     product.stockDetails.rate = response?.body?.purchaseAccountDetails?.unitRates[0]?.rate;
                     if (!response?.body?.purchaseAccountDetails) {
+                        product.stockDetails.stockUnitUniqueName = response?.body?.stockUnit?.uniqueName;
                         product.stockDetails.stockUnit = response?.body?.stockUnit?.code;
                     } else {
+                        product.stockDetails.stockUnitUniqueName = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitUniqueName;
                         product.stockDetails.stockUnit = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitCode;
                     }
                     this.calculateRowTotal(product);
@@ -623,7 +639,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
             if (this.transferType === 'senders') {
                 this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+                this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
                 this.branchTransfer.sources[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+                this.branchTransfer.sources[0].warehouse.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
 
                 this.focusDefaultSource();
             }
@@ -969,7 +987,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             if (isNaN(parseFloat(product.stockDetails.amount))) {
                 product.stockDetails.amount = 0;
             } else {
-                product.stockDetails.amount = Number(this._generalService.convertExponentialToNumber(parseFloat(product.stockDetails.amount).toFixed(2)));
+                product.stockDetails.amount = Number(this._generalService.convertExponentialToNumber(parseFloat(product.stockDetails.amount).toFixed(this.giddhBalanceDecimalPlaces)));
             }
         } else {
             if (isNaN(parseFloat(product.stockDetails.rate))) {
@@ -1175,13 +1193,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.isUpdateMode = true;
         this.inventoryService.getNewBranchTransfer(this.editBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
-                this.branchTransfer.dateOfSupply = response.body.dateOfSupply;
-                this.branchTransfer.challanNo = response.body.challanNo;
-                this.branchTransfer.note = response.body.note;
-                this.branchTransfer.uniqueName = response.body.uniqueName;
-                this.branchTransfer.sources = response.body.sources;
-                this.branchTransfer.destinations = response.body.destinations;
-                this.branchTransfer.products = response.body.products;
+                this.branchTransfer.dateOfSupply = response.body?.dateOfSupply;
+                this.branchTransfer.challanNo = response.body?.challanNo;
+                this.branchTransfer.note = response.body?.note;
+                this.branchTransfer.uniqueName = response?.body?.uniqueName;
+                this.branchTransfer.sources = response.body?.sources;
+                this.branchTransfer.destinations = response.body?.destinations;
+                this.branchTransfer.products = response.body?.products;
 
                 let allWarehouses = [];
                 if (Object.keys(this.allWarehouses)?.length > 0) {
@@ -1241,9 +1259,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branches = cloneDeep(tempBranches);
                 this.branches$ = observableOf(this.branches);
 
-                this.branchTransfer.entity = response.body.entity;
+                this.branchTransfer.entity = response.body?.entity;
                 this.branchTransfer.transferType = "products"; // MULTIPLE PRODUCTS VIEW SHOULD SHOW IN CASE OF EDIT
-                this.branchTransfer.transporterDetails = response.body.transporterDetails;
+                this.branchTransfer.transporterDetails = response.body?.transporterDetails;
                 if (this.branches) {
                     const destinationBranch = this.branches.find(branch => branch.value === this.branchTransfer.destinations[0]?.uniqueName);
                     this.destinationBranchAlias = destinationBranch && destinationBranch.additional ? destinationBranch.additional.alias : '';
@@ -1260,11 +1278,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     };
                 }
 
-                if (response.body.dateOfSupply) {
-                    this.tempDateParams.dateOfSupply = new Date(response.body.dateOfSupply.split("-").reverse().join("-"));
+                if (response.body?.dateOfSupply) {
+                    this.tempDateParams.dateOfSupply = new Date(response.body?.dateOfSupply?.split("-")?.reverse()?.join("-"));
                 }
-                if (response.body.transporterDetails && response.body.transporterDetails.dispatchedDate) {
-                    this.tempDateParams.dispatchedDate = new Date(response.body.transporterDetails.dispatchedDate.split("-").reverse().join("-"));
+                if (response.body?.transporterDetails && response.body?.transporterDetails.dispatchedDate) {
+                    this.tempDateParams.dispatchedDate = new Date(response.body?.transporterDetails.dispatchedDate.split("-").reverse().join("-"));
                 }
 
                 this.calculateOverallTotal();
@@ -1307,10 +1325,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.myCurrentCompany = this.isBranch ? branchName : hoBranch.alias;
             if (this.branchTransferMode === "deliverynote") {
                 this.branchTransfer.sources[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch?.uniqueName;
-                this.branchTransfer.sources[0].name = selectedBranch ? selectedBranch.name : hoBranch.name;
+                this.branchTransfer.sources[0].name = selectedBranch ? selectedBranch.name : hoBranch?.name;
             } else if (this.branchTransferMode === "receiptnote") {
                 this.branchTransfer.destinations[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch?.uniqueName;
-                this.branchTransfer.destinations[0].name = selectedBranch ? selectedBranch.name : hoBranch.name;
+                this.branchTransfer.destinations[0].name = selectedBranch ? selectedBranch.name : hoBranch?.name;
             }
         }
     }
@@ -1318,12 +1336,33 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public onProductNoResultsClicked(idx?: number): void {
         this.innerEntryIndex = idx;
 
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+        document.querySelector("body").classList.add("new-branch-transfer-page");
+
+        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, {
+            position: {
+                right: '0',
+                top: '0'
+            },
+            width: '760px',
+            height: '100vh !important'
+        });
+
+        this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
+            document.querySelector("body").classList.remove("new-branch-transfer-page");
+        });
 
         if (!idx) {
             this.getStock();
         }
+    }
+
+    /**
+     * This Function is used to close Aside Menu Sidebar
+     *
+     * @memberof NewBranchTransferAddComponent
+     */
+    public closeAsideMenuProductServiceModal(): void {
+        this.asideMenuStateForProductService?.close();
     }
 
     public clearTransportForm(): void {

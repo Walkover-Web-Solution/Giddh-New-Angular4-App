@@ -4,12 +4,12 @@ import { Action } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 import { INVENTORY_USER_ACTIONS } from './inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { InventoryUser } from '../../models/api-models/Inventory-in-out';
 import { Observable } from 'rxjs';
-import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
+import { IPaginatedResponse } from '../../models/interfaces/paginated-response.interface';
 
 @Injectable()
 export class InventoryUsersActions {
@@ -25,7 +25,7 @@ export class InventoryUsersActions {
             ofType(INVENTORY_USER_ACTIONS.CREATE_USER_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<InventoryUser, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -39,7 +39,7 @@ export class InventoryUsersActions {
             ofType(INVENTORY_USER_ACTIONS.GET_ALL_USERS),
             switchMap((action: CustomActions) => this._inventoryService.GetAllInventoryUser()),
             map(data => {
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
                 } else {

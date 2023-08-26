@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { NewInventoryComponent } from "./new-inventory.component";
-import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
 import { AboutGroupDetailComponent } from "./component/about-group-detail/about-group-detail.component";
 import { AboutProductServiceDetailComponent } from "./component/about-product-service-detail/about-product-service-detail.component";
 import { InventoryComboListComponent } from "./component/combo-list/inventory-combo-list.component";
@@ -14,19 +13,19 @@ import { InventoryDashboardComponent } from "./component/inventory-dashboard/inv
 import { DashboardSellingReport } from "./component/inventory-dashboard/dashboard-selling-report/dashboard-selling-report.component";
 import { ProductServiceListComponent } from "./component/inventory-product-service-list/inventory-product-service-list.component";
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
-import { InventoryCustomFieldComponent } from "./component/inventory-custom-field/inventory-custom-field.component";
 import { ListGroupComponent } from "./component/stock-group/list-group/list-group.component";
-import { StockCreateEditModule } from "./component/stock-create-edit/stock-create-edit.module";
 import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
-import { GroupwiseComponent } from "./component/stock-group/group-wise/group-wise.component";
 import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.component";
 import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
+import { ReportsComponent } from "./component/reports/reports.component";
+import { CustomUnitsComponent } from "./component/custom-units/custom-units.component"
+import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 
 const routes: Routes = [
     {
         path: "", component: NewInventoryComponent,
         children: [
-            { path: "", redirectTo: "stock-group/list-group", pathMatch: "full" },
+            { path: "", redirectTo: "product/master", pathMatch: "full" },
 
             {
                 path: "stock-group/list-group",
@@ -41,20 +40,36 @@ const routes: Routes = [
                 component: InventoryComboListComponent,
             },
             {
-                path: "inventory-transaction-list",
+                path: "reports/:type/transaction",
                 component: InventoryTransactionListComponent,
             },
             {
-                path: "inventory-custom-field",
-                component: InventoryCustomFieldComponent,
+                path: ":type/master",
+                component: InventoryMasterComponent,
             },
-
+            {
+                path: "reports/:type/transaction/:uniqueName",
+                component: InventoryTransactionListComponent,
+            },
+            {
+                path: "reports/:type",
+                component: ReportsComponent,
+            },
+            {
+                path: "reports/:type/:reportType",
+                component: ReportsComponent,
+            },
+            {
+                path: "reports/:type/:reportType/:uniqueName",
+                component: ReportsComponent,
+            },
+            {
+                path: "custom-units",
+                component: CustomUnitsComponent,
+            }
         ],
     },
-    {
-        path: "group-wise",
-        component: GroupwiseComponent,
-    },
+
     {
         path: "item-wise",
         component: ItemWiseComponent,
@@ -62,14 +77,6 @@ const routes: Routes = [
     {
         path: "variant-wise",
         component: VariantWiseComponent,
-    },
-    {
-        path: "stock-group/create",
-        component: InventoryCreateUpdateGroupComponent,
-    },
-    {
-        path: "stock-group/edit/:groupUniqueName",
-        component: InventoryCreateUpdateGroupComponent,
     },
     {
         path: "about-group-detail",
@@ -109,6 +116,22 @@ const routes: Routes = [
         loadChildren: () => import('./component/stock-create-edit/stock-create-edit.module').then(module => module.StockCreateEditModule)
     },
     {
+        path: "group",
+        loadChildren: () => import('./component/create-update-group/create-update-group.module').then(module => module.GroupCreateEditModule)
+    },
+    {
+        path: "recipe",
+        loadChildren: () => import('./component/recipe/recipe.module').then(module => module.RecipeModule)
+    },
+    {
+        path: "manufacturing",
+        loadChildren: () => import('./component/manufacturing/manufacturing.module').then(module => module.ManufacturingModule)
+    },
+    {
+        path: "branch-transfer",
+        loadChildren: () => import('./component/branch-transfer/branch-transfer.module').then(module => module.BranchTransferModule)
+    },
+    {
         path: "inventory-dashboard",
         component: InventoryDashboardComponent,
     },
@@ -125,7 +148,7 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [],
-    imports: [RouterModule.forChild(routes), StockCreateEditModule],
+    imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
 export class NewInventoryRoutingModule {

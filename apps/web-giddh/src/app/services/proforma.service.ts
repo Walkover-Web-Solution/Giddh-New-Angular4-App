@@ -1,6 +1,6 @@
 import { Inject, Optional, Injectable } from '@angular/core';
 import { GeneralService } from './general.service';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { Observable } from 'rxjs';

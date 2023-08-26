@@ -131,7 +131,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
 
     public ngAfterViewInit() {
         if (this.selectedValues && this.selectedValues.length > 0) {
-            let item = this.items?.find(p => p.value === (this.selectedValues.length > 0 ? this.selectedValues[0].value : (this.items?.length > 0 ? this.items[0].value : null)));
+            let item = this.items?.find(p => p?.value === (this.selectedValues.length > 0 ? this.selectedValues[0]?.value : (this.items?.length > 0 ? this.items[0]?.value : null)));
             setTimeout(() => {
                 this.scrollInto(item);
             }, 50);
@@ -143,7 +143,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public scrollInto(item: any) {
-        let index: number = (this.items || []).indexOf(item);
+        let index: number = (this.items || [])?.indexOf(item);
         if (index < 0 || index >= (this.items || [])?.length) {
             return;
         }
@@ -163,7 +163,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public getHighlightedOption(): IOption {
-        let index = this.items.findIndex(p => p.isHilighted);
+        let index = this.items?.findIndex(p => p.isHilighted);
         if (index > -1) {
             return this.items[index];
         }
@@ -171,7 +171,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public getPreviousHilightledOption(): IOption {
-        let index = this.items.findIndex(p => p.isHilighted);
+        let index = this.items?.findIndex(p => p.isHilighted);
         if (index > 0) {
             return this.items[index - 1];
         } else {

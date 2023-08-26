@@ -47,15 +47,14 @@
                         <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
                             <li role="menuitem">
                                 <a class="dropdown-item" href="javascript:void(0)">
-                                    <datepicker
-                                        [datepickerMode]="'month'"
+                                    <bs-datepicker-inline
                                         name="fromDate"
                                         (click)="$event.stopPropagation()"
-                                        [showWeeks]="false"
-                                        [minMode]="'month'"
-                                        (selectionDone)="periodChanged($event); monthWise?.hide()"
-                                        [(ngModel)]="selectedMonth"
-                                    ></datepicker>
+                                        (bsValueChange)="periodChanged($event); monthWise.hide()"
+                                        [bsConfig]="{ startView: 'month', dateInputFormat: 'MM/YYYY', adaptivePosition: true, minMode:'month' }"
+                                        [ngModelOptions]="{standalone: true}"
+                                    >
+                                    </bs-datepicker-inline>
                                 </a>
                             </li>
                         </ul>
@@ -223,7 +222,7 @@
     [@slideInOut]="GstAsidePaneState"
     (closeAsideEvent)="toggleSettingAsidePane($event)"
     (fileGst)="fileGstReturnV2()"
-    (cancelConfirmationEvent)="cancelConfirmationModel.show()"
+    (cancelConfirmationEvent)="cancelConfirmationModel?.show()"
     (fileGstComplete)="closeAsidePane()"
     [localeData]="localeData"
     [commonLocaleData]="commonLocaleData"

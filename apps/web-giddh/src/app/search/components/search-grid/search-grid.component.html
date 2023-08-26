@@ -16,186 +16,151 @@
             (openEmailDialog)="openEmailDialog()"
             (openSmsDialog)="openSmsDialog()"
             [showSendButton]="!!selectedItems?.length"
-            [showDownloadCsv]="!!(searchResponseFiltered$ | async)?.length"
+            [showDownloadCsv]="!!dataSource?.length"
         >
         </search-filter>
         <div class="table-responsive">
-            <table class="table table-bordered basic giddh-table on-mobile-view">
-                <thead [hidden]="!(searchResponseFiltered$ | async)?.length">
-                    <tr>
-                        <th [style.width.px]="25">
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    (change)="toggleSelectAll($event)"
-                                    [checked]="isAllChecked"
-                                    [(ngModel)]="isAllChecked"
-                                />
-                            </div>
-                        </th>
-                        <th>
-                            <div (click)="sortType = 'name'; sortReverse = !sortReverse">
-                                {{ commonLocaleData?.app_name }}
-                                <span
-                                    *ngIf="sortType == 'name' && !sortReverse"
-                                    class="glyphicon glyphicon-chevron-down"
-                                ></span>
-                                <span
-                                    *ngIf="sortType == 'name' && sortReverse"
-                                    class="glyphicon glyphicon-chevron-up"
-                                ></span>
-                            </div>
-                        </th>
-                        <th>
-                            <div (click)="sortType = 'uniqueName'; sortReverse = !sortReverse">
-                                {{ localeData?.unique_name }}
-                                <span
-                                    *ngIf="sortType == 'uniqueName' && !sortReverse"
-                                    class="glyphicon glyphicon-chevron-down"
-                                ></span>
-                                <span
-                                    *ngIf="sortType == 'uniqueName' && sortReverse"
-                                    class="glyphicon glyphicon-chevron-up"
-                                ></span>
-                            </div>
-                        </th>
-                        <th>
-                            <div (click)="sortType = 'parent'; sortReverse = !sortReverse">
-                                {{ localeData?.parent }}
-                                <span
-                                    *ngIf="sortType == 'parent' && !sortReverse"
-                                    class="glyphicon glyphicon-chevron-down"
-                                ></span>
-                                <span
-                                    *ngIf="sortType == 'parent' && sortReverse"
-                                    class="glyphicon glyphicon-chevron-up"
-                                ></span>
-                            </div>
-                        </th>
-                        <th class="text-right">
-                            <div (click)="sortType = 'openingBalance'; sortReverse = !sortReverse">
-                                {{ localeData?.opening_balance }}
-                                <span
-                                    *ngIf="sortType == 'openingBalance' && !sortReverse"
-                                    class="glyphicon glyphicon-chevron-down"
-                                ></span>
-                                <span
-                                    *ngIf="sortType == 'openingBalance' && sortReverse"
-                                    class="glyphicon glyphicon-chevron-up"
-                                ></span>
-                            </div>
-                        </th>
-                        <th class="text-right">
-                            <div (click)="sortType = 'debitTotal'; sortReverse = !sortReverse">
-                                {{ localeData?.dr_total }}
-                                <span
-                                    *ngIf="sortType == 'debitTotal' && !sortReverse"
-                                    class="glyphicon glyphicon-chevron-down"
-                                ></span>
-                                <span
-                                    *ngIf="sortType == 'debitTotal' && sortReverse"
-                                    class="glyphicon glyphicon-chevron-up"
-                                ></span>
-                            </div>
-                        </th>
-                        <th class="text-right">
-                            <div (click)="sortType = 'creditTotal'; sortReverse = !sortReverse">
-                                {{ localeData?.cr_total }}
-                                <span
-                                    *ngIf="sortType == 'creditTotal' && !sortReverse"
-                                    class="glyphicon glyphicon-chevron-down"
-                                ></span>
-                                <span
-                                    *ngIf="sortType == 'creditTotal' && sortReverse"
-                                    class="glyphicon glyphicon-chevron-up"
-                                ></span>
-                            </div>
-                        </th>
-                        <th class="text-right">
-                            <div (click)="sortType = 'closingBalance'; sortReverse = !sortReverse">
-                                {{ localeData?.closing_balance }}
-                                <span
-                                    *ngIf="sortType == 'closingBalance' && !sortReverse"
-                                    class="glyphicon glyphicon-chevron-down"
-                                ></span>
-                                <span
-                                    *ngIf="sortType == 'closingBalance' && sortReverse"
-                                    class="glyphicon glyphicon-chevron-up"
-                                ></span>
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of searchResponseFiltered$ | async; let i = index">
-                        <td [attr.data-title]="localeData?.select_item">
-                            <input
-                                type="checkbox"
-                                [checked]="selectedItems.indexOf(item?.uniqueName) > -1"
-                                (change)="toggleSelection($event, item)"
-                            />
-                        </td>
-                        <td [attr.data-title]="commonLocaleData?.app_name">{{ item.name }}</td>
-                        <td [attr.data-title]="localeData?.unique_name">{{ item?.uniqueName }}</td>
-                        <td [attr.data-title]="localeData?.parent">{{ item.parent }}</td>
-                        <td [attr.data-title]="localeData?.opening_balance" class="text-right">
-                            <span class="d-inline-flex">
-                                <amount-field
-                                    [amount]="item?.openingBalance"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                >
-                                </amount-field>
-                            </span>
-                            <span *ngIf="item.openingBalance > 0">
-                                <span class="text-success" *ngIf="item.openBalanceType === 'DEBIT'">{{
-                                    localeData?.balance_type.dr
-                                }}</span>
-                                <span class="text-danger" *ngIf="item.openBalanceType === 'CREDIT'">{{
-                                    localeData?.balance_type.cr
-                                }}</span>
-                            </span>
-                        </td>
-                        <td [attr.data-title]="localeData?.dr_total" class="text-right">
-                            <span class="d-inline-flex">
-                                <amount-field
-                                    [amount]="item?.debitTotal"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                >
-                                </amount-field>
-                            </span>
-                        </td>
-                        <td [attr.data-title]="localeData?.cr_total" class="text-right">
-                            <span class="d-inline-flex">
-                                <amount-field
-                                    [amount]="item?.creditTotal"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                >
-                                </amount-field>
-                            </span>
-                        </td>
-                        <td [attr.data-title]="localeData?.closing_balance" class="text-right">
-                            <span class="d-inline-flex">
-                                <amount-field
-                                    [amount]="item?.closingBalance"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                >
-                                </amount-field>
-                            </span>
-                            <span *ngIf="item.closingBalance > 0">
-                                <span class="text-success" *ngIf="item.closeBalanceType === 'DEBIT'">{{
-                                    localeData?.balance_type.dr
-                                }}</span>
-                                <span class="text-danger" *ngIf="item.closeBalanceType === 'CREDIT'">{{
-                                    localeData?.balance_type.cr
-                                }}</span>
-                            </span>
-                        </td>
-                    </tr>
-                </tbody>
+            <table mat-table [dataSource]="dataSource" class="table basic giddh-table on-mobile-view w-100">
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef [style.width.px]="25">
+                        <mat-checkbox
+                            color="primary"
+                            [(ngModel)]="selectAllCustomer"
+                            (ngModelChange)="toggleAllSelection(selectAllCustomer)"
+                        ></mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                        <mat-checkbox
+                            color="primary"
+                            class="mr-2"
+                            [(ngModel)]="row.isSelected"
+                            (change)="selectAccount($event, row)"
+                        >
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+                <!-- Name Column -->
+                <!-- mat-sort-header> -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
+                    <td [attr.data-title]="commonLocaleData?.app_name" mat-cell *matCellDef="let element">
+                        {{ element.name }}
+                    </td>
+                </ng-container>
+
+                <!-- Unique Name Column -->
+                <ng-container matColumnDef="uniqueName">
+                    <th [attr.data-title]="localeData?.unique_name" mat-header-cell *matHeaderCellDef>
+                        {{ localeData?.unique_name }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element.uniqueName }}</td>
+                </ng-container>
+
+                <!-- Parent Column -->
+                <ng-container matColumnDef="parent">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.parent }}</th>
+                    <td [attr.data-title]="localeData?.parent" mat-cell *matCellDef="let element">
+                        {{ element.parent }}
+                    </td>
+                </ng-container>
+
+                <!-- Opening Balance Column -->
+                <ng-container matColumnDef="openingBalance">
+                    <th class="text-right" mat-header-cell *matHeaderCellDef>
+                        {{ localeData?.opening_balance }}
+                    </th>
+                    <td
+                        [attr.data-title]="localeData?.opening_balance"
+                        class="text-right"
+                        mat-cell
+                        *matCellDef="let element"
+                    >
+                        <span class="d-inline-flex">
+                            <amount-field
+                                [amount]="element?.openingBalance"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
+                            </amount-field>
+                        </span>
+                        <span *ngIf="element.openingBalance > 0">
+                            <span class="text-success" *ngIf="element.openBalanceType === 'DEBIT'">
+                                {{ localeData?.balance_type.dr }}</span
+                            >
+                            <span class="text-danger" *ngIf="element.openBalanceType === 'CREDIT'">
+                                {{ localeData?.balance_type.cr }}</span
+                            >
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- DR Total Column -->
+                <ng-container matColumnDef="debitTotal">
+                    <th class="text-right" mat-header-cell *matHeaderCellDef>
+                        {{ localeData?.dr_total }}
+                    </th>
+                    <td [attr.data-title]="localeData?.dr_total" class="text-right" mat-cell *matCellDef="let element">
+                        <span class="d-inline-flex">
+                            <amount-field
+                                [amount]="element?.debitTotal"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
+                            </amount-field>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- CR Total Column -->
+                <ng-container matColumnDef="creditTotal">
+                    <th class="text-right" mat-header-cell *matHeaderCellDef>
+                        {{ localeData?.cr_total }}
+                    </th>
+                    <td [attr.data-title]="localeData?.cr_total" class="text-right" mat-cell *matCellDef="let element">
+                        <span class="d-inline-flex">
+                            <amount-field
+                                [amount]="element?.creditTotal"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
+                            </amount-field>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- Closing Balance Column -->
+                <ng-container matColumnDef="closingBalance">
+                    <th class="text-right" mat-header-cell *matHeaderCellDef>
+                        {{ localeData?.closing_balance }}
+                    </th>
+                    <td
+                        [attr.data-title]="localeData?.closing_balance"
+                        class="text-right"
+                        mat-cell
+                        *matCellDef="let element"
+                    >
+                        <span class="d-inline-flex">
+                            <amount-field
+                                [amount]="element?.closingBalance"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
+                            </amount-field>
+                        </span>
+                        <span *ngIf="element.closingBalance > 0">
+                            <span class="text-success" *ngIf="element.closeBalanceType === 'DEBIT'">
+                                {{ localeData?.balance_type.dr }}</span
+                            >
+                            <span class="text-danger" *ngIf="element.closeBalanceType === 'CREDIT'">
+                                {{ localeData?.balance_type.cr }}</span
+                            >
+                        </span>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
         </div>
         <div
@@ -224,54 +189,65 @@
     <!-- end pd div -->
 </div>
 <!--Modal for Mail/SMS-->
-<div class="modal fade border-radius-0" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="border-radius-0">
-                <div class="modal-header theme-bg pd-l2 pd-r2">
-                    <h3 class="modal-title bg" id="modal-title">{{ messageBody.header.set }}</h3>
-                    <button
-                        aria-hidden="true"
-                        class="close"
-                        data-dismiss="modal"
-                        [attr.aria-label]="commonLocaleData?.app_close"
-                        (click)="mailModal.hide()"
-                    >
-                        ×
-                    </button>
-                </div>
-                <div class="modal-body pd-l2 pd-r2 clearfix">
-                    <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'">{{ localeData?.subject_label }}</h1>
-                    <input
-                        *ngIf="messageBody.type == 'Email'"
-                        class="form-control mr-b1"
-                        #subject
-                        [(ngModel)]="messageBody.subject"
-                        type="text"
-                        [placeholder]="localeData?.subject_placeholder"
-                    />
-                    <h1 class="mr-b1">{{ localeData?.message_body_label }}</h1>
+<ng-template #mailSmsDialog>
+    <div class="modal-content">
+        <div class="border-radius-0">
+            <div class="modal-header theme-bg pd-l2 pd-r2">
+                <h3 class="modal-title bg" id="modal-title">{{ messageBody.header.set }}</h3>
+                <button
+                    mat-button
+                    aria-hidden="true"
+                    class="close"
+                    [attr.aria-label]="commonLocaleData?.app_close"
+                    (click)="mailSmsDialogRef?.close()"
+                >
+                    ×
+                </button>
+            </div>
+            <div class="modal-body pd-l2 pd-r2 clearfix">
+                <input-field
+                    *ngIf="messageBody.type == 'Email'"
+                    [type]="'text'"
+                    class="mr-b1"
+                    #subject
+                    [(ngModel)]="messageBody.subject"
+                    [placeholder]="localeData?.subject_placeholder"
+                    [label]="localeData?.subject_label"
+                >
+                </input-field>
+
+                <mat-form-field appearance="outline" class="w-100 mt-3">
+                    <mat-label>{{ localeData?.company_address }}</mat-label>
                     <textarea
                         #messageBox
+                        matInput
+                        rows="3"
                         [(ngModel)]="messageBody.msg"
-                        class="form-control resize-none"
-                        rows="4"
                         [placeholder]="localeData?.message_body_placeholder"
-                    ></textarea>
-                    <small class="mr-t05 mr-b05 grey">{{ localeData?.message_body_tips }}</small>
-                    <div class="row mr-t2">
-                        <ul class="list-inline pills">
-                            <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)">{{ val.name }}</li>
-                        </ul>
+                    >
+                    </textarea>
+                </mat-form-field>
+                <small class="mr-t05 mr-b05 grey">{{ localeData?.message_body_tips }}</small>
+                <div class="row mr-t2">
+                    <div class="mx-3">
+                        <mat-chip-listbox>
+                            <mat-chip
+                                *ngFor="let val of dataVariables"
+                                (click)="addValueToMsg(val?.value)"
+                                class="cursor-pointer"
+                            >
+                                {{ val?.name }}
+                            </mat-chip>
+                        </mat-chip-listbox>
                     </div>
-                    <div class="mr-t4">
-                        <button class="btn btn-sm btn-success pull-right mr-l1 mr-0" (click)="send()">
-                            {{ messageBody.btn.set }}
-                        </button>
-                    </div>
+                </div>
+                <div class="mr-t4">
+                    <button mat-stroked-button color="primary" class="pull-right mr-l1 mr-0" (click)="send()">
+                        {{ messageBody.btn.set }}
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</ng-template>
 <!--end Modal for Mail/SMS-->

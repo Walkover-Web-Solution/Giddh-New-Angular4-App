@@ -2,12 +2,10 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-import { HighchartsChartModule } from 'highcharts-angular';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { SharedModule } from '../shared/shared.module';
@@ -20,11 +18,14 @@ import { RevenueChartComponent } from './components/revenue/revenue-chart.compon
 import { TotalOverduesChartComponent } from './components/total-overdues/total-overdues-chart.component';
 import { HomeComponent } from './home.component';
 import { HomeRoutingModule } from './home.routing.module';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatFormFieldModule } from '@angular/material/form-field';
 
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-    suppressScrollX: false,
-    suppressScrollY: true
-};
 
 @NgModule({
     declarations: [
@@ -39,29 +40,30 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ],
     exports: [HomeComponent],
     providers: [
-        {
-            provide: PERFECT_SCROLLBAR_CONFIG,
-            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        },
-        GiddhCurrencyPipe
+            GiddhCurrencyPipe,
     ],
     imports: [
         CommonModule,
         FormsModule,
         HomeRoutingModule,
-        ModalModule,
-        HighchartsChartModule,
+        ModalModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
         }),
-        PerfectScrollbarModule,
         BsDropdownModule.forRoot(),
         TabsModule.forRoot(),
         TooltipModule.forRoot(),
         Daterangepicker,
         CurrencyModule,
-        SharedModule
+        SharedModule,
+        MatCardModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatTableModule,
+        GiddhDateRangepickerModule,
+        MatDatepickerModule,
+        MatFormFieldModule
     ],
 })
 export class HomeModule {

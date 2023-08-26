@@ -48,7 +48,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
         this.taxesOptions = this.taxes
             ?.filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
             .map(m => {
-                return { label: m.name, value: m.uniqueName };
+                return { label: m.name, value: m?.uniqueName };
             })
 
         this.calculationMethodOptions = [
@@ -56,7 +56,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
             { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' }
         ];
 
-        this.selectedCalculationMethod = this.calculationMethodOptions?.filter(method => method.value === this.otherTaxesModal?.tcsCalculationMethod);
+        this.selectedCalculationMethod = this.calculationMethodOptions?.filter(method => method?.value === this.otherTaxesModal?.tcsCalculationMethod);
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -71,16 +71,16 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
             }
 
             if (this.calculationMethodOptions?.length > 0) {
-                this.selectedCalculationMethod = this.calculationMethodOptions?.filter(method => method.value === this.otherTaxesModal.tcsCalculationMethod);
+                this.selectedCalculationMethod = this.calculationMethodOptions?.filter(method => method?.value === this.otherTaxesModal.tcsCalculationMethod);
             }
         }
     }
 
     public applyTax(tax: IOption): void {
-        if (tax && tax.value) {
+        if (tax && tax?.value) {
             this.defaultOtherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
             if (!this.selectedTaxUniqueName) {
-                let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
+                let taxType = this.taxes.find(f => f?.uniqueName === tax.value).taxType;
                 const isTdsTax = ['tdsrc', 'tdspay'].includes(taxType);
                 if (!isTdsTax) {
                     this.defaultOtherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;

@@ -1,7 +1,7 @@
 .appearance-none {
     background: none !important;
     border: 0 !important;
-    font-size: 16px;
+    font-size: var(--font-size-15);
     color: var(--color-nero);
 }
 
@@ -25,7 +25,7 @@
     color: var(--color-right-sidebar-primary-journal-voucher-list);
     padding: 7px 12px;
     display: block;
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 
 .menu-list li a:hover {

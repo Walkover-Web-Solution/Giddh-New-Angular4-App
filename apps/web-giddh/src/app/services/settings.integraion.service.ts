@@ -1,6 +1,6 @@
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
@@ -349,6 +349,38 @@ export class SettingsIntegrationService {
             let data: BaseResponse<any, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * This will use for get plaid token
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getPlaidLinkToken(): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_PLAID_LINK_TOKEN?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * This will use for save plaid access token
+     *
+     * @param {string} key
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public savePlaidAccessToken(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.SAVE_PLAID_ACCESS_TOKEN?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
     /**

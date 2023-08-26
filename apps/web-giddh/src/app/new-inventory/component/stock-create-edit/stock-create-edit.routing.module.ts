@@ -5,21 +5,18 @@ import { StockCreateEditComponent } from "./stock-create-edit.component";
 
 const routes: Routes = [
     {
-        path: "", 
+        path: "",
         component: MainComponent,
         children: [
             {
-                path: "",
-                redirectTo: "product/create",
-                pathMatch: "full"
-            },
-            {
                 path: ":type/create",
-                component: StockCreateEditComponent
+                component: StockCreateEditComponent,
+                pathMatch: 'full'
             },
             {
-                path: "edit/:stockUniqueName",
-                component: StockCreateEditComponent
+                path: ":type/edit/:stockUniqueName",
+                component: StockCreateEditComponent,
+                pathMatch: 'full'
             }
         ]
     }

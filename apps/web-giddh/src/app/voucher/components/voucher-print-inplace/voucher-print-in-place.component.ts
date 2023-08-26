@@ -65,7 +65,7 @@ export class VoucherPrintInPlaceComponent implements OnInit, OnDestroy {
             this.commonService.downloadFile(getRequest, "VOUCHER").pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result) {
                     /** Creating voucher pdf start */
-                    this.selectedItem.blob = this.generalService.base64ToBlob(result.body.data, 'application/pdf', 512);
+                    this.selectedItem.blob = this.generalService.base64ToBlob(result.body?.data, 'application/pdf', 512);
                     const file = new Blob([this.selectedItem.blob], { type: 'application/pdf' });
                     URL.revokeObjectURL(this.pdfFileURL);
                     this.pdfFileURL = URL.createObjectURL(file);

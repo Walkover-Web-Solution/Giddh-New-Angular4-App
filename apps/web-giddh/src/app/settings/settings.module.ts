@@ -16,14 +16,11 @@ import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingsComponent } from './settings.component';
 import { SettingRountingModule } from './settings.routing.module';
 import { SettingsTagsComponent } from './tags/tags.component';
-import { DeleteTaxConfirmationModelComponent } from './Taxes/confirmation/confirmation.model.component';
-import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
-import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
+import { DeleteTaxConfirmationModelComponent } from './taxes/confirmation/confirmation.model.component';
+import { SettingTaxesComponent } from './taxes/setting.taxes.component';
+import { SettingTriggerComponent } from './trigger/setting.trigger.component';
 import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-warehouse.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
-import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
-import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
@@ -46,9 +43,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
-
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
-import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -59,11 +54,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SettingCampaignComponent } from './integration/campaign/setting-campaign/setting-campaign.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-
-
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-    suppressScrollX: true
-};
+import { NgxPlaidLinkModule } from "ngx-plaid-link";
+import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 
 @NgModule({
     declarations: [
@@ -98,8 +90,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ContactModule,
         ReactiveFormsModule,
         CurrencyModule,
-        PerfectScrollbarModule,
-        TextMaskModule,
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
         ShSelectModule,
@@ -117,7 +107,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatSelectModule,
         MatDialogModule,
         ConfirmModalModule,
-        NgxBootstrapSwitchModule.forRoot(),
+        MatSlideToggleModule,
         BsDropdownModule.forRoot(),
         MatGridListModule,
         FormFieldsModule,
@@ -126,13 +116,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatCheckboxModule,
         MatChipsModule,
         MatAutocompleteModule,
-        MatSlideToggleModule
-    ],
-    providers: [
-        {
-            provide: PERFECT_SCROLLBAR_CONFIG,
-            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        }
+        MatSlideToggleModule,
+        NgxPlaidLinkModule,
+        AsideMenuAccountModule
     ]
 })
 

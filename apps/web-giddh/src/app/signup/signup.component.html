@@ -48,7 +48,7 @@
                                                 [disabled]="!emailVerifyForm.controls['email'].valid"
                                                 [ladda]="isLoginWithEmailInProcess$ | async"
                                                 class="btn btn-blue btn-block btn-lg"
-                                                (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)"
+                                                (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                                             >
                                                 Submit
                                             </button>
@@ -68,8 +68,8 @@
                                                     [ladda]="isVerifyEmailInProcess$ | async"
                                                     (click)="
                                                         VerifyEmail(
-                                                            emailVerifyForm.controls['email'].value,
-                                                            emailVerifyForm.controls['token'].value
+                                                            emailVerifyForm.controls['email']?.value,
+                                                            emailVerifyForm.controls['token']?.value
                                                         )
                                                     "
                                                 >
@@ -77,7 +77,7 @@
                                                 </button>
                                                 <a
                                                     class="btn btn-link cp pull-right"
-                                                    (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)"
+                                                    (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                                                     >Resend code</a
                                                 >
                                             </div>
@@ -117,7 +117,7 @@
                                                 type="submit"
                                                 [disabled]="
                                                     !signUpWithPasswdForm.controls['email'].valid ||
-                                                    !signUpWithPasswdForm.controls['password'].value
+                                                    !signUpWithPasswdForm.controls['password']?.value
                                                 "
                                             >
                                                 Signup
@@ -146,8 +146,8 @@
                                                     class="btn btn-blue btn-block btn-lg"
                                                     (click)="
                                                         VerifyEmail(
-                                                            signupVerifyForm.controls['email'].value,
-                                                            signupVerifyForm.controls['verificationCode'].value
+                                                            signupVerifyForm.controls['email']?.value,
+                                                            signupVerifyForm.controls['verificationCode']?.value
                                                         )
                                                     "
                                                 >
@@ -155,7 +155,7 @@
                                                 </button>
                                                 <a
                                                     class="btn btn-link cp pull-right"
-                                                    (click)="LoginWithEmail(signupVerifyForm.controls['email'].value)"
+                                                    (click)="LoginWithEmail(signupVerifyForm.controls['email']?.value)"
                                                     >Resend code</a
                                                 >
                                             </div>
@@ -217,7 +217,7 @@
                                 [disabled]="!emailVerifyForm.controls['email'].valid"
                                 [ladda]="isLoginWithEmailInProcess$ | async"
                                 class="btn sharp btn-block btn-blue btn-lg mr-t1"
-                                (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)"
+                                (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                             >
                                 Submit
                             </button>
@@ -237,8 +237,8 @@
                                 [ladda]="isVerifyEmailInProcess$ | async"
                                 (click)="
                                     VerifyEmail(
-                                        emailVerifyForm.controls['email'].value,
-                                        emailVerifyForm.controls['token'].value
+                                        emailVerifyForm.controls['email']?.value,
+                                        emailVerifyForm.controls['token']?.value
                                     )
                                 "
                             >
@@ -246,7 +246,7 @@
                             </button>
                             <a
                                 class="btn btn-link cp pull-right"
-                                (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)"
+                                (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                                 >Resend code</a
                             >
                         </div>
@@ -297,8 +297,8 @@
                             class="btn sharp btn-block btn-blue btn-lg mr-t1"
                             (click)="
                                 getOtp(
-                                    mobileVerifyForm.controls['mobileNumber'].value,
-                                    mobileVerifyForm.controls['country'].value
+                                    mobileVerifyForm.controls['mobileNumber']?.value,
+                                    mobileVerifyForm.controls['country']?.value
                                 )
                             "
                             [ladda]="isLoginWithMobileInProcess$ | async"
@@ -315,8 +315,8 @@
                                 [ladda]="isVerifyMobileInProcess$ | async"
                                 (click)="
                                     VerifyCode(
-                                        mobileVerifyForm.controls['mobileNumber'].value,
-                                        mobileVerifyForm.controls['otp'].value
+                                        mobileVerifyForm.controls['mobileNumber']?.value,
+                                        mobileVerifyForm.controls['otp']?.value
                                     )
                                 "
                                 [disabled]="!mobileVerifyForm.controls['otp'].valid"

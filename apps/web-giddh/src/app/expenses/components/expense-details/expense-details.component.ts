@@ -8,13 +8,10 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from '../../../models/api-models/Sales';
-import { UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
-import { Configuration } from '../../../app.constant';
-import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { DownloadLedgerAttachmentResponse } from '../../../models/api-models/Ledger';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
-import { UpdateLedgerEntryPanelComponent } from '../../../material-ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
+import { UpdateLedgerEntryPanelComponent } from '../../../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { cloneDeep } from '../../../lodash-optimized';
@@ -23,6 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CompanyActions } from '../../../actions/company.actions';
 import { Lightbox } from 'ngx-lightbox';
 import { GeneralService } from '../../../services/general.service';
+import { CommonService } from '../../../services/common.service';
 
 @Component({
     selector: 'app-expense-details',
@@ -45,6 +43,8 @@ import { GeneralService } from '../../../services/general.service';
 export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of approve confirm dialog */
     @ViewChild("approveConfirm") public approveConfirm;
+    /** Instance of Aside Menu State For Other Taxes dialog */
+    @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** Instance of approve confirm dialog */
     @ViewChild("rejectionReason") public rejectionReason;
     @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
@@ -66,15 +66,11 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
     public imgAttached: boolean = false;
     public imgUploadInprogress: boolean = false;
-    public fileUploadOptions: UploaderOptions;
-    public uploadInput: EventEmitter<UploadInput>;
-    public sessionId$: Observable<string>;
     public companyUniqueName$: Observable<string>;
-    public files: UploadFile[];
+    public files: any[] = [];
     public imageURL: any[] = [];
     public companyUniqueName: string;
     public signatureSrc: string = '';
-    public asideMenuStateForOtherTaxes: string = 'out';
     public accountType: string;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public DownloadAttachedImgResponse: DownloadLedgerAttachmentResponse[] = [];
@@ -152,6 +148,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public isPettyCashEntryLoading: boolean = false;
     /** True if we need to show red border around the field */
     public showEntryAgainstRequired: boolean = false;
+    /** Holds Aside Menu State For Other Taxes DialogRef */
+    public asideMenuStateForOtherTaxesDialogRef:any;
 
     constructor(
         private toaster: ToasterService,
@@ -162,11 +160,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         private dialog: MatDialog,
         private companyActions: CompanyActions,
         private lightbox: Lightbox,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private commonService: CommonService
     ) {
         this.files = [];
-        this.uploadInput = new EventEmitter<UploadInput>();
-        this.sessionId$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
     }
 
@@ -178,7 +175,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnInit(): void {
         // get company taxes
         this.store.dispatch(this.companyActions.getTax());
-        this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
         this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
         });
@@ -190,7 +186,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @param {TemplateRef<any>} rejectionReason
      * @memberof ExpenseDetailsComponent
      */
-     public openModal(rejectionReason: TemplateRef<any>): void {
+    public openModal(rejectionReason: TemplateRef<any>): void {
         this.modalRef = this.dialog.open(rejectionReason, {
             width: '630px',
             disableClose: true
@@ -423,53 +419,37 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Callback for file upload
+     * Uploads attachment
      *
-     * @param {UploadOutput} output
      * @memberof ExpenseDetailsComponent
      */
-    public onUploadFileOutput(output: UploadOutput): void {
-        if (output.type === 'allAddedToQueue') {
-            this.imgAttached = true;
-            this.startUpload();
-        } else if (output.type === 'start') {
-            this.imgUploadInprogress = true;
-        } else if (output.type === 'done') {
-            if (output.file.response?.status === 'success') {
-                this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response?.body?.uniqueName;
-                let img = {
-                    src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response?.body?.uniqueName
-                }
-                this.DownloadAttachedImgResponse.push(output.file.response?.body);
-                this.imgAttachedFileName = output.file.response?.body?.name;
-                this.imageURL.push(img);
-                this.toaster.showSnackBar("success", this.localeData?.file_upload_success);
-            } else {
-                this.toaster.showSnackBar("error", output.file.response?.message, output.file.response?.code);
-            }
-            this.imgUploadInprogress = false;
-            this.imgAttached = true;
+    public uploadFile(): void {
+        const selectedFile: any = document.getElementById("signatureImg-edit");
+        if (selectedFile?.files?.length) {
+            const file = selectedFile?.files[0];
+
+            this.generalService.getSelectedFile(file, (blob, file) => {
+                this.imgUploadInprogress = true;
+
+                this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.imgUploadInprogress = false;
+                    if (response?.status === 'success') {
+                        this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName;
+                        let img = {
+                            src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName
+                        }
+                        this.DownloadAttachedImgResponse.push(response?.body);
+                        this.imgAttachedFileName = response?.body?.name;
+                        this.imageURL.push(img);
+                        this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
+                    } else {
+                        this.imgAttachedFileName = '';
+                        this.signatureSrc = '';
+                        this.toaster.showSnackBar("error", response.message);
+                    }
+                });
+            });
         }
-    }
-
-    /**
-     * Uploads the file
-     *
-     * @memberof ExpenseDetailsComponent
-     */
-    public startUpload(): void {
-        let sessionId = null;
-        this.companyUniqueName = null;
-        this.sessionId$.pipe(take(1)).subscribe(a => sessionId = a);
-        this.companyUniqueName$.pipe(take(1)).subscribe(a => this.companyUniqueName = a);
-        const event: UploadInput = {
-            type: 'uploadAll',
-            url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', this.companyUniqueName),
-            method: 'POST',
-            headers: { 'Session-Id': sessionId },
-        };
-
-        this.uploadInput.emit(event);
     }
 
     /**
@@ -483,28 +463,20 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Toggles the fixed class on body
-     *
-     * @memberof ExpenseDetailsComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideMenuStateForOtherTaxes === 'in') {
-            document.querySelector('.petty-cash')?.classList?.add('sidebar-overlay');
-            document.querySelector('body')?.classList?.add('fixed');
-        } else {
-            document.querySelector('.petty-cash')?.classList?.remove('sidebar-overlay');
-            document.querySelector('body')?.classList?.remove('fixed');
-        }
-    }
-
-    /**
      * Toggles other tax aside pane
      *
      * @memberof ExpenseDetailsComponent
      */
     public toggleOtherTaxesAsidePane(): void {
-        this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes,{
+            position: {
+                right: '0'
+            },
+            maxWidth: '760px',
+            width:'100%',
+            height:'100vh',
+            maxHeight:'100vh'
+        });
     }
 
     /**

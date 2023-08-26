@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ChangeDetectionStrategy, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -44,7 +44,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
     /** Selected to date */
     public selectedToDate: Date;
     /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Universal date observer */
     public universalDate$: Observable<any>;
     /** This will store selected date range to use in api */
@@ -118,7 +118,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
@@ -207,11 +207,11 @@ export class ImportsComponent implements OnInit, OnDestroy {
                         result.expireAt = this.localeData?.expired;
                     }
                 });
-                this.dataSource = response.body.items;
-                this.importRequest.page = response.body.page;
-                this.importRequest.totalItems = response.body.totalItems;
-                this.importRequest.totalPages = response.body.totalPages;
-                this.importRequest.count = response.body.count;
+                this.dataSource = response.body?.items;
+                this.importRequest.page = response.body?.page;
+                this.importRequest.totalItems = response.body?.totalItems;
+                this.importRequest.totalPages = response.body?.totalPages;
+                this.importRequest.count = response.body?.count;
             } else {
                 this.dataSource = [];
                 this.importRequest.totalItems = 0;
@@ -340,7 +340,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
    */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
-        this.importRequest.branchUniqueName = selectedEntity.value;
+        this.importRequest.branchUniqueName = selectedEntity?.value;
         this.getImports();
     }
 

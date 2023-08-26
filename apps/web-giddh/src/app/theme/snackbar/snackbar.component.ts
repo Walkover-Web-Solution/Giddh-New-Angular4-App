@@ -16,6 +16,8 @@ export class SnackBarComponent implements OnInit {
     public snackProgressBarWidthPercentage: number = 100;
     /** Show/hide progress bar */
     public showProgressBar: boolean = true;
+    /** Mat snackbar element */
+    public matSnackbarElement: any;
 
     constructor(
         @Inject(MAT_SNACK_BAR_DATA) public data: any,
@@ -30,6 +32,8 @@ export class SnackBarComponent implements OnInit {
      * @memberof SnackBarComponent
      */
     public ngOnInit(): void {
+        this.matSnackbarElement = document.querySelector("mat-snack-bar-container").parentElement.parentElement;
+        this.matSnackbarElement.classList.add("mat-snack-bar-wrapper");
         this.createTimeout();
     }
 
@@ -74,6 +78,7 @@ export class SnackBarComponent implements OnInit {
      * @memberof SnackBarComponent
      */
     public dismiss(): void {
+        this.matSnackbarElement.classList.remove("mat-snack-bar-wrapper");
         this.showProgressBar = false;
         this.snackProgressBarWidthPercentage = 0;
         this.matSnackBarRef.dismiss();

@@ -4,7 +4,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { CustomActions } from '../store/customActions';
+import { CustomActions } from '../store/custom-actions';
 import {
     AgingAdvanceSearchModal,
     DueAmountReportQueryRequest,
@@ -40,7 +40,7 @@ export class AgingReportActions {
             ofType(AgingReportActions.CREATE_DUE_DAY_RANGE_RESPONSE),
             map((action: CustomActions) => {
                 let response = action.payload as BaseResponse<string, DueRangeRequest>;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -61,7 +61,7 @@ export class AgingReportActions {
             ofType(AgingReportActions.GET_DUE_DAY_RANGE_RESPONSE),
             map((action: CustomActions) => {
                 let response = action.payload as BaseResponse<string[], string>;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -78,7 +78,7 @@ export class AgingReportActions {
                 return this._agingReportService.GetDueAmountReport(action.payload.model, action.payload.queryRequest, action.payload.branchUniqueName).pipe(
                     map((r) => this.validateResponse<DueAmountReportResponse, DueAmountReportRequest>(r, {
                         type: AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE,
-                        payload: r.body
+                        payload: r?.body
                     }, true, {
                         type: AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE,
                         payload: null
@@ -150,7 +150,7 @@ export class AgingReportActions {
     }
 
     private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this._toasty.errorToast(response.message);
             }

@@ -5,7 +5,7 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { LocaleService } from '../../../services/locale.service';
 import { SettingsWarehouseService } from '../../../services/settings.warehouse.service';
 import { ToasterService } from '../../../services/toaster.service';
-import { CustomActions } from '../../../store/customActions';
+import { CustomActions } from '../../../store/custom-actions';
 
 /**
  * Warehouse actions
@@ -38,6 +38,8 @@ export class WarehouseActions {
     public static readonly RESET_UPDATE_WAREHOUSE = 'RESET_UPDATE_WAREHOUSE';
     /** Action to reset create warehouse flag (triggered after successful warehouse creation) */
     public static readonly RESET_CREATE_WAREHOUSE = 'RESET_CREATE_WAREHOUSE';
+    /** Action to handle reset warehouse response */
+    public static readonly RESET_WAREHOUSES = 'RESET_WAREHOUSES';
 
     /**
      * Create warehouse effect
@@ -49,7 +51,7 @@ export class WarehouseActions {
         ofType(WarehouseActions.CREATE_WAREHOUSE),
         switchMap((action: CustomActions) => this.settingsWarehouseService.createWarehouse(action.payload)),
         map((response: BaseResponse<any, any>) => {
-            if (response.status === 'error') {
+            if (response?.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
                 return this.createWarehouseResponse(response);
             }
@@ -68,7 +70,7 @@ export class WarehouseActions {
         ofType(WarehouseActions.GET_ALL_WAREHOUSE),
         switchMap((action: CustomActions) => this.settingsWarehouseService.fetchAllWarehouse(action.payload)),
         map((response: BaseResponse<any, any>) => {
-            if (response.status === 'error') {
+            if (response?.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
                 return { type: 'EmptyAction' };
             }
@@ -87,7 +89,7 @@ export class WarehouseActions {
         ofType(WarehouseActions.UPDATE_WAREHOUSE),
         switchMap((action: CustomActions) => this.settingsWarehouseService.updateWarehouse(action.payload)),
         map((response: BaseResponse<any, any>) => {
-            if (response.status === 'error') {
+            if (response?.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
                 return { type: 'EmptyAction' };
             }
@@ -107,7 +109,7 @@ export class WarehouseActions {
         ofType(WarehouseActions.SET_AS_DEFAULT_WAREHOUSE),
         switchMap((action: CustomActions) => this.settingsWarehouseService.setAsDefaultWarehouse(action.payload)),
         map((response: BaseResponse<any, any>) => {
-            if (response.status === 'error') {
+            if (response?.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
                 return { type: 'EmptyAction' };
             }
@@ -242,4 +244,13 @@ export class WarehouseActions {
         return { type: WarehouseActions.RESET_DEFAULT_WAREHOUSE_DATA };
     }
 
+    /**
+     * Returns the action to reset warehouse data
+     *
+     * @returns {CustomActions} Action to reset default warehouse data
+     * @memberof WarehouseActions
+     */
+    public resetWarehouseResponse(): CustomActions {
+        return { type: WarehouseActions.RESET_WAREHOUSES };
+    }
 }

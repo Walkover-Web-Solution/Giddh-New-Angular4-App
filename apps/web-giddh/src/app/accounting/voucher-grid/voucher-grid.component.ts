@@ -1,5 +1,5 @@
 import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { ToasterService } from './../../services/toaster.service';
@@ -18,7 +18,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
 import { AccountResponse } from '../../models/api-models/Account';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flatten-accounts-result-item.interface';
 import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -109,7 +109,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public inputForList: IOption[];
     public selectedField: 'account' | 'stock';
 
-    public chequeDetailForm: FormGroup;
+    public chequeDetailForm: UntypedFormGroup;
     public asideMenuStateForProductService: string = 'out';
     public isFirstRowDeleted: boolean = false;
     public autoFocusStockGroupField: boolean = false;
@@ -133,12 +133,12 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         private _ledgerActions: LedgerActions,
         private store: Store<AppState>,
         private _keyboardService: KeyboardService,
-        private _toaster: ToasterService, 
+        private _toaster: ToasterService,
         private _router: Router,
         private _tallyModuleService: TallyModuleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         public bsConfig: BsDatepickerConfig,
         private generalService: GeneralService) {
 
@@ -381,7 +381,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public onSubmitChequeDetail() {
-        const chequeDetails = this.chequeDetailForm.value;
+        const chequeDetails = this.chequeDetailForm?.value;
         this.requestObj.chequeNumber = chequeDetails.chequeNumber;
         this.requestObj.chequeClearanceDate = chequeDetails.chequeClearanceDate;
         this.closeChequeDetailForm();
@@ -395,7 +395,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public openChequeDetailForm() {
-        this.chequeEntryModal.show();
+        this.chequeEntryModal?.show();
         setTimeout(() => {
             this.chequeNumberInput?.nativeElement.focus();
         }, 200);
@@ -584,8 +584,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public validateForContraEntry(data) {
-        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')))));
-        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')))));
+        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')))));
+        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')))));
 
         if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
             return true;
@@ -595,8 +595,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public validateForSalesAndPurchaseEntry(data) {
-        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
-        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
+        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
+        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
 
         if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
             return true;
@@ -610,7 +610,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
             const toAccounts = data.transactions?.filter((acc) => acc.type === byOrTo);
             const AccountOfCashOrBank = toAccounts?.filter((acc) => {
-                const indexOfCashOrBank = acc.selectedAccount.parentGroups.findIndex((pg) => pg?.uniqueName === 'cash' || pg?.uniqueName === 'bankaccounts' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft'));
+                const indexOfCashOrBank = acc.selectedAccount?.parentGroups?.findIndex((pg) => pg?.uniqueName === 'cash' || pg?.uniqueName === 'bankaccounts' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft'));
                 return indexOfCashOrBank !== -1 ? true : false;
             });
             return (AccountOfCashOrBank && AccountOfCashOrBank.length) ? true : false;
@@ -880,7 +880,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             this.currentSelectedValue = '';
             this.showLedgerAccountList = false;
         }, 200);
-        if (ev.value === 'createnewitem') {
+        if (ev?.value === 'createnewitem') {
             return this.showQuickAccountModal();
         }
         if (this.selectedField === 'account') {
@@ -900,7 +900,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         } else {
             this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data?.status === 'success') {
-                    this.allStocks = cloneDeep(data.body.results);
+                    this.allStocks = cloneDeep(data?.body?.results);
                     this.sortStockItems(this.allStocks);
                     if (needToFocusStockInputField) {
                         this.selectedStockInputField.value = '';
@@ -961,7 +961,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         // this.selectedAccountInputField = selectedField;
         if (this.selectedField === 'account') {
             this.loadQuickAccountComponent();
-            this.quickAccountModal.show();
+            this.quickAccountModal?.show();
         } else if (this.selectedField === 'stock') {
             this.asideMenuStateForProductService = 'in';
             this.autoFocusStockGroupField = true;
@@ -1089,7 +1089,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             if (a && a !== '') {
                 this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data?.status === 'success') {
-                        this._tallyModuleService.setFlattenAccounts(data.body.results);
+                        this._tallyModuleService.setFlattenAccounts(data?.body?.results);
                         if (needToFocusAccountInputField) {
                             this.selectedAccountInputField.value = '';
                             this.selectedAccountInputField.focus();
@@ -1119,13 +1119,13 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             let accList: IOption[] = [];
             this.allAccounts.forEach((acc: IFlattenAccountsResultItem) => {
                 if (this.requestObj.voucherType === "Contra") {
-                    const isContraAccount = acc.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || pg?.uniqueName === 'currentliabilities' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')));
-                    const isDisallowedAccount = acc.parentGroups.find((pg) => (pg?.uniqueName === 'sundrycreditors' || pg?.uniqueName === 'dutiestaxes'));
+                    const isContraAccount = acc?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || pg?.uniqueName === 'currentliabilities' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')));
+                    const isDisallowedAccount = acc?.parentGroups.find((pg) => (pg?.uniqueName === 'sundrycreditors' || pg?.uniqueName === 'dutiestaxes'));
                     if (isContraAccount && !isDisallowedAccount) {
-                        accList.push({ label: `${acc.name} (${acc?.uniqueName})`, value: acc?.uniqueName, additional: acc });
+                        accList.push({ label: `${acc?.name} (${acc?.uniqueName})`, value: acc?.uniqueName, additional: acc });
                     }
                 } else {
-                    accList.push({ label: `${acc.name} (${acc?.uniqueName})`, value: acc?.uniqueName, additional: acc });
+                    accList.push({ label: `${acc?.name} (${acc?.uniqueName})`, value: acc?.uniqueName, additional: acc });
                 }
             });
             this.flattenAccounts = accList;

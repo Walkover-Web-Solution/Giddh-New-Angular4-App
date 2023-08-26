@@ -5,9 +5,9 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { BulkEmailRequest } from '../../models/api-models/Search';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flatten-accounts-result-item.interface';
 import { AccountService } from '../../services/account.service';
-import { CompanyService } from '../../services/companyService.service';
+import { CompanyService } from '../../services/company.service';
 import { ToasterService } from '../../services/toaster.service';
 
 @Component({
@@ -78,7 +78,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
 
     constructor(
         private _companyServices: CompanyService,
-        private _toaster: ToasterService, 
+        private _toaster: ToasterService,
         private _accountService: AccountService,
         private changeDetectorRef: ChangeDetectorRef
     ) {
@@ -161,7 +161,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
         this.messageBody.type = 'Email';
         this.messageBody.btn.set = this.messageBody.btn.email;
         this.messageBody.header.set = this.messageBody.header.email;
-        this.mailModal.show();
+        this.mailModal?.show();
     }
 
     // Open Modal for SMS
@@ -170,12 +170,12 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
         this.messageBody.type = 'sms';
         this.messageBody.btn.set = this.messageBody.btn.sms;
         this.messageBody.header.set = this.messageBody.header.sms;
-        this.mailModal.show();
+        this.mailModal?.show();
     }
 
     // Add Selected Value to Message Body
     public addValueToMsg(val: any) {
-        this.typeInTextarea(val.value);
+        this.typeInTextarea(val?.value);
     }
 
     /**
@@ -188,13 +188,13 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
         let el: HTMLInputElement = this.messageBox?.nativeElement;
         let start = el.selectionStart;
         let end = el.selectionEnd;
-        let text = el.value;
+        let text = el?.value;
         let before = text?.substring(0, start);
         let after = text?.substring(end, text?.length);
         el.value = (before + newText + after);
         el.selectionStart = el.selectionEnd = start + newText?.length;
         el.focus();
-        this.messageBody.msg = el.value;
+        this.messageBody.msg = el?.value;
     }
 
     // Send Email/Sms for Accounts

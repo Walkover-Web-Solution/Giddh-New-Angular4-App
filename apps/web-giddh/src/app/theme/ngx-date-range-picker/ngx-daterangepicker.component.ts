@@ -425,12 +425,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public closeCalender(): void {
         this.openMobileDatepickerPopup = false;
         document.querySelector('body').classList.remove('hide-scroll-body');
+        document.querySelector("body").style.overflowY = null;
     }
 
     public closeMobileDatePicker(): void {
         this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate, event: 'cancel' });
         this.openMobileDatepickerPopup = false;
         document.querySelector('body').classList.remove('hide-scroll-body');
+        document.querySelector("body").style.overflowY = null;
         this.hide();
     }
 
@@ -988,7 +990,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     public yearChanged(yearEvent: any, side: DateType): void {
         const month = this.calendarVariables[side].dropdowns.currentMonth;
-        const year = parseInt(yearEvent.target.value, 10);
+        const year = parseInt(yearEvent.target?.value, 10);
         this.monthOrYearChanged(month, year, side);
     }
 
@@ -1345,8 +1347,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             return false;
         }
 
-        this.startDate = dates.value[0].clone();
-        this.endDate = dates.value[1].clone();
+        this.startDate = dates?.value[0].clone();
+        this.endDate = dates?.value[1].clone();
         if (this.showRangeLabelOnInput && range.name !== this.locale.customRangeLabel) {
             this.chosenLabel = range.name;
         } else {
@@ -1364,7 +1366,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.isShown$.next(false); // hide calendars
             this.isShown = false;
         }
-        this.rangeClicked.emit({ name: range.name, startDate: dates.value[0], endDate: dates.value[1], event: 'save' });
+        this.rangeClicked.emit({ name: range.name, startDate: dates?.value[0], endDate: dates?.value[1], event: 'save' });
         if (!this.keepCalendarOpeningWithRange) {
             this.clickApply();
         } else {
@@ -1631,7 +1633,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         ranges = ranges.map(range => {
             range.isSelected = false;
             range.ranges = range.ranges ? range.ranges : [];
-            range.value = range.value ? range.value : [];
+            range.value = range?.value ? range?.value : [];
 
             if (range.ranges) {
                 this.parseRangesToVm(range.ranges);
@@ -1720,6 +1722,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('hide-scroll-body');
+        document.querySelector("body").style.overflowY = null;
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1751,7 +1754,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     let financialYearEnds = dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     this.financialYears.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
 
-                    if (this.currentFinancialYearUniqueName && this.currentFinancialYearUniqueName === key.uniqueName) {
+                    if (this.currentFinancialYearUniqueName && this.currentFinancialYearUniqueName === key?.uniqueName) {
                         lastFinancialYear = { start: dayjs(dayjs(key.financialYearStarts.split("-").reverse().join("-")).subtract(1, 'year').toDate()), end: dayjs(dayjs(key.financialYearEnds.split("-").reverse().join("-")).subtract(1, 'year').toDate()) };
                     }
 
@@ -1759,11 +1762,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                         currentFinancialYear = dayjs(dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT).toDate());
                     }
 
-                    if (allFinancialYears.indexOf(dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT).format("YYYY")) === -1) {
+                    if (allFinancialYears?.indexOf(dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT).format("YYYY")) === -1) {
                         allFinancialYears.push(dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT).format("YYYY"));
                     }
 
-                    if (allFinancialYears.indexOf(dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY")) === -1) {
+                    if (allFinancialYears?.indexOf(dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY")) === -1) {
                         allFinancialYears.push(dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY"));
                     }
 
@@ -1787,7 +1790,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                             ];
                             loop++;
                         } else if (key.name === DatePickerDefaultRangeEnum.LastFinancialYear) {
-                            if (lastFinancialYear && lastFinancialYear.start && lastFinancialYear.end && allFinancialYears.indexOf(lastFinancialYear.start.format("YYYY")) > -1) {
+                            if (lastFinancialYear && lastFinancialYear.start && lastFinancialYear.end && allFinancialYears?.indexOf(lastFinancialYear.start.format("YYYY")) > -1) {
                                 ranges[loop] = key;
 
                                 ranges[loop].value = [
@@ -1819,8 +1822,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public clickFinancialYear(financialYear): void {
-        this.startDate = dayjs(new Date(financialYear.value.financialYearStarts.split("-").reverse().join("-")));
-        this.endDate = dayjs(new Date(financialYear.value.financialYearEnds.split("-").reverse().join("-")));
+        this.startDate = dayjs(new Date(financialYear?.value.financialYearStarts.split("-").reverse().join("-")));
+        this.endDate = dayjs(new Date(financialYear?.value.financialYearEnds.split("-").reverse().join("-")));
         this.chosenLabel = this.startDate.format(GIDDH_DATE_FORMAT) + " - " + this.endDate.format(GIDDH_DATE_FORMAT);
         this.showCalInRanges = (!this.ranges?.length) || this.alwaysShowCalendars;
 
@@ -1951,7 +1954,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public saveInlineDates(event): void {
-        let inlineDate = dayjs(new Date(event.target.value.split("-").reverse().join("-")));
+        let inlineDate = dayjs(new Date(event.target?.value.split("-").reverse().join("-")));
 
         if (event.target.name === "inlineStartDate") {
             document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("focus-start-date");

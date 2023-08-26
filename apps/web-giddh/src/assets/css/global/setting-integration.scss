@@ -1,0 +1,34 @@
+#tab-integration {
+    .mat-tab-body-wrapper {
+        overflow: auto !important;
+        min-height: calc(100vh - 118px);
+    }
+}
+
+/*--- select-chip ---*/
+select-multiple-fields{
+    .mat-mdc-standard-chip.mdc-evolution-chip--with-trailing-action .mdc-evolution-chip__action--trailing i{
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 1440px) {
+    /*--- subscription ---*/
+    .menu-two-list {
+        .menu-two-list-items {
+            .mat-body-1{
+                font-size: 13px;
+            }
+        }
+    }
+    .main-content-subscription{
+        .mat-mdc-text-field-wrapper{
+            padding: 0 5px 0 5px;
+        }
+    }
+    .main-content{
+        .expand-button {
+            left: 75% !important;
+        }
+    } 
+}

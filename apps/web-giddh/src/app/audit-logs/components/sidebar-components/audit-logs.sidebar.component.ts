@@ -7,7 +7,7 @@ import { map as lodashMap } from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { flatten, omit, union } from '../../../lodash-optimized';
 import { LogsRequest } from '../../../models/api-models/Logs';
-import { CompanyService } from '../../../services/companyService.service';
+import { CompanyService } from '../../../services/company.service';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -87,7 +87,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         private groupService: GroupService,
         private searchService: SearchService
     ) {
-        
+
     }
 
     public ngOnInit() {
@@ -109,7 +109,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data?.status === 'success') {
                 let users: IOption[] = [];
-                data.body.map((d) => {
+                data.body?.map((d) => {
                     users.push({ label: d.userName, value: d.userUniqueName, additional: d });
                 });
                 this.vm.canManageCompany = true;
@@ -154,7 +154,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     }
 
     public selectAccount(v) {
-        this.vm.selectedAccountUnq = v.value || '';
+        this.vm.selectedAccountUnq = v?.value || '';
     }
 
     public clearDate(model: string) {
@@ -166,11 +166,11 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     }
 
     public selectGroup(v) {
-        this.vm.selectedGroupUnq = v.value || '';
+        this.vm.selectedGroupUnq = v?.value || '';
     }
 
     public selectUser(v) {
-        this.vm.selectedUserUnq = v.value || '';
+        this.vm.selectedUserUnq = v?.value || '';
     }
 
     public getLogfilters() {
@@ -201,8 +201,8 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     }
 
     public customUserFilter(term: string, item: IOption) {
-        return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 ||
-            (item.additional && item.additional.userEmail && item.additional.userEmail.toLocaleLowerCase().indexOf(term) > -1));
+        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value.toLocaleLowerCase()?.indexOf(term) > -1 ||
+            (item.additional && item.additional.userEmail && item.additional.userEmail.toLocaleLowerCase()?.indexOf(term) > -1));
     }
 
     public resetFilters() {

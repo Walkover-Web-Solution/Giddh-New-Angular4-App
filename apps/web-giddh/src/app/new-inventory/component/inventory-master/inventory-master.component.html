@@ -1,0 +1,167 @@
+<ng-container
+    appTranslate
+    [file]="'inventory/master'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <div class="mat-grid-wrapper">
+        <div class="d-flex inventory-search" cdkDrag>
+            <span class="search-icon">
+                <i class="icon-search"></i>
+            </span>
+            <text-field
+                [type]="'text'"
+                [cssClass]="'form-control mat-field-border cash-invoice-input'"
+                [placeholder]="commonLocaleData?.app_search"
+                [formControl]="searchFormControl"
+                [autoFocus]="true"
+            ></text-field>
+        </div>
+        <div class="mat-list-wrap">
+            <div class="no-data" *ngIf="isSearching && !masterColumnsData?.length">
+                <no-data
+                    [secondaryMessageClass]="'p-0'"
+                    [primaryMessage]="localeData?.no_inventory_found_primary_message"
+                    [secondaryMessage]="localeData?.no_inventory_found_secondary_message"
+                ></no-data>
+            </div>
+            <div class="horizontal-scroll" id="horizontal-scroll">
+                <div class="inventory-sideabar border-grid">
+                    <div class="inventory-sub-sideabar">
+                        <mat-list class="item-list border-grid pt-0 cp" *ngIf="!isSearching">
+                            <a
+                                href="javascript:;"
+                                class="create-head d-inline-block"
+                                (click)="showCreateButtons = true; activeIndex = 0; isTopLevel = true"
+                                >{{ commonLocaleData?.app_create_new }}</a
+                            >
+                            <cdk-virtual-scroll-viewport
+                                class="virtual-group-list overflow-x-hidden"
+                                [itemSize]="37"
+                                [minBufferPx]="400"
+                                [maxBufferPx]="800"
+                                id="0"
+                            >
+                                <ng-container
+                                    *cdkVirtualFor="let topLevelGroup of topLevelGroups?.results; let i = index"
+                                >
+                                    <a
+                                        href="javascript:;"
+                                        [matTooltip]="topLevelGroup?.name"
+                                        [matTooltipPosition]="'above'"
+                                        (click)="activeIndex = 0; isTopLevel = true; getMasters(topLevelGroup, -1)"
+                                        class="group-name"
+                                        [ngClass]="{
+                                            'isActive':
+                                                currentGroup?.uniqueName === topLevelGroup?.uniqueName ||
+                                                (createUpdateGroup &&
+                                                    masterColumnsData[activeIndex]?.stockGroup?.uniqueName ===
+                                                        topLevelGroup?.uniqueName &&
+                                                    !currentGroup?.uniqueName)
+                                        }"
+                                    >
+                                        <mat-list-item class="items">{{ topLevelGroup?.name }}</mat-list-item>
+                                    </a>
+                                </ng-container>
+                            </cdk-virtual-scroll-viewport>
+                        </mat-list>
+                        <ng-container *ngFor="let masterColumnData of masterColumnsData; let i = index">
+                            <mat-list class="item-list border-grid pt-0">
+                                <a
+                                    href="javascript:;"
+                                    class="create-head d-inline-block"
+                                    (click)="showCreateButtons = true; activeIndex = i; isTopLevel = false"
+                                    >{{ commonLocaleData?.app_create_new }}</a
+                                >
+                                <cdk-virtual-scroll-viewport
+                                    class="virtual-group-list overflow-x-hidden"
+                                    [itemSize]="37"
+                                    [minBufferPx]="400"
+                                    [maxBufferPx]="800"
+                                    [id]="i + 1"
+                                >
+                                    <ng-container
+                                        *cdkVirtualFor="let masterData of masterColumnData?.results; let j = index"
+                                    >
+                                        <a
+                                            href="javascript:;"
+                                            [matTooltip]="masterData?.name"
+                                            [matTooltipPosition]="'above'"
+                                            (click)="
+                                                activeIndex = i;
+                                                isTopLevel = false;
+                                                masterData.entity === 'STOCK_GROUP'
+                                                    ? getMasters(masterData, i)
+                                                    : editStock(masterData, i)
+                                            "
+                                            [ngClass]="{
+                                                'group-name': masterData.entity === 'STOCK_GROUP',
+                                                'isActive':
+                                                    currentGroup?.uniqueName === masterData?.uniqueName ||
+                                                    currentStock?.uniqueName === masterData?.uniqueName ||
+                                                    (createUpdateGroup &&
+                                                        masterColumnsData[activeIndex]?.stockGroup?.uniqueName ===
+                                                            masterData?.uniqueName &&
+                                                        !currentGroup?.uniqueName)
+                                            }"
+                                        >
+                                            <mat-list-item class="items">{{ masterData?.name }}</mat-list-item>
+                                        </a>
+                                    </ng-container>
+                                </cdk-virtual-scroll-viewport>
+                            </mat-list>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="inventory-btnside">
+                <div
+                    class="searchbar d-flex justify-content-between align-items-center pt-2 pb-1"
+                    *ngIf="breadcrumbs?.length"
+                >
+                    <div>
+                        <ol class="breadcrumb row pd-l15">
+                            <li *ngFor="let breadcrumb of breadcrumbs">
+                                <a href="javascript:;">{{ breadcrumb }}</a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="create-btn-grp create-btn-inventory" *ngIf="showCreateButtons">
+                    <button mat-stroked-button color="primary" class="mr-0" (click)="showCreateGroup()">
+                        {{ commonLocaleData?.app_create_group }}
+                    </button>
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        class="mr-0"
+                        *ngIf="!isTopLevel"
+                        (click)="showCreateStock()"
+                    >
+                        {{ commonLocaleData?.app_create_stock }}
+                    </button>
+                </div>
+                <div>
+                    <div *ngIf="!showCreateButtons" class="inventory-modal">
+                        <create-update-group
+                            *ngIf="createUpdateGroup"
+                            [addGroup]="true"
+                            [stockType]="inventoryType"
+                            [groupUniqueName]="currentGroup?.uniqueName"
+                            [activeGroup]="parentGroup"
+                            (closeAsideEvent)="closeGroup($event)"
+                        ></create-update-group>
+                        <stock-create-edit
+                            *ngIf="createUpdateStock"
+                            [addStock]="true"
+                            [stockType]="inventoryType"
+                            [stockUniqueName]="currentStock?.uniqueName"
+                            [activeGroup]="parentGroup"
+                            (closeAsideEvent)="closeStock($event)"
+                        ></stock-create-edit>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

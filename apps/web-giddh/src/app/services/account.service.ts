@@ -2,17 +2,17 @@ import { empty as observableEmpty, Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ShareRequestForm } from '../models/api-models/Permission';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest, FlattenAccountsResponse, ShareAccountRequest, ShareEntityRequest } from '../models/api-models/Account';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { ACCOUNTS_API, ACCOUNTS_API_V2 } from './apiurls/account.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
-import { APPLY_TAX_API } from './apiurls/applyTax.api';
+import { APPLY_TAX_API } from './apiurls/apply-tax.api';
 import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
-import { APPLY_DISCOUNT_API } from './apiurls/applyDiscount';
+import { APPLY_DISCOUNT_API } from './apiurls/apply-discount.api';
 
 @Injectable()
 export class AccountService {
@@ -82,7 +82,7 @@ export class AccountService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<string, AssignDiscountRequestForAccount>(e)));
     }
-    
+
     public GetApplyDiscount(accountUniqueName: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + APPLY_DISCOUNT_API.GET_APPLY_DISCOUNT_API?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
@@ -143,7 +143,7 @@ export class AccountService {
     public UpdateEntityPermission(model: ShareRequestForm, entity: string, newRoleUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        return this.http.put(this.config.apiUrl + ACCOUNTS_API.CHANGE_PERMISSION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':assignRoleEntryUniqueName', encodeURIComponent(model.uniqueName)), model).pipe(
+        return this.http.put(this.config.apiUrl + ACCOUNTS_API.CHANGE_PERMISSION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':assignRoleEntryUniqueName', encodeURIComponent(model?.uniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<string, ShareEntityRequest> = res;
                 data.queryString = { model, newRoleUniqueName, entity };
@@ -210,12 +210,21 @@ export class AccountService {
     }
 
     /**
-     * accounts v2 api's
+     * Get account details
+     *
+     * @param {string} accountUniqueName
+     * @param {string} [source]
+     * @returns {Observable<BaseResponse<AccountResponseV2, string>>}
+     * @memberof AccountService
      */
-    public GetAccountDetailsV2(accountUniqueName: string): Observable<BaseResponse<AccountResponseV2, string>> {
+    public GetAccountDetailsV2(accountUniqueName: string, source?: string): Observable<BaseResponse<AccountResponseV2, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         if (accountUniqueName) {
-            return this.http.get(this.config.apiUrl + ACCOUNTS_API_V2.GET?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
+            if (!source) {
+                source = "";
+            }
+
+            return this.http.get(this.config.apiUrl + ACCOUNTS_API_V2.GET?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))?.replace(':source', encodeURIComponent(source))).pipe(map((res) => {
                 let data: BaseResponse<AccountResponseV2, string> = res;
                 data.queryString = { accountUniqueName };
                 return data;

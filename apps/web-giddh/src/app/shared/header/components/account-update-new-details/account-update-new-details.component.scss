@@ -15,7 +15,7 @@
 
 .aside-pane-container {
     padding: 15px;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-nero);
 }
 
@@ -69,7 +69,6 @@ span.dr-label {
         input {
             border-left: 1px solid var(--color-iron) !important;
             border-radius: 5px;
-            border-right: none;
             &:focus {
                 border-left: 1px solid var(--color-blue) !important;
             }
@@ -98,8 +97,13 @@ form.gstin-form {
         margin-right: 10px;
     }
 }
+/*--- custom ---*/
+.add-new-btn {
+    width: 100%;
+    max-width: 185px;
+}
 .add-address-default h3 {
-    font-size: 16px;
+    font-size: var(--font-size-15);
     color: var(--color-nero);
 }
 
@@ -159,4 +163,8 @@ form.gstin-form {
 .merge-btn,
 .save-btn {
     min-width: 100px;
+}
+.is-default-address {
+    margin-top: 5px !important;
+    height: 29px;
 }

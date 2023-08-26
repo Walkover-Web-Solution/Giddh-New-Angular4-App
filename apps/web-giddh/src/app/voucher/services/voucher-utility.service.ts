@@ -3,7 +3,7 @@ import { GIDDH_VOUCHER_FORM } from '../../app.constant';
 import {
     ConfirmationModalButton,
     ConfirmationModalConfiguration,
-} from '../../common/confirmation-modal/confirmation-modal.interface';
+} from '../../theme/confirmation-modal/confirmation-modal.interface';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { VoucherForm } from '../../models/api-models/Voucher';
 import * as cleaner from 'fast-clean';
@@ -88,12 +88,13 @@ export class VoucherUtilityService {
                 entry?.transactions?.forEach(transaction => {
                     if (transaction?.stock) {
                         transaction.stock.rate.rateForAccount = transaction.stock.rate?.amountForAccount;
+                        transaction.stock.taxInclusive = transaction.stock.taxInclusive ?? transaction.taxInclusive;
                         delete transaction.stock.rate?.amountForAccount;
                     }
                 });
             });
         }
-        if(data?.company) {
+        if (data?.company) {
             if (data.company.billingDetails) {
                 data.company.billingDetails.taxNumber = data.company.billingDetails.gstNumber;
             }
@@ -101,7 +102,7 @@ export class VoucherUtilityService {
                 data.company.shippingDetails.taxNumber = data.company.shippingDetails.gstNumber;
             }
         }
-        if([VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote].includes(data.type)) {
+        if ([VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote].includes(data.type)) {
             data.number = data.invoiceNumberAgainstVoucher || data.number || '';
         }
         return data;

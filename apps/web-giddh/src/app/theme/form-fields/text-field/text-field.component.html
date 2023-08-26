@@ -6,6 +6,7 @@
         [id]="id"
         [class]="cssClass"
         [placeholder]="placeholder"
+        [ngModelOptions]="{standalone: true}"
         [(ngModel)]="ngModel"
         (ngModelChange)="handleChange()"
         (input)="handleInput()"
@@ -21,6 +22,7 @@
         *ngIf="!allowDecimalDigitsOnly && !allowDigitsOnly && !useMask"
         #textField
         (keydown.enter)="$event.preventDefault()"
+        [autocomplete]="autocomplete"
     />
     <input
         matInput
@@ -29,6 +31,7 @@
         [id]="id"
         [class]="cssClass"
         [placeholder]="placeholder"
+        [ngModelOptions]="{standalone: true}"
         [(ngModel)]="ngModel"
         (ngModelChange)="handleChange()"
         (input)="handleInput()"
@@ -43,6 +46,7 @@
         decimalDigitsDirective
         #textField
         (keydown.enter)="$event.preventDefault()"
+        [autocomplete]="autocomplete"
     />
     <input
         matInput
@@ -51,6 +55,7 @@
         [id]="id"
         [class]="cssClass"
         [placeholder]="placeholder"
+        [ngModelOptions]="{standalone: true}"
         [(ngModel)]="ngModel"
         (ngModelChange)="handleChange()"
         (input)="handleInput()"
@@ -65,14 +70,16 @@
         digitsOnlyDirective
         #textField
         (keydown.enter)="$event.preventDefault()"
+        [autocomplete]="autocomplete"
     />
     <input
         matInput
         [name]="name"
-        type="type"
+        [type]="type"
         [id]="id"
         [class]="cssClass"
         [placeholder]="placeholder"
+        [ngModelOptions]="{standalone: true}"
         [(ngModel)]="ngModel"
         (ngModelChange)="handleChange()"
         (input)="handleInput()"
@@ -86,14 +93,16 @@
         *ngIf="!allowDigitsOnly && useMask"
         #textField
         (keydown.enter)="$event.preventDefault()"
+        [autocomplete]="autocomplete"
     />
     <input
         matInput
         [name]="name"
-        type="type"
+        [type]="type"
         [id]="id"
         [class]="cssClass"
         [placeholder]="placeholder"
+        [ngModelOptions]="{standalone: true}"
         [(ngModel)]="ngModel"
         (ngModelChange)="handleChange()"
         (input)="handleInput()"
@@ -109,5 +118,7 @@
         digitsOnlyDirective
         #textField
         (keydown.enter)="$event.preventDefault()"
+        [autocomplete]="autocomplete"
     />
+    <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
 </div>

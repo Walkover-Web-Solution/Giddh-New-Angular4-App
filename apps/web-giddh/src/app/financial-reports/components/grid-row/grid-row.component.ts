@@ -15,7 +15,7 @@ import {
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
-import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { SearchService } from '../../../services/search.service';
 import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../../constants/trial-balance-profit.constant';
 
@@ -81,10 +81,10 @@ export class GridRowComponent implements OnChanges, OnDestroy {
         this.searchService.loadDetails(acc?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
                 this.accountDetails = response.body;
-                const parentGroups = response.body.parentGroups?.join(', ');
+                const parentGroups = response.body?.parentGroups?.join(', ');
                 const creditorsString = 'currentliabilities, sundrycreditors';
                 const debtorsString = 'currentassets, sundrydebtors';
-                if (parentGroups.indexOf(creditorsString) > -1 || parentGroups.indexOf(debtorsString) > -1) {
+                if (parentGroups?.indexOf(creditorsString) > -1 || parentGroups?.indexOf(debtorsString) > -1) {
                     this.modalUniqueName = response.body?.uniqueName;
                 } else {
                     this.modalUniqueName = '';

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -10,11 +10,11 @@ import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, take
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InvViewService } from '../inv.view.service';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { IStocksItem } from "../../models/interfaces/stocksItem.interface";
+import { IStocksItem } from "../../models/interfaces/stocks-item.interface";
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
@@ -44,9 +44,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
     @ViewChild('comparisionFilter', { static: true }) public comparisionFilter: ShSelectComponent;
     @ViewChild(DaterangePickerComponent, { static: true }) public datePicker: DaterangePickerComponent;
 
-    public senderUniqueNameInput: FormControl = new FormControl();
-    public receiverUniqueNameInput: FormControl = new FormControl();
-    public productUniqueNameInput: FormControl = new FormControl();
+    public senderUniqueNameInput: UntypedFormControl = new UntypedFormControl();
+    public receiverUniqueNameInput: UntypedFormControl = new UntypedFormControl();
+    public productUniqueNameInput: UntypedFormControl = new UntypedFormControl();
     public showWelcomePage: boolean = true;
     public showSenderSearch: boolean = false;
     public showReceiverSearch: boolean = false;
@@ -54,7 +54,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public updateDescriptionIdx: number = null;
     // modal advance search
     public isFilterCorrect: boolean = false;
-    public advanceSearchForm: FormGroup;
+    public advanceSearchForm: UntypedFormGroup;
     public COMPARISON_FILTER = [
         { label: 'Equals', value: '=' },
         { label: 'Greater Than', value: '>' },
@@ -133,7 +133,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         private inventoryReportActions: InventoryReportActions,
         private inventoryService: InventoryService,
         private _toasty: ToasterService,
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         private invViewService: InvViewService,
         private _store: Store<AppState>,
         private cdr: ChangeDetectorRef) {
@@ -160,8 +160,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
             stocksList: p.inventory.stocksList,
             inventoryUsers: p.inventoryInOutState.inventoryUsers
         })), takeUntil(this.destroyed$)).subscribe(p => p.inventoryUsers && p.stocksList &&
-            (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r.uniqueName, additional: 'stock' }))
-                .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r.uniqueName, additional: 'person' })))));
+            (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r?.uniqueName, additional: 'stock' }))
+                .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r?.uniqueName, additional: 'person' })))));
     }
 
     public ngOnInit() {
@@ -173,7 +173,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
             this.showWelcomePage = false;
             this.type = v.view;
             this.nameStockOrPerson = v.name;
-            if (v.uniqueName) {
+            if (v?.uniqueName) {
                 this.uniqueName = v.uniqueName;
                 let length = document.location.pathname.split('/')?.length;
                 if (!v.uniqueName && length === 6) {
@@ -199,7 +199,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
                             let firstElement = res[0];
                             this.showWelcomePage = false;
                             this.nameStockOrPerson = firstElement.name;
-                            this.uniqueName = firstElement.uniqueName;
+                            this.uniqueName = firstElement?.uniqueName;
                             this.filter.includeSenders = true;
                             this.filter.includeReceivers = true;
                             this.filter.receivers = [this.uniqueName];
@@ -215,7 +215,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
                             let firstElement = res[0];
                             this.showWelcomePage = false;
                             this.nameStockOrPerson = firstElement.name;
-                            this.uniqueName = firstElement.uniqueName;
+                            this.uniqueName = firstElement?.uniqueName;
                             this.applyFilters(1, false);
                         } else {
                             this.showWelcomePage = true;
@@ -268,9 +268,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
                     this.showWelcomePage = false;
                     this.type = 'stock';
                     this.nameStockOrPerson = firstElement.name;
-                    this.uniqueName = firstElement.uniqueName;
+                    this.uniqueName = firstElement?.uniqueName;
 
-                    this._store.dispatch(this.inventoryReportActions.genReport(firstElement.uniqueName, this.startDate, this.endDate, 1, 6, this.filter));
+                    this._store.dispatch(this.inventoryReportActions.genReport(firstElement?.uniqueName, this.startDate, this.endDate, 1, 6, this.filter));
                 }
             } else {
                 this.showWelcomePage = true;
@@ -322,7 +322,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
      */
     public updateDescription(txn: any) {
         this.updateDescriptionIdx = null;
-        this.inventoryService.updateDescription(txn.uniqueName, txn.description).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+        this.inventoryService.updateDescription(txn?.uniqueName, txn.description).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.status === 'success') {
                 this.updateDescriptionIdx = null;
             } else {
@@ -464,7 +464,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         }
 
         //advanceSearchAction modal filter
-        this.comparisionFilter.clear();
+        this.comparisionFilter?.clear();
         this.advanceSearchForm.controls['filterAmount'].setValue(null);
 
         this.filter.sort = null;
@@ -495,7 +495,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
     public advanceSearchAction(type: string) {
         if (type === 'clear') {
-            this.comparisionFilter.clear();
+            this.comparisionFilter?.clear();
             this.advanceSearchForm.controls['filterAmount'].setValue(null);
             if (this.filter.senderName || this.filter.receiverName || this.senderName.nativeElement.value || this.receiverName.nativeElement.value
                 || this.filter.sortBy || this.filter.sort || this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) {
@@ -555,24 +555,24 @@ export class JobworkComponent implements OnInit, OnDestroy {
     }
 
     public filterByCheck(type: string, event: boolean) {
-        let idx = this.filter.jobWorkTransactionType.indexOf('ALL');
+        let idx = this.filter.jobWorkTransactionType?.indexOf('ALL');
         if (idx !== -1) {
             this.initVoucherType();
         }
         if (event && type) {
             this.filter.jobWorkTransactionType.push(type);
         } else {
-            let index = this.filter.jobWorkTransactionType.indexOf(type);
+            let index = this.filter.jobWorkTransactionType?.indexOf(type);
             if (index !== -1) {
                 this.filter.jobWorkTransactionType.splice(index, 1);
             }
         }
         if (this.filter.jobWorkTransactionType?.length > 0 && this.filter.jobWorkTransactionType?.length < this.VOUCHER_TYPES.length) {
-            idx = this.filter.jobWorkTransactionType.indexOf('ALL');
+            idx = this.filter.jobWorkTransactionType?.indexOf('ALL');
             if (idx !== -1) {
                 this.filter.jobWorkTransactionType.splice(idx, 1);
             }
-            idx = this.filter.jobWorkTransactionType.indexOf('NONE');
+            idx = this.filter.jobWorkTransactionType?.indexOf('NONE');
             if (idx !== -1) {
                 this.filter.jobWorkTransactionType.splice(idx, 1);
             }

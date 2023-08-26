@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { BlankLedgerVM } from 'apps/web-giddh/src/app/material-ledger/ledger.vm';
+import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
 import { cloneDeep, forEach, isEqual, sumBy, concat, find, without, orderBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import * as dayjs from 'dayjs';
@@ -29,7 +29,7 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { AccountResponse } from '../../../models/api-models/Account';
-import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { AccountService } from '../../../services/account.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -816,8 +816,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         } else {
             this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data?.status === 'success') {
-                    this.sortStockItems(data.body.results);
-                    this.allStocks = cloneDeep(data.body.results);
+                    this.sortStockItems(data?.body?.results);
+                    this.allStocks = cloneDeep(data?.body?.results);
                     if (focusTargetElement) {
                         this.selectedStockInputField.focus();
                     }
@@ -848,15 +848,15 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
             this.showLedgerAccountList = false;
         }, 200);
 
-        if (ev.value === 'createnewitem') {
+        if (ev?.value === 'createnewitem') {
             return this.showQuickAccountModal();
         }
 
         if (this.selectedField === 'account') {
             this.setAccount(ev.additional);
             setTimeout(() => {
-                let accIndx = this.accountsTransaction.findIndex((acc) => acc.selectedAccount?.UniqueName === ev.value);
-                let indexInTaxesToRemember = this.taxesToRemember.findIndex((t) => t.taxUniqueName === ev.value);
+                let accIndx = this.accountsTransaction?.findIndex((acc) => acc.selectedAccount?.UniqueName === ev?.value);
+                let indexInTaxesToRemember = this.taxesToRemember?.findIndex((t) => t.taxUniqueName === ev?.value);
                 if (indexInTaxesToRemember > -1 && accIndx > -1) {
                     let rate = this.taxesToRemember[indexInTaxesToRemember].taxValue;
                     this.accountsTransaction[accIndx].rate = rate;
@@ -864,11 +864,11 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
                 }
             }, 100);
         } else if (this.selectedField === 'stock') {
-            let stockUniqueName = ev.value;
-            let taxIndex = this.taxesToRemember.findIndex((i) => i.stockUniqueName === stockUniqueName);
+            let stockUniqueName = ev?.value;
+            let taxIndex = this.taxesToRemember?.findIndex((i) => i.stockUniqueName === stockUniqueName);
             if (taxIndex === -1) {
                 this.inventoryService.GetStockUniqueNameWithDetail(stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((stockFullDetails) => {
-                    if (stockFullDetails && stockFullDetails.body.taxes && stockFullDetails.body.taxes.length) {
+                    if (stockFullDetails && stockFullDetails.body && stockFullDetails.body.taxes && stockFullDetails.body.taxes.length) {
                         this.companyTaxesList$.pipe(take(1)).subscribe((taxes: TaxResponse[]) => {
                             stockFullDetails.body.taxes.forEach((tax: string) => {
                                 let selectedTax = taxes.find((t) => t?.uniqueName === tax);
@@ -878,7 +878,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
                                         taxTotalValue += st.taxValue;
                                     });
                                 }
-                                let taxIndx = this.taxesToRemember.findIndex((i) => i.taxUniqueName === tax);
+                                let taxIndx = this.taxesToRemember?.findIndex((i) => i.taxUniqueName === tax);
                                 if (taxIndx === -1) {
                                     this.taxesToRemember.push({ stockUniqueName, taxUniqueName: tax, taxValue: taxTotalValue });
                                 }
@@ -922,7 +922,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     public showQuickAccountModal() {
         if (this.selectedField === 'account') {
             this.loadQuickAccountComponent();
-            this.quickAccountModal.show();
+            this.quickAccountModal?.show();
         } else if (this.selectedField === 'stock') {
             this.asideMenuStateForProductService = 'in';
             this.autoFocusStockGroupField = true;
@@ -1041,13 +1041,13 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
             if (a && a !== '') {
                 this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data?.status === 'success') {
-                        this.allFlattenAccounts = cloneDeep(data.body.results);
+                        this.allFlattenAccounts = cloneDeep(data?.body?.results);
                         if (groupUniqueName) {
-                            const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results?.filter((acc) => acc.parentGroups.findIndex((g) => g?.uniqueName === groupUniqueName) > -1);
+                            const filteredAccounts: IFlattenAccountsResultItem[] = data?.body?.results?.filter((acc) => acc?.parentGroups?.findIndex((g) => g?.uniqueName === groupUniqueName) > -1);
                             this._tallyModuleService.setFlattenAccounts(filteredAccounts);
                             this.isAccountListFiltered = true;
                         } else {
-                            this._tallyModuleService.setFlattenAccounts(data.body.results);
+                            this._tallyModuleService.setFlattenAccounts(data?.body?.results);
                             this.isAccountListFiltered = false;
                         }
                         if (needToFocusSelectedInputField) {

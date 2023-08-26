@@ -23,7 +23,7 @@
                             <button
                                 *ngIf="!isCompany"
                                 class="mr-l1"
-                                mat-raised-button
+                                mat-stroked-button
                                 color="primary"
                                 [routerLink]="['/pages/voucher/' + voucherType + '/create']"
                             >
@@ -31,7 +31,7 @@
                             </button>
                         </div>
                         <ul class="voucher-sidebar">
-                            <perfect-scrollbar *ngIf="filteredData && filteredData.length > 0">
+                            <cdk-virtual-scroll-viewport [itemSize]="62" *ngIf="filteredData && filteredData.length > 0">
                                 <li
                                     class="single-voucher-details cp"
                                     *ngFor="let row of filteredData; let i = index"
@@ -69,7 +69,7 @@
                                         </div>
                                     </div>
                                 </li>
-                            </perfect-scrollbar>
+                            </cdk-virtual-scroll-viewport>
                         </ul>
                     </div>
                 </div>
@@ -185,7 +185,7 @@
                                 </div>
                             </div>
                             <div class="pd-l15" *ngIf="attachedDocumentType?.type === 'unsupported'">
-                                <h5 class="pd-b05 font-16">
+                                <h5 class="pd-b05 font-15">
                                     <strong>{{ localeData?.uploaded_bill }}</strong>
                                 </h5>
                             </div>

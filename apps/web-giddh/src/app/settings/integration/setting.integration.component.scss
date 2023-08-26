@@ -10,7 +10,7 @@
     padding-top: 5px;
 }
 
-.font-18 {
+.font-16 {
     font-weight: bold;
 }
 
@@ -54,7 +54,7 @@
     padding: 6px;
     height: 100%;
     background: var(--color-white);
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 
 .tooltip-box {
@@ -147,17 +147,17 @@
         width: 10% !important;
     }
 
-    .mat-table tbody > tr > td:first-child {
+    .mat-mdc-table tbody > tr > td:first-child {
         color: var(--color-table-tertiary-content) !important;
     }
 
     th.mat-header-cell,
-    td.mat-cell {
+    td.mat-mdc-cell {
         white-space: normal !important;
     }
 
     .content-text {
-        font-size: 12px !important;
+        font-size: var(--font-size-12) !important;
         width: 26%;
         text-transform: none;
     }
@@ -170,16 +170,26 @@
         width: 25%;
     }
 
-    .mat-table tbody .mat-row:hover td {
+    .mat-mdc-table tbody .mat-mdc-row:hover td {
         background-color: #e7ebf6 !important;
     }
 
-    .mat-table tbody .mat-row:hover .mat-cell .visibility {
+    .mat-mdc-table tbody .mat-mdc-row:hover .mat-mdc-cell .visibility {
         display: block !important;
     }
 
-    .mat-table tbody .mat-row:hover .mat-cell .icon-visibility {
-        visibility: visible !important;
+    .mat-mdc-table {
+        tbody {
+            .mat-mdc-row{
+                &:hover{
+                    .mat-mdc-cell{
+                        .icon-visibility {
+                            visibility: visible !important;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -267,7 +277,7 @@
         h4 {
             align-self: self-start !important;
             padding-bottom: 10px;
-            font-size: 14px;
+            font-size: var(--font-size-15);
         }
 
         .btn-danger {
@@ -441,6 +451,11 @@
 .payor-duration {
     margin-top: 2px;
 }
+.mat-autocapture-payment {
+    margin-left: 10px;
+    vertical-align: top;
+    margin-top: -4px;
+}
 
 @media (max-width: 1600px) and (min-width: 1200px) {
     .account-wrapper {
@@ -460,23 +475,6 @@
             .input-field {
                 input {
                     width: 250px;
-                }
-            }
-        }
-
-        .main-content {
-            table {
-                .mat-cell {
-                    .small-button {
-                        height: 35px;
-                        font-size: 0.6rem;
-                        padding: 0px;
-                        min-width: 100%;
-                    }
-
-                    .right-side {
-                        width: 95%;
-                    }
                 }
             }
         }

@@ -1,5 +1,5 @@
 import { Injectable, Optional, Inject } from '@angular/core';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GeneralService } from './general.service';
 import { BULK_UPDATE_VOUCHER } from './apiurls/invoice.api';

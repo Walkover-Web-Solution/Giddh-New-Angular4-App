@@ -6,7 +6,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -14,8 +14,6 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
@@ -36,20 +34,18 @@ import { ElementViewChildModule } from './helpers/directives/elementViewChild/el
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NgxMaskModule } from './helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
-import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { AmountFieldComponentModule } from './amount-field/amount-field.module';
 import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
-import { LedgerDiscountModule } from '../material-ledger/components/ledger-discount/ledger-discount.module';
-import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
+import { LedgerDiscountModule } from '../ledger/components/ledger-discount/ledger-discount.module';
+import { ConfirmationModalModule } from '../theme/confirmation-modal/confirmation-modal.module';
 import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
 import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
 import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
 import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
-import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MasterComponent } from './header/components/master/master.component';
 import { CheckPermissionModule } from '../permissions/check-permission.module';
@@ -57,9 +53,6 @@ import { GenericAsideMenuAccountModule } from './generic-aside-menu-account/gene
 import { AccountUpdateNewDetailsModule } from './header/components/account-update-new-details/account-update-new-details.module';
 import { MatRadioModule } from '@angular/material/radio';
 
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-    suppressScrollX: true
-};
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
@@ -77,7 +70,6 @@ export function provideConfig() {
         ManageGroupsAccountsComponent,
         AccountOperationsComponent,
         AccountFilterPipe,
-        OnBoardingComponent,
         GroupAddComponent,
         GroupUpdateComponent,
         ShareGroupModalComponent,
@@ -91,13 +83,11 @@ export function provideConfig() {
         RouterModule,
         FormsModule,
         ReactiveFormsModule,
-        ModalModule,
-        DatepickerModule,
+        ModalModule.forRoot(),
         TypeaheadModule.forRoot(),
         TooltipModule.forRoot(),
         BsDropdownModule.forRoot(),
         PopoverModule.forRoot(),
-        PerfectScrollbarModule,
         SocialLoginModule,
         SelectModule,
         ClickOutsideModule,
@@ -116,7 +106,7 @@ export function provideConfig() {
         TextCaseChangeModule,
         HighlightModule,
         TabsModule.forRoot(),
-        NgxMaskModule,
+        NgxMaskModule.forRoot(),
         CommandKModule,
         NgxDaterangepickerMd.forRoot(),
         ScrollingModule,
@@ -131,7 +121,7 @@ export function provideConfig() {
         ValidateSectionPermissionDirectiveModule,
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
-        NgxBootstrapSwitchModule.forRoot(),
+        MatSlideToggleModule,
         MatSlideToggleModule,
         CheckPermissionModule,
         AccountUpdateNewDetailsModule,
@@ -139,7 +129,6 @@ export function provideConfig() {
     ],
     exports: [
         CommonModule,
-        DatepickerModule,
         DecimalDigitsModule,
         PopoverModule,
         FormsModule,
@@ -152,8 +141,7 @@ export function provideConfig() {
         SelectModule,
         PaginationModule,
         ClickOutsideModule,
-        PerfectScrollbarModule,
-        OnBoardingComponent,
+        ScrollingModule,
         ConfirmModalModule,
         TextCaseChangeModule,
         KeyboardShortutModule,
@@ -182,10 +170,6 @@ export function provideConfig() {
         {
             provide: AuthServiceConfig,
             useFactory: provideConfig
-        },
-        {
-            provide: PERFECT_SCROLLBAR_CONFIG,
-            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         }
     ]
 })

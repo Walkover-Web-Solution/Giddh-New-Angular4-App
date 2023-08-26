@@ -20,9 +20,9 @@ import { saveAs } from "file-saver";
 import * as dayjs from "dayjs";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
-import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
-import { cloneDeep, find, isEqual, map as lodashMap, uniq } from "../../app/lodash-optimized";
+import { cloneDeep, find, map as lodashMap, uniq } from "../../app/lodash-optimized";
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
@@ -38,8 +38,8 @@ import {
 } from "../models/api-models/Contact";
 import { BulkEmailRequest } from "../models/api-models/Search";
 import { CashfreeClass } from "../models/api-models/SettingsIntegraion";
-import { IFlattenAccountsResultItem } from "../models/interfaces/flattenAccountsResultItem.interface";
-import { CompanyService } from "../services/companyService.service";
+import { IFlattenAccountsResultItem } from "../models/interfaces/flatten-accounts-result-item.interface";
+import { CompanyService } from "../services/company.service";
 import { ContactService } from "../services/contact.service";
 import { GeneralService } from "../services/general.service";
 import { ToasterService } from "../services/toaster.service";
@@ -49,14 +49,14 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/d
 import { SettingsBranchActions } from "../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../models/user-login-state";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { Lightbox } from "ngx-lightbox";
-import { MatCheckboxChange } from "@angular/material/checkbox/checkbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { CustomFieldsService } from "../services/custom-fields.service";
+import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 @Component({
     selector: "contact-detail",
@@ -114,12 +114,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** sorting */
     public key: string = "name"; // set default
     public order: string = "asc";
-    public showFieldFilter: {
-        [columnname: string]: {
-            displayName: string;
-            visibility: boolean
-        }
-    } = {};
     public updateCommentIdx: number = null;
     public searchStr$ = new Subject<string>();
     public searchStr: string = "";
@@ -128,7 +122,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("staticTabs", { static: true }) public staticTabs: MatTableModule;
     @Output() selectedTabChange: EventEmitter<MatTabChangeEvent>;
     @ViewChild("messageBox", { static: false }) public messageBox: ElementRef;
-    @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: ElementRef;
+    @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: TemplateRef<any>;
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public universalDate$: Observable<any>;
     public messageBody = {
@@ -187,10 +181,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isGetAccountsInProcess: boolean = false;
     /** This will hold the current page number */
     public currentPage: number = 1;
-    /** company custom fields list */
-    public companyCustomFields$: Observable<any[]>;
-    /** Column span length */
-    public colspanLength: number = 11;
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -216,7 +206,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** This will store screen size */
     public isMobileView: boolean = false;
     /** Stores the searched name value for the Name filter */
-    public searchedName: FormControl = new FormControl();
+    public searchedName: UntypedFormControl = new UntypedFormControl();
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
     /** True if today selected */
@@ -233,33 +223,24 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("mailModal") public mailModalComponent: TemplateRef<any>;
     /** Instance of bulk payment modal */
     @ViewChild("template") public bulkPaymentModalRef: TemplateRef<any>;
-    public displayColumns: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
-    public displayColumns$: Observable<string[]> = this.displayColumns.asObservable().pipe(takeUntil(this.destroyed$), distinctUntilChanged(isEqual));
-    public customerColumns: string[] = ["customerName", "sales", "receipt", "closing"];
-    public vendorColumns: string[] = ["vendorName", "purchase", "payment", "closing"];
-    /** True/false if select all is checked */
-    public selectAll: boolean = false;
-    /** Holds count of available columns on the page */
-    public availableColumnsCount: any[] = [];
+
     /** True if we should select all checkbox */
     public showSelectAll: boolean = false;
-    /** True if custom fields finished loading */
-    public customFieldsLoaded: boolean = true;
-    /** Custom fields request */
-    public customFieldsRequest: any = {
-        page: 0,
-        count: 0,
-        moduleUniqueName: 'account'
-    };
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
     /** True if it's default load */
     public defaultLoad: boolean = true;
+    /** This will use for displayed table columns */
+    public displayedColumns: any[] = [];
+    /** This will use for customise column check values */
+    public customiseColumns = [];
+    /** Holds inventory type module  */
+    public moduleType: string = '';
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private customFieldsService: CustomFieldsService) {
+        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -290,17 +271,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
-        // localStorage supported
-        if (window.localStorage) {
-            let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"]));
-            if (showColumnObj) {
-                if (showColumnObj.closingBalance !== undefined) {
-                    delete showColumnObj.closingBalance;
-                }
-                this.showFieldFilter = showColumnObj;
-                this.setTableColspan();
-            }
-        }
 
         this.breakPointObservar.observe([
             "(max-width: 1023px)",
@@ -313,6 +283,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         combineLatest([this.route.params, this.route.queryParams]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
+            let lastTabType = this.moduleType;
+            this.moduleType = (params.type)?.toUpperCase();
 
             if (params) {
                 if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
@@ -321,7 +293,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                         this.setActiveTab("customer");
                     }
                     if (activeTab === "vendor" && this.localeData?.page_heading) {
-                        this.availableColumnsCount = [];
                         this.showNameSearch = false;
                         this.searchedName?.reset();
                         this.translationComplete(true);
@@ -332,7 +303,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                         this.setActiveTab("vendor");
                     }
                     if (activeTab === "customer" && this.localeData?.page_heading) {
-                        this.availableColumnsCount = [];
                         this.showNameSearch = false;
                         this.searchedName?.reset();
                         this.translationComplete(true);
@@ -340,9 +310,83 @@ export class ContactComponent implements OnInit, OnDestroy {
                 } else {
                     this.setActiveTab("aging-report");
                 }
-                this.setDisplayColumns();
+                this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
+
+                if (this.activeTab === ContactsTab.customer.toLowerCase()) {
+                    this.customiseColumns.splice(0, 0,
+                        {
+                            "value": "customer_name",
+                            "label": "Customer Name",
+                            "checked": true
+                        },
+                        {
+                            "value": "parent_group",
+                            "label": "Parent Group",
+                            "checked": true
+                        },
+                        {
+                            "value": "opening",
+                            "label": "Opening",
+                            "checked": true
+                        },
+                        {
+                            "value": "sales",
+                            "label": "Sales",
+                            "checked": true
+                        },
+                        {
+                            "value": "receipt",
+                            "label": "Receipt",
+                            "checked": true
+                        }
+                    );
+                    this.moduleType = ContactsTab.customer;
+                    this.displayedColumns = [];
+                }
+                if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+                    this.customiseColumns.splice(0, 0,
+                        {
+                            "value": "vendor_name",
+                            "label": "Vendor Name",
+                            "checked": true
+                        },
+                        {
+                            "value": "parent_group",
+                            "label": "Parent Group",
+                            "checked": true
+                        },
+                        {
+                            "value": "opening",
+                            "label": "Opening",
+                            "checked": true
+                        },
+                        {
+                            "value": "purchase",
+                            "label": "Purchase",
+                            "checked": true
+                        },
+                        {
+                            "value": "payment",
+                            "label": "Payment",
+                            "checked": true
+                        }
+                    );
+                    this.customiseColumns.push(
+                        {
+                            value: "action",
+                            label: "Action",
+                            checked: true
+                        })
+                    this.moduleType = ContactsTab.vendor;
+                    this.displayedColumns = [];
+                }
+                if (lastTabType) {
+                    this.translationComplete(true);
+                }
             }
+
         });
+
 
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
@@ -464,7 +508,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.searchedName.valueChanges.pipe(
+        this.searchedName?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
@@ -525,7 +569,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string) {
-        let url = location.href + `?returnUrl=${part}/${accUniqueName}`;                
+        let url = location.href + `?returnUrl=${part}/${accUniqueName}`;
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
@@ -554,7 +598,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.currentBranch.alias = this.currentBranchData.alias;
             } else {
                 this.currentBranch.name = this.activeCompany.name;
-                this.currentBranch.uniqueName = this.activeCompany.uniqueName;
+                this.currentBranch.uniqueName = this.activeCompany?.uniqueName;
                 this.currentBranch.alias = this.activeCompany.nameAlias ? this.activeCompany.nameAlias : this.activeCompany.name;
             }
         }
@@ -592,14 +636,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     public setActiveTab(tabName: "customer" | "aging-report" | "vendor") {
         this.searchStr = "";
         this.tabSelected(tabName);
-        this.showFieldFilter = {};
         let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"]));
         if (showColumnObj) {
             if (showColumnObj.closingBalance !== undefined) {
                 delete showColumnObj.closingBalance;
             }
-            this.showFieldFilter = showColumnObj;
-            this.setTableColspan();
         }
 
         if (tabName === "vendor") {
@@ -778,7 +819,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.contactService.addComment(account?.comment, account?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res?.status === 'success') {
                     this.updateCommentIdx = null;
-                    account.comment = cloneDeep(res.body.description);
+                    account.comment = cloneDeep(res.body?.description);
                 }
             });
         }, 500);
@@ -791,20 +832,20 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public addValueToMsg(val: any) {
-        this.typeInTextarea(val.value);
+        this.typeInTextarea(val?.value);
     }
 
     public typeInTextarea(newText) {
         let el: HTMLInputElement = this.messageBox?.nativeElement;
         let start = el.selectionStart;
         let end = el.selectionEnd;
-        let text = el.value;
+        let text = el?.value;
         let before = text.substring(0, start);
         let after = text.substring(end, text?.length);
         el.value = (before + newText + after);
         el.selectionStart = el.selectionEnd = start + newText?.length;
         el.focus();
-        this.messageBody.msg = el.value;
+        this.messageBody.msg = el?.value;
     }
 
     /**
@@ -992,8 +1033,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public selectAccount(ev: MatCheckboxChange, item: any) {
-        this.prepareSelectedContactsList(item, ev.checked);
-        if (!ev.checked) {
+        this.prepareSelectedContactsList(item, ev?.checked);
+        if (!ev?.checked) {
             this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
             this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
             if (this.selectedCheckedContacts?.length === 0) {
@@ -1196,7 +1237,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
                         // element.customFields = customFields;
 
-                        let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
+                        let indexOfItem = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
                         } else {
@@ -1224,7 +1265,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
                         // element.customFields = customFields;
 
-                        let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
+                        let indexOfItem = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
                         } else {
@@ -1247,20 +1288,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
             this.isGetAccountsInProcess = false;
         });
-    }
-
-    public columnFilter(event: boolean, column: string) {
-        if (this.showFieldFilter[column]) {
-            this.showFieldFilter[column].visibility = event;
-        }
-        this.setTableColspan();
-
-        this.selectAll = Object.keys(this.showFieldFilter).every(filterName => this.showFieldFilter[filterName].visibility);
-
-        if (window.localStorage) {
-            localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"], JSON.stringify(this.showFieldFilter));
-        }
-        this.setDisplayColumns();
     }
 
     /**
@@ -1296,12 +1323,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
     }
 
-    private setTableColspan() {
-        let balancesColsArr = ['openingBalance'];
-        let length = Object.keys(this.showFieldFilter)?.filter(f => this.showFieldFilter[f])?.filter(f => balancesColsArr.includes(f))?.length;
-        this.tableColsPan = length > 0 ? 4 : 3;
-    }
-
     /**
      * To close bulk payment model
      *
@@ -1335,20 +1356,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * This will toggle all columns
-     *
-     * @param {boolean} event
-     * @memberof ContactComponent
-     */
-    public selectAllColumns(event: boolean): void {
-        Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key].visibility = event);
-        this.setTableColspan();
-        if (window.localStorage) {
-            localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"], JSON.stringify(this.showFieldFilter));
-        }
-        this.setDisplayColumns();
-    }
 
     /**
      * This will show datepicker
@@ -1395,7 +1402,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.selectedAccountsList = this.selectedAccountsList?.filter(account => account?.uniqueName !== element?.uniqueName);
         }
         // selected contacts list
-        let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element?.uniqueName);
+        let indexOfEntrySelected = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
         if (indexOfEntrySelected === -1 && isChecked) {
             this.selectedCheckedContacts.push(element?.uniqueName);
         } else if (indexOfEntrySelected > -1 && !isChecked) {
@@ -1429,82 +1436,18 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * API call to get custom field data
+     * This will use for show hide main table headers from customise columns
      *
-     * @memberof ContactComponent
+     * @param {*} event
+     * @memberof PurchaseRegisterExpandComponent
      */
-    public getCompanyCustomField(): void {
-        this.customFieldsService.list(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.status === "success") {
-                if (response.body?.results?.length) {
-                    let customFields = response.body.results?.map(field => {
-                        return {
-                            key: field.fieldName,
-                            uniqueName: field.uniqueName
-                        }
-                    });
-
-                    this.colspanLength = 11 + customFields?.length;
-                    this.addNewFieldFilters(customFields);
-                    this.companyCustomFields$ = observableOf(customFields);
-                }
-            } else {
-                this.toaster.showSnackBar("error", response.message);
-            }
-            this.customFieldsLoaded = true;
-            this.cdRef.detectChanges();
-        });
+    public showSelectedHeaderColumns(columns: string[]): void {
+        if (columns) {
+            this.displayedColumns = columns;
+        }
+        this.cdRef.detectChanges();
     }
 
-    /**
-     * To add new properties in showFieldFilter object
-     *
-     * @param {*} field
-     * @memberof ContactComponent
-     */
-    public addNewFieldFilters(field: any): void {
-        for (let key of field) {
-            if (key?.uniqueName) {
-                let index = Object.keys(this.showFieldFilter).length;
-                if (!this.showFieldFilter[key?.uniqueName]) {
-                    this.showFieldFilter[key?.uniqueName] = {
-                        visibility: false,
-                        displayName: key.key,
-                    };
-                }
-
-                let isColumnAvailable = this.availableColumnsCount?.filter(column => column.value === key?.uniqueName);
-                if (!isColumnAvailable?.length) {
-                    this.availableColumnsCount.push({ key: index, value: key?.uniqueName });
-                }
-            }
-        }
-        this.setDisplayColumns();
-
-        this.selectAll = Object.keys(this.showFieldFilter).every(filterName => this.showFieldFilter[filterName].visibility);
-    }
-
-    /**
-     * To add new properties in showFieldFilter object
-     *
-     * @memberof ContactComponent
-     */
-    public setDisplayColumns(): void {
-        const defaultColumms: string[] = this.activeTab === "customer" ? this.customerColumns : this.vendorColumns;
-        let computedColumns: string[] = [...defaultColumms, ...Object.keys(this.showFieldFilter)?.filter(key => this.showFieldFilter[key].visibility)];
-        if (this.activeTab === "vendor" && computedColumns?.length) {
-            computedColumns?.push("action");
-        }
-        if (computedColumns.findIndex(s => s === "openingBalance") > -1) {
-            computedColumns = computedColumns?.filter(s => s !== "openingBalance");
-            computedColumns.splice(1, 0, "openingBalance");
-        }
-        if (computedColumns.findIndex(s => s === "parentGroup") > -1) {
-            computedColumns = computedColumns?.filter(s => s !== "parentGroup");
-            computedColumns.splice(1, 0, "parentGroup");
-        }
-        this.displayColumns.next(computedColumns);
-    }
 
     /**
      * Branch change handler
@@ -1579,38 +1522,10 @@ export class ContactComponent implements OnInit, OnDestroy {
                     value: "%s_AN",
                 },
             ];
-
-            const availableColumns = [
-                {
-                    key: this.commonLocaleData?.app_parent_group,
-                    uniqueName: 'parentGroup'
-                },
-                {
-                    key: this.localeData?.opening,
-                    uniqueName: 'openingBalance'
-                },
-                {
-                    key: this.localeData?.contacts,
-                    uniqueName: 'contact'
-                },
-                {
-                    key: this.commonLocaleData?.app_state,
-                    uniqueName: 'state'
-                },
-                {
-                    key: this.commonLocaleData?.app_tax_number,
-                    uniqueName: 'gstin'
-                },
-                {
-                    key: this.localeData?.comment,
-                    uniqueName: 'comment'
-                }
-            ];
-
-            this.addNewFieldFilters(availableColumns);
-            this.setTableColspan();
-
-            //this.getCompanyCustomField();
+            this.customiseColumns = this.customiseColumns?.map(column => {
+                column.label = this.localeData[column.value];
+                return column;
+            });
         }
     }
 
@@ -1626,7 +1541,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
         this.showClearFilter = false;
         if (searchedFieldName === "name") {
-            if (this.searchedName.value) {
+            if (this.searchedName?.value) {
                 return;
             }
             if (this.generalService.childOf(event.target, element)) {
@@ -1676,7 +1591,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 return itemObject?.bankPaymentDetails === true;
             });
             this.selectedAccountsList = this.selectedAccountsList.filter((data, index) => {
-                return this.selectedAccountsList.indexOf(data) === index;
+                return this.selectedAccountsList?.indexOf(data) === index;
             });
         }
         if (!this.selectedAccountsList?.length && item) {
@@ -1692,15 +1607,11 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.toaster.showSnackBar("info", message);
             return;
         }
-        if (this.selectedAccountsList?.length > 1) {
-            this.toaster.showSnackBar("warning", this.localeData?.bulk_payment_unsupported_error);
-        } else {
-            if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
-                this.dialog.open(this.bulkPaymentModalRef, {
-                    width: '980px',
-                    panelClass: 'contact-modal'
-                });
-            }
+        if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
+            this.dialog.open(this.bulkPaymentModalRef, {
+                width: '980px',
+                panelClass: 'contact-modal'
+            });
         }
     }
 
@@ -1763,8 +1674,6 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     private resetColumns(): void {
-        this.availableColumnsCount = [];
-        this.showFieldFilter = {};
         this.translationComplete(true);
     }
 }

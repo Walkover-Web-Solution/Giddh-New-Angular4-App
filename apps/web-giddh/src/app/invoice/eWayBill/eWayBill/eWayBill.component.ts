@@ -14,7 +14,7 @@ import { saveAs } from 'file-saver';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
-import { NgForm, FormControl } from '@angular/forms';
+import { NgForm, UntypedFormControl } from '@angular/forms';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
@@ -23,7 +23,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { GstReconcileService } from '../../../services/GstReconcile.service';
+import { GstReconcileService } from '../../../services/gst-reconcile.service';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -63,8 +63,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     // searching
     @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
     @ViewChild('customerSearch', { static: true }) public customerSearch: ElementRef;
-    public voucherNumberInput: FormControl = new FormControl();
-    public customerNameInput: FormControl = new FormControl();
+    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
+    public customerNameInput: UntypedFormControl = new UntypedFormControl();
     public showSearchInvoiceNo: boolean = false;
     public showSearchCustomer: boolean = false;
     public EwayBillfilterRequest: IEwayBillfilter = new IEwayBillfilter();
@@ -91,7 +91,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public selectedEway: Result;
     public states: any[] = [];
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -391,7 +391,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
-        this.EwayBillfilterRequest.branchUniqueName = selectedEntity.value;
+        this.EwayBillfilterRequest.branchUniqueName = selectedEntity?.value;
         this.getAllFilteredInvoice();
     }
 
@@ -459,7 +459,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
     public cancelEwayBill(cancelEway: NgForm) {
 
-        this.cancelEwayRequest = _.cloneDeep(cancelEway.value);
+        this.cancelEwayRequest = _.cloneDeep(cancelEway?.value);
         this.cancelEwayRequest.ewbNo = this.selectedEwayItem.ewbNo;
         if (cancelEway.valid) {
             this.store.dispatch(this.invoiceActions.cancelEwayBill(this.cancelEwayRequest));
@@ -469,11 +469,11 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     public updateEwayTransport(updateEwayTransportfrom: NgForm) {
 
-        this.updateEwayVehicleObj = updateEwayTransportfrom.value;
+        this.updateEwayVehicleObj = updateEwayTransportfrom?.value;
         this.updateEwayVehicleObj['ewbNo'] = this.selectedEwayItem.ewbNo;
         this.updateEwayVehicleObj['transDocDate'] = this.updateEwayVehicleform['transDocDate'] ? dayjs(this.updateEwayVehicleform['transDocDate']).format('DD/MM/YYYY') : null;
         if (updateEwayTransportfrom.valid) {
-            this.store.dispatch(this.invoiceActions.UpdateEwayVehicle(updateEwayTransportfrom.value));
+            this.store.dispatch(this.invoiceActions.UpdateEwayVehicle(updateEwayTransportfrom?.value));
         }
         this.detectChange();
     }
@@ -702,7 +702,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 }));
 
                 if (!this.EwayBillfilterRequest.gstin && this.taxes?.length > 0) {
-                    this.EwayBillfilterRequest.gstin = this.taxes[0].value;
+                    this.EwayBillfilterRequest.gstin = this.taxes[0]?.value;
                     if (this.initialApiCalled) {
                         this.selectTax();
                     }

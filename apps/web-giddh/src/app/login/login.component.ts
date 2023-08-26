@@ -2,7 +2,7 @@ import { take, takeUntil } from "rxjs/operators";
 import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
 import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
 import { Configuration, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
@@ -42,9 +42,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     @ViewChild("twoWayAuthModal", { static: false }) public twoWayAuthModal: ModalDirective;
 
     public isSubmited: boolean = false;
-    public mobileVerifyForm: FormGroup;
-    public emailVerifyForm: FormGroup;
-    public twoWayOthForm: FormGroup;
+    public mobileVerifyForm: UntypedFormGroup;
+    public emailVerifyForm: UntypedFormGroup;
+    public twoWayOthForm: UntypedFormGroup;
     public isVerifyMobileInProcess$: Observable<boolean>;
     public isLoginWithMobileInProcess$: Observable<boolean>;
     public isVerifyEmailInProcess$: Observable<boolean>;
@@ -59,15 +59,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     public selectedBanner: string = null;
     public loginUsing: string = null;
     public urlPath: string = "";
-    public loginWithPasswdForm: FormGroup;
+    public loginWithPasswdForm: UntypedFormGroup;
     public isLoginWithPasswordInProcess$: Observable<boolean>;
-    public forgotPasswordForm: FormGroup;
-    public verifyOtpForm: FormGroup;
-    public resetPasswordForm: FormGroup;
+    public forgotPasswordForm: UntypedFormGroup;
+    public verifyOtpForm: UntypedFormGroup;
+    public resetPasswordForm: UntypedFormGroup;
     public isForgotPasswordInProgress$: Observable<boolean>;
     public isForgotPasswordInSuccess$: Observable<boolean>;
     public isResetPasswordInSuccess$: Observable<boolean>;
-    public signupVerifyForm: FormGroup;
+    public signupVerifyForm: UntypedFormGroup;
     public isLoginWithPasswordSuccessNotVerified$: Observable<boolean>;
     public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
 
@@ -80,7 +80,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     // tslint:disable-next-line:no-empty
-    constructor(private _fb: FormBuilder,
+    constructor(private _fb: UntypedFormBuilder,
         private store: Store<AppState>,
         private loginAction: LoginActions,
         private authService: AuthService,
@@ -280,7 +280,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public showMobileModal() {
-        this.mobileVerifyModal.show();
+        this.mobileVerifyModal?.show();
     }
 
     public hideMobileModal() {
@@ -366,7 +366,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.selectedBanner = "slide" + selectedSlide;
     }
 
-    public loginWithPasswd(model: FormGroup) {
+    public loginWithPasswd(model: UntypedFormGroup) {
         let ObjToSend = model?.value;
         if (ObjToSend) {
             this.store.dispatch(this.loginAction.LoginWithPasswdRequest(ObjToSend));

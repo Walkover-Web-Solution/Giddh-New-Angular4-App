@@ -22,8 +22,7 @@ export const ROUTES: Routes = [
     { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full' },
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
     { path: 'proforma-invoice' },
-    { path: 'new-user', loadChildren: () => import('./new-user/new-user.module').then(module => module.NewUserModule) },
-    { path: 'welcome', loadChildren: () => import('./welcome/welcome.module').then(module => module.WelcomeModule) },
+    { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
     { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnboardingModule) },
     { path: 'social-login-callback' },
     { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
@@ -35,7 +34,6 @@ export const ROUTES: Routes = [
     { path: 'contact', redirectTo: 'pages/contact' },
     { path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full' },
     { path: 'import', redirectTo: 'pages/import', pathMatch: 'full' },
-    // { path: 'tallysync', redirectTo: 'pages/tallysync', pathMatch: 'full' },
     { path: 'gstfiling', redirectTo: 'pages/gstfiling', pathMatch: 'full' },
     { path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full' },
     { path: 'purchase/create', redirectTo: 'pages/purchase/create' },
@@ -43,6 +41,7 @@ export const ROUTES: Routes = [
     { path: 'reports', redirectTo: 'pages/reports' },
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
     { path: 'select-plan' },
+    { path: 'mobile-restricted', redirectTo: 'mobile-restricted', pathMatch: 'full' },
     {
         path: 'pages',
         children: [
@@ -51,7 +50,7 @@ export const ROUTES: Routes = [
             { path: 'daybook', loadChildren: () => import('./daybook/daybook.module').then(module => module.DaybookModule) },
             { path: 'purchase', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule) },
             { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(module => module.InventoryModule) },
-            { path: 'new-inventory', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule) },
+            { path: 'inventory/v2', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule) },
             {
                 path: 'inventory-in-out',
                 loadChildren: () => import('./inventory-in-out/inventory-in-out.module').then(module => module.InventoryInOutModule),
@@ -67,7 +66,7 @@ export const ROUTES: Routes = [
             { path: 'activity-logs', loadChildren: () => import('./activity-logs/activity-logs.module').then(module => module.ActivityLogsModule) },
             {
                 path: 'ledger/:accountUniqueName',
-                loadChildren: () => import('./material-ledger/ledger.module').then(module => module.LedgerModule),
+                loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule),
                 data: { preload: true }
             },
             { path: 'permissions', loadChildren: () => import('./permissions/permission.module').then(module => module.PermissionModule) },
@@ -82,28 +81,27 @@ export const ROUTES: Routes = [
                 loadChildren: () => import('./accounting/accounting.module').then(module => module.AccountingModule),
                 data: { preload: true }
             },
-            { path: 'user-details', loadChildren: () => import('./userDetails/userDetails.module').then(module => module.UserDetailsModule) },
+            { path: 'user-details', loadChildren: () => import('./user-details/user-details.module').then(module => module.UserDetailsModule) },
             { path: 'contact', loadChildren: () => import('./contact/contact.module').then(module => module.ContactModule) },
             {
                 path: 'new-vs-old-invoices',
                 loadChildren: () => import('./new-vs-old-Invoices/new-vs-old-Invoices.module').then(module => module.NewVsOldInvoicesModule)
             },
             { path: 'import', loadChildren: () => import('./import-excel/import-excel.module').then(module => module.ImportExcelModule) },
-            // { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule) },
             { path: 'gstfiling', loadChildren: () => import('./gst/gst.module').then(module => module.GstModule) },
             {
                 path: 'company-import-export',
-                loadChildren: () => import('./companyImportExport/companyImportExport.module').then(module => module.CompanyImportExportModule)
+                loadChildren: () => import('./company-import-export/company-import-export.module').then(module => module.CompanyImportExportModule)
             },
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule) },
             { path: 'purchase-management', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule) },
             { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule) },
             { path: 'billing-detail' },
             { path: 'billing-detail/buy-plan' },
-            { path: 'mobile', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
             { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule) },
             { path: 'downloads', loadChildren: () => import('./downloads/downloads.module').then(module => module.DownloadsModule) },
             { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule) },
+            { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule)},
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

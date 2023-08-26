@@ -3,10 +3,13 @@
         "sales": "Sales",
         "credit_note": "Credit Note",
         "debit_note": "Debit Note",
-        "purchase": "Purchase",
+        "purchase": "Bill",
         "cash": "Cash",
         "proforma": "Proforma",
-        "estimate": "Estimate"
+        "estimate": "Estimate",
+        "cash_bill": "Cash Bill",
+        "cash_credit_note": "Cash Credit Note",
+        "cash_debit_note": "Cash Debit Note"
     },
     "customer_name": "Customer Name",
     "balance_due": "Balance Due",
@@ -62,11 +65,11 @@
     "add_customer": "Add Customer",
     "add_vendor": "Add Vendor",
     "invoice_no": "Invoice #",
-    "bill_number":"Bill Number",
+    "bill_number": "Bill Number",
     "proforma_no": "Proforma #",
     "estimate_no": "Estimate #",
     "purchase_bill_no": "Purchase Bill #",
-    "invoice_due_date": "Invoice Due Date",
+    "invoice_due_date": "Due Date",
     "proforma_date": "Proforma Date",
     "estimate_date": "Estimate Date",
     "expiry_date": "Expiry Date",
@@ -109,5 +112,7 @@
     "enter_amount": "Please enter deposit amount",
     "voucher_number_required": "Voucher number is mandatory.",
     "invalid_contact_number": "Invalid Contact number",
-    "account":"Account"
+    "account": "Account",
+    "select_variant": "Select Variant",
+    "variant": "Variant"
 }

@@ -3,14 +3,13 @@ import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitte
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
-import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { GeneralService } from "../../../../services/general.service";
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 import { MasterComponent } from '../master/master.component';
+import { PageLeaveUtilityService } from 'apps/web-giddh/src/app/services/page-leave-utility.service';
 
 @Component({
     selector: 'app-manage-groups-accounts',
@@ -20,14 +19,12 @@ import { MasterComponent } from '../master/master.component';
 export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
     /** Instance of master component */
-    @ViewChild('master', {static: false}) public master: MasterComponent;
+    @ViewChild('master', { static: false }) public master: MasterComponent;
     @ViewChild('header', { static: true }) public header: ElementRef;
     @ViewChild('grpSrch', { static: true }) public groupSrch: ElementRef;
     public headerRect: any;
     public showForm: boolean = false;
     @ViewChild('myModel', { static: true }) public myModel: ElementRef;
-    public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
-    @ViewChild('perfectdirective', { static: true }) public directiveScroll: PerfectScrollbarComponent;
     public breadcrumbPath: string[] = [];
     public breadcrumbUniquePath: string[] = [];
     public myModelRect: any;
@@ -48,6 +45,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public topSharedGroups: any[] = [];
     /** List of data searched */
     public searchedMasterData: any[] = [];
+    /** True if account has unsaved changes */
+    private hasUnsavedChanges: boolean = false;
+    /** True if confirmation is open on search groups/accounts keyup event */
+    private isPageLeaveConfirmationOpen: boolean = false;
 
     // tslint:disable-next-line:no-empty
     constructor(
@@ -58,7 +59,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         private generalService: GeneralService,
         private generalAction: GeneralActions,
         private groupService: GroupService,
-        private accountsAction: AccountsAction
+        private accountsAction: AccountsAction,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
         this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
@@ -133,6 +135,14 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             }, 200);
         }
 
+        this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            if (this.hasUnsavedChanges && !response) {
+                this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+            }
+
+            this.hasUnsavedChanges = response;
+        });
+
         document.querySelector('body')?.classList?.add('master-page');
     }
 
@@ -141,6 +151,18 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     }
 
     public searchGroups(term: string): void {
+        if (this.hasUnsavedChanges) {
+            if (!this.isPageLeaveConfirmationOpen) {
+                this.confirmPageLeave(() => {
+                    this.searchGroupsAndAccounts(term);
+                });
+            }
+            return;
+        }
+        this.searchGroupsAndAccounts(term);
+    }
+
+    private searchGroupsAndAccounts(term: string): void {
         this.store.dispatch(this.groupWithAccountsAction.setGroupAndAccountsSearchString(term));
         this.groupSearchTerms.next(term);
         this.breadcrumbPath = [];
@@ -148,6 +170,18 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     }
 
     public resetGroupSearchString(needToFireRequest: boolean = true) {
+        if (this.hasUnsavedChanges) {
+            if (!this.isPageLeaveConfirmationOpen) {
+                this.confirmPageLeave(() => {
+                    this.resetSearchString(needToFireRequest);
+                });
+            }
+            return;
+        }
+        this.resetSearchString(needToFireRequest);
+    }
+
+    private resetSearchString(needToFireRequest: boolean = true): void {
         if (needToFireRequest) {
             this.groupSearchTerms.next('');
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
@@ -160,7 +194,24 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.searchString = "";
     }
 
-    public closePopupEvent() {
+    public closePopupEvent(): void {
+        if (this.hasUnsavedChanges) {
+            this.confirmPageLeave(() => {
+                this.closePopup();
+            });
+            return;
+        }
+        this.closePopup();
+    }
+
+    /**
+     * Closes master popup
+     *
+     * @private
+     * @memberof ManageGroupsAccountsComponent
+     */
+    private closePopup(): void {
+        document.querySelector('body')?.classList?.remove('master-page');
         this.store.dispatch(this.generalAction.addAndManageClosed());
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
         this.closeEvent.emit(true);
@@ -173,8 +224,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     }
 
     public scrollToRight(): void {
-        if (this.directiveScroll) {
-            this.directiveScroll.directiveRef.scrollToRight();
+        let element = document.querySelector('#horizontal-master-scroll');
+        if (element) {
+            element.scrollLeft = element.scrollWidth;
         }
     }
 
@@ -212,5 +264,33 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                 this.topSharedGroups = response?.body?.results;
             }
         });
+    }
+
+    /**
+     * Shows page leave confirmation
+     *
+     * @private
+     * @param {Function} callback
+     * @memberof ManageGroupsAccountsComponent
+     */
+    private confirmPageLeave(callback: Function): void {
+        this.isPageLeaveConfirmationOpen = true;
+        this.pageLeaveUtilityService.confirmPageLeave(action => {
+            this.isPageLeaveConfirmationOpen = false;
+            if (action) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                callback();
+            }
+        });
+    }
+
+    /**
+     * Closes modal if escape is pressed
+     *
+     * @memberof ManageGroupsAccountsComponent
+     */
+    @HostListener("document:keyup.esc", ['$event'])
+    public onPressEscape(): void {
+        this.closePopupEvent();
     }
 }

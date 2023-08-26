@@ -25,11 +25,11 @@ import {
     PURCHASE_RECORD_GRAND_TOTAL_OPERATION,
     PurchaseRecordAdvanceSearch,
 } from '../purchase/purchase-record/constants/purchase-record.interface';
-import { COMPANY_API } from './apiurls/comapny.api';
-import { RECEIPT_API } from './apiurls/recipt.api';
+import { COMPANY_API } from './apiurls/company.api';
+import { RECEIPT_API } from './apiurls/receipt.api';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
@@ -60,7 +60,7 @@ export class ReceiptService {
         const requestPayload = (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? this.getPurchaseRecordPayload(body) : body;
         const contextPath = (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
         const requestParameter = {
-            page: body.page, count: body.count, from: body.from, to: body.to, q: (body.q) ? encodeURIComponent(body.q) : body.q, sort: body.sort, sortBy: body.sortBy
+            page: body?.page, count: body?.count, from: body?.from, to: body?.to, q: (body?.q) ? encodeURIComponent(body?.q) : body?.q, sort: body?.sort, sortBy: body?.sortBy
         };
         let url = this.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? requestParameter : { ...requestParameter, type });
         if (this.generalService.voucherApiVersion === 2) {
@@ -70,11 +70,11 @@ export class ReceiptService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), requestPayload).pipe(
                 map((res) => {
                     let data: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = res;
-                    data.queryString = { page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf' };
+                    data.queryString = { page: body?.page, count: body?.count, from: body?.from, to: body?.to, type: 'pdf' };
                     data.request = body;
                     return data;
                 }),
-                catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, InvoiceReceiptFilter>(e, body, { page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf' })));
+                catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, InvoiceReceiptFilter>(e, body, { page: body?.page, count: body?.count, from: body?.from, to: body?.to, type: 'pdf' })));
     }
 
     /**
@@ -188,7 +188,7 @@ export class ReceiptService {
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         let requestObj: VoucherRequest | ReceiptVoucherDetailsRequest = Object.assign({}, model);
         if (this.generalService.voucherApiVersion === 2) {
-            requestObj = new VoucherRequest(model.invoiceNumber, model.voucherType, model.uniqueName);
+            requestObj = new VoucherRequest(model.invoiceNumber, model.voucherType, model?.uniqueName);
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
         return this.http.post(url, requestObj
@@ -274,7 +274,7 @@ export class ReceiptService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let requestType = type;
         let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL_BAL_SALE_DUE, {
-            page: body.page, count: body.count, from: body.from, to: body.to, type: requestType, q: body.q ? encodeURIComponent(body.q) : body.q, sort: body.sort, sortBy: body.sortBy
+            page: body?.page, count: body?.count, from: body?.from, to: body?.to, type: requestType, q: body?.q ? encodeURIComponent(body?.q) : body?.q, sort: body?.sort, sortBy: body?.sortBy
         });
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
@@ -283,11 +283,11 @@ export class ReceiptService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body).pipe(
                 map((res) => {
                     let data: BaseResponse<ReciptResponse, any> = res;
-                    data.queryString = { page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf' };
+                    data.queryString = { page: body?.page, count: body?.count, from: body?.from, to: body?.to, type: 'pdf' };
                     data.request = body;
                     return data;
                 }),
-                catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, any>(e, body, { page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf' })));
+                catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, any>(e, body, { page: body?.page, count: body?.count, from: body?.from, to: body?.to, type: 'pdf' })));
     }
 
     /**

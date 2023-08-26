@@ -1,0 +1,129 @@
+.mat-mdc-button,
+.mat-icon-button,
+.mat-stroked-button,
+.mat-raised-button {
+    &.mat-primary {
+        color: var(--color-giddh-blue) !important;
+    }
+    /*Material Button Disabled Cursor*/
+    &.mat-button-disabled {
+        &:hover {
+            cursor: not-allowed !important;
+        }
+    }
+    .mat-button-focus-overlay {
+        background-color: var(--color-primary-header-background) !important;
+    }
+}
+.mat-mdc-outlined-button {
+    &.mat-primary {
+        color: var(--color-giddh-blue) !important;
+    }
+    &:not(:disabled){
+        border-color: var(--color-fields-border) !important;
+    }
+}
+
+/*==========  Material Button Default Font Size Start Here =============*/
+.mat-mdc-button,
+.mat-raised-button,
+.mat-icon-button,
+.mat-stroked-button,
+.mat-flat-button,
+.mat-fab,
+.mat-mini-fab,
+.mat-mdc-outlined-button .mdc-button__label {
+    // font-size: var(--font-size-15) !important;
+    border-color: var(--color-fields-border) !important;
+}
+/*==========  Material Button Default Font Size End Here ===============*/
+
+/* ======Ladda  Button Color in Material Stroked Button====Start Here=========== */
+button {
+    &.mat-stroked-button {
+        &.mat-primary {
+            &:disabled {
+                .ladda-label {
+                    color: transparent;
+                }
+            }
+            &.ladda-button {
+                &:not(:disabled) {
+                    .ladda-label {
+                        color: var(--color-giddh-blue) !important;
+                        display: contents;
+                        width: auto;
+                        height: auto;
+                    }
+                }
+                .ladda-spinner {
+                    div {
+                        div {
+                            div {
+                                background: var(--color-giddh-blue) !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* This class is used to ladda button text color which is conditionally disabled*/
+.disabled-ladda-btn {
+    &.mat-stroked-button {
+        &.mat-primary {
+            &:disabled {
+                .ladda-label {
+                    color: var(--color-giddh-blue) !important;
+                }
+            }
+        }
+    }
+}
+
+/* ======Ladda  Button Color in Material Stroked Button====End Here=========== */
+.mat-button,
+.mat-raised-button,
+.mat-stroked-button {
+    margin-right: 15px !important;
+    height: 36px;
+    box-shadow: none !important;
+}
+
+.mat-raised-button:focus {
+    box-shadow: none !important;
+}
+
+.mat-icon-button {
+    i,
+    .mat-icon {
+        color: var(--color-primary-icon);
+    }
+}
+
+/*==========  Material Icon Button Default hover =============*/
+.mat-mdc-icon-button {
+    &:hover{
+        .mat-mdc-button-persistent-ripple{
+            &::before{
+                opacity: 0;
+            }
+        }
+    }
+    &:active{
+        .mat-mdc-button-persistent-ripple{
+            &::before{
+                opacity: 0;
+            }
+        }       
+    }
+    &.cdk-keyboard-focused {
+        .mat-mdc-button-persistent-ripple{
+            &::before{
+                opacity: 0;
+            }
+        }
+    }
+}

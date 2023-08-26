@@ -15,13 +15,7 @@
         }"
         [class]="'drops-' + drops + '-' + opens"
     >
-        <!-- ranges container -->
-        <perfect-scrollbar
-            fxFlex="auto"
-            class="hide-horizontal-scroll ranges-perfect-scrollbar"
-            [scrollIndicators]="true"
-            [config]="{ suppressScrollX: false, suppressScrollY: false }"
-        >
+        <app-cdk-scroll>
             <div class="ranges" *ngIf="ranges?.length">
                 <!-- loop over ranges -->
                 <div class="range-container">
@@ -106,9 +100,10 @@
                         <li>
                             <button>
                                 <input
+                                    matInput
                                     type="tel"
                                     (keyup)="uptoInputKeyUp($event)"
-                                    (change)="uptoToday($event, $event.target.value)"
+                                    (change)="uptoToday($event, $event.target?.value)"
                                 />
                                 {{ commonLocaleData?.app_datepicker?.days_upto_today }}
                             </button>
@@ -117,7 +112,7 @@
                 </div>
                 <!-- days up to today/ yesterday input -->
             </div>
-        </perfect-scrollbar>
+        </app-cdk-scroll>
         <!-- ranges container -->
         <!-- calender container -->
         <div class="calender-container" *ngIf="!isMobileScreen || (isMobileScreen && openMobileDatepickerPopup)">
@@ -162,6 +157,7 @@
                                 <div class="relative mr-1 d-flex date-field">
                                     <label>{{ commonLocaleData?.app_start_date }}</label>
                                     <input
+                                        matInput
                                         type="tel"
                                         name="inlineStartDate"
                                         [value]="viewOnlyStartDate"
@@ -175,6 +171,7 @@
                                 <div class="relative d-flex date-field">
                                     <label>{{ commonLocaleData?.app_end_date }}</label>
                                     <input
+                                        matInput
                                         type="tel"
                                         name="inlineEndDate"
                                         [value]="viewOnlyEndDate"
@@ -216,6 +213,7 @@
                                     </span>
                                     <span class="fa fa-search"></span>
                                     <input
+                                        matInput
                                         [ngClass]="{ 'invalid-date-input': invalidStartDate, 'w-100': true }"
                                         [placeholder]="commonLocaleData?.app_start_date"
                                         #startDateElement
@@ -223,7 +221,7 @@
                                         (blur)="
                                             isOnScrollActive = false;
                                             initialCalendarMonths = true;
-                                            setStartDate($event.target.value)
+                                            setStartDate($event.target?.value)
                                         "
                                         (focus)="ActiveDate = 0"
                                         [class]="ActiveDate === 0 ? ActiveSelectedDateClass : ''"
@@ -243,6 +241,7 @@
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
                                     </span>
                                     <input
+                                        matInput
                                         [ngClass]="{ 'invalid-date-input': invalidEndDate, 'w-100': true }"
                                         [placeholder]="commonLocaleData?.app_end_date"
                                         #endDateElement
@@ -250,7 +249,7 @@
                                         (blur)="
                                             isOnScrollActive = false;
                                             initialCalendarMonths = true;
-                                            setEndDate($event.target.value)
+                                            setEndDate($event.target?.value)
                                         "
                                         (focus)="ActiveDate = 1"
                                         [class]="ActiveDate === 1 ? ActiveSelectedDateClass : ''"
@@ -264,14 +263,14 @@
                         <!-- start date/ end date inputs container -->
                         <!-- month name -->
                         <div class="month-field">
-                            <button class="prev available" (click)="onScroll('top')"></button>
+                            <button mat-button class="prev available" (click)="onScroll('top')"></button>
                             <!-- month name and month dropdown -->
                             <div class="month-dropdown">
                                 <span class="month-name">
                                     <ng-container *ngIf="showDropdowns && calendarVariables.start.dropdowns">
                                         {{ activeMonth ? locale.monthNames[activeMonth.calendar[1][1].month()] : "" }}
                                         {{ activeMonth ? activeMonth.calendar[1][1].format(" YYYY") : "" }}
-                                        <button class="prev available"></button>
+                                        <button mat-button class="prev available"></button>
                                     </ng-container>
                                     <ng-container *ngIf="!showDropdowns || !calendarVariables.start.dropdowns">
                                         {{ activeMonth ? locale.monthNames[activeMonth.calendar[1][1].month()] : "" }}
@@ -282,7 +281,7 @@
                             <!-- month name and month dropdown -->
                             <!-- navigate to previous and next month buttons -->
                             <div class="prev-next-btn">
-                                <button class="next available" (click)="onScroll('bottom')"></button>
+                                <button mat-button class="next available" (click)="onScroll('bottom')"></button>
                             </div>
                             <!-- navigate to previous and next month buttons -->
                         </div>
@@ -477,7 +476,8 @@
                                                 <!-- clear button -->
                                                 <button
                                                     *ngIf="showClearButton"
-                                                    class="btn btn-default clear"
+                                                    mat-stroked-button
+                                                    class="clear"
                                                     type="button"
                                                     (click)="clear()"
                                                     title="clear the date"
@@ -497,7 +497,7 @@
 
                                                 <!-- cancel button -->
                                                 <button
-                                                    class="btn btn-danger"
+                                                    mat-stroked-button
                                                     *ngIf="showCancel"
                                                     type="button"
                                                     (click)="clickCancel($event)"
@@ -508,7 +508,8 @@
 
                                                 <!-- apply button -->
                                                 <button
-                                                    class="btn btn-success"
+                                                    mat-stroked-button
+                                                    color="primary"
                                                     *ngIf="!isMobileScreen"
                                                     [disabled]="applyBtn.disabled"
                                                     type="button"
@@ -517,7 +518,8 @@
                                                     {{ commonLocaleData?.app_datepicker?.done }}
                                                 </button>
                                                 <button
-                                                    class="btn btn-success"
+                                                    mat-stroked-button
+                                                    color="primary"
                                                     *ngIf="isMobileScreen"
                                                     [disabled]="applyBtn.disabled"
                                                     type="button"
@@ -540,7 +542,7 @@
                                         <option
                                             *ngFor="let i of timepickerVariables.start.hours"
                                             [value]="i"
-                                            [disabled]="timepickerVariables.start.disabledHours.indexOf(i) > -1"
+                                            [disabled]="timepickerVariables.start.disabledHours?.indexOf(i) > -1"
                                         >
                                             {{ i }}
                                         </option>
@@ -554,7 +556,7 @@
                                         <option
                                             *ngFor="let i of timepickerVariables.start.minutes; let index = index"
                                             [value]="i"
-                                            [disabled]="timepickerVariables.start.disabledMinutes.indexOf(i) > -1"
+                                            [disabled]="timepickerVariables.start.disabledMinutes?.indexOf(i) > -1"
                                         >
                                             {{ timepickerVariables.start.minutesLabel[index] }}
                                         </option>
@@ -569,7 +571,7 @@
                                         <option
                                             *ngFor="let i of timepickerVariables.start.seconds; let index = index"
                                             [value]="i"
-                                            [disabled]="timepickerVariables.start.disabledSeconds.indexOf(i) > -1"
+                                            [disabled]="timepickerVariables.start.disabledSeconds?.indexOf(i) > -1"
                                         >
                                             {{ timepickerVariables.start.secondsLabel[index] }}
                                         </option>
@@ -764,7 +766,7 @@
                                         <option
                                             *ngFor="let i of timepickerVariables.end.hours"
                                             [value]="i"
-                                            [disabled]="timepickerVariables.end.disabledHours.indexOf(i) > -1"
+                                            [disabled]="timepickerVariables.end.disabledHours?.indexOf(i) > -1"
                                         >
                                             {{ i }}
                                         </option>
@@ -778,7 +780,7 @@
                                         <option
                                             *ngFor="let i of timepickerVariables.end.minutes; let index = index"
                                             [value]="i"
-                                            [disabled]="timepickerVariables.end.disabledMinutes.indexOf(i) > -1"
+                                            [disabled]="timepickerVariables.end.disabledMinutes?.indexOf(i) > -1"
                                         >
                                             {{ timepickerVariables.end.minutesLabel[index] }}
                                         </option>
@@ -793,7 +795,7 @@
                                         <option
                                             *ngFor="let i of timepickerVariables.end.seconds; let index = index"
                                             [value]="i"
-                                            [disabled]="timepickerVariables.end.disabledSeconds.indexOf(i) > -1"
+                                            [disabled]="timepickerVariables.end.disabledSeconds?.indexOf(i) > -1"
                                         >
                                             {{ timepickerVariables.end.secondsLabel[index] }}
                                         </option>

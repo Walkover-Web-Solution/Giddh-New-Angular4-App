@@ -8,7 +8,7 @@ import { API_COUNT_LIMIT } from '../../../app.constant';
 import { cloneDeep, flatten, map, omit, union } from '../../../lodash-optimized';
 import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
 import { IForceClear } from '../../../models/api-models/Sales';
-import { CompanyService } from '../../../services/companyService.service';
+import { CompanyService } from '../../../services/company.service';
 import { GroupService } from '../../../services/group.service';
 import { LogsService } from '../../../services/logs.service';
 import { SearchService } from '../../../services/search.service';
@@ -106,7 +106,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         private groupService: GroupService,
         private searchService: SearchService
     ) {
-        
+
     }
 
     /**
@@ -121,7 +121,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data?.status === 'success') {
                 let users: IOption[] = [];
-                data.body.map((item) => {
+                data.body?.map((item) => {
                     users.push({ label: item.userName, value: item.userUniqueName, additional: item });
                 });
                 this.auditLogFormVM.canManageCompany = true;
@@ -201,8 +201,8 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsFormComponent
      */
     public customUserFilter(term: string, item: IOption): any {
-        return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 ||
-            (item.additional && item.additional.userEmail && item.additional.userEmail.toLocaleLowerCase().indexOf(term) > -1));
+        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value.toLocaleLowerCase()?.indexOf(term) > -1 ||
+            (item.additional && item.additional.userEmail && item.additional.userEmail.toLocaleLowerCase()?.indexOf(term) > -1));
     }
 
     /**

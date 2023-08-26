@@ -11,7 +11,7 @@ export class AccountFilterPipe implements PipeTransform {
     public srch: string;
 
     constructor() {
-        
+
     }
 
     public transform(input: any, search: string): any {
@@ -123,7 +123,7 @@ export class AccountFilterPipe implements PipeTransform {
     }
 
     public checkIndex(src, str) {
-        if (src.indexOf(str) !== -1) {
+        if (src?.indexOf(str) !== -1) {
             return true;
         } else {
             return false;

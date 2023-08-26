@@ -128,8 +128,8 @@ export class AccountingComponent implements OnInit, OnDestroy {
                 this.saveEntryInInvoice = false;
             }, 100);
         } else if (event.altKey && event.which === 86) { // Handling Alt + V and Alt + I
-            const selectedPage = this._tallyModuleService.selectedPageInfo.value;
-            if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
+            const selectedPage = this._tallyModuleService.selectedPageInfo?.value;
+            if (PAGES_WITH_CHILD?.indexOf(selectedPage.page) > -1) {
                 this._tallyModuleService.setVoucher({
                     page: selectedPage.page,
                     uniqueName: selectedPage?.uniqueName,
@@ -139,8 +139,8 @@ export class AccountingComponent implements OnInit, OnDestroy {
                 return;
             }
         } else if (event.altKey && event.which === 73) { // Alt + I
-            const selectedPage = this._tallyModuleService.selectedPageInfo.value;
-            if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
+            const selectedPage = this._tallyModuleService.selectedPageInfo?.value;
+            if (PAGES_WITH_CHILD?.indexOf(selectedPage.page) > -1) {
                 this._tallyModuleService.setVoucher({
                     page: selectedPage.page,
                     uniqueName: selectedPage?.uniqueName,

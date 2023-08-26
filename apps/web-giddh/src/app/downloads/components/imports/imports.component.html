@@ -63,7 +63,6 @@
             </div>
             <div class="pd-l05 d-flex">
                 <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                    <i class="icon-calender calendar-addon"></i>
                     <input
                         type="text"
                         name="selectedDateRange"
@@ -72,8 +71,8 @@
                     />
                 </div>
                 <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
-                    <button mat-raised-button class="btn btn-filter min-width-100 mr-l1" (click)="resetFilter()">
-                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                    <button mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
+                        <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
             </div>
@@ -81,7 +80,7 @@
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div class="table-content" *ngIf="!isLoading && dataSource?.length">
+        <div class="table-responsive table-content" *ngIf="!isLoading && dataSource?.length">
             <table mat-table [dataSource]="dataSource" class="import-table">
                 <!-- Requested importDate Column -->
                 <ng-container matColumnDef="importDate">
@@ -102,7 +101,13 @@
                 <ng-container matColumnDef="importFile">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.import_file }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <a target="_blank" [href]="element.efsPath" mat-button class="import-button-status btn-success">
+                        <a
+                            target="_blank"
+                            [href]="element.path"
+                            mat-stroked-button
+                            color="primary"
+                            class="import-button-status"
+                        >
                             {{ commonLocaleData?.app_download }}
                         </a>
                     </td>
@@ -111,12 +116,12 @@
                 <ng-container matColumnDef="count">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_count }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <ng-container *ngIf="element.status !== 'SUBMITTED'">
+                        <ng-container *ngIf="element?.status !== 'SUBMITTED'">
                             <span>{{ localeData?.success }} : {{ element.count.success }}</span
                             ><br /><span>{{ localeData?.failed }} : {{ element.count.failed }}</span
                             ><br /><span>{{ localeData?.total }} : {{ element.count.total }}</span>
                         </ng-container>
-                        <ng-container *ngIf="element.status === 'SUBMITTED'"> - </ng-container>
+                        <ng-container *ngIf="element?.status === 'SUBMITTED'"> - </ng-container>
                     </td>
                 </ng-container>
                 <!-- Error Sheet Column -->
@@ -125,17 +130,18 @@
                     <td mat-cell *matCellDef="let element">
                         <div
                             class="import-text"
-                            *ngIf="element.status !== 'COMPLETED'"
-                            [matTooltip]="element.status === 'SUBMITTED' ? localeData?.mapping_pending : ''"
+                            *ngIf="element?.status !== 'COMPLETED'"
+                            [matTooltip]="element?.status === 'SUBMITTED' ? localeData?.mapping_pending : ''"
                         >
-                            {{ element.status }}
+                            {{ element?.status }}
                         </div>
                         <a
-                            *ngIf="element.status === 'COMPLETED'"
+                            *ngIf="element?.status === 'COMPLETED'"
                             target="_blank"
                             (click)="downloadErrorSheet(element)"
-                            mat-button
-                            class="import-button-status btn-success"
+                            mat-stroked-button
+                            color="primary"
+                            class="import-button-status"
                         >
                             {{ commonLocaleData?.app_download }}
                         </a>
@@ -147,17 +153,18 @@
                     <td mat-cell *matCellDef="let element">
                         <div
                             class="import-text"
-                            *ngIf="element.status !== 'COMPLETED'"
-                            [matTooltip]="element.status === 'SUBMITTED' ? localeData?.mapping_pending : ''"
+                            *ngIf="element?.status !== 'COMPLETED'"
+                            [matTooltip]="element?.status === 'SUBMITTED' ? localeData?.mapping_pending : ''"
                         >
-                            {{ element.status }}
+                            {{ element?.status }}
                         </div>
                         <a
-                            *ngIf="element.status === 'COMPLETED'"
+                            *ngIf="element?.status === 'COMPLETED'"
                             target="_blank"
                             (click)="downloadSuccessSheet(element)"
-                            mat-button
-                            class="import-button-status btn-success"
+                            mat-stroked-button
+                            color="primary"
+                            class="import-button-status"
                         >
                             {{ commonLocaleData?.app_download }}
                         </a>

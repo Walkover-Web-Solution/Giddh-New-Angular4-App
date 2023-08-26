@@ -4,13 +4,10 @@ import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { CustomTemplateResponse } from '../../../../models/api-models/Invoice';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
-import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { ToasterService } from '../../../../services/toaster.service';
 import { LoaderService } from '../../../../loader/loader.service';
-import { INVOICE_API } from '../../../../services/apiurls/invoice';
-import { Configuration } from '../../../../app.constant';
 import { BulkUpdateInvoiceNote, BulkUpdateInvoiceImageSignature, BulkUpdateInvoiceTemplates, BulkUpdateInvoiceDueDates, BulkUpdateInvoiceSlogan, BulkUpdateInvoiceShippingDetails, BulkUpdateInvoiceCustomfields } from 'apps/web-giddh/src/app/models/api-models/Contact';
 import { InvoiceBulkUpdateService } from 'apps/web-giddh/src/app/services/invoice.bulkupdate.service';
 import { NgForm } from '@angular/forms';
@@ -18,8 +15,9 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { ModalOptions, ModalDirective } from 'ngx-bootstrap/modal';
-import { CustomTemplateState } from 'apps/web-giddh/src/app/store/Invoice/invoice.template.reducer';
+import { CustomTemplateState } from 'apps/web-giddh/src/app/store/invoice/invoice.template.reducer';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 
 @Component({
     selector: 'invoice-bulk-update-modal-component',
@@ -37,17 +35,12 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('bulkUpdateForm', { static: true }) public bulkUpdateForm: NgForm;
     @ViewChild('bulkUpdateImageSlogan', { static: true }) public bulkUpdateImageSlogan: ModalDirective;
-
     public fieldOptions: IOption[] = [];
     public templateSignaturesOptions: IOption[] = [];
     public signatureOptions: string = 'image'
     public selectedField: string = ''
     public allTemplates$: Observable<CustomTemplateResponse[]>;
     public allTemplatesOptions: IOption[] = [];
-    public fileUploadOptions: UploaderOptions;
-    public uploadInput: EventEmitter<UploadInput>;
-    public sessionId$: Observable<string>;
-    public companyUniqueName$: Observable<string>;
     public isSignatureAttached: boolean = false;
     public signatureSrc: string;
     public companyUniqueName: string;
@@ -77,10 +70,15 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     public voucherApiVersion: 1 | 2;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _toaster: ToasterService, private _invoiceBulkUpdateService: InvoiceBulkUpdateService, private _loaderService: LoaderService, private generalService: GeneralService) {
-        this.fileUploadOptions = { concurrency: 0 };
-        this.sessionId$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
-        this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+    constructor(
+        private store: Store<AppState>,
+        private invoiceActions: InvoiceActions,
+        private toaster: ToasterService,
+        private invoiceBulkUpdateService: InvoiceBulkUpdateService,
+        private loaderService: LoaderService,
+        private generalService: GeneralService,
+        private commonService: CommonService
+    ) {
         this.allTemplates$ = this.store.pipe(select(s => s.invoiceTemplate.customCreatedTemplates), takeUntil(this.destroyed$));
     }
     /**
@@ -90,7 +88,6 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
      */
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.uploadInput = new EventEmitter<UploadInput>();
         this.getTemplates();
         this.store.pipe(select(appState => appState.invoiceTemplate), takeUntil(this.destroyed$)).subscribe((templateData: CustomTemplateState) => {
             if (templateData && templateData.customCreatedTemplates) {
@@ -104,63 +101,36 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     }
 
     /**
-     * Upload file output
+     * Uploads image
      *
-     * @param {UploadOutput} output filter update options type for queue
      * @memberof InvoiceBulkUpdateModalComponent
      */
-    public onUploadOutput(output: UploadOutput): void {
-        this.updateInProcess = true;
-        this.isSignatureAttached = true;
-        this.previewFile(output.file);
-        if (output.type === 'allAddedToQueue') {
-            let sessionId = null;
-            this.sessionId$.pipe(take(1)).subscribe(a => sessionId = a);
-            this.companyUniqueName$.pipe(take(1)).subscribe(a => this.companyUniqueName = a);
-            const event: UploadInput = {
-                type: 'uploadAll',
-                url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
-                method: 'POST',
-                headers: { 'Session-Id': sessionId },
-            };
+    public uploadImage(): void {
+        const selectedFile: any = document.getElementById("bulkUploadfileInput");
+        if (selectedFile?.files?.length) {
+            const file = selectedFile?.files[0];
 
-            this.uploadInput.emit(event);
-        } else if (output.type === 'start') {
-            this._loaderService.show();
-        } else if (output.type === 'done') {
-            this._loaderService.hide();
-            if (output.file.response?.status === 'success') {
-                this.updateInProcess = false;
-                this.updateImageSignatureRequest.imageSignatureUniqueName = '';
-                if (output.file.response.body && output.file.response.body?.uniqueName) {
-                    this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body?.uniqueName;
-                    this.updateImageSignatureRequest.imageSignatureUniqueName = output.file.response.body?.uniqueName;
-                }
-                this._toaster.successToast(this.localeData?.file_uploaded);
-            } else {
-                this._toaster.errorToast(output.file.response.message);
-            }
-        }
-    }
+            this.generalService.getSelectedFileBase64(file, (base64) => {
+                this.loaderService.show();
 
-    /**
-     * Preview uploaded file
-     *
-     * @param {*} files
-     * @memberof InvoiceBulkUpdateModalComponent
-     */
-    public previewFile(files: any): void {
-        let preview: any = document.getElementById('signatureImage');
-        let a: any = document.querySelector('#bulkUploadfileInput');
-        let file = a.files[0];
-        let reader = new FileReader();
-        reader.onloadend = () => {
-            preview.src = reader.result;
-        };
-        if (file) {
-            reader.readAsDataURL(file);
-        } else {
-            preview.src = '';
+                this.commonService.uploadImageBase64({ base64: base64, format: file.type, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.loaderService.hide();
+
+                    if (response?.status === 'success') {
+                        this.updateInProcess = false;
+                        this.isSignatureAttached = true;
+                        this.updateImageSignatureRequest.imageSignatureUniqueName = '';
+                        if (response.body && response.body?.uniqueName) {
+                            this.signatureSrc = response.body?.path;
+                            this.updateImageSignatureRequest.imageSignatureUniqueName = response.body?.uniqueName;
+                        }
+                        this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
+                    } else {
+                        this.isSignatureAttached = false;
+                        this.toaster.showSnackBar("error", response.message);
+                    }
+                });
+            });
         }
     }
 
@@ -270,7 +240,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
 
                 this.voucherType = simpleChanges.voucherType.currentValue;
                 if (this.voucherType === "credit note" || this.voucherType === "debit note") {
-                    this.fieldOptions = this.fieldOptions?.filter(item => item.value !== 'dueDate' && item.label !== this.localeData?.bulk_update_fields?.due_date);
+                    this.fieldOptions = this.fieldOptions?.filter(item => item?.value !== 'dueDate' && item.label !== this.localeData?.bulk_update_fields?.due_date);
                 }
             }
             if (simpleChanges.selectedInvoices && simpleChanges.selectedInvoices.currentValue) {
@@ -352,7 +322,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
             if (this.updateImageSignatureRequest.imageSignatureUniqueName) {
                 this.bulkUpdateRequest(this.updateImageSignatureRequest, 'imagesignature');
             } else {
-                this._toaster.infoToast(this.localeData?.file_required_error);
+                this.toaster.infoToast(this.localeData?.file_required_error);
             }
         } else if (this.signatureOptions === 'slogan') {
             this.bulkUpdateRequest(this.updateSloganRequest, 'slogan');
@@ -408,12 +378,12 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
 
             if (selectedVouchers?.length && requestModel.voucherType) {
                 this.updateInProcess = true;
-                this._invoiceBulkUpdateService.bulkUpdateInvoice(requestModel, actionType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.invoiceBulkUpdateService.bulkUpdateInvoice(requestModel, actionType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
-                        this._toaster.successToast(response?.body);
+                        this.toaster.successToast(response?.body);
                         this.onCancel(true);
                     } else {
-                        this._toaster.errorToast(response?.message);
+                        this.toaster.errorToast(response?.message);
                     }
                     this.updateInProcess = false;
                 });

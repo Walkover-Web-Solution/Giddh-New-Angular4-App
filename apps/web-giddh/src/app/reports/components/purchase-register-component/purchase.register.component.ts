@@ -3,7 +3,7 @@ import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { CompanyActions } from "../../../actions/company.actions";
-import { CompanyService } from "../../../services/companyService.service";
+import { CompanyService } from "../../../services/company.service";
 import { PurchaseReportsModel, ReportsRequestModel } from "../../../models/api-models/Reports";
 import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
@@ -109,7 +109,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 if (!this.currentBranch?.uniqueName) {
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -119,7 +119,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                         };
                     }
                 } else {
-                    const selectedBranch = _.cloneDeep(response.find(branch => branch.uniqueName === this.currentBranch?.uniqueName));
+                    const selectedBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
                     if (selectedBranch) {
                         this.currentBranch.name = selectedBranch.name;
                         this.currentBranch.alias = selectedBranch.alias;
@@ -251,7 +251,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                     uniqueNameToSearch = activeCompany.activeFinancialYear?.uniqueName;
                 }
                 selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
-                activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
+                activeFinancialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
                 if(selectedFinancialYear){
                 this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
@@ -266,7 +266,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
 
     public selectFinancialYearOption(v: IOption) {
         if (v?.value) {
-            let financialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === v?.value);
+            let financialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === v?.value);
             this.activeFinacialYr = financialYear;
             this.populateRecords(this.interval, this.selectedMonth);
         }
@@ -279,13 +279,21 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             let endDate = this.activeFinacialYr.financialYearEnds?.toString();
             if (month) {
                 this.selectedMonth = month;
-                let startEndDate = this.getDateFromMonth(this.monthNames.indexOf(this.selectedMonth) + 1);
+                let startEndDate = this.getDateFromMonth(this.monthNames?.indexOf(this.selectedMonth) + 1);
                 startDate = startEndDate.firstDay;
                 endDate = startEndDate.lastDay;
             } else {
                 this.selectedMonth = null;
             }
             this.selectedType = interval?.charAt(0)?.toUpperCase() + interval?.slice(1);
+
+            if (this.currentOrganizationType === OrganizationType.Branch) {
+                if (!this.currentBranch) {
+                    this.currentBranch = {};
+                }
+                this.currentBranch.uniqueName = this.generalService.currentBranchUniqueName;
+            }
+            
             let request: ReportsRequestModel = {
                 to: endDate,
                 from: startDate,
@@ -333,8 +341,8 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public getDateFromMonth(selectedMonth) {
         let firstDay = '', lastDay = '';
         if (this.activeFinacialYr) {
-            let mdyFrom = this.activeFinacialYr.financialYearStarts.split('-');
-            let mdyTo = this.activeFinacialYr.financialYearEnds.split('-');
+            let mdyFrom = this.activeFinacialYr.financialYearStarts?.split('-');
+            let mdyTo = this.activeFinacialYr.financialYearEnds?.split('-');
 
             let startDate;
 
@@ -435,10 +443,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterComponent
      */
     public export(): void {
-        let startDate = this.activeFinacialYr.financialYearStarts?.toString();
-        let endDate = this.activeFinacialYr.financialYearEnds?.toString();
+        let startDate = this.activeFinacialYr?.financialYearStarts?.toString();
+        let endDate = this.activeFinacialYr?.financialYearEnds?.toString();
         if (this.selectedMonth) {
-            let startEndDate = this.getDateFromMonth(this.monthNames.indexOf(this.selectedMonth) + 1);
+            let startEndDate = this.getDateFromMonth(this.monthNames?.indexOf(this.selectedMonth) + 1);
             startDate = startEndDate.firstDay;
             endDate = startEndDate.lastDay;
         }

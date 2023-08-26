@@ -1,8 +1,8 @@
 import { Observable, of, ReplaySubject, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil, auditTime, take } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormControl, NgForm } from '@angular/forms';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { UntypedFormControl, NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -65,8 +65,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public endDate: Date;
     public isGenerateInvoice: boolean = true;
     public modalUniqueName: string;
-    public particularInput: FormControl = new FormControl();
-    public accountUniqueNameInput: FormControl = new FormControl();
+    public particularInput: UntypedFormControl = new UntypedFormControl();
+    public accountUniqueNameInput: UntypedFormControl = new UntypedFormControl();
     public hoveredItemForAction: string = '';
     public clickedHoveredItemForAction: string = '';
     public isGetAllRequestInProcess$: Observable<boolean> = of(true);
@@ -117,7 +117,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
@@ -138,6 +138,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     private voucherApiVersion: 1 | 2;
     /** True if voucher generate in process */
     public generateVoucherInProcess: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(
         private store: Store<AppState>,
@@ -251,6 +253,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             if (profile) {
                 this.baseCurrencySymbol = profile.baseCurrencySymbol;
                 this.baseCurrency = profile.baseCurrency;
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
         // Refresh report data according to universal date
@@ -388,7 +391,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.generateVoucherInProcess = false;
 
         let model;
-        
+
         if (this.voucherApiVersion === 2) {
             model = {
                 entryUniqueNames: uniq(this.selectedLedgerItems)
@@ -414,7 +417,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
         }
-        
+
         if (res?.account?.uniqueName) {
             this.generateVoucherInProcess = true;
             this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
@@ -472,7 +475,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             });
             this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, model));
         }
-        
+
         this.selectedLedgerItems = [];
         this.selectedCountOfAccounts = [];
     }
@@ -515,17 +518,17 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         if (o.description) {
             model.description = o.description;
         }
-        if (o.entryTotalBy === this.comparisionFilters[0].value) {
+        if (o.entryTotalBy === this.comparisionFilters[0]?.value) {
             model.totalIsMore = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[1].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[1]?.value) {
             model.totalIsLess = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[2].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[2]?.value) {
             model.totalIsMore = true;
             model.totalIsEqual = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[3].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[3]?.value) {
             model.totalIsLess = true;
             model.totalIsEqual = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[4].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[4]?.value) {
             model.totalIsEqual = true;
         }
         return model;
@@ -712,7 +715,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
             let grandTotalConversionRate = 0;
             if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
-                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(this.giddhBalanceDecimalPlaces);
             }
 
             let currencyConversion = this.localeData?.currency_conversion;

@@ -49,5 +49,6 @@
     "select_groups_placeholder": "गट शोधा",
     "from_to": "पासून",
     "select_item": "आयटम निवडा",
-    "select_query": "क्वेरी निवडा"
+    "select_query": "क्वेरी निवडा",
+    "company_address": "कंपनीचा पत्ता"
 }

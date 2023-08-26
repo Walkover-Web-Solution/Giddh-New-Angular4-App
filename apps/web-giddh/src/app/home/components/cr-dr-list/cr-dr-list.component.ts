@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef, Input, ViewChild, TemplateRef } from '@angular/core';
 import { Observable, ReplaySubject, of } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -9,6 +9,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 
 @Component({
     selector: 'cr-dr-list',
@@ -17,7 +18,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 })
 export class CrDrComponent implements OnInit, OnDestroy {
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
     /** This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /** This will store modal reference */
@@ -54,9 +55,21 @@ export class CrDrComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds giddh round off function instance */
+    public giddhRoundOff: any = giddhRoundOff;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
+    /** This will use for table heading */
+    public displayedColumns: string[] = ['name', 'latestInvoiceDate', 'latestBillAmount', 'closingBalance'];
 
     constructor(private store: Store<AppState>, private contactService: ContactService, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil((this.initializeDateWithUniversalDate) ? of(this.isDatePickerInitialized) : this.destroyed$));
+
+        this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
     }
 
     public ngOnInit() {
@@ -160,7 +173,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
             Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
-    
+
     /**
     * This will hide the datepicker
     *

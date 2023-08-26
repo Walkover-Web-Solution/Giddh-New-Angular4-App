@@ -751,7 +751,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this._invoiceUiDataService.setLogoPath('');
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
         this.showtemplateModal = true;
-        this.templateModal.show();
+        this.templateModal?.show();
     }
 
     /**
@@ -846,12 +846,12 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.fontDefault = data.fontSize;
                 data.fontMedium = data.fontSize - 2;
             }
-            if (!data.sections['footer'].data['message1'].display || !data?.sections['footer']?.data['message1']?.label) {
+            if (!data.sections['footer'].data['message1']?.display || !data?.sections['footer']?.data['message1']?.label) {
                 // If user checks the checkbox but didn't provide label then remove the selection
                 data.sections['footer'].data['message1'].display = false;
                 data.sections['footer'].data['message1'].label = '';
             }
-            if (!data.sections['footer'].data['textUnderSlogan'].display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
+            if (!data.sections['footer'].data['textUnderSlogan']?.display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
                 // If user checks the checkbox but didn't provide label then remove the selection
                 data.sections['footer'].data['textUnderSlogan'].display = false;
                 data.sections['footer'].data['textUnderSlogan'].label = '';

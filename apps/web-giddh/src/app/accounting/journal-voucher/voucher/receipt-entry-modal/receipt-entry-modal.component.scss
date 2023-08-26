@@ -5,15 +5,15 @@
         margin-bottom: 15px;
         padding: 0 0 15px;
         h5 {
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
         }
         p {
-            font-size: 14px;
+            font-size: var(--font-size-15);
         }
     }
     .receipt-entry-form {
         display: flex;
-        font-size: 14px;
+        font-size: var(--font-size-15);
         flex-direction: column;
         min-height: 200px;
 
@@ -55,7 +55,7 @@
                     max-width: 375px;
                 }
                 .icon-arrow-down {
-                    font-size: 14px;
+                    font-size: var(--font-size-15);
                     position: absolute;
                     right: 5px;
                     top: 12px;
@@ -72,7 +72,7 @@
                 min-width: 18px;
                 max-width: 18px;
                 i.icon-cross {
-                    font-size: 14px;
+                    font-size: var(--font-size-15);
                     color: var(--color-nero);
                     line-height: 2;
                 }

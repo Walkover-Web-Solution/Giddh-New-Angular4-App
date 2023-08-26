@@ -1,12 +1,11 @@
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { TitleCasePipe } from "@angular/common";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
-import { FormControl, NgForm } from "@angular/forms";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { UntypedFormControl, NgForm } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
-import { UploaderOptions, UploadInput, UploadOutput } from "ngx-uploader";
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from "rxjs";
 import { auditTime, take, takeUntil } from "rxjs/operators";
 import { CommonActions } from "../../../actions/common.actions";
@@ -14,13 +13,13 @@ import { CompanyActions } from "../../../actions/company.actions";
 import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
 import { InvoiceReceiptActions } from "../../../actions/invoice/receipt/receipt.actions";
 import { SalesActions } from "../../../actions/sales/sales.action";
-import { Configuration, SearchResultText, SubVoucher } from "../../../app.constant";
+import { SearchResultText, SubVoucher } from "../../../app.constant";
 import { cloneDeep, find, isEqual, orderBy, uniqBy } from "../../../lodash-optimized";
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from "../../../models/api-models/Account";
 import { OnboardingFormRequest } from "../../../models/api-models/Common";
 import { TaxResponse } from "../../../models/api-models/Company";
-import { AccountDetailsClass, IForceClear, PaymentReceipt, PaymentReceiptTransaction, StateCode, VoucherTypeEnum } from "../../../models/api-models/Sales";
-import { LEDGER_API } from "../../../services/apiurls/ledger.api";
+import { IContentCommon } from "../../../models/api-models/Invoice";
+import { AccountDetailsClass, IForceClear, PaymentReceipt, PaymentReceiptTransaction, SalesOtherTaxesModal, StateCode, VoucherTypeEnum } from "../../../models/api-models/Sales";
 import { GeneralService } from "../../../services/general.service";
 import { LedgerService } from "../../../services/ledger.service";
 import { SalesService } from "../../../services/sales.service";
@@ -94,10 +93,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public noResultsFoundLabel = SearchResultText.NewSearch;
     /** Observable for force clear sh-select */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-    /** File upload options */
-    public fileUploadOptions: UploaderOptions;
-    /** Emitted for upload input */
-    public uploadInput: EventEmitter<UploadInput>;
     /** True if file is uploading */
     public isFileUploading: boolean = false;
     /** True if is uploading */
@@ -115,11 +110,11 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     /** List of bank account for dropdown list */
     public bankAccounts: IOption[] = [];
     /** control for the MatSelect filter keyword */
-    public searchBankAccount: FormControl = new FormControl();
+    public searchBankAccount: UntypedFormControl = new UntypedFormControl();
     /** control for the MatSelect filter keyword */
-    public searchBillingStates: FormControl = new FormControl();
+    public searchBillingStates: UntypedFormControl = new UntypedFormControl();
     /** control for the MatSelect filter keyword */
-    public searchShippingStates: FormControl = new FormControl();
+    public searchShippingStates: UntypedFormControl = new UntypedFormControl();
     /** Input mask format */
     public inputMaskFormat: string = '';
     /* This will hold local JSON data */
@@ -128,6 +123,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Holds state of account aside menu */
     public accountAsideMenuState: string = 'out';
+    /**This will use for thead array read only */
+    public theadArrReadOnly: IContentCommon[] = [];
+    /** Hold aside menu state for other tax  */
+    public asideMenuStateForOtherTaxes: string = 'out';
     /** Selected customer details */
     public selectedCustomerForDetails: string = null;
     /** Holds session key observable */
@@ -230,6 +229,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public isInvalidVoucherDate: boolean = false;
     /** True if cheque date is invalid */
     public isInvalidChequeDate: boolean = false;
+
+    public otherTaxModal: SalesOtherTaxesModal= new SalesOtherTaxesModal();
 
     /** @ignore */
     constructor(
@@ -376,9 +377,9 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         if (this.voucherFormData.type === this.receiptVoucherType) {
             this.store.dispatch(this.companyActions.getTax());
         }
-
-        this.uploadInput = new EventEmitter<UploadInput>();
-        this.fileUploadOptions = { concurrency: 0 };
+        if (this.asideMenuStateForOtherTaxes === 'in') {
+            this.toggleOtherTaxesAsidePane(true);
+        }
 
         // listen for search field value changes
         this.searchBankAccount.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
@@ -439,7 +440,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                         this.voucherFormData.entries[entryLoop].transactions[transactionLoop] = {
                             account: {
                                 name: transaction.account.name,
-                                uniqueName: transaction.account.uniqueName
+                                uniqueName: transaction.account?.uniqueName
                             },
                             amount: {
                                 amountForAccount: transaction.amount.amountForAccount
@@ -453,7 +454,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                         this.voucherFormData.entries[entryLoop].date = this.voucherFormData.date;
 
                         entry.taxes?.forEach(entryTax => {
-                            let selectedTax = this.companyTaxesList.find(tax => tax.uniqueName === entryTax.uniqueName);
+                            let selectedTax = this.companyTaxesList.find(tax => tax?.uniqueName === entryTax?.uniqueName);
                             entryTax.name = entryTax?.name || selectedTax?.name || entryTax?.uniqueName;
                             entryTax.isChecked = true;
                         });
@@ -478,7 +479,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 this.voucherFormData.exchangeRate = response[0].exchangeRate;
                 this.voucherFormData.subVoucher = response[0].subVoucher;
                 this.voucherFormData.updateAccountDetails = true;
-                this.voucherFormData.uniqueName = response[0].uniqueName;
+                this.voucherFormData.uniqueName = response[0]?.uniqueName;
                 this.allowFocus = false;
 
                 this.autoFillShipping = isEqual(this.voucherFormData.account?.billingDetails, this.voucherFormData.account?.shippingDetails);
@@ -523,7 +524,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             newItem.additional.email = newItem.additional.email || '';
             newItem.additional.mobileNo = newItem.additional.mobileNo || '';
         }
-        return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.email.toLocaleLowerCase().indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1);
+        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value.toLocaleLowerCase()?.indexOf(term) > -1 || item.additional.email.toLocaleLowerCase()?.indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase()?.indexOf(term) > -1);
     }
 
     /**
@@ -544,7 +545,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                     if (!query) {
                         const results = response.map(result => {
                             return {
-                                value: result.stock ? `${result.uniqueName}#${result.stock?.uniqueName}` : result.uniqueName,
+                                value: result.stock ? `${result?.uniqueName}#${result.stock?.uniqueName}` : result?.uniqueName,
                                 label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                                 additional: result
                             }
@@ -676,7 +677,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public prepareSearchLists(results: any, currentPage: number = 1, searchType: string): void {
         const searchResults = results.map(result => {
             return {
-                value: result.stock ? `${result.uniqueName}#${result.stock?.uniqueName}` : result.uniqueName,
+                value: result.stock ? `${result?.uniqueName}#${result.stock?.uniqueName}` : result?.uniqueName,
                 label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                 additional: result
             };
@@ -733,7 +734,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public onSelectCustomer(item: IOption): void {
-        if (item.value) {
+        if (item?.value) {
             this.voucherFormData.account.name = item.label;
             this.getAccountDetails(item.value);
         }
@@ -779,41 +780,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Callback for file upload
-     *
-     * @param {UploadOutput} output
-     * @memberof PaymentReceiptComponent
-     */
-    public onUploadOutput(output: UploadOutput): void {
-        if (output.type === 'allAddedToQueue') {
-            let sessionKey = null;
-            let companyUniqueName = this.activeCompany?.uniqueName;
-            this.sessionKey$.pipe(take(1)).subscribe(key => sessionKey = key);
-            const event: UploadInput = {
-                type: 'uploadAll',
-                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', companyUniqueName),
-                method: 'POST',
-                fieldName: 'file',
-                data: { company: companyUniqueName },
-                headers: { 'Session-Id': sessionKey },
-            };
-            this.uploadInput.emit(event);
-        } else if (output.type === 'start') {
-            this.isFileUploading = true;
-        } else if (output.type === 'done') {
-            if (output.file.response?.status === 'success') {
-                this.isFileUploading = false;
-                this.voucherFormData.attachedFiles = [output.file.response?.body?.uniqueName];
-                this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
-            } else {
-                this.isFileUploading = false;
-                this.voucherFormData.attachedFiles = [];
-                this.toaster.showSnackBar("error", output.file.response?.message);
-            }
-        }
-    }
-
-    /**
      * Callback for file change
      *
      * @param {*} event
@@ -848,7 +814,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             }
             const results = response.map(result => {
                 return {
-                    value: result.stock ? `${result.uniqueName}#${result.stock?.uniqueName}` : result.uniqueName,
+                    value: result.stock ? `${result?.uniqueName}#${result.stock?.uniqueName}` : result?.uniqueName,
                     label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                     additional: result
                 }
@@ -907,7 +873,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         let bankAccounts: IOption[] = [];
         if (data && data.body && data.body.results) {
             data.body.results.forEach(account => {
-                bankAccounts.push({ label: account.name, value: account.uniqueName, additional: account });
+                bankAccounts.push({ label: account.name, value: account?.uniqueName, additional: account });
             });
         }
         return orderBy(bankAccounts, 'label');
@@ -926,7 +892,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             if (response) {
                 response.forEach(account => {
                     if (typeof search !== "string" || account?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
-                        bankAccounts.push({ label: account.label, value: account.value, additional: account });
+                        bankAccounts.push({ label: account.label, value: account?.value, additional: account });
                     }
                 });
 
@@ -956,12 +922,30 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public toggleBodyClass(): void {
+        if (this.asideMenuStateForOtherTaxes === 'in') {
+        /* add fixed class only in crete mode not in update mode
+            - because fixed class is already added in update mode due to double scrolling issue
+         */
+        if (!this.isUpdateMode) {
+            document.querySelector('body').classList.add('fixed');
+        }
+    }
         if (this.accountAsideMenuState === 'in') {
             document.querySelector('.invoice-modal-content')?.classList?.add('aside-account-create');
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('.invoice-modal-content')?.classList?.remove('aside-account-create');
             document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null) {
+        this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+    public closeAsideMenuStateForOtherTaxes(): void {
+        if (this.asideMenuStateForOtherTaxes === 'in') {
+            this.toggleOtherTaxesAsidePane(true, null);
         }
     }
 
@@ -991,7 +975,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public addAccountFromShortcut(): void {
-        if (!this.voucherFormData.account.uniqueName) {
+        if (!this.voucherFormData.account?.uniqueName) {
             this.selectedCustomerForDetails = null;
             this.toggleAccountAsidePane();
         }
@@ -1003,7 +987,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public getCustomerDetails(): void {
-        this.selectedCustomerForDetails = this.voucherFormData.account.uniqueName;
+        this.selectedCustomerForDetails = this.voucherFormData.account?.uniqueName;
         this.toggleAccountAsidePane();
     }
 
@@ -1015,7 +999,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public autoFillShippingDetails(): void {
         if (this.autoFillShipping) {
             this.voucherFormData.account.shippingDetails = cloneDeep(this.voucherFormData.account.billingDetails);
-            this.searchShippingStates.setValue(this.searchBillingStates.value);
+            this.searchShippingStates.setValue(this.searchBillingStates?.value);
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
             }
@@ -1075,7 +1059,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                     resolve();
                 } else {
                     this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
-                        this.statesSource = this.modifyStateResponse((resp.body) ? resp.body.stateList : [], countryCode);
+                        this.statesSource = this.modifyStateResponse((resp.body) ? resp.body?.stateList : [], countryCode);
                         this.filteredBillingStates = cloneDeep(this.statesSource);
                         this.filteredShippingStates = cloneDeep(this.statesSource);
                         resolve();
@@ -1164,7 +1148,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.showGstAndTrnUsingCountryName(this.customerCountryName);
         this.prepareSearchLists([{
             name: data.name,
-            uniqueName: data.uniqueName
+            uniqueName: data?.uniqueName
         }], 1, "customer");
         this.makeCustomerList();
         this.loadBankCashAccounts(data.currency);
@@ -1405,8 +1389,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.isValidForm = true;
         this.isLoading = false;
 
-        if (!this.voucherFormData.account.uniqueName?.trim() || !this.voucherFormData.date || !this.voucherFormData.entries[0].transactions[0].amount
-            .amountForAccount || !this.voucherFormData.entries[0].transactions[0].account.uniqueName || (this.isAdvanceReceipt && this.selectedTaxes?.length === 0)) {
+        if (!this.voucherFormData.account?.uniqueName?.trim() || !this.voucherFormData.date || !this.voucherFormData.entries[0].transactions[0].amount
+            .amountForAccount || !this.voucherFormData.entries[0].transactions[0].account?.uniqueName || (this.isAdvanceReceipt && this.selectedTaxes?.length === 0)) {
             this.isValidForm = false;
             return;
         }
@@ -1428,7 +1412,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
 
         let selectedTaxes = [];
         this.voucherFormData.entries[0].taxes?.filter(tax => tax.isChecked).forEach(tax => {
-            selectedTaxes.push({ uniqueName: tax.uniqueName });
+            selectedTaxes.push({ uniqueName: tax?.uniqueName });
         });
 
         this.voucherFormData.entries[0].taxes = selectedTaxes;
@@ -1530,7 +1514,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
 
         this.store.dispatch(this.invoiceReceiptAction.getVoucherDetailsV4(request.accountUniqueName, {
             voucherType: request.voucherType,
-            uniqueName: request.uniqueName
+            uniqueName: request?.uniqueName
         }));
     }
 
@@ -1544,8 +1528,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.isValidForm = true;
         this.isLoading = false;
 
-        if (!this.voucherFormData.account.uniqueName?.trim() || !this.voucherFormData.date || !this.voucherFormData.entries[0].transactions[0].amount
-            .amountForAccount || !this.voucherFormData.entries[0].transactions[0].account.uniqueName || (this.isAdvanceReceipt && this.selectedTaxes?.length === 0)) {
+        if (!this.voucherFormData.account?.uniqueName?.trim() || !this.voucherFormData.date || !this.voucherFormData.entries[0].transactions[0].amount
+            .amountForAccount || !this.voucherFormData.entries[0].transactions[0].account?.uniqueName || (this.isAdvanceReceipt && this.selectedTaxes?.length === 0)) {
             this.isValidForm = false;
             return;
         }
@@ -1569,7 +1553,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
 
         let selectedTaxes = [];
         this.voucherFormData.entries[0].taxes?.filter(tax => tax.isChecked).forEach(tax => {
-            selectedTaxes.push({ uniqueName: tax.uniqueName });
+            selectedTaxes.push({ uniqueName: tax?.uniqueName });
         });
 
         this.voucherFormData.entries[0].taxes = selectedTaxes;
@@ -1582,7 +1566,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                     message = message?.replace("[VOUCHER]", this.titleCasePipe.transform(this.voucherFormData.type));
                     this.toaster.showSnackBar("success", message);
 
-                    this.router.navigate(['/pages/voucher/' + this.voucherFormData.type + '/preview/' + this.voucherFormData.uniqueName + '/' + this.voucherFormData.account?.uniqueName]);
+                    this.router.navigate(['/pages/voucher/' + this.voucherFormData.type + '/preview/' + this.voucherFormData?.uniqueName + '/' + this.voucherFormData.account?.uniqueName]);
                 } else {
                     this.toaster.showSnackBar("error", response.message);
                 }
@@ -1708,7 +1692,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         let filteredStates: IOption[] = [];
         this.statesSource.forEach(state => {
             if (typeof search !== "string" || state?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
-                filteredStates.push({ label: state.label, value: state.value, additional: state });
+                filteredStates.push({ label: state.label, value: state?.value, additional: state });
             }
         });
 
@@ -1816,7 +1800,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @param {*} value
      * @memberof PaymentReceiptComponent
      */
-    private checkAndResetValue(formControl: FormControl, value: any): void {
+    private checkAndResetValue(formControl: UntypedFormControl, value: any): void {
         if (typeof formControl?.value !== "object" && formControl?.value !== value) {
             formControl.setValue({ label: value });
         }

@@ -1,0 +1,65 @@
+<div class="aside-pane" [keyboardShortcut]="'esc'" (onShortcutPress)="closeEvent.emit()">
+    <div class="form-header">
+        <h3 class="aside-title">{{ localeData?.subscription?.company_details }}</h3>
+    </div>
+    <button id="close" (click)="closeEvent.emit()"><i class="icon-cross"></i></button>
+
+    <div class="aside-body aside-create-tax-component">
+        <div class="aside-pane-form">
+            <h4 class="text-blue bold font-16 mr-b1 wb">{{ selectedCompany?.name }}</h4>
+            <div class="row pd-b1 bd-rb mb-2">
+                <div class="col-md-9">
+                    <ul class="company-list font-15 mb-0">
+                        <li>
+                            {{ localeData?.subscription?.plan }}: {{ selectedCompany?.subscription?.planDetails?.name }}
+                        </li>
+                        <li>
+                            {{ localeData?.subscription?.subscription_id }}:
+                            {{ selectedCompany?.subscription?.subscriptionId }}
+                        </li>
+                        <li>
+                            {{ localeData?.subscription?.created_on }}:
+                            {{ dayjs(selectedCompany?.subscription?.createdAt, giddhDateFormat).format("DD/MM/YYYY") }}
+                        </li>
+                        <li>
+                            {{ localeData?.subscription?.total_transactions }}:
+                            {{ selectedCompany?.subscription?.totalTransactions | number }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <h5 class="font-15 bold">{{ localeData?.subscription?.transactions_statement }}</h5>
+
+            <div class="table-subscription mt-1 xs-mb-2">
+                <div class="table-responsive">
+                    <table class="table basic giddh-table on-mobile-view mb-0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    {{ localeData?.subscription?.consumptions }}
+                                    <span class="text-gray">{{ localeData?.subscription?.previous_current }}</span>
+                                </th>
+                                <th>{{ commonLocaleData?.app_balance }}</th>
+                                <th class="text-right">{{ localeData?.subscription?.additional_charges }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td [attr.data-title]="localeData?.subscription?.consumptions">
+                                    {{ selectedCompany?.subscription?.totalTransactions | number }}
+                                </td>
+                                <td [attr.data-title]="commonLocaleData?.app_balance">
+                                    {{ selectedCompany?.subscription?.remainingTransactions }}
+                                </td>
+                                <td [attr.data-title]="localeData?.subscription?.additional_charges" class="text-right">
+                                    {{ selectedCompany?.subscription?.additionalCharges | number }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

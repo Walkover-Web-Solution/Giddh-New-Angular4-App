@@ -1,6 +1,6 @@
 import { Optional, Inject, Injectable } from '@angular/core';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { GeneralService } from './general.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';

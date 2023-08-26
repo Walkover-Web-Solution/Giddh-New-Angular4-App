@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
 import { Observable, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { SAMPLE_FILES_URL } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -52,7 +53,8 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private settingsBranchAction: SettingsBranchActions,
         private store: Store<AppState>,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private router: Router
     ) {
 
     }
@@ -78,7 +80,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     }
 
     public async downloadSampleFile(entity: string, isCsv: boolean = false) {
-        const fileUrl = `https://giddh-app-builds.s3.ap-south-1.amazonaws.com/sample-file-${entity}.${isCsv ? 'csv' : 'xlsx'}`;
+        const fileUrl = SAMPLE_FILES_URL + `${entity}.${isCsv ? 'csv' : 'xlsx'}`;
         const fileName = `${entity}-sample.${isCsv ? 'csv' : 'xlsx'}`;
         try {
             let blob = await fetch(fileUrl).then(r => r.blob());
@@ -104,6 +106,10 @@ export class UploadFileComponent implements OnInit, OnDestroy {
             if (data) {
                 this.entity = data.type;
                 this.setTitle();
+
+                if(this.entity === "banktransactions") {
+                    this.router.navigate(['/pages/import/select-type']);
+                }
             }
         });
         this.setTitle();

@@ -2,7 +2,7 @@ import { take, takeUntil } from "rxjs/operators";
 import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
 import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
 import { Configuration, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
@@ -42,9 +42,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     @ViewChild("twoWayAuthModal", { static: false }) public twoWayAuthModal: ModalDirective;
     public urlPath: string = "";
     public isSubmited: boolean = false;
-    public mobileVerifyForm: FormGroup;
-    public emailVerifyForm: FormGroup;
-    public twoWayOthForm: FormGroup;
+    public mobileVerifyForm: UntypedFormGroup;
+    public emailVerifyForm: UntypedFormGroup;
+    public twoWayOthForm: UntypedFormGroup;
     public isVerifyMobileInProcess$: Observable<boolean>;
     public isLoginWithMobileInProcess$: Observable<boolean>;
     public isVerifyEmailInProcess$: Observable<boolean>;
@@ -58,9 +58,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     public selectedCountry: string;
     public selectedBanner: string = null;
     public loginUsing: string = null;
-    public signUpWithPasswdForm: FormGroup;
+    public signUpWithPasswdForm: UntypedFormGroup;
     public isSignupWithPasswordInProcess$: Observable<boolean>;
-    public signupVerifyForm: FormGroup;
+    public signupVerifyForm: UntypedFormGroup;
     public isSignupWithPasswordSuccess$: Observable<boolean>;
     public retryCount: number = 0;
     public signupVerifyEmail$: Observable<string>;
@@ -70,7 +70,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
 
     // tslint:disable-next-line:no-empty
-    constructor(private fb: FormBuilder,
+    constructor(private fb: UntypedFormBuilder,
         private store: Store<AppState>,
         private loginAction: LoginActions,
         private authService: AuthService,
@@ -115,7 +115,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
         this.isSocialLogoutAttempted$ = this.store.pipe(select(p => p.login.isSocialLogoutAttempted), takeUntil(this.destroyed$));
         contriesWithCodes.map(c => {
-            this.countryCodeList.push({ value: c.countryName, label: c.value });
+            this.countryCodeList.push({ value: c.countryName, label: c?.value });
         });
         this.userLoginState$ = this.store.pipe(select(p => p.session.userLoginState), takeUntil(this.destroyed$));
         this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
@@ -201,7 +201,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     public showEmailModal() {
-        this.emailVerifyModal.show();
+        this.emailVerifyModal?.show();
         this.emailVerifyModal.onShow.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.isSubmited = false;
         });
@@ -236,7 +236,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         let data = new VerifyMobileModel();
         data.countryCode = Number(user.countryCode);
         data.mobileNumber = user.contactNumber;
-        data.oneTimePassword = this.twoWayOthForm.value.otp;
+        data.oneTimePassword = this.twoWayOthForm?.value.otp;
         this.store.dispatch(this.loginAction.VerifyTwoWayAuthRequest(data));
     }
 
@@ -247,7 +247,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     public showMobileModal() {
-        this.mobileVerifyModal.show();
+        this.mobileVerifyModal?.show();
     }
 
     public hideMobileModal() {
@@ -322,8 +322,8 @@ export class SignupComponent implements OnInit, OnDestroy {
      * @memberof SignupComponent
      */
     public setCountryCode(event: IOption) {
-        if (event.value) {
-            let country = this.countryCodeList?.filter((obj) => obj.value === event.value);
+        if (event?.value) {
+            let country = this.countryCodeList?.filter((obj) => obj?.value === event.value);
             this.selectedCountry = country[0].label;
         }
     }
@@ -339,8 +339,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.selectedBanner = "slide" + selectedSlide;
     }
 
-    public SignupWithPasswd(model: FormGroup) {
-        let ObjToSend = model.value;
+    public SignupWithPasswd(model: UntypedFormGroup) {
+        let ObjToSend = model?.value;
         if (ObjToSend) {
             this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
         }

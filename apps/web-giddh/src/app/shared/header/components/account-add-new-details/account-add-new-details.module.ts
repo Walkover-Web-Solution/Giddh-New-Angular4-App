@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
 import { SelectModule } from 'apps/web-giddh/src/app/theme/ng-select/ng-select';
@@ -8,7 +9,7 @@ import { ShSelectModule } from 'apps/web-giddh/src/app/theme/ng-virtual-select/s
 import { TranslateDirectiveModule } from 'apps/web-giddh/src/app/theme/translate/translate.directive.module';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AccountAddNewDetailsComponent } from './account-add-new-details.component';
-import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+
 @NgModule({
     declarations: [AccountAddNewDetailsComponent],
     exports: [AccountAddNewDetailsComponent],
@@ -23,7 +24,7 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
         ShSelectModule,
         TabsModule.forRoot(),
         TranslateDirectiveModule,
-        NgxBootstrapSwitchModule.forRoot(),
+        MatSlideToggleModule,
         RouterModule
     ]
 })

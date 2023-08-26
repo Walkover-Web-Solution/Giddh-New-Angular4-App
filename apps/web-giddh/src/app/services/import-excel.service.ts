@@ -1,5 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
@@ -31,6 +31,12 @@ export class ImportExcelService {
         const formData: FormData = new FormData();
         formData.append('file', model.file, model.file.name);
         formData.append('isHeaderProvided', model.isHeaderProvided);
+        if (model.accountUniqueName) {
+            formData.append('accountUniqueName', model.accountUniqueName);
+        }
+        if (model.sameDebitCreditAmountColumn) {
+            formData.append('sameDebitCreditAmountColumn', model.sameDebitCreditAmountColumn);
+        }
         return this.http.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(map((res) => {
             let data: BaseResponse<ImportExcelResponseData, string> = res;
             return data;

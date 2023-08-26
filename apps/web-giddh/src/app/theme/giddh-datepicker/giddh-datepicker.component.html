@@ -1,4 +1,5 @@
-<mat-form-field appearance="fill" [floatLabel]="'auto'">
+<mat-form-field [appearance]="appearance" [floatLabel]="'auto'">
+    <mat-label *ngIf="appearance === 'outline'">{{ label ? label : placeholder }}</mat-label>
     <input
         matInput
         [matDatepicker]="picker"
@@ -22,5 +23,5 @@
         >
         </mat-datepicker-toggle>
     </ng-container>
-    <mat-datepicker (closed)="isDatepickerOpen = false; emitDatepickerState(false)" #picker></mat-datepicker>
+    <mat-datepicker [opened]="isOpened" (closed)="isDatepickerOpen = false; emitDatepickerState(false)" #picker></mat-datepicker>
 </mat-form-field>

@@ -1,12 +1,14 @@
 import { cloneDeep, forEach, isNull, pick } from '../../lodash-optimized';
 import { LedgerDiscountClass } from './SettingsDiscount';
-import { LedgerResponseDiscountClass } from './Ledger';
+import { IVariant, LedgerResponseDiscountClass } from './Ledger';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
-import { TaxControlData } from '../../theme/tax-control/tax-control.component';
+import { INameUniqueName } from '../interfaces/name-unique-name.interface';
 import * as dayjs from 'dayjs';
 import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
-import { ReferenceVoucher } from '../../material-ledger/ledger.vm';
+import { ReferenceVoucher } from '../../ledger/ledger.vm';
+import { HIGH_RATE_FIELD_PRECISION } from '../../app.constant';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+import { ITaxControlData } from '../interfaces/tax.interface';
 
 export enum VoucherTypeEnum {
     'sales' = 'sales',
@@ -19,7 +21,10 @@ export enum VoucherTypeEnum {
     'generateEstimate' = 'estimates',
     'cash' = 'cash',
     'receipt' = 'receipt',
-    'payment' = 'payment'
+    'payment' = 'payment',
+    'cashDebitNote' = 'cash debit note',
+    'cashCreditNote' = 'cash credit note',
+    'cashBill' = 'cash bill'
 }
 
 export enum ActionTypeAfterVoucherGenerateOrUpdate {
@@ -78,6 +83,27 @@ export const VOUCHER_TYPE_LIST: any[] = [
         label: 'Estimate',
         additional: {
             label: 'Estimate (Beta)'
+        }
+    },
+    {
+        value: VoucherTypeEnum.cashCreditNote,
+        label: 'Cash Credit Note',
+        additional: {
+            label: 'Cash Credit Note'
+        }
+    },
+    {
+        value: VoucherTypeEnum.cashDebitNote,
+        label: 'Cash Debit Note',
+        additional: {
+            label: 'Cash Debit Note'
+        }
+    },
+    {
+        value: VoucherTypeEnum.cashBill,
+        label: 'Cash Bill',
+        additional: {
+            label: 'Cash Bill'
         }
     }
 ];
@@ -228,6 +254,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public description: string;
     public quantity: number;
     public stockUnit: string;
+    public stockUnitCode?: string;
     public rate: number;
     public date: any;
     public taxableValue: number;
@@ -245,6 +272,11 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
     public showCodeType: string;
     public highPrecisionAmount?: number;
+    /* Rate should have precision up to 16 digits for better calculation */
+    public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
+    /** Stores the selected stock variant */
+    public variant: IVariant;
+    public taxInclusive: boolean;
 
     constructor() {
         super();
@@ -254,6 +286,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         this.hsnOrSac = 'hsn';
         this.taxableValue = 0;
         this.showCodeType = "";
+        this.variant = { name: '', uniqueName: '' };
     }
 
     // basic check for valid transaction
@@ -267,10 +300,10 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         this.total = this.getTransactionTotal(tax, entry);
     }
 
-    public getTotalTaxOfEntry(taxArr: TaxControlData[]): number {
+    public getTotalTaxOfEntry(taxArr: ITaxControlData[]): number {
         let count: number = 0;
         if (taxArr?.length > 0) {
-            forEach(taxArr, (item: TaxControlData) => {
+            forEach(taxArr, (item: ITaxControlData) => {
                 count += item.amount;
             });
             return this.checkForInfinity(count);
@@ -293,7 +326,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         } else {
             count = cloneDeep(this.getTaxableValue(entry));
         }
-        return giddhRoundOff(count, 2);
+        return giddhRoundOff(count, this.highPrecisionRate);
     }
 
     /**
@@ -318,7 +351,7 @@ export class SalesEntryClass {
     public uniqueName: string;
     public discounts: LedgerDiscountClass[];
     public tradeDiscounts?: LedgerResponseDiscountClass[];
-    public taxes: TaxControlData[] = [];
+    public taxes: ITaxControlData[] = [];
     public transactions: SalesTransactionItemClass[];
     public description: string;
     public taxableValue: number;
@@ -453,6 +486,7 @@ export interface GenericRequestForGenerateSCD extends GenericRequest {
     voucherAdjustments?: VoucherAdjustments;
     attachedFileName?: string;
     attachedFiles?: Array<string>;
+    einvoiceGenerated?: boolean;
 }
 
 /**
@@ -580,6 +614,7 @@ export class VoucherClass {
     public purchaseOrderDetails?: any;
     public deposit?: any;
     public exchangeRate?: number;
+    public einvoiceGenerated?: boolean;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();
@@ -609,10 +644,14 @@ export class SalesAddBulkStockItems {
     stockUnitCode?: CodeStockMulticurrency;
     stockUnit?: CodeStockMulticurrency;
     additional?: any;
+    variant?: IVariant;
+    taxInclusive: boolean;
+    variants?: Array<IOption>;
 }
 
 export class CodeStockMulticurrency {
     code: string;
+    uniqueName: any;
 }
 
 export class Currency {
@@ -630,7 +669,7 @@ export class SalesEntryClassMulticurrency {
     public description: string;
     public hsnNumber: string;
     public sacNumber: string;
-    public taxes: TaxControlData[];
+    public taxes: ITaxControlData[];
     public transactions: TransactionClassMulticurrency[];
     public uniqueName: string;
     public voucherNumber: string;
@@ -727,7 +766,7 @@ export class PaymentReceiptEntry {
     date: any;
     chequeNumber: string;
     chequeClearanceDate: any;
-    taxes: TaxControlData[] = [];
+    taxes: ITaxControlData[] = [];
 
     constructor() {
         this.transactions = [new PaymentReceiptTransaction()];
@@ -737,6 +776,7 @@ export class PaymentReceiptEntry {
 
 export class PaymentReceipt {
     account: AccountDetailsClass;
+    accountDetails: any;
     updateAccountDetails: boolean;
     entries: PaymentReceiptEntry[];
     date: any;
@@ -749,6 +789,7 @@ export class PaymentReceipt {
 
     constructor() {
         this.account = new AccountDetailsClass();
+        this.accountDetails = new AccountDetailsClass();
         this.entries = [new PaymentReceiptEntry()];
         this.templateDetails = new TemplateDetailsClass();
         this.date = "";

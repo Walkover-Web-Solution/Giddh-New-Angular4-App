@@ -26,22 +26,17 @@ import { EditFiltersContainersComponent } from './templates/edit-template/filter
 import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/template-modal/template-modal.component';
 import { InvoiceTemplatePreviewModelComponent } from './templates/edit-template/modals/template-preview-modal/template-preview.modal.component';
 import { WebviewDirective } from './webview.directive';
-import { FontPickerConfigInterface, FontPickerModule, FONT_PICKER_CONFIG } from 'ngx-font-picker';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-import { TextMaskModule } from 'angular2-text-mask';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { NgxUploaderModule } from 'ngx-uploader';
 import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
@@ -78,11 +73,8 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { VoucherModule } from '../voucher/voucher.module';
-
-const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
-    // Change this to your Google API key
-    apiKey: 'AIzaSyAAvwBeHl0uuVSEVeZ3bTylwIkRGKCFvdI'
-};
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
     declarations: [
@@ -120,14 +112,12 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
         CommonModule,
         TabsModule.forRoot(),
         ReactiveFormsModule,
-        ModalModule,
+        ModalModule.forRoot(),
         TooltipModule.forRoot(),
         PaginationModule.forRoot(),
         InvoiceTemplatesModule,
         KeyboardShortutModule,
-        FontPickerModule,
         CollapseModule.forRoot(),
-        NgxUploaderModule,
         SelectModule,
         LaddaModule.forRoot({
             style: 'slide-left',
@@ -137,15 +127,13 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
         ClickOutsideModule,
         ElementViewChildModule,
         DecimalDigitsModule,
-        DatepickerModule,
         BsDropdownModule.forRoot(),
         AsideMenuRecurringEntryModule,
         SalesShSelectModule,
-        TextMaskModule,
         Daterangepicker,
         AccountDetailModalModule,
         CurrencyModule,
-        PerfectScrollbarModule,
+        ScrollingModule,
         VoucherModule,
         DigitsOnlyModule,
         UniqueNameModule,
@@ -158,7 +146,7 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
         TaxSidebarModule,
         NoDataModule,
         NgxMaskModule.forRoot(),
-        NgxBootstrapSwitchModule.forRoot(),
+        MatSlideToggleModule,
         ValidateSubscriptionDirectiveModule,
         DeleteVoucherConfirmationModalModule,
         PurchaseSendEmailModule,
@@ -180,10 +168,8 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
         DownloadOrSendInvoiceOnMailComponent,
         InvoicePreviewComponent
     ],
-    providers: [InvoiceUiDataService, {
-            provide: FONT_PICKER_CONFIG,
-            useValue: DEFAULT_FONT_PICKER_CONFIG
-        }
+    providers: [
+        InvoiceUiDataService
     ]
 })
 export class InvoiceModule {

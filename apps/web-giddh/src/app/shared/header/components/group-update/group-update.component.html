@@ -35,7 +35,7 @@
         <div class="row">
             <div class="form-group col-xs-12 col-sm-6" *ngIf="!(activeGroup$ | async)?.fixed">
                 <label for="" class="some">{{ localeData?.balance_for_trigger }}</label>
-                <div [ngClass]="{ 'input-group': groupDetailForm.get('closingBalanceTriggerAmount').value > 0 }">
+                <div [ngClass]="{ 'input-group': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }">
                     <input
                         type="number"
                         min="0"
@@ -56,10 +56,10 @@
                         (click)="closingBalanceTypeChanged('DEBIT')"
                         [ngClass]="{
                             'active-toggle-btn':
-                                groupDetailForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
-                            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0
+                                groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
+                            'cp': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
                         }"
-                        *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0"
+                        *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
                     >
                         {{ commonLocaleData?.app_dr?.toUpperCase() }}
                     </div>
@@ -68,10 +68,10 @@
                         (click)="closingBalanceTypeChanged('CREDIT')"
                         [ngClass]="{
                             'active-toggle-btn':
-                                groupDetailForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
-                            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0
+                                groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
+                            'cp': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
                         }"
-                        *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0"
+                        *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
                     >
                         {{ commonLocaleData?.app_cr?.toUpperCase() }}
                     </div>

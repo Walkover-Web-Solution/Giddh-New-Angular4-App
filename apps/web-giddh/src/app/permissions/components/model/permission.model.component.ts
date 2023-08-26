@@ -7,7 +7,7 @@ import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { INewRoleFormObj, IPage, IPageStr, NewRoleFormClass } from '../../permission.utility';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
-import { PermissionState } from 'apps/web-giddh/src/app/store/Permission/permission.reducer';
+import { PermissionState } from 'apps/web-giddh/src/app/store/permission/permission.reducer';
 import { IRoleCommonResponseAndRequest } from 'apps/web-giddh/src/app/models/api-models/Permission';
 import { forEach, omit } from '../../../lodash-optimized';
 
@@ -101,7 +101,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     }
 
     public selectAllPages(event) {
-        if (event.target.checked) {
+        if (event.target?.checked) {
             this.newRoleObj.isSelectedAllPages = true;
             this.newRoleObj.pageList.forEach((item: IPage) => item.isSelected = true);
         } else {
@@ -121,7 +121,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     }
 
     public selectPage(event) {
-        if (event.target.checked) {
+        if (event.target?.checked) {
             if (this.makeCount() === this.newRoleObj.pageList?.length) {
                 this.newRoleObj.isSelectedAllPages = true;
             }

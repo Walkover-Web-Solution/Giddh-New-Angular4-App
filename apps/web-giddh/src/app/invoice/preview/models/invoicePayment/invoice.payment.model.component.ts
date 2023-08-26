@@ -8,7 +8,7 @@ import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interfac
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
-import { orderBy } from '../../../../lodash-optimized';
+import { cloneDeep, orderBy } from '../../../../lodash-optimized';
 import { LedgerService } from "../../../../services/ledger.service";
 import { ReceiptItem } from "../../../../models/api-models/recipt";
 import { INameUniqueName } from "../../../../models/api-models/Inventory";
@@ -25,7 +25,8 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChanges {
 
     @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
-    @Output() public closeModelEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
+    @Output() public performActionPopup: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
+    @Output() public closeModelEvent: EventEmitter<void> = new EventEmitter();
     @ViewChildren(ShSelectComponent) public allShSelectComponents: QueryList<ShSelectComponent>;
     @ViewChild('amountField', { static: true }) amountField;
     @Input() public selectedInvoiceForPayment: ReceiptItem;
@@ -120,10 +121,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         this.isActionSuccess$.subscribe(a => {
             if (a) {
                 this.resetFrom();
-
-                if (this.selectedInvoiceForPayment) {
-                    this.assignAmount(this.selectedInvoiceForPayment?.balanceDue?.amountForAccount, this.selectedInvoiceForPayment?.account?.currency?.symbol);
-                }
+                this.closeModelEvent.emit();
             }
         });
 
@@ -137,27 +135,27 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public onConfirmation(formObj) {
-        formObj.paymentDate = dayjs(formObj.paymentDate).format(GIDDH_DATE_FORMAT);
-        formObj.exchangeRate = this.exchangeRate;
+        let newFormObj = cloneDeep(formObj);
+        newFormObj.paymentDate = dayjs(newFormObj.paymentDate).format(GIDDH_DATE_FORMAT);
+        newFormObj.exchangeRate = this.exchangeRate;
 
         if (this.generalService.voucherApiVersion === 2) {
-            formObj.date = formObj.paymentDate;
+            newFormObj.date = newFormObj.paymentDate;
 
             if (this.selectedInvoiceForPayment?.account?.currency?.code === this.selectedPaymentMode?.additional?.currency) {
-                formObj.amountForAccount = formObj.amount;
+                newFormObj.amountForAccount = newFormObj.amount;
             } else {
-                formObj.amountForCompany = formObj.amount;
+                newFormObj.amountForCompany = newFormObj.amount;
             }
 
-            formObj.tagNames = (formObj.tagUniqueName) ? [formObj.tagUniqueName] : [];
+            newFormObj.tagNames = (newFormObj.tagUniqueName) ? [newFormObj.tagUniqueName] : [];
 
-            delete formObj.paymentDate;
-            delete formObj.amount;
-            delete formObj.tagUniqueName;
+            delete newFormObj.paymentDate;
+            delete newFormObj.amount;
+            delete newFormObj.tagUniqueName;
         }
 
-        this.closeModelEvent.emit(formObj);
-        this.resetFrom();
+        this.performActionPopup.emit(newFormObj);
     }
 
     public onCancel() {

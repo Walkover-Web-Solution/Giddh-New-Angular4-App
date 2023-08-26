@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -25,7 +24,7 @@ import { ReportsDashboardComponent } from './components/report-dashboard/reports
 import { ReportsDetailsComponent } from './components/report-details-components/report.details.component';
 import { ReportsTableComponent } from './components/report-table-components/report.table.component';
 import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
-import { SalesRegisterExpandComponent } from './components/salesRegister-expand-component/sales.register.expand.component';
+import { SalesRegisterExpandComponent } from './components/sales-register-expand-component/sales.register.expand.component';
 import { ReportsComponent } from './reports.component';
 import { ReportsRoutingModule } from './reports.routing.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
@@ -42,7 +41,9 @@ import { NewConfirmModalModule } from '../theme/new-confirm-modal';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SendEmailModule } from '../shared/send-email/send-email.module';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
-import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
+import { SalesPurchaseRegisterExportComponent } from './sales-purchase-register-export/sales-purchase-register-export.component';
 
 @NgModule({
     declarations: [
@@ -62,12 +63,12 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
         CashFlowStatementComponent,
         PaymentReportComponent,
         PaymentAdvanceSearchComponent,
-        PreviewComponent
+        PreviewComponent,
+        SalesPurchaseRegisterExportComponent
     ],
     exports: [
         ReportsComponent,
         ReportsDetailsComponent,
-        DatepickerModule,
         BsDropdownModule,
         Daterangepicker,
         PaginationModule
@@ -100,7 +101,8 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
         MatDialogModule,
         SendEmailModule,
         ConfirmModalModule,
-        NgxBootstrapSwitchModule.forRoot(),
+        MatSlideToggleModule,
+        SelectTableColumnModule
     ]
 })
 

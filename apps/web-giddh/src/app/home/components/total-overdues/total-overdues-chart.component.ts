@@ -1,6 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
-import * as Highcharts from 'highcharts';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ViewChild, TemplateRef } from '@angular/core';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -14,6 +13,9 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
 import { ReceiptService } from '../../../services/receipt.service';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
+
 
 @Component({
     selector: 'total-overdues-chart',
@@ -21,7 +23,7 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
     styleUrls: ['../../home.component.scss', './total-overdues-chart.component.scss'],
 })
 export class TotalOverduesChartComponent implements OnInit, OnDestroy {
-    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
     /** This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /** This will store modal reference */
@@ -43,8 +45,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
     public imgPath: string = '';
     public requestInFlight: boolean = true;
-    public totaloverDueChart: typeof Highcharts = Highcharts;
-    public chartOptions: Highcharts.Options;
     /** Holds due invoices */
     public invoiceDue: number = 0;
     /** Holds pending invoices */
@@ -72,9 +72,19 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
+    /** Chart object */
+    public chart: any;
 
     constructor(private store: Store<AppState>, private dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private receiptService: ReceiptService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
     }
 
     public ngOnInit() {
@@ -121,72 +131,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges();
     }
 
-    public generateCharts() {
-        let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
-        let cPipe = this.currencyPipe;
-
-        this.chartOptions = {
-            colors: ['#F85C88', '#0CB1AF'],
-            chart: {
-                type: 'pie',
-                polar: false,
-                className: 'overdue-chart',
-                width: 260,
-                height: '180px'
-            },
-            title: {
-                text: '',
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                },
-                gridLineWidth: 0,
-                minorGridLineWidth: 0,
-            },
-            xAxis: {
-                categories: []
-            },
-            legend: {
-                enabled: false
-            },
-            credits: {
-                enabled: false
-            },
-            plotOptions: {
-                pie: {
-                    showInLegend: true,
-                    innerSize: '70%',
-                    allowPointSelect: true,
-                    dataLabels: {
-                        enabled: false,
-                        crop: true,
-                        defer: true
-                    },
-                    shadow: false
-                },
-                series: {
-                    animation: false,
-                    dataLabels: {}
-                }
-            },
-            tooltip: {
-                shared: true,
-                useHTML: true,
-                formatter: function () {
-                    return (this.point) ? baseCurrencySymbol + " " + cPipe.transform(this.point.y) + '/-' : '';
-                }
-            },
-            series: [{
-                name: 'Total Overdues',
-                type: 'pie',
-                data: [['Customer Due', this.invoiceDue], ['Vendor Due', this.billDue]],
-            }],
-        };
-
-        this.requestInFlight = false;
-        this.cdRef.detectChanges();
-    }
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
@@ -232,7 +176,10 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         if (this.invoiceDue === 0 && this.billDue === 0) {
             this.resetChartData();
         } else {
-            this.generateCharts();
+            if (this.chart) {
+                this.chart.destroy();
+            }
+            this.createChart();
         }
     }
 
@@ -243,14 +190,14 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
      */
     public getTotalOverduesData(): void {
         this.dataFound = false;
-        combineLatest([this.receiptService.getAllReceiptBalanceDue({from: this.toRequest.from, to: this.toRequest.to}, "sales"), this.receiptService.getAllReceiptBalanceDue({from: this.toRequest.from, to: this.toRequest.to}, "purchase"), this.dashboardService.getPendingVouchersCount(this.toRequest.from, this.toRequest.to, "sales"), this.dashboardService.getPendingVouchersCount(this.toRequest.from, this.toRequest.to, "purchase")]).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if(response[0] && response[1] && response[2] && response[3]) {
+        combineLatest([this.receiptService.getAllReceiptBalanceDue({ from: this.toRequest.from, to: this.toRequest.to }, "sales"), this.receiptService.getAllReceiptBalanceDue({ from: this.toRequest.from, to: this.toRequest.to }, "purchase"), this.dashboardService.getPendingVouchersCount(this.toRequest.from, this.toRequest.to, "sales"), this.dashboardService.getPendingVouchersCount(this.toRequest.from, this.toRequest.to, "purchase")]).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response[0] && response[1] && response[2] && response[3]) {
                 if (response[0] && response[0].status === 'success' && response[0].body) {
-                    this.invoiceDue = giddhRoundOff(response[0].body.totalDue, 2);
+                    this.invoiceDue = giddhRoundOff(response[0].body.totalDue, this.giddhBalanceDecimalPlaces);
                     this.dataFound = true;
                 }
                 if (response[1] && response[1].status === 'success' && response[1].body) {
-                    this.billDue = giddhRoundOff(response[1].body.totalDue, 2);
+                    this.billDue = giddhRoundOff(response[1].body.totalDue, this.giddhBalanceDecimalPlaces);
                     this.dataFound = true;
                 }
                 if (response[2] && response[2].status === 'success' && response[2].body) {
@@ -321,5 +268,62 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             this.toRequest.refresh = false;
             this.getTotalOverdues();
         }
+    }
+
+    /**
+     * Create chart
+     *
+     * @memberof TotalOverduesChartComponent
+     */
+    public createChart(): void {
+        let invoiceDue = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.invoiceDue) + "/-";
+        let billDue = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.billDue) + "/-";
+        let label = [invoiceDue, billDue];
+        let data = [this.invoiceDue, this.billDue];
+
+        this.chart = new Chart("totaloverDueChartCanvas", {
+            type: 'doughnut',
+            data: {
+                labels: label,
+                datasets: [{
+                    label: '',
+                    data: data,
+                    backgroundColor: ['#F85C88', '#0CB1AF'],
+                    hoverOffset: 18,
+                    hoverBorderColor: '#fff',
+                    borderWidth: 1,
+                    offset: 6,
+                }],
+            },
+
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255,0.8)',
+                        borderColor: 'rgb(248, 92, 136)',
+                        bodyFont: {
+                            size: 0,
+                        },
+                        titleColor: 'rgb(0, 0, 0)',
+                        borderWidth: 0.5,
+                        titleFont: {
+                            weight: 'normal'
+                        },
+                        displayColors: false,
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                spacing: 1,
+                cutout: 50,
+                radius: '95%',
+            }
+        });
+
+        this.requestInFlight = false;
+        this.cdRef.detectChanges();
     }
 }

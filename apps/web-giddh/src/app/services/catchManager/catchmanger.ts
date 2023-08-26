@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { HttpWrapperService } from '../httpWrapper.service';
+import { HttpWrapperService } from '../http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from '../service.config';
 import { ERROR_LOG_API } from '../apiurls/exception-log.api';
 import { take } from 'rxjs/operators';
@@ -65,7 +65,7 @@ export class GiddhErrorHandler {
                             email: null,
                             userUniqueName: null,
                             environment: null,
-                            key: r.error.message ? r.error.message.substring(r.error.message.indexOf(':') + 2, r.error.message.length) : null,
+                            key: r.error.message ? r.error.message.substring(r.error.message?.indexOf(':') + 2, r.error.message.length) : null,
                         };
                         this.store.dispatch({ type: 'REPORT_INVALID_JSON', payload: dataToSend });
                     } else if (data.code === '') {
@@ -79,12 +79,18 @@ export class GiddhErrorHandler {
             }
         }
 
-        if(typeof data === "string") {
+        if (typeof data === "string") {
             data = {
                 statusCode: r?.status
             };
         } else {
-            data.statusCode = r?.status;
+            if (data) {
+                data.statusCode = r?.status;
+            } else {
+                data = {
+                    statusCode: r?.status
+                };
+            }
         }
 
         return new Observable<BaseResponse<TResponce, TRequest>>((o) => {

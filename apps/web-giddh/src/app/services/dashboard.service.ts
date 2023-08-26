@@ -1,7 +1,7 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { DASHBOARD_API } from './apiurls/dashboard.api';
@@ -61,7 +61,7 @@ export class DashboardService {
         url = url?.replace(":previousTo", request.previousTo);
         url = url?.replace(":interval", request.interval);
         url = url?.replace(":type", request.type);
-        url = url?.replace(":uniqueName", request.uniqueName);
+        url = url?.replace(":uniqueName", request?.uniqueName);
         url = url?.replace(":refresh", request.refresh);
 
         return this.http.get(url).pipe(map((res) => {

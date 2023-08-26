@@ -25,7 +25,6 @@ import { SettingsProfileService } from '../../services/settings.profile.service'
 import { SettingsWarehouseService } from '../../services/settings.warehouse.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { OnBoardingComponent } from '../../shared/on-boarding/on-boarding.component';
 import { ItemOnBoardingState } from '../../store/item-on-boarding/item-on-boarding.reducer';
 import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
@@ -160,7 +159,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngAfterViewInit(): void {
         fromEvent(this.searchWarehouse?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
             this.showLoader = true;
-            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, query: encodeURIComponent(event.target.value), count: PAGINATION_LIMIT }));
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, query: encodeURIComponent(event.target?.value), count: PAGINATION_LIMIT }));
         });
     }
 
@@ -183,8 +182,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public openCreateWarehouseModal(): void {
         this.startOnBoarding();
-        this.createNewWarehouseModal();
-        this.warehouseOnBoardingModal.show();
+        this.warehouseOnBoardingModal?.show();
     }
 
     /**
@@ -481,29 +479,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Responsible for preparing the component to be shown in create
-     * new warehouse modal
-     *
-     * @private
-     * @memberof WarehouseComponent
-     */
-    private createNewWarehouseModal(): void {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(OnBoardingComponent);
-        let viewContainerRef = this.onBoardingContainer.viewContainerRef;
-        viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as OnBoardingComponent).onBoardingType = OnBoardingType.Warehouse;
-        (componentRef.instance as OnBoardingComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
-            if (data && data.isFirstStepCompleted) {
-                this.showWelcomePage();
-            } else {
-                this.endOnBoarding();
-            }
-            this.hideAddCompanyModal();
-        });
-    }
-
-    /**
      * Displays the welcome page for second step of warehouse on boarding and for update
      * warehouse flow
      *
@@ -579,8 +554,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                     {
                         ...address,
                         isDefault: false,
-                        label: address.name,
-                        value: address.uniqueName
+                        label: address?.name,
+                        value: address?.uniqueName
                     }));
                 if (successCallback) {
                     successCallback();

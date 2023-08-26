@@ -21,6 +21,11 @@ import { MainComponent } from "./main.component";
 import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-page-loader.module";
 import { InventorySidebarModule } from "../inventory-sidebar/inventory-sidebar.module";
 import { TranslateDirectiveModule } from "../../../theme/translate/translate.directive.module";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { RecipeModule } from "../recipe/recipe.module";
+import { DragDropModule } from "@angular/cdk/drag-drop";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { SortByModule } from "../../../shared/helpers/pipes/sort-by/sort-by.module";
 
 @NgModule({
     declarations: [
@@ -48,7 +53,12 @@ import { TranslateDirectiveModule } from "../../../theme/translate/translate.dir
         MatAutocompleteModule,
         GiddhPageLoaderModule,
         InventorySidebarModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        MatTooltipModule,
+        RecipeModule,
+        DragDropModule,
+        MatSlideToggleModule,
+        SortByModule
     ],
     exports: [
         StockCreateEditComponent

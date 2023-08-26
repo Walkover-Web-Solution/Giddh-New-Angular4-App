@@ -1,0 +1,108 @@
+<div id="import-statement-modal">
+    <div class="modal-header flex-row-reverse">
+        <button
+            aria-hidden="true"
+            class="close"
+            mat-dialog-close
+            [attr.aria-label]="inputData?.commonLocaleData?.app_close"
+        >
+            ×
+        </button>
+        <h3 class="unbold" mat-dialog-title>{{ inputData?.localeData?.import_page_heading }}</h3>
+    </div>
+    <div class="modal-body">
+        <form name="importStatementForm" novalidate autocomplete="off">
+            <div class="pd-b2 clearfix browse-file-btn">
+                <label class="import-field-label file-upload-label"
+                    >{{ inputData?.localeData?.file }} <sup>*</sup></label
+                >
+                <label class="radio-inline p-0 browse-file-label">
+                    {{ inputData?.localeData?.choose_file }}
+                    <input
+                        type="file"
+                        name="file"
+                        class="form-control file-upload-field"
+                        (change)="onFileChange($event.target.files)"
+                        required
+                    />
+                </label>
+                <span class="path-name"> {{ selectedFile }} </span>
+            </div>
+            <div class="pd-b2 clearfix password-label d-flex" *ngIf="getRequest.entity === 'pdf'">
+                <label class="import-field-label">{{ inputData?.localeData?.password }}</label>
+                <mat-form-field appearance="fill" class="w-100 custom-input-field">
+                    <input
+                        matInput
+                        type="password"
+                        name="password"
+                        class="form-control mat-field-border"
+                        [(ngModel)]="postRequest.password"
+                    />
+                </mat-form-field>
+            </div>
+            <div
+                class="pd-b2 clearfix"
+                *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
+            >
+                <label for="isHeaderProvided" class="import-field-label">{{
+                    inputData?.localeData?.header_provided
+                }}</label>
+                <mat-slide-toggle color="primary" name="isHeaderProvided" [(ngModel)]="postRequest.isHeaderProvided">
+                    <span class="pull-left" *ngIf="postRequest.isHeaderProvided">{{
+                        inputData?.commonLocaleData?.app_yes
+                    }}</span>
+                    <span class="pull-right" *ngIf="!postRequest.isHeaderProvided">{{
+                        inputData?.commonLocaleData?.app_no
+                    }}</span>
+                </mat-slide-toggle>
+            </div>
+            <div
+                class="pd-b2 clearfix"
+                *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
+            >
+                <label for="sameDebitCreditAmountColumn" class="import-field-label">{{
+                    inputData?.localeData?.same_debit_credit_column
+                }}</label>
+                <mat-slide-toggle
+                    color="primary"
+                    name="sameDebitCreditAmountColumn"
+                    [(ngModel)]="postRequest.sameDebitCreditAmountColumn"
+                >
+                    <span class="pull-left" *ngIf="postRequest.sameDebitCreditAmountColumn">{{
+                        inputData?.commonLocaleData?.app_yes
+                    }}</span>
+                    <span class="pull-right" *ngIf="!postRequest.sameDebitCreditAmountColumn">{{
+                        inputData?.commonLocaleData?.app_no
+                    }}</span>
+                </mat-slide-toggle>
+            </div>
+            <div class="modal-wrap mr-b5">
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    [disabled]="!postRequest.file"
+                    class="mr-t1 pull-left"
+                    (click)="importStatement()"
+                >
+                    {{ inputData?.localeData?.upload }}
+                </button>
+                <div class="pull-left mr-t1 d-flex sample-file-buttons">
+                    <a
+                        href="javascript:;"
+                        class="btn btn-sm btn-link pr-0 text-align-left"
+                        (click)="downloadSampleFile()"
+                    >
+                        {{ inputData?.localeData?.download_sample_xls }}
+                    </a>
+                    <a
+                        href="javascript:;"
+                        class="btn btn-sm btn-link pull-right text-align-left"
+                        (click)="downloadSampleFile(true)"
+                    >
+                        {{ inputData?.localeData?.download_sample_csv }}
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

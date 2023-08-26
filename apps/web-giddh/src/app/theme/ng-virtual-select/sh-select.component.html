@@ -39,8 +39,10 @@
                 [attr.style]="borderConfiguration?.style"
                 (click)="showSearchSuggestion ? show($event) : ''"
                 [placeholder]="selectedValues?.length > 0 ? filter : placeholder"
+                [ngModelOptions]="{standalone: true}"
                 [(ngModel)]="filter"
                 (ngModelChange)="handleInputChange($event)"
+                [ngClass]="cssClass"
             />
         </div>
         <!--endregion-->
@@ -59,6 +61,7 @@
             (click)="showSearchSuggestion ? show($event) : ''"
             [attr.style]="borderConfiguration?.style"
             [placeholder]="placeholder"
+            [ngModelOptions]="{standalone: true}"
             [(ngModel)]="filter"
             (ngModelChange)="handleInputChange($event)"
             (change)="!filter ? clear() : ''"
@@ -74,6 +77,7 @@
                         value="{{ selectedValues[0]?.label }}"
                         class="form-control selected-val cp"
                         [attr.style]="borderConfiguration?.style"
+                        [ngClass]="cssClass"
                     />
                 </div>
             </ng-container>
@@ -88,6 +92,7 @@
                     [disabled]="disabled"
                     [value]="filter"
                     (change)="!filter ? clear() : ''"
+                    [ngClass]="cssClass"
                 />
             </ng-container>
         </div>

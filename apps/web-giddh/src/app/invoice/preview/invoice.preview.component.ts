@@ -14,7 +14,7 @@ import {
     EventEmitter,
     Output
 } from '@angular/core';
-import { FormControl, NgForm } from '@angular/forms';
+import { UntypedFormControl, NgForm } from '@angular/forms';
 import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -128,9 +128,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public isDeleteSuccess$: Observable<boolean>;
     public allItemsSelected: boolean = false;
     public selectedItems: string[] = [];
-    public voucherNumberInput: FormControl = new FormControl();
-    public accountUniqueNameInput: FormControl = new FormControl();
-    public ProformaPurchaseOrder: FormControl = new FormControl();
+    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
+    public accountUniqueNameInput: UntypedFormControl = new UntypedFormControl();
+    public ProformaPurchaseOrder: UntypedFormControl = new UntypedFormControl();
     public showAdvanceSearchIcon: boolean = false;
     public hoveredItemForAction: string = '';
     public clickedHoveredItemForAction: string = '';
@@ -188,7 +188,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /* This will hold if we need to show/hide PO search */
     public showPurchaseOrderSearch: boolean = false;
     /* Field for search */
-    public purchaseOrderNumbersInput: FormControl = new FormControl();
+    public purchaseOrderNumbersInput: UntypedFormControl = new UntypedFormControl();
     /* Send email request params object */
     public sendEmailRequest: any = {};
     /* Company name observable */
@@ -212,7 +212,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Stores the voucher eligible for adjustment */
     public voucherForAdjustment: Array<Adjustment>;
     /** This will store selected date range to show on UI */
@@ -244,6 +244,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedEInvoice: any;
     /** True if dropdown menu needs to show upwards */
     public isDropUp: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(
         private store: Store<AppState>,
@@ -281,6 +283,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.voucherDetails$ = this.store.pipe(select(s => s.receipt.voucher), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
     }
 
     /**
@@ -358,7 +366,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (a && a.voucherType === 'recurring') {
                 return;
             }
-            this.selectedVoucher = (a) ? a.voucherType : "";
+            this.selectedVoucher = (a) ? a?.voucherType : "";
             if (this.selectedVoucher === 'credit note' || this.selectedVoucher === 'debit note') {
                 this.templateType = 'voucher';
             } else {
@@ -388,7 +396,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.itemsListForDetails = allItems;
                         this.toggleBodyClass();
                         setTimeout(() => {
-                            const itemIndex = this.itemsListForDetails.findIndex(item => item?.uniqueName === record.purchaseRecordUniqueName);
+                            const itemIndex = this.itemsListForDetails?.findIndex(item => item?.uniqueName === record.purchaseRecordUniqueName);
                             this.selectedInvoiceForDetails = allItems[itemIndex];
                             this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                             this.store.dispatch(this.purchaseRecordActions.resetUpdatePurchaseRecord());
@@ -708,7 +716,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 } else {
                     this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem?.uniqueName, {
                         action: actionToPerform,
-                        voucherType: objItem.voucherType ?? this.selectedVoucher
+                        voucherType: objItem?.voucherType ?? this.selectedVoucher
                     }));
                 }
             }
@@ -765,7 +773,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         voucherType: this.selectedVoucher
                     }
                 }
-                if (selectedVouchers?.length && bulkDeleteModel.voucherType) {
+                if (selectedVouchers?.length && bulkDeleteModel?.voucherType) {
                     this._invoiceBulkUpdateService.bulkUpdateInvoice(bulkDeleteModel, 'delete').subscribe(response => {
                         if (response) {
                             if (response.status === "success") {
@@ -800,16 +808,25 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public closeConfirmationPopup() {
+    public closeConfirmationPopup(): void {
         this.invoiceConfirmationModel?.hide();
     }
 
-    public closePerformActionPopup(data) {
-        this.performActionOnInvoiceModel?.hide();
+    public performActionPopup(data: any): void {
         if (data) {
             data.action = 'paid';
             this.store.dispatch(this.invoiceActions.ActionOnInvoice(data.uniqueName, data));
         }
+    }
+    
+    /**
+     * Closes payment popup
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public closePerformActionPopup(): void {
+        this.store.dispatch(this.invoiceActions.resetActionOnInvoice());
+        this.performActionOnInvoiceModel?.hide();
     }
 
     public goToInvoice(voucherType: string) {
@@ -1112,19 +1129,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public clickedOutside(event: Event, el, fieldName: string) {
 
         if (fieldName === 'invoiceNumber') {
-            if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
+            if (this.voucherNumberInput?.value !== null && this.voucherNumberInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'accountUniqueName') {
-            if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
+            if (this.accountUniqueNameInput?.value !== null && this.accountUniqueNameInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'ProformaPurchaseOrder') {
-            if (this.ProformaPurchaseOrder.value !== null && this.ProformaPurchaseOrder.value !== '') {
+            if (this.ProformaPurchaseOrder?.value !== null && this.ProformaPurchaseOrder?.value !== '') {
                 return;
             }
         } else if (fieldName === 'purchaseOrderNumbers') {
-            if (this.purchaseOrderNumbersInput.value !== null && this.purchaseOrderNumbersInput.value !== '') {
+            if (this.purchaseOrderNumbersInput?.value !== null && this.purchaseOrderNumbersInput?.value !== '') {
                 return;
             }
         }
@@ -1377,8 +1394,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     private parseBalRes(res) {
         if (res && res.body) {
-            this.totalSale = giddhRoundOff(res.body.grandTotal, 2);
-            this.totalDue = giddhRoundOff(res.body.totalDue, 2);
+            this.totalSale = giddhRoundOff(res.body.grandTotal, this.giddhBalanceDecimalPlaces);
+            this.totalDue = giddhRoundOff(res.body.totalDue, this.giddhBalanceDecimalPlaces);
         }
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
@@ -1838,7 +1855,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
                             if (this.selectedInvoiceForDetails?.uniqueName === item?.uniqueName) {
                                 let updatedItem = cloneDeep(item);
-                                updatedItem.voucherType = this.selectedInvoiceForDetails.voucherType;
+                                updatedItem.voucherType = this.selectedInvoiceForDetails?.voucherType;
                                 this.selectedInvoiceForDetails = updatedItem;
                             }
 
@@ -1856,7 +1873,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             }
                             if (MULTI_CURRENCY_MODULES?.indexOf(this.selectedVoucher) > -1) {
                                 // For CR/DR note and Cash/Sales invoice
-                                item = this.generalService.addToolTipText(this.selectedVoucher, this.baseCurrency, item, this.localeData, this.commonLocaleData);
+                                item = this.generalService.addToolTipText(this.selectedVoucher, this.baseCurrency, item, this.localeData, this.commonLocaleData, this.giddhBalanceDecimalPlaces);
 
                                 if (this.gstEInvoiceEnable) {
                                     item.eInvoiceStatusTooltip = this.getEInvoiceTooltipText(item);
@@ -1914,7 +1931,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     // get voucherDetailsNo so we can open that voucher in details mode
                     if (res[0] && res[1] && res[2]) {
                         this.selectedInvoiceForDetails = null;
-                        let voucherIndex = (res[0] as ReciptResponse).items.findIndex(f => f.voucherNumber === res[1]);
+                        let voucherIndex = (res[0] as ReciptResponse)?.items?.findIndex(f => f.voucherNumber === res[1]);
                         if (voucherIndex > -1) {
                             let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
                             const removedItem = allItems.splice(voucherIndex, 1)[0];

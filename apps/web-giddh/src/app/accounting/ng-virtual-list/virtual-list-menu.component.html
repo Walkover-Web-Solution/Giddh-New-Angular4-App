@@ -16,7 +16,7 @@
             id="noresult"
             *ngIf="
                 viewPortItems?.length === 0 ||
-                (viewPortItems?.length === 1 && viewPortItems[0].value === 'createnewitem')
+                (viewPortItems?.length === 1 && viewPortItems[0]?.value === 'createnewitem')
             "
             class="item"
             [style.height.px]="noResultLinkEnabled ? NoFoundMsgHeight : NoFoundMsgHeight - 20"

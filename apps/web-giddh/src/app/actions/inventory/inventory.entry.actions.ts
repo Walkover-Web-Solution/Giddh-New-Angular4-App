@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 import { INVENTORY_ENTRY_ACTIONS } from './inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { InventoryEntry, InventoryUser } from '../../models/api-models/Inventory-in-out';
@@ -24,7 +24,7 @@ export class InventoryEntryActions {
             ofType(INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<InventoryEntry, InventoryEntry> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -44,7 +44,7 @@ export class InventoryEntryActions {
             ofType(INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<InventoryEntry, InventoryEntry> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
                 } else {

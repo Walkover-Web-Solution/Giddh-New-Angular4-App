@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { IStocksItem } from '../../../../models/interfaces/stocks-item.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as dayjs from 'dayjs';
@@ -26,13 +26,13 @@ export class TransferNoteComponent implements OnChanges {
     public stockListOptions: IOption[];
     public stockUnitsOptions: IOption[];
     public userListOptions: IOption[];
-    public form: FormGroup;
+    public form: UntypedFormGroup;
     public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     public today = new Date();
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor(private _fb: FormBuilder) {
+    constructor(private _fb: UntypedFormBuilder) {
         this.form = this._fb.group({
             inventoryEntryDate: [dayjs().format(GIDDH_DATE_FORMAT), Validators.required],
             transactions: this._fb.array([]),
@@ -45,36 +45,36 @@ export class TransferNoteComponent implements OnChanges {
         });
     }
 
-    public get inventoryEntryDate(): FormControl {
-        return this.form.get('inventoryEntryDate') as FormControl;
+    public get inventoryEntryDate(): UntypedFormControl {
+        return this.form.get('inventoryEntryDate') as UntypedFormControl;
     }
 
-    public get description(): FormControl {
-        return this.form.get('description') as FormControl;
+    public get description(): UntypedFormControl {
+        return this.form.get('description') as UntypedFormControl;
     }
 
-    public get type(): FormControl {
-        return this.form.get('type') as FormControl;
+    public get type(): UntypedFormControl {
+        return this.form.get('type') as UntypedFormControl;
     }
 
-    public get quantity(): FormControl {
-        return this.form.get('quantity') as FormControl;
+    public get quantity(): UntypedFormControl {
+        return this.form.get('quantity') as UntypedFormControl;
     }
 
-    public get inventoryUser(): FormControl {
-        return this.form.get('inventoryUser') as FormControl;
+    public get inventoryUser(): UntypedFormControl {
+        return this.form.get('inventoryUser') as UntypedFormControl;
     }
 
-    public get stock(): FormControl {
-        return this.form.get('stock') as FormControl;
+    public get stock(): UntypedFormControl {
+        return this.form.get('stock') as UntypedFormControl;
     }
 
-    public get stockUnit(): FormControl {
-        return this.form.get('stockUnit') as FormControl;
+    public get stockUnit(): UntypedFormControl {
+        return this.form.get('stockUnit') as UntypedFormControl;
     }
 
-    public get transactions(): FormArray {
-        return this.form.get('transactions') as FormArray;
+    public get transactions(): UntypedFormArray {
+        return this.form.get('transactions') as UntypedFormArray;
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -90,23 +90,23 @@ export class TransferNoteComponent implements OnChanges {
     }
 
     public stockChanged(option: IOption) {
-        const stockItem = this.stockList.find(p => p?.uniqueName === option.value);
+        const stockItem = this.stockList.find(p => p?.uniqueName === option?.value);
         const stockUnit = stockItem ? stockItem.stockUnit.code : null;
-        this.form?.patchValue({ ...this.form.value, stockUnit });
+        this.form?.patchValue({ ...this.form?.value, stockUnit });
     }
 
     public save() {
         if (this.form.valid) {
 
             let value: any = {
-                inventoryEntryDate: dayjs(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
-                description: this.description.value,
+                inventoryEntryDate: dayjs(this.inventoryEntryDate?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                description: this.description?.value,
                 transactions: [{
-                    stock: { uniqueName: this.stock.value },
-                    inventoryUser: { uniqueName: this.inventoryUser.value },
-                    stockUnit: { code: this.stockUnit.value },
-                    type: this.type.value,
-                    quantity: this.quantity.value
+                    stock: { uniqueName: this.stock?.value },
+                    inventoryUser: { uniqueName: this.inventoryUser?.value },
+                    stockUnit: { code: this.stockUnit?.value },
+                    type: this.type?.value,
+                    quantity: this.quantity?.value
                 }]
             };
 

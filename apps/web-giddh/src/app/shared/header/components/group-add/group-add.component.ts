@@ -1,6 +1,6 @@
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
@@ -8,6 +8,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { GroupCreateRequest } from '../../../../models/api-models/Group';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 import { digitsOnly } from '../../../helpers';
+import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 
 @Component({
     selector: 'group-add',
@@ -21,7 +22,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     @Input() public commonLocaleData: any = {};
     @Input() public path: string[] = [];
     public activeGroupUniqueName$: Observable<string>;
-    public groupDetailForm: FormGroup;
+    public groupDetailForm: UntypedFormGroup;
     public showAddNewGroup$: Observable<boolean>;
     public isCreateGroupInProcess$: Observable<boolean>;
     public isCreateGroupSuccess$: Observable<boolean>;
@@ -29,7 +30,12 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
+    constructor(
+        private _fb: UntypedFormBuilder, 
+        private store: Store<AppState>, 
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private accountsAction: AccountsAction
+    ) {
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.showAddNewGroup$ = this.store.pipe(select(state => state.groupwithaccounts.showAddNewGroup), takeUntil(this.destroyed$));
         this.isCreateGroupInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.isCreateGroupInProcess), takeUntil(this.destroyed$));
@@ -45,9 +51,15 @@ export class GroupAddComponent implements OnInit, OnDestroy {
             closingBalanceTriggerAmountType: ['CREDIT']
         });
 
+        this.groupDetailForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.groupDetailForm.dirty));
+        });
+
         this.isCreateGroupSuccess$.subscribe(a => {
             if (a) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 this.groupDetailForm.reset();
+                this.groupDetailForm?.markAsPristine();
             }
         });
 
@@ -68,13 +80,13 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     public addNewGroup() {
         let activeGrpUniqueName: string;
         let uniqueName = this.groupDetailForm.get('uniqueName');
-        uniqueName?.patchValue(uniqueName.value?.replace(/ /g, '').toLowerCase());
+        uniqueName?.patchValue(uniqueName?.value?.replace(/ /g, '')?.toLowerCase());
 
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGrpUniqueName = a);
 
         let grpObject: GroupCreateRequest;
-        grpObject = this.groupDetailForm.value as GroupCreateRequest;
-        grpObject.uniqueName = grpObject.uniqueName;
+        grpObject = this.groupDetailForm?.value as GroupCreateRequest;
+        grpObject.uniqueName = grpObject?.uniqueName;
         grpObject.parentGroupUniqueName = activeGrpUniqueName;
         grpObject.path = this.path;
         // add bredcrum to payload
@@ -82,7 +94,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     }
 
     public closingBalanceTypeChanged(type: string) {
-        if (Number(this.groupDetailForm.get('closingBalanceTriggerAmount').value) > 0) {
+        if (Number(this.groupDetailForm.get('closingBalanceTriggerAmount')?.value) > 0) {
             this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
     }

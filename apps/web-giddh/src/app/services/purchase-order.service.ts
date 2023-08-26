@@ -4,7 +4,7 @@ import { catchError, map } from 'rxjs/operators';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { PURCHASE_ORDER_API } from './apiurls/purchase-order.api';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
@@ -110,7 +110,7 @@ export class PurchaseOrderService {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.EMAIL;
         url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
         url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
-        url = url?.replace(':poUniqueName', getRequestObject.uniqueName);
+        url = url?.replace(':poUniqueName', getRequestObject?.uniqueName);
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }

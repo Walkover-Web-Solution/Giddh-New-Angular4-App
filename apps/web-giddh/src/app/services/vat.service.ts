@@ -6,7 +6,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { VatReportRequest, VatReportResponse, VatReportTransactionsRequest } from '../models/api-models/Vat';
 import { GiddhErrorHandler } from "./catchManager/catchmanger";
-import { HttpWrapperService } from "./httpWrapper.service";
+import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 
 @Injectable()

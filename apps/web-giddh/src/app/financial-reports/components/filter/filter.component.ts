@@ -1,6 +1,6 @@
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -30,19 +30,17 @@ import { IForceClear } from '../../../models/api-models/Sales';
 export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public today: Date = new Date();
     public selectedDateOption: string = '0';
-    public filterForm: FormGroup;
+    public filterForm: UntypedFormGroup;
     public search: string = '';
     public financialOptions: IOption[] = [];
-    public accountSearchControl: FormControl = new FormControl();
+    public accountSearchControl: UntypedFormControl = new UntypedFormControl();
     public tags: TagRequest[] = [];
     public selectedTag: string;
-    @Input() public tbExportPdf: boolean = false;
     @Input() public tbExportXLS: boolean = false;
     @Input() public tbExportCsv: boolean = false;
     @Input() public plBsExportXLS: boolean = false;
     @Input() public BsExportXLS: boolean = false;
     @Output() public seachChange = new EventEmitter<string>();
-    @Output() public tbExportPdfEvent = new EventEmitter<string>();
     @Output() public tbExportXLSEvent = new EventEmitter<string>();
     @Output() public tbExportCsvEvent = new EventEmitter<string>();
     @Output() public plBsExportXLSEvent = new EventEmitter<string>();
@@ -70,11 +68,11 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
     @ViewChild('createTagModal', { static: true }) public createTagModal: ModalDirective;
     public universalDate$: Observable<any>;
-    public newTagForm: FormGroup;
+    public newTagForm: UntypedFormGroup;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** This will store modal reference */
     public modalRef: BsModalRef;
     /** This will store selected date range to use in api */
@@ -104,7 +102,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     /* This will clear the select value in sh-select */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
 
-    constructor(private fb: FormBuilder,
+    constructor(private fb: UntypedFormBuilder,
         private cd: ChangeDetectorRef,
         private store: Store<AppState>,
         private settingsTagService: SettingsTagService,
@@ -152,7 +150,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             return { label: q?.uniqueName, value: q?.uniqueName };
         });
 
-        if (this.filterForm.get('selectedDateOption').value === '0' && value.activeFinancialYear) {
+        if (this.filterForm.get('selectedDateOption')?.value === '0' && value.activeFinancialYear) {
             this.filterForm?.patchValue({
                 to: value.activeFinancialYear.financialYearEnds,
                 from: value.activeFinancialYear.financialYearStarts,
@@ -194,7 +192,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 });
 
                 // if filter type is not date picker then set filter as datepicker
-                if (this.filterForm.get('selectedDateOption').value === '0') {
+                if (this.filterForm.get('selectedDateOption')?.value === '0') {
                     this.filterForm?.patchValue({
                         selectedDateOption: '1'
                     });
@@ -218,7 +216,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             }
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.currentCompanyBranches$.subscribe(response => {           
+        this.currentCompanyBranches$.subscribe(response => {
             if (response?.length) {
                 this.filterForm.get('branchUniqueName').setValue("");
                 this.forceClear$ = observableOf({ status: true });
@@ -294,7 +292,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public selectFinancialYearOption(v: IOption) {
         if (v.value) {
             let financialYear = this._selectedCompany.financialYears.find(p => p?.uniqueName === v.value);
-            let index = this._selectedCompany.financialYears.findIndex(p => p?.uniqueName === v.value);
+            let index = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === v.value);
             if (financialYear) {
                 this.filterForm?.patchValue({
                     to: financialYear.financialYearEnds,
@@ -313,16 +311,16 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     public filterData() {
-        this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption'].value);
-        this.onPropertyChanged.emit(this.filterForm.value);
+        this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption']?.value);
+        this.onPropertyChanged.emit(this.filterForm?.value);
         // this will clear the search and reset it after we click apply --G0-2745
         let a = this.search = '';
         this.seachChange.emit(a);
     }
 
     public refreshData() {
-        this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption'].value);
-        let data = cloneDeep(this.filterForm.value);
+        this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption']?.value);
+        let data = cloneDeep(this.filterForm?.value);
         data.refresh = true;
         this.onPropertyChanged.emit(data);
         this.emitExpand(false);
@@ -330,7 +328,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
 
     public setFYFirstTime(selectedFY: string) {
         if (selectedFY) {
-            let inx = this._selectedCompany.financialYears.findIndex(p => p?.uniqueName === selectedFY);
+            let inx = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === selectedFY);
             if (inx !== -1) {
                 this.filterForm?.patchValue({
                     fy: inx === 0 ? 0 : inx * -1
@@ -350,7 +348,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.getTags();
                 this.toaster.successToast(this.commonLocaleData?.app_messages?.tag_created, this.commonLocaleData?.app_success);
             } else {
-                this.toaster.errorToast(response?.message, response?.code);                
+                this.toaster.errorToast(response?.message, response?.code);
             }
         });
         this.toggleTagsModal();
@@ -369,10 +367,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     public onTagSelected(ev) {
-        this.selectedTag = ev.value;
-        this.filterForm.get('tagName')?.patchValue(ev.value);
+        this.selectedTag = ev?.value;
+        this.filterForm.get('tagName')?.patchValue(ev?.value);
         this.filterForm.get('refresh')?.patchValue(true);
-        this.onPropertyChanged.emit(this.filterForm.value);
+        this.onPropertyChanged.emit(this.filterForm?.value);
     }
 
     public dateOptionIsSelected(ev) {
@@ -398,7 +396,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.expandAllChange.emit(false);
         }, 10);
-        this.onPropertyChanged.emit(this.filterForm.value);
+        this.onPropertyChanged.emit(this.filterForm?.value);
     }
 
     /**

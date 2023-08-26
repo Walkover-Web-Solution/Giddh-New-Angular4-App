@@ -7,9 +7,9 @@ import {
     OnInit,
     SimpleChanges,
     ViewChild,
-    TemplateRef, ElementRef
+    TemplateRef
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import {
     ProformaFilter,
     ProformaGetRequest,
@@ -135,10 +135,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     };
     public localStorageSelectedDate: string = '';
     public showVoucherNoSearch: boolean = false;
-    public voucherNumberInput: FormControl = new FormControl();
+    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
 
     public showCustomerSearch: boolean = false;
-    public customerNameInput: FormControl = new FormControl();
+    public customerNameInput: UntypedFormControl = new UntypedFormControl();
 
     public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
     public advanceSearchFilter: ProformaFilter = new ProformaFilter();
@@ -173,7 +173,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
@@ -190,6 +190,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** True if user has voucher list permission */
     public hasVoucherListPermissions: boolean = true;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private commonActions: CommonActions) {
         this.advanceSearchFilter.page = 1;
@@ -218,6 +220,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             if (profile) {
                 this.baseCurrencySymbol = profile.baseCurrencySymbol;
                 this.baseCurrency = profile.baseCurrency;
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
 
@@ -271,7 +274,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 // get voucherDetailsNo so we can open that voucher in details mode
                 if (res[0] && res[1] && res[2]) {
                     this.selectedVoucher = null;
-                    let voucherIndex = (res[0] as ProformaResponse).results.findIndex(f => {
+                    let voucherIndex = (res[0] as ProformaResponse)?.results?.findIndex(f => {
                         if (f.estimateNumber) {
                             return f.estimateNumber === this.voucherNoForDetail;
                         } else {
@@ -473,11 +476,11 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     public clickedOutside(event, el, fieldName: string) {
         if (fieldName === 'voucherNumber') {
-            if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
+            if (this.voucherNumberInput?.value !== null && this.voucherNumberInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'customerName') {
-            if (this.customerNameInput.value !== null && this.customerNameInput.value !== '') {
+            if (this.customerNameInput?.value !== null && this.customerNameInput?.value !== '') {
                 return;
             }
         }
@@ -804,7 +807,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
             let grandTotalConversionRate = 0;
             if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
-                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(this.giddhBalanceDecimalPlaces);
             }
 
             item['grandTotalTooltipText'] = `In ${this.baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;

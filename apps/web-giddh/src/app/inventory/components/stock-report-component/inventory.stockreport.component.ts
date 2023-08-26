@@ -1,7 +1,7 @@
 import { ToasterService } from './../../../services/toaster.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
-import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
+import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
 import { InventoryDownloadRequest, StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store';
@@ -16,15 +16,16 @@ import {
     OnDestroy,
     OnInit,
     SimpleChanges,
+    TemplateRef,
     ViewChild
 } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BranchFilterRequest, CompanyResponse } from '../../../models/api-models/Company';
+import { CompanyResponse } from '../../../models/api-models/Company';
 import { createSelector } from 'reselect';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -62,7 +63,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     @ViewChild('shCategoryType', { static: true }) public shCategoryType: ShSelectComponent;
     @ViewChild('shValueCondition', { static: true }) public shValueCondition: ShSelectComponent;
     /** Template reference */
-    @ViewChild('template', { static: true }) public template: ElementRef;
+    @ViewChild('template', { static: true }) public template: TemplateRef<any>;
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
@@ -90,11 +91,11 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public selectedTransactionType: string = 'all';
     public entities$: Observable<CompanyResponse[]>;
     public showAdvanceSearchIcon: boolean = false;
-    public accountUniqueNameInput: FormControl = new FormControl();
+    public accountUniqueNameInput: UntypedFormControl = new UntypedFormControl();
     public showAccountSearch: boolean = false;
-    public entityAndInventoryTypeForm: FormGroup = new FormGroup({});
+    public entityAndInventoryTypeForm: UntypedFormGroup = new UntypedFormGroup({});
     // modal advance search
-    public advanceSearchForm: FormGroup;
+    public advanceSearchForm: UntypedFormGroup;
     public filterCategory: string = null;
     public filterCategoryType: string = null;
     public filterValueCondition: string = null;
@@ -256,7 +257,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -276,7 +277,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     constructor(private store: Store<AppState>, private sideBarAction: SidebarAction,
         private stockReportActions: StockReportActions,
         private _toasty: ToasterService,
-        private inventoryService: InventoryService, private fb: FormBuilder, private inventoryAction: InventoryAction,
+        private inventoryService: InventoryService, private fb: UntypedFormBuilder, private inventoryAction: InventoryAction,
         private settingsBranchActions: SettingsBranchActions,
         private invViewService: InvViewService,
         private cdr: ChangeDetectorRef,
@@ -491,7 +492,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             if (entities) {
                 if (entities.length) {
                     const branches = cloneDeep(entities);
-                    if (this.selectedCmp && branches.findIndex(p => p?.uniqueName === this.selectedCmp?.uniqueName) === -1) {
+                    if (this.selectedCmp && branches?.findIndex(p => p?.uniqueName === this.selectedCmp?.uniqueName) === -1) {
                         this.selectedCmp['label'] = this.selectedCmp.name;
                         branches.push(this.selectedCmp);
                     }
@@ -585,24 +586,24 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     }
 
     public filterByCheck(type: string, event: boolean) {
-        let idx = this.stockReportRequest.voucherTypes.indexOf('ALL');
+        let idx = this.stockReportRequest.voucherTypes?.indexOf('ALL');
         if (idx !== -1) {
             this.initVoucherType();
         }
         if (event && type) {
             this.stockReportRequest.voucherTypes.push(type);
         } else {
-            let index = this.stockReportRequest.voucherTypes.indexOf(type);
+            let index = this.stockReportRequest.voucherTypes?.indexOf(type);
             if (index !== -1) {
                 this.stockReportRequest.voucherTypes.splice(index, 1);
             }
         }
         if (this.stockReportRequest.voucherTypes?.length > 0 && this.stockReportRequest.voucherTypes?.length < this.VOUCHER_TYPES.length) {
-            idx = this.stockReportRequest.voucherTypes.indexOf('ALL');
+            idx = this.stockReportRequest.voucherTypes?.indexOf('ALL');
             if (idx !== -1) {
                 this.stockReportRequest.voucherTypes.splice(idx, 1);
             }
-            idx = this.stockReportRequest.voucherTypes.indexOf('NONE');
+            idx = this.stockReportRequest.voucherTypes?.indexOf('NONE');
             if (idx !== -1) {
                 this.stockReportRequest.voucherTypes.splice(idx, 1);
             }
@@ -719,7 +720,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
 
     public onOpenAdvanceSearch() {
         this.advanceSearchModalShow = true;
-        this.advanceSearchModel.show();
+        this.advanceSearchModel?.show();
     }
 
     public advanceSearchAction(type?: string) {
@@ -749,11 +750,11 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
 
     public clearModal() {
         if (this.stockReportRequest.param || this.stockReportRequest.val || this.stockReportRequest.expression) {
-            this.shCategory.clear();
+            this.shCategory?.clear();
             if (this.shCategoryType) {
                 this.shCategoryType.clear();
             }
-            this.shValueCondition.clear();
+            this.shValueCondition?.clear();
             this.advanceSearchForm.controls['filterAmount'].setValue(null);
             this.getStockReport(true);
         }

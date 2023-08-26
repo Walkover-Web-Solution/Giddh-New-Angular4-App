@@ -1,6 +1,6 @@
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
@@ -50,7 +50,7 @@ export class SettingsTagService {
             description: model.description
         };
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + SETTINGS_TAG_API.UPDATE_TAG?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':tagUniqueName', encodeURIComponent(model.uniqueName)), body).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + SETTINGS_TAG_API.UPDATE_TAG?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':tagUniqueName', encodeURIComponent(model?.uniqueName)), body).pipe(map((res) => {
             let data: BaseResponse<TagRequest, TagRequest> = res;
             data.request = model;
             return data;
@@ -62,7 +62,7 @@ export class SettingsTagService {
      */
     public DeleteTag(model: TagRequest): Observable<BaseResponse<TagRequest, TagRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + SETTINGS_TAG_API.DELETE_TAG?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':tagUniqueName', encodeURIComponent(model.uniqueName))).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + SETTINGS_TAG_API.DELETE_TAG?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':tagUniqueName', encodeURIComponent(model?.uniqueName))).pipe(map((res) => {
             let data: BaseResponse<TagRequest, TagRequest> = res;
             data.request = model;
             return data;

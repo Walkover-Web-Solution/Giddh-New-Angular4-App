@@ -1,0 +1,159 @@
+.inventory-v2 {
+    .nav.nav-tabs {
+        display: none !important;
+    }
+
+    .branch-transfer-report {
+        padding-top: 10px !important;
+    }
+}
+.stock-create-edit,
+.custom-units {
+    .options-line-value {
+        padding: 10px;
+        vertical-align: middle;
+        min-height: 50px !important;
+
+        .option-label {
+            color: var(--color-common-primary-text);
+        }
+
+        .option-value {
+            float: left !important;
+            width: 100% !important;
+            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
+            font-size: var(--font-size-14);
+        }
+
+        .mat-option-text {
+            line-height: 16px;
+        }
+    }
+}
+
+/*---- report-filter-chip ----*/
+report-filters{
+    .inventory-filter-bar{
+        .select-multiple-chiplist-inventory{
+            .mat-mdc-standard-chip {
+                color: var(--color-chips-primary) !important;
+                background-color: var(--color-body-background) !important;
+                border: 1px solid var(--color-primary-login-box-body-text) !important;
+                font-size: var(--font-size-12) !important;
+                border-radius: 5px !important;
+            }
+        }
+    }
+}
+
+/*---- inventory-stock ----*/
+.back-btn-align{
+    .mdc-button {
+        .mdc-button__label{
+            display: flex;
+            align-items: center;
+            column-gap: 2px;
+        }
+    }
+}
+
+/*---- inventory-sidebar ----*/
+inventory-sidebar{
+    .mat-mdc-icon-button{
+        &.mat-mdc-button-base{
+            width: 40px;
+        }
+    }
+}
+
+/*---- variant ----*/
+.option-value-field{
+    text-field,
+    select-field{
+        input{
+            padding: 12px;
+            border: 1px solid var(--color-fields-border) !important;
+            border-radius: 4px;
+        }
+    }
+    select-field{
+        position: relative;
+        input{
+            height: 48px !important;
+        }
+        &::before{
+            content: '';
+            position: absolute;
+            width: 0px;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid var(--color-popup-list-input-text) !important;
+            top: 50%;
+            right: 12px;
+            z-index: 9;
+            transform: translateY(-50%);
+        }
+    }
+}
+body{
+    &.fixed{
+        .mat-grid-wrapper{
+            .inventory-search {
+                z-index: 99 !important;
+            }
+        } 
+    }
+}
+.text-field-right{
+    .select-field-input{
+        text-align: right !important;
+        border: 0;
+        padding: 6px;
+        background-color: transparent;
+    }
+}
+.inventory-report-table {
+    .mat-mdc-table {
+        .mat-mdc-header-row {
+            .mat-mdc-header-cell {
+                .mat-mdc-icon-button.mat-mdc-button-base {
+                    font-size: var(--font-size-15) !important;
+                    padding: 0;
+                }
+            }
+        }
+    }
+}
+
+.field-m-width{
+    max-width: 170px;
+    .select-field-input {
+        width: 100% !important;
+    }
+}
+
+inventory-master{
+    .mat-grid-wrapper {
+        .mat-list-wrap {
+            .inventory-sub-sideabar {
+                .item-list {
+                    a {
+                        mat-list-item {
+                            .mdc-list-item__primary-text {
+                                color: var(--color-field-hover) !important;
+                            }
+                        }
+                        &.isActive{
+                            mat-list-item {
+                                .mdc-list-item__primary-text {
+                                    color: var(--color-list) !important;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -82,7 +82,6 @@
                             bsDatepicker
                             required
                         />
-                        <i class="fa fa-calendar text-light-2 date-input"></i>
                     </div>
                 </div>
             </div>
@@ -96,12 +95,9 @@
                                 class="d-none"
                                 name="bulkUploadfileInput"
                                 id="bulkUploadfileInput"
-                                [options]="fileUploadOptions"
-                                ngFileSelect
-                                [uploadInput]="uploadInput"
-                                (uploadOutput)="onUploadOutput($event)"
+                                (change)="uploadImage()"
                             />
-                            <label class="cp font-16 text-gray font-14" for="bulkUploadfileInput">
+                            <label class="cp font-15 text-gray" for="bulkUploadfileInput">
                                 {{ localeData?.upload_logo }}
                             </label>
                         </label>

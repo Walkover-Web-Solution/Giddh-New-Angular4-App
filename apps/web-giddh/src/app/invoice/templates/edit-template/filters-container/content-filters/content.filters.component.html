@@ -20,6 +20,7 @@
                     >
                         <input
                             type="checkbox"
+                            color="primary"
                             name="companyNameCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['companyName'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
@@ -1677,7 +1678,7 @@
                             class="form-group"
                             *ngIf="customTemplate?.templateType === 'gst_template_e' && voucherType === 'sales'"
                         >
-                            <div class="form-group font-16">
+                            <div class="form-group font-15">
                                 <input
                                     type="checkbox"
                                     name="taxBifurcationCheckbox"
@@ -2416,10 +2417,7 @@
                                             [disabled]="customTemplate.sections.footer.data.slogan.display"
                                             accept="image/png, image/jpeg"
                                             id="signatureImg-edit"
-                                            ngFileSelect
-                                            (uploadOutput)="onUploadFileOutput($event)"
-                                            [options]="fileUploadOptions"
-                                            [uploadInput]="uploadInput"
+                                            (change)="uploadImage()"
                                         />
                                         <small>Upload Signature</small>
                                     </label>

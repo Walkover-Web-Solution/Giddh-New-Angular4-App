@@ -1,6 +1,6 @@
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
@@ -8,7 +8,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { SETTINGS_BRANCH_API } from './apiurls/settings.branch.api';
 import { BranchFilterRequest } from '../models/api-models/Company';
-import { COMPANY_API } from './apiurls/comapny.api';
+import { COMPANY_API } from './apiurls/company.api';
 
 @Injectable()
 export class SettingsBranchService {

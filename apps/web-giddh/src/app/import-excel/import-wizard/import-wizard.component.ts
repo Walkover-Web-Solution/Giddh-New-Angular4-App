@@ -5,6 +5,9 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ImportExcelService } from '../../services/import-excel.service';
+import { AppState } from '../../store';
+import { select, Store } from '@ngrx/store';
+import { CommonActions } from '../../actions/common.actions';
 
 @Component({
     selector: 'import-wizard',
@@ -38,7 +41,9 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private importExcelService: ImportExcelService,
         private cdRef: ChangeDetectorRef,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        private store: Store<AppState>,
+        private commonAction: CommonActions
     ) {
     }
 
@@ -55,7 +60,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             // if rows grater then 400 rows show report page
             if (this.excelState.importResponse.message) {
                 this.toaster.successToast(this.excelState.importResponse.message);
-                this.showReport();
+                if (this.entity === "banktransactions" && this.mappedData?.accountUniqueName) {
+                    this.router.navigate(['/pages', 'ledger', this.mappedData.accountUniqueName]);
+                } else {
+                    this.router.navigate(['/pages', 'downloads', 'imports']);
+                }
             } else {
                 // go to import success page
                 this.step++;
@@ -79,9 +88,25 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             requestState: ImportExcelRequestStates.Default,
             importStatus: importStatusRequest
         };
+
+        this.store.pipe(select(state => state.common.importBankTransactions), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.mappedData = response;
+                this.step = 2;
+            } else {
+                if (this.entity === "banktransactions") {
+                    if (this.mappedData?.accountUniqueName) {
+                        this.router.navigate(['/pages', 'ledger', this.mappedData.accountUniqueName]);
+                    } else {
+                        this.router.navigate(['/pages/import/select-type']);
+                    }
+                }
+            }
+        });
     }
 
     public ngOnDestroy() {
+        this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(null));
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -141,11 +166,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public onBack() {
-        this.step--;
-    }
-
-    public showReport() {
-        this.router.navigate(['/pages', 'downloads', 'imports']);
+        if (this.entity === "banktransactions" && this.mappedData?.accountUniqueName) {
+            this.router.navigate(['/pages', 'ledger', this.mappedData.accountUniqueName]);
+        } else {
+            this.step--;
+        }
     }
 
     public onSubmit(data: any) {
@@ -191,6 +216,10 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
                 
             case "stock":
                 importType = "INVENTORY_IMPORT";
+                break;
+
+            case "banktransactions":
+                importType = "BANK_TRANSACTIONS_IMPORT";
                 break;    
         }
 

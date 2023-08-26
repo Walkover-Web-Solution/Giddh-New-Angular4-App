@@ -10,7 +10,7 @@ import { SettingsLinkedAccountsService } from '../../services/settings.linked.ac
 import { SettingsLinkedAccountsActions } from '../../actions/settings/linked-accounts/settings.linked.accounts.action';
 import { IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { IServiceConfigArgs, ServiceConfig } from '../../services/service.config';
 import { GeneralService } from '../../services/general.service';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
@@ -35,7 +35,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     public accounts: IOption[];
     public confirmationMessage: string;
     public dateToUpdate: string;
-    public yodleeForm: FormGroup;
+    public yodleeForm: UntypedFormGroup;
     public companyUniqueName: string;
     public selectedProvider: string;
     public isRefreshWithCredentials: boolean = true;
@@ -72,7 +72,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
         private settingsLinkedAccountsActions: SettingsLinkedAccountsActions,
-        private _fb: FormBuilder,
+        private _fb: UntypedFormBuilder,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
         private _generalService: GeneralService,
         private searchService: SearchService,
@@ -108,7 +108,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(p => p.settings.linkedAccounts.iframeSource), takeUntil(this.destroyed$)).subscribe((source) => {
             if (source) {
-                this.connectBankModel.show();
+                this.connectBankModel?.show();
                 this.connectBankModel.config.ignoreBackdropClick = true;
             }
         });
@@ -133,7 +133,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             this.isRefreshWithCredentials = false;
             this.providerAccountId = providerAccountId;
         }
-        this.connectBankModel.show();
+        this.connectBankModel?.show();
         this.connectBankModel.config.ignoreBackdropClick = true;
     }
 
@@ -149,11 +149,11 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                         rsession: data.body.rsession,
                         app: token.appId,
                         redirectReq: true,
-                        token: token.value,
+                        token: token?.value,
                         extraParams: ['callback=' + this.config.appUrl + 'app/yodlee-success.html?companyUniqueName=' + this.companyUniqueName]
                     });
                     this.yodleeFormHTML?.nativeElement.submit();
-                    this.connectBankModel.show();
+                    this.connectBankModel?.show();
                 }
             }
         });
@@ -178,7 +178,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             switch (this.actionToPerform) {
                 case 'DeleteAddedBank':
                     let deleteWithAccountId = true;
-                    if (this.selectedBank.status !== 'ALREADY_ADDED') {
+                    if (this.selectedBank?.status !== 'ALREADY_ADDED') {
                         accountId = (this.selectedAccount && this.selectedAccount.providerAccount) ? this.selectedAccount.providerAccount.providerAccountId : 0;
                         deleteWithAccountId = false;
                     }
@@ -219,7 +219,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             message = message?.replace("[BANK]", bankName);
             this.confirmationMessage = message;
             this.actionToPerform = 'DeleteAddedBank';
-            this.confirmationModal.show();
+            this.confirmationModal?.show();
         }
     }
 
@@ -250,7 +250,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             message = message?.replace("[ACCOUNT]", data.value);
             this.confirmationMessage = message;
             this.actionToPerform = 'LinkAccount';
-            this.confirmationModal.show();
+            this.confirmationModal?.show();
         }
     }
 
@@ -260,7 +260,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         message = message?.replace("[ACCOUNT]", account.giddhAccount.name);
         this.confirmationMessage = message;
         this.actionToPerform = 'UnlinkAccount';
-        this.confirmationModal.show();
+        this.confirmationModal?.show();
     }
 
     public onUpdateDate(date, account) {
@@ -270,7 +270,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         message = message?.replace("[DATE]", this.dateToUpdate);
         this.confirmationMessage = message;
         this.actionToPerform = 'UpdateDate';
-        this.confirmationModal.show();
+        this.confirmationModal?.show();
     }
 
     public ngOnDestroy(): void {
@@ -300,8 +300,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
-                            label: `${result.name} (${result.uniqueName})`
+                            value: result?.uniqueName,
+                            label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
                     if (page === 1) {
@@ -348,8 +348,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
-                                label: `${result.name} (${result.uniqueName})`
+                                value: result?.uniqueName,
+                                label: `${result.name} (${result?.uniqueName})`
                             }
                         }) || [];
                         this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
@@ -370,8 +370,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         this.onAccountSearchQueryChanged('', 1, (response) => {
             this.defaultAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: `${result.name} (${result.uniqueName})`
+                    value: result?.uniqueName,
+                    label: `${result.name} (${result?.uniqueName})`
                 }
             }) || [];
             this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;

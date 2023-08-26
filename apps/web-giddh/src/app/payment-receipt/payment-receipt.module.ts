@@ -8,7 +8,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GiddhDatepickerModule } from "../theme/giddh-datepicker/giddh-datepicker.module";
 import { MatSelectModule } from "@angular/material/select";
 import { MatInputModule } from "@angular/material/input";
-import { NgxUploaderModule } from "ngx-uploader";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatMenuModule } from "@angular/material/menu";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
@@ -27,6 +26,9 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
 import { SendEmailModule } from "../shared/send-email/send-email.module";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { AsideMenuOtherTaxesModule } from "../shared/aside-menu-other-taxes/aside-menu-other-taxes.module";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { AdvanceReceiptAdjustmentModule } from "../shared/advance-receipt-adjustment/advance-receipt-adjustment.module";
 
 @NgModule({
     declarations: [
@@ -45,7 +47,6 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         GiddhDatepickerModule,
         MatSelectModule,
         MatInputModule,
-        NgxUploaderModule,
         MatCheckboxModule,
         MatMenuModule,
         AmountFieldComponentModule,
@@ -60,7 +61,10 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         MatDialogModule,
         GiddhPageLoaderModule,
         MatAutocompleteModule,
-        MatTooltipModule
+        AsideMenuOtherTaxesModule,
+        MatSlideToggleModule,
+        MatTooltipModule,
+        AdvanceReceiptAdjustmentModule
     ],
     providers: [TitleCasePipe]
 })

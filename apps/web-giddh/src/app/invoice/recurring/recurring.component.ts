@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
-import { FormControl } from '@angular/forms';
-import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
+import { UntypedFormControl } from '@angular/forms';
+import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/recurring-invoice';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
@@ -66,8 +66,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public allItemsSelected: boolean = false;
     public recurringVoucherDetails: RecurringInvoice[];
     public selectedItems: string[] = [];
-    public customerNameInput: FormControl = new FormControl();
-    public invoiceNumberInput: FormControl = new FormControl();
+    public customerNameInput: UntypedFormControl = new UntypedFormControl();
+    public invoiceNumberInput: UntypedFormControl = new UntypedFormControl();
     public hoveredItemForAction: string = '';
     public clickedHoveredItemForAction: string = '';
     public showResetFilterButton: boolean = false;
@@ -213,11 +213,11 @@ export class RecurringComponent implements OnInit, OnDestroy {
 
     public clickedOutside(event, el, fieldName: string) {
         if (fieldName === 'invoiceNumber') {
-            if (this.invoiceNumberInput.value !== null && this.invoiceNumberInput.value !== '') {
+            if (this.invoiceNumberInput?.value !== null && this.invoiceNumberInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'customerName') {
-            if (this.customerNameInput.value !== null && this.customerNameInput.value !== '') {
+            if (this.customerNameInput?.value !== null && this.customerNameInput?.value !== '') {
                 return;
             }
         }

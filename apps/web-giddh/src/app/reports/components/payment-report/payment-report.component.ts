@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
@@ -16,7 +16,7 @@ import { ReceiptService } from '../../../services/receipt.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { AppState } from '../../../store'; 
+import { AppState } from '../../../store';
 import { PAYMENT_REPORT_FILTERS, PaymentAdvanceSearchModel } from '../../constants/reports.constant';
 import { PaymentAdvanceSearchComponent } from '../payment-advance-search/payment-advance-search.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -110,7 +110,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -147,6 +147,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public hoveredPaymentTable: boolean = false;
     /** Holds currency */
     public baseCurrency: string = '';
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     /** @ignore */
     constructor(
@@ -174,6 +176,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
                 this.baseCurrency = profile.baseCurrency;
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
     }
@@ -207,7 +210,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
@@ -224,7 +227,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                     let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -557,7 +560,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                     if (isSeleted) {
                         payment.isSelected = true;
                     }
-                    payment = this.generalService.addToolTipText("payment", this.baseCurrency, payment, this.localeData, this.commonLocaleData);
+                    payment = this.generalService.addToolTipText("payment", this.baseCurrency, payment, this.localeData, this.commonLocaleData, this.giddhBalanceDecimalPlaces);
                 });
 
                 this.changeDetectorRef.detectChanges();

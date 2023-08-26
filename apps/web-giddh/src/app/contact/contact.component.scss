@@ -25,6 +25,11 @@
 
 .dis {
     display: flex;
+    .btn-group{
+        button{
+            min-width: 135px;
+        }
+    }
 }
 
 .pd-1 {
@@ -63,7 +68,7 @@
 }
 
 .icon-pointer .font-xxs {
-    font-size: 12px;
+    font-size: var(--font-size-12);
 }
 
 .account-detail-modal-header {
@@ -103,8 +108,8 @@ button.mat-menu-item {
 }
 
 .account-detail-custom-title {
-    font-family: "opensans-semibold" !important;
-    font-size: 16px !important;
+    font-family: var(--font-semibold) !important;
+    font-size: var(--font-size-15) !important;
     word-break: break-word !important;
     margin-top: 5%;
 }
@@ -114,14 +119,15 @@ button.mat-menu-item {
     text-transform: none !important;
     img {
         filter: var(--color-image-filter);
+        width: 15px;
     }
 }
 
 .custom-detail h4 {
     color: var(--color-abbey);
     margin-top: 7px;
-    font-size: 14px !important;
-    font-family: opensans-regular !important;
+    font-size: var(--font-size-15) !important;
+    font-family: var(--font-regular) !important;
 }
 
 ul.list-unstyled li a {
@@ -217,7 +223,7 @@ tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer
 
 .position-relative.word-wrap {
     .table-menu-first-td {
-        font-size: 14px;
+        font-size: var(--font-size-15);
         vertical-align: middle;
         display: none;
         color: var(--color-primary-contact-icon-dots-three-vertical);
@@ -346,7 +352,7 @@ span.input-addon {
     padding: 4px 9px;
     background-color: var(--color-blue);
     color: var(--color-white);
-    font-size: 18px;
+    font-size: var(--font-size-16);
     border-radius: 5px;
     height: 36px;
     top: 0;
@@ -403,23 +409,20 @@ span.input-addon {
 }
 
 button.btn.btn-filter {
-    background: var(--color-dark-fog);
-    border: 1px solid var(--color-dark-fog);
-    font-size: 14px;
-    color: var(--color-giddh-blue);
+    font-size: var(--font-size-15);
     display: inline-flex;
     justify-content: space-between;
     width: 140px !important;
     margin: 0 auto !important;
     margin-right: 0 !important;
-    box-shadow: none !important;
     height: 40px;
 }
 .btn-small {
     box-shadow: none !important;
 }
-button.btn.btn-filter span.icon-cross {
-    margin-right: 5px;
+
+.icon-cross {
+    line-height: 32px;
 }
 
 .customer-form-inline {
@@ -468,12 +471,12 @@ button.btn.btn-filter span.icon-cross {
 .total-customer-vendor-count {
     color: var(--color-primary-contact-total-customer-vendor-count) !important;
     font-weight: 400 !important;
-    font-size: 12px !important;
+    font-size: var(--font-size-12) !important;
     letter-spacing: 1px;
 
     strong {
         color: var(--color-giddh-blue) !important;
-        font-size: 16px;
+        font-size: var(--font-size-15);
     }
 }
 
@@ -538,7 +541,7 @@ button.btn.btn-filter span.icon-cross {
         bottom: 2px;
     }
     .mat-vendor-name {
-        padding-left: 28px !important;
+        padding-left: 10px !important;
     }
     .mat-customer-name {
         padding-left: 10px !important;
@@ -567,12 +570,29 @@ button.btn.btn-filter span.icon-cross {
 
 .customer-vendor-name-search-icon {
     top: 2px;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    .mat-mdc-icon-button .mat-mdc-button-touch-target {
+        width: 25px !important;
+        height: 25px !important;
+    }
 }
 .customer-img {
     height: 360px;
     width: 489px;
 }
 /*responsive*/
+
+@media screen and (max-width: 1280px) {
+    .min-width-230 {
+        min-width: 195px !important;
+    }
+}
+
 @media (max-width: 1024px) {
     .customer-img {
         height: 360px;
@@ -581,7 +601,7 @@ button.btn.btn-filter span.icon-cross {
     .customer-form-inline {
         position: relative;
         display: flex;
-        align-items: initial;
+        align-items: start;
 
         .wrap-search-entity {
             display: flex;
@@ -799,7 +819,7 @@ button.btn.btn-filter span.icon-cross {
         display: block;
     }
     .top-aging-table-top {
-        font-size: 14px;
+        font-size: var(--font-size-15);
         padding: 8px 3px !important;
     }
     .advance-icon {
@@ -815,7 +835,7 @@ button.btn.btn-filter span.icon-cross {
 
 @media (max-width: 414px) {
     .top-aging-table-top {
-        font-size: 14px;
+        font-size: var(--font-size-15);
     }
 }
 
@@ -903,6 +923,10 @@ button.btn.btn-filter span.icon-cross {
     visibility: visible !important;
 }
 
+.padding-left-25{
+    padding-left: 25px;
+}
+
 ::ng-deep.search-table {
     position: relative;
     right: 8px;
@@ -925,9 +949,12 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .close-btn-in-mat-model {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
     right: 9px;
-    top: 9px;
+    top: 6px;
     font-size: 25px;
     color: var(--color-popup-list-head-text);
 }
@@ -935,7 +962,8 @@ button.btn.btn-filter span.icon-cross {
     min-width: 230px;
 }
 .arrow-icon {
-    right: -3px;
+    right: 14px;
+    top: 20px;
     width: 30px;
     height: 30px;
     border: 2px solid var(--color-primary-button-border);
@@ -949,9 +977,9 @@ button.btn.btn-filter span.icon-cross {
 }
 .select-all-checkbox-wrapper {
     align-items: center;
-    padding-left: 25px;
-    .mat-checkbox {
-        left: 12px;
+    margin-left: 25px;
+    .mat-mdc-checkbox {
+        left: 20px;
     }
 }
 .select-single-checkbox-wrapper {
@@ -962,11 +990,8 @@ button.btn.btn-filter span.icon-cross {
     border: unset;
     margin-top: 20px;
 }
-.min-width-137 {
-    min-width: 137px;
-    color: var(--color-denary-button-text);
-    background-color: var(--color-denary-button-background);
-    border: 1px solid var(--color-primary-button-border);
+.min-width-150 {
+    min-width: 150px;
 }
 
 .btn-light:not(:disabled):not(.disabled).active,
@@ -975,4 +1000,11 @@ button.btn.btn-filter span.icon-cross {
     color: var(--color-denary-button-text);
     background-color: var(--color-denary-button-background);
     border: 1px solid var(--color-primary-button-border);
+}
+th.mat-header-cell {
+    white-space: nowrap !important;
+}
+td.mat-cell {
+    white-space: normal !important;
+    word-break: keep-all !important;
 }

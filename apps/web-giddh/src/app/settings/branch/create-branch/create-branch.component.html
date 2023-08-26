@@ -98,9 +98,9 @@
                                                 ><input
                                                     type="checkbox"
                                                     [checked]="
-                                                        branchForm?.get('address')?.value?.includes(option.value)
+                                                        branchForm?.get('address')?.value?.includes(option?.value)
                                                     "
-                                                    [value]="option.value" /></span
+                                                    [value]="option?.value" /></span
                                             >&nbsp;
                                             <span class="entity-details">
                                                 <div class="item giddh-limit single-line-clamp">
@@ -145,7 +145,7 @@
                 </div>
                 <div class="footer-btn row">
                     <div class="button-group">
-                        <button type="reset" (click)="handleFormClear()" class="btn btn-primary mr-r15">
+                        <button type="reset" (click)="handleFormClear()" class="btn btn-primary mr-r15 clear-btn-width">
                             {{ commonLocaleData?.app_clear }}
                         </button>
                         <button type="submit" [disabled]="branchForm?.invalid" class="btn btn-success">

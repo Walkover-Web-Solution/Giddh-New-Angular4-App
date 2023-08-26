@@ -9,10 +9,10 @@ import { CurrentPage } from '../../models/api-models/Common';
 import { States, StatesRequest } from '../../models/api-models/Company';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { IUpdateDbRequest } from '../../models/interfaces/ulist.interface';
-import { CompanyService } from '../../services/companyService.service';
+import { CompanyService } from '../../services/company.service';
 import { DbService } from '../../services/db.service';
 import { GroupService } from '../../services/group.service';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 import { GENERAL_ACTIONS } from './general.const';
 
 @Injectable()
@@ -47,7 +47,7 @@ export class GeneralActions {
                     const items = data.itemData;
                     switch (payload.type) {
                         case "accounts": {
-                            const matchedIndex = (items && items.aidata && items.aidata.accounts) ? items.aidata.accounts.findIndex(item => item && item?.uniqueName && item?.uniqueName === payload.oldUniqueName) : -1;
+                            const matchedIndex = (items && items.aidata && items.aidata.accounts) ? items.aidata.accounts?.findIndex(item => item && item?.uniqueName && item?.uniqueName === payload.oldUniqueName) : -1;
                             if (matchedIndex > -1) {
                                 items.aidata.accounts[matchedIndex] = {
                                     ...items.aidata.accounts[matchedIndex],
@@ -96,7 +96,7 @@ export class GeneralActions {
         .pipe(
             ofType(GENERAL_ACTIONS.GET_SIDE_MENU_ITEMS),
             switchMap(() => this._companyService.getMenuItems()),
-            map(resp => this.saveSideMenuItems(resp.body))));
+            map(resp => this.saveSideMenuItems(resp?.body))));
 
     constructor(private action$: Actions, private _groupService: GroupService, private _companyService: CompanyService, private _dbService: DbService, private route: Router) {
 

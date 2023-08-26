@@ -9,7 +9,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SALES_ACTIONS } from './sales.const';
 import { AccountRequestV2, AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountService } from '../../services/account.service';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 import { IUpdateDbRequest } from "../../models/interfaces/ulist.interface";
 import { GeneralActions } from "../general/general.actions";
 import { GeneralService } from "../../services/general.service";
@@ -30,7 +30,7 @@ export class SalesActions {
         .pipe(
             ofType(SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return {
@@ -50,7 +50,7 @@ export class SalesActions {
         .pipe(
             ofType(SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return {
@@ -65,7 +65,7 @@ export class SalesActions {
     public UpdateAccountDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS),
-            switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.accountRequest, action.payload.value)),
+            switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.accountRequest, action.payload?.value)),
             map(response => {
                 if (response && response.body && response.queryString) {
                     const updateIndexDb: IUpdateDbRequest = {
@@ -75,7 +75,7 @@ export class SalesActions {
                         uniqueName: this._generalServices.companyUniqueName,
                         type: "accounts",
                         isActive: false,
-                        name: response.body.name
+                        name: response.body?.name
                     }
                     this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
                 }
@@ -86,7 +86,7 @@ export class SalesActions {
         .pipe(
             ofType(SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {

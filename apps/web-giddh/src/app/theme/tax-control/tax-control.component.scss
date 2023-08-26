@@ -29,7 +29,7 @@
     display: block !important;
 }
 sup.mandatory-asterisk {
-    font-size: 14px;
+    font-size: var(--font-size-15);
     top: 0;
     color: var(--color-danger);
 }
@@ -37,4 +37,11 @@ sup.mandatory-asterisk {
 .dropdown-menu {
     left: unset !important;
     top: 0px;
+    li{
+        padding: 0 10px;
+        height: 40px;
+        &:hover{
+            background-color: var(--color-dark-fog) !important;
+        }
+    }
 }

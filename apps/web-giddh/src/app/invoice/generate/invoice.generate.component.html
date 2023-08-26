@@ -58,7 +58,6 @@
                             <div class="form-group date-advance-search pending-advance-search flex-fill">
                                 <div class="input-group mr-r1 mb-0" id="dp-parent">
                                     <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                        <i class="icon-calender calendar-addon"></i>
                                         <input
                                             type="text"
                                             name="selectedDateRange"
@@ -287,7 +286,7 @@
                                                     <amount-field
                                                         [amount]="transaction.amount"
                                                         [currencySymbol]="item.accountCurrencySymbol"
-                                                        [currencyCode]="activeCompany.baseCurrency"
+                                                        [currencyCode]="activeCompany?.baseCurrency"
                                                     >
                                                     </amount-field>
                                                 </span>
@@ -313,7 +312,7 @@
                                                     <amount-field
                                                         [amount]="transaction.amount"
                                                         [currencySymbol]="item.accountCurrencySymbol"
-                                                        [currencyCode]="activeCompany.baseCurrency"
+                                                        [currencyCode]="activeCompany?.baseCurrency"
                                                     >
                                                     </amount-field>
                                                 </span>
@@ -349,7 +348,7 @@
                                         <amount-field
                                             [amount]="item.total.amount"
                                             [currencySymbol]="item.accountCurrencySymbol"
-                                            [currencyCode]="activeCompany.baseCurrency"
+                                            [currencyCode]="activeCompany?.baseCurrency"
                                         >
                                         </amount-field>
                                     </span>

@@ -4,7 +4,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { COMMON_API } from './apiurls/common.api';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { CountryRequest, CountryResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
-import { HttpWrapperService } from "./httpWrapper.service";
+import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 import { GeneralService } from './general.service';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
@@ -112,7 +112,7 @@ export class CommonService {
     }
 
     /**
-     * This will use for patch mapped gst unit 
+     * This will use for patch mapped gst unit
      *
      * @param {*} params
      * @return {*}  {Observable<BaseResponse<any, any>>}
@@ -127,5 +127,101 @@ export class CommonService {
                 data.request = params;
                 return data;
             }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error, params)));
+    }
+
+    /**
+     * This will use for save stock transaction report columns
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof CommonService
+     */
+    public saveSelectedTableColumns(model: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + COMMON_API.MODULE_WISE_COLUMNS;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':module', model.module);
+        return this.http.post(url, model).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = model;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+    * This will use for get selected  columns data
+    *
+    * @param {string} module
+    * @return {*}  {Observable<BaseResponse<any, string>>}
+    * @memberof CommonService
+    */
+    public getSelectedTableColumns(module: string): Observable<BaseResponse<any, string>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + COMMON_API.MODULE_WISE_COLUMNS?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':module', module)).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
+    }
+
+    /**
+     * Uploads file
+     *
+     * @param {*} postRequest
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof CommonService
+     */
+    public uploadFile(postRequest: any, addVoucherVersion: boolean = false): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMMON_API.UPLOAD_FILE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+
+        const formData: FormData = new FormData();
+        formData.append('file', postRequest.file, postRequest.fileName);
+
+        if (postRequest.entries) {
+            formData.append('entries', postRequest.entries);
+        }
+
+        if (addVoucherVersion && this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+
+        return this.http.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * Uploads image
+     *
+     * @param {*} postRequest
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof CommonService
+     */
+    public uploadImage(postRequest: any): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMMON_API.UPLOAD_IMAGE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+
+        const formData: FormData = new FormData();
+        formData.append('file', postRequest.file, postRequest.fileName);
+
+        return this.http.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * Uploads base64 image
+     *
+     * @param {*} postRequest
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof CommonService
+     */
+    public uploadImageBase64(postRequest: any): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMMON_API.UPLOAD_IMAGE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        return this.http.post(url, postRequest).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 }

@@ -6,7 +6,7 @@ import { CommonService } from "../../services/common.service";
 import { StockUnitRequest } from "../../models/api-models/Inventory";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../store";
-import { CustomStockUnitAction } from "../../actions/inventory/customStockUnit.actions";
+import { CustomStockUnitAction } from "../../actions/inventory/custom-stock-unit.actions";
 import { Router } from "@angular/router";
 import { cloneDeep } from "../../lodash-optimized";
 import { ToasterService } from "../../services/toaster.service";
@@ -46,12 +46,12 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
 
     /**
      * Lifecycle hook runs when component is initialized
-     * 
+     *
      * @memberof UnitMappingComponent
      */
     public ngOnInit(): void {
         this.getStockUnits();
-        this.store.dispatch(this.customStockAction.GetStockUnit());
+        this.store.dispatch(this.customStockAction.getStockUnit());
         document.querySelector('body').classList.add('gst-sidebar-open');
         document.querySelector('body').classList.add('unit-mapping-page');
         this.breakpointObserver
@@ -81,12 +81,13 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
 
     /**
      * Lifecycle hook runs when component is destroyed
-     * 
+     *
      * @memberof UnitMappingComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
         document.querySelector('body').classList.remove('unit-mapping-page');
         this.asideGstSidebarMenuState = 'out';
     }
@@ -102,12 +103,12 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
 
     /**
      * This will use for get stock units
-     * 
+     *
      * @memberof UnitMappingComponent
      */
     public getStockUnits(): void {
         this.commonService.getStockUnits().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.units = response.body.map((result: any) => {
+            this.units = response.body?.map((result: any) => {
                 return {
                     value: result.code,
                     label: `${result.code}-${result.name}`

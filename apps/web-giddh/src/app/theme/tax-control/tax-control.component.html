@@ -20,7 +20,8 @@
                 *ngIf="!maskInput"
                 class="form-control cursor-pointer text-right tax-input pd-r3"
                 [(ngModel)]="taxTotalAmount"
-                (focus)="handleInputFocus()"
+                [ngClass]="{ 'field-disabled': readonly }"
+                (focus)="!readonly ? handleInputFocus() : ''"
             />
             <input
                 (keydown.enter)="$event.preventDefault()"
@@ -36,7 +37,8 @@
                 [mask]="maskInput"
                 [prefix]="prefixInput"
                 [suffix]="suffixInput"
-                (focus)="handleInputFocus()"
+                [ngClass]="{ 'field-disabled': readonly }"
+                (focus)="!readonly ? handleInputFocus() : ''"
             />
         </div>
     </a>
@@ -63,7 +65,7 @@
                     id="{{ 'tax-control-checkbox-' + idx }}"
                     name="tax_{{ idx }}"
                     [(ngModel)]="tax.isChecked"
-                    (change)="change($event)"
+                    (change)="change()"
                     (click)="$event.stopPropagation()"
                     [disabled]="tax.isDisabled"
                 >
@@ -79,7 +81,7 @@
                     id="{{ 'tax-checkbox-' + idx }}"
                     name="tax_{{ idx }}"
                     [(ngModel)]="tax.isChecked"
-                    (change)="change($event)"
+                    (change)="change()"
                     (click)="$event.stopPropagation()"
                     [disabled]="tax.isDisabled"
                 >

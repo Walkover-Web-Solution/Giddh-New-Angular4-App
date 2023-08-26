@@ -3,11 +3,11 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { select, Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { ReconcileActionState } from '../../../../../store/GstReconcile/GstReconcile.reducer';
+import { ReconcileActionState } from '../../../../../store/gst-reconcile/GstReconcile.reducer';
 import { AppState } from '../../../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { GstReport } from '../../../../constants/gst.constant';
-import { GstReconcileActions } from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
+import { GstReconcileActions } from 'apps/web-giddh/src/app/actions/gst-reconcile/gst-reconcile.actions';
 
 interface SequenceConfig {
     name: string;
@@ -108,7 +108,7 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
             to: this.currentPeriod.to,
             status: 'all'
         };
-        this.route.navigate(['pages', 'gstfiling', 'filing-return', (obj.gstReturnType === 'hsnsac' ? 'hsn-summary' : 'transaction')], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, type: param.type, entityType: param.entityType, status: param.status, selectedGst: this.activeCompanyGstNumber } });
+        this.route.navigate(['pages', 'gstfiling', 'filing-return', (obj.gstReturnType === 'hsnsac' ? 'hsn-summary' : 'transaction')], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, type: param.type, entityType: param.entityType, status: param?.status, selectedGst: this.activeCompanyGstNumber } });
     }
 
     public ngOnDestroy() {
@@ -122,7 +122,7 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
         let manipulatedData: GstOverViewSummary[] = _.cloneDeep(data);
 
         manipulatedData = _.sortBy(manipulatedData, (o: GstOverViewSummary) => {
-            let index = sequencingList.findIndex(f => f.gstReturnType === o.gstReturnType);
+            let index = sequencingList?.findIndex(f => f.gstReturnType === o.gstReturnType);
             o.name = sequencingList[index].name;
             return index;
         });

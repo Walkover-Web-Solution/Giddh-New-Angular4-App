@@ -468,8 +468,8 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         let adjustmentTypesOptions: IOption[] = [];
 
         adjustmentTypes.map(type => {
-            if ((index === 0 && (type.value === AdjustmentTypesEnum.receipt || type.value === AdjustmentTypesEnum.advanceReceipt)) || (index > 0 && type.value === AdjustmentTypesEnum.againstReference) || (entry && type.value === entry.type)) {
-                adjustmentTypesOptions.push({ label: type.label, value: type.value });
+            if ((index === 0 && (type?.value === AdjustmentTypesEnum.receipt || type?.value === AdjustmentTypesEnum.advanceReceipt)) || (index > 0 && type?.value === AdjustmentTypesEnum.againstReference) || (entry && type?.value === entry.type)) {
+                adjustmentTypesOptions.push({ label: type.label, value: type?.value });
             }
         });
 

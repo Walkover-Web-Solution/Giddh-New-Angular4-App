@@ -1,0 +1,17 @@
+.readonly-field {
+    .dropdown-bg {
+        display: none !important;
+    }
+    .mat-mdc-form-field {
+        background-color: var(--color-primary-input-bar-background) !important;
+    }
+
+    .dropdown-bg {
+        background-color: transparent !important;
+    }
+}
+.create-company {
+    .options-line {
+        padding: 0 16px !important;
+    }
+}

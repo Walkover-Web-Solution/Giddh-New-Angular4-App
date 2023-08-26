@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { AppState } from '../../../store/roots';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -54,7 +54,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
@@ -128,7 +128,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
@@ -207,7 +207,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
     public onSelectGroup(group: IOption) {
         this.groupName = group.label;
-        this.groupUniqueName = group.value;
+        this.groupUniqueName = group?.value;
     }
 
     public selectedDate(value: any) {
@@ -272,7 +272,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
-        this.currentBranchChanged.emit(selectedEntity.value);
+        this.currentBranchChanged.emit(selectedEntity?.value);
         this.loadDefaultGroupsSuggestions();
     }
 

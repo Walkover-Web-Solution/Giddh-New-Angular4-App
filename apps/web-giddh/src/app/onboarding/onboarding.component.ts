@@ -87,12 +87,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     }
 
-    public updateInventorySetting(data) {
-        let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
-        dataToSaveNew.companyInventorySettings = { manageInventory: data };
-        this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
-    }
-
     /**
      * Releases memory
      *

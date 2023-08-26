@@ -7,11 +7,11 @@ import { select, Store } from '@ngrx/store';
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
-import { GstReconcileService } from '../../services/GstReconcile.service';
+import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
-import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
+import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.actions';
 
 @Component({
     selector: 'tax-sidebar',
@@ -90,9 +90,12 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                     this.showVatMenus = true;
                     this.showGstMenus = false;
-                } else {
+                } else if (activeCompany.countryV2?.alpha2CountryCode ==='IN'){
                     this.showGstMenus = true;
                     this.showVatMenus = false;
+                } else{
+                    this.showVatMenus = false;
+                    this.showGstMenus = false;
                 }
             }
         });

@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef, ViewContainerRef, NgZone, AfterViewInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { Observable, ReplaySubject, of as observableOf, combineLatest } from 'rxjs';
+import { Observable, ReplaySubject, of as observableOf, combineLatest, BehaviorSubject } from 'rxjs';
 import { IOption } from '../../theme/ng-select/ng-select';
-import { takeUntil, filter, take, delay, distinctUntilChanged } from 'rxjs/operators';
+import { takeUntil, filter, take, delay, distinctUntilChanged, map } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
@@ -12,7 +12,7 @@ import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../.
 import { PurchaseOrder, StateCode, Address } from '../../models/api-models/Purchase';
 import { SalesService } from '../../services/sales.service';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
-import { WarehouseDetails } from '../../material-ledger/ledger.vm';
+import { WarehouseDetails } from '../../ledger/ledger.vm';
 import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -25,22 +25,22 @@ import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, Sa
 import { TaxResponse } from '../../models/api-models/Company';
 import { IContentCommon } from '../../models/api-models/Invoice';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
-import { cloneDeep } from '../../lodash-optimized';
+import { cloneDeep, find } from '../../lodash-optimized';
 import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 import { TaxControlComponent } from '../../theme/tax-control/tax-control.component';
 import { CompanyActions } from '../../actions/company.actions';
-import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../common/confirmation-modal/confirmation-modal.interface';
+import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../theme/confirmation-modal/confirmation-modal.interface';
 import { NgForm } from '@angular/forms';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { LoaderState } from '../../loader/loader';
 import { LoaderService } from '../../loader/loader.service';
-import { CurrentCompanyState } from '../../store/Company/company.reducer';
+import { CurrentCompanyState } from '../../store/company/company.reducer';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
-import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
+import { IVariant, LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
 import { InvoiceService } from '../../services/invoice.service';
 import { PURCHASE_ORDER_STATUS } from '../../shared/helpers/purchaseOrderStatus';
 import { INameUniqueName } from '../../models/api-models/Inventory';
@@ -54,6 +54,7 @@ import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-s
 import { LedgerService } from '../../services/ledger.service';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
 import { MatDialog } from '@angular/material/dialog';
+import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 
 /** Type of search: vendor and item (product/service) search */
 const SEARCH_TYPE = {
@@ -375,6 +376,23 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public activeEntry: any;
     /** This will hold true if creating new account */
     private isCreatingNewAccount: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
+    /** Stores the stock variants */
+    public stockVariants: BehaviorSubject<Array<Observable<Array<IOption>>>> = new BehaviorSubject([]);
+
+    /** True, if bulk items are added to the voucher list, required to prevent repetitive stock variants processing
+     * when bulk entries are added
+     */
+    private isBulkEntryInProgress: boolean;
+    /** Stores the current transaction request obj for the API */
+    private currentTxnRequestObject: Array<any> = [];
+    /** Stores the index of current stock variants being loaded */
+    private currentlyLoadedStockVariantIndex: number;
+    /** Returns true if account is selected else false */
+    public get showPageLeaveConfirmation(): boolean {
+        return (!this.isUpdateMode && this.purchaseOrder?.account?.uniqueName) ? true : false;
+    }
 
     constructor(
         private store: Store<AppState>,
@@ -400,7 +418,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private ngZone: NgZone,
         private changeDetection: ChangeDetectorRef,
         private settingsDiscountService: SettingsDiscountService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
@@ -547,6 +566,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.getUpdatedStateCodes(profile.countryV2.alpha2CountryCode, true);
                 }
 
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.changeDetection.detectChanges();
             } else {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -621,16 +641,44 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         });
 
         // listen for newly added stock and assign value
-        combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+        combineLatest([this.newlyCreatedStockAc$, this.salesAccounts$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             let stock = resp[0];
             let acData = resp[1];
             if (stock && acData) {
-                let result: IOption = _.find(acData, (item: IOption) => item.additional.uniqueName === stock.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === stock.uniqueName);
+                let result: IOption = _.find(acData, (item: IOption) => item.additional?.uniqueName === stock.linkedAc && item.additional && item.additional.stock && item.additional.stock?.uniqueName === stock?.uniqueName);
                 if (result && !_.isUndefined(this.innerEntryIndex)) {
                     this.purchaseOrder.entries[this.innerEntryIndex].transactions[0].fakeAccForSelect2 = result.value;
                     this.onSelectSalesAccount(result, this.purchaseOrder.entries[this.innerEntryIndex].transactions[0], this.purchaseOrder.entries[this.innerEntryIndex], false, this.innerEntryIndex);
                 }
             }
+        });
+
+        this.stockVariants.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res?.length && !this.isBulkEntryInProgress) {
+                const currentlyLoadedVariantRequest = this.currentTxnRequestObject[this.currentlyLoadedStockVariantIndex ?? this.activeIndex];
+                if (!currentlyLoadedVariantRequest) {
+                    // Deletion case, item was deleted and no current entry is active
+                    return;
+                }
+                const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params?.variantUniqueName;
+                let stockAllVariants;
+                res[this.currentlyLoadedStockVariantIndex ?? this.activeIndex].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
+                if (stockAllVariants.findIndex(variant => variant.value === currentEntryStockVariantUniqueName) === -1) {
+                    // Only reset the stock variant when the stock is changed
+                    if (currentlyLoadedVariantRequest.txn) {
+                        /* If transaction is present then it means the user has changed the stock of any entry
+                            otherwise the user has opened the invoice for edit flow
+                        */
+                        currentlyLoadedVariantRequest.txn.variant = { name: stockAllVariants[0].label, uniqueName: stockAllVariants[0].value };
+                        if (currentlyLoadedVariantRequest.params) {
+                            // include the variant unique name for the API call
+                            currentlyLoadedVariantRequest.params.variantUniqueName = stockAllVariants[0].value;
+                        }
+                        this.loadDetails(currentlyLoadedVariantRequest);
+                    }
+                }
+            }
+            this.currentlyLoadedStockVariantIndex = null;
         });
     }
 
@@ -766,7 +814,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             newItem.additional.email = newItem.additional.email || '';
             newItem.additional.mobileNo = newItem.additional.mobileNo || '';
         }
-        return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.email.toLocaleLowerCase().indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1);
+        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value.toLocaleLowerCase()?.indexOf(term) > -1 || item.additional.email.toLocaleLowerCase()?.indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase()?.indexOf(term) > -1);
     }
 
     /**
@@ -776,7 +824,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public onSelectVendor(item: IOption): void {
-        if (item.value) {
+        if (item?.value) {
             this.purchaseOrder.voucherDetails.customerName = item.label;
             this.purchaseOrder.accountDetails.name = '';
 
@@ -786,7 +834,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 item.additional['currency'] = item.additional.currency || this.companyCurrency;
                 this.isMulticurrencyAccount = item.additional.currency !== this.companyCurrency;
             }
-            this.getAccountDetails(item.value);
+            this.getAccountDetails(item?.value);
+            this.pageLeaveUtilityService.addBrowserConfirmationDialog();
         }
     }
 
@@ -849,7 +898,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     public fillShippingBillingDetails(event: any, isBilling: boolean, addressType: string): void {
         let stateName = event.label;
-        let stateCode = event.value;
+        let stateCode = event?.value;
 
         if (isBilling) {
             if (addressType === "vendor") {
@@ -939,9 +988,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
                     this.startLoader(false);
                     if (!isCompanyStates) {
-                        this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
+                        this.statesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : []);
                     } else {
-                        this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
+                        this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : []);
                     }
                     resolve();
                 }, () => {
@@ -977,7 +1026,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private modifyStateResp(stateList: StateCode[]): IOption[] {
         let stateListRet: IOption[] = [];
-        stateList.forEach(stateR => {
+        stateList?.forEach(stateR => {
             stateListRet.push({ label: stateR.name, value: stateR.code ? stateR.code : stateR.stateGstCode, stateGstCode: stateR.stateGstCode ? stateR.stateGstCode : stateR.code });
         });
         return stateListRet;
@@ -994,15 +1043,15 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
             if (warehouses) {
                 let warehouseResults = cloneDeep(warehouses.results);
-                warehouseResults = warehouseResults?.filter(wh => warehouse?.uniqueName === wh.uniqueName || !wh.isArchived);
+                warehouseResults = warehouseResults?.filter(wh => warehouse?.uniqueName === wh?.uniqueName || !wh.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 let defaultWarehouseUniqueName;
                 let defaultWarehouseName;
                 if (warehouseData) {
                     this.warehouses = warehouseData.formattedWarehouses;
-                    defaultWarehouseUniqueName = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+                    defaultWarehouseUniqueName = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse?.uniqueName : '';
                     defaultWarehouseName = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.name : '';
-                    this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+                    this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse?.uniqueName : '';
                     if (warehouseData.defaultWarehouse) {
                         this.autoFillWarehouseAddress(warehouseData.defaultWarehouse);
                     }
@@ -1277,9 +1326,27 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public getOnboardingForm(countryCode): void {
-        if (this.onboardingFormRequest.country !== countryCode) {
+        if (this.onboardingFormRequest?.country !== countryCode) {
             this.onboardingFormRequest.country = countryCode;
             this.store.dispatch(this.commonActions.GetOnboardingForm(this.onboardingFormRequest));
+        }
+    }
+
+    /**
+     * Variant change handler
+     *
+     * @param {IOption} event Change event
+     * @param {SalesTransactionItemClass} transaction Current transaction
+     * @param {SalesEntryClass} entry Current entry
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public variantChanged(event: IOption, transaction: SalesTransactionItemClass, entry: SalesEntryClass): void {
+        transaction.variant.name = event.label;
+        this.currentTxnRequestObject[this.activeIndex].txn = transaction;
+        this.currentTxnRequestObject[this.activeIndex].entry = entry;
+        if (this.currentTxnRequestObject[this.activeIndex]?.params) {
+            this.currentTxnRequestObject[this.activeIndex].params.variantUniqueName = event.value;
+            this.loadDetails(this.currentTxnRequestObject[this.activeIndex]);
         }
     }
 
@@ -1297,60 +1364,32 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, entryIndex: number): any {
         this.purchaseOrder.entries[entryIndex] = entry;
         this.purchaseOrder.entries[entryIndex].transactions[0] = txn;
-        if ((selectedAcc.value || isBulkItem) && selectedAcc.additional.uniqueName) {
-            let requestObject;
+        if ((selectedAcc?.value || isBulkItem) && selectedAcc.additional?.uniqueName) {
+            let params;
             if (selectedAcc.additional.stock) {
-                requestObject = {
+                params = {
                     stockUniqueName: selectedAcc.additional.stock.uniqueName
                 };
             }
+            this.currentTxnRequestObject[this.activeIndex] = {
+                selectedAcc: selectedAcc,
+                txn: txn,
+                entry: entry,
+                params: params,
+                entryIndex: entryIndex
+            };
             if (isBulkItem) {
+                const allStockVariants = this.stockVariants.getValue();
+                allStockVariants[this.activeIndex] = observableOf(selectedAcc.variants);
+                this.stockVariants.next(allStockVariants);
                 txn = this.calculateItemValues(selectedAcc, txn, entry, false, true);
             } else {
-                this.searchService.loadDetails(selectedAcc.additional.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data && data.body) {
-                        // Take taxes of parent group and stock's own taxes
-                        const taxes = this.generalService.fetchTaxesOnPriority(
-                            data.body.stock?.taxes ?? [],
-                            data.body.stock?.groupTaxes ?? [],
-                            data.body.taxes ?? [],
-                            data.body.groupTaxes ?? []);
-                        // directly assign additional property
-                        selectedAcc.additional = {
-                            ...selectedAcc.additional,
-                            label: selectedAcc.label,
-                            value: selectedAcc.value,
-                            applicableTaxes: taxes,
-                            currency: data.body.currency,
-                            currencySymbol: data.body.currencySymbol,
-                            email: data.body.emails,
-                            isFixed: data.body.isFixed,
-                            mergedAccounts: data.body.mergedAccounts,
-                            mobileNo: data.body.mobileNo,
-                            nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.name).join(', ') : '',
-                            stock: (data.body.stock) ? data.body.stock : '',
-                            hsnNumber: (data.body.stock) ? data.body.stock.hsnNumber : "",
-                            sacNumber: (data.body.stock) ? data.body.sacNumber : "",
-                            uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
-                        };
-                        txn = this.calculateItemValues(selectedAcc, txn, entry);
-                        this.focusOnDescription();
-                    }
-                }, () => {
-                    txn.isStockTxn = false;
-                    txn.amount = 0;
-                    txn.accountName = null;
-                    txn.accountUniqueName = null;
-                    txn.hsnOrSac = 'sac';
-                    txn.total = null;
-                    txn.rate = null;
-                    txn.sacNumber = null;
-                    txn.sacNumberExists = false;
-                    txn.taxableValue = 0;
-                    txn.applicableTaxes = [];
-                    this.focusOnDescription();
-                    return txn;
-                });
+                if (selectedAcc.additional.stock) {
+                    txn.isStockTxn = true;
+                    this.loadStockVariants(selectedAcc.additional.stock.uniqueName);
+                } else {
+                    this.loadDetails(this.currentTxnRequestObject[this.activeIndex]);
+                }
             }
         }
     }
@@ -1366,6 +1405,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         transaction.quantity = null;
         transaction.isStockTxn = false;
         transaction.stockUnit = null;
+        transaction.stockUnitCode = null;
         transaction.stockDetails = null;
         transaction.stockList = [];
         transaction.rate = null;
@@ -1467,7 +1507,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public prepareUnitArr(unitArr): any {
         let unitArray = [];
         _.forEach(unitArr, (item) => {
-            unitArray.push({ id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate });
+            unitArray.push({ id: item.stockUnitUniqueName, text: item.stockUnitCode, rate: item.rate });
         });
         return unitArray;
     }
@@ -1520,9 +1560,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public calculateConvertedAmount(transaction: SalesTransactionItemClass): void {
         if (this.isMulticurrencyAccount) {
             if (transaction.isStockTxn) {
-                transaction.convertedAmount = giddhRoundOff(transaction.quantity * ((transaction.rate * this.exchangeRate) ? transaction.rate * this.exchangeRate : 0), 2);
+                transaction.convertedAmount = giddhRoundOff(transaction.quantity * ((transaction.rate * this.exchangeRate) ? transaction.rate * this.exchangeRate : 0), this.giddhBalanceDecimalPlaces);
             } else {
-                transaction.convertedAmount = giddhRoundOff(transaction.amount * this.exchangeRate, 2);
+                transaction.convertedAmount = giddhRoundOff(transaction.amount * this.exchangeRate, this.giddhBalanceDecimalPlaces);
             }
         }
     }
@@ -1582,8 +1622,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
         });
 
-        entry.taxSum = giddhRoundOff(((taxPercentage * (trx.amount - entry.discountSum)) / 100), 2);
-        entry.cessSum = giddhRoundOff(((cessPercentage * (trx.amount - entry.discountSum)) / 100), 2);
+        entry.taxSum = giddhRoundOff(((taxPercentage * (trx.amount - entry.discountSum)) / 100), this.giddhBalanceDecimalPlaces);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (trx.amount - entry.discountSum)) / 100), this.giddhBalanceDecimalPlaces);
 
         if (isNaN(entry.taxSum)) {
             entry.taxSum = 0;
@@ -1622,6 +1662,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         // Calculate discount
+        entry.discounts = entry.discounts?.length ? entry.discounts : this.generalService.getDiscountValues({
+            discountAccountsDetails: entry.discounts ?? [],
+            discountsList: this.discountsList
+        });
         let percentageDiscountTotal = entry.discounts?.filter(discount => discount.isActive)
             ?.filter(activeDiscount => activeDiscount.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
@@ -1638,6 +1682,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         let taxPercentage: number = 0;
         let cessPercentage: number = 0;
         let taxTotal: number = 0;
+        entry.taxes = entry.taxes?.length ? entry.taxes : this.generalService.getTaxValues({
+            taxRenderData: entry.taxes ?? [],
+            date: this.purchaseOrder.voucherDetails.voucherDate,
+            applicableTaxes: transaction.applicableTaxes,
+            taxes: this.companyTaxesList,
+            exceptTaxTypes: this.exceptTaxTypes,
+        });
         entry.taxes?.filter(tax => tax.isChecked).forEach(selectedTax => {
             if (selectedTax.type === 'gstcess') {
                 cessPercentage += selectedTax.amount;
@@ -1649,9 +1700,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         // Calculate amount with inclusive tax
         transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
-            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), 2);
-        let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), 2);
-        entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, 2);
+            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
+        transaction.convertedAmount = giddhRoundOff(transaction.amount * this.exchangeRate, this.giddhBalanceDecimalPlaces);
+        let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), this.highPrecisionRate);
+        entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, this.highPrecisionRate);
         if (isNaN(entry.discountSum)) {
             entry.discountSum = 0;
         }
@@ -1659,8 +1711,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (isNaN(transaction.taxableValue)) {
             transaction.taxableValue = 0;
         }
-        entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
-        entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
+        entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), this.highPrecisionRate);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), this.highPrecisionRate);
         if (isNaN(entry.taxSum)) {
             entry.taxSum = 0;
         }
@@ -1672,6 +1724,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (transaction.isStockTxn) {
             transaction.rate = giddhRoundOff((transaction.amount / transaction.quantity), this.ratePrecision);
         }
+        transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.giddhBalanceDecimalPlaces);
         this.calculateSubTotal();
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
@@ -1772,17 +1825,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         //Save the Grand Total for Edit
         if (calculatedGrandTotal > 0) {
             if (this.applyRoundOff) {
-                this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(2));
+                this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(this.giddhBalanceDecimalPlaces));
             } else {
-                this.calculatedRoundOff = Number((calculatedGrandTotal - calculatedGrandTotal).toFixed(2));
+                this.calculatedRoundOff = Number((calculatedGrandTotal - calculatedGrandTotal).toFixed(this.giddhBalanceDecimalPlaces));
             }
 
-            calculatedGrandTotal = Number((calculatedGrandTotal + this.calculatedRoundOff).toFixed(2));
+            calculatedGrandTotal = Number((calculatedGrandTotal + this.calculatedRoundOff).toFixed(this.giddhBalanceDecimalPlaces));
         } else if (calculatedGrandTotal === 0) {
             this.calculatedRoundOff = 0;
         }
         this.purchaseOrder.voucherDetails.grandTotal = calculatedGrandTotal;
-        this.grandTotalMulDum = giddhRoundOff(calculatedGrandTotal * this.exchangeRate, 2);
+        this.grandTotalMulDum = giddhRoundOff(calculatedGrandTotal * this.exchangeRate, this.giddhBalanceDecimalPlaces);
     }
 
     /**
@@ -1804,7 +1857,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             return;
         }
         if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
-            let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
+            let tax = this.companyTaxesList.find(ct => ct?.uniqueName === modal.appliedOtherTax.uniqueName);
             if (tax) {
                 if (!modal.appliedOtherTax?.name) {
                     entry.otherTaxModal.appliedOtherTax.name = tax.name;
@@ -1830,7 +1883,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 totalTaxes += tax.taxDetail[0].taxValue;
             }
 
-            entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+            entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), this.highPrecisionRate);
             entry.otherTaxModal = modal;
         } else {
             entry.otherTaxSum = 0;
@@ -1942,6 +1995,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
+        const stockVariants = this.stockVariants.getValue();
+        stockVariants.splice(entryIdx, 1);
+        this.stockVariants.next(stockVariants);
     }
 
     /**
@@ -1997,7 +2053,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     public toggleRcmCheckbox(event: any): void {
         event.preventDefault();
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked, this.commonLocaleData);
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target?.checked, this.commonLocaleData);
     }
 
     /**
@@ -2112,7 +2168,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         // convert date object
         data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
         data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
-        data.templateDetails.other.shippingDate = this.convertDateForAPI(data.templateDetails.other.shippingDate);
+        data.templateDetails.other.shippingDate = this.convertDateForAPI(data.templateDetails?.other.shippingDate);
 
         let txnErr: boolean;
 
@@ -2120,7 +2176,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (data.entries && data.entries.length > 0) {
             _.forEach(data.entries, (entry) => {
                 _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
-                    txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
+                    txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), this.highPrecisionRate) : 0;
 
                     // will get errors of string and if not error then true boolean
                     if (!txn.isValid()) {
@@ -2151,7 +2207,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
 
             entry.voucherType = VoucherTypeEnum.purchase;
-            entry.taxList = entry.taxes.map(tax => tax.uniqueName);
+            entry.taxList = entry.taxes.map(tax => tax?.uniqueName);
             entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
 
             if (entry.isOtherTaxApplicable) {
@@ -2184,8 +2240,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         let updatedData = this.updateData(postRequestObject, data);
 
         let getRequestObject = {
-            companyUniqueName: this.selectedCompany.uniqueName,
-            accountUniqueName: data.accountDetails.uniqueName
+            companyUniqueName: this.selectedCompany?.uniqueName,
+            accountUniqueName: data.accountDetails?.uniqueName
         };
 
         if (type === "create") {
@@ -2198,7 +2254,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.resetForm();
 
                     let poCreated = this.localeData?.po_created;
-                    poCreated = poCreated?.replace("[PO_NUMBER]", response.body.number);
+                    poCreated = poCreated?.replace("[PO_NUMBER]", response.body?.number);
                     this.toaster.successToast(poCreated);
                 } else {
                     this.toaster.errorToast(response.message);
@@ -2237,7 +2293,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         entries.forEach(entry => {
             let salesEntryClass = new SalesEntryClassMulticurrency();
             salesEntryClass.voucherType = entry.voucherType;
-            salesEntryClass.uniqueName = entry.uniqueName;
+            salesEntryClass.uniqueName = entry?.uniqueName;
             salesEntryClass.description = entry.description;
             let calculationMethod = (entry.otherTaxModal && entry.otherTaxModal.tcsCalculationMethod) ? entry.otherTaxModal.tcsCalculationMethod : "";
             entry.taxList.forEach(t => {
@@ -2254,14 +2310,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 if (transaction.isStockTxn) {
                     let salesAddBulkStockItems = new SalesAddBulkStockItems();
                     salesAddBulkStockItems.name = transaction.stockDetails.name;
-                    salesAddBulkStockItems.uniqueName = transaction.stockDetails.uniqueName;
+                    salesAddBulkStockItems.uniqueName = transaction.stockDetails?.uniqueName;
                     salesAddBulkStockItems.quantity = transaction.quantity;
                     salesAddBulkStockItems.rate = {};
                     salesAddBulkStockItems.rate.amountForAccount = transaction.rate;
                     salesAddBulkStockItems.sku = transaction.stockDetails.skuCode;
                     salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
-                    salesAddBulkStockItems.stockUnit.code = transaction.stockUnit;
-
+                    salesAddBulkStockItems.stockUnit.uniqueName = transaction.stockUnit;
+                    salesAddBulkStockItems.stockUnit.code = transaction.stockUnitCode;
+                    salesAddBulkStockItems.variant = transaction.variant;
+                    salesAddBulkStockItems.taxInclusive = transaction.taxInclusive;
                     transactionClassMul.stock = salesAddBulkStockItems;
                 }
                 salesEntryClass.transactions.push(transactionClassMul);
@@ -2331,12 +2389,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public addBulkStockItems(items: SalesAddBulkStockItems[]): void {
         const startIndex = this.purchaseOrder.entries?.length;
         let isBlankItemPresent;
+        this.isBulkEntryInProgress = true;
         this.ngZone.runOutsideAngular(() => {
             for (const item of items) {
                 // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
                 item.additional['quantity'] = item.quantity;
                 let lastIndex = -1;
-                let blankItemIndex = this.purchaseOrder.entries.findIndex(sItem => !sItem.transactions[0].accountUniqueName);
+                let blankItemIndex = this.purchaseOrder.entries?.findIndex(sItem => !sItem.transactions[0].accountUniqueName);
                 let isBlankItemInBetween;
                 if (blankItemIndex > -1) {
                     lastIndex = blankItemIndex;
@@ -2350,7 +2409,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
 
                 this.activeIndex = lastIndex;
-                this.purchaseOrder.entries[lastIndex].transactions[0].fakeAccForSelect2 = item.uniqueName;
+                this.purchaseOrder.entries[lastIndex].transactions[0].fakeAccForSelect2 = item?.uniqueName;
                 this.purchaseOrder.entries[lastIndex].isNewEntryInUpdateMode = true;
                 if (isBlankItemInBetween) {
                     // Update the context of blank items found in between of list of entries
@@ -2362,6 +2421,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
                 this.onSelectSalesAccount(item, this.purchaseOrder.entries[lastIndex].transactions[0], this.purchaseOrder.entries[lastIndex], true, lastIndex);
             }
+            this.isBulkEntryInProgress = false;
         });
         this.buildBulkData(this.purchaseOrder.entries?.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
     }
@@ -2375,12 +2435,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public onChangeUnit(transaction: any, selectedUnit: any): void {
-        if (!event) {
-            return;
-        }
-        _.find(transaction.stockList, (txn) => {
+        find(transaction.stockList, (txn) => {
             if (txn.id === selectedUnit) {
-                return transaction.rate = txn.rate;
+                transaction.stockUnitCode = txn.text;
+                return transaction.rate = giddhRoundOff(txn.rate / this.exchangeRate, this.highPrecisionRate);
             }
         });
     }
@@ -2392,6 +2450,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public resetForm(): void {
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         if (this.container) {
             this.container.clear();
         }
@@ -2430,7 +2489,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         });
         if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
             // Find the current checked out branch
-            currentBranch = branches.find(branch => branch.uniqueName === this.generalService.currentBranchUniqueName);
+            currentBranch = branches.find(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
         } else {
             // Find the HO branch
             currentBranch = branches.find(branch => !branch.parentBranch);
@@ -2539,7 +2598,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public getPurchaseOrder(): void {
         this.startLoader(true);
 
-        let getRequest = { companyUniqueName: this.selectedCompany.uniqueName, poUniqueName: this.purchaseOrderUniqueName };
+        let getRequest = { companyUniqueName: this.selectedCompany?.uniqueName, poUniqueName: this.purchaseOrderUniqueName };
 
         this.purchaseOrderService.get(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -2549,7 +2608,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
                     if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails && !this.getAccountInProgress) {
                         this.getAccountInProgress = true;
-                        this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
+                        this.getAccountDetails(this.purchaseOrderDetails.account?.uniqueName);
                     }
                     this.interval = setInterval(() => {
                         if (this.purchaseOrderDetails && this.purchaseOrderDetails.entries && this.vendorAccountsLoaded && !entriesUpdated && this.copiedAccountDetails) {
@@ -2618,14 +2677,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
             entry.transactions.forEach(transaction => {
                 salesTransactionItemClass = new SalesTransactionItemClass();
-                salesTransactionItemClass.accountUniqueName = transaction.account.uniqueName;
+                salesTransactionItemClass.accountUniqueName = transaction.account?.uniqueName;
                 salesTransactionItemClass.accountName = transaction.account.name;
                 salesTransactionItemClass.amount = transaction.amount.amountForAccount;
                 salesTransactionItemClass.hsnNumber = transaction.hsnNumber;
                 salesTransactionItemClass.sacNumber = transaction.sacNumber;
                 salesTransactionItemClass.sacNumberExists = (transaction.sacNumber) ? true : false;
                 salesTransactionItemClass.showCodeType = transaction.hsnNumber ? "hsn" : "sac";
-                salesTransactionItemClass.fakeAccForSelect2 = transaction.account.uniqueName;
+                salesTransactionItemClass.fakeAccForSelect2 = transaction.account?.uniqueName;
                 salesTransactionItemClass.description = entry.description;
                 salesTransactionItemClass.date = transaction.date;
 
@@ -2633,26 +2692,26 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
                 entry.taxes.forEach(tax => {
                     let taxTypeArr = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
-                    if (taxTypeArr.indexOf(tax.taxType) > -1) {
+                    if (taxTypeArr?.indexOf(tax.taxType) > -1) {
                         salesEntryClass.isOtherTaxApplicable = true;
                         let otherTaxModal = new SalesOtherTaxesModal();
-                        otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+                        otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax?.uniqueName };
                         otherTaxModal.tcsCalculationMethod = tax.calculationMethod;
                         salesEntryClass.otherTaxModal = otherTaxModal;
 
                         if (tax.taxType === 'tdsrc' || tax.taxType === 'tdspay') {
-                            salesEntryClass.tdsTaxList.push(tax.uniqueName);
+                            salesEntryClass.tdsTaxList.push(tax?.uniqueName);
                         } else {
-                            salesEntryClass.tcsTaxList.push(tax.uniqueName);
+                            salesEntryClass.tcsTaxList.push(tax?.uniqueName);
                         }
                     } else {
                         let selectedTax;
-                        if (usedTaxes.indexOf(tax.uniqueName) === -1) {
-                            usedTaxes.push(tax.uniqueName);
+                        if (usedTaxes?.indexOf(tax?.uniqueName) === -1) {
+                            usedTaxes.push(tax?.uniqueName);
 
                             if (entryTaxes && entryTaxes.length > 0) {
                                 entryTaxes.forEach(entryTax => {
-                                    if (entryTax.uniqueName === tax.uniqueName) {
+                                    if (entryTax?.uniqueName === tax?.uniqueName) {
                                         selectedTax = entryTax;
                                     }
                                 });
@@ -2660,7 +2719,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
                             salesEntryClass.taxes.push({
                                 amount: tax.taxPercent,
-                                uniqueName: tax.uniqueName,
+                                uniqueName: tax?.uniqueName,
                                 isChecked: true,
                                 isDisabled: false,
                                 type: tax.taxType,
@@ -2671,6 +2730,31 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 });
 
                 if (transaction.stock) {
+                    this.currentTxnRequestObject[convertedEntries.length] = {
+                        ...this.currentTxnRequestObject[convertedEntries.length],
+                        params: {
+                            variantUniqueName: transaction.stock?.variant?.uniqueName
+                        },
+                        selectedAcc: {
+                            stock: {
+                                name: transaction.stock.name,
+                                uniqueName: transaction.stock.uniqueName,
+                            },
+                            additional: {
+                                name: transaction.account.name,
+                                uniqueName: transaction.account.uniqueName,
+                            }
+                        }
+                    };
+                    this.loadStockVariants(transaction.stock.uniqueName, convertedEntries.length);
+                    const unitRates = transaction.stock?.unitRates ?? [];
+                    if (!transaction.stock.stockUnit?.uniqueName && transaction.stock.stockUnit?.code) {
+                        const unitFound = unitRates?.filter(unit => unit?.stockUnitCode === transaction.stock.stockUnit?.code);
+                        if (unitFound?.length) {
+                            transaction.stock.stockUnit.uniqueName = unitFound[0]?.stockUnitUniqueName;
+                        }
+                    }
+
                     salesTransactionItemClass.isStockTxn = true;
                     salesTransactionItemClass.stockDetails = {};
                     salesTransactionItemClass.stockDetails.name = transaction.stock.name;
@@ -2678,14 +2762,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     salesTransactionItemClass.stockDetails.customField1 = transaction.stock.customField1;
                     salesTransactionItemClass.stockDetails.customField2 = transaction.stock.customField2;
                     salesTransactionItemClass.stockDetails.stockUnit = transaction.stock.stockUnit;
-                    salesTransactionItemClass.stockDetails.unitRates = transaction.stock.unitRates;
+                    salesTransactionItemClass.stockDetails.unitRates = unitRates;
                     salesTransactionItemClass.stockDetails.uniqueName = transaction.stock.uniqueName;
                     salesTransactionItemClass.stockDetails.skuCodeHeading = transaction.stock.skuCodeHeading;
                     salesTransactionItemClass.quantity = transaction.stock.quantity;
                     salesTransactionItemClass.rate = transaction.stock.rate.amountForAccount;
                     salesTransactionItemClass.stockDetails.skuCode = transaction.stock.sku;
-                    salesTransactionItemClass.stockUnit = transaction.stock.stockUnit.code;
-                    salesTransactionItemClass.fakeAccForSelect2 = transaction.account.uniqueName + '#' + transaction.stock.uniqueName;
+                    salesTransactionItemClass.stockUnit = transaction.stock.stockUnit.uniqueName;
+                    salesTransactionItemClass.stockUnitCode = transaction.stock.stockUnit.code;
+                    salesTransactionItemClass.fakeAccForSelect2 = transaction.account?.uniqueName + '#' + transaction.stock.uniqueName;
+                    salesTransactionItemClass.variant = transaction.stock.variant;
+                    salesTransactionItemClass.taxInclusive = transaction.stock.taxInclusive;
 
                     let stock = salesTransactionItemClass.stockDetails;
 
@@ -2711,12 +2798,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
                         salesTransactionItemClass.sku_and_customfields = description.join(', ');
                     }
-                    stock.unitRates = stock.unitRates || [];
+                    stock.unitRates = unitRates || [];
                     const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
                     let stockUnit: IStockUnit = {
-                        id: stock.stockUnit.code,
-                        text: unitRate ? unitRate.stockUnitName : ''
+                        id: stock.stockUnit.uniqueName,
+                        text: unitRate ? unitRate.stockUnitCode : stock.stockUnit.code
                     };
+
                     salesTransactionItemClass.stockList = [];
                     if (stock.unitRates && stock.unitRates.length) {
                         salesTransactionItemClass.stockList = this.prepareUnitArr(stock.unitRates);
@@ -2738,7 +2826,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     discountLedger.discountType = discount.calculationMethod;
                     discountLedger.discountValue = discount.discountValue;
                     discountLedger.isActive = true;
-                    discountLedger.discountUniqueName = discount.uniqueName;
+                    discountLedger.discountUniqueName = discount?.uniqueName;
                     discountLedger.name = discount.name;
                     discountLedger.particular = discount.particular;
                     discountLedger.uniqueName = discountLedger.discountUniqueName;
@@ -2751,7 +2839,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     };
                     tradeDiscount.account = {
                         accountType: '',
-                        uniqueName: entry.uniqueName,
+                        uniqueName: entry?.uniqueName,
                         name: ''
                     };
                     tradeDiscount.discount.uniqueName = discountLedger.discountUniqueName;
@@ -2768,7 +2856,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
             salesEntryClass.discounts = this.parseDiscountFromResponse(salesEntryClass);
             salesEntryClass.voucherType = entry.voucherType;
-            salesEntryClass.uniqueName = entry.uniqueName;
+            salesEntryClass.uniqueName = entry?.uniqueName;
             salesEntryClass.description = entry.description;
             this.calculateOtherTaxes(salesEntryClass.otherTaxModal, salesEntryClass);
             convertedEntries.push(salesEntryClass);
@@ -2793,7 +2881,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         let discountArray: LedgerDiscountClass[] = [];
 
         if (entry.tradeDiscounts) {
-            let isDefaultDiscountThere = entry.tradeDiscounts.some(s => !s.discount.uniqueName);
+            let isDefaultDiscountThere = entry.tradeDiscounts.some(s => !s.discount?.uniqueName);
 
             // now we are adding every discounts in tradeDiscounts so have to only check in trade discounts
             if (!isDefaultDiscountThere) {
@@ -2812,10 +2900,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     discountType: tradeDiscount.discount.discountType,
                     amount: tradeDiscount.discount.discountValue,
                     name: tradeDiscount.discount.name,
-                    particular: tradeDiscount.account.uniqueName,
+                    particular: tradeDiscount.account?.uniqueName,
                     isActive: true,
                     discountValue: tradeDiscount.discount.discountValue,
-                    discountUniqueName: tradeDiscount.discount.uniqueName
+                    discountUniqueName: tradeDiscount.discount?.uniqueName
                 });
 
             });
@@ -2904,7 +2992,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public getVendorPurchaseOrders(vendorName: any): void {
         if (this.selectedCompany) {
             let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, accountUniqueName: vendorName, page: 1, count: 10, sort: '', sortBy: '' };
-            let purchaseOrderPostRequest = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
+            let purchaseOrderPostRequest = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyConverted, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
 
             if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
                 this.purchaseOrders = [];
@@ -3107,7 +3195,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     if (!query) {
                         const results = response.map(result => {
                             return {
-                                value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                                value: result.stock ? `${result?.uniqueName}#${result.stock?.uniqueName}` : result?.uniqueName,
                                 label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                                 additional: result
                             }
@@ -3187,7 +3275,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public prepareSearchLists(results: any, currentPage: number = 1, searchType: string): void {
         const searchResults = results.map(result => {
             return {
-                value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                value: result.stock ? `${result?.uniqueName}#${result.stock?.uniqueName}` : result?.uniqueName,
                 label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                 additional: result
             };
@@ -3227,7 +3315,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
             const results = response.map(result => {
                 return {
-                    value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                    value: result.stock ? `${result?.uniqueName}#${result.stock?.uniqueName}` : result?.uniqueName,
                     label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                     additional: result
                 }
@@ -3241,14 +3329,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.vendorAccountsLoaded = true;
             if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails && !this.getAccountInProgress) {
                 this.getAccountInProgress = true;
-                this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
+                this.getAccountDetails(this.purchaseOrderDetails.account?.uniqueName);
             }
             this.focusInVendorName();
         });
         this.onSearchQueryChanged('', 1, SEARCH_TYPE.ITEM, (response) => {
             this.defaultItemSuggestions = response.map(result => {
                 return {
-                    value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                    value: result.stock ? `${result?.uniqueName}#${result.stock?.uniqueName}` : result?.uniqueName,
                     label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                     additional: result
                 }
@@ -3283,6 +3371,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true, isBulkItem?: boolean): SalesTransactionItemClass {
         let additional = _.cloneDeep(selectedAcc.additional);
+        const variant = additional.stock?.variant;
+        const isInclusiveEntry = (variant?.purchaseTaxInclusive && additional.category === 'expenses') ||
+            (variant?.salesTaxInclusive && additional.category === 'income') ||
+            (variant?.fixedAssetTaxInclusive && additional.category === 'fixedassets');
+        transaction.taxInclusive = isInclusiveEntry;
         transaction.quantity = additional.quantity ? additional.quantity : (additional.stock) ? 1 : null;
         transaction.applicableTaxes = [];
         transaction.sku_and_customfields = null;
@@ -3310,14 +3403,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         // assign taxes and create fluctuation
         if (additional.stock && additional.stock.taxes && additional.stock.taxes.length) {
             additional.stock.taxes.forEach(stockTax => {
-                let tax = this.companyTaxesList.find(tax => tax.uniqueName === stockTax);
+                let tax = this.companyTaxesList.find(tax => tax?.uniqueName === stockTax);
                 if (tax) {
                     switch (tax.taxType) {
                         case 'tcsrc':
                         case 'tcspay':
                         case 'tdsrc':
                         case 'tdspay':
-                            entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+                            entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax?.uniqueName };
                             entry.isOtherTaxApplicable = true;
                             break;
                         default:
@@ -3336,29 +3429,47 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         }
 
         transaction.accountName = additional.name;
-        transaction.accountUniqueName = additional.uniqueName;
+        transaction.accountUniqueName = additional?.uniqueName;
 
         if (additional.stock) {
             // set rate auto
             transaction.rate = null;
             let obj: IStockUnit = {
-                id: additional.stock.stockUnitCode,
-                text: additional.stock.stockUnitName
+                id: additional.stock.stockUnitUniqueName,
+                text: additional.stock.stockUnitCode
             };
             transaction.stockList = [];
-            if (additional.stock && additional.stock.unitRates && additional.stock.unitRates.length) {
-                transaction.stockList = this.prepareUnitArr(additional.stock.unitRates);
+            /*
+                From API, in get voucher API, unit rates are received within stock key.
+                And in particular API, the unit rates are received within stock.variant key.
+                This method is common for both the flows therefore we are searching the unitRates
+                in both the keys
+            */
+            const unitRates = additional.stock?.unitRates ?? additional.stock?.variant?.unitRates ?? [];
+            if (additional.stock && unitRates.length) {
+                transaction.stockList = this.prepareUnitArr(unitRates);
                 transaction.stockUnit = transaction.stockList[0].id;
-                transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                transaction.stockUnitCode = transaction.stockList[0].text;
+                if (!isInclusiveEntry) {
+                    /* For inclusive entry we calculate the rate at the time of amount calculation,
+                        this is done to avoid the fluctuation of rate from exclusive to inclusive
+                    */
+                    transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                }
             } else {
                 transaction.stockList.push(obj);
-                transaction.stockUnit = additional.stock.stockUnit.code;
+                transaction.stockUnit = additional.stock.stockUnit.uniqueName;
+                transaction.stockUnitCode = additional.stock.stockUnit.code;
             }
             transaction.stockDetails = _.omit(additional.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
+            if (isBulkItem) {
+                transaction.variant = selectedAcc.variant;
+            }
         } else {
             transaction.isStockTxn = false;
             transaction.stockUnit = null;
+            transaction.stockUnitCode = null;
             transaction.stockDetails = null;
             transaction.stockList = [];
             // reset fields
@@ -3366,6 +3477,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             transaction.quantity = null;
             transaction.amount = 0;
             transaction.taxableValue = 0;
+            transaction.variant = null;
         }
         this.handleWarehouseVisibility();
         transaction.sacNumber = null;
@@ -3438,8 +3550,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
         }
         this.focusOnDescription();
-        this.calculateStockEntryAmount(transaction);
-        this.calculateWhenTrxAltered(entry, transaction);
+        if (isInclusiveEntry) {
+            setTimeout(() => {
+                // Set timeout is used as tax component is not rendered at the time control is reached here
+                transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                transaction.total = transaction.quantity * transaction.rate;
+                this.calculateTransactionValueInclusively(entry, transaction);
+            });
+        } else {
+            this.calculateStockEntryAmount(transaction);
+            this.calculateWhenTrxAltered(entry, transaction);
+        }
         return transaction;
     }
 
@@ -3772,18 +3893,18 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private calculateConvertedTotal(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         if (this.excludeTax) {
-            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), 2);
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), this.giddhBalanceDecimalPlaces);
             if (transaction.isStockTxn) {
-                transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum, 2);
+                transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum, this.giddhBalanceDecimalPlaces);
             } else {
-                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.giddhBalanceDecimalPlaces);
             }
         } else {
-            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), this.giddhBalanceDecimalPlaces);
             if (transaction.isStockTxn) {
-                transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+                transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), this.giddhBalanceDecimalPlaces);
             } else {
-                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.giddhBalanceDecimalPlaces);
             }
         }
     }
@@ -3827,5 +3948,111 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71)) {
             this.isCreatingNewAccount = false;
         }
+    }
+
+    /**
+     * Loads the details of selected entry
+     *
+     * @private
+     * @param {*} requestObject Request object for the API
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private loadDetails(requestObject: any): void {
+        let {
+            selectedAcc,
+            txn,
+            entry,
+            params,
+            entryIndex
+        } = requestObject;
+        this.searchService.loadDetails(selectedAcc.additional?.uniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data && data.body) {
+                // Take taxes of parent group and stock's own taxes
+                const taxes = this.generalService.fetchTaxesOnPriority(
+                    data.body.stock?.taxes ?? [],
+                    data.body.stock?.groupTaxes ?? [],
+                    data.body.taxes ?? [],
+                    data.body.groupTaxes ?? []);
+                // directly assign additional property
+                selectedAcc.additional = {
+                    ...selectedAcc.additional,
+                    label: selectedAcc.label,
+                    value: selectedAcc?.value,
+                    applicableTaxes: taxes,
+                    currency: data.body.currency,
+                    currencySymbol: data.body.currencySymbol,
+                    email: data.body.emails,
+                    isFixed: data.body.isFixed,
+                    mergedAccounts: data.body.mergedAccounts,
+                    mobileNo: data.body.mobileNo,
+                    nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.name).join(', ') : '',
+                    stock: (data.body.stock) ? data.body.stock : '',
+                    hsnNumber: (data.body.stock) ? data.body.stock.hsnNumber : "",
+                    sacNumber: (data.body.stock) ? data.body.sacNumber : "",
+                    uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
+                    category: data.body.category
+                };
+                txn = this.calculateItemValues(selectedAcc, txn, entry);
+                this.focusOnDescription();
+            }
+        }, () => {
+            txn.isStockTxn = false;
+            txn.amount = 0;
+            txn.accountName = null;
+            txn.accountUniqueName = null;
+            txn.hsnOrSac = 'sac';
+            txn.total = null;
+            txn.rate = null;
+            txn.sacNumber = null;
+            txn.sacNumberExists = false;
+            txn.taxableValue = 0;
+            txn.applicableTaxes = [];
+            this.focusOnDescription();
+            return txn;
+        });
+    }
+
+    /**
+     * Handle price calculation on unit change
+     *
+     * @param {SalesEntryClass} entry Entry details
+     * @param {SalesTransactionItemClass} transaction Transaction details
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public handlePriceCalculationOnUnitChange(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        let isInclusiveTax;
+        if (transaction?.stockDetails?.variant) {
+            // Unit is changed in create flow by changing the stock
+            isInclusiveTax = transaction.stockDetails.variant.salesTaxInclusive ||
+                transaction.stockDetails.variant.purchaseTaxInclusive ||
+                transaction.stockDetails.variant.fixedAssetTaxInclusive;
+        } else {
+            // Unit is changed in update flow without changing the stock
+            isInclusiveTax = transaction?.taxInclusive;
+        }
+        if (isInclusiveTax) {
+            transaction.total = transaction.quantity * transaction.rate;
+            this.calculateTransactionValueInclusively(entry, transaction);
+        } else {
+            transaction.setAmount(entry);
+            this.calculateWhenTrxAltered(entry, transaction);
+        }
+    }
+
+    /**
+     * Loads the stock variants
+     *
+     * @private
+     * @param {string} stockUniqueName Uniquename of the stock
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private loadStockVariants(stockUniqueName: string, index?: number): void {
+        this.ledgerService.loadStockVariants(stockUniqueName).pipe(
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName })))).subscribe(res => {
+                const allStockVariants = this.stockVariants.getValue();
+                this.currentlyLoadedStockVariantIndex = index;
+                allStockVariants[this.currentlyLoadedStockVariantIndex ?? this.activeIndex] = observableOf(res);
+                this.stockVariants.next(allStockVariants);
+            });
     }
 }

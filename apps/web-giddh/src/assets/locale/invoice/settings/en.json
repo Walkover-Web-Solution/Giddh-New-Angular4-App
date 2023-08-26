@@ -44,5 +44,7 @@
     "e_invoice_password_label": "Password",
     "e_invoice_gstin_label": "GSTIN",
     "e_invoice_fields_required_error_message": "All fields are required for E-invoicing Authentication",
-    "e_invoice_invalid_gstin_error_message": "Please provide a valid GSTIN"
+    "e_invoice_invalid_gstin_error_message": "Please provide a valid GSTIN",
+    "apply_sales_round_off": "Apply round off on sales/cash voucher",
+    "apply_credit_note_round_off": "Apply round off on credit note voucher"
 }

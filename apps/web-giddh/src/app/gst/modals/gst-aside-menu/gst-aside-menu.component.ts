@@ -5,7 +5,7 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GstSaveGspSessionRequest, VerifyOtpRequest } from '../../../models/api-models/GstReconcile';
 import { AppState } from '../../../store';
-import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
+import { GstReconcileActions } from '../../../actions/gst-reconcile/gst-reconcile.actions';
 import { ToasterService } from '../../../services/toaster.service';
 import { GstReport } from '../../constants/gst.constant';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -196,7 +196,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
 
     public submitGstReturn() {
         this.submitGstForm.isAccepted = true;
-        if (this.submitGstForm.txtVal.toLowerCase() !== 'SUBMIT'.toLowerCase()) {
+        if (this.submitGstForm.txtVal?.toLowerCase() !== 'SUBMIT'?.toLowerCase()) {
             this.toaster.errorToast(this.localeData?.aside_menu?.submit_gst_error);
             return;
         }

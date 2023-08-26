@@ -8,7 +8,7 @@ import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
-import { reassignNavigationalArray } from './models/defaultMenus'
+import { reassignNavigationalArray } from './models/default-menus'
 import { Configuration } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
@@ -72,6 +72,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.companyUniqueName = ss.companyUniqueName;
         });
 
+        if (this._generalService.getUrlParameter("companyUniqueName")) {
+            this._generalService.setParameterInLocalStorage("companyUniqueName", this._generalService.getUrlParameter("companyUniqueName"));
+        }
+        if (this._generalService.getUrlParameter("version")) {
+            this._generalService.setParameterInLocalStorage("voucherApiVersion", this._generalService.getUrlParameter("version"));
+        }
+
         if (!(this._generalService.user && this._generalService.sessionId)) {
             if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download')) {
                 if (PRODUCTION_ENV && !isElectron) {
@@ -91,12 +98,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const { ipcRenderer } = (window as any).require("electron");
             // google
             const t = ipcRenderer.send("take-server-environment", {
-                STAGING_ENV,
-                LOCAL_ENV,
-                TEST_ENV,
-                PRODUCTION_ENV,
-                AppUrl,
-                APP_FOLDER
+                'STAGING_ENV': STAGING_ENV,
+                'LOCAL_ENV': LOCAL_ENV,
+                'TEST_ENV': TEST_ENV,
+                'PRODUCTION_ENV': PRODUCTION_ENV,
+                'AppUrl': AppUrl,
+                'APP_FOLDER': APP_FOLDER
             });
         }
 
@@ -142,6 +149,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.changeOnMobileView(result.matches);
         });
+        this.breakpointObserver.observe([
+            '(max-width: 480px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (result.matches) {
+                this.router.navigate(['/mobile-restricted']);
+            }
+        });
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
 
@@ -172,10 +186,19 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.addLinkTag("./assets/css/font-awesome.css");
             this._generalService.addLinkTag("./assets/fonts/icomoon/icomoon.css");
             this._generalService.addLinkTag("./assets/css/toastr.css");
-            this._generalService.addLinkTag("./assets/css/perfect-scrollbar.component.scss");
             this._generalService.addLinkTag("./assets/css/ngx-bootstrap/bs-datepicker.css");
             this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
             this._generalService.addLinkTag("./assets/css/lightbox.scss");
+
+            /* RAZORPAY */
+            if (window['Razorpay'] === undefined) {
+                let scriptTag = document.createElement('script');
+                scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
+                scriptTag.type = 'text/javascript';
+                scriptTag.defer = true;
+                document.body.appendChild(scriptTag);
+            }
+            /* RAZORPAY */
         }, 1000);
     }
 

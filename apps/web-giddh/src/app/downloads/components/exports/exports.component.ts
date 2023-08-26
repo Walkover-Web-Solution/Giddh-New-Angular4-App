@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ChangeDetectionStrategy, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DownloadsService } from '../../../services/downloads.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
@@ -15,6 +15,7 @@ import { DownloadData, DownloadsRequest } from '../../../models/api-models/downl
 import { cloneDeep } from '../../../lodash-optimized';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { ExportsJsonComponent } from '../exports-json/exports-json.component';
+import { download } from '@giddh-workspaces/utils';
 
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];
@@ -41,7 +42,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
     /** Selected to date */
     public selectedToDate: Date;
     /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Universal date observer */
     public universalDate$: Observable<any>;
     /** This will store selected date range to use in api */
@@ -76,6 +77,8 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public toDate: string;
     /** This will use for from date static*/
     public fromDate: string;
+    /** Instance of is electron variable */
+    public isElectron: any = isElectron;
 
     constructor(public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -140,10 +143,10 @@ export class ExportsComponent implements OnInit, OnDestroy {
                         result.expireAt = this.localeData?.expired;
                     }
                 });
-                this.dataSource = response.body.items;
-                this.downloadRequest.totalItems = response.body.totalItems;
-                this.downloadRequest.totalPages = response.body.totalPages;
-                this.downloadRequest.count = response.body.count;
+                this.dataSource = response.body?.items;
+                this.downloadRequest.totalItems = response.body?.totalItems;
+                this.downloadRequest.totalPages = response.body?.totalPages;
+                this.downloadRequest.count = response.body?.count;
             } else {
                 this.dataSource = [];
                 this.downloadRequest.totalItems = 0;
@@ -254,14 +257,27 @@ export class ExportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-   * Callback for translation response complete
-   *
-   * @param {boolean} event
-   * @memberof ExportsComponent
-   */
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof ExportsComponent
+     */
     public translationComplete(event: boolean): void {
         if (event) {
             this.getDownloads(true);
+        }
+    }
+
+    /**
+     * Download export file
+     *
+     * @param {*} url
+     * @memberof ExportsComponent
+     */
+    public downloadFile(url: any): void {
+        if (url) {
+            let fileName = url.substring(url.lastIndexOf('/') + 1);
+            return download(fileName, url, "");
         }
     }
 }

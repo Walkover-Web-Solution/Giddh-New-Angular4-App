@@ -57,7 +57,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     border-radius: 5px;
     margin-right: 0;
     width: 73px;
@@ -89,7 +89,7 @@ span.input-addon {
     padding: 4px 9px;
     background-color: var(--color-blue);
     color: var(--color-white);
-    font-size: 18px;
+    font-size: var(--font-size-16);
     border-radius: 5px;
     top: 0;
 }
@@ -109,6 +109,12 @@ tr.aging-table-top td {
     border: 1px solid var(--color-common-secondary-border);
     border-radius: 5px;
     margin-left: 10px !important;
+    button{
+        font-size: var(--font-size-16);
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
     .icon-refresh {
         color: var(--color-abbey);
     }
@@ -201,7 +207,7 @@ tr.mat-header-row {
         .pull-right {
             display: flex;
             button {
-                min-width: 88px;
+                min-width: 50px;
                 padding-right: 10px;
                 padding-left: 10px !important;
             }
@@ -359,7 +365,7 @@ tr.mat-header-row {
 @media (max-width: 575px) {
     .top-aging-table-top {
         padding: 8px 3px !important;
-        font-size: 14px;
+        font-size: var(--font-size-15);
     }
 }
 
@@ -429,4 +435,8 @@ tr.mat-header-row {
     padding-top: 10px;
     margin-top: 17px;
     box-shadow: 0 0 19px var(--color-primary-common-box-shadow);
+}
+
+.icon-cross {
+    line-height: 32px;
 }

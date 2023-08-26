@@ -1,12 +1,12 @@
 import { catchError, map } from 'rxjs/operators';
-import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, IUnpaidInvoiceListResponse, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
+import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, IUnpaidInvoiceListResponse, IVariant, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
-import { BlankLedgerVM } from '../material-ledger/ledger.vm';
+import { BlankLedgerVM } from '../ledger/ledger.vm';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ExportBodyRequest } from '../models/api-models/DaybookRequest';
@@ -15,9 +15,7 @@ import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { cloneDeep } from '../lodash-optimized';
 import { PAGINATION_LIMIT } from '../app.constant';
 
-@Injectable({
-    providedIn: 'any'
-})
+@Injectable()
 export class LedgerService {
     private companyUniqueName: string;
 
@@ -283,7 +281,7 @@ export class LedgerService {
     }
 
     /**
-     *This will use for ledger export  
+     *This will use for ledger export
      *
      * @param {ExportLedgerRequest} model
      * @param {string} accountUniqueName
@@ -295,7 +293,7 @@ export class LedgerService {
     public ExportLedger(model: ExportLedgerRequest, accountUniqueName: string, body: any, exportByInvoiceNumber?: boolean): Observable<BaseResponse<any, ExportLedgerRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let api;
-        if (body.type === 'columnar') {
+        if (body?.type === 'columnar') {
             api = exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER;
         } else {
             api = this.config.apiUrl + LEDGER_API.EXPORT;
@@ -303,7 +301,7 @@ export class LedgerService {
         let url = api?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             ?.replace(':from', model.from)?.replace(':to', model.to)?.replace(':type', encodeURIComponent(model.type))?.replace(':format', encodeURIComponent(model.format))?.replace(':sort', encodeURIComponent(model.sort));
-        if (body.type === 'columnar') {
+        if (body?.type === 'columnar') {
             if (model.branchUniqueName) {
                 url = url.concat(`&branchUniqueName=${model.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(model.branchUniqueName) : ''}`);
             }
@@ -401,7 +399,7 @@ export class LedgerService {
     }
 
     /**
-     * This will use for group ledger export 
+     * This will use for group ledger export
      *
      * @param {ExportBodyRequest} model
      * @return {*}  {Observable<BaseResponse<any, ExportBodyRequest>>}
@@ -678,7 +676,7 @@ export class LedgerService {
     }
 
     /**
-     * Get the list of account 
+     * Get the list of account
      *
      * @param {*} accountUniqueName
      * @param {*} model
@@ -694,5 +692,45 @@ export class LedgerService {
             let data: BaseResponse<any, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * This will use for run Autopaid
+     *
+     * @param {string} accountUniqueName
+     * @param {string} [branchUniqueName]
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public runAutopaid(accountUniqueName: string, branchUniqueName?: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + LEDGER_API.RUN_AUTOPAID?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        if (branchUniqueName) {
+            url = url.concat(`?branchUniqueName=${branchUniqueName}`);
+        }
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<string, string> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
+    }
+
+    /**
+     * Loads stock variants
+     *
+     * @param {string} stockUniqueName Stock uniquename
+     * @return {Observable<Array<IVariant>>} Observable to caary out further operations
+     * @memberof LedgerService
+     */
+    public loadStockVariants(stockUniqueName: string): Observable<Array<IVariant>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + LEDGER_API.GET_STOCK_VARIANTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
+        return this.http.get(url).pipe(map((res) => res.body),catchError(e => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 }

@@ -1,22 +1,21 @@
 import { takeUntil } from 'rxjs/operators';
 import { StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { AppState } from '../../../store/roots';
-import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { InvViewService } from '../../inv.view.service';
-import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
+import { ScrollDispatcher } from '@angular/cdk/scrolling';
 
 @Component({
     selector: 'stockgrp-list',
     styleUrls: ['stockgrplist.component.scss'],
     templateUrl: 'stockgrplist.component.html'
 })
-export class StockgrpListComponent implements OnInit, OnChanges, OnDestroy {
-    @ViewChild('perfectScrollbar', { static: false }) public perfectScrollbar: PerfectScrollbarComponent;
+export class StockgrpListComponent implements OnInit, OnDestroy {
     public activeStock$: Observable<StockDetailResponse>;
     public activeGroup$: Observable<StockGroupResponse>;
     public activeGroupUniqueName$: Observable<string>;
@@ -32,8 +31,13 @@ export class StockgrpListComponent implements OnInit, OnChanges, OnDestroy {
     /** True if get stocks in progress */
     public getStocksInProgress: boolean = false;
 
-    constructor(private store: Store<AppState>, private sideBarAction: SidebarAction,
-        private inventoryAction: InventoryAction, private invViewService: InvViewService) {
+    constructor(
+        private store: Store<AppState>, 
+        private sideBarAction: SidebarAction,
+        private inventoryAction: InventoryAction, 
+        private invViewService: InvViewService,
+        private scrollDispatcher: ScrollDispatcher
+    ) {
         this.activeGroup$ = this.store.pipe(select(p => p.inventory.activeGroup), takeUntil(this.destroyed$));
         this.activeStock$ = this.store.pipe(select(p => p.inventory.activeStock), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(p => p.inventory.activeGroupUniqueName), takeUntil(this.destroyed$));
@@ -54,18 +58,12 @@ export class StockgrpListComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.inventory.getStocksInProgress)).subscribe(response => this.getStocksInProgress = response);
-    }
 
-    /**
-     * Scrolling to top if we get page 1 from parent
-     *
-     * @param {SimpleChanges} changes
-     * @memberof StockgrpListComponent
-     */
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.page?.currentValue === 1) {
-            this.perfectScrollbar?.directiveRef?.scrollToTop();
-        }
+        this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
+            if (event?.getDataLength() - event?.getRenderedRange().end < 50) {
+                this.loadMore.emit(true);
+            }
+        });
     }
 
     public ngOnDestroy() {
@@ -97,17 +95,5 @@ export class StockgrpListComponent implements OnInit, OnChanges, OnDestroy {
      */
     public setInventoryAsideState(isOpen, isGroup, isUpdate) {
         this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
-    }
-
-    /**
-     * Callback if stock scroller reached end
-     *
-     * @param {*} event
-     * @memberof StockgrpListComponent
-     */
-    public onScrollEnd(event: any): void {
-        if (event?.target?.className !== "ps") {
-            this.loadMore.emit(true);
-        }
     }
 }

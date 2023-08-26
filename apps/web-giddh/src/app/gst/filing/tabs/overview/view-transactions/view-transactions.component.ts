@@ -10,7 +10,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { takeUntil } from 'rxjs/operators';
 import { GStTransactionRequest, GstTransactionResult, GstTransactionSummary } from '../../../../../models/api-models/GstReconcile';
-import { GstReconcileActions } from '../../../../../actions/gst-reconcile/GstReconcile.actions';
+import { GstReconcileActions } from '../../../../../actions/gst-reconcile/gst-reconcile.actions';
 import { DownloadOrSendInvoiceOnMailComponent } from '../../../../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -144,7 +144,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             this.selectedGstNumber = params.selectedGst;
             this.filterParam.entityType = params.entityType;
             this.filterParam.type = params.type;
-            this.filterParam.status = params.status;
+            this.filterParam.status = params?.status;
             this.viewFilteredTxn('page', 1);
         });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
@@ -180,12 +180,12 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                     voucherType: invoice.voucherType,
                     accountUniqueName: invoice.account?.uniqueName
                 };
-            
+
                 this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
             }
         }
         this.loadDownloadOrSendMailComponent();
-        this.downloadOrSendMailModel.show();
+        this.downloadOrSendMailModel?.show();
     }
 
     public loadDownloadOrSendMailComponent() {
@@ -220,12 +220,12 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public mapFilters() {
         let filters = _.cloneDeep(this.filterParam);
         if (this.selectedGst === GstReport.Gstr1) {
-            let selected = _.find(this.gstr1entityType, o => o.value === filters.entityType);
+            let selected = _.find(this.gstr1entityType, o => o?.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
             }
         } else {
-            let selected = _.find(this.gstr2entityType, o => o.value === filters.entityType);
+            let selected = _.find(this.gstr2entityType, o => o?.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
             }
@@ -235,12 +235,12 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             let selected;
             if (this.selectedGst === GstReport.Gstr1) {
                 if (this.filterParam.entityType === 'advance-receipt') {
-                    selected = _.find(this.otherEntityType, o => o.value === filters.type)
+                    selected = _.find(this.otherEntityType, o => o?.value === filters.type)
                 } else {
-                    selected = _.find(this.invoiceType, o => o.value === filters.type);
+                    selected = _.find(this.invoiceType, o => o?.value === filters.type);
                 }
             } else {
-                selected = _.find(this.gstr2InvoiceType, o => o.value === filters.type);
+                selected = _.find(this.gstr2InvoiceType, o => o?.value === filters.type);
             }
             if (selected) {
                 this.selectedFilter.type = selected.label;

@@ -91,7 +91,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         roleObj?.scopes.forEach((role) => {
             if (role.name === 'SHARE') {
                 role.permissions = role.permissions?.filter((p) => {
-                    return shareScopes.indexOf(p.code) > -1;
+                    return shareScopes?.indexOf(p.code) > -1;
                 });
                 if (role.permissions?.length < 3) {
                     shareScopes.forEach((s: string) => {
@@ -293,13 +293,13 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     public toggleItems(pageName: string, event: any) {
         let res = find(this.roleObj?.scopes, (o: Scope) => o.name === pageName);
         if (res) {
-            map(res.permissions, (o: Permission) => o.isSelected = event.target.checked ? true : false);
+            map(res.permissions, (o: Permission) => o.isSelected = event.target?.checked ? true : false);
         }
     }
 
     public toggleItem(pageName: string, item: Permission, event: any) {
         let res = find(this.roleObj?.scopes, (o: Scope) => o.name === pageName);
-        if (event.target.checked) {
+        if (event.target?.checked) {
             let idx = findIndex(res.permissions, (o: Permission) => o.isSelected === false);
             if (idx !== -1) {
                 return res.selectAll = false;

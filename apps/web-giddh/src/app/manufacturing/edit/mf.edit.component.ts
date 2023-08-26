@@ -9,7 +9,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
-import { IStockItemDetail } from '../../models/interfaces/stocksItem.interface';
+import { IStockItemDetail } from '../../models/interfaces/stocks-item.interface';
 import * as dayjs from 'dayjs';
 import { ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -291,8 +291,10 @@ export class MfEditComponent implements OnInit, OnDestroy {
 
             if (this.isUpdateCase) {
                 val.stockUnitCode = data.manufacturingUnit;
+                val.stockUnitUniqueName = data.stockUnitUniqueName;
             } else {
                 val.stockUnitCode = data.stockUnitCode;
+                val.stockUnitUniqueName = data.stockUnitUniqueName;
             }
 
             let manufacturingObj = cloneDeep(this.manufacturingDetails);
@@ -388,7 +390,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
     }
 
     public deleteEntry() {
-        this.manufacturingConfirmationModal.show();
+        this.manufacturingConfirmationModal?.show();
     }
 
     public getTotal(from, field) {
@@ -482,11 +484,13 @@ export class MfEditComponent implements OnInit, OnDestroy {
                         quantity: itemQuantity,
                         stockUnitCode: unitCode,
                         rate: null,
-                        amount: null
+                        amount: null,
+                        stockUnitUniqueName: res.body?.stockUnit?.uniqueName
                     };
 
                     this.linkedStocks.manufacturingUnit = unitCode;
                     this.linkedStocks.stockUnitCode = unitCode;
+                    this.linkedStocks.stockUnitUniqueName = res.body?.stockUnit?.uniqueName;
 
                     this._inventoryService.GetRateForStoke(selectedItem, data).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                         if (response?.status === 'success') {
@@ -501,6 +505,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
         } else {
             this.linkedStocks.manufacturingUnit = null;
             this.linkedStocks.stockUnitCode = null;
+            this.linkedStocks.stockUnitUniqueName = null;
             this.linkedStocks.rate = null;
         }
     }

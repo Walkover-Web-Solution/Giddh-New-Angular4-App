@@ -14,6 +14,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { VoucherTypeEnum } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'download-or-send-mail-invoice',
@@ -102,7 +103,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
             this.invoiceType.push('Original');
 
             let getRequest = {
-                voucherType: this.selectedVoucher.voucherType,
+                voucherType: this.selectedVoucher?.voucherType,
                 uniqueName: this.selectedVoucher?.uniqueName
             };
 
@@ -118,14 +119,14 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                     this.sanitizedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
 
                     this.selectedInvoiceNo = this.selectedVoucher.voucherNumber;
-                    this.selectedVoucherType = this.selectedVoucher.voucherType;
+                    this.selectedVoucherType = this.selectedVoucher?.voucherType;
                     this.selectedVoucherUniqueName = this.selectedVoucher?.uniqueName;
 
                     let accountUniqueName = (this.selectedVoucher?.accountUniqueName || this.selectedVoucher.account?.uniqueName);
 
                     this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(accountUniqueName, {
                         invoiceNumber:this.selectedVoucher.voucherNumber,
-                        voucherType: this.selectedVoucher.voucherType,
+                        voucherType: this.selectedVoucher?.voucherType,
                         uniqueName: this.selectedVoucher?.uniqueName
                     }));
 
@@ -157,7 +158,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
                     this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(o.request.accountUniqueName, {
                         invoiceNumber: o.request.voucherNumber?.join(),
-                        voucherType: o.request.voucherType,
+                        voucherType: o.request?.voucherType,
                         uniqueName: (this.voucherApiVersion === 2) ? o.request?.uniqueName : undefined
                     }));
 
@@ -243,8 +244,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
      * onSelectInvoiceCopy
      */
     public onSelectInvoiceCopy(event) {
-        let val = event.target.value;
-        if (event.target.checked) {
+        let val = event.target?.value;
+        if (event.target?.checked) {
             this.invoiceType.push(val);
         } else {
             let idx = findIndex(this.invoiceType, (o) => o === val);
@@ -284,7 +285,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                 if (response?.status !== "error") {
                     if (dataToSend.copyTypes?.length > 1 || this.isAttachment) {
                         if (fileType === "base64") {
-                            saveAs((this.generalService.base64ToBlob(response.body.attachments[0].encodedData, '', 512)), response.body.attachments[0].name);
+                            saveAs((this.generalService.base64ToBlob(response.body?.attachments[0]?.encodedData, '', 512)), response.body?.attachments[0]?.name);
                         } else {
                             saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'zip');
                         }

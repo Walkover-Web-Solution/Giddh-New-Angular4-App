@@ -1,6 +1,6 @@
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { CreateNewRoleRequest, CreateNewRoleResponse, IRoleCommonResponseAndRequest } from '../models/api-models/Permission';
 import { PERMISSION_API } from './apiurls/permission.api';
@@ -48,7 +48,7 @@ export class PermissionService {
      */
     public UpdateRole(model: IRoleCommonResponseAndRequest): Observable<BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + PERMISSION_API.UPDATE_ROLE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':roleUniqueName', model.uniqueName), model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + PERMISSION_API.UPDATE_ROLE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':roleUniqueName', model?.uniqueName), model).pipe(map((res) => {
             let data: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest> = res;
             data.request = model;
             return data;

@@ -5,6 +5,7 @@ import { UserAuthenticated } from './decorators/UserAuthenticated';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { AppLoginSuccessComponent } from "./app-login-success/app-login-success";
 import { PageComponent } from './page/page.component';
+import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
 
 export const ROUTES: Routes = [
     { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
@@ -26,8 +27,7 @@ export const ROUTES: Routes = [
     { path: 'activity-logs', redirectTo: 'pages/activity-logs', pathMatch: 'full' },
     { path: 'ledger', redirectTo: 'pages/ledger' },
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
-    { path: 'new-user', loadChildren: () => import('./new-user/new-user.module').then(module => module.NewUserModule), canActivate: [NewUserAuthGuard] },
-    { path: 'welcome', loadChildren: () => import('./welcome/welcome.module').then(module => module.WelcomeModule) },
+    { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule), canActivate: [NewUserAuthGuard] },
     { path: 'onboarding', redirectTo: 'pages/onboarding', pathMatch: 'full' },
     { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
     { path: 'sales', redirectTo: 'pages/proforma-invoice/invoice/sales' },
@@ -42,6 +42,8 @@ export const ROUTES: Routes = [
     { path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full' },
     { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
     { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
+    { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
+    { path: 'mobile-restricted', component: MobileRestrictedComponent },
     {
         path: 'pages', component: PageComponent,
         children: [
@@ -57,38 +59,36 @@ export const ROUTES: Routes = [
                 redirectTo: 'purchase-management'
             },
             { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(module => module.InventoryModule), canActivate: [NeedsAuthorization] },
-            { path: 'new-inventory', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule), canActivate: [NeedsAuthorization] },
+            { path: 'inventory/v2', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule), canActivate: [NeedsAuthorization] },
             { path: 'inventory-in-out', loadChildren: () => import('./inventory-in-out/inventory-in-out.module').then(module => module.InventoryInOutModule), canActivate: [NeedsAuthorization] },
             { path: 'search', loadChildren: () => import('./search/search.module').then(module => module.SearchModule) },
             { path: 'trial-balance-and-profit-loss', loadChildren: () => import('./financial-reports/financial-reports.module').then(module => module.FinancialReportsModule), canActivate: [NeedsAuthentication, NeedsAuthorization] },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule), canActivate: [NeedsAuthorization] },
             { path: 'activity-logs', loadChildren: () => import('./activity-logs/activity-logs.module').then(module => module.ActivityLogsModule), canActivate: [NeedsAuthorization] },
-            { path: 'ledger', loadChildren: () => import('./material-ledger/ledger.module').then(module => module.LedgerModule), canActivate: [NeedsAuthorization] },
+            { path: 'ledger', loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule), canActivate: [NeedsAuthorization] },
             { path: 'permissions', loadChildren: () => import('./permissions/permission.module').then(module => module.PermissionModule), canActivate: [NeedsAuthorization] },
             { path: 'settings', loadChildren: () => import('./settings/settings.module').then(module => module.SettingsModule), canActivate: [NeedsAuthorization] },
             { path: 'manufacturing', loadChildren: () => import('./manufacturing/manufacturing.module').then(module => module.ManufacturingModule), canActivate: [NeedsAuthorization] },
             { path: 'journal-voucher', loadChildren: () => import('./accounting/accounting.module').then(module => module.AccountingModule), canActivate: [NeedsAuthorization] },
-            { path: 'user-details', loadChildren: () => import('./userDetails/userDetails.module').then(module => module.UserDetailsModule) },
+            { path: 'user-details', loadChildren: () => import('./user-details/user-details.module').then(module => module.UserDetailsModule) },
             { path: 'contact', loadChildren: () => import('./contact/contact.module').then(module => module.ContactModule), canActivate: [NeedsAuthorization] },
             { path: 'new-vs-old-invoices', loadChildren: () => import('./new-vs-old-Invoices/new-vs-old-Invoices.module').then(module => module.NewVsOldInvoicesModule), canActivate: [NeedsAuthorization] },
             { path: 'import', loadChildren: () => import('./import-excel/import-excel.module').then(module => module.ImportExcelModule), canActivate: [NeedsAuthorization] },
             { path: 'gstfiling', loadChildren: () => import('./gst/gst.module').then(module => module.GstModule) },
-            { path: 'company-import-export', loadChildren: () => import('./companyImportExport/companyImportExport.module').then(module => module.CompanyImportExportModule) },
+            { path: 'company-import-export', loadChildren: () => import('./company-import-export/company-import-export.module').then(module => module.CompanyImportExportModule) },
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule), canActivate: [NeedsAuthorization] },
             { path: 'proforma-invoice', loadChildren: () => import('./voucher/voucher.module').then(module => module.VoucherModule), canActivate: [NeedsAuthorization] },
             { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnboardingModule), canActivate: [NeedsAuthorization] },
-            { path: 'welcome', loadChildren: () => import('./welcome/welcome.module').then(module => module.WelcomeModule), canActivate: [NeedsAuthorization] },
-            { path: 'billing-detail', loadChildren: () => import('./billing-details/billingDetail.module').then(module => module.BillingDetailModule) },
-            { path: 'mobile', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule), canActivate: [NeedsAuthorization] },
+            { path: 'billing-detail', loadChildren: () => import('./billing-details/billing-details.module').then(module => module.BillingDetailModule) },
             { path: 'giddh-all-items', loadChildren: () => import('./all-items/all-item.module').then(module => module.AllItemModule), canActivate: [NeedsAuthorization] },
-            // { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule), canActivate: [NeedsAuthorization] },
             { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization] },
-            { path: 'vat-report', loadChildren: () => import('./vat-report/vatReport.module').then(module => module.VatReportModule), canActivate: [NeedsAuthorization] },
+            { path: 'vat-report', loadChildren: () => import('./vat-report/vat-report.module').then(module => module.VatReportModule), canActivate: [NeedsAuthorization] },
             { path: 'purchase-management', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule), canActivate: [NeedsAuthorization] },
             { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule), canActivate: [NeedsAuthorization] },
             { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule), canActivate: [NeedsAuthorization] },
             { path: 'downloads', loadChildren: () => import('./downloads/downloads.module').then(module => module.DownloadsModule), canActivate: [NeedsAuthorization] },
             { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule), canActivate: [NeedsAuthorization] },
+            { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule), canActivate: [NeedsAuthorization]},
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

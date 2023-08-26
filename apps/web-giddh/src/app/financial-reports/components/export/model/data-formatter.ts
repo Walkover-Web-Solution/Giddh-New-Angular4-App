@@ -31,11 +31,11 @@ export class DataFormatter {
         csv = '';
         row = '';
         title = '' + ',' + localeData?.csv.trial_balance.opening_balance + ',' + localeData?.csv.trial_balance.debit + ',' + localeData?.csv.trial_balance.credit + ',' + localeData?.csv.trial_balance.closing_balance + '\n';
-        header = `${this.selectedCompany.name}\r\n"${this.selectedCompany.address}"\r\n${this.selectedCompany.city}-${this.selectedCompany.pincode}\r\n${localeData?.csv.trial_balance.trial_balance} ${localeData?.csv.trial_balance.fromDate} ${localeData?.csv.trial_balance.to} ${localeData?.csv.trial_balance.toDate}\r\n`;
+        header = `${this.selectedCompany?.name}\r\n"${this.selectedCompany?.address}"\r\n${this.selectedCompany?.city}-${this.selectedCompany?.pincode}\r\n${localeData?.csv.trial_balance.trial_balance} ${localeData?.csv.trial_balance.fromDate} ${localeData?.csv.trial_balance.to} ${localeData?.csv.trial_balance.toDate}\r\n`;
         csv += `${header}\r\n${title}`;
 
         this.exportData.forEach(obj => {
-            row += `${obj.groupName} (${obj.uniqueName}),${obj.forwardedBalance.amount} ${this.recType.transform(obj.forwardedBalance)},${obj.debitTotal},${obj.creditTotal},${obj.closingBalance.amount}${this.recType.transform(obj.closingBalance)}\r\n`;
+            row += `${obj.groupName} (${obj?.uniqueName}),${obj.forwardedBalance.amount} ${this.recType.transform(obj.forwardedBalance)},${obj.debitTotal},${obj.creditTotal},${obj.closingBalance.amount}${this.recType.transform(obj.closingBalance)}\r\n`;
             total = this.calculateTotal(obj, total);
         });
         csv += `${row}\r\n`;
@@ -56,14 +56,16 @@ export class DataFormatter {
             const addRow = (group: ChildGroup) => {
                 if (group.accounts?.length > 0) {
                     group.accounts.forEach(account => {
-                        let data1 = [];
-                        let name = this.truncate(`${this.firstCapital(account.name)} (${this.firstCapital(group.groupName)})`, true, 37);
-                        data1.push(name);
-                        data1.push(`${account.openingBalance.amount}${this.recType.transform(account.openingBalance)}`);
-                        data1.push(account.debitTotal);
-                        data1.push(account.creditTotal);
-                        data1.push(`${account.closingBalance.amount}${this.recType.transform(account.closingBalance)}`);
-                        formatable.setRowData(data1, 0);
+                        if (account) {
+                            let data1 = [];
+                            let name = this.truncate(`${this.firstCapital(account.name)} (${this.firstCapital(group.groupName)})`, true, 37);
+                            data1.push(name);
+                            data1.push(`${account.openingBalance.amount}${this.recType.transform(account.openingBalance)}`);
+                            data1.push(account.debitTotal);
+                            data1.push(account.creditTotal);
+                            data1.push(`${account.closingBalance.amount}${this.recType.transform(account.closingBalance)}`);
+                            formatable.setRowData(data1, 0);
+                        }
                     });
                 }
             };
@@ -122,7 +124,7 @@ export class DataFormatter {
                     data1 = [];
                     if (group.accounts?.length > 0) {
                         group.accounts.forEach(acc => {
-                            if (true) {
+                            if (acc) {
                                 data1.push(this.truncate(`${this.firstCapital(acc.name)}(${this.firstCapital(group.groupName)})`, true, 25));
                                 data1.push(`${acc.openingBalance.amount}${this.recType.transform(acc.openingBalance)}`);
                                 data1.push(acc.debitTotal);

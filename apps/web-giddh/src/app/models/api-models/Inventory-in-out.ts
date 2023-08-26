@@ -1,5 +1,5 @@
 import { INameUniqueName } from './Inventory';
-import { IManufacturingDetails } from '../interfaces/stocksItem.interface';
+import { IManufacturingDetails } from '../interfaces/stocks-item.interface';
 
 export interface Stock {
     uniqueName: string;
