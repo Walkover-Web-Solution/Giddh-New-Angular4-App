@@ -526,8 +526,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         this.purchaseOrder.account.billingDetails.state.name = billingDetails.stateName;
 
                     } else if (billingDetails.county) {
-                        this.purchaseOrder.account.billingDetails.county.name = billingDetails.county.name;
-                        this.purchaseOrder.account.billingDetails.county.code = billingDetails.county.code;
+                        this.purchaseOrder.account.billingDetails.county.name = billingDetails.county?.name;
+                        this.purchaseOrder.account.billingDetails.county.code = billingDetails.county?.code;
                     }
                     else {
                         this.purchaseOrder.account.billingDetails.state.name = "";
@@ -551,8 +551,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         this.purchaseOrder.account.shippingDetails.stateCode = shippingDetails.stateCode;
                         this.purchaseOrder.account.shippingDetails.stateName = shippingDetails.stateName;
                     } else if (shippingDetails.county) {
-                        this.purchaseOrder.account.shippingDetails.county.name = shippingDetails.county.name;
-                        this.purchaseOrder.account.shippingDetails.county.code = shippingDetails.county.code;
+                        this.purchaseOrder.account.shippingDetails.county.name = shippingDetails.county?.name;
+                        this.purchaseOrder.account.shippingDetails.county.code = shippingDetails.county?.code;
                     } else {
                         this.purchaseOrder.account.shippingDetails.state.name = "";
                         this.purchaseOrder.account.shippingDetails.state.code = "";
@@ -787,8 +787,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             this.purchaseOrder.account.billingDetails.stateCode = this.purchaseOrder.account.billingDetails.state.code;
                             this.purchaseOrder.account.billingDetails.stateName = defaultAddress.state.name;
                         } else if (defaultAddress.county) {
-                            this.purchaseOrder.account.billingDetails.county.name = defaultAddress.county.name;
-                            this.purchaseOrder.account.billingDetails.county.code = defaultAddress.county.code;
+                            this.purchaseOrder.account.billingDetails.county.name = defaultAddress.county?.name;
+                            this.purchaseOrder.account.billingDetails.county.code = defaultAddress.county?.code;
                         } else {
                             this.purchaseOrder.account.billingDetails.state.name = "";
                             this.purchaseOrder.account.billingDetails.state.code = "";
@@ -809,8 +809,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             this.purchaseOrder.account.shippingDetails.stateName = defaultAddress.state.name;
 
                         } else if (defaultAddress.county) {
-                            this.purchaseOrder.account.shippingDetails.county.name = defaultAddress.county.name;
-                            this.purchaseOrder.account.shippingDetails.county.code = defaultAddress.county.code;
+                            this.purchaseOrder.account.shippingDetails.county.name = defaultAddress.county?.name;
+                            this.purchaseOrder.account.shippingDetails.county.code = defaultAddress.county?.code;
                         } else {
                             this.purchaseOrder.account.shippingDetails.state.name = "";
                             this.purchaseOrder.account.shippingDetails.state.code = "";
@@ -1153,8 +1153,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.shippingDetails.stateName = defaultAddress.stateName;
                     this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress.taxNumber;
                     this.purchaseOrder.company.shippingDetails.pincode = defaultAddress.pincode;
-                    this.purchaseOrder.company.shippingDetails.county.code = defaultAddress.county.code;
-                    this.purchaseOrder.company.shippingDetails.county.name = defaultAddress.county.name;
+                    this.purchaseOrder.company.shippingDetails.county.code = defaultAddress?.county?.code;
+                    this.purchaseOrder.company.shippingDetails.county.name = defaultAddress?.county?.name;
                     this.changeDetection.detectChanges();
                 } else {
                     this.resetShippingAddress();
@@ -2402,10 +2402,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             delete obj.company.billingDetails.state;
             delete obj.company.billingDetails.stateName;
             delete obj.company.billingDetails.stateCode;
-            obj.account.billingDetails.county.code = obj.account.billingDetails.county.code;
-            obj.account.billingDetails.county.name = obj.account.billingDetails.county.name;
-            obj.account.shippingDetails.county.code = obj.account.shippingDetails.county.code;
-            obj.account.shippingDetails.county.name = obj.account.shippingDetails.county.name;
+            obj.account.billingDetails.county.code = obj.account.billingDetails?.county?.code;
+            obj.account.billingDetails.county.name = obj.account.billingDetails?.county?.name;
+            obj.account.shippingDetails.county.code = obj.account.shippingDetails?.county?.code;
+            obj.account.shippingDetails.county.name = obj.account.shippingDetails?.county?.name;
         }
         if (this.statesSource.length) {
             obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
@@ -2582,8 +2582,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.purchaseOrder.company.billingDetails.address.push(defaultAddress ? defaultAddress.address : '');
             this.purchaseOrder.company.billingDetails.state.code = defaultAddress ? defaultAddress.stateCode : '';
             this.purchaseOrder.company.billingDetails.state.name = defaultAddress ? defaultAddress.stateName : '';
-            this.purchaseOrder.company.billingDetails.county.code = defaultAddress.county.code;
-            this.purchaseOrder.company.billingDetails.county.name = defaultAddress.county.name;
+            this.purchaseOrder.company.billingDetails.county.code = defaultAddress?.county?.code;
+            this.purchaseOrder.company.billingDetails.county.name = defaultAddress?.county?.name;
             this.purchaseOrder.company.billingDetails.stateCode = defaultAddress ? defaultAddress.stateCode : '';
             this.purchaseOrder.company.billingDetails.stateName = defaultAddress ? defaultAddress.stateName : '';
             this.purchaseOrder.company.billingDetails.gstNumber = defaultAddress ? defaultAddress.taxNumber : '';
@@ -2723,10 +2723,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.shippingDetails.state.code = this.purchaseOrderDetails.company.shippingDetails.stateCode;
                     this.purchaseOrder.company.shippingDetails.state.name = this.purchaseOrderDetails.company.shippingDetails.stateName;
 
-                    this.purchaseOrder.company.billingDetails.county.code = this.purchaseOrderDetails.company.billingDetails.county.code;
-                    this.purchaseOrder.company.billingDetails.county.name = this.purchaseOrderDetails.company.billingDetails.county.name;
-                    this.purchaseOrder.company.shippingDetails.county.code = this.purchaseOrderDetails.company.shippingDetails.county.code;
-                    this.purchaseOrder.company.shippingDetails.county.name = this.purchaseOrderDetails.company.shippingDetails.county.name;
+                    this.purchaseOrder.company.billingDetails.county.code = this.purchaseOrderDetails.company.billingDetails?.county?.code;
+                    this.purchaseOrder.company.billingDetails.county.name = this.purchaseOrderDetails.company.billingDetails?.county?.name;
+                    this.purchaseOrder.company.shippingDetails.county.code = this.purchaseOrderDetails.company.shippingDetails?.county?.code;
+                    this.purchaseOrder.company.shippingDetails.county.name = this.purchaseOrderDetails.company.shippingDetails?.county?.name;
 
                     this.checkForAutoFillShippingAddress('company');
 
@@ -3778,7 +3778,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (sectionName === 'account') {
             if (this.purchaseOrder?.account?.billingDetails?.address[0] === this.purchaseOrder?.account?.shippingDetails?.address[0] &&
                 this.purchaseOrder?.account?.billingDetails?.stateCode === this.purchaseOrder?.account?.shippingDetails?.stateCode &&
-                this.purchaseOrder?.account?.billingDetails?.county.code === this.purchaseOrder?.account?.shippingDetails?.county.code &&
+                this.purchaseOrder?.account?.billingDetails?.county.code === this.purchaseOrder?.account?.shippingDetails?.county?.code &&
                 this.purchaseOrder?.account?.billingDetails?.gstNumber === this.purchaseOrder?.account?.shippingDetails?.gstNumber &&
                 this.purchaseOrder?.account?.billingDetails?.pincode === this.purchaseOrder?.account?.shippingDetails?.pincode) {
                 this.autoFillVendorShipping = true;
@@ -3788,7 +3788,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         } else if (sectionName === 'company') {
             if (this.purchaseOrder?.company?.billingDetails?.address[0] === this.purchaseOrder?.company?.shippingDetails?.address[0] &&
                 this.purchaseOrder?.company?.billingDetails?.stateCode === this.purchaseOrder?.company?.shippingDetails?.stateCode &&
-                this.purchaseOrder?.company?.billingDetails?.county.code === this.purchaseOrder?.company?.shippingDetails?.county.code &&
+                this.purchaseOrder?.company?.billingDetails?.county.code === this.purchaseOrder?.company?.shippingDetails?.county?.code &&
                 this.purchaseOrder?.company?.billingDetails?.gstNumber === this.purchaseOrder?.company?.shippingDetails?.gstNumber &&
                 this.purchaseOrder?.company?.billingDetails?.pincode === this.purchaseOrder?.company?.shippingDetails?.pincode) {
                 this.autoFillCompanyShipping = true;
