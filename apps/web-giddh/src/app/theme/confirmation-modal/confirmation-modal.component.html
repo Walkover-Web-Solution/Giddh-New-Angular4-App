@@ -8,10 +8,12 @@
         <p [ngClass]="configuration?.footerCssClass">{{ configuration?.footerText }}</p>
         <div>
             <button
-                mat-button
+                mat-stroked-button
+                color="primary"
                 *ngFor="let button of configuration?.buttons"
                 (click)="handleButtonClick(button?.text)"
                 [ngClass]="button?.cssClass"
+                class="mr-2"
             >
                 {{ button?.text }}
             </button>

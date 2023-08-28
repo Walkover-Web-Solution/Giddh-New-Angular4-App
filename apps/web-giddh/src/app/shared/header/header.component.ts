@@ -154,7 +154,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isGstSideMenuOpened: boolean = false;
     /** VAT supported countries to show the Vat Report section in all modules */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
-    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
 
     /* This will store modal reference */
     public modalRef: BsModalRef;
@@ -176,8 +176,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isAllowedForBetaTesting: boolean = false;
     /* This will hold value if settings sidebar is open through mobile hamburger icon */
     public isMobileSidebar: boolean = false;
-    /* This will hold if resolution is less than 768 to consider as mobile screen */
-    public isMobileScreen: boolean = false;
     /* This will hold current page url */
     public currentPageUrl: string = '';
     /** Stores the details of the current branch */
@@ -501,10 +499,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.getCurrentCompanyData();
         this._breakpointObserver.observe([
-            '(max-width: 767px)',
             '(max-width: 768px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result?.breakpoints['(max-width: 767px)'];
             this.isIpadScreen = result?.breakpoints['(max-width: 768px)'];
         });
 
@@ -1582,15 +1578,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             };
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         }
-    }
-
-    /**
-     * This will navigate user to mobile home page
-     *
-     * @memberof HeaderComponent
-     */
-    public redirectToMobileHome(): void {
-        this.router.navigate(['/pages/mobile/home']);
     }
 
     /**

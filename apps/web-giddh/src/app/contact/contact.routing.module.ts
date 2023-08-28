@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { ContactComponent } from './contact.component';
 
 @NgModule({
@@ -8,8 +7,6 @@ import { ContactComponent } from './contact.component';
         RouterModule.forChild([
             {
                 path: '',
-                canActivate: [NeedsAuthentication],
-                component: ContactComponent,
                 redirectTo: 'customer',
                 pathMatch: 'full'
             },

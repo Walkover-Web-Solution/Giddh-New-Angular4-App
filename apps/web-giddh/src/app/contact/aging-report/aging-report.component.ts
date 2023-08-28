@@ -28,12 +28,11 @@ import { ElementViewContainerRef } from "../../shared/helpers/directives/element
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import * as dayjs from "dayjs";
-import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
 import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSearch.component";
 import { GeneralService } from "../../services/general.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
@@ -63,7 +62,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public key: string = "name";
     public order: string = "asc";
     public filter: string = "";
-    public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     public searchStr$ = new Subject<string>();
     public searchStr: string = "";
     public isMobileScreen: boolean = false;
@@ -87,7 +85,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Stores the searched name value for the Name filter */
-    public searchedName: FormControl = new FormControl();
+    public searchedName: UntypedFormControl = new UntypedFormControl();
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
     /** Observable if loading in process */

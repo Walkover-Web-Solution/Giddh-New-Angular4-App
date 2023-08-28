@@ -210,9 +210,9 @@ export class GstComponent implements OnInit, OnDestroy {
                 from: dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT),
                 to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
             };
-            this.selectedMonth = ev;
             this.isMonthSelected = true;
         }
+        this.selectedMonth = ev;
         this.showCalendar = false;
         this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
 

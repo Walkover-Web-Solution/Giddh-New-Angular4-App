@@ -27,7 +27,7 @@
                                 <!--share account from-->
                                 <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" autocomplete="off">
                                     <div class="input-group d-flex justify-content-between">
-                                        <mat-form-field appearance="fill">
+                                        <mat-form-field appearance="fill" class="custom-input-field share-input-width">
                                             <input
                                                 matInput
                                                 name="userEmail"
@@ -91,7 +91,7 @@
                                 <span class="success" *ngIf="isCopied">{{ localeData?.copied }}</span>
                             </div>
                             <div class="input-group d-flex justify-content-between">
-                                <mat-form-field appearance="fill">
+                                <mat-form-field appearance="fill" class="custom-input-field share-input-width">
                                     <input
                                         #magicLinkInput
                                         matInput

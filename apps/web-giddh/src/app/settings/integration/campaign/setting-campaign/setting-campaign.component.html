@@ -47,7 +47,7 @@
         "
     >
         <button
-            class="cursor-pointer font-15 d-flex p-0 back-button mat-button"
+            class="cursor-pointer font-15 d-flex p-0 back-button mat-button msg-btn"
             (click)="backToHomePage($event)"
             *ngIf="communicationPlatforms?.MSG91?.isConnected"
         >
@@ -321,8 +321,8 @@
             <div class="dropdown-box-1">
                 <div class="compose-trigger-dropdowns">
                     <div class="chiplist-wrapper">
-                        <div class="pd-l2 pd-r2">
-                            <span class="dropdown-heading">{{ localeData?.communication?.receiver }}</span>
+                        <div class="pd-l2 pd-r2 pd-b3">
+                            <span class="dropdown-heading pd-b15 d-block">{{ localeData?.communication?.receiver }}</span>
                             <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_mobile"
                                 [options]="triggerMobileDropdown"
@@ -333,7 +333,7 @@
                                 class="select-multiple-chiplist mobile-margin"
                             ></select-multiple-fields>
                         </div>
-                        <div class="border-left border-right pd-l2 pd-r2">
+                        <div class="border-left border-right chip-gap pd-l2 pd-r2">
                             <select-multiple-fields
                                 [showError]="mandatoryFields.triggerToChiplist"
                                 [placeholder]="localeData?.communication?.select_to"
@@ -353,7 +353,6 @@
                                 [name]="'cc'"
                                 class="select-multiple-chiplist"
                             ></select-multiple-fields>
-                            <br />
                             <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_cc"
                                 [options]="triggerCcDropdown"
@@ -385,7 +384,7 @@
                         class="grid-box grid-box-content campaign-grid-tile"
                         *ngFor="let variable of createTrigger.campaignDetails.argsMapping; let i = index"
                     >
-                        <div class="unit-value">{{ variable.name }}</div>
+                        <div class="unit-value" [ngClass]="{ 'mt-2': i > 0 }">{{ variable.name }}</div>
                         <div class="map-unit-value">
                             <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_suggestions"

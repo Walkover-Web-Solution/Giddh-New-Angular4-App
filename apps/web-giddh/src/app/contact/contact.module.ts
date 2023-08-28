@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { LaddaModule } from 'angular2-ladda';
-import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
@@ -23,7 +22,6 @@ import { AgingReportComponent } from './aging-report/aging-report.component';
 import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component'; // importing the module for table column sort
 import { PaymentAsideComponent } from './payment-aside/payment-aside.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
-import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { NoDataModule } from '../shared/no-data/no-data.module';
@@ -42,11 +40,6 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { AccountUpdateNewDetailsModule } from '../shared/header/components/account-update-new-details/account-update-new-details.module';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
-
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-    suppressScrollX: false,
-    suppressScrollY: true
-};
 
 @NgModule({
     declarations: [
@@ -69,7 +62,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             spinnerSize: 30
         }),
         ShSelectModule,
-        TabsModule,
         BsDropdownModule.forRoot(),
         TooltipModule.forRoot(),
         SharedModule,
@@ -82,9 +74,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ElementViewChildModule,
         CurrencyModule,
         Daterangepicker,
-        PerfectScrollbarModule,
         NgxDaterangepickerMd.forRoot(),
-        TextMaskModule,
         NgxMaskModule.forRoot(),
         NoDataModule,
         LightboxModule,
@@ -104,10 +94,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         SelectTableColumnModule
     ],
     providers: [
-        {
-            provide: PERFECT_SCROLLBAR_CONFIG,
-            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        },
         GiddhCurrencyPipe
     ]
 })

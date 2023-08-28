@@ -1,3 +1,7 @@
+.setting-scroll{
+    height: 100%;
+}
+
 :host {
     position: fixed;
     left: auto;
@@ -323,6 +327,5 @@
 @media (max-height: 700px) {
     .help-aside-body {
         height: 100%;
-        overflow-y: scroll;
     }
 }

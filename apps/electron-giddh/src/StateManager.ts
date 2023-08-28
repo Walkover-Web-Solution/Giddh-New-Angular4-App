@@ -12,8 +12,6 @@ let serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
-// let win: Electron.BrowserWindow = null;
-
 const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
 const isEnvSet = 'ELECTRON_IS_DEV' in process.env;
 const debugMode = isEnvSet

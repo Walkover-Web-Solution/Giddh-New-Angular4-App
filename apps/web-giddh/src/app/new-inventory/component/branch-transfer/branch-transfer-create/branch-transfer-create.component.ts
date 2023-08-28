@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
@@ -8,13 +8,19 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'branch-transfer-create',
   templateUrl: './branch-transfer-create.component.html',
-  styleUrls: ['./branch-transfer-create.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./branch-transfer-create.component.scss']
 })
 
-export class BranchTransferCreateComponent implements OnInit , OnDestroy{
+export class BranchTransferCreateComponent implements OnInit, OnDestroy{
+
     /** Instance of stock create/edit form */
-    @ViewChild('branchTransferCreateEditForm', { static: false }) public stockCreateEditForm: NgForm;
+    @ViewChild('branchTransferCreateEditForm', { static: false }) public branchTransferCreateEditForm: NgForm;
+    /** Close the  HSN/SAC Opened Menu*/
+    @ViewChild('hsnSacMenuTrigger') hsnSacMenuTrigger: MatMenuTrigger;
+    /** Close the  HSN/SAC Opened Menu*/
+    @ViewChild('skuMenuTrigger') skuMenuTrigger: MatMenuTrigger;
+    /** For HSN/SAC Code Inside Table*/
+    public showCodeType: 'HSN' | 'SAC' = 'HSN';
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -27,28 +33,26 @@ export class BranchTransferCreateComponent implements OnInit , OnDestroy{
     public imgPath: string = "";
     /* this will hold branch transfer mode */
     public branchTransferMode: string = "";
-  /** Close the  HSN/SAC Opened Menu*/
-  @ViewChild('hsnSacMenuTrigger') hsnSacMenuTrigger: MatMenuTrigger;
-  @ViewChild('skuMenuTrigger') skuMenuTrigger: MatMenuTrigger;
    /** Product Name Filter dropdown items*/
    public product:any = [];
    /** Holds if Multiple Products/Senders selected */
    public transferType: 'Products' | 'Senders' = 'Products';
    /** For Table Receipt Toggle Input Fields */
    public activeRow: boolean = false;
-   /** For HSN/SAC Code Inside Table*/
-   public showCodeType:'HSN' | 'SAC' = 'HSN';
    public hsnNumber:number;
    public sacNumber:number;
    public skuNumber:string;
    /** On Sender */
    public senderHsnSacStatus:'HSN' | 'SAC';
    public SenderProductName:string= 'Sender\'s Name';
-   public productSenderDescription:string = 'Product Description';
+    public productSenderDescription: string = 'Product Description';
+    public editBranchTransferUniqueName: string = '';
+    public tempDateParams: any = { dateOfSupply: new Date(), dispatchedDate: '' };
 
     constructor(
         private route: ActivatedRoute,
-        private changeDetection: ChangeDetectorRef
+        private changeDetection: ChangeDetectorRef,
+        private formBuilder: UntypedFormBuilder,
     ) {
 
   }
@@ -64,11 +68,28 @@ export class BranchTransferCreateComponent implements OnInit , OnDestroy{
                 this.changeDetection.detectChanges();
             }
         });
-  }
+    }
 
+    private initCompanyForm(): void {
+        // this.branchTransferCreateEditForm = this.formBuilder.group({
+        //     senderProductName: ['', Validators.required],
+        //     country: ['', Validators.required],
+        //     currency: ['', Validators.required],
+        //     mobile: ['']
+        // });
+    }
+    public selectSenderProductName(event:any): void {
+
+    }
   public setActiveRow(): void {
       this.activeRow = true;
   }
+
+    public selectDateOfSupply(date): void {
+        if (date && this.tempDateParams.dispatchedDate && date > this.tempDateParams.dispatchedDate) {
+            this.tempDateParams.dispatchedDate = date;
+        }
+    }
 
   public hideActiveRow(): void {
       this.activeRow = false;

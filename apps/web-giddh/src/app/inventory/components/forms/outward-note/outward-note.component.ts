@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -25,35 +25,35 @@ export class OutwardNoteComponent implements OnChanges {
     public stockListOptions: IOption[];
     public stockUnitsOptions: IOption[];
     public userListOptions: IOption[];
-    public form: FormGroup;
+    public form: UntypedFormGroup;
     public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     public mode: 'receiver' | 'product' = 'receiver';
     public today = new Date();
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor(private _fb: FormBuilder) {
+    constructor(private _fb: UntypedFormBuilder) {
         this.initializeForm(true);
     }
 
-    public get inventoryEntryDate(): FormControl {
-        return this.form.get('inventoryEntryDate') as FormControl;
+    public get inventoryEntryDate(): UntypedFormControl {
+        return this.form.get('inventoryEntryDate') as UntypedFormControl;
     }
 
-    public get transactions(): FormArray {
-        return this.form.get('transactions') as FormArray;
+    public get transactions(): UntypedFormArray {
+        return this.form.get('transactions') as UntypedFormArray;
     }
 
-    public get inventoryUser(): FormControl {
-        return this.form.get('inventoryUser') as FormControl;
+    public get inventoryUser(): UntypedFormControl {
+        return this.form.get('inventoryUser') as UntypedFormControl;
     }
 
-    public get stock(): FormControl {
-        return this.form.get('stock') as FormControl;
+    public get stock(): UntypedFormControl {
+        return this.form.get('stock') as UntypedFormControl;
     }
 
-    public get description(): FormArray {
-        return this.form.get('description') as FormArray;
+    public get description(): UntypedFormArray {
+        return this.form.get('description') as UntypedFormArray;
     }
 
     public initializeForm(initialRequest: boolean = false) {
@@ -105,7 +105,7 @@ export class OutwardNoteComponent implements OnChanges {
             return;
         }
 
-        const items = this.form.get('transactions') as FormArray;
+        const items = this.form.get('transactions') as UntypedFormArray;
         const value = items?.length > 0 ? items?.at(0)?.value : {
             type: '',
             quantity: '',
@@ -125,12 +125,12 @@ export class OutwardNoteComponent implements OnChanges {
     }
 
     public deleteTransactionItem(index: number) {
-        const items = this.form.get('transactions') as FormArray;
+        const items = this.form.get('transactions') as UntypedFormArray;
         items.removeAt(index);
     }
 
     public userChanged(option: IOption, index: number) {
-        const items = this.form.get('transactions') as FormArray;
+        const items = this.form.get('transactions') as UntypedFormArray;
         const user = this.userList.find(p => p?.uniqueName === option.value);
         const inventoryUser = user ? { uniqueName: user?.uniqueName } : null;
         if (index >= 0) {

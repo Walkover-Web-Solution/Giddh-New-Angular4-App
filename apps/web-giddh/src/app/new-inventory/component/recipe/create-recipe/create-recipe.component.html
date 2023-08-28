@@ -29,8 +29,8 @@
                         <div class="row">
                             <div class="form-fields w-100">
                                 <div class="d-flex flex-column flex-wrap w-100 row-gap">
-                                    <h1 class="section-head pb-2">{{ localeData?.finished_stock }}</h1>
-                                    <div *ngIf="stock?.variants?.length > 1">
+                                    <h1 class="section-head pb-2 w-100">{{ localeData?.finished_stock }}</h1>
+                                    <div *ngIf="stock?.variants?.length > 1" class="w-100">
                                         <dropdown-field
                                             class="width-280"
                                             [name]="'variant_' + i"
@@ -46,7 +46,7 @@
                                         >
                                         </dropdown-field>
                                     </div>
-                                    <div>
+                                    <div class="w-100">
                                         <input-field
                                             class="width-280"
                                             [type]="'number'"
@@ -55,7 +55,7 @@
                                             [(ngModel)]="recipe.manufacturingQuantity"
                                         ></input-field>
                                     </div>
-                                    <div>
+                                    <div class="w-100">
                                         <dropdown-field
                                             [name]="'unit_' + i"
                                             [scrollableElementId]="'unit_' + i"
@@ -286,7 +286,7 @@
                 </div>
             </ng-container>
             <div class="row mt-2 add-recipe" *ngIf="recipeObject.manufacturingDetails?.length < variantsList?.length">
-                <button mat-button class="mb-2" (click)="addNewRecipe()">
+                <button mat-button class="mb-2 ml-2" color="primary" (click)="addNewRecipe()">
                     <span>+</span> {{ localeData?.add_recipe }}
                 </button>
             </div>

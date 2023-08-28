@@ -34,3 +34,11 @@
 .filter-list .activeItem {
     background-color: var(--color-dark-fog);
 }
+
+.filter-list{
+    .mat-mdc-list {
+        .mat-mdc-list-item {
+            height: auto !important;
+        }
+    }
+}
