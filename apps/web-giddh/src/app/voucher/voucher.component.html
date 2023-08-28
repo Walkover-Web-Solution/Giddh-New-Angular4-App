@@ -2017,7 +2017,8 @@
                                     class="row mt-3"
                                     *ngIf="
                                         isPurchaseInvoice ||
-                                        (currentVoucherFormDetails?.rcmAllowed && companyCountryName === 'India')
+                                        (currentVoucherFormDetails?.rcmAllowed &&
+                                            (companyCountryName === 'India' || companyCountryName === 'United Kingdom'))
                                     "
                                 >
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
