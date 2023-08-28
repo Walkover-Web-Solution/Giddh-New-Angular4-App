@@ -5802,6 +5802,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!countryCode) {
             return;
         }
+        this.statesSource = [];
+        this.regionsSource = [];
+        this.companyStatesSource = [];
+        this.companyRegionsSource = [];
         this.startLoader(true);
         return new Promise((resolve: Function) => {
             if (countryCode) {
@@ -5926,11 +5930,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.showTRNNo = false;
                 this.showVATNo = true;
                 this.getOnboardingForm('GB')
-            } else {
-                this.showGSTINNo = false;
-                this.showTRNNo = false;
-                this.showVATNo = false;
             }
+        } else {
+            this.showGSTINNo = false;
+            this.showTRNNo = false;
+            this.showVATNo = false;
         }
     }
 
