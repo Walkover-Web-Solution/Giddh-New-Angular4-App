@@ -5808,8 +5808,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.statesSource = [];
         this.regionsSource = [];
-        this.companyStatesSource = [];
-        this.companyRegionsSource = [];
         this.startLoader(true);
         return new Promise((resolve: Function) => {
             if (countryCode) {
