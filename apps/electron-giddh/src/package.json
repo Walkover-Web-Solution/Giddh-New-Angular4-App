@@ -12,10 +12,10 @@
     "dependencies": {
         "@getstation/electron-google-oauth2": "^14.0.0",
         "configstore": "^5.0.0",
-        "electron-is-dev": "^2.0.0",
-        "electron-log": "^4.4.8",
+        "electron-is-dev": "^1.2.0",
+        "electron-log": "^4.2.2",
         "electron-oauth": "git+https://github.com/govi2010/electron-oauth2.git",
-        "electron-updater": "^6.1.1",
+        "electron-updater": "^4.3.4",
         "jquery": "^3.5.1",
         "moment": "^2.29.4",
         "tslib": "^2.6.1"
