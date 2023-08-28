@@ -14433,5 +14433,6 @@ activity-compare-json {
     }
 }
 commandk-virtual-scroll {
-    overflow: auto !important;
+    overflow: scroll !important;
+    min-height: 200px;
 }
