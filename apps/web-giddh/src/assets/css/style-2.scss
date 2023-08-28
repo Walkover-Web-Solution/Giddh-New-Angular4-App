@@ -14528,5 +14528,6 @@ activity-compare-json {
     z-index: 99999 !important;
 }
 commandk-virtual-scroll {
-    overflow: auto !important;
+    overflow: scroll !important;
+    min-height: 200px;
 }
