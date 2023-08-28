@@ -12,11 +12,8 @@
 }
 
 .universal-list-items {
-    .mat-list-item {
-        height: unset !important;
-        .mat-list-item-content {
-            padding: 0 !important;
-        }
+    .mat-mdc-list {
+        padding-top: 0 !important;
     }
 }
 
