@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef, Input, ViewChild, TemplateRef } from '@angular/core';
 import { Observable, ReplaySubject, of } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -18,7 +18,7 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 })
 export class CrDrComponent implements OnInit, OnDestroy {
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
     /** This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /** This will store modal reference */

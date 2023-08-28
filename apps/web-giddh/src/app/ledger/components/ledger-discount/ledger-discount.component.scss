@@ -48,8 +48,12 @@
     list-style: none;
     overflow: auto;
     max-height: 100px;
-}
-.custom-item {
-    padding: 5px;
-    margin-bottom: 5px;
+    .custom-item {
+        padding: 5px;
+        margin-bottom: 5px;
+        label{
+            display: flex;
+            align-items: center;
+        }
+    }
 }

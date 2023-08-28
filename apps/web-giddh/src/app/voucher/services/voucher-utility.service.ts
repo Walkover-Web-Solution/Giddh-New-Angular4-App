@@ -94,7 +94,7 @@ export class VoucherUtilityService {
                 });
             });
         }
-        if(data?.company) {
+        if (data?.company) {
             if (data.company.billingDetails) {
                 data.company.billingDetails.taxNumber = data.company.billingDetails.gstNumber;
             }
@@ -102,7 +102,7 @@ export class VoucherUtilityService {
                 data.company.shippingDetails.taxNumber = data.company.shippingDetails.gstNumber;
             }
         }
-        if([VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote].includes(data.type)) {
+        if ([VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote].includes(data.type)) {
             data.number = data.invoiceNumberAgainstVoucher || data.number || '';
         }
         return data;

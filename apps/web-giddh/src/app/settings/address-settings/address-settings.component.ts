@@ -1,9 +1,9 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { combineLatest, of, ReplaySubject } from 'rxjs';
+import { combineLatest, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { PAGINATION_LIMIT } from '../../app.constant';
@@ -102,13 +102,13 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public closeSidePaneChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     /** Search address name input field form control */
-    public searchAddressNameInput: FormControl = new FormControl();
+    public searchAddressNameInput: UntypedFormControl = new UntypedFormControl();
     /** Search address input field form control */
-    public searchAddressInput: FormControl = new FormControl();
+    public searchAddressInput: UntypedFormControl = new UntypedFormControl();
     /** Search tax input field form control */
-    public searchTaxInput: FormControl = new FormControl();
+    public searchTaxInput: UntypedFormControl = new UntypedFormControl();
     /** Search state input field form control */
-    public searchStateInput: FormControl = new FormControl();
+    public searchStateInput: UntypedFormControl = new UntypedFormControl();
     /** Stores the current state of side menu */
     public accountAsideMenuState: string = 'out';
     /** True, if search name input field is to be shown */
@@ -200,7 +200,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof AddressSettingsComponent
      */
-    public ngOnChanges(): void {
+    public ngOnChanges(changes: SimpleChanges): void {
         this.hideLinkEntity = true;
 
         if (this.addresses?.length > 1) {
@@ -213,6 +213,12 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 }
             });
+        }
+
+        if (changes.closeSidePane?.currentValue) {
+            if (this.accountAsideMenuState === 'in') {
+                this.toggleAccountAsidePane();
+            }
         }
     }
 

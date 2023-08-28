@@ -16,15 +16,16 @@ import {
     OnDestroy,
     OnInit,
     SimpleChanges,
+    TemplateRef,
     ViewChild
 } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BranchFilterRequest, CompanyResponse } from '../../../models/api-models/Company';
+import { CompanyResponse } from '../../../models/api-models/Company';
 import { createSelector } from 'reselect';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -62,7 +63,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     @ViewChild('shCategoryType', { static: true }) public shCategoryType: ShSelectComponent;
     @ViewChild('shValueCondition', { static: true }) public shValueCondition: ShSelectComponent;
     /** Template reference */
-    @ViewChild('template', { static: true }) public template: ElementRef;
+    @ViewChild('template', { static: true }) public template: TemplateRef<any>;
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
@@ -90,11 +91,11 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public selectedTransactionType: string = 'all';
     public entities$: Observable<CompanyResponse[]>;
     public showAdvanceSearchIcon: boolean = false;
-    public accountUniqueNameInput: FormControl = new FormControl();
+    public accountUniqueNameInput: UntypedFormControl = new UntypedFormControl();
     public showAccountSearch: boolean = false;
-    public entityAndInventoryTypeForm: FormGroup = new FormGroup({});
+    public entityAndInventoryTypeForm: UntypedFormGroup = new UntypedFormGroup({});
     // modal advance search
-    public advanceSearchForm: FormGroup;
+    public advanceSearchForm: UntypedFormGroup;
     public filterCategory: string = null;
     public filterCategoryType: string = null;
     public filterValueCondition: string = null;
@@ -256,7 +257,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -276,7 +277,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     constructor(private store: Store<AppState>, private sideBarAction: SidebarAction,
         private stockReportActions: StockReportActions,
         private _toasty: ToasterService,
-        private inventoryService: InventoryService, private fb: FormBuilder, private inventoryAction: InventoryAction,
+        private inventoryService: InventoryService, private fb: UntypedFormBuilder, private inventoryAction: InventoryAction,
         private settingsBranchActions: SettingsBranchActions,
         private invViewService: InvViewService,
         private cdr: ChangeDetectorRef,

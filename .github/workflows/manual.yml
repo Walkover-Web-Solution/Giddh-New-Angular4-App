@@ -21,7 +21,7 @@ on:
                 required: true
             version:
                 description: "App version"
-                default: "8.0.8"
+                default: "8.2.3"
                 required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -40,7 +40,7 @@ jobs:
             - name: Install Node.js & NPM
               uses: actions/setup-node@v3
               with:
-                  node-version: "14.19.3"
+                  node-version: "16.20.1"
             - uses: bahmutov/npm-install@v1
               env:
                   CYPRESS_INSTALL_BINARY: 0

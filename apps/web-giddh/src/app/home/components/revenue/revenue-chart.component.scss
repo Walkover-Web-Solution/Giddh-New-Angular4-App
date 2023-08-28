@@ -34,6 +34,14 @@
 .left-column {
     margin: 5px 0;
     border-right: 1px solid var(--color-common-secondary-border);
+
+    .panel-body {
+        .chart-div {
+            cdk-virtual-scroll-viewport {
+                height: 300px;
+            }
+        }
+    }
 }
 span.this-week {
     color: var(--color-abbey);

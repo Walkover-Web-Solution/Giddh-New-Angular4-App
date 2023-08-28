@@ -660,7 +660,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     // Deletion case, item was deleted and no current entry is active
                     return;
                 }
-                const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params.variantUniqueName;
+                const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params?.variantUniqueName;
                 let stockAllVariants;
                 res[this.currentlyLoadedStockVariantIndex ?? this.activeIndex].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
                 if (stockAllVariants.findIndex(variant => variant.value === currentEntryStockVariantUniqueName) === -1) {
@@ -670,8 +670,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             otherwise the user has opened the invoice for edit flow
                         */
                         currentlyLoadedVariantRequest.txn.variant = { name: stockAllVariants[0].label, uniqueName: stockAllVariants[0].value };
-                        // include the variant unique name for the API call
-                        currentlyLoadedVariantRequest.params.variantUniqueName = stockAllVariants[0].value;
+                        if (currentlyLoadedVariantRequest.params) {
+                            // include the variant unique name for the API call
+                            currentlyLoadedVariantRequest.params.variantUniqueName = stockAllVariants[0].value;
+                        }
                         this.loadDetails(currentlyLoadedVariantRequest);
                     }
                 }
@@ -1370,11 +1372,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 };
             }
             this.currentTxnRequestObject[this.activeIndex] = {
-                selectedAcc,
-                txn,
-                entry,
-                params,
-                entryIndex
+                selectedAcc: selectedAcc,
+                txn: txn,
+                entry: entry,
+                params: params,
+                entryIndex: entryIndex
             };
             if (isBulkItem) {
                 const allStockVariants = this.stockVariants.getValue();
@@ -2436,7 +2438,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         find(transaction.stockList, (txn) => {
             if (txn.id === selectedUnit) {
                 transaction.stockUnitCode = txn.text;
-                return transaction.rate = giddhRoundOff(txn.rate  / this.exchangeRate, this.highPrecisionRate);
+                return transaction.rate = giddhRoundOff(txn.rate / this.exchangeRate, this.highPrecisionRate);
             }
         });
     }
@@ -3556,8 +3558,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.calculateTransactionValueInclusively(entry, transaction);
             });
         } else {
-        this.calculateStockEntryAmount(transaction);
-        this.calculateWhenTrxAltered(entry, transaction);
+            this.calculateStockEntryAmount(transaction);
+            this.calculateWhenTrxAltered(entry, transaction);
         }
         return transaction;
     }
@@ -4046,7 +4048,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private loadStockVariants(stockUniqueName: string, index?: number): void {
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(
-            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName })))).subscribe(res => {
                 const allStockVariants = this.stockVariants.getValue();
                 this.currentlyLoadedStockVariantIndex = index;
                 allStockVariants[this.currentlyLoadedStockVariantIndex ?? this.activeIndex] = observableOf(res);

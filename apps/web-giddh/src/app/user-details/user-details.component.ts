@@ -177,7 +177,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.pipe(select(s => s.session.user), takeUntil(this.destroyed$)).subscribe((user) => {
             if (user) {
                 this.user = cloneDeep(user.user);
-                this.userSessionId = _.cloneDeep(user.session.id);
+                this.userSessionId = _.cloneDeep(user.session?.id);
             }
         });
 

@@ -9,11 +9,7 @@
             "sourceRoot": "apps/web-giddh/src",
             "projectType": "application",
             "prefix": "foo",
-            "schematics": {
-                "@nrwl/schematics:component": {
-                    "style": "scss"
-                }
-            },
+            "schematics": {},
             "architect": {
                 "build": {
                     "builder": "@angular-builders/custom-webpack:browser",
@@ -51,7 +47,7 @@
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js",
-                            "node_modules/intl-tel-input/build/js/intlTelInput.js"
+                            "apps/web-giddh/src/assets/js/intl-tel-input.js"
                         ]
                     },
                     "configurations": {
@@ -221,14 +217,6 @@
             "projectType": "library",
             "prefix": "foo",
             "architect": {
-                "test": {
-                    "builder": "@angular-builders/custom-webpack:karma",
-                    "options": {
-                        "main": "testing/test.libs.ts",
-                        "tsConfig": "testing/tsconfig.libs.spec.json",
-                        "karmaConfig": "testing/karma.conf.js"
-                    }
-                },
                 "lint": {
                     "builder": "@angular-builders/custom-webpack:tslint",
                     "options": {
@@ -260,13 +248,9 @@
                         "baseHref": "http://localhost:3000",
                         "allowedCommonJsDependencies": [
                             "file-saver",
-                            "angular2-text-mask",
                             "ngrx-store-localstorage",
                             "css-element-queries",
-                            "jspdf",
-                            "jspdf-autotable",
                             "webfontloader",
-                            "ng2-order-pipe",
                             "jquery"
                         ],
                         "outputPath": "dist/apps/web-giddh",
@@ -304,7 +288,7 @@
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js",
-                            "node_modules/intl-tel-input/build/js/intlTelInput.js"
+                            "apps/web-giddh/src/assets/js/intl-tel-input.js"
                         ],
                         "customWebpackConfig": {
                             "path": "apps/web-giddh/webpack.partial.js",
@@ -491,15 +475,6 @@
                             "**/node_modules/**"
                         ]
                     }
-                },
-                "test": {
-                    "builder": "@angular-builders/custom-webpack:karma",
-                    "options": {
-                        "main": "apps/web-giddh/src/test.ts",
-                        "tsConfig": "apps/web-giddh/tsconfig.spec.json",
-                        "karmaConfig": "apps/web-giddh/karma.conf.js",
-                        "polyfills": "apps/web-giddh/src/polyfills.ts"
-                    }
                 }
             }
         },
@@ -537,14 +512,6 @@
             "projectType": "library",
             "prefix": "foo",
             "architect": {
-                "test": {
-                    "builder": "@angular-builders/custom-webpack:karma",
-                    "options": {
-                        "main": "testing/test.xplat.ts",
-                        "tsConfig": "testing/tsconfig.xplat.spec.json",
-                        "karmaConfig": "testing/karma.conf.js"
-                    }
-                },
                 "lint": {
                     "builder": "@angular-builders/custom-webpack:tslint",
                     "options": {
@@ -562,8 +529,7 @@
     },
     "schematics": {
         "@nrwl/angular:application": {
-            "unitTestRunner": "jest",
-            "e2eTestRunner": "cypress"
+            "unitTestRunner": "jest"
         },
         "@nrwl/angular:library": {
             "unitTestRunner": "jest"

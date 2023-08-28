@@ -425,12 +425,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public closeCalender(): void {
         this.openMobileDatepickerPopup = false;
         document.querySelector('body').classList.remove('hide-scroll-body');
+        document.querySelector("body").style.overflowY = null;
     }
 
     public closeMobileDatePicker(): void {
         this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate, event: 'cancel' });
         this.openMobileDatepickerPopup = false;
         document.querySelector('body').classList.remove('hide-scroll-body');
+        document.querySelector("body").style.overflowY = null;
         this.hide();
     }
 
@@ -1720,6 +1722,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('hide-scroll-body');
+        document.querySelector("body").style.overflowY = null;
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

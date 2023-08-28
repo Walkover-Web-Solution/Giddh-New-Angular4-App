@@ -34,7 +34,7 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
     public maxDate: any;
 
     /** Subject to unsubscribe from all listeners */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private destroyed$: ReplaySubject<void> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions) {
 
