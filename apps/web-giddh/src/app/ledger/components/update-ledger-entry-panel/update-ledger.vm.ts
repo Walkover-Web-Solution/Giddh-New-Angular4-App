@@ -613,7 +613,7 @@ export class UpdateLedgerVm {
 
     public reInitilizeDiscount(resp: LedgerResponse) {
         let discountArray: LedgerDiscountClass[] = [];
-        let defaultDiscountIndex = resp.discounts?.findIndex(f => !f.discount?.uniqueName);
+        let defaultDiscountIndex = resp?.discounts?.findIndex(f => !f.discount?.uniqueName);
 
         if (defaultDiscountIndex > -1) {
             discountArray.push({
@@ -636,7 +636,7 @@ export class UpdateLedgerVm {
             });
         }
 
-        resp.discounts.forEach((f, index) => {
+        resp?.discounts?.forEach((f, index) => {
             if (index !== defaultDiscountIndex) {
                 discountArray.push({
                     discountType: f.discount?.discountType,

@@ -635,9 +635,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             return;
         }
 
-        let parsedMobileNo = window['libphonenumber']?.parsePhoneNumber("+" + this.mobileNo);
-        let number = parsedMobileNo?.nationalNumber ?? this.mobileNo;
-        let countryCode = parsedMobileNo?.countryCallingCode;
+        let number = "";
+        let countryCode = "";
+
+        if (this.mobileNo) {
+            let parsedMobileNo = window['libphonenumber']?.parsePhoneNumber("+" + this.mobileNo);
+            number = parsedMobileNo?.nationalNumber ?? this.mobileNo;
+            countryCode = parsedMobileNo?.countryCallingCode;
+        }
         let taxDetails = this.prepareTaxDetail(this.companyForm);
         this.company.name = this.firstStepForm.value.name;
         this.company.country = this.firstStepForm.value.country.value;

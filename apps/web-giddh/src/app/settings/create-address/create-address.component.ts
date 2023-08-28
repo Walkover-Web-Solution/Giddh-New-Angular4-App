@@ -81,8 +81,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 this.addressForm = this.formBuilder.group({
                     name: ['', [Validators.required, Validators.maxLength(100)]],
                     taxNumber: ['', (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
-                    state: ['', !this.addressConfiguration.countyList?.length ? Validators.required: null],
-                    county: ['', this.addressConfiguration.countyList?.length ? Validators.required: null],
+                    state: ['', !this.addressConfiguration.countyList?.length ? Validators.required : null],
+                    county: ['', this.addressConfiguration.countyList?.length ? Validators.required : null],
                     address: [''],
                     linkedEntity: [[]],
                     pincode: []
@@ -98,8 +98,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     this.addressForm = this.formBuilder.group({
                         name: [this.addressToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                         taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
-                        state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, !this.addressConfiguration.countyList?.length ? Validators.required: null],
-                        county: [this.addressToUpdate.county?.code, this.addressConfiguration.countyList?.length ? Validators.required: null],
+                        state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, !this.addressConfiguration.countyList?.length ? Validators.required : null],
+                        county: [this.addressToUpdate.county?.code, this.addressConfiguration.countyList?.length ? Validators.required : null],
                         address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' ? [Validators.required] : []],
                         linkedEntity: [this.addressToUpdate.linkedEntities.map(entity => entity?.uniqueName)],
                         pincode: [this.addressToUpdate.pincode]
@@ -275,14 +275,18 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         }
                     }
                 } else {
-                    statesEle.forceClearReactive.status = true;
-                    statesEle.clear();
+                    if (statesEle) {
+                        statesEle.forceClearReactive.status = true;
+                        statesEle.clear();
+                    }
                     this.addressForm.get('state')?.patchValue(null);
                     this.addressForm.get('state').enable();
                 }
             } else {
-                statesEle.forceClearReactive.status = true;
-                statesEle.clear();
+                if (statesEle) {
+                    statesEle.forceClearReactive.status = true;
+                    statesEle.clear();
+                }
                 this.addressForm.get('state')?.patchValue(null);
                 this.addressForm.get('state').enable();
             }
@@ -335,7 +339,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public handleFinalSelection(selectedEntities: Array<any>): void {
         this.addressConfiguration.linkedEntities.forEach(entity => {
-            if (!selectedEntities.includes(entity?.uniqueName)) {
+            if (!selectedEntities?.includes(entity?.uniqueName)) {
                 entity.isDefault = false;
             }
         });
