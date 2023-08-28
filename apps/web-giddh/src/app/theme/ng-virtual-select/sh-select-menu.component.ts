@@ -74,11 +74,11 @@ export class ShSelectMenuComponent implements OnChanges {
         if (row?.value === this.selectAllRecords) {
             this._rows.forEach(key => {
                 if (this.isSelectAllChecked) {
-                    if (this.selectedValues.indexOf(key) !== -1) {
+                    if (this.selectedValues?.indexOf(key) !== -1) {
                         this.noToggleClick.emit(key);
                     }
                 } else {
-                    if (this.selectedValues.indexOf(key) === -1) {
+                    if (this.selectedValues?.indexOf(key) === -1) {
                         this.noToggleClick.emit(key);
                     }
                 }
@@ -105,7 +105,7 @@ export class ShSelectMenuComponent implements OnChanges {
      * @memberof ShSelectMenuComponent
      */
     public autoSelectIfSingleValueAvailable(): void {
-        if (this.isRequired && this._rows && this._rows.length === 1 && !this.filter) {
+        if (this.isRequired && this._rows && this._rows?.length === 1 && !this.filter) {
             setTimeout(() => {
                 this.toggleSelected(this._rows[0]);
             }, 150);

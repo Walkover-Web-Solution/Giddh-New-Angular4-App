@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { CompanyCashFreeSettings, CompanyEmailSettings, EstimateSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
@@ -52,7 +52,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         entity: 'invoice'
     };
     public showDatePicker: boolean = false;
-    public moment = moment;
+    public dayjs = dayjs;
     public isAutoPaidOn: boolean;
     public companyCashFreeSettings: CompanyCashFreeSettings = new CompanyCashFreeSettings();
     public paymentGatewayList: IOption[] = [];
@@ -88,11 +88,13 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         private router: Router,
         private generalService: GeneralService
     ) {
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
@@ -110,7 +112,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             if (res) {
                 if (res.fields) {
                     this.formFields = [];
-                    Object.keys(res.fields).forEach(key => {
+                    Object.keys(res.fields)?.forEach(key => {
                         if (res.fields[key]) {
                             this.formFields[res.fields[key].name] = [];
                             this.formFields[res.fields[key].name] = res.fields[key];
@@ -152,19 +154,19 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 let webhookArray = cloneDeep(setting.webhooks ?? []);
 
                 // using filter to get webhooks for 'invoice' only
-                this.invoiceWebhook = webhookArray.filter((obj) => obj.entity === 'invoice');
+                this.invoiceWebhook = webhookArray?.filter((obj) => obj.entity === 'invoice');
                 this.invoiceWebhook.push(cloneDeep(this.webhookMock));
 
 
-                this.estimateWebhook = webhookArray.filter((obj) => obj.entity === 'estimate');
+                this.estimateWebhook = webhookArray?.filter((obj) => obj.entity === 'estimate');
                 this.estimateWebhook.push(cloneDeep(this.webhookMock));
 
 
-                this.proformaWebhook = webhookArray.filter((obj) => obj.entity === 'proforma');
+                this.proformaWebhook = webhookArray?.filter((obj) => obj.entity === 'proforma');
                 this.proformaWebhook.push(cloneDeep(this.webhookMock));
 
 
-                if (webhookArray.length > 0) {
+                if (webhookArray?.length > 0) {
                     this.webhooks = webhookArray;
                 } else {
                     // adding blank webhook row on load
@@ -193,7 +195,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
                 if (this.invoiceSetting.lockDate) {
                     this.isLockDateSet = true;
-                    this.lockDate = moment(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT).toDate();
+                    this.lockDate = dayjs(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT).toDate();
                 } else {
                     this.isLockDateSet = false;
                 }
@@ -202,12 +204,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             } else if (!setting) {
                 this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             }
-            
         });
-        
     }
-    
-
     // public onChangeSendInvoiceViaSms(isChecked) {
     //     if (!isChecked) {
     //         this.invoiceSetting.smsContent = '';
@@ -242,8 +240,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * Delete Webhook
      */
     public deleteWebhook(webhook, index) {
-        if (webhook.uniqueName) {
-            this.store.dispatch(this.invoiceActions.deleteWebhook(webhook.uniqueName));
+        if (webhook?.uniqueName) {
+            this.store.dispatch(this.invoiceActions.deleteWebhook(webhook?.uniqueName));
             this.initSettingObj();
         } else {
             this.webhooks.splice(index, 1);
@@ -257,7 +255,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
         let razorpayObj: RazorPayDetailsResponse = cloneDeep(this.settingResponse?.razorPayform) || new RazorPayDetailsResponse();
 
-        if (this.webhooks && this.webhooks.length > 0 && !this.webhooks[this.webhooks.length - 1].url && !this.webhooks[this.webhooks.length - 1].triggerAt) {
+        if (this.webhooks && this.webhooks.length > 0 && !this.webhooks[this.webhooks.length - 1]?.url && !this.webhooks[this.webhooks.length - 1]?.triggerAt) {
             this.webhooks.splice(this.webhooks.length - 1);
         }
         // perform operation to update 'invoice' webhooks
@@ -275,7 +273,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         delete this.formToSave.sendThroughGmail;
         delete this.formToSave.razorPayform; // delete razorPay before sending form
         if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
-            this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
+            this.formToSave.invoiceSettings.lockDate = dayjs(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
         if (this.formToSave?.invoiceSettings?.gstEInvoiceEnable) {
             const invoiceSettings = this.formToSave.invoiceSettings;
@@ -374,9 +372,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public selectLinkAccount(data) {
         let arrOfAcc = cloneDeep(this.accountList);
-        if (data.value && this.accountToSend) {
-            let result = arrOfAcc.filter((obj) => obj?.uniqueName === data.value);
-            this.accountToSend.name = result[0].name;
+        if (data?.value && this.accountToSend) {
+            let result = arrOfAcc?.filter((obj) => obj?.uniqueName === data.value);
+            this.accountToSend.name = result[0]?.name;
             this.accountToSend.uniqueName = result[0]?.uniqueName;
         }
     }
@@ -419,7 +417,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             }
             if (indx > -1 && isNaN(value) && flag === 'alpha') {
                 let webhooks = cloneDeep(this.webhooks);
-                webhooks[indx].triggerAt = Number(String(webhooks[indx].triggerAt).replace(/\D/g, '')) !== 0 ? Number(String(webhooks[indx].triggerAt).replace(/\D/g, '')) : null;
+                webhooks[indx].triggerAt = Number(String(webhooks[indx].triggerAt)?.replace(/\D/g, '')) !== 0 ? Number(String(webhooks[indx].triggerAt)?.replace(/\D/g, '')) : null;
                 this.webhooks = webhooks;
             }
         }
@@ -438,20 +436,20 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public validateDefaultDueDate(defaultDueDate: string) {
         if (defaultDueDate) {
             let invoiceSetting = cloneDeep(this.invoiceSetting);
-            if (isNaN(Number(defaultDueDate)) && defaultDueDate.indexOf('-') === -1) {
-                invoiceSetting.duePeriod = Number(defaultDueDate.replace(/\D/g, '')) !== 0 && !isNaN(Number(defaultDueDate.replace(/\D/g, ''))) ? Number(defaultDueDate.replace(/\D/g, '')) : null;
+            if (isNaN(Number(defaultDueDate)) && defaultDueDate?.indexOf('-') === -1) {
+                invoiceSetting.duePeriod = Number(defaultDueDate?.replace(/\D/g, '')) !== 0 && !isNaN(Number(defaultDueDate?.replace(/\D/g, ''))) ? Number(defaultDueDate?.replace(/\D/g, '')) : null;
                 setTimeout(() => {
                     this.invoiceSetting = invoiceSetting;
                 });
             }
-            if (defaultDueDate.indexOf('-') !== -1 && (defaultDueDate.indexOf('-') !== defaultDueDate.lastIndexOf('-')) || defaultDueDate.indexOf('-') > 0) {
-                invoiceSetting.duePeriod = Number(defaultDueDate.replace(/\D/g, ''));
+            if (defaultDueDate?.indexOf('-') !== -1 && (defaultDueDate?.indexOf('-') !== defaultDueDate.lastIndexOf('-')) || defaultDueDate?.indexOf('-') > 0) {
+                invoiceSetting.duePeriod = Number(defaultDueDate?.replace(/\D/g, ''));
                 setTimeout(() => {
                     this.invoiceSetting = invoiceSetting;
                 });
             }
-            if (String(defaultDueDate).length > 3) {
-                if (defaultDueDate.indexOf('-') !== -1) {
+            if (String(defaultDueDate)?.length > 3) {
+                if (defaultDueDate?.indexOf('-') !== -1) {
                     invoiceSetting.duePeriod = Number(String(defaultDueDate).substring(0, 4));
                 } else {
                     invoiceSetting.duePeriod = Number(String(defaultDueDate).substring(0, 3));
@@ -467,12 +465,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * setInvoiceLockDate
      */
     public setInvoiceLockDate(date) {
-        this.invoiceSetting.lockDate = moment(date).format(GIDDH_DATE_FORMAT);
+        this.invoiceSetting.lockDate = dayjs(date).format(GIDDH_DATE_FORMAT);
         this.showDatePicker = !this.showDatePicker;
     }
 
     public onLockDateBlur(ev) {
-        this.isLockDateSet = !!ev.target.value;
+        this.isLockDateSet = !!ev.target?.value;
     }
 
     public ngOnDestroy() {
@@ -489,10 +487,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             redirect_uri: this.getRedirectUrl(AppUrl)
         };
         this._authenticationService.saveGmailAuthCode(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 this._toasty.successToast(this.localeData?.gmail_account_added, this.commonLocaleData?.app_success);
             } else {
-                this._toasty.errorToast(res.message, res.code);
+                this._toasty.errorToast(res?.message, res?.code);
             }
             this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
             this.router.navigateByUrl('/pages/invoice/preview/settings/email');

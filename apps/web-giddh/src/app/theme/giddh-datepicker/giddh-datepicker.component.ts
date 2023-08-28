@@ -1,16 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import * as _moment from 'moment';
+import * as dayjs from 'dayjs';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { DateAdapter } from '@angular/material/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 const noop = () => { };
-const moment = _moment;
 
 @Component({
     selector: 'giddh-datepicker',
@@ -33,16 +32,25 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     /** Taking any css class as input to be applied on date input field */
     @Input() public cssClass: string = "";
     /** Will show toggle icon if true */
-    @Input() public showToggleIcon: boolean = true;
+    @Input() public showToggleIcon: boolean = false;
     /** Will disable the field if true */
     @Input() public disabled: boolean = false;
     /** True if we need to show error */
     @Input() public showError: boolean = false;
+    /* Datepicker fill */
+    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'fill';
+    /** Hold Mat Label Text*/
+    @Input() public label: any;
+    /** True if datepicker has to be opened by default */
+    @Input() public isOpened: boolean = false;
     /** Emitting selected date object as output */
     @Output() public dateSelected: EventEmitter<any> = new EventEmitter<any>();
     /** Emitting the state of datepicker (open/close) */
     @Output() public datepickerState: EventEmitter<any> = new EventEmitter<any>();
-
+    /** Emitting the state of datepicker */
+    @Output() public focusOut: EventEmitter<any> = new EventEmitter<any>();
+    /** This will hold if datepicker is open */
+    public isDatepickerOpen: boolean = false;
     /** Internal data model */
     private innerValue: any = '';
     /** This is used to show default date */
@@ -54,7 +62,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     private onChangeCallback: (_: any) => void = noop;
 
     constructor(
-        private adapter: DateAdapter<any>, 
+        private adapter: DateAdapter<any>,
         private store: Store<AppState>,
         private changeDetectorRef: ChangeDetectorRef
     ) {
@@ -91,7 +99,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public dateChange(event: MatDatepickerInputEvent<Date>): void {
-        let selectedDate = moment(event.value, GIDDH_DATE_FORMAT).toDate();
+        let selectedDate = (typeof(event?.value) === "object") ? dayjs(event?.value).toDate() : dayjs(event?.value, GIDDH_DATE_FORMAT).toDate();
         this.onChangeCallback(selectedDate);
         this.dateSelected.emit(selectedDate);
     }
@@ -103,6 +111,9 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public emitDatepickerState(state: boolean): void {
+        if (state) {
+            this.isDatepickerOpen = true;
+        }
         this.datepickerState.emit(state);
     }
 
@@ -148,7 +159,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     public writeValue(value: any): void {
         if (value) {
             this.innerValue = value;
-            this.calendarDate = moment(value, GIDDH_DATE_FORMAT).toDate();
+            this.calendarDate = (typeof(value) === "object") ? dayjs(value).toDate() : dayjs(value, GIDDH_DATE_FORMAT).toDate();
             this.changeDetectorRef.detectChanges();
         } else {
             this.innerValue = "";

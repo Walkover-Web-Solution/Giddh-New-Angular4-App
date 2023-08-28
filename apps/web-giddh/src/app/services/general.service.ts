@@ -1,16 +1,20 @@
 import { Injectable } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../common/confirmation-modal/confirmation-modal.interface';
+import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
-import { cloneDeep, find } from '../lodash-optimized';
+import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
 import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
+import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
+import * as dayjs from 'dayjs';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 
 @Injectable()
 export class GeneralService {
@@ -129,11 +133,11 @@ export class GeneralService {
         let byteArrays = [];
         let offset = 0;
         if (byteCharacters && byteCharacters.length > 0) {
-            while (offset < byteCharacters.length) {
+            while (offset < byteCharacters?.length) {
                 let slice = byteCharacters.slice(offset, offset + sliceSize);
-                let byteNumbers = new Array(slice.length);
+                let byteNumbers = new Array(slice?.length);
                 let i = 0;
-                while (i < slice.length) {
+                while (i < slice?.length) {
                     byteNumbers[i] = slice.charCodeAt(i);
                     i++;
                 }
@@ -146,7 +150,7 @@ export class GeneralService {
     }
 
     convertExponentialToNumber(n) {
-        var [lead, decimal, pow] = n.toString().split(/e|\./);
+        var [lead, decimal, pow] = n?.toString()?.split(/e|\./);
         if (decimal) {
             return +pow <= 0
                 ? "0." + "0".repeat(Math.abs(pow) - 1) + lead + decimal
@@ -191,7 +195,7 @@ export class GeneralService {
     }
 
     getLastElement(array) {
-        return array[array.length - 1];
+        return array[array?.length - 1];
     };
 
     /**
@@ -204,11 +208,10 @@ export class GeneralService {
     public getRcmConfiguration(isRcmSelected: boolean, commonLocaleData?: any): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
             text: (commonLocaleData) ? commonLocaleData?.app_yes : 'Yes',
-            cssClass: 'btn btn-success'
+            color: 'primary'
         },
         {
-            text: (commonLocaleData) ? commonLocaleData?.app_no : 'No',
-            cssClass: 'btn btn-danger'
+            text: (commonLocaleData) ? commonLocaleData?.app_no : 'No'
         }];
         const headerText: string = (commonLocaleData) ? commonLocaleData?.app_rc_heading : 'Reverse Charge Confirmation';
         const headerCssClass: string = 'd-inline-block mr-1';
@@ -249,15 +252,15 @@ export class GeneralService {
      */
     public shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any, activeCompany?: any): boolean {
         if (currentLedgerAccountDetails && selectedAccountDetails) {
-            if (![currentLedgerAccountDetails.uniqueName, selectedAccountDetails.uniqueName].includes('roundoff')) {
+            if (![currentLedgerAccountDetails?.uniqueName, selectedAccountDetails?.uniqueName].includes('roundoff')) {
                 // List of allowed first level parent groups
                 const allowedFirstLevelUniqueNames = (this.voucherApiVersion === 2 && activeCompany?.country === "India") ? ['operatingcost', 'indirectexpenses', 'fixedassets', 'revenuefromoperations', 'otherincome'] : ['operatingcost', 'indirectexpenses', 'fixedassets'];
                 // List of not allowed second level parent groups
                 const disallowedSecondLevelUniqueNames = (this.voucherApiVersion === 2 && activeCompany?.country === "India") ? ['discount', 'exchangeloss', 'roundoff', 'exchangegain', 'dividendincome', 'interestincome', 'dividendexpense', 'interestexpense'] : ['discount', 'exchangeloss'];
-                const currentLedgerFirstParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[0]) ? currentLedgerAccountDetails.parentGroups[0].uniqueName : '';
-                const currentLedgerSecondParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[1]) ? currentLedgerAccountDetails.parentGroups[1].uniqueName : '';
-                const selectedAccountFirstParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[0]) ? selectedAccountDetails.parentGroups[0].uniqueName : '';
-                const selectedAccountSecondParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[1]) ? selectedAccountDetails.parentGroups[1].uniqueName : '';
+                const currentLedgerFirstParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[0]) ? currentLedgerAccountDetails.parentGroups[0]?.uniqueName : '';
+                const currentLedgerSecondParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[1]) ? currentLedgerAccountDetails.parentGroups[1]?.uniqueName : '';
+                const selectedAccountFirstParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[0]) ? selectedAccountDetails.parentGroups[0]?.uniqueName : '';
+                const selectedAccountSecondParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[1]) ? selectedAccountDetails.parentGroups[1]?.uniqueName : '';
                 // Both accounts (current ledger and selected account) in order to satisfy RCM MUST have first
                 // level parent group unique name in allowed unique names and MUST NOT have their second level parent
                 // in disallowed unique names
@@ -276,7 +279,7 @@ export class GeneralService {
      * @memberof CompletedComponent
      */
     public ConvertUTCTimeToLocalTime(UTCDateString) {
-        UTCDateString = UTCDateString.replace("@", "");
+        UTCDateString = UTCDateString?.replace("@", "");
         let convertdLocalTime = new Date(UTCDateString);
         let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
         convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset * 60));
@@ -290,9 +293,9 @@ export class GeneralService {
      * @returns {string} Trimed value
      * @memberof GeneralService
      */
-    public allowAlphanumericChar(value: string): string {
+    public allowAlphanumericChar(value: any): string {
         if (value) {
-            return value.replace(/[^a-zA-Z0-9]/g, '');
+            return value?.replace(/[^a-zA-Z0-9]/g, '');
         } else {
             return '';
         }
@@ -444,7 +447,7 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getRevisionField(type: any): string {
-        return type.replace(/_/g, " ");
+        return type?.replace(/_/g, " ");
     }
 
     /**
@@ -456,22 +459,22 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getAccountCategory(account: any, accountName: string): string {
-        let parent = account.parentGroups ? account.parentGroups[0] : '';
+        let parent = account?.parentGroups ? account.parentGroups[0] : '';
         if (parent) {
-            if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent.uniqueName)) {
+            if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent?.uniqueName)) {
                 return 'liabilities';
-            } else if (find(['fixedassets'], p => p === parent.uniqueName)) {
+            } else if (find(['fixedassets'], p => p === parent?.uniqueName)) {
                 return 'fixedassets';
-            } else if (find(['noncurrentassets', 'currentassets'], p => p === parent.uniqueName)) {
+            } else if (find(['noncurrentassets', 'currentassets'], p => p === parent?.uniqueName)) {
                 return 'assets';
-            } else if (find(['revenuefromoperations', 'otherincome'], p => p === parent.uniqueName)) {
+            } else if (find(['revenuefromoperations', 'otherincome'], p => p === parent?.uniqueName)) {
                 return 'income';
-            } else if (find(['operatingcost', 'indirectexpenses'], p => p === parent.uniqueName)) {
+            } else if (find(['operatingcost', 'indirectexpenses'], p => p === parent?.uniqueName)) {
                 if (accountName === 'roundoff') {
                     return 'roundoff';
                 }
-                let subParent = account.parentGroups[1];
-                if (subParent && subParent.uniqueName === 'discount') {
+                let subParent = account?.parentGroups[1];
+                if (subParent && subParent?.uniqueName === 'discount') {
                     return 'discount';
                 }
                 return 'expenses';
@@ -631,11 +634,10 @@ export class GeneralService {
     public getDateChangeConfiguration(localeData: any, commonLocaleData: any, isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
             text: commonLocaleData?.app_yes,
-            cssClass: 'btn btn-success'
+            color: 'primary'
         },
         {
-            text: commonLocaleData?.app_no,
-            cssClass: 'btn btn-danger'
+            text: commonLocaleData?.app_no
         }];
         const headerText: string = localeData?.date_change_confirmation_heading;
         const headerCssClass: string = 'd-inline-block mr-1';
@@ -661,6 +663,38 @@ export class GeneralService {
     }
 
     /**
+     * This will use for confirmation delete attachment in vocher
+     *
+     * @param {*} localeData
+     * @param {*} commonLocaleData
+     * @param {boolean} isVoucherDateSelected
+     * @return {*}  {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public getAttachmentDeleteConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerText: string = commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: localeData?.confirm_delete_file,
+            messageCssClass,
+            footerText: commonLocaleData?.app_permanently_delete_message,
+            footerCssClass,
+            buttons
+        };
+    }
+
+    /**
      * This will return the file extension
      *
      * @param {string} path
@@ -680,7 +714,7 @@ export class GeneralService {
     public isRtlCurrency(currencyCode: string): boolean {
         const rtlCurrencyCodes = ['AED'];
 
-        if (rtlCurrencyCodes.indexOf(currencyCode) > -1) {
+        if (rtlCurrencyCodes?.indexOf(currencyCode) > -1) {
             return true;
         } else {
             return false;
@@ -770,7 +804,7 @@ export class GeneralService {
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
             menuItem.items?.forEach(item => {
-                const isValidItem = apiItems.find(apiItem => apiItem.uniqueName === item.link);
+                const isValidItem = apiItems.find(apiItem => apiItem?.uniqueName === item.link);
                 if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.countrySpecific?.length || item.additional?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.voucherVersion || item.additional?.voucherVersion === this.voucherApiVersion)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
@@ -814,31 +848,27 @@ export class GeneralService {
      */
     public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean): void {
         let isQueryParams: boolean;
-        if (screen.width <= 767) {
-            this.router.navigate(["/pages/mobile-home"]);
+        if (route.includes('?')) {
+            parameter = parameter || {};
+            isQueryParams = true;
+            const splittedRoute = route.split('?');
+            route = splittedRoute[0];
+            const paramString = splittedRoute[1];
+            const params = paramString?.split('&');
+            params?.forEach(param => {
+                const [key, value] = param.split('=');
+                parameter[key] = value;
+            });
+        }
+        if (isQueryParams) {
+            this.router.navigate([route], { queryParams: parameter });
         } else {
-            if (route.includes('?')) {
-                parameter = parameter || {};
-                isQueryParams = true;
-                const splittedRoute = route.split('?');
-                route = splittedRoute[0];
-                const paramString = splittedRoute[1];
-                const params = paramString?.split('&');
-                params?.forEach(param => {
-                    const [key, value] = param.split('=');
-                    parameter[key] = value;
-                });
-            }
-            if (isQueryParams) {
-                this.router.navigate([route], { queryParams: parameter });
-            } else {
-                this.router.navigate([route], parameter);
-            }
-            if (isElectron && isSocialLogin) {
-                setTimeout(() => {
-                    window.location.reload();
-                }, 200);
-            }
+            this.router.navigate([route], parameter);
+        }
+        if (isElectron && isSocialLogin) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 200);
         }
     }
 
@@ -857,6 +887,7 @@ export class GeneralService {
             case AdjustedVoucherType.CreditNote: return commonLocaleData?.app_voucher_types.credit_note;
             case AdjustedVoucherType.DebitNote: return commonLocaleData?.app_voucher_types.debit_note;
             case AdjustedVoucherType.Payment: return commonLocaleData?.app_voucher_types.payment;
+            case AdjustedVoucherType.Journal: return commonLocaleData?.app_voucher_types.journal;
             default: return '';
         }
     }
@@ -952,7 +983,7 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public removeSpecialCharactersFromAmount(amount: any): string {
-        amount = amount.toString();
+        amount = amount?.toString();
         return amount?.replace(/,/g, "")?.replace(/ /g, "")?.replace(/'/g, "").trim();
     }
 
@@ -978,7 +1009,7 @@ export class GeneralService {
      * @returns {*} Modified item with tooltup text for grand total and total due amount
      * @memberof GeneralService
      */
-    public addToolTipText(selectedVoucher: any, baseCurrency: string, item: any, localeData: any, commonLocaleData: any): any {
+    public addToolTipText(selectedVoucher: any, baseCurrency: string, item: any, localeData: any, commonLocaleData: any, giddhBalanceDecimalPlaces: number): any {
         try {
             let balanceDueAmountForCompany, balanceDueAmountForAccount, grandTotalAmountForCompany,
                 grandTotalAmountForAccount;
@@ -987,7 +1018,7 @@ export class GeneralService {
                 balanceDueAmountForCompany = Number(item.totalBalance.amountForCompany) || 0;
                 balanceDueAmountForAccount = Number(item.totalBalance.amountForAccount) || 0;
             }
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].indexOf(selectedVoucher) > -1 && item.grandTotal) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment]?.indexOf(selectedVoucher) > -1 && item.grandTotal) {
                 grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
                 grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
             }
@@ -996,10 +1027,10 @@ export class GeneralService {
             if (this.voucherApiVersion === 2) {
                 grandTotalConversionRate = item.exchangeRate;
             } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
-                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
             }
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
-                balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
+                balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
                 if (this.voucherApiVersion !== 2) {
                     item.exchangeRate = balanceDueAmountConversionRate;
                 }
@@ -1073,10 +1104,10 @@ export class GeneralService {
         }
         if (
             this.voucherApiVersion === 2
-            && entryAccount?.parentGroups?.length > 0 && ledgerAccount?.parentGroups?.length > 0 &&
-            (((ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors') && (entryAccount?.parentGroups[1]?.uniqueName === VoucherTypeEnum.cash || entryAccount?.parentGroups[1]?.uniqueName === 'bankaccounts'))
+            && entryAccount?.parentGroups?.length > 1 && ledgerAccount?.parentGroups?.length > 1 &&
+            (((ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors') && (entryAccount?.parentGroups[1]?.uniqueName === VoucherTypeEnum.cash || entryAccount?.parentGroups[1]?.uniqueName === 'bankaccounts' || (this.voucherApiVersion === 2 && entryAccount?.parentGroups[1]?.uniqueName === 'loanandoverdraft')))
                 ||
-                ((ledgerAccount?.parentGroups[1]?.uniqueName === VoucherTypeEnum.cash || ledgerAccount?.parentGroups[1]?.uniqueName === 'bankaccounts') && (entryAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || entryAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors')))
+                ((ledgerAccount?.parentGroups[1]?.uniqueName === VoucherTypeEnum.cash || ledgerAccount?.parentGroups[1]?.uniqueName === 'bankaccounts' || (this.voucherApiVersion === 2 && ledgerAccount?.parentGroups[1]?.uniqueName === 'loanandoverdraft')) && (entryAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || entryAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors')))
             &&
             (!voucherType || (["rcpt", "pay", "advance-receipt"].includes(voucherType)))
         ) {
@@ -1139,4 +1170,360 @@ export class GeneralService {
     public dropdownFocusOut(dropdownListItem: HTMLElement): void {
         dropdownListItem.classList.remove('custom-keyboard-dropdown-list-focus');
     }
+
+    /**
+     * Adds link tag
+     *
+     * @param {string} path
+     * @memberof GeneralService
+     */
+    public addLinkTag(path: string): void {
+        let linkTag = document.createElement('link');
+        linkTag.href = path;
+        linkTag.rel = 'stylesheet';
+        linkTag.crossOrigin = "anonymous";
+        linkTag.as = "style";
+        document.body.appendChild(linkTag);
+    }
+
+    /**
+     * Returns true if css is loaded else false
+     *
+     * @param {string} path
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public checkIfCssExists(path: string): boolean {
+        let found = false;
+        for (let i = 0; i < document.styleSheets?.length; i++) {
+            if (document.styleSheets[i]?.href == path) {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
+
+    /**
+     * This will add object in array if doesn't exists
+     *
+     * @param {any[]} array
+     * @param {*} value
+     * @returns {Array<string>}
+     * @memberof GeneralService
+     */
+    public addObjectInArray(array: any[], value: any): Array<string> {
+        let exists = false;
+        if (array && array.length > 0) {
+            array.forEach(item => {
+                if (item?.poUniqueName === value?.poUniqueName) {
+                    exists = true;
+                }
+            });
+        }
+
+        if (!exists) {
+            array.push(value);
+        }
+
+        return array;
+    }
+
+    /**
+     * This will check if object exists in array
+     *
+     * @param {any[]} array
+     * @param {*} value
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public checkIfObjectExistsInArray(array: any[], value: any): boolean {
+        let exists = false;
+
+        if (array && array.length > 0) {
+            array.forEach(item => {
+                if (item?.poUniqueName === value?.poUniqueName) {
+                    exists = true;
+                }
+            });
+        }
+
+        return exists;
+    }
+
+    /**
+     * This will remove object from array
+     *
+     * @param {any[]} array
+     * @param {*} value
+     * @returns {Array<string>}
+     * @memberof GeneralService
+     */
+    public removeObjectFromArray(array: any[], value: any): Array<string> {
+        let index = -1;
+        if (array && array.length > 0) {
+            let loop = 0;
+            array.forEach(item => {
+                if (item?.poUniqueName === value?.poUniqueName) {
+                    index = loop;
+                }
+                loop++;
+            });
+        }
+
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+
+        return array;
+    }
+
+    /**
+     * Set parameter in local storage
+     *
+     * @param {*} key
+     * @param {*} value
+     * @memberof GeneralService
+     */
+    public setParameterInLocalStorage(key: any, value: any): void {
+        localStorage.setItem(key, value);
+    }
+
+    /**
+     * Removes parameter from local storage
+     *
+     * @param {*} key
+     * @memberof GeneralService
+     */
+    public removeLocalStorageParameter(key: any): void {
+        localStorage.removeItem(key);
+    }
+
+    /**
+     * Gets parameter from url
+     *
+     * @param {*} sParam
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getUrlParameter(sParam: any): any {
+        let sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : this.removeProtocol(decodeURIComponent(sParameterName[1]));
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Removes protocol from url
+     *
+     * @param {string} url
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public removeProtocol(url: string): string {
+        url = url.replace("https://", "");
+        url = url.replace("http://", "");
+        return url;
+    }
+
+    /**
+     * Returns the formatted tax list based on the taxes applied
+     * on any account, it is required when tax component is not rendered
+     * in the UI. Currently, the tax component calculates the formatted tax
+     * list and then provides the same to the parent component. With this
+     * implementation, we no longer need to rely on tax component.
+     *
+     * @param {ITaxUtilRequest} requestObj Request object for formatting
+     * @return {Array<ITaxControlData>} Formatted list of taxes
+     * @memberof GeneralService
+     */
+    public getTaxValues(requestObj: ITaxUtilRequest): Array<ITaxControlData> {
+        let {
+            customTaxTypesForTaxFilter,
+            taxes,
+            exceptTaxTypes,
+            taxRenderData,
+            applicableTaxes,
+            date
+        } = requestObj;
+        if (customTaxTypesForTaxFilter && customTaxTypesForTaxFilter.length) {
+            taxes = taxes?.filter(f => customTaxTypesForTaxFilter.includes(f.taxType));
+        }
+        if (exceptTaxTypes && exceptTaxTypes.length) {
+            taxes = taxes?.filter(f => !exceptTaxTypes.includes(f.taxType));
+        }
+        taxes.map(tax => {
+            let index = taxRenderData?.findIndex(f => f?.uniqueName === tax?.uniqueName);
+            // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
+            if (index > -1) {
+                taxRenderData[index].isChecked =
+                    applicableTaxes && applicableTaxes.length ? applicableTaxes.some(item => item === tax?.uniqueName) :
+                        taxRenderData[index].isChecked ? taxRenderData[index].isChecked : false;
+                if (date && tax.taxDetail && tax.taxDetail.length) {
+                    taxRenderData[index].amount =
+                        (dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(dayjs(date, GIDDH_DATE_FORMAT)) || dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < dayjs(date, GIDDH_DATE_FORMAT)) ?
+                            tax.taxDetail[0].taxValue : 0;
+                }
+            } else {
+                let taxObj = new ITaxControlData();
+                taxObj.name = tax.name;
+                taxObj.uniqueName = tax?.uniqueName;
+                taxObj.type = tax.taxType;
+
+                if (date) {
+                    date = (typeof date === "object") ? dayjs(date).format(GIDDH_DATE_FORMAT) : date;
+                    let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
+                        return dayjs(p.date, GIDDH_DATE_FORMAT);
+                    }, 'desc');
+                    let exactDate = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT).isSame(dayjs(date, GIDDH_DATE_FORMAT)));
+                    if (exactDate?.length > 0) {
+                        taxObj.amount = exactDate[0].taxValue;
+                    } else {
+                        let filteredTaxObject = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT) < dayjs(date, GIDDH_DATE_FORMAT));
+                        if (filteredTaxObject?.length > 0) {
+                            taxObj.amount = filteredTaxObject[0].taxValue;
+                        } else {
+                            taxObj.amount = 0;
+                        }
+                    }
+                } else {
+                    taxObj.amount = tax.taxDetail[0].taxValue;
+                }
+                taxObj.isChecked = applicableTaxes && applicableTaxes.length ? applicableTaxes.some(s => s === tax?.uniqueName) : false;
+
+                taxObj.isDisabled = false;
+                taxRenderData.push(taxObj);
+            }
+        });
+        if (taxRenderData?.length) {
+            taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
+        }
+        return taxRenderData;
+    }
+
+    /**
+     * Returns the formatted discount list based on the discountes applied
+     * on any account, it is required when discount component is not rendered
+     * in the UI. Currently, the discount component calculates the formatted discount
+     * list and then provides the same to the parent component. With this
+     * implementation, we no longer need to rely on discount component.
+     *
+     * @param {IDiscountUtilRequest} requestObj Request object for formatting
+     * @return {Array<LedgerDiscountClass>} Formatted list of discounts
+     * @memberof GeneralService
+     */
+    public getDiscountValues(requestObj: IDiscountUtilRequest): Array<LedgerDiscountClass> {
+        let {
+            discountsList,
+            discountAccountsDetails
+        } = requestObj;
+        discountsList.forEach(acc => {
+            if (discountAccountsDetails) {
+                let hasItem = discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
+                if (!hasItem) {
+                    let obj: LedgerDiscountClass = new LedgerDiscountClass();
+                    obj.amount = acc.discountValue;
+                    obj.discountValue = acc.discountValue;
+                    obj.discountType = acc.discountType;
+                    obj.isActive = false;
+                    obj.particular = acc.linkAccount?.uniqueName;
+                    obj.discountUniqueName = acc?.uniqueName;
+                    obj.name = acc.name;
+                    discountAccountsDetails.push(obj);
+                }
+            } else {
+                discountAccountsDetails = [];
+            }
+        });
+        return discountAccountsDetails;
+    }
+
+    /**
+     * swap array elements
+     *
+     * @param {*} arr
+     * @param {number} i
+     * @param {number} j
+     * @memberof GeneralService
+     */
+    public swap(arr: any, i: number, j: number): void {
+        const temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    /**
+     * generate permutations of array
+     *
+     * @param {*} arr
+     * @param {number} [start=0]
+     * @param {*} [result=[]]
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public generatePermutations(arr: any, start = 0, result = []): any {
+        if (start === arr.length - 1) {
+            result.push([...arr]);
+            return;
+        }
+
+        for (let i = start; i < arr.length; i++) {
+            this.swap(arr, start, i);
+            this.generatePermutations(arr, start + 1, result);
+            this.swap(arr, start, i); // backtrack
+        }
+
+        return result;
+    }
+
+    /**
+     * Reads the selected file and returns blob
+     *
+     * @param {*} file
+     * @param {Function} callback
+     * @memberof GeneralService
+     */
+    public getSelectedFile(file: any, callback: Function): void {
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(file);
+        reader.onload = () => {
+            const blob = new Blob([reader.result], { type: file.type });
+            callback(blob, file);
+        };
+    }
+
+    /**
+     * Reads the selected file and returns base64
+     *
+     * @param {*} file
+     * @param {Function} callback
+     * @memberof GeneralService
+     */
+    public getSelectedFileBase64(file: any, callback: Function): void {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            callback(reader.result);
+        };
+    }
+
+    /**
+     * Check if is cidr range
+     *
+     * @param {string} cidr
+     * @return {*}  {boolean}
+     * @memberof GeneralService
+     */
+    public isCidr(cidr: string): boolean {
+        return (/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))?$/g).test(cidr);
+    };
 }

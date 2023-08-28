@@ -6,7 +6,11 @@
     (translationComplete)="translationComplete($event)"
 >
     <!-- AccountInfo -->
-    <div *ngIf="isModalOpen" class="p-modal-tooltip">
+    <div
+        *ngIf="isModalOpen"
+        class="p-modal-tooltip"
+        (clickOutside)="accountAsideMenuState === 'out' ? getUpdatedList(false) : ''"
+    >
         <div class="tb-pl-modal-header p-0">
             <div class="account-detail-modal-header-div">
                 <div class="account-detail-modal-div">
@@ -16,7 +20,7 @@
                                 <h3 class="account-detail-custom-title">{{ accInfo?.name }}</h3>
                             </div>
 
-                            <div class="account-detail-padding" (click)="performActions(0)">
+                            <div class="account-detail-padding" (click)="performActions(0, $event)">
                                 <img src="./assets/images/path.svg" />
                             </div>
                         </div>
@@ -128,5 +132,19 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+    <div *ngIf="accountAsideMenuState === 'in'">
+        <aside-menu-account
+            [activeGroupUniqueName]="activeGroupUniqueName"
+            [activeAccountDetails]="accInfo"
+            [isUpdateAccount]="true"
+            class="account-aside-menu-state transform-inherit"
+            [@slideInOut]="accountAsideMenuState"
+            [commonLocaleData]="commonLocaleData"
+            (closeAsideEvent)="getUpdatedList(false)"
+            (getUpdateList)="getUpdatedList(true)"
+        >
+        </aside-menu-account>
     </div>
 </ng-container>

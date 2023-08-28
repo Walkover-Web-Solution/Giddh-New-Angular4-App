@@ -22,6 +22,10 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
     public emailData: string = '';
     public fileType: string = 'pdf';
     public order: string = 'asc';
+    /** Hide/show voucher number in exported csv */
+    public showVoucherNumber: boolean = false;
+    /** Hide/show entry voucher in exported csv */
+    public showEntryVoucher: boolean = false;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -41,7 +45,7 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
     }
 
     public exportLedger() {
-        this.closeExportDaybookModal.emit({ type: this.emailTypeSelected, fileType: this.fileType, order: this.order });
+        this.closeExportDaybookModal.emit({ type: this.emailTypeSelected, fileType: this.fileType, order: this.order, showVoucherNumber: this.showVoucherNumber, showEntryVoucher: this.showEntryVoucher });
     }
 
     public ngOnDestroy() {

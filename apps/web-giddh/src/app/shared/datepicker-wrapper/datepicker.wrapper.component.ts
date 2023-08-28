@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Renderer2, Output, EventEmitter, OnChanges, SimpleChanges, HostListener } from '@angular/core';
-import * as _moment from 'moment';
+import * as dayjs from 'dayjs';
 
 @Component({
     selector: 'app-datepicker-wrapper',
@@ -7,16 +7,16 @@ import * as _moment from 'moment';
 })
 
 export class DatepickerWrapperComponent implements OnInit, OnChanges {
-    public moment = _moment;
+    public dayjs = dayjs;
 
     @Output() onChange: EventEmitter<Object> = new EventEmitter();
     @Output() rangeClicked: EventEmitter<Object> = new EventEmitter();
     @Output() datesUpdated: EventEmitter<Object> = new EventEmitter();
 
-    @Input() public inputStartDate: _moment.Moment;
-    @Input() public inputEndDate: _moment.Moment;
-    @Input() public minDate: _moment.Moment;
-    @Input() public maxDate: _moment.Moment;
+    @Input() public inputStartDate: dayjs.Dayjs;
+    @Input() public inputEndDate: dayjs.Dayjs;
+    @Input() public minDate: dayjs.Dayjs;
+    @Input() public maxDate: dayjs.Dayjs;
     @Input() public autoApply: boolean;
     @Input() public alwaysShowCalendars: boolean;
     @Input() public showCustomRangeLabel: boolean;
@@ -61,11 +61,11 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
     public ngOnInit(): void {
 
         if (!this.inputStartDate) {
-            this.inputStartDate = _moment().startOf('day');
+            this.inputStartDate = dayjs().startOf('day');
         }
 
         if (!this.inputEndDate) {
-            this.inputEndDate = _moment().endOf('day');
+            this.inputEndDate = dayjs().endOf('day');
         }
 
         this.initialWindowOffset = window.pageYOffset;

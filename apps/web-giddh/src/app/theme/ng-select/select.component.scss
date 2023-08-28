@@ -1,11 +1,9 @@
 ng-select {
-    display: inline-block;
+    display: block;
     margin: 0;
     position: relative;
-    vertical-align: middle;
-    // width: 100%;
     outline: none;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     * {
         box-sizing: border-box;
     }
@@ -17,12 +15,8 @@ ng-select {
         cursor: pointer;
         user-select: none;
         width: 100%;
-        &.open {
-        }
         &.focus {
             outline: none;
-        }
-        &.below {
         }
         &.disabled {
             background-color: var(--color-dark-fog);
@@ -56,10 +50,10 @@ ng-select {
                 }
             }
             > div.clear {
-                font-size: 18px;
+                font-size: var(--font-size-16);
             }
             > div.toggle {
-                font-size: 14px;
+                font-size: var(--font-size-15);
             }
         }
         > div.multiple {
@@ -77,14 +71,14 @@ ng-select {
                 cursor: default;
                 display: inline-block;
                 flex-shrink: 0;
-                font-size: 14px;
+                font-size: var(--font-size-15);
                 line-height: 22px;
                 margin: 3px 5px 3px 0;
                 padding: 0 4px;
                 span.deselect-option {
                     color: var(--color-gray);
                     cursor: pointer;
-                    font-size: 14px;
+                    font-size: var(--font-size-15);
                     height: 20px;
                     line-height: 20px;
                     &:hover {
@@ -109,7 +103,7 @@ ng-select {
     label {
         color: rgba(0, 0, 0, 0.6);
         display: block;
-        font-size: 13px;
+        font-size: var(--font-size-15);
         padding: 4px 0;
     }
     select-dropdown {
@@ -129,17 +123,8 @@ ng-select {
 
 ng-select.splSales {
     width: 190px;
-    // height: 42px;
     > div {
         border-color: var(--color-iron);
-        // height: 41px;
-        > .single {
-            // height: 39px;
-            .placeholder,
-            .value {
-                // line-height: 39px;
-            }
-        }
     }
     .glyphicon {
         top: 7px;

@@ -59,7 +59,7 @@
                         <ng-template #optionTemplate1 let-option="option">
                             <a href="javascript:void(0)" class="list-item bd-rb">
                                 <div class="item">{{ option.label }}</div>
-                                <div class="item-unique">{{ option.value }}</div>
+                                <div class="item-unique">{{ option?.value }}</div>
                             </a>
                         </ng-template>
                     </sh-select>
@@ -97,11 +97,12 @@
                     <label>{{ commonLocaleData?.app_cheque_clearance_date }}</label>
                     <input
                         type="text"
-                        [textMask]="{ mask: dateMask, guide: true }"
+                        bsDatepicker
                         class="form-control"
                         [(ngModel)]="paymentActionFormObj.chequeClearanceDate"
                         name="chequeClearance"
                         [placeholder]="giddhDateFormat"
+                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                     />
                 </div>
             </div>

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { AsideBranchTransferPaneComponent } from '../inventory/components/aside-branch-transfer-pane/aside-branch-transfer-pane.component';
@@ -11,7 +10,6 @@ import { AsidePaneComponent } from '../inventory/components/aside-pane/aside-pan
 import { AsideTransferPaneComponent } from '../inventory/components/aside-transfer-pane/aside-transfer-pane.component';
 import { JobworkComponent } from '../inventory/jobwork/jobwork.component';
 import { JobworkWelcomeComponent } from '../inventory/jobwork/welcome-jobwork/welcome-jobwork.component';
-import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
 import { ExceptionLogService } from '../services/exception-log.service';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
@@ -43,7 +41,12 @@ import { InventoryComponent } from './inventory.component';
 import { InventoryRoutingModule } from './inventory.routing.module';
 import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
-import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
+import { VoucherModule } from '../voucher/voucher.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
     declarations: [
@@ -108,22 +111,25 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
     providers: [ExceptionLogService],
     imports: [
         InventoryRoutingModule,
-        TooltipModule,
+        TooltipModule.forRoot(),
         SharedModule,
         Daterangepicker,
         TextCaseChangeModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         CurrencyModule,
-        TabsModule,
+        TabsModule.forRoot(),
         ReactiveFormsModule,
         DigitsOnlyModule,
         NgxMaskModule.forRoot(),
-        ProformaInvoiceModule,
         GiddhRoundOffPipeModule,
         InventoryAddStockModule,
         ConfirmModalModule,
-        NgxBootstrapSwitchModule.forRoot()
-    ],
-    entryComponents: [PaginationComponent]
+        ScrollingModule,
+        AsideMenuProductServiceModule,
+        VoucherModule,
+        FormFieldsModule,
+        MatSlideToggleModule,
+        MatDialogModule
+    ]
 })
 export class InventoryModule { }

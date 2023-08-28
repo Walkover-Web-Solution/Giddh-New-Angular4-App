@@ -16,14 +16,11 @@ import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingsComponent } from './settings.component';
 import { SettingRountingModule } from './settings.routing.module';
 import { SettingsTagsComponent } from './tags/tags.component';
-import { DeleteTaxConfirmationModelComponent } from './Taxes/confirmation/confirmation.model.component';
-import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
-import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
+import { DeleteTaxConfirmationModelComponent } from './taxes/confirmation/confirmation.model.component';
+import { SettingTaxesComponent } from './taxes/setting.taxes.component';
+import { SettingTriggerComponent } from './trigger/setting.trigger.component';
 import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-warehouse.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
-import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
-import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
@@ -38,13 +35,27 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { SettingIntegrationPaymentModule } from './integration/payment/setting.integration.payment.module';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
-import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
-
-
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-    suppressScrollX: true
-};
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatInputModule } from '@angular/material/input';
+import { ClipboardModule } from 'ngx-clipboard';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { SettingCampaignComponent } from './integration/campaign/setting-campaign/setting-campaign.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { NgxPlaidLinkModule } from "ngx-plaid-link";
+import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 
 @NgModule({
     declarations: [
@@ -69,7 +80,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PersonalInformationComponent,
         AddressSettingsComponent,
         OtherSettingsComponent,
-        CreateBranchComponent
+        CreateBranchComponent,
+        SettingCampaignComponent
     ],
     imports: [
         SharedModule,
@@ -78,8 +90,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ContactModule,
         ReactiveFormsModule,
         CurrencyModule,
-        PerfectScrollbarModule,
-        TextMaskModule,
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
         ShSelectModule,
@@ -88,14 +98,27 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ReplacePipeModule,
         NoDataModule,
         SettingIntegrationPaymentModule,
+        MatTabsModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatIconModule,
+        MatMenuModule,
+        MatTableModule,
+        MatSelectModule,
+        MatDialogModule,
         ConfirmModalModule,
-        NgxBootstrapSwitchModule.forRoot()
-    ],
-    providers: [
-        {
-            provide: PERFECT_SCROLLBAR_CONFIG,
-            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        }
+        MatSlideToggleModule,
+        BsDropdownModule.forRoot(),
+        MatGridListModule,
+        FormFieldsModule,
+        MatInputModule,
+        ClipboardModule,
+        MatCheckboxModule,
+        MatChipsModule,
+        MatAutocompleteModule,
+        MatSlideToggleModule,
+        NgxPlaidLinkModule,
+        AsideMenuAccountModule
     ]
 })
 

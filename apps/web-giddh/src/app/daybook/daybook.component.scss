@@ -2,13 +2,10 @@
     background-size: 17px !important;
     background-position: 9px 8px !important;
     background-repeat: no-repeat !important;
-    padding-left: 30px !important;
     position: relative;
     z-index: 1;
     cursor: default;
     border: 1px solid var(--color-common-secondary-border);
-    text-align: center;
-    max-width: 230px;
     width: 230px;
 }
 
@@ -41,7 +38,7 @@
     justify-content: center;
     -webkit-box-align: center;
     align-items: center;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     margin-left: 15px;
     border: 1px solid var(--color-primary-button-border);
     border-radius: 5px;
@@ -78,15 +75,15 @@
 }
 
 .expand-collapse-btn a {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     background-color: var(--color-white);
     border: 1px solid var(--color-common-secondary-border);
     border-radius: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
+    font-size: var(--font-size-16);
     color: var(--color-giddh-blue);
     &:hover {
         background: var(--color-blue);
@@ -101,7 +98,7 @@
 button.btn.btn-filter {
     background: var(--color-dark-fog);
     border: 1px solid var(--color-dark-fog);
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-giddh-blue);
     align-items: center;
 }
@@ -117,6 +114,7 @@ button.btn.btn-filter {
 .daybook-w-200 {
     width: 200px;
     white-space: normal !important;
+    text-transform: capitalize;
 }
 
 .daybook-w-300 {

@@ -2,21 +2,13 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
-import {
-    AmazonSellerClass,
-    CashfreeClass,
-    EmailKeyClass,
-    PaymentClass,
-    RazorPayClass,
-    SmsKeyClass
-} from '../../models/api-models/SettingsIntegraion';
+import { AmazonSellerClass, CashfreeClass, EmailKeyClass, PaymentClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { TabsetComponent, TabDirective } from "ngx-bootstrap/tabs";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
@@ -24,17 +16,21 @@ import { BootstrapToggleSwitch, Configuration, SELECT_ALL_RECORDS } from "../../
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
-import { forIn } from '../../lodash-optimized';
 import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
-import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, UNLIMITED_LIMIT } from '../constants/settings.constant';
+import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, SettingsIntegrationTabV1, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
-
-export declare const gapi: any;
+import { TabDirective } from 'ngx-bootstrap/tabs';
+import { MatTabGroup } from '@angular/material/tabs';
+import {
+    NgxPlaidLinkService,
+    PlaidLinkHandler,
+    LegacyPlaidConfig
+} from "ngx-plaid-link";
 
 @Component({
     selector: 'setting-integration',
@@ -57,7 +53,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public payoutAdded: boolean = false;
     public bankAccounts$: Observable<IOption[]>;
     public gmailAuthCodeUrl$: Observable<string> = null;
-    public amazonSellerForm: FormGroup;
+    public amazonSellerForm: UntypedFormGroup;
     public amazonEditItemIdx: number;
     public amazonSellerRes: AmazonSellerClass[];
     public isGmailIntegrated$: Observable<boolean>;
@@ -66,15 +62,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
     private isSellerAdded: Observable<boolean> = observableOf(false);
     private isSellerUpdate: Observable<boolean> = observableOf(false);
-    /** user who is logged in currently */
-    private loggedInUserEmail: string;
     /** Input mast for number format */
     public inputMaskFormat: string = '';
-    /** To check company country */
-    public isIndianCompany: boolean = true;
-
-    @Input() private selectedTabParent: number;
-    @ViewChild('integrationTab', { static: true }) public integrationTab: TabsetComponent;
+    /**This will use for select tab index */
+    @Input() public selectedTabParent: number;
     @ViewChild('removegmailintegration', { static: true }) public removegmailintegration: ModalDirective;
     @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
     @ViewChild('paymentFormAccountName', { static: true }) paymentFormAccountName: ShSelectComponent;
@@ -119,7 +110,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Form Group for create new account form */
-    public createNewAccountForm: FormGroup;
+    public createNewAccountForm: UntypedFormGroup;
     /** List of users to receive payment alerts */
     public paymentAlerts: any[] = [];
     /** Holds string for select all records */
@@ -135,17 +126,39 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** This will have payor account details */
     public activePayorAccount: any;
     /** Form Group for edit account user form */
-    public editAccountUserForm: FormGroup;
+    public editAccountUserForm: UntypedFormGroup;
     /** Form Group for edit account form */
-    public editAccountForm: FormGroup;
+    public editAccountForm: UntypedFormGroup;
     /** Holds unlimited text for amount limit */
     public unlimitedLimit: string = UNLIMITED_LIMIT;
     /** This will hold active company data */
     public activeCompany: any;
     /** Holds image path */
     public imgPath: string = '';
+    /** This will hold apiUrl */
+    public apiUrl: string = '';
+    /** This will hold isCopied */
+    public isCopied: boolean = false;
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
+    /** This will hold plaid link handler */
+    private plaidLinkHandler: PlaidLinkHandler;
+    /** This will hold plaid configuration */
+    private plaidConfig: LegacyPlaidConfig = {
+        env: "sandbox",
+        token: null,
+        product: ["auth","transactions"],
+        onSuccess: undefined,
+        onExit: undefined
+    };
+    /** List of icici bank supported countries */
+    public iciciBankSupportedCountryList: any[] = ["IN", "NP", "BT"];
+    /** True, if is other country in payment integration */
+    public isIciciBankSupportedCountry: boolean = false;
+/** True, if is add or manage group form outside */
+    public isAddAndManageOpenedFromOutside:boolean = false;
 
     constructor(
         private router: Router,
@@ -155,12 +168,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private toasty: ToasterService,
         private _companyActions: CompanyActions,
         private _authenticationService: AuthenticationService,
-        private _fb: FormBuilder,
+        private _fb: UntypedFormBuilder,
         private settingsPermissionActions: SettingsPermissionActions,
         private generalService: GeneralService,
         private settingsIntegrationService: SettingsIntegrationService,
         private searchService: SearchService,
-        private salesService: SalesService
+        private salesService: SalesService,
+        private plaidLinkService: NgxPlaidLinkService,
+        private activateRoute: ActivatedRoute
+
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -171,17 +187,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(s => s.session.user), take(1)).subscribe(result => {
             if (result && result.user) {
                 this.generalService.user = result.user;
-                this.loggedInUserEmail = result.user.email;
             }
         });
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        //logic to switch to payment tab if coming from vedor tabs add payment
-        if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
-            this.selectTab(this.selectedTabParent);
-        }
+        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+
+        let companyUniqueName = this.generalService.companyUniqueName;
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
 
         // getting all page data of integration page
         this.store.pipe(select(p => p?.settings?.integration), takeUntil(this.destroyed$)).subscribe((o) => {
@@ -263,10 +278,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                this.isIndianCompany = profile.countryV2.alpha2CountryCode === 'IN' ? true : false;
-                if (!this.isIndianCompany && this.selectedTabParent === 3) {
-                    this.selectedTabParent = 0;
-                    this.selectTab(this.selectedTabParent);
+                if (this.iciciBankSupportedCountryList.includes(profile.countryV2.alpha2CountryCode)) {
+                    this.isIciciBankSupportedCountry = true;
+                } else {
+                    this.isIciciBankSupportedCountry = false;
                 }
             }
         });
@@ -280,13 +295,27 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.activeCompany = activeCompany;
             }
         });
+        this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(response => {
+            if (!response && this.isAddAndManageOpenedFromOutside) {
+                this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(resp => {
+                    if (resp?.referrer === 'payment') {
+                        this.loadDefaultBankAccountsSuggestions();
+                    }
+                });
+            }
+            this.isAddAndManageOpenedFromOutside = response;
+        });
     }
 
-    public ngAfterViewInit() {
-        if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
-            this.selectTab(this.selectedTabParent);
+    /**
+     * This hook will be called after component is initialized
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public ngAfterViewInit(): void {
+        if (this.selectedTabParent) {
+            this.loadTabData(this.selectedTabParent);
         }
-        this.loadTabData();
     }
 
     public setDummyData() {
@@ -301,20 +330,20 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public onSubmitMsgform(f: NgForm) {
         if (f.valid) {
-            this.store.dispatch(this.settingsIntegrationActions.SaveSMSKey(f.value.smsFormObj));
+            this.store.dispatch(this.settingsIntegrationActions.SaveSMSKey(f?.value.smsFormObj));
         }
     }
 
     public onSubmitEmailform(f: NgForm) {
         if (f.valid) {
-            this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f.value));
+            this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f?.value));
         }
     }
 
     public selectAccount(event: IOption) {
-        if (event.value) {
+        if (event?.value) {
             this.accounts$.subscribe((arr: IOption[]) => {
-                let res = find(arr, (o) => o.value === event.value);
+                let res = find(arr, (o) => o?.value === event.value);
                 if (res) {
                     this.razorPayObj.account.name = res.text;
                 }
@@ -333,7 +362,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public unlinkAccountFromRazorPay() {
-        if (this.razorPayObj.account && this.razorPayObj.account.name && this.razorPayObj.account.uniqueName) {
+        if (this.razorPayObj.account && this.razorPayObj.account.name && this.razorPayObj.account?.uniqueName) {
             let data = cloneDeep(this.razorPayObj);
             if (data) {
                 data.account.uniqueName = null;
@@ -356,7 +385,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public selectCashfreeAccount(event: IOption, objToApnd) {
         let accObj = {
             name: event.label,
-            uniqueName: event.value
+            uniqueName: event?.value
         };
         objToApnd.account = accObj;
     }
@@ -402,7 +431,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public saveAmazonSeller(obj) {
         let sellers = [];
-        sellers.push(cloneDeep(obj.value));
+        sellers.push(cloneDeep(obj?.value));
         this.store.dispatch(this.settingsIntegrationActions.AddAmazonSeller(sellers));
     }
 
@@ -410,10 +439,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * updateAmazonSeller
      */
     public updateAmazonSeller(obj) {
-        if (!obj.value.sellerId) {
+        if (!obj?.value.sellerId) {
             return;
         }
-        let sellerObj = cloneDeep(obj.value);
+        let sellerObj = cloneDeep(obj?.value);
         delete sellerObj['secretKey'];
         this.store.dispatch(this.settingsIntegrationActions.UpdateAmazonSeller(sellerObj));
     }
@@ -422,7 +451,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * deleteAmazonSeller
      */
     public deleteAmazonSeller(sellerId, idx) {
-        let seller = this.amazonSellerRes.findIndex((o) => o.sellerId === sellerId);
+        let seller = this.amazonSellerRes?.findIndex((o) => o.sellerId === sellerId);
         if (seller > -1) {
             this.store.dispatch(this.settingsIntegrationActions.DeleteAmazonSeller(sellerId));
             this.removeAmazonSeller(idx);
@@ -443,25 +472,25 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public addAmazonSellerRow(i?: number, item?: any) {
-        const control = this.amazonSellerForm.controls['sellers'] as FormArray;
+        const control = this.amazonSellerForm.controls['sellers'] as UntypedFormArray;
         if (item) {
             if (control.controls[i]) {
                 control.controls[i]?.patchValue(item);
-                if (control.controls[i].value.sellerId) {
+                if (control.controls[i]?.value.sellerId) {
                     control.controls[i].disable();
                 }
             } else {
                 control.push(this.initAmazonReseller());
                 setTimeout(() => {
                     control.controls[i]?.patchValue(item);
-                    if (control.controls[i].value.sellerId) {
+                    if (control.controls[i]?.value.sellerId) {
                         control.controls[i].disable();
                     }
                 }, 200);
             }
         } else {
-            let arr = control.value;
-            if (!control.value[arr?.length - 1].sellerId) {
+            let arr = control?.value;
+            if (!control?.value[arr?.length - 1]?.sellerId) {
                 return;
             }
             control.push(this.initAmazonReseller());
@@ -471,7 +500,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     // remove amazon Seller controls
     public removeAmazonSeller(i: number) {
         // remove address from the list
-        const control = this.amazonSellerForm.controls['sellers'] as FormArray;
+        const control = this.amazonSellerForm.controls['sellers'] as UntypedFormArray;
         if (control?.length > 1) {
             control.removeAt(i);
         } else {
@@ -491,7 +520,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * enableDisableAmazonControl
      */
     public enableDisableAmazonControl(idx, type) {
-        const control = this.amazonSellerForm.controls['sellers'] as FormArray;
+        const control = this.amazonSellerForm.controls['sellers'] as UntypedFormArray;
         if (type === 'enable') {
             control.controls[idx].enable();
         } else {
@@ -501,12 +530,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     private getRedirectUrl(baseHref: string) {
         return `${baseHref}pages/settings?tab=integration`;
-    }
-
-    public selectTab(id: number) {
-        if (this.integrationTab.tabs[id] && this.integrationTab.tabs[id] !== undefined) {
-            this.integrationTab.tabs[id].active = true;
-        }
     }
 
     /**
@@ -541,7 +564,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     };
                     this._authenticationService.saveGmailToken(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
 
-                        if (res.status === 'success') {
+                        if (res?.status === 'success') {
                             this.toasty.successToast(this.localeData?.email?.gmail_added_successfully, this.commonLocaleData?.app_success);
                         } else {
                             this.toasty.errorToast(res.message, res.code);
@@ -569,12 +592,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public prepareDataForUI(data: ShareRequestForm[]): any {
         return data.map((item) => {
             if (item.allowedCidrs && item.allowedCidrs.length > 0) {
-                item.cidrsStr = item.allowedCidrs.toString();
+                item.cidrsStr = item.allowedCidrs?.toString();
             } else {
                 item.cidrsStr = null;
             }
             if (item.allowedIps && item.allowedIps.length > 0) {
-                item.ipsStr = item.allowedIps.toString();
+                item.ipsStr = item.allowedIps?.toString();
             } else {
                 item.ipsStr = null;
             }
@@ -589,11 +612,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadPaymentData(event?: any): void {
+        this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(result => {
+            this.isAddAndManageOpenedFromOutside = result;
+        });
         if (event && event instanceof TabDirective || !event) {
             this.loadDefaultBankAccountsSuggestions();
             this.getAllBankAccounts();
             this.store.dispatch(this._companyActions.getAllRegistrations());
-            this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
             this.store.pipe(take(1)).subscribe(s => {
                 this.selectedCompanyUniqueName = s.session.companyUniqueName;
                 this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
@@ -608,7 +633,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadEcommerceData(event?: any): void {
-        if (event && event instanceof TabDirective || !event) {
+        if (event && event instanceof MatTabGroup || !event) {
             this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
         }
     }
@@ -619,8 +644,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {any} event Tab select event
      * @memberof SettingIntegrationComponent
      */
-    public loadCollectionData(event?): void {
-        if (event && event instanceof TabDirective || !event) {
+    public loadCollectionData(event?: any): void {
+        if (event && event instanceof MatTabGroup || !event) {
             this.loadDefaultAccountsSuggestions();
             this.loadDefaultBankAccountsSuggestions();
             this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
@@ -634,7 +659,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadEmailData(event?: any): void {
-        if (event && event instanceof TabDirective || !event) {
+        if (event && event instanceof MatTabGroup || !event) {
             this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
             this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
         }
@@ -647,10 +672,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadSmsData(event?: any): void {
-        if (event && event instanceof TabDirective || !event) {
-            if (event && event instanceof TabDirective || !event) {
-                this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
-            }
+        if (event && event instanceof MatTabGroup || !event) {
+            this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
         }
     }
 
@@ -660,25 +683,27 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @private
      * @memberof SettingIntegrationComponent
      */
-    private loadTabData(): void {
-        switch (this.selectedTabParent) {
-            // case SettingsIntegrationTab.Sms:
-            //     this.loadSmsData();
-            //     break;
-            case SettingsIntegrationTab.Email:
+    private loadTabData(index: number): void {
+        if (this.voucherApiVersion === 2) {
+            if (SettingsIntegrationTab.Email === index) {
                 this.loadEmailData();
-                break;
-            case SettingsIntegrationTab.Collection:
+            }
+            if (SettingsIntegrationTab.Collection === index) {
                 this.loadCollectionData();
-                break;
-            case SettingsIntegrationTab.ECommerce:
-                this.loadEcommerceData();
-                break;
-            case SettingsIntegrationTab.Payment:
+            }
+            if (SettingsIntegrationTab.Payment === index) {
                 this.loadPaymentData();
-                break;
-            default:
-                break;
+            }
+        } else {
+            if (SettingsIntegrationTabV1.Email === index) {
+                this.loadEmailData();
+            }
+            if (SettingsIntegrationTabV1.Collection === index) {
+                this.loadCollectionData();
+            }
+            if (SettingsIntegrationTabV1.Payment === index) {
+                this.loadPaymentData();
+            }
         }
     }
 
@@ -688,8 +713,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {string} tab
      * @memberof SettingIntegrationComponent
      */
-    public tabChanged(tab: string): void {
+    public tabChanged(event: any): void {
+        let tab = event?.tab?.textLabel?.toLocaleLowerCase();
         this.router.navigateByUrl('/pages/settings/integration/' + tab);
+        this.loadTabData(event?.index);
     }
 
     /**
@@ -714,7 +741,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -763,7 +790,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -802,7 +829,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     private loadDefaultBankAccountsSuggestions(): void {
-        this.salesService.getAccountsWithCurrency('bankaccounts').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.salesService.getAccountsWithCurrency('bankaccounts,loanandoverdraft').pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.results) {
                 const bankAccounts = response.body.results.map(account => ({
                     label: account?.name,
@@ -830,6 +857,85 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public openCreateNewAccountModal(): void {
         this.createNewAccountModal?.show();
+    }
+
+    /**
+     * This will open create new account modal
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public getPlaidLinkToken(): void {
+        this.settingsIntegrationService.getPlaidLinkToken().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body) {
+                this.plaidConfig.token = response.body?.link_token;
+                this.plaidLinkService
+                    .createPlaid(
+                        Object.assign({}, this.plaidConfig, {
+                            onSuccess: (token, metadata) => this.getPlaidSuccessPublicToken(token, metadata)
+                        })
+                    )
+                    .then((handler: PlaidLinkHandler) => {
+                        this.plaidLinkHandler = handler;
+                        this.plaidLinkHandler.open();
+                    });
+            } else {
+                this.toasty.clearAllToaster();
+                this.toasty.errorToast(response?.message);
+            }
+        });
+    }
+
+    /**
+     *This will use for get plaid success public token
+     *
+     * @param {*} token
+     * @param {*} metadata
+     * @memberof SettingIntegrationComponent
+     */
+    public getPlaidSuccessPublicToken(token: string, metadata: any): void {
+        let data = {
+            public_token: token,
+            institution: metadata?.institution,
+            accounts: metadata?.accounts
+        }
+        this.settingsIntegrationService.savePlaidAccessToken(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body) {
+                this.loadPaymentData();
+            } else {
+                this.toasty.clearAllToaster();
+                this.toasty.errorToast(response?.message);
+            }
+        });
+    }
+
+    /**
+     * This will use for select bank account only for plaid integration
+     *
+     * @param {*} event
+     * @param {*} bank
+     * @memberof SettingIntegrationComponent
+     */
+    public selectBankAccount(event: any, bank: any): void {
+        if (event) {
+            let request = { bankAccountUniqueName: bank?.iciciDetailsResource?.uniqueName };
+            let accountForm = {
+                accountNumber: bank?.iciciDetailsResource?.accountNumber,
+                accountUniqueName: event?.value,
+                paymentAlerts: [],
+                bankName: 'plaid'
+            };
+            this.settingsIntegrationService.updateAccount(accountForm, request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success") {
+                    if (response?.body?.message) {
+                        this.toasty.clearAllToaster();
+                        this.toasty.successToast(response?.body?.message);
+                    }
+                } else {
+                    this.toasty.clearAllToaster();
+                    this.toasty.errorToast(response?.message);
+                }
+            });
+        }
     }
 
     /**
@@ -1021,4 +1127,18 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
     }
+
+
+    /**
+     *This will use for copy api url link and display copied
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public copyUrl(): void {
+        this.isCopied = true;
+        setTimeout(() => {
+            this.isCopied = false;
+        }, 3000);
+    }
 }
+

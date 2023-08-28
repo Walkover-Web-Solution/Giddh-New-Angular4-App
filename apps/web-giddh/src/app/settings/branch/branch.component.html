@@ -231,7 +231,7 @@
                                     <li *ngFor="let cmp of companies$ | async">
                                         <input
                                             type="checkbox"
-                                            [checked]="selectedCompaniesUniquename.indexOf(cmp.uniqueName) !== -1"
+                                            [checked]="selectedCompaniesUniquename?.indexOf(cmp?.uniqueName) !== -1"
                                             (click)="checkUncheckMe(cmp, $event)"
                                         />
                                         {{ cmp.name }} <span *ngIf="cmp.nameAlias"> ({{ cmp.nameAlias }})</span>

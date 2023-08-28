@@ -1,280 +1,336 @@
-<giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
-<div class="stock-balance-wrapper" *ngIf="!isLoading">
-    <div class="stock-balance-top-bar">
-        <div class="stock-balance-top-bar-left-side">
-            <button class="new-stock-btn" mat-button [matMenuTriggerFor]="newStock">
-                + New Stock
-                <span class="caret"></span>
-            </button>
-            <mat-menu #newStock="matMenu">
-                <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/product/create'">Product</button>
-                <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/service/create'">Service</button>
-            </mat-menu>
-            <div class="warehouse-select-bar">
-                <mat-form-field class="search-warehouse-bar" appearance="outline">
+<ng-container
+    appTranslate
+    [file]="'inventory'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+    <div class="stock-balance-wrapper" *ngIf="!isLoading">
+        <div class="stock-balance-top-bar">
+            <div class="stock-balance-top-bar-left-side column-gap15">
+                <button mat-stroked-button color="primary" [matMenuTriggerFor]="newStock">
+                    {{ localeData?.warehouse_opening_balance?.new_stock }}
+                    <span class="caret"></span>
+                </button>
+                <mat-menu #newStock="matMenu">
+                    <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/product/create'">
+                        {{ commonLocaleData?.app_product }}
+                    </button>
+                    <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/service/create'">
+                        {{ commonLocaleData?.app_service }}
+                    </button>
+                </mat-menu>
+                <div class="col-xl-6 col-lg-10 col-md-10 pl-0">
                     <mat-select
-                        placeholder="Warehouses"
-                        multiple
-                        class="select-warehouse-bar"
-                        [(value)]="selectedWarehouse"
+                        name="selectedWarehouse"
+                        [multiple]="true"
+                        [(ngModel)]="selectedWarehouse"
+                        class="stock-mat-salect"
+                        [placeholder]="localeData?.warehouse_opening_balance?.select_warehouse"
                     >
+                        <mat-option class="balance-options">
+                            <ngx-mat-select-search
+                                [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                [formControl]="warehousesDropdown"
+                                [placeholderLabel]="localeData?.warehouse_opening_balance?.select_warehouse"
+                            >
+                                <i class="icon-cross" ngxMatSelectSearchClear></i>
+                            </ngx-mat-select-search>
+                        </mat-option>
+
                         <mat-option
+                            class="balance-options"
                             (click)="
-                                selectWarehouse(warehouse.uniqueName); updateSelectedWarehouse(warehouse.uniqueName)
+                                calculationWarehouse(warehouse?.uniqueName);
+                                updateCalculationWarehouse(warehouse?.uniqueName)
                             "
                             *ngFor="let warehouse of warehouses"
-                            [value]="warehouse.uniqueName"
+                            [value]="warehouse?.uniqueName"
                         >
                             {{ warehouse.name ?? "-" }}
                         </mat-option>
                     </mat-select>
-                </mat-form-field>
+                </div>
+            </div>
+            <div class="stock-balance-top-bar-right-side">
+                <select-table-column
+                    [moduleType]="moduleType"
+                    [customiseColumns]="customiseColumns"
+                    (isLoading)="isLoading = $event"
+                    (selectedColumns)="showSelectedTableColumns($event)"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    [iconClass]="'icon-options select-multiple-icon-options'"
+                >
+                </select-table-column>
             </div>
         </div>
-        <div class="stock-balance-top-bar-right-side">
-            <!-- <button mat-flat-button class="export-btn">
-                <img src="{{ imgPath }}download-blue.svg" alt="" /> Export
-            </button> -->
-            <button mat-flat-button [matMenuTriggerFor]="menu" class="filter-btn">
-                <img src="{{ imgPath }}filter.svg" alt="filter-button" />
-                <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="showUniqueName = !showUniqueName; $event.stopPropagation()">
-                        <mat-checkbox color="primary" [(ngModel)]="showUniqueName">Unique Name </mat-checkbox>
-                    </button>
-                    <button mat-menu-item (click)="showGroupName = !showGroupName; $event.stopPropagation()">
-                        <mat-checkbox color="primary" [(ngModel)]="showGroupName">Stock Group</mat-checkbox>
-                    </button>
-                </mat-menu>
-            </button>
-        </div>
-    </div>
-    <div class="searching-stocks">
-        <div class="list-head">
-            <div class="custom-material-search-bar stock-searchbar">
-                <img src="{{ imgPath }}search-new.svg" class="search-icon" />
-                <mat-form-field appearance="outline">
-                    <input
-                        matInput
-                        placeholder="Stocks"
+        <div class="searching-stocks">
+            <div class="list-head">
+                <div class="custom-material-search-bar stock-searchbar">
+                    <img src="{{ imgPath }}search-new.svg" class="search-icon" />
+                    <text-field
+                        [placeholder]="commonLocaleData?.app_stock"
                         autocomplete="off"
                         #productName
                         [formControl]="productNameSearching"
-                    />
-                </mat-form-field>
-            </div>
-            <div class="unique-name-wrapper" *ngIf="showUniqueName">
-                <h2 class="unique-name">Unique Name</h2>
-            </div>
-            <div class="group-list-head group-searchbar" *ngIf="showGroupName">
-                <img src="{{ imgPath }}search-new.svg" class="search-icon" />
-                <select-field
-                    [cssClass]="'form-control'"
-                    [name]="'stockGroup'"
-                    [placeholder]="'Group'"
-                    [options]="stockGroups"
-                    (selectedOption)="selectGroupName($event)"
-                    [defaultValue]="stockGroupName"
-                >
-                </select-field>
-            </div>
-            <div class="wrapper-warehouse">
-                <div class="warehouse-list">
-                    <ng-container *ngFor="let warehouse of warehouses">
-                        <div
-                            class="warehouse-list-head odd-even-shade"
-                            *ngIf="selectedWarehouse?.indexOf(warehouse?.uniqueName) > -1"
-                        >
-                            <p class="warehouse-list-head-num">{{ warehouse?.name ?? "-" }}</p>
-                            <div class="warehouse-list-head-options">
-                                <div class="d-flex">
-                                    <div class="flex-fill">Opening Bal</div>
-                                </div>
-                                <div class="d-flex">
-                                    <div class="flex-fill">Quantity</div>
-                                </div>
-
-                                <div class="d-flex">
-                                    <div class="flex-fill">Unit</div>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
+                        [cssClass]="'form-control bg-dropdown'"
+                    ></text-field>
                 </div>
-            </div>
-        </div>
-        <div class="stock-table-wrapper">
-            <div
-                class="stock-table"
-                *ngFor="let stock of stocksList"
-                (click)="stock.display = !stock.display"
-                [ngClass]="{ 'white-color': stock.display }"
-            >
-                <div
-                    class="grid-title-left"
-                    (click)="getStockVariants(stock)"
-                    [ngClass]="{ 'white-color': stock.display }"
-                >
-                    <p class="inner-name mat-table-sticky">{{ stock?.stockName ?? "-" }}</p>
-                    <p class="stock-details">
-                        <span class="stock-ob">
-                            {{ stock?.openingBalance?.amount }}
-                            <img
-                                class="dot first-dot"
-                                *ngIf="stock?.openingBalance?.amount"
-                                src="{{ imgPath }}dot.png"
-                                alt="dot"
-                            />
-                        </span>
-                        <span class="stock-ob"
-                            >{{ stock?.openingBalance?.quantity }} {{ stock?.openingBalance?.stockUnit }}
-                        </span>
-                        <span class="stock-ob" *ngIf="stock.display && stock?.stock?.variants?.length">
-                            <img class="dot second-dot" src="{{ imgPath }}dot.png" alt="dot" />
-                            <span>
-                                {{ stock?.stock?.variants?.length }}
-                                {{ stock?.stock?.variants?.length < 2 ? "Variant" : "Variants" }}
-                            </span>
-                        </span>
-                    </p>
+                <div class="unique-name-wrapper" *ngIf="showUniqueName">
+                    <h2 class="unique-name font-15">{{ commonLocaleData?.app_unique_name }}</h2>
                 </div>
-                <div class="stock-warehouse-list-container" (click)="getStockVariants(stock)">
-                    <div class="grid-list-div list-grid stock-list-unexpanded">
-                        <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
-                            <span class="unique-name-wrap">{{ stock?.stockUniqueName }}</span>
-                        </div>
-                        <div class="grid-title-list list-grid-title stock-group-name-container" *ngIf="showGroupName">
-                            <span class="stock-group-name">{{ stockGroupName }}</span>
-                        </div>
-                    </div>
-                    <div class="warehouse-list-wrapper">
-                        <ng-container *ngFor="let stockWarehouse of stock?.warehouses">
+                <div class="group-list-head group-searchbar" *ngIf="showGroupName">
+                    <img src="{{ imgPath }}search-new.svg" class="search-icon" />
+                    <select-field
+                        [cssClass]="'form-control bg-dropdown'"
+                        [name]="'stockGroup'"
+                        [placeholder]="commonLocaleData?.app_group"
+                        [options]="stockGroups"
+                        (selectedOption)="selectGroupName($event)"
+                        [defaultValue]="stockGroupName"
+                    >
+                    </select-field>
+                </div>
+                <div class="wrapper-warehouse">
+                    <div class="warehouse-list">
+                        <ng-container *ngFor="let warehouse of warehouses">
                             <div
-                                class="warehouse-list warehouse-even"
-                                *ngIf="selectedWarehouse?.indexOf(stockWarehouse?.uniqueName) > -1"
+                                class="warehouse-list-head odd-even-shade"
+                                *ngIf="selectedWarehouse?.indexOf(warehouse?.uniqueName) > -1"
                             >
-                                <div class="stock-list-body">
-                                    <div class="stock-list-box">
-                                        <div class="stock-list-unexpanded">
-                                            <p class="stock-list-box-heading proper-spacing-list">
-                                                <span class="opening-bal-value bg-color-hover">{{
-                                                    stockWarehouse?.openingBalance?.amount ?? "-"
-                                                }}</span>
-                                                <span class="quantity-value bg-color-hover">{{
-                                                    stockWarehouse?.openingBalance?.quantity ?? "-"
-                                                }}</span>
-                                                <span class="unit-value bg-color-hover">{{
-                                                    stockWarehouse?.openingBalance?.stockUnit ?? "-"
-                                                }}</span>
-                                            </p>
+                                <p class="warehouse-list-head-num">{{ warehouse?.name ?? "-" }}</p>
+                                <div class="warehouse-list-head-options">
+                                    <div class="d-flex">
+                                        <div class="flex-fill">
+                                            {{ localeData?.warehouse_opening_balance?.opening_bal }}
                                         </div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-fill">{{ commonLocaleData?.app_quantity }}</div>
+                                    </div>
+
+                                    <div class="d-flex">
+                                        <div class="flex-fill">{{ commonLocaleData?.app_unit }}</div>
                                     </div>
                                 </div>
                             </div>
                         </ng-container>
                     </div>
                 </div>
+            </div>
+            <div class="stock-table-wrapper">
                 <div
-                    *ngIf="stock.display"
-                    class="stock-display-wrapper"
-                    [ngClass]="{ 'expanded-stock-table-with-opacity': stock.display }"
+                    class="stock-table"
+                    *ngFor="let stock of stocksList; let stockIndex = index"
+                    (click)="stock.display = !stock.display"
+                    [ngClass]="{ 'white-color': stock.display }"
                 >
-                    <div class="grid-list-div list-grid unexpanded-list" *ngFor="let variant of stock?.stock?.variants">
-                        <div
-                            class="grid-title-left"
-                            [ngClass]="{ 'expanded-stock-table-without-opacity': stock.display }"
-                        >
-                            <p class="inner-name mat-table-sticky">{{ variant?.name ?? "-" }}</p>
+                    <div
+                        class="grid-title-left"
+                        (click)="getStockVariants(stock)"
+                        [ngClass]="{ 'white-color': stock.display }"
+                    >
+                        <p class="inner-name mat-table-sticky">{{ stock?.stockName ?? "-" }}</p>
+                        <p class="stock-details">
+                            <span class="stock-ob">
+                                {{ stock?.openingBalance?.amount }}
+                                <img
+                                    class="dot first-dot"
+                                    *ngIf="stock?.openingBalance?.amount"
+                                    src="{{ imgPath }}dot.png"
+                                    alt="dot"
+                                />
+                            </span>
+                            <span class="stock-ob"
+                                >{{ stock?.openingBalance?.quantity }} {{ stock?.openingBalance?.stockUnit }}
+                            </span>
+                            <span class="stock-ob" *ngIf="stock.display && stock?.stock?.variants?.length">
+                                <img class="dot second-dot" src="{{ imgPath }}dot.png" alt="dot" />
+                                <span>
+                                    {{ stock?.stock?.variants?.length }}
+                                    {{
+                                        stock?.stock?.variants?.length < 2
+                                            ? localeData?.warehouse_opening_balance?.variant
+                                            : localeData?.warehouse_opening_balance?.variants
+                                    }}
+                                </span>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="stock-warehouse-list-container" (click)="getStockVariants(stock)">
+                        <div class="grid-list-div list-grid stock-list-unexpanded">
+                            <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
+                                <span class="unique-name-wrap">{{ stock?.stockUniqueName }}</span>
+                            </div>
+                            <div
+                                class="grid-title-list list-grid-title stock-group-name-container"
+                                *ngIf="showGroupName"
+                            >
+                                <span class="stock-group-name">{{ stockGroupName }}</span>
+                            </div>
                         </div>
-                        <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
-                            <span class="unique-name-wrap">{{ variant?.uniqueName ?? "-" }}</span>
-                        </div>
-                        <div class="grid-title-list list-grid-title stock-group-name" *ngIf="showGroupName">
-                            <span>{{ stockGroupName ?? "-" }}</span>
-                        </div>
-                        <div class="warehouse-expanded-box-wrapper">
-                            <ng-container *ngFor="let warehouseVariant of variant?.warehouseBalance; let i = index">
-                                <div
-                                    (clickOutside)="warehouseVariant.display = false"
-                                    class="grid-title-list list-grid-title warehouse-expanded-box"
-                                    *ngIf="selectedWarehouse?.indexOf(warehouseVariant?.warehouse?.uniqueName) > -1"
-                                    [ngClass]="{ 'expanded-stock-table-with-opacity': stock.display }"
-                                >
-                                    <div class="stock-list-expanded-content" (click)="$event.stopPropagation()">
-                                        <p
-                                            class="stock-list-box-heading proper-spacing-list"
-                                            *ngIf="!warehouseVariant.display"
-                                        >
-                                            <span
-                                                class="opening-bal-value bg-color-hover"
-                                                (click)="warehouseVariant.display = true; setInputFocus(1)"
-                                                >{{ warehouseVariant?.openingAmount ?? "-" }}</span
-                                            >
-                                            <span
-                                                class="quantity-value bg-color-hover"
-                                                (click)="warehouseVariant.display = true; setInputFocus(2)"
-                                                >{{ warehouseVariant?.openingQuantity ?? "-" }}</span
-                                            >
-                                            <span
-                                                class="unit-value bg-color-hover"
-                                                (click)="warehouseVariant.display = true; setInputFocus(3)"
-                                                >{{ warehouseVariant?.stockUnit?.code ?? "-" }}
-                                                <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
-                                            </span>
-                                        </p>
-                                    </div>
-                                    <div
-                                        *ngIf="warehouseVariant.display"
-                                        (click)="$event.stopPropagation()"
-                                        class="editable-input"
-                                    >
-                                        <span class="input-select-wrapper">
-                                            <input
-                                                #warehouseInput1
-                                                matInput
-                                                class="opening-bal-input"
-                                                placeholder="Opening Bal"
-                                                type="text"
-                                                (change)="stockUpdate(stock)"
-                                                [(ngModel)]="warehouseVariant.openingAmount"
-                                            />
-                                            <input
-                                                #warehouseInput2
-                                                matInput
-                                                class="quantity-input"
-                                                placeholder="Qty"
-                                                type="text"
-                                                (change)="stockUpdate(stock)"
-                                                [(ngModel)]="warehouseVariant.openingQuantity"
-                                            />
 
-                                            <select-field
-                                                [cssClass]="'form-control'"
-                                                class="unit-dropdown"
-                                                [name]="'stockUnitCode'"
-                                                [placeholder]="Unit"
-                                                [options]="stockUnits"
-                                                (selectedOption)="
-                                                    stock.stock.stockUnitCode = $event.value;
-                                                    stock.stock.stockUnitName = $event.label;
-                                                    stockUpdate(stock)
-                                                "
-                                                [defaultValue]="stock.stock?.stockUnitCode"
-                                                [openDropdown]="isOpen"
-                                            >
-                                            </select-field>
-                                            <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
-                                        </span>
+                        <div class="warehouse-list-wrapper">
+                            <ng-container *ngFor="let stockWarehouse of stock?.warehouses">
+                                <div
+                                    class="warehouse-list warehouse-even"
+                                    *ngIf="selectedWarehouse?.indexOf(stockWarehouse?.uniqueName) > -1"
+                                >
+                                    <div class="stock-list-body">
+                                        <div class="stock-list-box">
+                                            <div class="stock-list-unexpanded">
+                                                <p class="stock-list-box-heading proper-spacing-list">
+                                                    <span class="opening-bal-value bg-color-hover">{{
+                                                        stockWarehouse?.openingBalance?.amount ?? "-"
+                                                    }}</span>
+                                                    <span class="quantity-value bg-color-hover">{{
+                                                        stockWarehouse?.openingBalance?.quantity ?? "-"
+                                                    }}</span>
+                                                    <span class="unit-value bg-color-hover">{{
+                                                        stockWarehouse?.openingBalance?.stockUnit ?? "-"
+                                                    }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </ng-container>
                         </div>
                     </div>
+                    <div
+                        *ngIf="stock.display"
+                        class="stock-display-wrapper"
+                        [ngClass]="{ 'expanded-stock-table-with-opacity': stock.display }"
+                    >
+                        <div
+                            class="grid-list-div list-grid unexpanded-list"
+                            *ngFor="let variant of stock?.stock?.variants"
+                        >
+                            <div
+                                class="grid-title-left"
+                                [ngClass]="{ 'expanded-stock-table-without-opacity': stock.display }"
+                            >
+                                <p class="inner-name mat-table-sticky">{{ variant?.name ?? "-" }}</p>
+                            </div>
+                            <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
+                                <span class="unique-name-wrap">{{ variant?.uniqueName ?? "-" }}</span>
+                            </div>
+                            <div class="grid-title-list list-grid-title stock-group-name" *ngIf="showGroupName">
+                                <span>{{ stockGroupName ?? "-" }}</span>
+                            </div>
+                            <div class="warehouse-expanded-box-wrapper">
+                                <ng-container
+                                    *ngFor="
+                                        let warehouseVariant of variant?.warehouseBalance;
+                                        let warehouseIndex = index
+                                    "
+                                >
+                                    <div
+                                        (clickOutside)="warehouseVariant.display = false"
+                                        class="grid-title-list list-grid-title warehouse-expanded-box"
+                                        *ngIf="selectedWarehouse?.indexOf(warehouseVariant?.warehouse?.uniqueName) > -1"
+                                        [ngClass]="{ 'expanded-stock-table-with-opacity': stock.display }"
+                                    >
+                                        <div class="stock-list-expanded-content" (click)="$event.stopPropagation()">
+                                            <p
+                                                class="stock-list-box-heading proper-spacing-list"
+                                                *ngIf="!warehouseVariant.display"
+                                            >
+                                                <span
+                                                    class="opening-bal-value bg-color-hover"
+                                                    (click)="warehouseVariant.display = true; setInputFocus(1)"
+                                                    >{{ warehouseVariant?.openingAmount ?? "-" }}</span
+                                                >
+                                                <span
+                                                    class="quantity-value bg-color-hover"
+                                                    (click)="warehouseVariant.display = true; setInputFocus(2)"
+                                                    >{{ warehouseVariant?.openingQuantity ?? "-" }}</span
+                                                >
+                                                <span
+                                                    class="unit-value bg-color-hover"
+                                                    (click)="warehouseVariant.display = true; setInputFocus(3)"
+                                                    >{{ warehouseVariant?.stockUnit?.code ?? "-" }}
+                                                    <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <div
+                                            *ngIf="warehouseVariant.display"
+                                            (click)="$event.stopPropagation()"
+                                            class="editable-input"
+                                        >
+                                            <span class="input-select-wrapper">
+                                                <input
+                                                    #warehouseInput1
+                                                    matInput
+                                                    class="opening-bal-input"
+                                                    [placeholder]="localeData?.warehouse_opening_balance?.opening_bal"
+                                                    type="text"
+                                                    (change)="stockUpdate(stock, warehouseVariant)"
+                                                    [(ngModel)]="warehouseVariant.openingAmount"
+                                                />
+                                                <input
+                                                    #warehouseInput2
+                                                    matInput
+                                                    class="quantity-input"
+                                                    [placeholder]="localeData?.warehouse_opening_balance?.qty"
+                                                    type="text"
+                                                    (change)="stockUpdate(stock, warehouseVariant)"
+                                                    [(ngModel)]="warehouseVariant.openingQuantity"
+                                                />
+
+                                                <select-field
+                                                    #warehouseDropdown
+                                                    [cssClass]="'form-control'"
+                                                    class="unit-dropdown"
+                                                    [name]="'stockUnitCode'"
+                                                    [placeholder]="commonLocaleData?.app_unit"
+                                                    [options]="stockUnits"
+                                                    (selectedOption)="
+                                                        warehouseVariant.stockUnit.uniqueName = $event?.value;
+                                                        warehouseVariant.stockUnit.name = $event.label;
+                                                        warehouseVariant.stockUnit.code = $event.additional?.code;
+                                                        stockUpdate(stock, warehouseVariant)
+                                                    "
+                                                    [defaultValue]="warehouseVariant?.stockUnit?.code"
+                                                    [openDropdown]="isOpen"
+                                                >
+                                                </select-field>
+                                                <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="no-data-found" *ngIf="stocksList?.length <= 0">
+                    <img src="{{ imgPath }}search-data-not-found.svg" /><br />
+                    {{ commonLocaleData?.app_no_result_found }}
                 </div>
             </div>
-            <div class="no-data-found" *ngIf="stocksList.length <= 0">
-                <img src="{{ imgPath }}search-data-not-found.svg" /><br />
-                No Data Found
-            </div>
+        </div>
+        <div
+            class="pagination-wrapper"
+            *ngIf="GroupStockReportRequest?.totalItems > GroupStockReportRequest.count && !isLoading"
+        >
+            <pagination
+                [totalItems]="GroupStockReportRequest?.totalItems"
+                [(ngModel)]="GroupStockReportRequest.page"
+                [maxSize]="5"
+                class="pagination-sm"
+                [boundaryLinks]="true"
+                [itemsPerPage]="GroupStockReportRequest.count"
+                [rotate]="false"
+                (pageChanged)="pageChanged($event)"
+                [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last"
+            ></pagination>
         </div>
     </div>
-</div>
+</ng-container>

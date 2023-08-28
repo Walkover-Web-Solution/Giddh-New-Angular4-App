@@ -1,9 +1,8 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
-import * as isCidr from 'is-cidr';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ShareRequestForm } from '../../../models/api-models/Permission';
@@ -11,10 +10,13 @@ import { ToasterService } from '../../../services/toaster.service';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { AccountsAction } from '../../../actions/accounts.actions';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 import { GeneralService } from '../../../services/general.service';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { cloneDeep, forEach, isEmpty, isNull } from '../../../lodash-optimized';
+import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 // some local const
 const DATE_RANGE = 'daterange';
 const PAST_PERIOD = 'pastperiod';
@@ -41,10 +43,11 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Output() public onSubmitForm: EventEmitter<any> = new EventEmitter(null);
-
+    /** Emits true if form has unsaved changes */
+    @Output() public hasUnsavedChanges: EventEmitter<boolean> = new EventEmitter(null);
     public showTimeSpan: boolean = false;
     public showIPWrap: boolean = false;
-    public permissionForm: FormGroup;
+    public permissionForm: UntypedFormGroup;
     public allRoles: object[] = [];
     public selectedTimeSpan: string = '';
     // Selected Type of IP range
@@ -72,8 +75,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         private _accountsAction: AccountsAction,
         private _toasty: ToasterService,
         private store: Store<AppState>,
-        private _fb: FormBuilder,
-        private generalService: GeneralService
+        private _fb: UntypedFormBuilder,
+        private generalService: GeneralService,
+        private settingsProfileActions: SettingsProfileActions
     ) {
         this.createPermissionInProcess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionInProcess), takeUntil(this.destroyed$));
         this.createPermissionSuccess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionSuccess), takeUntil(this.destroyed$));
@@ -91,12 +95,12 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
         if (this.userdata) {
             if (this.userdata.from && this.userdata.to) {
-                let from: any = moment(this.userdata.from, GIDDH_DATE_FORMAT);
-                let to: any = moment(this.userdata.to, GIDDH_DATE_FORMAT);
+                let from: any = dayjs(this.userdata.from, GIDDH_DATE_FORMAT);
+                let to: any = dayjs(this.userdata.to, GIDDH_DATE_FORMAT);
                 setTimeout(() => {
                     // Set timeout is used because ngx datepicker doesn't take the
                     // format provided in bsConfig if bsValue is set in ngOnInit
-                    this.dateRangePickerValue = [from._d, to._d];
+                    this.dateRangePickerValue = [from.$d, to.$d];
                 }, 0);
             }
             this.initAcForm(this.userdata);
@@ -118,8 +122,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 let allRoleArray = [];
                 roles.forEach((role) => {
                     allRoleArray.push({
-                        label: role.name,
-                        value: role.uniqueName
+                        label: role?.name,
+                        value: role?.uniqueName
                     });
                 });
                 this.allRoles = cloneDeep(allRoleArray);
@@ -144,6 +148,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         this.permissionForm.get('ipOptions').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(val => {
             this.toggleIpOptVal(val);
         });
+
+        this.permissionForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.hasUnsavedChanges.emit(this.permissionForm?.dirty);
+        });
     }
 
     public toggleIpOptVal(val: string) {
@@ -156,8 +164,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public onSelectDateRange(ev) {
         if (ev && ev.length) {
-            let from = moment(ev[0]).format(GIDDH_DATE_FORMAT);
-            let to = moment(ev[1]).format(GIDDH_DATE_FORMAT);
+            let from = dayjs(ev[0]).format(GIDDH_DATE_FORMAT);
+            let to = dayjs(ev[1]).format(GIDDH_DATE_FORMAT);
             this.permissionForm?.patchValue({ from, to });
         }
     }
@@ -214,8 +222,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 allowedIps: this._fb.array([]),
                 allowedCidrs: this._fb.array([])
             });
-            let allowedIps = this.permissionForm.get('allowedIps') as FormArray;
-            let allowedCidrs = this.permissionForm.get('allowedCidrs') as FormArray;
+            let allowedIps = this.permissionForm.get('allowedIps') as UntypedFormArray;
+            let allowedCidrs = this.permissionForm.get('allowedCidrs') as UntypedFormArray;
 
             if (data?.allowedIps?.length > 0) {
                 forEach(data.allowedIps, (val) => {
@@ -247,8 +255,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 allowedIps: this._fb.array([]),
                 allowedCidrs: this._fb.array([])
             });
-            let allowedIps = this.permissionForm.get('allowedIps') as FormArray;
-            let allowedCidrs = this.permissionForm.get('allowedCidrs') as FormArray;
+            let allowedIps = this.permissionForm.get('allowedIps') as UntypedFormArray;
+            let allowedCidrs = this.permissionForm.get('allowedCidrs') as UntypedFormArray;
             allowedCidrs.push(this.initRangeForm());
             allowedIps.push(this.initRangeForm());
             this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
@@ -257,7 +265,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    public initRangeForm(val?: any): FormGroup {
+    public initRangeForm(val?: any): UntypedFormGroup {
         return this._fb.group({
             range: (val) ? [val] : [null]
         });
@@ -274,9 +282,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         e.stopPropagation();
         let errFound: boolean = false;
         let msg: string;
-        let arow = this.permissionForm.get(type) as FormArray;
+        let arow = this.permissionForm.get(type) as UntypedFormArray;
         for (let control of arow.controls) {
-            let val = control.get('range').value;
+            let val = control.get('range')?.value;
             if (isNull(val) || isEmpty(val)) {
                 errFound = true;
                 msg = undefined;
@@ -290,7 +298,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             }
             // match cidr
             if (type === 'allowedCidrs') {
-                if (!isCidr(val)) {
+                if (!this.generalService.isCidr(val)) {
                     errFound = true;
                     msg = this.localeData?.invalid_cidr_range;
                 }
@@ -305,13 +313,13 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public delRow(type: string, i: number, e: any) {
         e.stopPropagation();
-        const arow = this.permissionForm.get(type) as FormArray;
+        const arow = this.permissionForm.get(type) as UntypedFormArray;
         arow.removeAt(i);
     }
 
     public submitPermissionForm() {
         let obj: any = {};
-        let form: ShareRequestForm = cloneDeep(this.permissionForm.value);
+        let form: ShareRequestForm = cloneDeep(this.permissionForm?.value);
         let CidrArr = [];
         let IpArr = [];
         forEach(form.allowedCidrs, (n) => {
@@ -360,10 +368,11 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 obj.data.periodOptions = null;
             }
             this._settingsPermissionService.UpdatePermission(form).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
+                    this.hasUnsavedChanges.emit(false);
                     this._toasty.successToast(this.localeData?.permission_updated_success);
                 } else {
-                    this._toasty.warningToast(res.message, res.code);
+                    this._toasty.warningToast(res?.message, res?.code);
                 }
                 this.onSubmitForm.emit(obj);
             });

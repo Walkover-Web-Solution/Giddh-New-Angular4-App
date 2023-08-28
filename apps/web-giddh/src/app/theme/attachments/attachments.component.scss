@@ -9,26 +9,32 @@
         height: 50px;
         .attachment-back-button {
             width: 64px;
+            color: var(--color-toast-primary-text) !important;
             i {
                 margin-right: 2px;
+            }
+            .mdc-button__label{
+                color: var(--color-white);
             }
         }
     }
     .section {
         display: flex;
         height: 77vh;
+        background-color: var(--color-popup-background);
         .left-side {
             border-right: 1px solid var(--color-common-secondary-border);
             width: 35%;
             padding: 10px 10px 10px 13px;
             position: relative;
             .left-side-subhead {
-                font-size: 12px;
+                font-size: var(--font-size-12);
                 margin-top: 10px;
-                margin-left: 25px;
+                margin-left: 35px;
             }
             .invoice-head {
                 display: flex;
+                align-items: center;
                 position: relative;
                 span {
                     margin-left: 5px;
@@ -44,15 +50,15 @@
                 }
             }
             .attachment {
-                font-size: 12px;
-                margin-top: 10px;
-                margin-left: 25px;
+                font-size: var(--font-size-12);
+                margin-left: 28px;
             }
             .attachment-list {
                 overflow: auto;
                 margin-bottom: 14px;
                 mat-list {
                     padding-top: 0;
+                    padding-bottom: 0;
                     mat-list-item {
                         height: 45px;
                         .file-name {
@@ -61,11 +67,13 @@
                             margin-top: 1px;
                             overflow: hidden;
                             text-overflow: ellipsis;
+                            color: var(--color-table-septenary-content);
                         }
                         a {
                             color: var(--color-dark-gray) !important;
                             position: absolute;
                             right: 0;
+                            top: 10px;
                         }
                     }
                 }
@@ -132,7 +140,7 @@
     }
 }
 .active-file {
-    color: var(--color-blue);
+    color: var(--color-blue) !important;
 }
 .disabled {
     background-color: var(--color-iron) !important;

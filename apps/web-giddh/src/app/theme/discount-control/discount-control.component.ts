@@ -4,8 +4,6 @@ import { ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil } from 'rxjs/operators';
-import { SettingsDiscountService } from '../../services/settings.discount.service';
-import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'discount-control-component',
@@ -18,7 +16,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     public get defaultDiscount(): LedgerDiscountClass {
         return this.discountAccountsDetails[0];
     }
-
+    /** True if field is read only */
+    @Input() public readonly: boolean = false;
     @Input() public discountAccountsDetails: LedgerDiscountClass[];
     @Input() public ledgerAmount: number = 0;
     @Input() public totalAmount: number = 0;
@@ -43,13 +42,10 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** List of discounts */
-    private discountsList: any[] = [];
-    /** True if get discounts list api call in progress */
-    private getDiscountsLoading: boolean = false;
+    @Input() public discountsList: any[] = [];
 
     constructor(
-        private store: Store<AppState>,
-        private settingsDiscountService: SettingsDiscountService, private generalService: GeneralService,
+        private store: Store<AppState>
     ) {
 
     }
@@ -68,7 +64,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
                 // check for visibility while always include the current activeElement
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
             });
-        let index = focussable.indexOf(document.activeElement);
+        let index = focussable?.indexOf(document.activeElement);
         if (index > -1) {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
@@ -113,18 +109,6 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     public prepareDiscountList() {
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
-        } else {
-            if (this.getDiscountsLoading) {
-                return;
-            }
-            this.getDiscountsLoading = true;
-            this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.status === "success" && response?.body?.length > 0) {
-                    this.discountsList = response?.body;
-                    this.processDiscountList();
-                }
-                this.getDiscountsLoading = false;
-            });
         }
     }
 
@@ -137,15 +121,15 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     private processDiscountList(): void {
         this.discountsList.forEach(acc => {
             if (this.discountAccountsDetails) {
-                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
+                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
                 if (!hasItem) {
                     let obj: LedgerDiscountClass = new LedgerDiscountClass();
                     obj.amount = acc.discountValue;
                     obj.discountValue = acc.discountValue;
                     obj.discountType = acc.discountType;
                     obj.isActive = false;
-                    obj.particular = acc.linkAccount.uniqueName;
-                    obj.discountUniqueName = acc.uniqueName;
+                    obj.particular = acc.linkAccount?.uniqueName;
+                    obj.discountUniqueName = acc?.uniqueName;
                     obj.name = acc.name;
                     this.discountAccountsDetails.push(obj);
                 }
@@ -156,13 +140,13 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', event: any) {
-        this.defaultDiscount.amount = parseFloat(String(event.target.value).replace(/[,'\s]/g, ''));
-        this.defaultDiscount.discountValue = parseFloat(String(event.target.value).replace(/[,'\s]/g, ''));
+        this.defaultDiscount.amount = parseFloat(String(event.target?.value)?.replace(/[,'\s]/g, ''));
+        this.defaultDiscount.discountValue = parseFloat(String(event.target?.value)?.replace(/[,'\s]/g, ''));
         this.defaultDiscount.discountType = type;
 
         this.change();
 
-        if (!event.target.value) {
+        if (!event.target?.value) {
             this.discountFromVal = true;
             this.discountFromPer = true;
             return;
@@ -201,23 +185,14 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-    /**
-     * Adds styling on focused Dropdown List
-     *
-     * @param {HTMLElement} discountDropdownListItem
-     * @memberof DiscountControlComponent
-     */
-    public discountDropdownFocus(discountDropdownListItem: HTMLElement): void {
-        this.generalService.dropdownFocusIn(discountDropdownListItem);
-    }
 
     /**
-     * Removes styling from focused Dropdown List
+     * Shows discount menu
      *
-     * @param {HTMLElement} discountDropdownListItem
      * @memberof DiscountControlComponent
      */
-    public discountDropdownBlur(discountDropdownListItem: HTMLElement): void {
-        this.generalService.dropdownFocusOut(discountDropdownListItem);
+    public showDiscountMenu(): void {
+        this.discountMenu = true;
+        this.hideOtherPopups.emit(true);
     }
 }

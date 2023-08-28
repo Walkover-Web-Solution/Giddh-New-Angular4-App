@@ -58,6 +58,7 @@ export class Addresses {
     public name?: string;
     public taxType?: string;
     public pincode?: string;
+    public county?: { code: any; };
 }
 
 export class CompanyTotals {
@@ -234,6 +235,10 @@ export class States {
         stateGstCode: string;
         name: string;
         code: string;
+    }];
+    public countyList: [{
+        name: string;
+        code: string;
     }]
 }
 
@@ -332,6 +337,7 @@ export class PlanDetails {
     companiesLimit: number;
     durationUnit: string;
     transactionLimit: number;
+    currency?: any;
 }
 
 export class UserDetail {

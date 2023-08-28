@@ -38,7 +38,6 @@ body.default-theme {
     --color-primary-login-signup-mobile-background: #212528;
     --color-primary-login-signup-slide-content-background: #212528;
     --color-primary-login-signup-download-app-ul-li-a-hover: #212528;
-    --color-primary-login-signup-button-close: #e54556;
     --color-primary-login-signup-twitter-background: #668cff;
     --color-primary-login-signup-google-background: #e54556;
     --color-primary-login-signup-linkedin-background: #668cff;
@@ -718,4 +717,20 @@ body.default-theme {
     --color-dark-gray: #505159;
     --color-tutu: #e5455626;
     --color-slate: #505159;
+
+    /*---- box-shadow ----*/
+    --color-search-box-shadow: #00000040;
+    --color-drag-shadow: #00000033;
+    --color-drag-bottom-shadow: #00000024;
+    --color-drag-right-shadow: #0000001f;
+
+    --color-apple-search-background: #575150;
+    --color-fields-border: #0000001f;
+    --color-field-hover: #000000de;
+    --color-border-focus: #3f51b5;
+    --color-transparent-background: #00000000;
+    --color-header-icon-background: #11185c;
+    --color-primary-common : #3f51b5;
+    --color-mat-option: #0000000a;
+    --color-list: #ffffff;
 }

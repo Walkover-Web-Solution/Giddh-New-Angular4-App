@@ -11,7 +11,6 @@
     >
         <tax-sidebar
             (navigateEvent)="handleNavigation($event)"
-            [activeCompanyGstNumber]="activeCompanyGstNumber"
             [isMonthSelected]="isMonthSelected"
             [isGstModule]="true"
             [selectedGstModule]="selectedGst"
@@ -82,28 +81,6 @@
                                 ></reconcile>
                             </div>
                         </tab>
-
-                        <tab
-                            *ngIf="selectedGst === GstReport.Gstr1"
-                            [active]="selectedTab === 'pushToGstn' || selectedTabId === 1"
-                            (selectTab)="selectTab($event, true, 'pushToGstn')"
-                        >
-                            <ng-template tabHeading>
-                                {{ localeData?.filing?.tabs?.push_gstn }}
-                            </ng-template>
-                            <div *ngIf="selectedTab === 'pushToGstn' || selectedTabId === 1">
-                                <push-to-gstin
-                                    [activeCompanyGstNumber]="activeCompanyGstNumber"
-                                    [showHsn]="showHsn"
-                                    (backClicked)="handleBackButton()"
-                                    [currentPeriod]="currentPeriod"
-                                    [selectedGst]="selectedGst"
-                                    [localeData]="localeData"
-                                    [commonLocaleData]="commonLocaleData"
-                                ></push-to-gstin>
-                            </div>
-                        </tab>
-
                         <tab
                             *ngIf="isCompany && selectedGst !== GstReport.Gstr2 && showGstFiling"
                             (selectTab)="selectTab($event, true, localeData?.filing?.tabs?.file_return)"

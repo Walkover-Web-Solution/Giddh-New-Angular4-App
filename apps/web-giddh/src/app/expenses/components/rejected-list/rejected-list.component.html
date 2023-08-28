@@ -155,7 +155,10 @@
     </div>
 </div>
 
-<div *ngIf="pettyCashRejectedReportResponse?.totalItems > 20" class="pagination-wrapper">
+<div
+    *ngIf="pettyCashRejectedReportResponse?.totalItems > pettyCashRejectedReportResponse?.count"
+    class="pagination-wrapper"
+>
     <pagination
         [totalItems]="pettyCashRejectedReportResponse?.totalItems"
         [maxSize]="5"

@@ -39,7 +39,7 @@
 
 .item > a {
     padding: 5px 10px;
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 .item > a:hover {
     color: var(--color-dropdown-list) !important;

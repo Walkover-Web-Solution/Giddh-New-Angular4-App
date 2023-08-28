@@ -8,7 +8,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { saveAs } from "file-saver";
 import { IForceClear } from '../../../models/api-models/Sales';
 import { ReportsDetailedRequestFilter } from '../../../models/api-models/Reports';
@@ -119,8 +119,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.settingsFinancialYearService.GetAllFinancialYears().pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res && res.body && res.body.financialYears) {
                 res.body.financialYears.forEach(key => {
-                    let financialYearStarts = moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
-                    let financialYearEnds = moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    let financialYearStarts = dayjs(key?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    let financialYearEnds = dayjs(key?.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     this.selectYear.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
                 });
                 this.selectActiveFinancialYear();
@@ -135,7 +135,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectGroup(event: any): void {
-        this.groupUniqueName = event.value;
+        this.groupUniqueName = event?.value;
     }
 
     /**
@@ -149,17 +149,29 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             this.isShowColumnarReport = isShowReport;
             if (this.fromMonth && this.toMonth) {
                 let monthYear = [];
-                let startDate = moment(new Date(this.fromMonth));
-                let monthsCount = moment(new Date(this.toMonth)).diff(startDate, 'months');
+                let startDate = dayjs(new Date(this.fromMonth));
+                let monthsCount = dayjs(new Date(this.toMonth)).diff(startDate, 'months');
 
-                monthYear.push(moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY"));
+                monthYear.push(dayjs(startDate.toDate()).format("MM-YYYY"));
 
                 for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                     startDate = startDate.add(1, 'month');
-                    monthYear.push(moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY"));
+                    monthYear.push(dayjs(startDate.toDate()).format("MM-YYYY"));
                 }
 
                 this.exportRequest.monthYear = monthYear;
+            } else if (this.fromMonth) {
+                let monthYear = [];
+                let startDate = dayjs(new Date(this.fromMonth));
+                monthYear.push(dayjs(startDate.toDate()).format("MM-YYYY"));
+                this.exportRequest.monthYear = monthYear;
+            } else if (this.toMonth) {
+                let monthYear = [];
+                let startDate = dayjs(new Date(this.toMonth));
+                monthYear.push(dayjs(startDate.toDate()).format("MM-YYYY"));
+                this.exportRequest.monthYear = monthYear;
+            } else {
+                this.exportRequest.monthYear = [];
             }
             if (isShowReport) {
                 this.columnarReportResponse = null;
@@ -169,16 +181,16 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest, isShowReport).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
                 this.isShowColumnarReport = false;
-                if (res.status === "success") {
+                if (res?.status === "success") {
                     if (isShowReport) {
-                        this.columnarReportResponse = res.body;
+                        this.columnarReportResponse = res?.body;
                     } else {
                         let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
                         return saveAs(blob, this.localeData?.downloaded_filename);
                     }
                 } else {
                     this.toaster.clearAllToaster();
-                    this.toaster.errorToast(res.message);
+                    this.toaster.errorToast(res?.message);
                 }
             });
         }
@@ -191,8 +203,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public onBalanceTypeAsSignChanged(event): void {
-        this.isBalanceTypeAsSign = event;
-        this.exportRequest.balanceTypeAsSig = event;
+        this.isBalanceTypeAsSign = event ? true : false;
+        this.exportRequest.balanceTypeAsSig = event ? true : false;
     }
 
     /**
@@ -215,23 +227,23 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         if (event && event.value) {
             this.forceClearMonths$ = observableOf({ status: true });
             this.financialYearSelected = event.value;
-            this.exportRequest.financialYear = moment(event.value.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+            this.exportRequest.financialYear = dayjs(event.value?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
 
-            let financialYearStarts = moment(new Date(event.value.financialYearStarts.split("-").reverse().join("-")));
-            let financialYearEnds = moment(new Date(event.value.financialYearEnds.split("-").reverse().join("-")));
+            let financialYearStarts = dayjs(new Date(event.value?.financialYearStarts?.split("-")?.reverse()?.join("-")));
+            let financialYearEnds = dayjs(new Date(event.value?.financialYearEnds?.split("-")?.reverse()?.join("-")));
             let startDate = financialYearStarts;
             let monthsCount = financialYearEnds.diff(financialYearStarts, 'months');
 
             this.fromMonthNames = [];
             this.toMonthNames = [];
 
-            this.fromMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
-            this.toMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
+            this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
+            this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
 
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
-                this.fromMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
-                this.toMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
+                this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
+                this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
             }
         }
     }
@@ -257,18 +269,33 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectFromMonth(event): void {
-        if (event.value) {
-            let fromMonth = moment(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
-            let toMonth = moment(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
+        if (event?.value) {
+            let fromMonth = dayjs(new Date(this.financialYearSelected?.financialYearStarts?.split("-")?.reverse()?.join("-")));
+            let toMonth = dayjs(new Date(this.financialYearSelected?.financialYearEnds?.split("-")?.reverse()?.join("-")));
             let startDate = fromMonth;
             let monthsCount = toMonth.diff(fromMonth, 'months');
             this.toMonthNames = [];
 
-            this.toMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
+            this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
 
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
-                this.toMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
+                this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
+            }
+        } else {
+            this.fromMonth = "";
+
+            let fromMonth = dayjs(new Date(this.financialYearSelected?.financialYearStarts?.split("-")?.reverse()?.join("-")));
+            let toMonth = dayjs(new Date(this.financialYearSelected?.financialYearEnds?.split("-")?.reverse()?.join("-")));
+            let startDate = fromMonth;
+            let monthsCount = toMonth.diff(fromMonth, 'months');
+            this.toMonthNames = [];
+
+            this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
+
+            for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
+                startDate = startDate.add(1, 'month');
+                this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
             }
         }
     }
@@ -280,18 +307,33 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectToMonth(event): void {
-        if (event.value) {
-            let fromMonth = moment(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
-            let toMonth = moment(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
+        if (event?.value) {
+            let fromMonth = dayjs(new Date(this.financialYearSelected?.financialYearStarts?.split("-")?.reverse()?.join("-")));
+            let toMonth = dayjs(new Date(this.financialYearSelected?.financialYearEnds?.split("-")?.reverse()?.join("-")));
             let startDate = fromMonth;
             let monthsCount = toMonth.diff(fromMonth, 'months');
             this.fromMonthNames = [];
 
-            this.fromMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
+            this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
 
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
-                this.fromMonthNames.push({ label: moment(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
+                this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
+            }
+        } else {
+            this.toMonth = "";
+
+            let fromMonth = dayjs(new Date(this.financialYearSelected?.financialYearStarts?.split("-")?.reverse()?.join("-")));
+            let toMonth = dayjs(new Date(this.financialYearSelected?.financialYearEnds?.split("-")?.reverse()?.join("-")));
+            let startDate = fromMonth;
+            let monthsCount = toMonth.diff(fromMonth, 'months');
+            this.fromMonthNames = [];
+
+            this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
+
+            for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
+                startDate = startDate.add(1, 'month');
+                this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
             }
         }
     }
@@ -304,11 +346,11 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public selectActiveFinancialYear(): void {
         if (this.selectYear && this.selectYear.length > 0 && this.activeFinancialYear) {
             this.selectYear.forEach(key => {
-                if (key.value.uniqueName === this.activeFinancialYear) {
+                if (key?.value?.uniqueName === this.activeFinancialYear) {
                     this.selectFinancialYear(key);
 
-                    let financialYearStarts = moment(key.value.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
-                    let financialYearEnds = moment(key.value.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    let financialYearStarts = dayjs(key?.value?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    let financialYearEnds = dayjs(key?.value?.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     this.activeFinancialYearLabel = financialYearStarts + " - " + financialYearEnds;
                 }
             });
@@ -377,9 +419,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
-                            label: `${result.name}`,
-                            additional: result.parentGroups
+                            value: result?.uniqueName,
+                            label: `${result?.name}`,
+                            additional: result?.parentGroups
                         }
                     }) || [];
                     if (page === 1) {
@@ -426,9 +468,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
-                                label: `${result.name}`,
-                                additional: result.parentGroups
+                                value: result?.uniqueName,
+                                label: `${result?.name}`,
+                                additional: result?.parentGroups
                             }
                         }) || [];
                         this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
@@ -449,9 +491,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.onGroupSearchQueryChanged('', 1, (response) => {
             this.defaultGroupSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: `${result.name}`,
-                    additional: result.parentGroups
+                    value: result?.uniqueName,
+                    label: `${result?.name}`,
+                    additional: result?.parentGroups
                 }
             }) || [];
             this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;

@@ -116,14 +116,14 @@
                                                 ></sh-select>
                                                 <i
                                                     class="icon-arrow-down"
-                                                    (click)="adjustmentTypesField.show($event)"
+                                                    (click)="adjustmentTypesField?.show($event)"
                                                 ></i>
                                             </div>
                                             <!-- <div class="single-field" *ngIf="entry.type !== 'againstReference'">
                                                     <input type="text" class="form-control" placeholder="Notes" name="notes" [(ngModel)]="entry.note">
                                                 </div> -->
                                             <div
-                                                class="single-field relative {{ entry.tax.uniqueName }}"
+                                                class="single-field relative {{ entry.tax?.uniqueName }}"
                                                 *ngIf="entry.type !== 'againstReference'"
                                             >
                                                 <sh-select

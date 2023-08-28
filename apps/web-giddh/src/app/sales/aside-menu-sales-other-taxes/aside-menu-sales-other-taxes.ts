@@ -34,9 +34,9 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
         ];
 
         this.taxesOptions = this.taxes
-            .filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
+            ?.filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
             .map(m => {
-                return { label: m.name, value: m.uniqueName };
+                return { label: m.name, value: m?.uniqueName };
             })
     }
 
@@ -46,8 +46,8 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
             this.defaultOtherTaxesModal = cloneDeep(changes.otherTaxesModal.currentValue);
 
             if (this.defaultOtherTaxesModal.appliedOtherTax) {
-                this.selectedTaxUniqueName = this.defaultOtherTaxesModal.appliedOtherTax.uniqueName;
-                this.applyTax({ label: this.defaultOtherTaxesModal.appliedOtherTax.name, value: this.defaultOtherTaxesModal.appliedOtherTax.uniqueName });
+                this.selectedTaxUniqueName = this.defaultOtherTaxesModal.appliedOtherTax?.uniqueName;
+                this.applyTax({ label: this.defaultOtherTaxesModal.appliedOtherTax?.name, value: this.defaultOtherTaxesModal.appliedOtherTax?.uniqueName });
             }
         }
     }
@@ -56,7 +56,7 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
         if (tax && tax.value) {
             this.defaultOtherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
             if (!this.selectedTaxUniqueName) {
-                let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
+                let taxType = this.taxes.find(f => f?.uniqueName === tax.value).taxType;
                 const isTdsTax = ['tdsrc', 'tdspay'].includes(taxType);
                 if (!isTdsTax) {
                     this.defaultOtherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
@@ -75,5 +75,14 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
     public saveTaxes(): void {
         this.otherTaxesModal = cloneDeep(this.defaultOtherTaxesModal);
         this.applyTaxes.emit(this.otherTaxesModal);
+    }
+
+    /**
+     *Close the aside-menu-modal
+     *
+     * @memberof AsideMenuSalesOtherTaxes
+     */
+    public closeTaxesModal(): void {
+        this.closeModal.emit(true);
     }
 }

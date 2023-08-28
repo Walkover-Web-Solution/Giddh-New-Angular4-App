@@ -35,13 +35,13 @@
     box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
     margin: 0 15px;
     label {
-        font-size: 14px;
+        font-size: var(--font-size-15);
     }
 }
 
 h4 > span {
     color: var(--color-gray) !important;
-    font-size: 12px !important;
+    font-size: var(--font-size-12) !important;
 }
 
 .flex-initial {
@@ -112,7 +112,7 @@ input.form-control.send-alert {
         top: -24px;
         left: 0;
         right: 15px;
-        font-size: 12px;
+        font-size: var(--font-size-12);
         color: var(--color-abbey);
         text-align: left;
     }
@@ -138,7 +138,7 @@ span.viasocket {
     position: absolute;
     bottom: -26px;
     right: 0;
-    font-size: 12px;
+    font-size: var(--font-size-12);
     text-decoration: underline;
 }
 
@@ -200,7 +200,7 @@ span.viasocket a {
     width: 36px;
     height: 36px;
     i.icon-trash {
-        font-size: 18px;
+        font-size: var(--font-size-16);
     }
 }
 
@@ -211,6 +211,11 @@ span.viasocket a {
 }
 
 @media (max-width: 991px) {
+    /*--- custom ---*/
+    .left-gap {
+        margin-left: 25px;
+    }
+
     #invoice-setting .show-on-mobile {
         display: inline-block;
         float: left;

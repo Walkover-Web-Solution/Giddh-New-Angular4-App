@@ -27,13 +27,12 @@ import { PaginationComponent } from "ngx-bootstrap/pagination";
 import { ElementViewContainerRef } from "../../shared/helpers/directives/elementViewChild/element.viewchild.directive";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
-import * as moment from "moment/moment";
-import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
+import * as dayjs from "dayjs";
 import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSearch.component";
 import { GeneralService } from "../../services/general.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
@@ -59,11 +58,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public dueAmountReportData$: Observable<DueAmountReportResponse>;
     public totalDueAmounts: number = 0;
     public totalFutureDueAmounts: number = 0;
-    public moment = moment;
+    public dayjs = dayjs;
     public key: string = "name";
     public order: string = "asc";
     public filter: string = "";
-    public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     public searchStr$ = new Subject<string>();
     public searchStr: string = "";
     public isMobileScreen: boolean = false;
@@ -75,7 +73,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     @ViewChild("filterDropDownList", { static: true }) public filterDropDownList: BsDropdownDirective;
     /** Advance search component instance */
     @ViewChild("agingReportAdvanceSearch", { read: ContactAdvanceSearchComponent, static: true }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
-    @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
+    @Output() public createNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -87,7 +85,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Stores the searched name value for the Name filter */
-    public searchedName: FormControl = new FormControl();
+    public searchedName: UntypedFormControl = new UntypedFormControl();
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
     /** Observable if loading in process */
@@ -103,6 +101,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
+    /** Holds images folder path */
+    public imgPath: string = "";
+    /** False for on init call */
+    public defaultLoad: boolean = true;
 
     constructor(
         public dialog: MatDialog,
@@ -153,9 +155,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.getDueReport();
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.getDueAmountreportData();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.getDueReport();
         this.store.dispatch(this.agingReportActions.GetDueRange());
         this.agingDropDownoptions$.subscribe(p => {
             this.agingDropDownoptions = cloneDeep(p);
@@ -166,11 +169,12 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(term => {
-            if (term) {
-                this.showClearFilter = true;
+            if (!this.defaultLoad) {
+                this.showClearFilter = (term) ? true : false;
                 this.dueAmountReportRequest.q = term;
                 this.getDueReport();
             }
+            this.defaultLoad = false;
         });
 
         this.breakpointObserver
@@ -225,7 +229,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        this.searchedName.valueChanges.pipe(
+        this.searchedName?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
@@ -268,6 +272,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             viewContainerRef.insert(componentInstanceView.hostView);
 
             let componentInstance = componentInstanceView.instance as PaginationComponent;
+            componentInstance.totalPages = s.totalPages;
             componentInstance.totalItems = s.count * s.totalPages;
             componentInstance.itemsPerPage = s.count;
             componentInstance.maxSize = 5;
@@ -284,62 +289,73 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public resetAdvanceSearch() {
-        this.searchedName?.reset();
-        this.searchStr = "";
-        this.showNameSearch = false;
-        this.isAdvanceSearchApplied = false;
-        this.dueAmountReportRequest.q = '';
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
         if (this.agingReportAdvanceSearch) {
             this.agingReportAdvanceSearch.reset();
         }
+        this.searchStr$.next('');
+        this.searchedName?.reset();
+        this.searchStr = "";
+        this.showNameSearch = false;
+        this.isAdvanceSearchApplied = false;
+        this.dueAmountReportRequest.q = '';
         this.sort("name", "asc");
         this.showClearFilter = false;
+        this.defaultLoad = true;
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
         this.commonRequest = request;
         this.agingAdvanceSearchModal.totalDueAmount = request.amount;
         if (request.category === "totalDue") {
-            switch (request.amountType) {
-                case "GreaterThan":
-                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
-                    this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
-                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
-                    break;
-                case "LessThan":
-                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
-                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
-                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
-                    break;
-                case "Exclude":
-                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
-                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = true;
-                    break;
-                case "Equals":
-                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = true;
-                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
-                    break;
-            }
+            this.agingAdvanceSearchModal.includeTotalDueAmount = true;
         } else {
-            // Code here for Future Due category
             this.agingAdvanceSearchModal.includeTotalDueAmount = false;
         }
+        switch (request.amountType) {
+            case "GreaterThan":
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                break;
+            case "LessThan":
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                break;
+            case "Exclude":
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = true;
+                break;
+            case "Equals":
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = true;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                break;
+
+            default:
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                break;
+        }
+
         this.isAdvanceSearchApplied = true;
+        this.showClearFilter = false;
         this.getDueReport();
     }
 
     public sort(key: string, ord: "asc" | "desc" = "asc") {
         this.showClearFilter = true;
         if (key.includes("range")) {
-            this.dueAmountReportRequest.rangeCol = parseInt(key.replace("range", ""));
+            this.dueAmountReportRequest.rangeCol = parseInt(key?.replace("range", ""));
             this.dueAmountReportRequest.sortBy = "range";
         } else {
             this.dueAmountReportRequest.rangeCol = null;
@@ -393,9 +409,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        this.showClearFilter = false;
         if (searchedFieldName === "name") {
-            if (this.searchedName.value) {
+            if (this.searchedName?.value) {
                 return;
             }
             if (this.generalService.childOf(event.target, element)) {

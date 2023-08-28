@@ -38,7 +38,7 @@
             </table>
         </div>
 
-        <div *ngIf="!doc_issuesVM.length">
+        <div *ngIf="!doc_issuesVM?.length">
             <div class="filings-empty-state">
                 <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" />
                 <div class="empty-msg">

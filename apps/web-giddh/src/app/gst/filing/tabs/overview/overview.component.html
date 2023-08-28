@@ -1,5 +1,5 @@
 <overview-summary
-    *ngIf="!showTransaction"
+    *ngIf="!showTransaction && !showHsnSummary"
     [activeCompanyGstNumber]="activeCompanyGstNumber"
     [currentPeriod]="currentPeriod"
     [selectedGst]="selectedGst"
@@ -19,3 +19,13 @@
     [commonLocaleData]="commonLocaleData"
 >
 </view-transactions>
+
+<push-to-gstin
+    *ngIf="showHsnSummary"
+    [activeCompanyGstNumber]="activeCompanyGstNumber"
+    [showHsn]="true"
+    [currentPeriod]="currentPeriod"
+    [selectedGst]="selectedGst"
+    [localeData]="localeData"
+    [commonLocaleData]="commonLocaleData"
+></push-to-gstin>

@@ -1,8 +1,16 @@
 <div class="container-fluid">
-    <div class="top-bar aging-top-bar d-flex justify-content-between">
+    <div
+        *ngIf="
+            (dueAmountReportData$ | async)?.results?.length ||
+            (getAgingReportRequestInProcess$ | async) ||
+            showClearFilter ||
+            isAdvanceSearchApplied
+        "
+        class="top-bar aging-top-bar d-flex justify-content-between"
+    >
         <div class="aging-form-inline">
             <div class="btn-group pull-left on-desktop-view">
-                <button mat-flat-button class="btn-sky-blue" (click)="creteNewCustomerEvent.emit(true)">
+                <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)">
                     {{ localeData?.new_customer }}
                 </button>
             </div>
@@ -56,7 +64,7 @@
             class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
             *ngIf="showClearFilter"
         >
-            <button class="btn btn-filters mr-0" (click)="resetAdvanceSearch()">
+            <button mat-stroked-button class="mr-0" (click)="resetAdvanceSearch()">
                 <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
             </button>
         </div>
@@ -105,7 +113,7 @@
             </div>
         </div>
         <div class="btn-group mr-t15 pull-left mobile-view">
-            <button mat-raised-button class="btn-sky-blue w-100" (click)="creteNewCustomerEvent.emit(true)">
+            <button mat-stroked-button color="primary" class="w-100" (click)="createNewCustomerEvent.emit(true)">
                 {{ localeData?.new_customer }}
             </button>
         </div>
@@ -147,7 +155,7 @@
             <div *ngIf="!isMobileScreen" class="table-responsive">
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
-            <div *ngIf="isMobileScreen">
+            <div *ngIf="isMobileScreen && (dueAmountReportData$ | async)?.results?.length">
                 <div class="text-center top-aging-table-top pd-1">
                     <p (click)="openAgingDropDown()">
                         <strong>{{ localeData?.due_in_last_days }} </strong>
@@ -161,9 +169,29 @@
                 </div>
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
+            <div class="no-data">
+                <div
+                    class="align-item-center"
+                    *ngIf="
+                        !(dueAmountReportData$ | async)?.results?.length &&
+                        !(getAgingReportRequestInProcess$ | async) &&
+                        !showClearFilter &&
+                        !isAdvanceSearchApplied
+                    "
+                >
+                    <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
+                    <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)">
+                        {{ localeData?.new_customer }}
+                    </button>
+                </div>
+            </div>
             <div
                 class="no-data"
-                *ngIf="!(dueAmountReportData$ | async)?.results?.length && !(getAgingReportRequestInProcess$ | async)"
+                *ngIf="
+                    !(dueAmountReportData$ | async)?.results?.length &&
+                    !(getAgingReportRequestInProcess$ | async) &&
+                    (showClearFilter || isAdvanceSearchApplied)
+                "
             >
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>
             </div>
@@ -226,7 +254,6 @@
                 </ng-template>
             </mat-menu>
         </div>
-
         <table
             *ngIf="!(getAgingReportRequestInProcess$ | async)"
             mat-table
@@ -235,7 +262,7 @@
         >
             <ng-container matColumnDef="customerName">
                 <th
-                    class="mat-customer-name"
+                    class="mat-customer-name mat-column-name"
                     mat-header-cell
                     *matHeaderCellDef
                     #searchCustomerContainer
@@ -264,7 +291,7 @@
             </ng-container>
 
             <ng-container matColumnDef="parentGroup">
-                <th class="mat-parent-group" mat-header-cell *matHeaderCellDef>
+                <th class="mat-parent-group mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center">
                         {{ commonLocaleData?.app_parent_group }}
                         <ng-container
@@ -278,7 +305,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_upcoming_due">
-                <th mat-header-cell *matHeaderCellDef>
+                <th mat-header-cell *matHeaderCellDef class="mat-column-upcoming">
                     <div class="d-flex align-items-center justify-content-end">
                         {{ commonLocaleData?.app_upcoming_due }}
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'futureDueAmount' }">
@@ -298,7 +325,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_1">
-                <th class="mat-app-days-1" mat-header-cell *matHeaderCellDef>
+                <th class="mat-app-days-1 mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             mat-button
@@ -333,7 +360,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_2">
-                <th class="mat-app-days-2" mat-header-cell *matHeaderCellDef>
+                <th class="mat-app-days-2 mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             [matMenuTriggerFor]="agingDropdown"
@@ -376,7 +403,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_3">
-                <th class="mat-app-days-3" mat-header-cell *matHeaderCellDef>
+                <th class="mat-app-days-3 mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             mat-button
@@ -417,7 +444,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_4">
-                <th class="mat-app-days-4" mat-header-cell *matHeaderCellDef>
+                <th class="mat-app-days-4 mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             mat-button
@@ -448,7 +475,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_total_due">
-                <th mat-header-cell *matHeaderCellDef>
+                <th mat-header-cell *matHeaderCellDef class="mat-column-group">
                     <div class="d-flex align-items-center justify-content-end">
                         {{ commonLocaleData?.app_total_due }}
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'totalDueAmount' }">
@@ -474,7 +501,7 @@
     </div>
 
     <div
-        *ngIf="(dueAmountReportData$ | async)?.totalItems >= 20"
+        *ngIf="(dueAmountReportData$ | async)?.totalPages > 1"
         class="pagination-wrapper"
         [hidden]="getAgingReportRequestInProcess$ | async"
     >

@@ -93,7 +93,6 @@
                         <th colspan="3" width="40%">
                             <div class="d-flex">
                                 <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                    <i class="icon-calender calendar-addon"></i>
                                     <input
                                         type="text"
                                         name="selectedDateRange"
@@ -211,7 +210,7 @@
                                             ><input
                                                 type="checkbox"
                                                 [(ngModel)]="item.checked"
-                                                (click)="filterByCheck(item.value, $event.target.checked)"
+                                                (click)="filterByCheck(item.value, $event.target?.checked)"
                                             />
                                             {{ item.label }}</label
                                         >
@@ -475,7 +474,7 @@
                                 {{ txn.quantity | giddhCurrency }}
                             </span>
                             <span *ngIf="txn.type == 'dr'" class="unit-badge">
-                                {{ txn.stockUnit }}
+                                {{ txn.stockUnit?.code }}
                             </span>
                             <span *ngIf="txn.type == 'cr'">-</span>
                         </td>
@@ -485,7 +484,7 @@
                                 {{ txn.quantity | giddhCurrency }}
                             </span>
                             <span *ngIf="txn.type == 'cr'" class="unit-badge">
-                                {{ txn.stockUnit }}
+                                {{ txn.stockUnit?.code }}
                             </span>
                             <span *ngIf="txn.type == 'dr'">-</span>
                         </td>
@@ -678,7 +677,6 @@
                         <div class="col-sm-4">Date Range</div>
                         <div class="col-sm-8">
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i class="icon-calender calendar-addon"></i>
                                 <input
                                     type="text"
                                     name="selectedDateRange"

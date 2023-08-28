@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from './financial-year.const';
-import { CustomActions } from '../../../store/customActions';
+import { CustomActions } from '../../../store/custom-actions';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { IFinancialYearResponse, ILockFinancialYearRequest, SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { Action } from '@ngrx/store';
@@ -39,7 +39,7 @@ export class SettingsFinancialYearActions {
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(this.localeService.translate("app_messages.financial_year_locked"));
@@ -60,7 +60,7 @@ export class SettingsFinancialYearActions {
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(this.localeService.translate("app_messages.financial_year_unlocked"));
@@ -81,7 +81,7 @@ export class SettingsFinancialYearActions {
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<ActiveFinancialYear, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, 'Error');
                 } else {
                     this.toasty.successToast(this.localeService.translate("app_messages.financial_year_period_updated"));
@@ -200,7 +200,7 @@ export class SettingsFinancialYearActions {
     }
 
     public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this.toasty.errorToast(response.message);
             }

@@ -9,7 +9,7 @@ import { ToasterService } from '../services/toaster.service';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsFinancialYearActions } from '../actions/settings/financial-year/financial-year.action';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
 
 @Component({
@@ -57,8 +57,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public reportYear: string;
 
     constructor(
-        private store: Store<AppState>, 
-        private toaster: ToasterService, 
+        private store: Store<AppState>,
+        private toaster: ToasterService,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private newVsOldInvoicesService: NewVsOldInvoicesService
     ) {
@@ -71,8 +71,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.startDate && response.endDate) {
                 this.yearOptions = [];
-                let startYear = Number(moment(response.startDate, GIDDH_DATE_FORMAT).format("YYYY"));
-                let endYear = Number(moment(response.endDate, GIDDH_DATE_FORMAT).format("YYYY"));
+                let startYear = Number(dayjs(response.startDate, GIDDH_DATE_FORMAT).format("YYYY"));
+                let endYear = Number(dayjs(response.endDate, GIDDH_DATE_FORMAT).format("YYYY"));
 
                 for (startYear; startYear <= endYear; startYear++) {
                     this.yearOptions.push({ label: String(startYear), value: String(startYear) });
@@ -82,15 +82,15 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                let universalEndDate = moment(response[1]).format("YYYY");
+                let universalEndDate = dayjs(response[1]).format("YYYY");
 
-                if (moment(response[1]).toDate() >= moment().toDate()) {
-                    this.selectedYear = (new Date()).getFullYear().toString();
-                    this.selectedmonth = ("0" + (new Date().getMonth() + 1)).slice(-2).toString();
+                if (dayjs(response[1]).toDate() >= dayjs().toDate()) {
+                    this.selectedYear = (new Date()).getFullYear()?.toString();
+                    this.selectedmonth = ("0" + (new Date().getMonth() + 1)).slice(-2)?.toString();
                     this.getSalesBifurcation();
                 } else {
                     this.selectedYear = universalEndDate;
-                    this.selectedmonth = ("0" + (moment(response[1]).format("M"))).slice(-2).toString();
+                    this.selectedmonth = ("0" + (dayjs(response[1]).format("M"))).slice(-2)?.toString();
                     this.getSalesBifurcation();
                 }
             }
@@ -185,7 +185,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     }
 
     public customMonthSorting(a: IOption, b: IOption) {
-        return (parseInt(a.value) - parseInt(b.value));
+        return (parseInt(a?.value) - parseInt(b?.value));
     }
 
     /**
@@ -212,9 +212,9 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      */
     public getBifurcationClientsString(): void {
         if (this.NewVsOldInvoicesQueryRequest.type === 'month' && this.selectedmonth) {
-            this.columnName = this.monthOptions.find(f => f.value === this.selectedmonth)?.label;
+            this.columnName = this.monthOptions.find(f => f?.value === this.selectedmonth)?.label;
         } else if (this.NewVsOldInvoicesQueryRequest.type === 'quater' && this.selectedQuater) {
-            this.columnName = this.quaterOptions.find(f => f.value === this.selectedQuater)?.label;
+            this.columnName = this.quaterOptions.find(f => f?.value === this.selectedQuater)?.label;
         }
 
         if(this.columnName) {

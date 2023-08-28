@@ -20,12 +20,13 @@ const noop = () => {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
-    @ViewChild('textField', {static: false}) public textField: ElementRef;
+    @ViewChild('textField', { static: false }) public textField: ElementRef;
     @Input() public pattern: any = null;
     @Input() public required: boolean = false;
     @Input() public min: number = null;
     @Input() public max: number = null;
     @Input() public allowDecimalDigitsOnly: boolean = false;
+    @Input() public allowDigitsOnly: boolean = false;
     @Input() public cssClass: string = "";
     @Input() public cssStyle: string = "";
     /** Taking placeholder as input */
@@ -40,6 +41,15 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public showError: boolean = false;
     /** It will focus in the text field */
     @Input() public autoFocus: boolean = false;
+    /** It will enable mask in the text field */
+    @Input() public useMask: boolean = false;
+    /** It will show mask in the text field */
+    @Input() public mask: any;
+    /** It will show prefix in the text field */
+    @Input() public prefix: any;
+    /** It will show suffix in the text field */
+    @Input() public suffix: any;
+    @Input() public customDecimalPlaces: any;
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */
@@ -47,6 +57,10 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
+    /** True if field is autocomplete */
+    @Input() public autocomplete: string;
+    /** Holds mat suffic */
+    @Input() public matSuffix: any;
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
@@ -73,7 +87,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if(this.autoFocus) {
+        if (this.autoFocus) {
             setTimeout(() => {
                 this.textField?.nativeElement?.focus();
             }, 20);

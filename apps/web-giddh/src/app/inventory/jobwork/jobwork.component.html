@@ -12,7 +12,7 @@
                 <div class="fb-1-container">
                     <div class="d-flex job-work-content">
                         <div class="d-flex form-inline">
-                            <h2 class="mr-2 report-info d-inline-block bold text-capitalize font-20">
+                            <h2 class="mr-2 report-info d-inline-block bold text-capitalize font-16">
                                 <span *ngIf="type === 'stock'" class="report-info">{{ nameStockOrPerson }}</span
                                 >&nbsp;<span *ngIf="type === 'stock'">(Transaction Log)</span>
 
@@ -21,14 +21,14 @@
                                 >
                             </h2>
                             <div class="form-group margin-datepicker">
-                                <input
-                                    type="text"
-                                    name="daterangeInput"
-                                    daterangepicker
-                                    [options]="datePickerOptions"
-                                    class="form-control date-range-picker"
-                                    (applyDaterangepicker)="dateSelected($event)"
-                                />
+                                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                    <input
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker"
+                                    />
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -159,7 +159,7 @@
                                                         ><input
                                                             type="checkbox"
                                                             [(ngModel)]="item.checked"
-                                                            (click)="filterByCheck(item.value, $event.target.checked)"
+                                                            (click)="filterByCheck(item.value, $event.target?.checked)"
                                                         />
                                                         {{ item.label }}</label
                                                     >
@@ -245,7 +245,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody *ngIf="inventoryReport && inventoryReport.transactions.length > 0">
+                            <tbody *ngIf="inventoryReport && inventoryReport.transactions?.length > 0">
                                 <tr *ngFor="let txn of inventoryReport.transactions; let idx = index">
                                     <td class="bd-rr">{{ txn.date }}</td>
                                     <td class="bd-rr" *ngIf="type === 'person'">{{ txn.stock.name }}</td>
@@ -280,7 +280,7 @@
                             </tbody>
                             <tbody
                                 *ngIf="
-                                    (inventoryReport && inventoryReport.transactions.length <= 0) || !inventoryReport
+                                    (inventoryReport && inventoryReport.transactions?.length <= 0) || !inventoryReport
                                 "
                             >
                                 <tr>

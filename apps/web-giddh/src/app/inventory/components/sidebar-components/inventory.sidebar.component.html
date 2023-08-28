@@ -48,7 +48,6 @@
                                 </li>
                             </ul>
                         </li>
-
                         <li role="menuitem" dropdown placement="right" container="body">
                             <a dropdownToggle class="dropdown-item dropdown-toggle">Download all stock wise</a>
                             <ul class="dropdown-menu" role="menu">
@@ -101,6 +100,11 @@
                 </div>
             </div>
         </div>
-        <stockgrp-list class="parent-group stock-group-parent" [Groups]="stockGroupData"></stockgrp-list>
+        <stockgrp-list
+            class="parent-group stock-group-parent"
+            [Groups]="stockGroupData"
+            [page]="currentPage"
+            (loadMore)="loadMore()"
+        ></stockgrp-list>
     </div>
 </section>

@@ -1,6 +1,5 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { SharedModule } from '../../../shared/shared.module'
-import { TabsModule } from 'ngx-bootstrap/tabs';
+
 @Component({
     selector: 'aside-adjust-inventory',
     templateUrl: './adjust-inventory-aside.component.html',

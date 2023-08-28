@@ -68,7 +68,7 @@
             }
         }
         h3 {
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
             color: var(--color-primary-sidebar-company-branch-block-h3);
             .company-alice {
                 width: 30px;
@@ -82,13 +82,13 @@
                 align-items: center;
                 white-space: nowrap;
                 letter-spacing: -2px;
-                font-size: 13px !important;
+                font-size: var(--font-size-15) !important;
                 color: var(--color-sidebar-content-text);
             }
             .company-full-name {
                 white-space: normal;
                 word-break: break-word;
-                font-size: 14px;
+                font-size: var(--font-size-15);
                 padding-left: 5px;
                 .icon-branch-connect {
                     position: absolute;
@@ -106,8 +106,8 @@
                     width: 140px;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    font-family: "opensans-regular";
-                    font-size: 13px;
+                    font-family: var(--font-regular);
+                    font-size: var(--font-size-12);
                     margin-left: 18px;
                     margin-top: 7px;
                 }
@@ -172,7 +172,7 @@
             }
         }
         .input-group-append {
-            font-size: 12px;
+            font-size: var(--font-size-12);
             color: var(--color-sidebar-search-bar-text);
             right: 10px;
             top: 0;
@@ -205,17 +205,17 @@
             p {
                 display: block;
                 i {
-                    font-size: 18px;
+                    font-size: var(--font-size-16);
                     color: var(--color-primary-sidebar-account-collapse-i);
                 }
             }
             .left-fixed-header > li a.active {
-                @include highlight-color(var(--color-sidebar-background), var(--color-sidebar-anchor-text-hover));
+                @include highlight-color(var(--color-sidebar-background), var(--color-giddh-blue));
             }
         }
         p {
             color: var(--color-sidebar-list-head);
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
         }
         ul {
             li {
@@ -231,10 +231,10 @@
                     &.show-more {
                         color: var(--color-primary-sidebar-show-more);
                         text-decoration: underline;
-                        font-size: 12px;
+                        font-size: var(--font-size-12);
                     }
                     &:hover {
-                        color: var(--color-sidebar-anchor-text-hover);
+                        color: var(--color-giddh-blue);
                     }
                 }
             }
@@ -245,13 +245,12 @@
     }
     .menu-block {
         .menu-item {
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
             p {
                 display: flex;
                 justify-content: space-between;
                 line-height: 20px;
                 color: var(--color-sidebar-list-head);
-                // background-color: var(--color-body-background);
                 span {
                     .icon-arrow-down {
                         transform: rotate(0deg);
@@ -283,19 +282,19 @@
                     }
                     a {
                         color: var(--color-sidebar-secondary-anchor-text);
-                        font-family: "opensans-semibold";
+                        font-family: var(--font-semibold);
                         width: 100%;
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
                         &:hover {
-                            color: var(--color-sidebar-anchor-text-hover);
+                            color: var(--color-giddh-blue);
                         }
                         &.dropdown-toggle {
                             padding: 0 20px;
                         }
                         &.active {
-                            color: var(--color-sidebar-anchor-text-hover) !important;
+                            color: var(--color-giddh-blue) !important;
                             background-color: transparent;
                         }
                         &:first-child {
@@ -334,7 +333,7 @@
                             color: var(--color-primary-sidebar-menu-item-wrapper-list-anchor);
                             align-items: center;
                             display: flex;
-                            font-family: "opensans-regular";
+                            font-family: var(--font-regular);
                         }
                     }
                     .sub-menu {
@@ -357,7 +356,7 @@
                                 color: var(--color-sidebar-primary-anchor-text);
                                 align-items: center;
                                 display: flex;
-                                font-family: "opensans-regular";
+                                font-family: var(--font-regular);
                                 background-color: transparent;
                                 justify-content: flex-start;
                                 padding: 10px 0 10px 50px;
@@ -368,7 +367,7 @@
                                 }
                                 &.active {
                                     @include highlight-color(
-                                        var(--color-sidebar-anchor-text-hover),
+                                        var(--color-giddh-blue),
                                         var(--color-sidebar-menu-list-items)
                                     );
                                 }
@@ -376,12 +375,12 @@
                             &:hover {
                                 a {
                                     @include highlight-color(
-                                        var(--color-sidebar-anchor-text-hover),
+                                        var(--color-giddh-blue),
                                         var(--color-sidebar-menu-list-items)
                                     );
                                     &.active {
                                         @include highlight-color(
-                                            var(--color-sidebar-anchor-text-hover),
+                                            var(--color-giddh-blue),
                                             var(--color-sidebar-menu-list-items)
                                         );
                                     }
@@ -462,9 +461,9 @@
                         align-items: center;
                         padding: 0;
                         margin-top: 15px;
-                        font-family: "opensans-semibold";
+                        font-family: var(--font-semibold);
                         letter-spacing: 0;
-                        font-size: 16px;
+                        font-size: var(--font-size-15);
                         height: 36px;
                         width: 36px;
                         min-width: 45px;
@@ -479,9 +478,9 @@
                     align-items: center;
                     padding: 0;
                     margin-top: 15px;
-                    font-family: "opensans-semibold";
+                    font-family: var(--font-semibold);
                     letter-spacing: 0;
-                    font-size: 16px;
+                    font-size: var(--font-size-15);
                     height: 36px;
                     width: 36px;
                 }
@@ -581,7 +580,7 @@
                             &:hover,
                             &.active {
                                 @include highlight-color(
-                                    var(--color-primary-sidebar-menu-item-anchor-active-hover-highlight),
+                                    var(--color-giddh-blue),
                                     var(--color-white)
                                 );
                             }
@@ -674,7 +673,7 @@
                             }
                         }
                         i {
-                            font-size: 14px;
+                            font-size: var(--font-size-15);
                             display: inline-flex;
                             color: var(--color-primary-sidebar-account-dropdown-i);
                             width: 14px;

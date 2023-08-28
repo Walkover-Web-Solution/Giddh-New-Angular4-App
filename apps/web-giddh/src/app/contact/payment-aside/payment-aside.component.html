@@ -11,11 +11,14 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<mat-dialog-content class="all-payment-side">
+<mat-dialog-content class="all-payment-side  w-100">
     <div class="clearfix">
         <form #adjustAdvancePaymentForm="ngForm" autocomplete="off">
             <div class="row d-flex align-items-center payment-top-form">
                 <div class="col-sm-12">
+                    <div class="d-flex mb-1" *ngIf="selectedAccForBulkPayment?.length > 1">
+                        <span class="red-text font-14">{{ localeData?.bulk_payment_warning }}</span>
+                    </div>
                     <div class="d-flex mr-b1">
                         <div class="form-group mr-r15 select-bank" *ngIf="selectIntegratedBankList?.length !== 1">
                             <label>{{ localeData?.select_bank }}<span class="red-text">*</span></label>
@@ -97,7 +100,7 @@
                                 >
                             </p>
                         </div>
-                        <div class="form-group mr-r15">
+                        <div class="form-group mr-r15 ">
                             <label>{{ commonLocaleData?.app_total_amount }}<span class="red-text">*</span></label>
                             <text-field
                                 type="text"
@@ -109,7 +112,7 @@
                                 name="amount"
                             ></text-field>
                         </div>
-                        <div class="form-group mr-r15" *ngIf="isPayClicked">
+                        <div class="form-group mr-r15 " *ngIf="isPayClicked">
                             <label class="relative d-flex"
                                 >{{ commonLocaleData?.app_enter_otp }}<span class="red-text">*</span>
                                 <p class="resend-btn" *ngIf="!timerOn">
@@ -131,41 +134,53 @@
                                 [(ngModel)]="receivedOtp"
                             ></text-field>
                         </div>
-                        <div class="form-group mr-r15">
-                            <label class="d-flex"> &nbsp; </label>
+                        <div class="form-group mr-r15  d-flex column-gap15 align-items-center confirm-btn">
                             <button
-                                mat-raised-button
+                                mat-stroked-button
+                                color="primary"
                                 type="button"
                                 *ngIf="!isPayClicked"
-                                class="btn-success"
+                                [ngClass]="{
+                                    'disabled-ladda-btn':
+                                        !isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData
+                                }"
                                 [disabled]="!isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData"
                                 [ladda]="isRequestInProcess"
                                 (click)="payClicked()"
+                                class="pay-btn"
                             >
                                 {{ commonLocaleData?.app_pay }}
                             </button>
-
-                            <button
-                                mat-raised-button
-                                *ngIf="isPayClicked"
-                                class="btn-success"
-                                [disabled]="
-                                    !isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData || !receivedOtp
-                                "
-                                [ladda]="isRequestInProcess"
-                                (click)="confirmOTP()"
-                            >
-                                {{ commonLocaleData?.app_confirm }}
-                            </button>
-                            <button
-                                mat-raised-button
-                                type="button"
-                                *ngIf="isPayClicked"
-                                class="btn-primary"
-                                (click)="clickedCancelOtp()"
-                            >
-                                {{ commonLocaleData?.app_cancel }}
-                            </button>
+                            <div class="mr-t1 d-flex column-gap15">
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    *ngIf="isPayClicked"
+                                    [ngClass]="{
+                                        'disabled-ladda-btn':
+                                            !isBankSelectedForBulkPayment ||
+                                            !selectedBankUrn ||
+                                            !isValidData ||
+                                            !receivedOtp
+                                    }"
+                                    [disabled]="
+                                        !isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData || !receivedOtp
+                                    "
+                                    [ladda]="isRequestInProcess"
+                                    (click)="confirmOTP()"
+                                >
+                                    {{ commonLocaleData?.app_confirm }}
+                                </button>
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    type="button"
+                                    *ngIf="isPayClicked"
+                                    (click)="clickedCancelOtp()"
+                                >
+                                    {{ commonLocaleData?.app_cancel }}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -282,7 +297,7 @@
             <div class="modal-header">
                 <h4 class="modal-title pull-left">{{ localeData?.payment_status }}</h4>
                 <button
-                    mat-raised-button
+                    mat-stroked-button
                     type="button"
                     class="close pull-right"
                     [attr.aria-label]="commonLocaleData?.app_close"
@@ -297,7 +312,7 @@
                 </div>
                 <h4>{{ commonLocaleData?.app_payment_proceed }}</h4>
                 <p>{{ paymentSuccessfulMessage }}</p>
-                <button mat-raised-button class="btn-success" (click)="successModalRef.hide()">
+                <button mat-stroked-button color="primary" (click)="successModalRef.hide()">
                     {{ commonLocaleData?.app_done }}
                 </button>
             </div>

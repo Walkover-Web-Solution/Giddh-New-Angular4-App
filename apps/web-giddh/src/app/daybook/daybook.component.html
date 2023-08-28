@@ -11,7 +11,7 @@
             <!-- ledger header -->
             <div class="col-md-12">
                 <div class="d-flex justify-content-between">
-                    <div class="d-flex">
+                    <div class="d-flex align-items-end">
                         <div class="d-flex company-date-picker">
                             <div
                                 class="form-group mb-0 mr-r15 linked-entities"
@@ -64,7 +64,6 @@
                             </div>
                             <div class="form-inline align-items-center d-flex flex-nowrap daybook-filter">
                                 <div class="form-group custom-datepicker mr-r15" (click)="showGiddhDatepicker($event)">
-                                    <i class="icon-calender calendar-addon"></i>
                                     <input
                                         matInput
                                         type="text"
@@ -99,28 +98,30 @@
                         </div>
                     </div>
                     <div *ngIf="showAdvanceSearchIcon" class="clear-filter form-group mb-0">
-                        <button mat-button class="btn btn-filter" (click)="initialRequest()">
-                            <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                        <button mat-stroked-button (click)="initialRequest()">
+                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
                     </div>
                     <div class="filter-export d-flex align-items-center">
                         <div class="form-group mb-0 cursor-pointer">
                             <button
-                                class="advance-icon align-items-center btn btn-primary"
+                                class="advance-icon align-items-center"
                                 [matTooltip]="commonLocaleData?.app_advance_search"
                                 [matTooltipPosition]="'above'"
                                 matTooltipClass="tooltip-black"
                                 (click)="onOpenAdvanceSearch()"
-                                mat-raised-button
+                                mat-stroked-button
+                                color="primary"
                             >
                                 <span class="pd-r05 d-sm-inline d-none">{{ commonLocaleData?.app_filter }}</span>
                                 <span class="icon-advance-filter"></span>
                             </button>
                         </div>
                         <button
-                            mat-raised-button
+                            mat-stroked-button
+                            color="primary"
                             type="button"
-                            class="btn btn-default bdr export-btn mr-0 d-flex align-items-center"
+                            class="bdr export-btn mr-0 d-flex align-items-center"
                             (click)="exportDaybook()"
                             *ngIf="daybookData?.entries?.length > 0"
                         >
@@ -129,8 +130,8 @@
                     </div>
                 </div>
                 <div class="d-none clear-filter-responsive mr-t1 clear-filter" *ngIf="showAdvanceSearchIcon">
-                    <button mat-raised-button class="btn btn-filter" (click)="initialRequest()">
-                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                    <button mat-stroked-button color="primary" (click)="initialRequest()">
+                        <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
             </div>
@@ -614,7 +615,10 @@
                 </div>
 
                 <!-- pagination -->
-                <div class="mt-1" [hidden]="!daybookData?.entries?.length">
+                <div
+                    class="mt-1"
+                    [hidden]="!daybookData?.entries?.length || daybookData?.totalItems <= daybookData?.count"
+                >
                     <pagination
                         [totalItems]="daybookData?.totalItems"
                         [(ngModel)]="daybookData.page"
@@ -693,19 +697,20 @@
         [isPettyCash]="false"
         (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
         (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
+        [entrySide]="entrySide"
+        [activeCompany]="activeCompany"
     ></update-ledger-entry-panel>
 </ng-template>
 
 <!-- aside menu section -->
-<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
-<app-aside-menu-sales-other-taxes
-    *ngIf="asideMenuStateForOtherTaxes === 'in'"
-    [class]="asideMenuStateForOtherTaxes"
-    [taxes]="companyTaxesList"
-    [otherTaxesModal]="updateLedgerComponent.vm.selectedLedger.otherTaxModal"
-    [commonLocaleData]="commonLocaleData"
-    [@slideInOut]="asideMenuStateForOtherTaxes"
-    (closeModal)="toggleOtherTaxesAsidePane(null)"
-    (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane(null)"
->
-</app-aside-menu-sales-other-taxes>
+<ng-template #asideMenuStateForOtherTaxes>
+    <app-aside-menu-sales-other-taxes
+        [class]="asideMenuStateForOtherTaxes"
+        [taxes]="companyTaxesList"
+        [otherTaxesModal]="updateLedgerComponent?.vm?.selectedLedger?.otherTaxModal"
+        [commonLocaleData]="commonLocaleData"
+        (closeModal)="asideMenuStateForOtherTaxesDialogRef.close()"
+        (applyTaxes)="calculateOtherTaxes($event); asideMenuStateForOtherTaxesDialogRef.close()"
+    >
+    </app-aside-menu-sales-other-taxes>
+</ng-template>

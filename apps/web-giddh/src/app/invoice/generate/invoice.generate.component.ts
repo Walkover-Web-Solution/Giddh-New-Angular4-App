@@ -1,12 +1,12 @@
 import { Observable, of, ReplaySubject, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil, auditTime, take } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormControl, NgForm } from '@angular/forms';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { UntypedFormControl, NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -40,7 +40,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('accountUniqueNameSearch', { static: true }) public accountUniqueNameSearch: ElementRef;
     @Input() public selectedVoucher: string = 'invoice';
 
-    public moment = moment;
+    public dayjs = dayjs;
     public showFromDatePicker: boolean = false;
     public showToDatePicker: boolean = false;
     public togglePrevGenBtn: boolean = false;
@@ -65,8 +65,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public endDate: Date;
     public isGenerateInvoice: boolean = true;
     public modalUniqueName: string;
-    public particularInput: FormControl = new FormControl();
-    public accountUniqueNameInput: FormControl = new FormControl();
+    public particularInput: UntypedFormControl = new UntypedFormControl();
+    public accountUniqueNameInput: UntypedFormControl = new UntypedFormControl();
     public hoveredItemForAction: string = '';
     public clickedHoveredItemForAction: string = '';
     public isGetAllRequestInProcess$: Observable<boolean> = of(true);
@@ -117,7 +117,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
@@ -138,6 +138,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     private voucherApiVersion: 1 | 2;
     /** True if voucher generate in process */
     public generateVoucherInProcess: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(
         private store: Store<AppState>,
@@ -174,7 +176,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             }
         });
 
@@ -185,7 +187,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
                     let response = cloneDeep(res);
                     response.results = orderBy(response.results, (item: ILedgersInvoiceResult) => {
-                        return moment(item.entryDate, GIDDH_DATE_FORMAT);
+                        return dayjs(item.entryDate, GIDDH_DATE_FORMAT);
                     }, 'desc');
 
                     if (response && response.results) {
@@ -201,8 +203,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                         this.ledgerSearchRequest.from = response.fromDate;
                         this.ledgerSearchRequest.to = response.toDate;
 
-                        this.selectedDateRange = { startDate: moment(response.fromDate, GIDDH_DATE_FORMAT), endDate: moment(response.toDate, GIDDH_DATE_FORMAT) };
-                        this.selectedDateRangeUi = moment(response.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(response.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.selectedDateRange = { startDate: dayjs(response.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response.toDate, GIDDH_DATE_FORMAT) };
+                        this.selectedDateRangeUi = dayjs(response.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                     }
 
                     setTimeout(() => {
@@ -251,6 +253,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             if (profile) {
                 this.baseCurrencySymbol = profile.baseCurrencySymbol;
                 this.baseCurrency = profile.baseCurrency;
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
         // Refresh report data according to universal date
@@ -265,11 +268,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                         if (this.universalDate && !this.todaySelected) {
                             this.ledgerSearchRequest.dateRange = this.universalDate;
 
-                            this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                            this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                            this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
-                            this.ledgerSearchRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                            this.ledgerSearchRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                            this.ledgerSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                            this.ledgerSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
 
                             this.isUniversalDateApplicable = true;
                         } else {
@@ -361,9 +364,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 item.isSelected = this.allItemsSelected ? true : false;
 
                 if (this.allItemsSelected) {
-                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
+                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
                 } else {
-                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
+                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
                 }
 
                 return item;
@@ -388,7 +391,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.generateVoucherInProcess = false;
 
         let model;
-        
+
         if (this.voucherApiVersion === 2) {
             model = {
                 entryUniqueNames: uniq(this.selectedLedgerItems)
@@ -400,11 +403,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         let res = find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-            return item.uniqueName === this.selectedLedgerItems[0];
+            return item?.uniqueName === this.selectedLedgerItems[0];
         });
         this.selectedItem = cloneDeep(res);
-        if (this.selectedItem && this.selectedItem.account && this.selectedItem.account.uniqueName) {
-            this.selectedAccountUniqueName = this.selectedItem.account.uniqueName;
+        if (this.selectedItem && this.selectedItem.account && this.selectedItem.account?.uniqueName) {
+            this.selectedAccountUniqueName = this.selectedItem.account?.uniqueName;
         } else {
             this.selectedAccountUniqueName = '';
         }
@@ -414,7 +417,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
         }
-        
+
         if (res?.account?.uniqueName) {
             this.generateVoucherInProcess = true;
             this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
@@ -441,7 +444,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public generateBulkInvoice(action: boolean) {
-        if (this.selectedLedgerItems.length <= 0) {
+        if (this.selectedLedgerItems?.length <= 0) {
             return false;
         }
         let arr: GenBulkInvoiceGroupByObj[] = [];
@@ -455,7 +458,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             let model: GenerateBulkInvoiceObject[] = [];
             forEach(res, (item: any): void => {
                 forEach(item, (obj: GenBulkInvoiceGroupByObj): void => {
-                    model.push(obj.uniqueName);
+                    model.push(obj?.uniqueName);
                 });
             });
             this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, { entryUniqueNames: model }));
@@ -466,19 +469,19 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 obj.entries = [];
                 forEach(item, (o: GenBulkInvoiceGroupByObj): void => {
                     obj.accountUniqueName = o.accUniqueName;
-                    obj.entries.push(o.uniqueName);
+                    obj.entries.push(o?.uniqueName);
                 });
                 model.push(obj);
             });
             this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, model));
         }
-        
+
         this.selectedLedgerItems = [];
         this.selectedCountOfAccounts = [];
     }
 
     public setToday(model: string) {
-        this.ledgerSearchRequest[model] = String(moment());
+        this.ledgerSearchRequest[model] = String(dayjs());
     }
 
     public clearDate(model: string) {
@@ -515,17 +518,17 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         if (o.description) {
             model.description = o.description;
         }
-        if (o.entryTotalBy === this.comparisionFilters[0].value) {
+        if (o.entryTotalBy === this.comparisionFilters[0]?.value) {
             model.totalIsMore = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[1].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[1]?.value) {
             model.totalIsLess = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[2].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[2]?.value) {
             model.totalIsMore = true;
             model.totalIsEqual = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[3].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[3]?.value) {
             model.totalIsLess = true;
             model.totalIsEqual = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[4].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[4]?.value) {
             model.totalIsEqual = true;
         }
         return model;
@@ -536,8 +539,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         let fromDate = null;
         let toDate = null;
         if (this.universalDate && this.universalDate.length) {
-            fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-            toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+            fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+            toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         }
 
         return {
@@ -550,7 +553,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public countAndToggleVar() {
-        let total: number = this.ledgersData.results.length;
+        let total: number = this.ledgersData.results?.length;
         let count: number = 0;
         forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
             if (item.isSelected) {
@@ -565,11 +568,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public insertItemsIntoArr() {
         if (this.ledgersData) {
             forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-                let idx = indexOf(this.selectedLedgerItems, item.uniqueName);
+                let idx = indexOf(this.selectedLedgerItems, item?.uniqueName);
                 if (item.isSelected) {
                     if (idx === -1) {
-                        this.selectedLedgerItems.push(item.uniqueName);
-                        this.selectedCountOfAccounts.push(item.account.uniqueName);
+                        this.selectedLedgerItems.push(item?.uniqueName);
+                        this.selectedCountOfAccounts.push(item.account?.uniqueName);
                     }
                 } else {
                     if (idx !== -1) {
@@ -662,8 +665,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.ledgerSearchRequest.dateRange = this.universalDate;
         this.customDateSelected = false;
         if (this.universalDate && !this.todaySelected) {
-            this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-            this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+            this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
             this.isUniversalDateApplicable = true;
         } else {
@@ -712,7 +715,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
             let grandTotalConversionRate = 0;
             if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
-                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(this.giddhBalanceDecimalPlaces);
             }
 
             let currencyConversion = this.localeData?.currency_conversion;
@@ -769,10 +772,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.customDateSelected = true;
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.ledgerSearchRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.ledgerSearchRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.ledgerSearchRequest.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.ledgerSearchRequest.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.isUniversalDateApplicable = false;
             this.getLedgersOfInvoice();
         }

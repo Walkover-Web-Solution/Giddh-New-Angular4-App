@@ -16,6 +16,7 @@ const GST_ROUTES: Routes = [
         children: [
             { path: '', component: FilingComponent },
             { path: 'transaction', component: FilingComponent },
+            { path: 'hsn-summary', component: FilingComponent },
         ]
     },
     { path: 'unit-mapping', component: UnitMappingComponent },

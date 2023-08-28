@@ -29,6 +29,8 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     @Input() public commonLocaleData: any = {};
     /** This will hold default data of other taxes */
     public defaultOtherTaxesModal: SalesOtherTaxesModal;
+    /** Selected calculation method label */
+    public selectedCalculationMethod: any;
 
     constructor(
         private breakPointObservar: BreakpointObserver
@@ -42,16 +44,19 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
 
     public ngOnInit(): void {
         document.querySelector("body").classList.add("aside-menu-othertax-open");
+        this.addZindexCdkOverlay();
         this.taxesOptions = this.taxes
             ?.filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
             .map(m => {
-                return { label: m.name, value: m.uniqueName };
+                return { label: m.name, value: m?.uniqueName };
             })
 
         this.calculationMethodOptions = [
             { label: this.commonLocaleData?.app_on_taxable_value, value: 'OnTaxableAmount' },
-            { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' },
+            { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' }
         ];
+
+        this.selectedCalculationMethod = this.calculationMethodOptions?.filter(method => method?.value === this.otherTaxesModal?.tcsCalculationMethod);
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -64,14 +69,18 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
                 this.selectedTaxUniqueName = this.defaultOtherTaxesModal.appliedOtherTax.uniqueName;
                 this.applyTax({ label: this.defaultOtherTaxesModal.appliedOtherTax.name, value: this.defaultOtherTaxesModal.appliedOtherTax.uniqueName });
             }
+
+            if (this.calculationMethodOptions?.length > 0) {
+                this.selectedCalculationMethod = this.calculationMethodOptions?.filter(method => method?.value === this.otherTaxesModal.tcsCalculationMethod);
+            }
         }
     }
 
     public applyTax(tax: IOption): void {
-        if (tax && tax.value) {
+        if (tax && tax?.value) {
             this.defaultOtherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
             if (!this.selectedTaxUniqueName) {
-                let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
+                let taxType = this.taxes.find(f => f?.uniqueName === tax.value).taxType;
                 const isTdsTax = ['tdsrc', 'tdspay'].includes(taxType);
                 if (!isTdsTax) {
                     this.defaultOtherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
@@ -99,6 +108,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnDestroy(): void {
         document.querySelector("body").classList.remove("aside-menu-othertax-open");
+        this.removeZindexCdkOverlay();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -108,7 +118,39 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof AsideMenuOtherTaxes
      */
-    public closeTaxesModal(): void {
-        this.closeModal.emit(true);
+    public closeTaxesModal(event: any): void {
+        if (event?.target?.className?.indexOf("option") === -1) {
+            this.closeModal.emit(true);
+        }
+    }
+
+    /**
+     * This will use for onCalculate tax method
+     *
+     * @param {IOption} tax
+     * @memberof AsideMenuOtherTaxes
+     */
+    public onCalculateTax(tax: IOption): void {
+        if (tax && tax.value) {
+            this.defaultOtherTaxesModal.tcsCalculationMethod = (tax.value === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) ? SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount : SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
+        }
+    }
+
+    /**
+     * Adds Z-index class to cdk-overlay element
+     *
+     * @memberof AsideMenuOtherTaxes
+     */
+    public addZindexCdkOverlay(): void {
+        document.querySelector('.cdk-overlay-container')?.classList?.add('cdk-overlay-container-z-index');
+    }
+
+    /**
+     * Removes Z-index class to cdk-overlay element
+     *
+     * @memberof AsideMenuOtherTaxes
+     */
+    public removeZindexCdkOverlay(): void {
+        document.querySelector('.cdk-overlay-container')?.classList?.remove('cdk-overlay-container-z-index');
     }
 }

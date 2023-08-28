@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
 import { takeUntil } from "rxjs/operators";
 import { ReplaySubject } from "rxjs";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
@@ -42,12 +42,12 @@ export class CreateNewInventoryComponent implements OnInit {
     public isService: boolean = false;
     public isCombo: boolean = false;
     public isBulkCreation: boolean = false;
-    public formGroupRadio: FormGroup;
+    public formGroupRadio: UntypedFormGroup;
     /* this will store expense boolean value */
     public isExpense: boolean = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private fb: FormBuilder,
+    constructor(private fb: UntypedFormBuilder,
     ) {
     }
 
@@ -94,7 +94,7 @@ export class CreateNewInventoryComponent implements OnInit {
 
 
     public add(event: MatChipInputEvent): void {
-        const value = (event.value || "").trim();
+        const value = (event?.value || "").trim();
 
         // Add our fruit
         if (value) {
@@ -107,7 +107,7 @@ export class CreateNewInventoryComponent implements OnInit {
     }
 
     public remove(categorys: Category): void {
-        const index = this.category.indexOf(categorys);
+        const index = this.category?.indexOf(categorys);
 
         if (index >= 0) {
             this.category.splice(index, 1);

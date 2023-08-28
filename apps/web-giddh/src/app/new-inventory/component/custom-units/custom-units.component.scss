@@ -1,0 +1,79 @@
+.mat-grid-wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    flex-wrap: wrap;
+    .mat-list-wrap {
+        .item-list {
+            width: 100%;
+            margin: 0 15px;
+            &.group-list{
+                margin-left: 0 !important;
+            }
+            strong {
+                color: var(--color-table-secondary-heading);
+                font-size: var(--font-size-15);
+                display: inline-block;
+                &.list-font {
+                    font-size: var(--font-size-16);
+                }
+            }
+            .items {
+                font-size: var(--font-size-15);
+                display: flex;
+                margin: auto 0;
+                &.map-item {
+                    .mat-list-item-content {
+                        float: right !important;
+                    }
+                }
+                &.selected-unit-group {
+                    background-color: var(--color-table-secondary-heading);
+                    a {
+                        color: var(--color-white);
+                    }
+                }
+            }
+            .list-head {
+                display: flex;
+                justify-content: space-between;
+                padding: 0px;
+                column-gap: 10px;
+
+                &.selected-unit {
+                    background-color: var(--color-table-secondary-heading);
+                    mat-list-item {
+                        a {
+                            color: var(--color-white);
+                        }
+                    }
+                }
+            }
+        }
+        .border-grid {
+            border-right: 1px solid var(--color-iron);
+        }
+    }
+    .form-btn {
+        position: relative;
+        .custom-form {
+            margin-top: 60px;
+            width: 100%;
+        }
+        .create-btn-grp {
+            position: absolute;
+            right: 0;
+            display: flex;
+            justify-content: flex-end;
+
+            button {
+                &:last-child {
+                    margin-right: 0px !important;
+                }
+            }
+        }
+        .mat-grid-tile-content {
+            overflow-y: scroll;
+        }
+    }
+}

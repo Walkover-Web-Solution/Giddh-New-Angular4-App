@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { CustomActions } from '../store/customActions';
+import { CustomActions } from '../store/custom-actions';
 import { AuthenticationService } from '../services/authentication.service';
 import { ToasterService } from '../services/toaster.service';
 
@@ -33,7 +33,7 @@ export class SessionActions {
         .pipe(
             ofType(SessionActions.GET_ALL_SESSION_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status !== 'success') {
+                if (action.payload?.status !== 'success') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -49,7 +49,7 @@ export class SessionActions {
         .pipe(
             ofType(SessionActions.DELETE_SESSION_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status !== 'success') {
+                if (action.payload?.status !== 'success') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -65,7 +65,7 @@ export class SessionActions {
         .pipe(
             ofType(SessionActions.DELETE_ALL_SESSION_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status !== 'success') {
+                if (action.payload?.status !== 'success') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };

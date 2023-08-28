@@ -27,8 +27,10 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     public selectedRoleForDelete: IRoleCommonResponseAndRequest;
     public session$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    // showBackButton will be used to show/hide the back button
+    /* showBackButton will be used to show/hide the back button */
     public showBackButton: boolean = false;
+    /* showPopup will be used to show/hide the popup */
+    public showPopup: boolean = false;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -49,6 +51,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
             if (params && params["tab"] && params["tab"] === "settings") {
                 this.showBackButton = true;
+                this.showPopup = true;
                 this.router.navigate(['pages/permissions/list'], { replaceUrl: true });
             }
         });
@@ -56,7 +59,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         // This module should be accessible to superuser only
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
-                let superAdminIndx = activeCompany.userEntityRoles.findIndex((entity) => entity?.role?.uniqueName === 'super_admin');
+                let superAdminIndx = activeCompany.userEntityRoles?.findIndex((entity) => entity?.role?.uniqueName === 'super_admin');
                 if (superAdminIndx === -1) {
                     this.redirectToDashboard();
                 }
@@ -69,7 +72,12 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         // Getting roles every time user refresh page
         this.store.dispatch(this.permissionActions.GetRoles());
         this.store.dispatch(this.permissionActions.RemoveNewlyCreatedRoleFromStore());
-        this.store.pipe(select(p => p.permission.roles), takeUntil(this.destroyed$)).subscribe((roles: IRoleCommonResponseAndRequest[]) => this.allRoles = roles);
+        this.store.pipe(select(p => p.permission.roles), takeUntil(this.destroyed$)).subscribe((roles: IRoleCommonResponseAndRequest[]) => {
+            this.allRoles = roles;
+            if (this.allRoles?.length > 0) {
+                this.showBackButton = true;
+            }
+        });
     }
 
     /**
@@ -78,7 +86,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
      * @memberof PermissionListComponent
      */
     public ngAfterViewInit(): void {
-        if (this.showBackButton) {
+        if (this.showPopup) {
             this.openPermissionModal();
         }
     }
@@ -97,6 +105,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     public closePopupEvent(userAction) {
+        this.showPopup = false;
         this.permissionModel.hide();
         if (userAction === 'save') {
             this.router.navigate(['/pages', 'permissions', 'details']);
@@ -111,7 +120,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
 
     public deleteRole(role: IRoleCommonResponseAndRequest) {
         this.selectedRoleForDelete = role;
-        this.permissionConfirmationModel.show();
+        this.permissionConfirmationModel?.show();
     }
 
     public deleteConfirmedRole() {
@@ -124,7 +133,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     public openPermissionModal() {
-        this.permissionModel.show();
+        this.permissionModel?.show();
     }
 
     public hidePermissionModel() {

@@ -1,5 +1,5 @@
 import { AppState } from '../store';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { Injectable, NgZone } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { userLoginStateEnum } from '../models/user-login-state';
 import { ROUTES } from '../routes-array';
 
 @Injectable()
-export class UserAuthenticated implements CanActivate {
+export class UserAuthenticated  {
     constructor(public router: Router, private store: Store<AppState>, private zone: NgZone) {
     }
 
@@ -17,7 +17,6 @@ export class UserAuthenticated implements CanActivate {
         }), map(p => {
             if (p.userLoginState === userLoginStateEnum.userLoggedIn) {
                 if (ROUTES.findIndex(q => q.path.split('/')[0] === p.lastState.split('/')[0]) > -1) {
-                    console.log('UserAuthenticated');
                     let lastStateHaveParams: boolean = p.lastState.includes('?');
                     if (lastStateHaveParams) {
                         let tempParams = p.lastState.substr(p.lastState.lastIndexOf('?'));
@@ -26,7 +25,7 @@ export class UserAuthenticated implements CanActivate {
                         urlParams.forEach((val, key) => {
                             queryParams[key] = val;
                         });
-                        this.router.navigate([p.lastState.replace(tempParams, '')], { queryParams });
+                        this.router.navigate([p.lastState?.replace(tempParams, '')], { queryParams });
                     } else {
                         if (p.lastState) {
                             this.router.navigate([p.lastState]);
@@ -40,7 +39,7 @@ export class UserAuthenticated implements CanActivate {
             }
             if (p.userLoginState === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
-                    this.router.navigate(['/new-user']);
+                    this.router.navigate(['/new-company']);
                 });
             }
             return !(p.userLoginState === userLoginStateEnum.userLoggedIn || p.userLoginState === userLoginStateEnum.newUserLoggedIn);

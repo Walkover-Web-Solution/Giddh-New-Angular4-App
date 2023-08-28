@@ -22,6 +22,8 @@ export class FilingOverviewComponent implements OnInit, OnDestroy {
     /** Emits when HSN/SAC is selected */
     @Output() public hsnSacSelected: EventEmitter<void> = new EventEmitter();
     public showTransaction: boolean = false;
+    /** Show/hides hsn summary */
+    public showHsnSummary: boolean = false;
     public filters: any = {};
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -29,8 +31,14 @@ export class FilingOverviewComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            this.showTransaction = this.route.routerState.snapshot.url.includes('transaction');
+            this.showHsnSummary = this.route.routerState.snapshot.url.includes('hsn-summary');
+        });
+        
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.showTransaction = this.route.routerState.snapshot.url.includes('transaction');
+            this.showHsnSummary = this.route.routerState.snapshot.url.includes('hsn-summary');
         });
     }
 

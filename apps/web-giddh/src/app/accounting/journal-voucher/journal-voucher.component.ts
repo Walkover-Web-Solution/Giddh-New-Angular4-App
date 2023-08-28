@@ -159,7 +159,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
 
     @HostListener('document:keyup', ['$event'])
     public handleKeyboardEvent(event: KeyboardEvent) {
-        if (event.ctrlKey && event.key.toLowerCase() === 'a') { // Ctrl + A
+        if (event.ctrlKey && event.key?.toLowerCase() === 'a') { // Ctrl + A
             event.preventDefault();
             event.stopPropagation();
             if (this.gridType === 'voucher') {
@@ -233,7 +233,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             }
         });
         this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());

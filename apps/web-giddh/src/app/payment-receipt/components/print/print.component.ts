@@ -62,7 +62,7 @@ export class PrintComponent implements OnInit, OnDestroy {
 
         let model: DownloadVoucherRequest = {
             voucherType: this.selectedItem?.type,
-            uniqueName: this.selectedItem.uniqueName
+            uniqueName: this.selectedItem?.uniqueName
         };
 
         this.commonService.downloadFile(model, "VOUCHER", "pdf").pipe(takeUntil(this.destroyed$)).subscribe(result => {

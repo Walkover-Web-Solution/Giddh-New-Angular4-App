@@ -51,7 +51,7 @@
             tabindex="-1"
             [placeholder]="placeholderView"
             [ngStyle]="{ 'width.px': filterInputWidth }"
-            (input)="onFilterInput($event.target.value)"
+            (input)="onFilterInput($event.target?.value)"
             (keydown)="onMultipleFilterKeydown($event)"
             (focus)="onMultipleFilterFocus()"
         />
@@ -64,7 +64,7 @@
                 tabindex="0"
                 [placeholder]="placeholderView"
                 [value]="optionList.hasSelected ? optionList.selection[0].label : ''"
-                (input)="onFilterInput($event.target.value)"
+                (input)="onFilterInput($event.target?.value)"
                 (keydown)="onTypeAheadFilterKeydown($event)"
                 (keyup)="onTypeAheadFilterKeyup($event)"
                 (focus)="onTypeAheadFilterFocus()"

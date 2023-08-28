@@ -17,17 +17,17 @@ export class SettingsUtilityService {
      */
     public getCreateWarehouseRequestObject(formControls: any): any {
         return {
-            name: (formControls.name) ? formControls.name.value : '',
+            name: (formControls.name) ? formControls.name?.value : '',
             addresses: [{
-                address: (formControls.address) ? formControls.address.value : '',
-                stateCode: (formControls.state) ? formControls.state.value : '',
+                address: (formControls.address) ? formControls.address?.value : '',
+                stateCode: (formControls.state) ? formControls.state?.value : '',
                 isDefault: true
             }],
             isDefault: false,
-            countryCode: (formControls.country) ? formControls.country.value : '',
-            currencyCode: (formControls.baseCurrency) ? formControls.baseCurrency.value : '',
-            callingCode: (formControls.phoneCode) ? formControls.phoneCode.value : '',
-            mobileNumber: (formControls.contactNo) ? formControls.contactNo.value : ''
+            countryCode: (formControls.country) ? formControls.country?.value : '',
+            currencyCode: (formControls?.baseCurrency) ? formControls?.baseCurrency?.value : '',
+            callingCode: (formControls.phoneCode) ? formControls.phoneCode?.value : '',
+            mobileNumber: (formControls.contactNo) ? formControls.contactNo?.value : ''
         };
     }
 
@@ -45,7 +45,7 @@ export class SettingsUtilityService {
             if (warehouse.isDefault) {
                 defaultWarehouse = warehouse;
             }
-            return { ...warehouse, label: warehouse.name, value: warehouse.uniqueName };
+            return { ...warehouse, label: warehouse?.name, value: warehouse?.uniqueName };
         });
 
         if(!defaultWarehouse?.uniqueName && formattedWarehouses?.length > 0) {
@@ -73,7 +73,8 @@ export class SettingsUtilityService {
                 taxNumber: address.taxNumber,
                 address: address.address,
                 name: address.name,
-                uniqueName: address.uniqueName,
+                uniqueName: address?.uniqueName,
+                county: address?.county,
                 linkedEntities: this.getLinkedEntities(address)
             });
         });
@@ -100,7 +101,7 @@ export class SettingsUtilityService {
                     address: address.address,
                     isDefault: address.isDefault,
                     name: address.name,
-                    uniqueName: address.uniqueName,
+                    uniqueName: address?.uniqueName,
                 });
             });
         }
@@ -119,7 +120,7 @@ export class SettingsUtilityService {
         return {
             name: branchDetails.name,
             alias: branchDetails.alias,
-            linkAddresses: (branchDetails.addresses && branchDetails.addresses.length > 0) ? branchDetails.addresses.map(address => ({ uniqueName: address.uniqueName, isDefault: address.isDefault })) : []
+            linkAddresses: (branchDetails.addresses && branchDetails.addresses.length > 0) ? branchDetails.addresses.map(address => ({ uniqueName: address?.uniqueName, isDefault: address.isDefault })) : []
         };
     }
 

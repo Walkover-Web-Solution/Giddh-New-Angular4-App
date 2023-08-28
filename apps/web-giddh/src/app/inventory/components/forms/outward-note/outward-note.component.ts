@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
-import * as moment from 'moment';
+import { IStocksItem } from '../../../../models/interfaces/stocks-item.interface';
+import * as dayjs from 'dayjs';
 import { StockUnitRequest } from '../../../../models/api-models/Inventory';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
@@ -25,40 +25,40 @@ export class OutwardNoteComponent implements OnChanges {
     public stockListOptions: IOption[];
     public stockUnitsOptions: IOption[];
     public userListOptions: IOption[];
-    public form: FormGroup;
+    public form: UntypedFormGroup;
     public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     public mode: 'receiver' | 'product' = 'receiver';
     public today = new Date();
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor(private _fb: FormBuilder) {
+    constructor(private _fb: UntypedFormBuilder) {
         this.initializeForm(true);
     }
 
-    public get inventoryEntryDate(): FormControl {
-        return this.form.get('inventoryEntryDate') as FormControl;
+    public get inventoryEntryDate(): UntypedFormControl {
+        return this.form.get('inventoryEntryDate') as UntypedFormControl;
     }
 
-    public get transactions(): FormArray {
-        return this.form.get('transactions') as FormArray;
+    public get transactions(): UntypedFormArray {
+        return this.form.get('transactions') as UntypedFormArray;
     }
 
-    public get inventoryUser(): FormControl {
-        return this.form.get('inventoryUser') as FormControl;
+    public get inventoryUser(): UntypedFormControl {
+        return this.form.get('inventoryUser') as UntypedFormControl;
     }
 
-    public get stock(): FormControl {
-        return this.form.get('stock') as FormControl;
+    public get stock(): UntypedFormControl {
+        return this.form.get('stock') as UntypedFormControl;
     }
 
-    public get description(): FormArray {
-        return this.form.get('description') as FormArray;
+    public get description(): UntypedFormArray {
+        return this.form.get('description') as UntypedFormArray;
     }
 
     public initializeForm(initialRequest: boolean = false) {
         this.form = this._fb.group({
-            inventoryEntryDate: [moment().format(GIDDH_DATE_FORMAT), Validators.required],
+            inventoryEntryDate: [dayjs().format(GIDDH_DATE_FORMAT), Validators.required],
             transactions: this._fb.array([], Validators.required),
             description: [''],
             inventoryUser: [''],
@@ -72,8 +72,8 @@ export class OutwardNoteComponent implements OnChanges {
     public modeChanged(mode: 'receiver' | 'product') {
         this.mode = mode;
         this.form.reset();
-        this.inventoryEntryDate?.patchValue(moment().format(GIDDH_DATE_FORMAT));
-        this.transactions.controls = this.transactions.controls.filter(trx => false);
+        this.inventoryEntryDate?.patchValue(dayjs().format(GIDDH_DATE_FORMAT));
+        this.transactions.controls = this.transactions.controls?.filter(trx => false);
 
         if (this.mode === 'receiver') {
             this.stock.setValidators(Validators.required);
@@ -89,13 +89,13 @@ export class OutwardNoteComponent implements OnChanges {
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.stockList && this.stockList) {
-            this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p.uniqueName }));
+            this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
         if (changes.stockUnits && this.stockUnits) {
             this.stockUnitsOptions = this.stockUnits.map(p => ({ label: `${p.name} (${p.code})`, value: p.code }));
         }
         if (changes.userList && this.userList) {
-            this.userListOptions = this.userList.map(p => ({ label: p.name, value: p.uniqueName }));
+            this.userListOptions = this.userList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
     }
 
@@ -105,8 +105,8 @@ export class OutwardNoteComponent implements OnChanges {
             return;
         }
 
-        const items = this.form.get('transactions') as FormArray;
-        const value = items.length > 0 ? items.at(0).value : {
+        const items = this.form.get('transactions') as UntypedFormArray;
+        const value = items?.length > 0 ? items?.at(0)?.value : {
             type: '',
             quantity: '',
             inventoryUser: '',
@@ -125,14 +125,14 @@ export class OutwardNoteComponent implements OnChanges {
     }
 
     public deleteTransactionItem(index: number) {
-        const items = this.form.get('transactions') as FormArray;
+        const items = this.form.get('transactions') as UntypedFormArray;
         items.removeAt(index);
     }
 
     public userChanged(option: IOption, index: number) {
-        const items = this.form.get('transactions') as FormArray;
-        const user = this.userList.find(p => p.uniqueName === option.value);
-        const inventoryUser = user ? { uniqueName: user.uniqueName } : null;
+        const items = this.form.get('transactions') as UntypedFormArray;
+        const user = this.userList.find(p => p?.uniqueName === option.value);
+        const inventoryUser = user ? { uniqueName: user?.uniqueName } : null;
         if (index >= 0) {
             const control = items.at(index);
             control?.patchValue({
@@ -146,8 +146,8 @@ export class OutwardNoteComponent implements OnChanges {
 
     public stockChanged(option: IOption, index: number) {
         const items = this.transactions;
-        const stockItem = this.stockList.find(p => p.uniqueName === option.value);
-        const stock = stockItem ? { uniqueName: stockItem.uniqueName } : null;
+        const stockItem = this.stockList.find(p => p?.uniqueName === option.value);
+        const stock = stockItem ? { uniqueName: stockItem?.uniqueName } : null;
         const stockUnit = stockItem ? stockItem.stockUnit.code : null;
         if (index >= 0) {
             const control = items.at(index);
@@ -166,7 +166,7 @@ export class OutwardNoteComponent implements OnChanges {
                 return rv;
             });
             let value: InventoryEntry = {
-                inventoryEntryDate: moment(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                inventoryEntryDate: dayjs(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
                 description: this.description.value,
                 transactions: rawValues
             };

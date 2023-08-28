@@ -20,6 +20,7 @@ import { PaginationModule } from "ngx-bootstrap/pagination";
 import { FormsModule } from "@angular/forms";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { NoDataModule } from "../shared/no-data/no-data.module";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 
 @NgModule({
     declarations: [
@@ -42,10 +43,11 @@ import { NoDataModule } from "../shared/no-data/no-data.module";
         FormFieldsModule,
         MatTooltipModule,
         TranslateDirectiveModule,
-        PaginationModule,
+        PaginationModule.forRoot(),
         FormsModule,
         GiddhPageLoaderModule,
-        NoDataModule
+        NoDataModule,
+        MatSlideToggleModule
     ]
 })
 export class CustomFieldsModule {

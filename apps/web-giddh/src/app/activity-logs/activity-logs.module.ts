@@ -39,7 +39,7 @@ import { ActivityCompareJsonComponent } from './components/activity-compare-json
         NoDataModule,
         GiddhPageLoaderModule,
         TranslateDirectiveModule,
-        PaginationModule,
+        PaginationModule.forRoot(),
         FormFieldsModule,
         HamburgerMenuModule,
         SharedModule,

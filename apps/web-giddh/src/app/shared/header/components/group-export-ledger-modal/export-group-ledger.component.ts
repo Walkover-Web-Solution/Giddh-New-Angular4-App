@@ -1,8 +1,8 @@
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild, Input } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild, Input, TemplateRef } from '@angular/core';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { some } from '../../../../lodash-optimized';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from 'apps/web-giddh/src/app/app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -28,13 +28,12 @@ export class ExportGroupLedgerComponent implements OnInit {
     public emailTypeMini: string = '';
     public emailTypeDetail: string;
     public emailData: string = '';
-    public fileType: string = 'pdf';
     public order: string = 'asc';
     public dateRange: { from: string, to: string } = { from: '', to: '' };
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
@@ -43,8 +42,8 @@ export class ExportGroupLedgerComponent implements OnInit {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -70,6 +69,8 @@ export class ExportGroupLedgerComponent implements OnInit {
         exportType: 'GROUP_LEDGER_EXPORT',
         showEntryVoucherNo: false
     }
+    /** To hold export request object */
+    public fileType: string = 'CSV';
 
 
     constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService, private generalService: GeneralService, private modalService: BsModalService) {
@@ -78,8 +79,8 @@ export class ExportGroupLedgerComponent implements OnInit {
 
     public ngOnInit() {
         // Set a default date
-        this.dateRange.from = moment(moment().subtract(30, 'days')).format(GIDDH_DATE_FORMAT);
-        this.dateRange.to = moment(moment()).format(GIDDH_DATE_FORMAT);
+        this.dateRange.from = dayjs(dayjs().subtract(30, 'day')).format(GIDDH_DATE_FORMAT);
+        this.dateRange.to = dayjs(dayjs()).format(GIDDH_DATE_FORMAT);
 
         if (this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
             this._permissionDataService.getData.forEach(f => {
@@ -95,10 +96,10 @@ export class ExportGroupLedgerComponent implements OnInit {
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
         });
     }
@@ -115,8 +116,8 @@ export class ExportGroupLedgerComponent implements OnInit {
     }
 
     public onSelectDateRange(ev) {
-        this.dateRange.from = moment(ev.picker.startDate).format(GIDDH_DATE_FORMAT);
-        this.dateRange.to = moment(ev.picker.endDate).format(GIDDH_DATE_FORMAT);
+        this.dateRange.from = dayjs(ev.picker.startDate).format(GIDDH_DATE_FORMAT);
+        this.dateRange.to = dayjs(ev.picker.endDate).format(GIDDH_DATE_FORMAT);
     }
 
     /**
@@ -162,10 +163,10 @@ export class ExportGroupLedgerComponent implements OnInit {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.dateRange.from = this.fromDate;
             this.dateRange.to = this.toDate;
         }

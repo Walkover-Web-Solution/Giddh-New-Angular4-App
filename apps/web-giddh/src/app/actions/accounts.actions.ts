@@ -7,11 +7,11 @@ import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Action, Store } from '@ngrx/store';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
 import { GeneralActions } from './general/general.actions';
-import { CustomActions } from '../store/customActions';
+import { CustomActions } from '../store/custom-actions';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { Observable } from 'rxjs';
@@ -42,6 +42,7 @@ export class AccountsAction {
     public static SHARED_ACCOUNT_WITH_RESPONSE = 'AccountSharedWithResponse';
     public static MOVE_ACCOUNT = 'AccountMove';
     public static MOVE_ACCOUNT_RESPONSE = 'AccountMoveResponse';
+    public static MOVE_ACCOUNT_RESET = 'AccountMoveReset';
     public static UPDATE_ACCOUNT = 'UpdateAccount';
     public static UPDATE_ACCOUNT_RESPONSE = 'UpdateAccountResponse';
     public static UPDATE_ACCOUNTV2 = 'UpdateAccountV2';
@@ -66,6 +67,7 @@ export class AccountsAction {
     public static ASSIGN_DISCOUNT_TO_ACCOUNT = 'ASSIGN_DISCOUNT_TO_ACCOUNT';
     public static RESET_SHARE_ENTITY = 'RESET_SHARE_ENTITY';
     public static RESET_UPDATE_ACCOUNTV2 = 'RESET_UPDATE_ACCOUNTV2';
+    public static ACCOUNT_HAS_UNSAVED_CHANGES = 'ACCOUNT_HAS_UNSAVED_CHANGES';
 
     public ApplyAccountTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -79,14 +81,14 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.APPLY_GROUP_TAX_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
                 }
-                this._toasty.successToast(action.payload.body, action.payload.status);
+                this._toasty.successToast(action.payload?.body, action.payload?.status);
                 this.store.pipe(take(1)).subscribe((s) => {
                     if (s.groupwithaccounts && s.groupwithaccounts.activeGroup) {
-                        return this.getAccountDetails(s.groupwithaccounts.activeAccount.uniqueName);
+                        return this.getAccountDetails(s.groupwithaccounts.activeAccount?.uniqueName);
                     }
                 });
                 return { type: 'EmptyAction' };
@@ -97,7 +99,8 @@ export class AccountsAction {
             ofType(AccountsAction.CREATE_ACCOUNTV2),
             switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName)),
             map(response => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
+                    this.store.dispatch(this.hasUnsavedChanges(false));
                     this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
                 }
                 return this.createAccountResponseV2(response);
@@ -107,7 +110,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.CREATE_ACCOUNT_RESPONSEV2),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return {
@@ -124,7 +127,7 @@ export class AccountsAction {
     public GetAccountDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(AccountsAction.GET_ACCOUNT_DETAILS),
-            switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload)),
+            switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload.uniqueName, action.payload.source)),
             map(response => {
                 return this.getAccountDetailsResponse(response);
             })));
@@ -133,7 +136,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return {
@@ -148,13 +151,13 @@ export class AccountsAction {
             map(response => {
                 if (response && response.body && response.queryString) {
                     const updateIndexDb: IUpdateDbRequest = {
-                        newUniqueName: response.body.uniqueName,
+                        newUniqueName: response.body?.uniqueName,
                         oldUniqueName: response.queryString.accountUniqueName,
                         latestName: response.request.name,
                         uniqueName: this._generalServices.companyUniqueName,
                         type: "accounts",
                         isActive: false,
-                        name: response.body.name
+                        name: response.body?.name
                     }
                     this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
                 }
@@ -165,7 +168,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
@@ -186,19 +189,20 @@ export class AccountsAction {
     public UpdateAccountV2$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(AccountsAction.UPDATE_ACCOUNTV2),
-            switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.account, action.payload.value)),
+            switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.account, action.payload?.value)),
             map(response => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
+                    this.store.dispatch(this.hasUnsavedChanges(false));
                     this.store.dispatch(this.commonActions.accountUpdated(true));
                     this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
                     const updateIndexDb: IUpdateDbRequest = {
-                        newUniqueName: response.body.uniqueName,
+                        newUniqueName: response?.body?.uniqueName,
                         oldUniqueName: response.queryString.accountUniqueName,
                         latestName: response.request.name,
                         uniqueName: this._generalServices.companyUniqueName,
                         type: "accounts",
                         isActive: false,
-                        name: response.body.name
+                        name: response?.body?.name
                     }
                     this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
                 }
@@ -209,8 +213,8 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSEV2),
             map((action: CustomActions) => {
-                let resData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
-                if (action.payload.status === 'error') {
+                let resData: BaseResponse<AccountResponseV2, AccountRequestV2> = action?.payload;
+                if (action.payload?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
@@ -218,7 +222,13 @@ export class AccountsAction {
                     this._generalServices.invokeEvent.next(["accountUpdated", resData]);
                     this._generalServices.eventHandler.next({ name: eventsConst.accountUpdated, payload: resData });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_updated"));
-                    this.store.dispatch(this.getAccountDetails(resData.body.uniqueName));
+                    if (!action.payload?.queryString?.isMasterOpen) {
+                        this.store.dispatch(this.getAccountDetails(resData.body?.uniqueName));
+                    }
+
+                    if (resData.body?.parentGroups[resData.body?.parentGroups?.length - 1]?.uniqueName) {
+                        this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(resData.body?.parentGroups[resData.body?.parentGroups?.length - 1]?.uniqueName));
+                    }
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -235,7 +245,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.GET_ACCOUNT_TAX_HIERARCHY_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return {
@@ -248,7 +258,7 @@ export class AccountsAction {
             ofType(AccountsAction.SHARE_ENTITY),
             switchMap((action: CustomActions) =>
                 this._accountService.Share(
-                    action.payload.body,
+                    action.payload?.body,
                     action.payload.accountUniqueName
                 )
             ),
@@ -260,7 +270,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.SHARE_ENTITY_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return {
                         type: 'EmptyAction'
@@ -294,14 +304,14 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.UN_SHARE_ENTITY_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return {
                         type: 'EmptyAction'
                     };
                 } else {
                     let data: BaseResponse<string, ShareAccountRequest> = action.payload;
-                    this._toasty.successToast(action.payload.body, '');
+                    this._toasty.successToast(action.payload?.body, '');
                     if (data.queryString.entity === 'account') {
                         return this.sharedAccountWith(data.queryString.entityUniqueName);
                     } else if (data.queryString.entity === 'group') {
@@ -328,7 +338,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.UPDATE_ENTITY_PERMISSION_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return {
                         type: 'EmptyAction'
@@ -358,17 +368,17 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.UNSHARE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return {
                         type: 'EmptyAction'
                     };
                 } else {
-                    this._toasty.successToast(action.payload.body, '');
+                    this._toasty.successToast(action.payload?.body, '');
                 }
                 let accountUniqueName = null;
                 this.store.pipe(take(1)).subscribe(s => {
-                    accountUniqueName = s.groupwithaccounts.activeAccount.uniqueName;
+                    accountUniqueName = s.groupwithaccounts.activeAccount?.uniqueName;
                 });
                 return this.sharedAccountWith(accountUniqueName);
             })));
@@ -385,7 +395,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return {
@@ -398,7 +408,7 @@ export class AccountsAction {
             ofType(AccountsAction.MOVE_ACCOUNT),
             switchMap((action: CustomActions) =>
                 this._accountService.AccountMove(
-                    action.payload.body,
+                    action.payload?.body,
                     action.payload.accountUniqueName,
                     action.payload.activeGroupUniqueName
                 )
@@ -411,13 +421,12 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.MOVE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
                     let data: BaseResponse<string, AccountMoveRequest> = action.payload;
                     this._generalServices.eventHandler.next({ name: eventsConst.accountMoved, payload: data });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_moved"), '');
-                    this.groupWithAccountsAction.getGroupDetails(data.request.uniqueName);
                 }
                 return {
                     type: 'EmptyAction'
@@ -441,17 +450,17 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.MERGE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this._toasty.successToast(action.payload.body, '');
+                    this._toasty.successToast(action.payload?.body, '');
                     let data: BaseResponse<string, AccountMergeRequest[]> = action.payload;
                     this._generalServices.eventHandler.next({ name: eventsConst.accountMerged, payload: data });
                     if (data.request && data.request.length) {
                         data.request.forEach(uniqueAccountName => {
                             const request: IUpdateDbRequest = {
                                 uniqueName: this._generalServices.companyUniqueName,
-                                deleteUniqueName: uniqueAccountName.uniqueName,
+                                deleteUniqueName: uniqueAccountName?.uniqueName,
                                 type: "accounts",
                                 name: this._generalServices.companyUniqueName,
                                 isActive: false
@@ -483,10 +492,10 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.UNMERGE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this._toasty.successToast(action.payload.body, '');
+                    this._toasty.successToast(action.payload?.body, '');
                     let data: BaseResponse<string, AccountUnMergeRequest> = action.payload;
                     return this.getAccountDetails(data.queryString.accountUniqueName);
                 }
@@ -507,7 +516,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.DELETE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
                     this._generalServices.invokeEvent.next(["accountdeleted", action.payload.request?.groupUniqueName]);
@@ -521,7 +530,7 @@ export class AccountsAction {
                         isActive: false
                     }
                     this.store.dispatch(this._generalActions.deleteEntryFromIndexDb(request));
-                    this._toasty.successToast(action.payload.body, '');
+                    this._toasty.successToast(action.payload?.body, '');
                 }
                 return {
                     type: 'EmptyAction'
@@ -538,10 +547,10 @@ export class AccountsAction {
     public ApplyAccountDiscountResponseV2$: Observable<Action> = createEffect(() => this.action$
         .pipe(ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT_RESPONSE_V2),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
-                } else if (action.payload.status === 'success') {
-                    this._toasty.successToast(this.localeService.translate("app_messages.discount_linked"), action.payload.status);
+                } else if (action.payload?.status === 'success') {
+                    this._toasty.successToast(this.localeService.translate("app_messages.discount_linked"), action.payload?.status);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -593,7 +602,7 @@ export class AccountsAction {
         };
     }
 
-    public updateAccountV2(value: { groupUniqueName: string, accountUniqueName: string }, account: AccountRequestV2): CustomActions {
+    public updateAccountV2(value: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }, account: AccountRequestV2): CustomActions {
         return {
             type: AccountsAction.UPDATE_ACCOUNTV2,
             payload: { account, value }
@@ -613,10 +622,10 @@ export class AccountsAction {
         };
     }
 
-    public getAccountDetails(value: string): CustomActions {
+    public getAccountDetails(value: string, source?: string): CustomActions {
         return {
             type: AccountsAction.GET_ACCOUNT_DETAILS,
-            payload: value
+            payload: { uniqueName: value, source: source }
         };
     }
 
@@ -710,6 +719,12 @@ export class AccountsAction {
         return {
             type: AccountsAction.MOVE_ACCOUNT_RESPONSE,
             payload: value
+        };
+    }
+
+    public moveAccountReset(): CustomActions {
+        return {
+            type: AccountsAction.MOVE_ACCOUNT_RESET
         };
     }
 
@@ -838,6 +853,20 @@ export class AccountsAction {
     public resetShareEntity(): CustomActions {
         return {
             type: AccountsAction.RESET_SHARE_ENTITY
+        }
+    }
+
+    /**
+     * This will hold if account/group has unsaved changes
+     *
+     * @param {boolean} value
+     * @returns {CustomActions}
+     * @memberof AccountsAction
+     */
+    public hasUnsavedChanges(value: boolean): CustomActions {
+        return {
+            type: AccountsAction.ACCOUNT_HAS_UNSAVED_CHANGES,
+            payload: value
         }
     }
 }

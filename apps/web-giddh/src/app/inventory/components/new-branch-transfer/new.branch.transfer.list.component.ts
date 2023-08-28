@@ -4,7 +4,6 @@ import {
     OnDestroy,
     OnInit,
     ViewChild,
-    ElementRef,
     HostListener
 } from "@angular/core";
 import { BsModalService, BsModalRef, ModalDirective } from "ngx-bootstrap/modal";
@@ -12,11 +11,11 @@ import { InventoryService } from '../../../services/inventory.service';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { takeUntil, take, filter } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest } from '../../../models/api-models/BranchTransfer';
 import { branchTransferVoucherTypes, branchTransferAmountOperators } from "../../../shared/helpers/branchTransferFilters";
 import { IOption } from '../../../theme/ng-select/ng-select';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { GeneralService } from '../../../services/general.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -28,6 +27,7 @@ import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { Router } from "@angular/router";
 
 @Component({
     selector: "new-branch-transfer-list",
@@ -49,7 +49,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 
 export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
-    @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: ElementRef;
+    @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: TemplateRef<any>;
     @ViewChild('deleteBranchTransferModal', { static: true }) public deleteBranchTransferModal: ModalDirective;
     @ViewChild('senderReceiverField', { static: true }) public senderReceiverField;
     @ViewChild('warehouseNameField', { static: true }) public warehouseNameField;
@@ -62,7 +62,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public branchTransferResponse: NewBranchTransferListResponse;
     public universalDate$: Observable<any>;
     public datePicker: any[] = [];
-    public moment = moment;
+    public dayjs = dayjs;
     public asidePaneState: string = 'out';
     public asideTransferPaneState: string = 'out';
     public branchTransferMode: string = '';
@@ -78,7 +78,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -136,7 +136,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private inventoryService: InventoryService,
         private _toasty: ToasterService,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private router: Router
     ) {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && !_.isEmpty(o)) {
@@ -151,7 +152,6 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.querySelector("body")?.classList?.add("new-branch-list-page");
         this.initBranchTransferListResponse();
-
         branchTransferVoucherTypes.map(voucherType => {
             this.voucherTypes.push({ label: voucherType.label, value: voucherType.value });
         });
@@ -163,13 +163,13 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.store.pipe(select(stateStore => stateStore.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.datePicker = [moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
-                this.branchTransferGetRequestParams.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.branchTransferGetRequestParams.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.datePicker = [dayjs(universalDate[0], GIDDH_DATE_FORMAT).toDate(), dayjs(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
+                this.branchTransferGetRequestParams.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.branchTransferGetRequestParams.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getBranchTransferList(false);
             }
         });
@@ -183,34 +183,34 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
-                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    value: this.activeCompany ? this.activeCompany?.uniqueName : '',
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this._generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
                 }
-                this.branchTransferGetRequestParams.branchUniqueName = this.currentBranch.uniqueName;
+                this.branchTransferGetRequestParams.branchUniqueName = this.currentBranch?.uniqueName;
             } else {
                 if (this._generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
@@ -257,8 +257,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         }
 
         this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferPostRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response.status === "success") {
-                this.branchTransferResponse = response.body;
+            if (response?.status === "success") {
+                this.branchTransferResponse = response?.body;
             } else {
                 this.initBranchTransferListResponse();
             }
@@ -274,8 +274,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     public changeFilterDate(date): void {
         if (date) {
-            this.branchTransferGetRequestParams.from = moment(date[0]).format(GIDDH_DATE_FORMAT);
-            this.branchTransferGetRequestParams.to = moment(date[1]).format(GIDDH_DATE_FORMAT);
+            this.branchTransferGetRequestParams.from = dayjs(date[0]).format(GIDDH_DATE_FORMAT);
+            this.branchTransferGetRequestParams.to = dayjs(date[1]).format(GIDDH_DATE_FORMAT);
             this.getBranchTransferList(true);
         }
     }
@@ -314,6 +314,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public hideModal(refreshList: boolean): void {
+        this.router.navigate(['/pages/inventory/report']);
         if (refreshList) {
             this.getBranchTransferList(true);
         }
@@ -333,19 +334,19 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public deleteNewBranchTransfer(): void {
         this.hideBranchTransferModal();
         this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransfer).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response.status === "success") {
-                this._toasty.successToast(response.body);
+            if (response?.status === "success") {
+                this._toasty.successToast(response?.body);
                 this.getBranchTransferList(false);
             } else {
-                this._toasty.errorToast(response.message);
+                this._toasty.errorToast(response?.message);
             }
         });
     }
 
     public showDeleteBranchTransferModal(item): void {
-        this.selectedBranchTransfer = item.uniqueName;
+        this.selectedBranchTransfer = item?.uniqueName;
         this.selectedBranchTransferType = (item.voucherType === "receiptnote") ? "Receipt Note" : "Delivery Challan";
-        this.deleteBranchTransferModal.show();
+        this.deleteBranchTransferModal?.show();
     }
 
     public hideBranchTransferModal(): void {
@@ -369,7 +370,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     public showEditBranchTransferPopup(item): void {
         this.branchTransferMode = item.voucherType;
-        this.editBranchTransferUniqueName = item.uniqueName;
+        this.editBranchTransferUniqueName = item?.uniqueName;
         this.openModal();
     }
 
@@ -429,15 +430,15 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     public downloadBranchTransfer(item): void {
         let downloadBranchTransferRequest = new NewBranchTransferDownloadRequest();
-        downloadBranchTransferRequest.uniqueName = item.uniqueName;
+        downloadBranchTransferRequest.uniqueName = item?.uniqueName;
 
-        this.inventoryService.downloadBranchTransfer(this.activeCompany.uniqueName, downloadBranchTransferRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res.status === "success") {
-                let blob = this._generalService.base64ToBlob(res.body, 'application/pdf', 512);
+        this.inventoryService.downloadBranchTransfer(this.activeCompany?.uniqueName, downloadBranchTransferRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res?.status === "success") {
+                let blob = this._generalService.base64ToBlob(res?.body, 'application/pdf', 512);
                 return saveAs(blob, item.voucherNo + `.pdf`);
             } else {
                 this._toasty.clearAllToaster();
-                this._toasty.errorToast(res.message);
+                this._toasty.errorToast(res?.message);
             }
         });
     }
@@ -527,10 +528,10 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.branchTransferGetRequestParams.from = this.fromDate;
             this.branchTransferGetRequestParams.to = this.toDate;
             this.getBranchTransferList(true);

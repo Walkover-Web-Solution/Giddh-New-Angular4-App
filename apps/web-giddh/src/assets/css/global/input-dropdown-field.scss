@@ -1,0 +1,505 @@
+/*-- input-new-form-field --*/
+voucher-component,
+create-update-group,
+giddh-datepicker,
+add-company,
+stock-create-edit,
+dropdown-field,
+input-field,
+stock-balance {
+    .mat-mdc-form-field {
+        width: 100%;
+    }
+    .mat-mdc-form-field {
+        .mat-mdc-text-field-wrapper {
+            .mat-form-field-underline {
+                display: block !important;
+            }
+            .mat-mdc-form-field-infix{
+                min-height: 3rem;
+                padding: 12px 0 !important;
+                .mat-mdc-input-element{
+                    &::placeholder{
+                        color: var(--color-gray) !important;
+                    }
+                }
+            }
+            &.mdc-text-field--outlined {
+                .mdc-notched-outline--upgraded {
+                    .mdc-floating-label--float-above{
+                        transform: translateY( -36.75px) scale(var(--mat-mdc-form-field-floating-label-scale, 0.75));
+                    }
+                }
+                .mdc-text-field__input{
+                    height: 100%;
+                }
+            }
+        } 
+        .mat-mdc-select{
+            padding: 0;
+        }
+        .mat-mdc-floating-label{
+            &.mdc-floating-label{
+                line-height: 38px;
+                margin-top: -5px;
+            }
+        }
+        .mdc-notched-outline__notch{
+            border-color: var(--color-fields-border) !important;
+            border-left: 0 !important;
+        }
+    }
+    .mat-form-field-appearance-outline {
+         .mat-mdc-form-field-icon-suffix {
+             margin-left: 0;
+             margin-right: 10px;
+        }
+    }
+    .mat-mdc-form-field-subscript-wrapper{
+        display: none;
+    }
+    .mdc-text-field--outlined{
+        &:not(.mdc-text-field--disabled) {
+            .mdc-notched-outline__leading{
+                border-color: var(--color-fields-border) !important;
+            }
+            &.mdc-text-field--focused {
+                .mdc-notched-outline__notch {
+                    border-color: var(--color-border-focus) !important;
+                }
+                .mdc-notched-outline__leading {
+                    border-color: var(--color-border-focus) !important;
+                }
+            }
+            &:not(.mdc-text-field--focused){
+                &:hover {
+                    .mdc-notched-outline {
+                        .mdc-notched-outline__notch {
+                            border-color: var(--color-field-hover) !important;
+                        }
+                        .mdc-notched-outline__trailing{
+                            border-color: var(--color-field-hover) !important;
+                        }
+                        .mdc-notched-outline__leading {
+                            border-color: var(--color-field-hover) !important;
+                        }
+                    }
+                }
+            }
+        }
+        .mdc-notched-outline {
+            .mdc-notched-outline__trailing {
+                border-color: var(--color-fields-border);
+            }
+        }
+    }
+    .mat-form-field-invalid{
+        .mdc-text-field--outlined{
+            &:not(.mdc-text-field--disabled) {
+                .mdc-notched-outline__leading{
+                    border-color: var(--color-red) !important;
+                }
+                &.mdc-text-field--focused {
+                    .mdc-notched-outline__notch {
+                        border-color: var(--color-red) !important;
+                    }
+                    .mdc-notched-outline__leading {
+                        border-color: var(--color-red) !important;
+                    }
+                }
+                &:not(.mdc-text-field--focused){
+                    &:hover {
+                        .mdc-notched-outline {
+                            .mdc-notched-outline__notch {
+                                border-color: var(--color-field-hover) !important;
+                            }
+                            .mdc-notched-outline__trailing{
+                                border-color: var(--color-field-hover) !important;
+                            }
+                            .mdc-notched-outline__leading {
+                                border-color: var(--color-field-hover) !important;
+                            }
+                        }
+                    }
+                }
+            }
+            .mdc-notched-outline {
+                .mdc-notched-outline__trailing {
+                    border-color: var(--color-fields-border);
+                }
+            }
+        }
+    }
+    .mdc-text-field{
+        &:not(.mdc-text-field--disabled) {
+            .mdc-floating-label{
+                color: var(--color-popup-list-input-text) !important;
+            }
+        }
+    }
+    .mdc-text-field--focused {
+        .mdc-notched-outline__leading, .mdc-notched-outline__notch, .mdc-notched-outline__trailing {
+            border-width: 1px;
+        }
+    }
+    .mdc-text-field--disabled {
+        .mdc-notched-outline__leading{
+            border-color: var(--color-fields-border) !important;
+        }
+    }
+    mat-select {
+        padding: 0 14px;
+        .mat-mdc-select-arrow {
+            svg {
+                fill: var(--color-popup-list-input-text);
+            }
+        }
+    }
+    .mdc-notched-outline {
+        .mdc-notched-outline__leading {
+            border-color: var(--color-field-hover);
+        }
+    }
+    .mat-mdc-select-placeholder, .mat-mdc-select {
+        color: var(--color-popup-list-input-text) !important;
+    }
+}
+.mat-mdc-form-field{
+    &.mat-focused{
+        background-color: transparent;
+        .mat-text-field--focused{
+            background-color: transparent;
+        }
+    }
+    &:hover{
+        background-color: transparent;
+        .mat-mdc-form-field-focus-overlay {
+            opacity: 0;
+        }
+    }
+    .mdc-line-ripple {
+        display: none;
+    }
+    &.mat-focused {
+        .mat-mdc-form-field-focus-overlay{
+            opacity: 0;
+        }
+    }
+}
+/*--- giddh-datepicker ---*/
+.search-datepicker{
+    giddh-datepicker {
+        .mat-mdc-form-field-flex {
+            border: 1px solid var(--color-secondary-input-bar-border)!important; 
+            border-radius: 5px!important;
+        }
+        .mdc-text-field__input{
+            padding: 5px;
+        }
+    }
+}
+.single-search-box, .ledger-date, giddh-datepicker, .form-group{
+    .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix{
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        min-height: 1rem;
+    }
+}
+.ledger-row {
+    giddh-datepicker {
+        .mat-mdc-form-field {
+            min-width: 71px;
+            max-width: 100px;
+        }
+    }
+}
+.mdc-text-field--filled {
+    &:not(.mdc-text-field--disabled) {
+        background-color: transparent !important;
+    }
+}
+.mat-mdc-form-field-subscript-wrapper{
+    display: none;
+}
+.stock-option-fields {
+    .mat-form-field-appearance-outline {
+        .mat-form-field-wrapper {
+            padding-bottom: 0;
+        }
+    }
+}
+
+.other-details-section {
+    .mat-form-field-appearance-outline {
+        .mat-form-field-flex {
+            background-color: var(--color-white);
+        }
+    }
+}
+
+add-company,
+voucher-component {
+    .mobile-number {
+        .mat-mdc-form-field {
+            .mat-mdc-text-field-wrapper {
+                &.mdc-text-field--outlined {
+                    .mdc-notched-outline--upgraded {
+                        .mdc-floating-label--float-above{
+                            padding-left: 0px;
+                        }
+                    }
+                }
+            }
+        }
+        .mdc-floating-label {
+            padding-left: 36px;
+        }
+        .mat-form-field-infix {
+            .mat-input-element {
+                padding-left: 48px !important;
+            }
+        }
+        &.mat-form-field-can-float {
+            &.mat-form-field-should-float {
+                .mat-form-field-label {
+                    padding-left: 64px;
+                }
+            }
+        }
+    }
+    giddh-datepicker {
+        .mat-focused {
+            .mat-form-field-flex {
+                border: 0 !important;
+            }
+        }
+    }
+}
+
+add-company{
+    .readflag{
+        .mat-mdc-text-field-wrapper{
+            &.mdc-text-field--outlined {
+                .mdc-text-field__input{
+                    padding-left: 32px;
+                }
+            }
+        }
+    }
+}
+
+/*--- default select checkbox color ---*/
+.mat-pseudo-checkbox-checked,
+.mat-pseudo-checkbox-indeterminate{
+    &.mat-pseudo-checkbox-full {
+        background: var(--color-primary-common) !important;
+    }
+}
+
+/*------ dropdown option checkbox color ------*/
+.mat-pseudo-checkbox-checked,
+.mat-pseudo-checkbox-indeterminate{
+    &.mat-pseudo-checkbox-minimal{
+        &::after{
+            color: var(--color-giddh-blue);
+        }
+    }
+}
+
+.mat-mdc-option{
+    &:focus{
+        &.mdc-list-item {
+            background-color: transparent !important;
+        }
+    }
+    &.mat-mdc-option-active{
+        &.mdc-list-item {
+            background-color: transparent !important;
+        }
+    }
+}
+
+/*----- checkbox -----*/
+.mdc-checkbox {
+    margin-left: -8px !important;
+    padding-right: 4px !important;
+    .mat-mdc-checkbox-ripple {
+        display: none;
+    }
+    .mdc-checkbox__native-control {
+        margin: 0 !important;
+    }
+    input[type=checkbox][disabled] {
+        opacity: 0;
+    }
+    input[type=checkbox]::before, 
+    input[type=checkbox]::after {
+        display: none;
+    }
+}
+.mat-mdc-checkbox-touch-target {
+    height: 18px !important;
+    width: 18px !important;
+    left: 60% !important;
+}
+.mdc-checkbox .mdc-checkbox__native-control {
+    width: 18px !important;
+    height: 18px !important;
+}
+.mdc-checkbox__ripple {
+    display: none !important;
+}
+/*----- radio-button -----*/
+
+.mat-mdc-radio-group{
+    display: flex;
+    column-gap: 15px;
+}
+.mat-mdc-radio-button {
+    .mdc-radio {
+        padding: 0 !important;
+        .mdc-radio__native-control:enabled:checked+.mdc-radio__background {
+            .mdc-radio__outer-circle {
+                border-color: var(--color-giddh-blue) !important;
+            }
+            .mdc-radio__inner-circle{
+                background-color: var(--color-giddh-blue) !important;
+            }
+        }
+        &:hover{
+            .mdc-radio__native-control:not([disabled]):not(:focus)~.mdc-radio__background::before {
+                opacity: 0 !important;
+            }
+        }
+    }
+}
+
+
+/*---- custom ----*/
+.custom-input-field{
+    .mdc-text-field--filled {
+        padding: 0;
+    }
+    &.share-input-width{
+        width: 80%;
+    }
+    .mat-mdc-form-field-infix{
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        min-height: 2rem !important;
+    }
+}
+
+/*--- manufacturing edit ---*/
+.manufacturing-date{
+    giddh-datepicker{
+        .mat-mdc-text-field-wrapper{
+            padding: 0 !important;
+        }
+        .mat-datepicker-input{
+            padding: 5px 15px !important;
+        }
+    }
+}
+
+/*----- dropdown-color ----*/
+body{
+    .cdk-overlay-container {
+        .cdk-overlay-pane {
+            .mat-mdc-autocomplete-panel {
+                background-color: var(--color-body-background);
+            }
+        }
+    }
+    div.mat-mdc-select-panel {
+        background-color: var(--color-body-background);
+    }
+}
+
+.mat-mdc-menu-item{
+    min-height: 40px !important;
+    .mat-mdc-menu-item-text {
+        display: block;
+        width: 100%;
+        .mat-mdc-checkbox{
+            .mdc-form-field{
+                width: 100%;
+                .mdc-label{
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+activity-logs {
+    .activity-container {
+        .mat-mdc-table {
+            .mdc-data-table__content {
+                .mat-mdc-row {
+                    .mat-mdc-cell {
+                        .mat-mdc-checkbox  {
+                            .mdc-checkbox {
+                                padding-top: 0px;
+                                .mdc-checkbox__background {
+                                    position: absolute;
+                                    top: 5px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*---- report-filter ----*/
+report-filters{
+    .mat-mdc-form-field {
+        .mat-mdc-text-field-wrapper {
+            .mat-mdc-form-field-infix{
+                min-height: 3rem;
+                padding: 12px 0 !important;
+            }
+        } 
+    }
+}
+
+.select-all-checkbox-wrapper{
+    .mdc-checkbox {
+        padding: 0 !important;
+    }
+    .mdc-checkbox__background {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+    }
+    .mat-mdc-button-touch-target {
+        width: 25px !important;
+        height: 25px !important;
+    }
+}
+
+.mat-mdc-option{
+    &.mdc-list-item--disabled {
+        .mdc-list-item__primary-text{
+            opacity: .78 !important;
+        }
+    }
+}
+
+app-cdk-scroll {
+    .mat-mdc-option{
+        &:focus{
+            &.mdc-list-item {
+                background-color: var(--color-mat-option) !important;
+            }
+        }
+        &.mat-mdc-option-active{
+            &.mdc-list-item {
+                background-color: var(--color-mat-option) !important;
+            }
+        }
+    }
+}

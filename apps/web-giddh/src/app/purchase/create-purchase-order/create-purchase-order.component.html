@@ -64,7 +64,7 @@
                                                     [notFoundLinkText]="localeData?.add_vendor"
                                                     (keyup)="resetVendor($event)"
                                                     (onClear)="resetVendor(null)"
-                                                    [isOpen]="!isUpdateMode && !purchaseOrder.account.uniqueName"
+                                                    [isOpen]="!isUpdateMode && !purchaseOrder.account?.uniqueName"
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
                                                         <a
@@ -72,7 +72,7 @@
                                                             class="list-item flex-column border-none"
                                                         >
                                                             <div class="item">{{ option.label }}</div>
-                                                            <div class="item-unique">{{ option.value }}</div>
+                                                            <div class="item-unique">{{ option?.value }}</div>
                                                         </a>
                                                     </ng-template>
 
@@ -110,13 +110,13 @@
                                                     <p>
                                                         <small>{{ localeData?.pending_po }}</small>
                                                     </p>
-                                                    <p class="font-14">
+                                                    <p class="font-15">
                                                         <a
                                                             href="javascript:;"
                                                             (click)="
                                                                 openPurchaseOrderPreviewPopup(
                                                                     purchaseOrderPreviewModal,
-                                                                    order.uniqueName,
+                                                                    order?.uniqueName,
                                                                     order.accountUniqueName
                                                                 )
                                                             "
@@ -564,7 +564,7 @@
                             <!-- region customer dropdown -->
                             <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 select-customer-name">
                                 <section class="form-inline">
-                                    <div class="wrap-billing-address w-100 clearfix">
+                                    <div class="wrap-billing-address w-100 clearfix ">
                                         <div class="row">
                                             <!-- region billing address -->
                                             <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
@@ -747,6 +747,66 @@
                                                                 (change)="autoFillShippingDetails('company')"
                                                             />
                                                             {{ localeData?.shipping_billing_same }}
+                                                        </span>
+                                                        <span>
+                                                            <div
+                                                                class="btn-group btn-block"
+                                                                dropdown
+                                                                #companyShippingAddressDropDownWeb="bs-dropdown"
+                                                                [attachOutsideOnClick]="true"
+                                                                (clickOutside)="
+                                                                    companyShippingAddressDropDownWeb.hide()
+                                                                "
+                                                                *ngIf="
+                                                                    companyAddressList?.length > 1 &&
+                                                                    !autoFillCompanyShipping
+                                                                "
+                                                            >
+                                                                <a
+                                                                    dropdownToggle
+                                                                    type="button"
+                                                                    class="dropdown-toggle"
+                                                                    >{{ localeData?.change }}</a
+                                                                >
+                                                                <ul
+                                                                    *dropdownMenu
+                                                                    class="
+                                                                        dropdown-menu
+                                                                        change-address-dropdown
+                                                                        dropdown-menu-right
+                                                                    "
+                                                                    role="menu"
+                                                                >
+                                                                    <li
+                                                                        role="menuitem"
+                                                                        *ngFor="let address of companyAddressList"
+                                                                    >
+                                                                        <a
+                                                                            class="dropdown-item"
+                                                                            (click)="
+                                                                                selectAddress(
+                                                                                    purchaseOrder.company
+                                                                                        .shippingDetails,
+                                                                                    address,
+                                                                                    true
+                                                                                )
+                                                                            "
+                                                                        >
+                                                                            {{ address.address }}
+                                                                            {{ address.state?.name }}
+                                                                            {{
+                                                                                address.taxNumber
+                                                                                    ? (showGSTINNo
+                                                                                          ? commonLocaleData?.app_gstin +
+                                                                                            ": "
+                                                                                          : commonLocaleData?.app_trn +
+                                                                                            ": ") + address.taxNumber
+                                                                                    : ""
+                                                                            }}
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
                                                         </span>
                                                     </div>
                                                     <div
@@ -988,7 +1048,7 @@
                 </div>
             </div>
         </div>
-        <ng-container *ngIf="!purchaseOrder.account.uniqueName">
+        <ng-container *ngIf="!purchaseOrder.account?.uniqueName">
             <img src="assets/images/new/search-vendor.svg" class="img-responsive search-arrow-image" />
         </ng-container>
         <section
@@ -1126,6 +1186,14 @@
                                     >({{ transaction.stockDetails?.name }})</span
                                 >
                             </div>
+                            <p
+                                *ngIf="
+                                    transaction.variant?.name && ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                "
+                                class="variant"
+                            >
+                                {{ localeData?.variant + ": " + transaction.variant?.name }}
+                            </p>
                             <div class="description">
                                 {{ transaction.description }}
                             </div>
@@ -1159,7 +1227,7 @@
                             </div>
                         </td>
                         <td class="text-right stock-unit">
-                            <div class="wrap-td-data">{{ transaction.quantity }} {{ transaction.stockUnit }}</div>
+                            <div class="wrap-td-data">{{ transaction.quantity }} {{ transaction.stockUnitCode }}</div>
                         </td>
                         <td class="text-right tra-rate item-rate">
                             <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
@@ -1183,7 +1251,6 @@
                                                 >
                                                 </amount-field>
                                             </span>
-                                            <br />
                                         </div>
                                     </div>
                                 </div>
@@ -1312,7 +1379,7 @@
                         </td>
                         <td class="text-right item-tax delete-btn-absolute">
                             <div class="td-wrapper">
-                                <div>
+                                <div class="flex-fill">
                                     <div class="wrap-td-data">
                                         <span>
                                             <span class="d-flex justify-content-end">
@@ -1333,7 +1400,7 @@
                                             </span>
                                         </span>
                                         <br />
-                                        <span *ngIf="entry.isOtherTaxApplicable">
+                                        <span class="d-flex justify-content-end" *ngIf="entry.isOtherTaxApplicable">
                                             {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                             <span class="d-flex justify-content-end">
                                                 <amount-field
@@ -1448,7 +1515,7 @@
                                                     </div>
                                                     <div class="item-stock">
                                                         {{ commonLocaleData?.app_stock }}:
-                                                        {{ option.additional?.stock.uniqueName }}
+                                                        {{ option.additional?.stock?.uniqueName }}
                                                     </div>
                                                 </a>
                                             </ng-container>
@@ -1456,7 +1523,33 @@
                                     </sh-select>
                                 </div>
                             </div>
-
+                            <ng-container
+                                *ngIf="
+                                    transaction?.isStockTxn && ((stockVariants | async)[entryIdx] | async) as variants
+                                "
+                            >
+                                <div *ngIf="variants?.length > 1" class="variant-name">
+                                    <!-- <select-field
+                                        [disabled]="isReadOnly"
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [placeholder]="localeData?.select_variant"
+                                        (selectedOption)="variantChanged($event, transaction, entry)"
+                                        [options]="variants"
+                                        [required]="true"
+                                        [name]="'variant' + entryIdx"
+                                        [(ngModel)]="transaction.variant.uniqueName"
+                                    >
+                                    </select-field> -->
+                                    <sh-select
+                                        [placeholder]="localeData?.select_variant"
+                                        [options]="variants"
+                                        (selected)="variantChanged($event, transaction, entry)"
+                                        [isRequired]="true"
+                                        name="{{ 'variant' + entryIdx }}"
+                                        [(ngModel)]="transaction.variant.uniqueName"
+                                    ></sh-select>
+                                </div>
+                            </ng-container>
                             <div *ngIf="transaction.fakeAccForSelect2">
                                 <div class="description mt-1">
                                     <textarea
@@ -1604,7 +1697,10 @@
                                 [disabled]="!transaction.isStockTxn"
                                 name="transaction.stockUnit_{{ entryIdx }}"
                                 [(ngModel)]="transaction.stockUnit"
-                                (ngModelChange)="onChangeUnit(transaction, $event); transaction.setAmount(entry)"
+                                (ngModelChange)="
+                                    onChangeUnit(transaction, $event);
+                                    handlePriceCalculationOnUnitChange(entry, transaction)
+                                "
                             >
                                 <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
                                     {{ stock.text }}
@@ -1684,6 +1780,7 @@
                                     <discount-control-component
                                         #discountComponent
                                         [discountMenu]="false"
+                                        [discountsList]="discountsList"
                                         [discountAccountsDetails]="entry.discounts"
                                         [discountSum]="entry.discountSum"
                                         [showHeaderText]="false"
@@ -1832,9 +1929,6 @@
                                         </amount-field>
                                     </span>
                                 </div>
-
-                                <ng-container *ngTemplateOutlet="otherTaxesModal; context: { $implicit: entry }">
-                                </ng-container>
                             </div>
 
                             <div
@@ -1853,8 +1947,8 @@
                 <!-- region add bulk items -->
                 <div class="p-1 aqua-color add-line-bulk-item">
                     <a href="javascript:void 0" (click)="addBlankRow(null)">{{ localeData?.add_new_line }}</a>
-                    <span class="font-14"> | </span>
-                    <a (click)="bulkItemsModal.show()" href="javascript:void(0)">{{ localeData?.add_bulk_entries }}</a>
+                    <span class="font-15"> | </span>
+                    <a (click)="addBulkItems()" href="javascript:;">{{ localeData?.add_bulk_entries }}</a>
                 </div>
                 <!-- endregion -->
                 <tfoot>
@@ -1881,10 +1975,11 @@
                                         <div class="row">
                                             <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                 <giddh-datepicker
+                                                    [cssClass]="'mat-field-border bdr form-control'"
                                                     #shippingDate="ngModel"
                                                     [placeholder]="localeData?.ship_date"
                                                     name="shippingDate"
-                                                    [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
+                                                    [(ngModel)]="purchaseOrder?.templateDetails?.other.shippingDate"
                                                     [class.invalid-inp]="
                                                         shippingDate.errors &&
                                                         (shippingDate.dirty || shippingDate.touched)
@@ -1906,7 +2001,7 @@
                                                 <input
                                                     type="text"
                                                     name="shippedVia"
-                                                    [(ngModel)]="purchaseOrder.templateDetails.other.shippedVia"
+                                                    [(ngModel)]="purchaseOrder.templateDetails?.other.shippedVia"
                                                     class="form-control"
                                                     [placeholder]="localeData?.ship_via"
                                                 />
@@ -1915,7 +2010,7 @@
                                                 <input
                                                     type="text"
                                                     name="trackingNumber"
-                                                    [(ngModel)]="purchaseOrder.templateDetails.other.trackingNumber"
+                                                    [(ngModel)]="purchaseOrder.templateDetails?.other.trackingNumber"
                                                     class="form-control"
                                                     [placeholder]="localeData?.tracking_number"
                                                 />
@@ -1931,7 +2026,7 @@
                                 <textarea
                                     class="form-control"
                                     name="message2"
-                                    [(ngModel)]="purchaseOrder.templateDetails.other.message2"
+                                    [(ngModel)]="purchaseOrder.templateDetails?.other.message2"
                                 ></textarea>
                             </div>
                             <!-- endregion -->
@@ -2125,7 +2220,7 @@
                                             [suffix]="selectedSuffixForCurrency"
                                             [mask]="inputMaskFormat"
                                             [(ngModel)]="grandTotalMulDum"
-                                            (blur)="updateExchangeRate(grandTotalInr.value)"
+                                            (blur)="updateExchangeRate(grandTotalInr?.value)"
                                         />
                                     </div>
                                 </div>
@@ -2199,7 +2294,15 @@
                                             >({{ transaction.stockDetails?.name }})</span
                                         >
                                     </div>
-
+                                    <p
+                                        *ngIf="
+                                            transaction.variant?.name &&
+                                            ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                        "
+                                        class="variant"
+                                    >
+                                        {{ localeData?.variant + ": " + transaction.variant?.name }}
+                                    </p>
                                     <p class="description">
                                         {{ transaction.description }}
                                     </p>
@@ -2239,7 +2342,7 @@
                                 <div class="single-card-row">
                                     <div class="qty-unit">
                                         <label class="card-label">{{ commonLocaleData?.app_quantity_unit }}</label>
-                                        <p>{{ transaction.quantity }} {{ transaction.stockUnit }}</p>
+                                        <p>{{ transaction.quantity }} {{ transaction.stockUnitCode }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -2497,7 +2600,7 @@
                                                                 </div>
                                                                 <div class="item-stock">
                                                                     {{ commonLocaleData?.app_stock }}:
-                                                                    {{ option.additional?.stock.uniqueName }}
+                                                                    {{ option.additional?.stock?.uniqueName }}
                                                                 </div>
                                                             </a>
                                                         </ng-container>
@@ -2674,7 +2777,8 @@
                                                     name="transaction.stockUnit_{{ entryIdx }}"
                                                     [(ngModel)]="transaction.stockUnit"
                                                     (ngModelChange)="
-                                                        onChangeUnit(transaction, $event); transaction.setAmount(entry)
+                                                        onChangeUnit(transaction, $event);
+                                                        handlePriceCalculationOnUnitChange(entry, transaction)
                                                     "
                                                 >
                                                     <option
@@ -2777,6 +2881,7 @@
                                             <discount-control-component
                                                 #discountComponent
                                                 [discountMenu]="false"
+                                                [discountsList]="discountsList"
                                                 [discountAccountsDetails]="entry.discounts"
                                                 [discountSum]="entry.discountSum"
                                                 [showHeaderText]="false"
@@ -2932,11 +3037,6 @@
                                                 </amount-field>
                                             </span>
                                         </div>
-
-                                        <ng-container
-                                            *ngTemplateOutlet="otherTaxesModal; context: { $implicit: entry }"
-                                        >
-                                        </ng-container>
                                     </div>
                                 </div>
                             </div>
@@ -2978,10 +3078,11 @@
                             <div class="row">
                                 <div class="form-group col-xs-4">
                                     <giddh-datepicker
+                                         [cssClass]="'mat-field-border bdr form-control'"
                                         #shippingDate="ngModel"
                                         [placeholder]="localeData?.ship_date"
                                         name="shippingDate"
-                                        [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
+                                        [(ngModel)]="purchaseOrder.templateDetails?.other.shippingDate"
                                         [class.invalid-inp]="
                                             shippingDate.errors && (shippingDate.dirty || shippingDate.touched)
                                         "
@@ -3000,7 +3101,7 @@
                                     <input
                                         type="text"
                                         name="shippedVia"
-                                        [(ngModel)]="purchaseOrder.templateDetails.other.shippedVia"
+                                        [(ngModel)]="purchaseOrder.templateDetails?.other.shippedVia"
                                         class="form-control"
                                         [placeholder]="localeData?.ship_via"
                                     />
@@ -3010,7 +3111,7 @@
                                     <input
                                         type="text"
                                         name="trackingNumber"
-                                        [(ngModel)]="purchaseOrder.templateDetails.other.trackingNumber"
+                                        [(ngModel)]="purchaseOrder.templateDetails?.other.trackingNumber"
                                         class="form-control"
                                         [placeholder]="localeData?.tracking_number"
                                     />
@@ -3024,7 +3125,7 @@
                         <textarea
                             class="form-control"
                             name="message2"
-                            [(ngModel)]="purchaseOrder.templateDetails.other.message2"
+                            [(ngModel)]="purchaseOrder.templateDetails?.other.message2"
                         ></textarea>
                     </div>
                 </div>
@@ -3195,7 +3296,7 @@
                                 [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat"
                                 [(ngModel)]="grandTotalMulDum"
-                                (blur)="updateExchangeRate(grandTotalInr.value)"
+                                (blur)="updateExchangeRate(grandTotalInr?.value)"
                             />
                         </div>
                     </div>
@@ -3258,7 +3359,7 @@
                 <!-- endregion -->
 
                 <!-- region update mode -->
-                <div class="pull-right pr" *ngIf="isUpdateMode">
+                <div class="pull-right pr d-flex column-gap15" *ngIf="isUpdateMode">
                     <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
@@ -3310,42 +3411,31 @@
     </aside-menu-product-service>
 
     <!-- region bulk items -->
-    <div
-        bsModal
-        #bulkItemsModal="bs-modal"
-        tabindex="-1"
-        class="modal fade"
-        role="dialog"
-        [config]="{ animated: true, keyboard: false, backdrop: false, ignoreBackdropClick: true }"
-    >
-        <ng-container *ngIf="bulkItemsModal?.isShown">
-            <proforma-add-bulk-items-component
-                [invoiceType]="invoiceType"
-                (saveItemsEvent)="addBulkStockItems($event)"
-                (closeEvent)="bulkItemsModal.hide()"
-            ></proforma-add-bulk-items-component>
-        </ng-container>
-    </div>
-    <!-- endregion -->
-    <ng-template let-entry #otherTaxesModal>
-        <div id="top0">
-            <app-aside-menu-other-taxes
-                *ngIf="asideMenuStateForOtherTaxes === 'in'"
-                [class]="asideMenuStateForOtherTaxes"
-                [taxes]="companyTaxesList"
-                [otherTaxesModal]="entry.otherTaxModal"
-                [commonLocaleData]="commonLocaleData"
-                [@slideInOut]="asideMenuStateForOtherTaxes"
-                (closeModal)="toggleOtherTaxesAsidePane(true, null)"
-                (applyTaxes)="
-                    calculateOtherTaxes($event, entry);
-                    toggleOtherTaxesAsidePane(true, null);
-                    calculateAffectedThingsFromOtherTaxChanges()
-                "
-            >
-            </app-aside-menu-other-taxes>
-        </div>
+    <ng-template #bulkItemsModal>
+        <voucher-add-bulk-items-component
+            [invoiceType]="invoiceType"
+            (saveItemsEvent)="addBulkStockItems($event)"
+            (closeEvent)="cancelBulkItemsModal()"
+        ></voucher-add-bulk-items-component>
     </ng-template>
+    <!-- endregion -->
+    <div id="top0">
+        <app-aside-menu-other-taxes
+            *ngIf="asideMenuStateForOtherTaxes === 'in'"
+            [class]="asideMenuStateForOtherTaxes"
+            [taxes]="companyTaxesList"
+            [otherTaxesModal]="activeEntry.otherTaxModal"
+            [commonLocaleData]="commonLocaleData"
+            [@slideInOut]="asideMenuStateForOtherTaxes"
+            (closeModal)="closeAsideMenuStateForOtherTaxes()"
+            (applyTaxes)="
+                calculateOtherTaxes($event, activeEntry);
+                toggleOtherTaxesAsidePane(true, null);
+                calculateAffectedThingsFromOtherTaxChanges()
+            "
+        >
+        </app-aside-menu-other-taxes>
+    </div>
     <ng-template #purchaseOrderPreviewModal>
         <purchase-order-preview-modal
             [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName"

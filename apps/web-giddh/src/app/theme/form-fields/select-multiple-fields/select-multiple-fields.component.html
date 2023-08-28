@@ -1,0 +1,40 @@
+<div class="custom-input-field communication-input">
+    <mat-form-field floatLabel="never" class="w-100">
+        <mat-chip-grid #matChipList>
+            <mat-chip-row
+                *ngFor="let chip of chipList; let indx = index"
+                [selectable]="true"
+                [removable]="true"
+                (removed)="removeOption(indx)"
+            >
+                {{ chip }}
+                <span matChipRemove>
+                    <i class="icon-cross"></i>
+                </span>
+            </mat-chip-row>
+            <input
+                type="text"
+                matInput
+                [formControl]="searchFormControl"
+                [placeholder]="placeholder"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="matChipList"
+                [matChipInputAddOnBlur]="!auto.isOpen"
+                (matChipInputTokenEnd)="addChip($event)"
+                [ngClass]="{ 'chiplist-error': showError }"
+                #trigger="matAutocompleteTrigger"
+                [name]="name"
+                #selectField
+                [autocomplete]="'off'"
+                matAutocompletePosition="auto"
+                class="select-multiple-field-input"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            />
+        </mat-chip-grid>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''">
+            <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
+                {{ option.label }}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</div>

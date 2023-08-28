@@ -29,6 +29,11 @@
                     localeData?.csv?.account_wise_report
                 }}</a>
             </li>
+            <li>
+                <a (click)="exportFlatTrialBalanceReport()" data-report="account-wise">{{
+                    localeData?.csv?.flat_report
+                }}</a>
+            </li>
         </ul>
     </div>
 </ng-container>

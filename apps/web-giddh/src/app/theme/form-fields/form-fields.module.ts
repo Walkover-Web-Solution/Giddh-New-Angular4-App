@@ -11,11 +11,27 @@ import { DecimalDigitsModule } from "../../shared/helpers/directives/decimalDigi
 import { SelectFieldComponent } from "./select-field/select-field.component";
 import { TextFieldComponent } from "./text-field/text-field.component";
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { DigitsOnlyModule } from "../../shared/helpers/directives/digitsOnly/digitsOnly.module";
+import { TranslateDirectiveModule } from "../translate/translate.directive.module";
+import { NgxMaskModule } from "../../shared/helpers/directives/ngx-mask";
+import { ClickOutsideModule } from "ng-click-outside";
+import { MatChipsModule } from "@angular/material/chips";
+import { CdkScrollModule } from "./cdk-scroll/cdk-scroll.module";
+import { ScrollingModule } from "@angular/cdk/scrolling";
+import { SelectMultipleFieldsComponent } from "./select-multiple-fields/select-multiple-fields.component";
+import { MatIconModule } from "@angular/material/icon";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatButtonModule } from "@angular/material/button";
+import { InputFieldComponent } from "./input-field/input-field.component";
+import { DropdownFieldComponent } from "./dropdown-field/dropdown-field.component";
 
 @NgModule({
     declarations: [
         TextFieldComponent,
-        SelectFieldComponent
+        SelectFieldComponent,
+        SelectMultipleFieldsComponent,
+        InputFieldComponent,
+        DropdownFieldComponent
     ],
     imports: [
         CommonModule,
@@ -28,12 +44,25 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatAutocompleteModule,
         ReactiveFormsModule,
         DecimalDigitsModule,
-        MatTooltipModule
+        MatTooltipModule,
+        TranslateDirectiveModule,
+        DigitsOnlyModule,
+        NgxMaskModule,
+        ClickOutsideModule,
+        MatChipsModule,
+        CdkScrollModule,
+        ScrollingModule,
+        MatIconModule,
+        MatMenuModule,
+        MatButtonModule
     ],
     exports: [
         TextFieldComponent,
         SelectFieldComponent,
-        MatFormFieldModule
+        SelectMultipleFieldsComponent,
+        MatFormFieldModule,
+        InputFieldComponent,
+        DropdownFieldComponent
     ]
 })
 

@@ -14,7 +14,7 @@ import { CompanyResponse, Organization } from '../../models/api-models/Company';
 import { SalesActions } from '../../actions/sales/sales.action';
 import { AccountResponse, AddAccountRequest } from '../../models/api-models/Account';
 import { CompAidataModel } from '../../models/db';
-import { DEFAULT_AC } from '../../models/defaultMenus';
+import { DEFAULT_AC } from '../../models/default-menus';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
 import { OrganizationType } from '../../models/user-login-state';
 import { DbService } from '../../services/db.service';
@@ -81,10 +81,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public allItems: AllItems[] = [];
     /** True, if sidebar needs to be shown */
     @Input() public isOpen: boolean = false;
+    /** True, if sidebar needs to be shown */
+    @Input() public isGoToBranch: boolean = false;
     /** API menu items, required to show permissible items only in the menu */
     @Input() public apiMenuItems: Array<any> = [];
-    /** Event to carry out new company onboarding */
-    @Output() public newCompany: EventEmitter<void> = new EventEmitter();
     /** Stores the instance of CMD+K dropdown */
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Stores the instance of company detail dropdown */
@@ -109,6 +109,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     private createAccountIsSuccess$: Observable<boolean>;
     /* This will hold the active route url */
     public isActiveRoute: string;
+    /** True if account has unsaved changes */
+    public hasUnsavedChanges: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -134,7 +136,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
                         if (response) {
-                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                            this.currentBranch = response.find(branch => (branch?.uniqueName === this.generalService.currentBranchUniqueName));
                             if (!this.activeCompanyForDb) {
                                 this.activeCompanyForDb = new CompAidataModel();
                             }
@@ -149,6 +151,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasUnsavedChanges = response;
+        });
     }
 
     /**
@@ -159,7 +165,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public isRouteWithParamsActive(routeUrl: string): boolean {
-        const queryParamsIndex = this.router.url.indexOf('?');
+        const queryParamsIndex = this.router.url?.indexOf('?');
         const baseUrl = queryParamsIndex === -1 ? this.router.url :
             this.router.url.slice(0, queryParamsIndex);
         // For Trial balance module, strict comparison should be done
@@ -186,6 +192,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.isGoToBranch?.currentValue) {
+            this.openCompanyBranchDropdown();
+        }
         if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length && this.localeData?.page_heading) {
             this.allItems = this.generalService.getVisibleMenuItems("sidebar", changes.apiMenuItems.currentValue, this.localeData?.items);
             this.allItems?.map(items => {
@@ -222,7 +231,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
                 }
                 if (this.generalService.companyUniqueName) {
-                    this.dbService.getAllItems(this.activeCompanyForDb.uniqueName, 'accounts').subscribe(accountList => {
+                    this.dbService.getAllItems(this.activeCompanyForDb?.uniqueName, 'accounts').subscribe(accountList => {
                         if (accountList?.length) {
                             if (window.innerWidth > 1440 && window.innerHeight > 717) {
                                 this.accountItemsFromIndexDB = accountList.slice(0, 7);
@@ -274,7 +283,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
-                const queryParamsIndex = this.router.url.indexOf('?');
+                const queryParamsIndex = this.router.url?.indexOf('?');
                 const baseUrl = queryParamsIndex === -1 ? this.router.url :
                     this.router.url.slice(0, queryParamsIndex);
                 this.isActiveRoute = baseUrl;
@@ -287,7 +296,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
                 this.changeDetectorRef.detectChanges();
             }
-
             if (event instanceof NavigationStart) {
                 if (this.companyDetailsDropDownWeb.isOpen) {
                     this.companyDetailsDropDownWeb.hide();
@@ -320,7 +328,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     item.time = +new Date();
                     item.route = this.router.url;
                     item.parentGroups = account.parentGroups;
-                    item.uniqueName = account.uniqueName;
+                    item.uniqueName = account?.uniqueName;
                     item.name = account.name;
                     this.doEntryInDb('accounts', item);
                 }
@@ -379,10 +387,21 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public handleNewTeamCreationEmitter(e: any): void {
         this.modelRef.hide();
         if (e[0] === "group") {
+            if (this.accountAsideMenuState === "in") {
+                this.toggleAccountAsidePane();
+            }
             this.showManageGroupsModal(e[1]?.name);
         } else if (e[0] === "account") {
             this.selectedGroupForCreateAccount = e[1]?.uniqueName;
-            this.toggleAccountAsidePane();
+            if (this.accountAsideMenuState === "out") {
+                this.toggleAccountAsidePane();
+            } else {
+                this.toggleAccountAsidePane();
+                setTimeout(() => {
+                    this.toggleAccountAsidePane();
+                    this.changeDetection.detectChanges();
+                }, 50);
+            }
         }
     }
 
@@ -397,7 +416,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         if (!this.activeCompanyForDb) {
             return;
         }
-        if (!this.activeCompanyForDb.uniqueName) {
+        if (!this.activeCompanyForDb?.uniqueName) {
             return;
         }
         if (dbResult) {
@@ -430,9 +449,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public showManageGroupsModal(search: any = ""): void {
-        if (search) {
-            this.store.dispatch(this.groupWithAction.getGroupWithAccounts());
-        }
         this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(search));
     }
 
@@ -465,7 +481,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (item && item.type === 'MENU') {
                 if (item.additional && item.additional.tab) {
                     if (item.uniqueName.includes('?')) {
-                        item.uniqueName = item.uniqueName.split('?')[0];
+                        item.uniqueName = item.uniqueName?.split('?')[0];
                     }
                     this.router.navigate([item.uniqueName], {
                         queryParams: {
@@ -521,15 +537,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Opens new company modal
-     *
-     * @memberof PrimarySidebarComponent
-     */
-    public createNewCompany(): void {
-        this.newCompany.emit();
-    }
-
-    /**
      * Track by for menu items
      *
      * @param {number} index Index of current item
@@ -568,7 +575,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.isLedgerAccSelected = false;
         } else if (entity === 'accounts') {
             this.isLedgerAccSelected = true;
-            this.selectedLedgerName = item.uniqueName;
+            this.selectedLedgerName = item?.uniqueName;
         }
 
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
@@ -613,12 +620,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             });
         } else {
             if (this.isOpen) {
-                const activeItemIndex = this.allItems.findIndex(item => item.isActive);
+                const activeItemIndex = this.allItems?.findIndex(item => item.isActive);
                 this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
                     if (index === activeItemIndex) {
-                        dropdown.show();
+                        dropdown?.show();
                     } else {
-                        dropdown.hide();
+                        dropdown?.hide();
                     }
                 });
             }

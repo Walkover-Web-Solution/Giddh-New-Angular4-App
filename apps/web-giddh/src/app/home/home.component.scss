@@ -4,28 +4,23 @@
     justify-content: center;
     margin: 0 -15px;
     flex-direction: row;
+
+    li {
+        list-style: none;
+    }
 }
 
-.dashboard-option li {
-    list-style: none;
-}
-
-:host ::ng-deep perfect-scrollbar {
-    height: auto;
-}
 // new dashboard css
 .white-row {
     background-color: var(--color-white);
     padding: 9px;
     margin-bottom: 10px;
-    font-size: 16px;
+    font-size: var(--font-size-15);
     box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
 }
-.click-here {
-    color: var(--color-blue);
-}
+
 .dashboard-container {
-    max-width: 1170px;
+    max-width: 1200px;
     width: 100%;
 }
 span.icon-traingle-info {
@@ -35,27 +30,16 @@ span.icon-traingle-info {
 }
 span.icon-info-icon {
     color: var(--color-gray);
-    font-size: 18px;
+    font-size: var(--font-size-16);
     margin-right: 10px;
 }
-.dropdown-menu {
-    z-index: 1;
-    border: 1px solid var(--color-common-secondary-border);
-}
-a.dropdown-item {
-    color: var(--color-nero);
-}
 
-a.dropdown-item:hover {
-    background-color: var(--color-dark-fog);
-    color: var(--color-blue);
-}
 .dashboard-notification {
     margin-bottom: 20px;
 }
 .panel-heading {
     padding: 15px 15px;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -66,21 +50,43 @@ a.dropdown-item:hover {
 .form-control:focus {
     border-color: var(--color-blue) !important;
 }
-.form-control {
-    height: 32px;
-}
-.click-here {
-    cursor: pointer;
-}
+
 .no-data-available {
     display: flex;
     height: 181px;
     justify-content: center;
     align-items: center;
 }
+.menu-trigger-btn {
+    display: flex;
+    align-items: flex-start;
+    height: 40px;
 
+    .icon-arrow-down {
+        line-height: 22px !important;
+    }
+}
+.dashboard-doughnut-chart-container {
+    height: 150px;
+    min-width: 220px;
+}
+.dashboard-line-chart-container {
+    height: 300px;
+    max-width: 660px;
+}
+.hide-chart {
+    display: none !important;
+}
 @media (max-width: 1500px) {
     .dashboard-container {
         margin-bottom: 40px;
+    }
+}
+
+@media (max-width: 1299px) {
+    .dashboard-container {
+        mat-card {
+            min-height: 446px;
+        }
     }
 }

@@ -134,7 +134,7 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
     public findIndex(activeFY, financialYears) {
         let tempFYIndex = 0;
         each(financialYears, (fy: any, index: number) => {
-            if (fy.uniqueName === activeFY.uniqueName) {
+            if (fy?.uniqueName === activeFY?.uniqueName) {
                 if (index === 0) {
                     tempFYIndex = index;
                 } else {

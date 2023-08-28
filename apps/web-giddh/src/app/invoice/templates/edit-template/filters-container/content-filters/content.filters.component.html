@@ -20,6 +20,7 @@
                     >
                         <input
                             type="checkbox"
+                            color="primary"
                             name="companyNameCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['companyName'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
@@ -54,7 +55,7 @@
                             >
                                 <span class="max-character-label">Characters left:&nbsp;</span
                                 ><span class="max-character-value">{{
-                                    15 - customTemplate.sections["header"].data["formNameInvoice"].label.length
+                                    15 - customTemplate.sections["header"].data["formNameInvoice"].label?.length
                                 }}</span>
                             </ng-container>
                         </div>
@@ -79,7 +80,7 @@
                             >
                                 <span class="max-character-label">Characters left:&nbsp;</span
                                 ><span class="max-character-value">{{
-                                    15 - customTemplate.sections["header"].data["formNameTaxInvoice"].label.length
+                                    15 - customTemplate.sections["header"].data["formNameTaxInvoice"].label?.length
                                 }}</span>
                             </ng-container>
                         </div>
@@ -205,7 +206,7 @@
                             >
                                 <span class="max-character-label">Characters left:&nbsp;</span
                                 ><span class="max-character-value">{{
-                                    70 - customTemplate.sections["header"].data["gstComposition"].label.length
+                                    70 - customTemplate.sections["header"].data["gstComposition"].label?.length
                                 }}</span>
                             </ng-container>
                         </span>
@@ -243,8 +244,8 @@
                                     <span class="max-character-label">Characters left:&nbsp;</span>
                                     <span class="max-character-value">{{
                                         customTemplate.templateType === "thermal_template"
-                                            ? 12 - customTemplate.sections["header"].data["invoiceDate"].label.length
-                                            : 15 - customTemplate.sections["header"].data["invoiceDate"].label.length
+                                            ? 12 - customTemplate.sections["header"].data["invoiceDate"].label?.length
+                                            : 15 - customTemplate.sections["header"].data["invoiceDate"].label?.length
                                     }}</span>
                                 </ng-container>
                             </div>
@@ -279,8 +280,8 @@
                                     <span class="max-character-label">Characters left:&nbsp;</span>
                                     <span class="max-character-value">{{
                                         customTemplate.templateType === "thermal_template"
-                                            ? 14 - customTemplate.sections["header"].data["invoiceNumber"].label.length
-                                            : 15 - customTemplate.sections["header"].data["invoiceNumber"].label.length
+                                            ? 14 - customTemplate.sections["header"].data["invoiceNumber"].label?.length
+                                            : 15 - customTemplate.sections["header"].data["invoiceNumber"].label?.length
                                     }}</span>
                                 </ng-container>
                             </div>
@@ -318,7 +319,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span>
                                     <span class="max-character-value">{{
-                                        15 - customTemplate.sections["header"].data["voucherDate"].label.length
+                                        15 - customTemplate.sections["header"].data["voucherDate"].label?.length
                                     }}</span>
                                 </ng-container>
                             </div>
@@ -352,7 +353,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span>
                                     <span class="max-character-value">{{
-                                        15 - customTemplate.sections["header"].data["voucherNumber"].label.length
+                                        15 - customTemplate.sections["header"].data["voucherNumber"].label?.length
                                     }}</span>
                                 </ng-container>
                             </div>
@@ -390,7 +391,7 @@
                             >
                                 <span class="max-character-label">Characters left:&nbsp;</span>
                                 <span class="max-character-value">{{
-                                    15 - customTemplate.sections["header"].data["dueDate"].label.length
+                                    15 - customTemplate.sections["header"].data["dueDate"].label?.length
                                 }}</span>
                             </ng-container>
                         </div>
@@ -439,7 +440,7 @@
                             >
                                 <span class="max-character-label">Characters left:&nbsp;</span>
                                 <span class="max-character-value">{{
-                                    15 - customTemplate.sections["header"].data["formNameInvoice"].label.length
+                                    15 - customTemplate.sections["header"].data["formNameInvoice"].label?.length
                                 }}</span>
                             </ng-container>
                         </div>
@@ -465,7 +466,7 @@
                             >
                                 <span class="max-character-label">Characters left:&nbsp;</span>
                                 <span class="max-character-value">{{
-                                    15 - customTemplate.sections["header"].data["formNameTaxInvoice"].label.length
+                                    15 - customTemplate.sections["header"].data["formNameTaxInvoice"].label?.length
                                 }}</span>
                             </ng-container>
                         </div>
@@ -577,7 +578,7 @@
                             >
                                 <span class="max-character-label">Characters left:&nbsp;</span>
                                 <span class="max-character-value">{{
-                                    18 - customTemplate.sections["header"].data["billingAddress"].label.length
+                                    18 - customTemplate.sections["header"].data["billingAddress"].label?.length
                                 }}</span>
                             </ng-container>
                         </div>
@@ -624,7 +625,7 @@
                             >
                                 <span class="max-character-label">Characters left:&nbsp;</span>
                                 <span class="max-character-value">{{
-                                    15 - customTemplate.sections["header"].data["billingGstin"].label.length
+                                    15 - customTemplate.sections["header"].data["billingGstin"].label?.length
                                 }}</span>
                             </ng-container>
                         </div>
@@ -668,7 +669,7 @@
                             >
                                 <span class="max-character-label">Characters left:&nbsp;</span>
                                 <span class="max-character-value">{{
-                                    18 - customTemplate.sections["header"].data["shippingAddress"].label.length
+                                    18 - customTemplate.sections["header"].data["shippingAddress"].label?.length
                                 }}</span>
                             </ng-container>
                         </div>
@@ -716,7 +717,7 @@
                             >
                                 <span class="max-character-label">Characters left:&nbsp;</span>
                                 <span class="max-character-value">{{
-                                    15 - customTemplate.sections["header"].data["shippingGstin"].label.length
+                                    15 - customTemplate.sections["header"].data["shippingGstin"].label?.length
                                 }}</span>
                             </ng-container>
                         </div>
@@ -769,7 +770,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span>
                                     <span class="max-character-value">{{
-                                        15 - customTemplate.sections["header"].data["shippingDate"].label.length
+                                        15 - customTemplate.sections["header"].data["shippingDate"].label?.length
                                     }}</span>
                                 </ng-container>
                             </div>
@@ -803,7 +804,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span>
                                     <span class="max-character-value">{{
-                                        15 - customTemplate.sections["header"].data["shippedVia"].label.length
+                                        15 - customTemplate.sections["header"].data["shippedVia"].label?.length
                                     }}</span>
                                 </ng-container>
                             </div>
@@ -844,7 +845,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span>
                                     <span class="max-character-value">{{
-                                        15 - customTemplate.sections["header"].data["trackingNumber"].label.length
+                                        15 - customTemplate.sections["header"].data["trackingNumber"].label?.length
                                     }}</span>
                                 </ng-container>
                             </div>
@@ -898,7 +899,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span>
                                     <span class="max-character-value">{{
-                                        15 - customTemplate.sections["header"].data["customField1"].label.length
+                                        15 - customTemplate.sections["header"].data["customField1"].label?.length
                                     }}</span>
                                 </ng-container>
                             </span>
@@ -932,7 +933,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span>
                                     <span class="max-character-value">{{
-                                        15 - customTemplate.sections["header"].data["customField2"].label.length
+                                        15 - customTemplate.sections["header"].data["customField2"].label?.length
                                     }}</span>
                                 </ng-container>
                             </span>
@@ -966,7 +967,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span>
                                     <span class="max-character-value">{{
-                                        15 - customTemplate.sections["header"].data["customField3"].label.length
+                                        15 - customTemplate.sections["header"].data["customField3"].label?.length
                                     }}</span>
                                 </ng-container>
                             </span>
@@ -1024,7 +1025,7 @@
                                 <ng-container *ngIf="sNo?.isFocused || contentForm?.controls['ss']?.errors?.maxlength">
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        10 - customTemplate.sections["table"].data["sNo"].label.length
+                                        10 - customTemplate.sections["table"].data["sNo"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1063,7 +1064,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        10 - customTemplate.sections["table"].data["date"].label.length
+                                        10 - customTemplate.sections["table"].data["date"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1100,8 +1101,8 @@
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
                                         customTemplate.templateType === "thermal_template"
-                                            ? 8 - customTemplate.sections["table"].data["item"].label.length
-                                            : 12 - customTemplate.sections["table"].data["item"].label.length
+                                            ? 8 - customTemplate.sections["table"].data["item"].label?.length
+                                            : 12 - customTemplate.sections["table"].data["item"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1162,7 +1163,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        8 - customTemplate.sections["table"].data["hsnSac"].label.length
+                                        8 - customTemplate.sections["table"].data["hsnSac"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1200,7 +1201,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        6 - customTemplate.sections["table"].data["quantity"].label.length
+                                        6 - customTemplate.sections["table"].data["quantity"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1250,7 +1251,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        10 - customTemplate.sections["table"].data["description"].label.length
+                                        10 - customTemplate.sections["table"].data["description"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1287,8 +1288,8 @@
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
                                         customTemplate.templateType === "thermal_template"
-                                            ? 9 - customTemplate.sections["table"].data["rate"].label.length
-                                            : 10 - customTemplate.sections["table"].data["rate"].label.length
+                                            ? 9 - customTemplate.sections["table"].data["rate"].label?.length
+                                            : 10 - customTemplate.sections["table"].data["rate"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1328,7 +1329,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        10 - customTemplate.sections["table"].data["discount"].label.length
+                                        10 - customTemplate.sections["table"].data["discount"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1369,7 +1370,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        14 - customTemplate.sections["table"].data["taxableValue"].label.length
+                                        14 - customTemplate.sections["table"].data["taxableValue"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1403,7 +1404,7 @@
                                 <ng-container *ngIf="tax?.isFocused || contentForm?.controls['t1']?.errors?.maxlength">
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        10 - customTemplate.sections["table"].data["tax"].label.length
+                                        10 - customTemplate.sections["table"].data["tax"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1440,8 +1441,8 @@
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
                                         customTemplate.templateType === "thermal_template"
-                                            ? 5 - customTemplate.sections["table"].data["total"].label.length
-                                            : 6 - customTemplate.sections["table"].data["total"].label.length
+                                            ? 5 - customTemplate.sections["table"].data["total"].label?.length
+                                            : 6 - customTemplate.sections["table"].data["total"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1486,7 +1487,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        14 - customTemplate.sections["table"].data["previousDue"].label.length
+                                        14 - customTemplate.sections["table"].data["previousDue"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1546,7 +1547,7 @@
                                     >
                                         <span class="max-character-label">Characters left:&nbsp;</span
                                         ><span class="max-character-value">{{
-                                            10 - customTemplate.sections["table"].data["tcs"].label.length
+                                            10 - customTemplate.sections["table"].data["tcs"].label?.length
                                         }}</span>
                                     </ng-container>
                                 </td>
@@ -1583,7 +1584,7 @@
                                     >
                                         <span class="max-character-label">Characters left:&nbsp;</span
                                         ><span class="max-character-value">{{
-                                            10 - customTemplate.sections["table"].data["tds"].label.length
+                                            10 - customTemplate.sections["table"].data["tds"].label?.length
                                         }}</span>
                                     </ng-container>
                                 </td>
@@ -1622,7 +1623,7 @@
                                     >
                                         <span class="max-character-label">Characters left:&nbsp;</span
                                         ><span class="max-character-value">{{
-                                            40 - customTemplate.sections["table"].data["totalDue"].label.length
+                                            40 - customTemplate.sections["table"].data["totalDue"].label?.length
                                         }}</span>
                                     </ng-container>
                                 </td>
@@ -1677,7 +1678,7 @@
                             class="form-group"
                             *ngIf="customTemplate?.templateType === 'gst_template_e' && voucherType === 'sales'"
                         >
-                            <div class="form-group font-16">
+                            <div class="form-group font-15">
                                 <input
                                     type="checkbox"
                                     name="taxBifurcationCheckbox"
@@ -1764,7 +1765,7 @@
                                 <ng-container *ngIf="tcs?.isFocused || contentForm?.controls['tcs']?.errors?.maxlength">
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        10 - customTemplate.sections["footer"].data["tcs"].label.length
+                                        10 - customTemplate.sections["footer"].data["tcs"].label?.length
                                     }}</span>
                                 </ng-container>
                             </div>
@@ -1796,7 +1797,7 @@
                                 <ng-container *ngIf="tds?.isFocused || contentForm?.controls['tds']?.errors?.maxlength">
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        10 - customTemplate.sections["footer"].data["tds"].label.length
+                                        10 - customTemplate.sections["footer"].data["tds"].label?.length
                                     }}</span>
                                 </ng-container>
                             </div>
@@ -1830,7 +1831,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        40 - customTemplate.sections["footer"].data["totalDue"].label.length
+                                        40 - customTemplate.sections["footer"].data["totalDue"].label?.length
                                     }}</span>
                                 </ng-container>
                             </div>
@@ -1909,7 +1910,7 @@
                             >
                                 <span class="max-character-label">Characters left:&nbsp;</span
                                 ><span class="max-character-value">{{
-                                    124 - customTemplate.sections["footer"].data["companyAddress"].label.length
+                                    124 - customTemplate.sections["footer"].data["companyAddress"].label?.length
                                 }}</span>
                             </ng-container>
                         </div>
@@ -1995,7 +1996,7 @@
                         >
                             <span class="max-character-label">Characters left:&nbsp;</span
                             ><span class="max-character-value">{{
-                                13 - customTemplate.sections["table"].data["totalQuantity"].label.length
+                                13 - customTemplate.sections["table"].data["totalQuantity"].label?.length
                             }}</span>
                         </div>
                     </div>
@@ -2014,7 +2015,7 @@
                             >
                                 <span class="max-character-label">Characters left:&nbsp;</span
                                 ><span class="max-character-value">{{
-                                    15 - customTemplate.sections["footer"].data["totalDue"].label.length
+                                    15 - customTemplate.sections["footer"].data["totalDue"].label?.length
                                 }}</span>
                             </ng-container>
                         </div>
@@ -2051,7 +2052,7 @@
                             >
                                 <span class="max-character-label">Characters left:&nbsp;</span
                                 ><span class="max-character-value">{{
-                                    10 - customTemplate.sections["table"].data["discount"].label.length
+                                    10 - customTemplate.sections["table"].data["discount"].label?.length
                                 }}</span>
                             </ng-container>
                         </div>
@@ -2083,7 +2084,7 @@
                             >
                                 <span class="max-character-label">Characters left:&nbsp;</span
                                 ><span class="max-character-value">{{
-                                    14 - customTemplate.sections["table"].data["taxableValue"].label.length
+                                    14 - customTemplate.sections["table"].data["taxableValue"].label?.length
                                 }}</span>
                             </ng-container>
                         </div>
@@ -2255,7 +2256,7 @@
                                     >
                                         <span class="max-character-label">Characters left:&nbsp;</span
                                         ><span class="max-character-value">{{
-                                            200 - customTemplate.sections["footer"].data["message1"].label.length
+                                            200 - customTemplate.sections["footer"].data["message1"].label?.length
                                         }}</span>
                                     </ng-container>
                                 </div>
@@ -2311,7 +2312,7 @@
                         >
                             <span class="max-character-label">Characters left:&nbsp;</span
                             ><span class="max-character-value">{{
-                                30 - customTemplate.sections["footer"].data["thanks"].label.length
+                                30 - customTemplate.sections["footer"].data["thanks"].label?.length
                             }}</span>
                         </div>
                     </div>
@@ -2372,7 +2373,7 @@
                         >
                             <span class="max-character-label">Characters left:&nbsp;</span
                             ><span class="max-character-value">{{
-                                50 - customTemplate.sections["footer"].data["textUnderSlogan"].label.length
+                                50 - customTemplate.sections["footer"].data["textUnderSlogan"].label?.length
                             }}</span>
                         </div>
                     </div>
@@ -2416,10 +2417,7 @@
                                             [disabled]="customTemplate.sections.footer.data.slogan.display"
                                             accept="image/png, image/jpeg"
                                             id="signatureImg-edit"
-                                            ngFileSelect
-                                            (uploadOutput)="onUploadFileOutput($event)"
-                                            [options]="fileUploadOptions"
-                                            [uploadInput]="uploadInput"
+                                            (change)="uploadImage()"
                                         />
                                         <small>Upload Signature</small>
                                     </label>
@@ -2489,7 +2487,7 @@ Note:Contact us for queries on these questions</textarea
                                         >
                                             <span class="max-character-label">Characters left:&nbsp;</span
                                             ><span class="max-character-value">{{
-                                                30 - customTemplate.sections["footer"].data["slogan"].label.length
+                                                30 - customTemplate.sections["footer"].data["slogan"].label?.length
                                             }}</span>
                                         </ng-container>
                                     </div>

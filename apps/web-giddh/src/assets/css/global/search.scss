@@ -1,0 +1,39 @@
+body {
+    &.search-filter {
+        .cdk-overlay-container {
+            .cdk-overlay-connected-position-bounding-box {
+                .cdk-overlay-pane {
+                    .mat-mdc-menu-panel {
+                        max-width: 550px !important;
+                    }
+                }
+            }
+        }
+        .mat-chip-list-wrapper {
+            flex-wrap: wrap !important;
+        }
+        .select-entity-height {
+            input {
+                height: 48px;
+                border-radius: 0.5rem;
+            }
+        }
+        .width-query-types {
+            .mat-mdc-form-field {
+                width: 152px;
+            }
+        }
+        .width-query-differs {
+            .mat-mdc-form-field {
+                width: 92px;
+            }
+        }
+        .width-balance-type {
+            .mat-mdc-form-field, 
+            input {
+                width: 92px;
+                background: transparent;
+            }
+        }
+    }
+}

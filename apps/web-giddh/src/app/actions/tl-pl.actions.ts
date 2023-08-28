@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { TlPlService } from '../services/tl-pl.service';
 import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
-import { CustomActions } from '../store/customActions';
+import { CustomActions } from '../store/custom-actions';
 
 @Injectable()
 export class TBPlBsActions {
@@ -54,7 +54,7 @@ export class TBPlBsActions {
                 return this._tlPlService.GetV2TrailBalance(action.payload).pipe(
                     map((r) => this.validateResponse<AccountDetails, TrialBalanceRequest>(r, {
                         type: TBPlBsActions.GET_V2_TRIAL_BALANCE_RESPONSE,
-                        payload: r.body
+                        payload: r?.body
                     }, true, {
                         type: TBPlBsActions.GET_V2_TRIAL_BALANCE_RESPONSE,
                         payload: null
@@ -68,7 +68,7 @@ export class TBPlBsActions {
                 return this._tlPlService.GetProfitLoss(action.payload).pipe(
                     map((r) => this.validateResponse<AccountDetails, ProfitLossRequest>(r, {
                         type: TBPlBsActions.GET_PROFIT_LOSS_RESPONSE,
-                        payload: r.body
+                        payload: r?.body
                     }, true, {
                         type: TBPlBsActions.GET_PROFIT_LOSS_RESPONSE,
                         payload: []
@@ -82,10 +82,10 @@ export class TBPlBsActions {
                 return this._tlPlService.GetCogs(action.payload).pipe(
                     map((r) => this.validateResponse<GetCogsResponse, GetCogsRequest>(r, {
                         type: TBPlBsActions.GET_COGS_RESPONSE,
-                        payload: r.body
+                        payload: r?.body
                     }, true, {
                         type: TBPlBsActions.GET_COGS_RESPONSE,
-                        payload: r.body
+                        payload: r?.body
                     })));
             })));
 
@@ -93,10 +93,10 @@ export class TBPlBsActions {
         .pipe(
             ofType(TBPlBsActions.GET_BALANCE_SHEET_REQUEST),
             switchMap((action: CustomActions) => {
-                return this._tlPlService.GetBalanceSheet(action.payload).pipe(
+                return this._tlPlService.GetBalanceSheet(action?.payload).pipe(
                     map((r) => this.validateResponse<AccountDetails, BalanceSheetRequest>(r, {
                         type: TBPlBsActions.GET_BALANCE_SHEET_RESPONSE,
-                        payload: r.body
+                        payload: r?.body
                     }, true, {
                         type: TBPlBsActions.GET_BALANCE_SHEET_RESPONSE,
                         payload: []
@@ -107,7 +107,7 @@ export class TBPlBsActions {
         .pipe(
             ofType(TBPlBsActions.DOWNLOAD_TRIAL_BALANCE_EXCEL_REQUEST),
             switchMap((action: CustomActions) => {
-                return this._tlPlService.DownloadTrialBalanceExcel(action.payload).pipe(
+                return this._tlPlService.DownloadTrialBalanceExcel(action?.payload).pipe(
                     map((r) => ({ type: 'EmptyAction' })));
             })));
 
@@ -115,7 +115,7 @@ export class TBPlBsActions {
         .pipe(
             ofType(TBPlBsActions.DOWNLOAD_BALANCE_SHEET_EXCEL_REQUEST),
             switchMap((action: CustomActions) => {
-                return this._tlPlService.DownloadBalanceSheetExcel(action.payload).pipe(
+                return this._tlPlService.DownloadBalanceSheetExcel(action?.payload).pipe(
                     map((r) => ({ type: 'EmptyAction' })));
             })));
 
@@ -123,7 +123,7 @@ export class TBPlBsActions {
         .pipe(
             ofType(TBPlBsActions.DOWNLOAD_PROFIT_LOSS_EXCEL_REQUEST),
             switchMap((action: CustomActions) => {
-                return this._tlPlService.DownloadProfitLossExcel(action.payload).pipe(
+                return this._tlPlService.DownloadProfitLossExcel(action?.payload).pipe(
                     map((r) => ({ type: 'EmptyAction' })));
             })));
 
@@ -189,7 +189,7 @@ export class TBPlBsActions {
     }
 
     private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this._toasty.errorToast(response.message);
             }

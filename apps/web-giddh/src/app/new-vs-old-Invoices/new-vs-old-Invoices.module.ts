@@ -25,15 +25,18 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
         ReactiveFormsModule,
         ElementViewChildModule,
         NewVsOldInvoicesRoutingModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ShSelectModule,
-        TabsModule,
-        BsDropdownModule,
-        TooltipModule,
+        TabsModule.forRoot(),
+        BsDropdownModule.forRoot(),
+        TooltipModule.forRoot(),
         SharedModule,
         SelectModule.forRoot(),
         ModalModule,
-        PaginationModule,
+        PaginationModule.forRoot(),
         CurrencyModule
     ],
     providers: []

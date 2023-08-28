@@ -1,17 +1,30 @@
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import * as moment from 'moment/moment';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import * as dayjs from 'dayjs';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store';
 import { saveAs } from 'file-saver';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { CompanyService } from '../../../services/companyService.service';
+import { CompanyService } from '../../../services/company.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../../../services/general.service';
 import { cloneDeep } from '../../../lodash-optimized';
+import { MatDialog } from '@angular/material/dialog';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
+export interface SearchTable {
+    name: string;
+    uniqueName: string;
+    parent: string;
+    openingBalance: number;
+    debitTotal: number;
+    creditTotal: number;
+    closingBalance: number;
+    isSelected: boolean
+}
+/** Hold information of activity logs */
+const ELEMENT_DATA: SearchTable[] = [];
 @Component({
     selector: 'search-grid',
     templateUrl: './search-grid.component.html'
@@ -25,7 +38,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    public moment = moment;
+    /** This will hold Template Reference of Mail/SMS Dialog */
+    @ViewChild('mailSmsDialog') public mailSmsDialog: TemplateRef<any>;
+    public dayjs = dayjs;
     public companyUniqueName: string;
     public searchResponse$: Observable<AccountFlat[]>;
     public searchResponseFiltered$: Observable<AccountFlat[]>;
@@ -80,38 +95,30 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             value: '%s_AN',
         },
     ];
-    @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
-    @ViewChild('messageBox', { static: true }) public messageBox: ElementRef;
+    @ViewChild('messageBox') public messageBox: ElementRef<HTMLInputElement>;
     public searchRequest$: Observable<SearchRequest>;
     public isAllChecked: boolean = false;
-    public get sortReverse(): boolean {
-        return this._sortReverse;
-    }
-
-    /**
-     * reversing sort
-     *
-     * @memberof SearchGridComponent
-     */
-    public set sortReverse(value: boolean) {
-        this._sortReverse = value;
-        this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType]))));
-    }
-
     /** pagination related  */
     public page: number;
     public totalPages: number;
-    public selectedItems: string[] = [];
-    private _sortReverse: boolean;
-    private _sortType: string;
+    public selectedItems: any[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private checkboxInfo: any = {
         selectedPage: 1
     };
     private formattedQuery: any;
+    /** Hold Mail/SMS Mat Dailog Reference */
+    public mailSmsDialogRef: any;
+    /* Holds Mat Table Configuration */
+    public displayedColumns: string[] = ['select', 'name', 'uniqueName', 'parent', 'openingBalance', 'debitTotal', 'creditTotal', 'closingBalance'];
+    /** True if select customer all */
+    public selectAllCustomer: boolean = false;
+    /** Hold table datal */
+    public dataSource = ELEMENT_DATA;
 
-    constructor(private store: Store<AppState>, private companyServices: CompanyService, private toaster: ToasterService, private generalService: GeneralService) {
-        this.searchResponse$ = this.store.pipe(select(p => p.search.value), takeUntil(this.destroyed$));
+
+    constructor(private store: Store<AppState>, private companyServices: CompanyService, private toaster: ToasterService, private generalService: GeneralService, public dialog: MatDialog) {
+        this.searchResponse$ = this.store.pipe(select(p => p.search?.value), takeUntil(this.destroyed$));
         this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.search$ = this.store.pipe(select(p => p.search.search), takeUntil(this.destroyed$));
@@ -121,15 +128,13 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             this.page = info.page;
             this.totalPages = info.totalPages;
         });
-    }
-
-    public set sortType(value: string) {
-        this._sortType = value;
-        this.sortReverse = this._sortReverse;
+        this.searchResponseFiltered$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            let newArr = response.map(v => ({ ...v, isSelected: false }))
+            this.dataSource = newArr;
+        });
     }
 
     public ngOnInit() {
-        this.sortType = 'name';
         this.searchRequest$.subscribe((req) => {
             if (req && req.groupName) {
                 if (!this.checkboxInfo.selectedGroup) {
@@ -196,27 +201,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         ];
     }
 
-    public toggleSelectAll(ev) {
-        let isAllChecked = ev.target.checked;
-        this.checkboxInfo[this.checkboxInfo.selectedPage] = isAllChecked;
-
-        this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
-            let entries = cloneDeep(p);
-            this.isAllChecked = isAllChecked;
-
-            entries.forEach((entry) => {
-                let indexOfEntry = this.selectedItems.indexOf(entry?.uniqueName);
-                if (isAllChecked) {
-                    if (indexOfEntry === -1) {
-                        this.selectedItems.push(entry?.uniqueName);
-                    }
-                } else if (indexOfEntry > -1) {
-                    this.selectedItems.splice(indexOfEntry, 1);
-                }
-            });
-        });
-    }
-
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -232,6 +216,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         let queryForApi = this.createSearchQueryReqObj();
         let formattedQuery = this.formatQuery(queryForApi, searchQuery);
         this.formattedQuery = formattedQuery;
+        this.selectAllCustomer = false;
         this.FilterByAPIEvent.emit(formattedQuery);
     }
 
@@ -246,6 +231,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             this.searchResponseFiltered$ = this.searchResponse$;
             this.FilterByAPIEvent.emit(null);
             this.pageChangeEvent.emit(1);
+            this.selectAllCustomer = false;
         }
     }
 
@@ -297,7 +283,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                 data: {
                     subject: this.messageBody.subject,
                     message: this.messageBody.msg,
-                    accounts: [],
+                    accounts: this.selectedItems,
                 },
                 params: {
                     from: p.fromDate,
@@ -311,8 +297,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
             this.companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.searchLoader$ = of(false);
-                if (res.status === 'success') {
-                    let blobData = this.generalService.base64ToBlob(res.body, 'text/csv', 512);
+                if (res?.status === 'success') {
+                    let blobData = this.generalService.base64ToBlob(res?.body, 'text/csv', 512);
                     return saveAs(blobData, `${p.groupName}.csv`);
                 }
             });
@@ -326,21 +312,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      * @param {*} val
      * @memberof SearchGridComponent
      */
-    public addValueToMsg(val: any): void {
-        this.typeInTextarea(val.value);
-    }
-
-    public typeInTextarea(newText) {
-        let el: HTMLInputElement = this.messageBox?.nativeElement;
-        let start = el.selectionStart;
-        let end = el.selectionEnd;
-        let text = el.value;
-        let before = text.substring(0, start);
-        let after = text.substring(end, (text ? text.length : 0));
-        el.value = (before + newText + after);
-        el.selectionStart = el.selectionEnd = start + (newText ? newText.length : 0);
-        el.focus();
-        this.messageBody.msg = el.value;
+    public addValueToMsg(newText: any): void {
+        this.messageBody.msg += newText;
+        this.messageBox.nativeElement.focus();
     }
 
     /**
@@ -354,7 +328,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.messageBody.type = 'Email';
         this.messageBody.btn.set = this.messageBody.btn.email;
         this.messageBody.header.set = this.messageBody.header.email;
-        this.mailModal.show();
+        this.mailSmsDialogRef = this.dialog.open(this.mailSmsDialog, {
+            width: '630px',
+            height: '515px'
+        })
     }
 
     /**
@@ -367,19 +344,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.messageBody.type = 'sms';
         this.messageBody.btn.set = this.messageBody.btn.sms;
         this.messageBody.header.set = this.messageBody.header.sms;
-        this.mailModal.show();
-    }
-
-    public toggleSelection(ev, item: AccountFlat) {
-        let isChecked = ev.target.checked;
-        let indexOfEntry = this.selectedItems.indexOf(item?.uniqueName);
-        if (isChecked && indexOfEntry === -1) {
-            this.selectedItems.push(item?.uniqueName);
-        } else {
-            this.selectedItems.splice(indexOfEntry, 1);
-            this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
-            this.isAllChecked = false;
-        }
+        this.mailSmsDialogRef = this.dialog.open(this.mailSmsDialog, {
+            width: '630px',
+            height: '515px'
+        })
     }
 
     /**
@@ -421,7 +389,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
                 return this.companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                     .subscribe((r) => {
-                        r.status === 'success' ? this.toaster.successToast(r.body) : this.toaster.errorToast(r.message);
+                        r?.status === 'success' ? this.toaster.successToast(r?.body) : this.toaster.errorToast(r?.message);
                         this.checkboxInfo = {
                             selectedPage: 1
                         };
@@ -431,14 +399,14 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                 delete temp.data['subject'];
                 return this.companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
                     .subscribe((r) => {
-                        r.status === 'success' ? this.toaster.successToast(r.body) : this.toaster.errorToast(r.message);
+                        r?.status === 'success' ? this.toaster.successToast(r?.body) : this.toaster.errorToast(r?.message);
                         this.checkboxInfo = {
                             selectedPage: 1
                         };
                     });
             }
         });
-        this.mailModal.hide();
+        this.mailSmsDialogRef.close();
     }
 
     public pageChanged(ev) {
@@ -502,5 +470,54 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             }
         });
         return queryForApi;
+    }
+
+    /**
+     * This will use for single selection customer
+     *
+     * @param {MatCheckboxChange} event
+     * @param {*} item
+     * @memberof SearchGridComponent
+     */
+    public selectAccount(event: MatCheckboxChange, item: any): void {
+        this.prepareSelectedCustomerList(item, event?.checked);
+        if (event) {
+            let currentSelectedValues = this.dataSource.every(value => this.selectedItems?.includes(value?.uniqueName));
+            if (currentSelectedValues) {
+                this.selectAllCustomer = true;
+            } else {
+                this.selectAllCustomer = false;
+            }
+        }
+    }
+
+    /**
+     * This will use for prepare selected customer list
+     *
+     * @param {*} element
+     * @param {boolean} isChecked
+     * @memberof SearchGridComponent
+     */
+    public prepareSelectedCustomerList(element: any, isChecked: boolean): void {
+        let indexOfEntrySelected = this.selectedItems?.indexOf(element?.uniqueName);
+        if (indexOfEntrySelected === -1 && isChecked) {
+            this.selectedItems.push(element?.uniqueName);
+        } else if (indexOfEntrySelected > -1 && !isChecked) {
+            this.selectedItems.splice(indexOfEntrySelected, 1);
+        }
+    }
+
+    /**
+     *This will use for select all customer
+     *
+     * @param {boolean} action
+     * @memberof SearchGridComponent
+     */
+    public toggleAllSelection(action: boolean): void {
+        this.dataSource = this.dataSource?.map(element => {
+            element.isSelected = action;
+            this.prepareSelectedCustomerList(element, action);
+            return element;
+        });
     }
 }

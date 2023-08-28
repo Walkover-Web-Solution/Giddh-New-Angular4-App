@@ -1,0 +1,43 @@
+.export-data-form {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    .file-type-label,
+    .select-file-label {
+        min-width: 250px;
+    }
+    label {
+        font-size: var(--font-size-15);
+        padding-bottom: 5px;
+    }
+}
+.btn-success,
+.btn-primary {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    border-color: var(--color-secondary-button-background) !important;
+    background-color: var(--color-secondary-button-background) !important;
+}
+
+.input-upload {
+    max-width: 250px;
+}
+@media (max-width: 991px) {
+    .export-data-form {
+        display: flex;
+        margin-top: 15px;
+        justify-content: space-between;
+        flex-direction: row;
+        .file-type-label,
+        .select-file-label {
+            min-width: 180px;
+        }
+        .back-to-import {
+            position: absolute;
+            top: -15px;
+            right: 15px;
+            margin-right: 0;
+            margin-top: 0;
+        }
+    }
+}

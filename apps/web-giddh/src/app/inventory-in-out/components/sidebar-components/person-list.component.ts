@@ -34,7 +34,7 @@ import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
   `],
     template: `
     <ul class="list-unstyled stock-grp-list clearfix" *ngIf="personList">
-      <li routerLinkActive="active" *ngFor="let p of personList"><a [routerLink]="['/pages','inventory-in-out','person',p.uniqueName]"> {{p.name}}</a></li>
+      <li routerLinkActive="active" *ngFor="let p of personList"><a [routerLink]="['/pages','inventory-in-out','person',p?.uniqueName]"> {{p.name}}</a></li>
     </ul>
   `
 })
