@@ -14,12 +14,12 @@ import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { branchTransferVoucherTypes, branchTransferAmountOperators } from "../../../../shared/helpers/branchTransferFilters";
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { ConfirmationModalConfiguration } from 'apps/web-giddh/src/app/theme/confirmation-modal/confirmation-modal.interface';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
-import { FormBuilder, FormControl, FormGroup, NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-field/select-field.component';
 
 @Component({
     selector: 'branch-transfer-list',
@@ -27,14 +27,15 @@ import { FormBuilder, FormControl, FormGroup, NgForm } from '@angular/forms';
     styleUrls: ['./branch-transfer-list.component.scss']
 })
 export class BranchTransferListComponent implements OnInit {
-    /** Manufacturing list  product dropdown items*/
-    public product: any = [];
     /** Material table elements */
     public displayedColumns: string[] = [];
     /** Instance of Mat Dialog for Advance Filter */
     @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /** Open Account Selection Dropdown instance */
+    @ViewChild('voucherTypeDropdown', { static: false }) public voucherTypeDropdown: SelectFieldComponent;
+    /** This will store selected date ranges */
     public selectedDateRange: any;
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
@@ -44,9 +45,8 @@ export class BranchTransferListComponent implements OnInit {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
+    /** Instance of bootstrap modal */
     public modalRef: BsModalRef;
-    /** Pagination limit */
-    public paginationLimit: number = PAGINATION_LIMIT;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Observable to store the branches of current company */
@@ -57,6 +57,7 @@ export class BranchTransferListComponent implements OnInit {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This will hold local JSON data */
     public activeCompany: any;
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -67,8 +68,11 @@ export class BranchTransferListComponent implements OnInit {
     public fromDate: string;
     /* Selected to date */
     public toDate: string;
+    /* Observable to store universal date */
     public universalDate$: Observable<any>;
+    /* True if api is in process */
     public isLoading: boolean = false;
+    /* Hold branch transfer query params */
     public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
         from: '',
         to: '',
@@ -78,26 +82,36 @@ export class BranchTransferListComponent implements OnInit {
         sortBy: '',
         branchUniqueName: ''
     };
-    /** This will use for activity logs object */
+    /** This will use for branch transer pagination logs object */
     public branchTransferPaginationObject = {
         page: 1,
         totalPages: 0,
         totalItems: 0,
         count: PAGINATION_LIMIT
     }
+    /* Hold branch transfer advance search object */
     public branchTransferAdvanceSearchFormObj: any = {
         amountOperator: null,
         amount: null,
         voucherType: null
     };
+    /* Hold branch transfer table data source */
     public branchTransferResponse: any[] = [];
+    /* Hold branch voucher type in advance search */
     public voucherTypes: IOption[] = [];
+    /* Hold branch amount operators in advance search */
     public amountOperators: IOption[] = [];
+    /** Hold advance search amount value */
+    public advanceSearchAmountValue: any = '';
+    /* Hold list searching value */
     public inlineSearch: any = '';
-    public timeout: any;
+    /* Hold branch transfer uniquename */
     public editBranchTransferUniqueName: string = '';
+    /* Hold branch transfer mode */
     public branchTransferMode: string = '';
-    public selectedBranchTransfer: any = '';
+    /* Hold selected branch transfer  uniquename */
+    public selectedBranchTransferUniqueName: any = '';
+    /* Hold selected branch transfer  type*/
     public selectedBranchTransferType: any = '';
     /** Branch Transfer confirmation popup configuration */
     public branchTransferConfirmationConfiguration: ConfirmationModalConfiguration;
@@ -107,28 +121,29 @@ export class BranchTransferListComponent implements OnInit {
     public branchTransferAdvanceSearchForm: FormGroup;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
+    /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
         const hasResponse = this.branchTransferResponse.length > 0;
         return (
-            (hasResponse && this.inlineSearch !== 'sender') ||
-            (this.inlineSearch === 'sender' && !hasResponse) ||
-            (hasResponse && this.inlineSearch === 'sender') ||
-            (hasResponse && this.inlineSearch !== 'receiver') ||
-            (this.inlineSearch === 'receiver' && !hasResponse) ||
-            (hasResponse && this.inlineSearch === 'receiver') ||
-            (hasResponse && this.inlineSearch !== 'senderReceiver') ||
-            (this.inlineSearch === 'senderReceiver' && !hasResponse) ||
-            (hasResponse && this.inlineSearch === 'senderReceiver') ||
-            (hasResponse && this.inlineSearch !== 'fromWarehouse') ||
-            (this.inlineSearch === 'fromWarehouse' && !hasResponse) ||
-            (hasResponse && this.inlineSearch === 'fromWarehouse') ||
-            (hasResponse && this.inlineSearch !== 'toWarehouse') ||
-            (this.inlineSearch === 'toWarehouse' && !hasResponse) ||
-            (hasResponse && this.inlineSearch === 'toWarehouse')
+            (hasResponse && this.inlineSearch !== 'sender' || this.showClearFilter) ||
+            (this.inlineSearch === 'sender' && !hasResponse || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch === 'sender' || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch !== 'receiver' || this.showClearFilter) ||
+            (this.inlineSearch === 'receiver' && !hasResponse || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch === 'receiver' || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch !== 'senderReceiver' || this.showClearFilter) ||
+            (this.inlineSearch === 'senderReceiver' && !hasResponse || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch === 'senderReceiver' || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch !== 'fromWarehouse' || this.showClearFilter) ||
+            (this.inlineSearch === 'fromWarehouse' && !hasResponse || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch === 'fromWarehouse' || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch !== 'toWarehouse' || this.showClearFilter) ||
+            (this.inlineSearch === 'toWarehouse' && !hasResponse || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch === 'toWarehouse' || this.showClearFilter)
         );
     }
-    public advanceSearchAmountValue: any = '';
-
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
     constructor(
         public dialog: MatDialog,
         private modalService: BsModalService,
@@ -154,16 +169,13 @@ export class BranchTransferListComponent implements OnInit {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Conponent init hook
+     *
+     * @memberof BranchTransferListComponent
+     */
     public ngOnInit(): void {
         document.querySelector("body")?.classList?.add("new-branch-list-page");
-        branchTransferVoucherTypes.map(voucherType => {
-            this.voucherTypes.push({ label: voucherType.label, value: voucherType.value });
-        });
-
-        branchTransferAmountOperators.map(amountOperator => {
-            this.amountOperators.push({ label: amountOperator.label, value: amountOperator.value });
-        });
-
         this.initAllForms();
         this.store.pipe(select(stateStore => stateStore.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
@@ -269,11 +281,12 @@ export class BranchTransferListComponent implements OnInit {
         });
     }
 
-    public toggleSearch(fieldName: string): void {
-        this.inlineSearch = fieldName;
-    }
-
-    private initAllForms(): void {
+    /**
+     * This will use for init all forms value
+     *
+     * @memberof BranchTransferListComponent
+     */
+    public initAllForms(): void {
         this.branchTransferForm = this.formBuilder.group({
             amountOperator: null,
             amount: null,
@@ -289,6 +302,12 @@ export class BranchTransferListComponent implements OnInit {
         });
     }
 
+    /**
+     *This will use for get branch transfer list data
+     *
+     * @param {boolean} resetPage
+     * @memberof BranchTransferListComponent
+     */
     public getBranchTransferList(resetPage: boolean): void {
         this.isLoading = true;
         if (resetPage) {
@@ -312,6 +331,22 @@ export class BranchTransferListComponent implements OnInit {
         });
     }
 
+    /**
+     * This will use for toggle table search field
+     *
+     * @param {string} fieldName
+     * @memberof BranchTransferListComponent
+     */
+    public toggleSearch(fieldName: string): void {
+        this.inlineSearch = fieldName;
+    }
+
+    /**
+     * This will use for download branch transfer row data
+     *
+     * @param {*} item
+     * @memberof BranchTransferListComponent
+     */
     public downloadBranchTransfer(item): void {
         let downloadBranchTransferRequest = new NewBranchTransferDownloadRequest();
         downloadBranchTransferRequest.uniqueName = item?.uniqueName;
@@ -327,15 +362,26 @@ export class BranchTransferListComponent implements OnInit {
         });
     }
 
-
+    /**
+     * This will be called when edit branch transfer row data
+     *
+     * @param {*} item
+     * @memberof BranchTransferListComponent
+     */
     public showEditBranchTransferPopup(item): void {
         this.branchTransferMode = item.voucherType;
         this.editBranchTransferUniqueName = item?.uniqueName;
         // this.openModal();
     }
 
+    /**
+     * This will be use for show delete branch transfer modal
+     *
+     * @param {*} item
+     * @memberof BranchTransferListComponent
+     */
     public showDeleteBranchTransferModal(item): void {
-        this.selectedBranchTransfer = item?.uniqueName;
+        this.selectedBranchTransferUniqueName = item?.uniqueName;
         this.selectedBranchTransferType = (item.voucherType === "receiptnote") ? "Receipt Note" : "Delivery Challan";
         this.branchTransferConfirmationConfiguration = this.generalService.getDeleteBranchTransferConfiguration(this.localeData, this.commonLocaleData, this.selectedBranchTransferType,);
 
@@ -355,9 +401,14 @@ export class BranchTransferListComponent implements OnInit {
         });
     }
 
+    /**
+     *This will use for delete branch transfer confirmation
+     *
+     * @memberof BranchTransferListComponent
+     */
     public deleteNewBranchTransfer(): void {
         this.dialog.closeAll();
-        this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransfer).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 this.toaster.successToast(response?.body);
                 this.getBranchTransferList(false);
@@ -368,34 +419,45 @@ export class BranchTransferListComponent implements OnInit {
     }
 
     /**
-  * Branch change handler
-  *
-  * @memberof VatReportComponent
-  */
+     * This will be use for handle branch transfer change
+     *
+     * @param {*} selectedEntity
+     * @memberof BranchTransferListComponent
+     */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
     }
 
+    /**
+     * This will use for page change
+     *
+     * @param {*} event
+     * @memberof BranchTransferListComponent
+     */
     public pageChanged(event: any): void {
         this.branchTransferPaginationObject.page = event?.page;
         this.getBranchTransferList(false);
     }
 
     /**
-     *  Function to open Dialog on Advance Filter Button
+     * This will use for open advance filter dialog
+     *
+     * @memberof BranchTransferListComponent
      */
     public openAdvanceFilterDialog(): void {
+        this.voucherTypeDropdown?.closeDropdownPanel();
         this.dialog.open(this.advanceFilterComponent, {
-            width: '630px',
+             width: '500px',
+            autoFocus: false
         })
     }
 
     /**
-      *To show the datepicker
-      *
-      * @param {*} element
-      * @memberof ListManufacturingComponent
-      */
+     * This will be use for show datepicker
+     *
+     * @param {*} element
+     * @memberof BranchTransferListComponent
+     */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
@@ -407,10 +469,10 @@ export class BranchTransferListComponent implements OnInit {
     }
 
     /**
-      * This will hide the datepicker
-      *
-      * @memberof InvoicePreviewComponent
-      */
+     * This will be use for hide datepicker
+     *
+     * @memberof BranchTransferListComponent
+     */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
     }
@@ -419,7 +481,7 @@ export class BranchTransferListComponent implements OnInit {
     * Call back function for date/range selection in datepicker
     *
     * @param {*} value
-    * @memberof NewBranchTransferListComponent
+    * @memberof BranchTransferListComponent
     */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
@@ -444,19 +506,25 @@ export class BranchTransferListComponent implements OnInit {
     }
 
     /**
- * This will use for sorting filters
- *
- * @param {*} event
- * @memberof ReportsComponent
- */
+     *This will be use for table sorting
+     *
+     * @param {*} event
+     * @memberof BranchTransferListComponent
+     */
     public sortChange(event: any): void {
         this.branchTransferGetRequestParams.sort = event?.direction ? event?.direction : 'asc';
         this.branchTransferGetRequestParams.sortBy = event?.active;
         this.branchTransferGetRequestParams.page = 1;
+        this.inlineSearch = '';
         this.showClearFilter = true;
         this.getBranchTransferList(false);
     }
 
+    /**
+     * This will be use for clear filters
+     *
+     * @memberof BranchTransferListComponent
+     */
     public clearFilters(): void {
         this.branchTransferAdvanceSearchFormObj.voucherType = null;
         this.branchTransferAdvanceSearchFormObj.amountOperator = null;
@@ -464,35 +532,86 @@ export class BranchTransferListComponent implements OnInit {
         this.branchTransferGetRequestParams.sort = "";
         this.branchTransferGetRequestParams.sortBy = "";
         this.showClearFilter = false;
-        this.initAllForms();
+        this.branchTransferForm.reset();
         this.inlineSearch = '';
         this.getBranchTransferList(true);
     }
 
+    /**
+     *This will be use for select voucher type in advance filter
+     *
+     * @param {*} event
+     * @memberof BranchTransferListComponent
+     */
     public selectVoucherType(event: any): void {
         this.branchTransferAdvanceSearchFormObj.voucherType = event?.value;
         this.branchTransferForm.controls['voucherType'].setValue(event?.value);
     }
 
+    /**
+     * This will be use for select operator type in advance filter
+     *
+     * @param {*} event
+     * @memberof BranchTransferListComponent
+     */
     public selectOperator(event: any): void {
         this.branchTransferAdvanceSearchFormObj.amountOperator = event?.value;
         this.branchTransferForm.controls['amountOperator'].setValue(event?.value);
     }
 
+    /**
+     * This will be use for submit advance search filter form
+     *
+     * @param {*} event
+     * @memberof BranchTransferListComponent
+     */
     public search(): void {
+        this.showClearFilter = true;
         this.branchTransferForm.controls['amount'].setValue(this.branchTransferAdvanceSearchFormObj.amount);
+        if (this.branchTransferAdvanceSearchFormObj.amountOperator === 'Equals') {
+            this.branchTransferForm.controls['amountOperator'].setValue('equal');
+        } else if (this.branchTransferAdvanceSearchFormObj.amountOperator === 'Excluded') {
+            this.branchTransferForm.controls['amountOperator'].setValue('exclude');
+        } else if (this.branchTransferAdvanceSearchFormObj.amountOperator === "Less than") {
+            this.branchTransferForm.controls['amountOperator'].setValue('less');
+        } else if (this.branchTransferAdvanceSearchFormObj.amountOperator === "Greater than") {
+            this.branchTransferForm.controls['amountOperator'].setValue('greater');
+        }
+        if (this.branchTransferAdvanceSearchFormObj.voucherType === 'Receipt Note') {
+            this.branchTransferForm.controls['voucherType'].setValue('receiptnote');
+        } else if (this.branchTransferAdvanceSearchFormObj.voucherType === 'Delivery Challan') {
+            this.branchTransferForm.controls['voucherType'].setValue('deliverynote');
+        }
         this.getBranchTransferList(true);
         this.dialog?.closeAll();
     }
 
-
+    /**
+     * This will be use for  reset select voucher type in advance filter
+     *
+     * @param {*} event
+     * @memberof BranchTransferListComponent
+     */
     public resetVoucherType(): void {
         this.branchTransferAdvanceSearchFormObj.voucherType = null
     }
+
+    /**
+     * This will be use for reset operators type in advance filter
+     *
+     * @param {*} event
+     * @memberof BranchTransferListComponent
+     */
     public resetOperators(): void {
         this.branchTransferAdvanceSearchFormObj.amountOperator = null
     }
 
+    /**
+     * This will be use for cancel in advance filter
+     *
+     * @param {*} event
+     * @memberof BranchTransferListComponent
+     */
     public cancel(): void {
         this.branchTransferForm.controls['voucherType'].setValue(null);
         this.branchTransferForm.controls['amountOperator'].setValue(null);
@@ -500,7 +619,56 @@ export class BranchTransferListComponent implements OnInit {
         this.dialog.closeAll();
     }
 
-    public ngOnDestroy() {
+    /**
+       * This will use for translation complete
+       *
+       * @param {*} event
+       * @memberof BranchTransferListComponent
+       */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
+            this.amountOperators = [
+                {
+                    value: "Equals",
+                    label: "Equals"
+                },
+                {
+                    value: "Excluded",
+                    label: "Excluded"
+                },
+                {
+                    value: "Less than",
+                    label: "Less than"
+                },
+                {
+                    value: "Greater than",
+                    label: "Greater than"
+                }
+            ];
+
+            this.voucherTypes = [
+                {
+                    label: 'Receipt Note',
+                    value: 'Receipt Note'
+                },
+                {
+                    label: 'Delivery Challan',
+                    value: 'Delivery Challan'
+                }
+            ];
+
+        }
+    }
+
+
+    /**
+     * Component destroy hook
+     *
+     * @param {*} event
+     * @memberof BranchTransferListComponent
+     */
+    public ngOnDestroy(): void {
         document.querySelector("body")?.classList?.remove("new-branch-list-page");
         this.destroyed$.next(true);
         this.destroyed$.complete();

@@ -15,7 +15,7 @@ import { BranchTransferListComponent } from './branch-transfer-list/branch-trans
 import { DatepickerWrapperModule } from '../../../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { BranchTransferCreateComponent } from './branch-transfer-create/branch-transfer-create.component';
 import { MatRadioModule } from '@angular/material/radio';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -23,6 +23,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
 import { CurrencyModule } from '../../../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { MatSortModule } from '@angular/material/sort';
+import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
 @NgModule({
     imports: [
         CommonModule,
@@ -45,7 +46,9 @@ import { MatSortModule } from '@angular/material/sort';
         PaginationModule.forRoot(),
         GiddhPageLoaderModule,
         CurrencyModule,
-        MatSortModule
+        MatSortModule,
+        ReactiveFormsModule,
+        TranslateDirectiveModule
 
     ],
     exports: [

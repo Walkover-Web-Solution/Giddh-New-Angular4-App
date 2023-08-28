@@ -1,359 +1,372 @@
-<section id="branch-transfer-list" class="p-3 clearfix">
-    <!-- page Title -->
-    <hamburger-menu *ngIf="false" [pageHeading]="'Branch Transfer List'"></hamburger-menu>
-    <!-- form -->
-    <div class="col-12 col-sm-12">
-        <div class="clearfix">
-            <form name="branchTransferHeaderForm" class="col-12 pl-0 pr-0 mr-b05">
-                <div class="row">
-                    <div class="d-flex flex-wrap w-100 mb-3">
-                        <div
-                            *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
-                            class="branch-width"
-                        >
-                            <dropdown-field
-                                [label]="'Branch'"
-                                [options]="currentCompanyBranches"
-                                width="100%"
-                                (selectedOption)="currentBranch.uniqueName = $event.value; handleBranchChange($event)"
-                                [placeholder]="'Select Entity'"
-                            ></dropdown-field>
-                        </div>
-                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                            <input
-                                type="text"
-                                name="selectedDateRange"
-                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                class="giddh-datepicker date-range-picker"
-                            />
-                        </div>
-                        <div class="text-center d-lg-flex d-none" *ngIf="showClearFilter">
-                            <div class="clear-filter">
-                                <button class="btn btn-filter mr-0" (click)="clearFilters()">
-                                    <span class="icon-cross"></span> Clear Filter
+<ng-container
+    appTranslate
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <section id="branch-transfer-list" class="p-3 clearfix">
+        <!-- page Title -->
+        <hamburger-menu *ngIf="false" [pageHeading]="'Branch Transfer List'"></hamburger-menu>
+        <!-- form -->
+        <div class="col-12 col-sm-12">
+            <div class="clearfix">
+                <form name="branchTransferHeaderForm" class="col-12 pl-0 pr-0 mr-b05">
+                    <div class="row">
+                        <div class="d-flex flex-wrap w-100 mb-3">
+                            <div
+                                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                                class="branch-width"
+                            >
+                                <dropdown-field
+                                    [label]="'Branch'"
+                                    [options]="currentCompanyBranches"
+                                    width="100%"
+                                    (selectedOption)="
+                                        currentBranch.uniqueName = $event.value; handleBranchChange($event)
+                                    "
+                                    [placeholder]="'Select Entity'"
+                                ></dropdown-field>
+                            </div>
+                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <input
+                                    type="text"
+                                    name="selectedDateRange"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker"
+                                />
+                            </div>
+                            <div class="text-center d-lg-flex d-none" *ngIf="showClearFilter">
+                                <div class="clear-filter">
+                                    <button class="btn btn-filter mr-0" (click)="clearFilters()">
+                                        <span class="icon-cross"></span> Clear Filter
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="ml-auto mt-auto">
+                                <button
+                                    matTooltip="Advanced Filter"
+                                    matTooltipPosition="left"
+                                    type="button"
+                                    (click)="openAdvanceFilterDialog()"
+                                    mat-stroked-button
+                                    color="primary"
+                                >
+                                    Filter
+                                    <span class="icon-advance-filter"></span>
                                 </button>
                             </div>
                         </div>
-                        <div class="ml-auto mt-auto">
-                            <button
-                                matTooltip="Advanced Filter"
-                                matTooltipPosition="left"
-                                type="button"
-                                (click)="openAdvanceFilterDialog()"
-                                mat-stroked-button
-                                color="primary"
-                            >
-                                Filter
-                                <span class="icon-advance-filter"></span>
-                            </button>
-                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
-    <section *ngIf="shouldShowElement">
-        <form name="branchTransferForm" [formGroup]="branchTransferForm" novalidate="" autocomplete="off">
-            <table
-                matSort
-                (matSortChange)="sortChange($event)"
-                [matSortActive]="branchTransferGetRequestParams?.sortBy"
-                [matSortDirection]="branchTransferGetRequestParams?.sort"
-                mat-table
-                [dataSource]="branchTransferResponse"
-                class="w-100"
-            >
-                <ng-container matColumnDef="s_no">
-                    <th mat-header-cell *matHeaderCellDef>#</th>
-                    <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
-                </ng-container>
+        <section *ngIf="shouldShowElement">
+            <form name="branchTransferForm" [formGroup]="branchTransferForm" novalidate="" autocomplete="off">
+                <table
+                    matSort
+                    (matSortChange)="sortChange($event)"
+                    [matSortActive]="branchTransferGetRequestParams?.sortBy"
+                    [matSortDirection]="branchTransferGetRequestParams?.sort"
+                    mat-table
+                    [dataSource]="branchTransferResponse"
+                    class="w-100"
+                >
+                    <ng-container matColumnDef="s_no">
+                        <th mat-header-cell *matHeaderCellDef>#</th>
+                        <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+                    </ng-container>
 
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-                    <td mat-cell *matCellDef="let element">{{ element?.dateOfSupply }}</td>
-                </ng-container>
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+                        <td mat-cell *matCellDef="let element">{{ element?.dateOfSupply }}</td>
+                    </ng-container>
 
-                <ng-container matColumnDef="voucher_type">
-                    <th mat-header-cell *matHeaderCellDef>Voucher Type</th>
-                    <td mat-cell *matCellDef="let element">
-                        <span *ngIf="element.voucherType === 'deliverynote'">Delivery Challan</span
-                        ><span *ngIf="element.voucherType === 'receiptnote'">Receipt Note</span>
-                    </td>
-                </ng-container>
+                    <ng-container matColumnDef="voucher_type">
+                        <th mat-header-cell *matHeaderCellDef>Voucher Type</th>
+                        <td mat-cell *matCellDef="let element">
+                            <span *ngIf="element.voucherType === 'deliverynote'">Delivery Challan</span
+                            ><span *ngIf="element.voucherType === 'receiptnote'">Receipt Note</span>
+                        </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="voucher_no">
-                    <th mat-header-cell *matHeaderCellDef>Voucher No.</th>
-                    <td mat-cell *matCellDef="let element">{{ element?.voucherNo }}</td>
-                </ng-container>
+                    <ng-container matColumnDef="voucher_no">
+                        <th mat-header-cell *matHeaderCellDef>Voucher No.</th>
+                        <td mat-cell *matCellDef="let element">{{ element?.voucherNo }}</td>
+                    </ng-container>
 
-                <ng-container matColumnDef="sender">
-                    <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchSenderContainer>
-                        <div [hidden]="inlineSearch === 'sender'">
-                            <i class="icon-search" (click)="toggleSearch('sender')"></i>
-                            <span class="pl-0">Sender</span>
-                        </div>
-                        <div class="input-container" [hidden]="inlineSearch !== 'sender'">
-                            <text-field
-                                [placeholder]="'Sender'"
-                                [type]="'text'"
-                                [cssClass]="'form-control  mat-field-border'"
-                                formControlName="sender"
-                                [autoFocus]="inlineSearch === 'sender'"
-                            >
-                            </text-field>
-                        </div>
-                    </th>
-                    <td mat-cell *matCellDef="let element">{{ element?.sender }}</td>
-                </ng-container>
-                <ng-container matColumnDef="receiver">
-                    <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchRecieverContainer>
-                        <div [hidden]="inlineSearch === 'receiver'">
-                            <i class="icon-search" (click)="toggleSearch('receiver')"></i>
-                            <span class="pl-0">Receiver</span>
-                        </div>
-                        <div class="input-container" [hidden]="inlineSearch !== 'receiver'">
-                            <text-field
-                                [placeholder]="'Receiver'"
-                                [type]="'text'"
-                                [cssClass]="'form-control  mat-field-border'"
-                                formControlName="receiver"
-                                [autoFocus]="inlineSearch === 'receiver'"
-                            >
-                            </text-field>
-                        </div>
-                    </th>
-                    <td mat-cell *matCellDef="let element">{{ element?.receiver }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="sender_receiver">
-                    <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchSenderRecieverContainer>
-                        <div [hidden]="inlineSearch === 'senderReceiver'">
-                            <i class="icon-search" (click)="toggleSearch('senderReceiver')"></i>
-                            <span class="pl-0">Sender/Reciever</span>
-                        </div>
-                        <div class="input-container" [hidden]="inlineSearch !== 'senderReceiver'">
-                            <text-field
-                                [placeholder]="'Sender/Receiver'"
-                                [type]="'text'"
-                                [type]="'text'"
-                                [cssClass]="'form-control  mat-field-border'"
-                                formControlName="senderReceiver"
-                                [autoFocus]="inlineSearch === 'senderReceiver'"
-                            >
-                            </text-field>
-                        </div>
-                    </th>
-                    <td mat-cell *matCellDef="let element">{{ element?.senderReceiver }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="from_warehouse">
-                    <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchFromWarehouseContainer>
-                        <div [hidden]="inlineSearch === 'fromWarehouse'">
-                            <i class="icon-search" (click)="toggleSearch('fromWarehouse')"></i>
-                            <span class="pl-0">From Warehouse</span>
-                        </div>
-                        <div class="input-container" [hidden]="inlineSearch !== 'fromWarehouse'">
-                            <text-field
-                                [placeholder]="'From Warehouse'"
-                                [type]="'text'"
-                                [type]="'text'"
-                                [cssClass]="'form-control  mat-field-border'"
-                                formControlName="fromWarehouse"
-                                [autoFocus]="inlineSearch === 'fromWarehouse'"
-                            >
-                            </text-field>
-                        </div>
-                    </th>
-                    <td mat-cell *matCellDef="let element">{{ element?.fromWarehouse }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="to_warehouse">
-                    <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchToWarehouseContainer>
-                        <div [hidden]="inlineSearch === 'toWarehouse'">
-                            <i class="icon-search" (click)="toggleSearch('toWarehouse')"></i>
-                            <span class="pl-0">To Warehouse</span>
-                        </div>
-                        <div class="input-container" [hidden]="inlineSearch !== 'toWarehouse'">
-                            <text-field
-                                [placeholder]="'To Warehouse'"
-                                [type]="'text'"
-                                [type]="'text'"
-                                [cssClass]="'form-control  mat-field-border'"
-                                formControlName="toWarehouse"
-                                [autoFocus]="inlineSearch === 'toWarehouse'"
-                            >
-                            </text-field>
-                        </div>
-                    </th>
-                    <td mat-cell *matCellDef="let element">{{ element?.toWarehouse }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="total_amount">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Amount</th>
-                    <td mat-cell *matCellDef="let element">
-                        {{ activeCompany?.baseCurrencySymbol }} {{ element?.totalAmount | giddhCurrency }}
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef>Action</th>
-                    <td mat-cell *matCellDef="let element">
-                        <button mat-button [matMenuTriggerFor]="beforeMenu" class="bg-transparent mr-0 px-0">
-                            <span class="d-flex align-items-center justify-content-space-between">
-                                <span class="text-light-2 pr-2">Select Action</span>
-                                <span> <i class="icon-dots-three-vertical"></i></span>
-                            </span>
-                        </button>
-                        <mat-menu #beforeMenu="matMenu" xPosition="before">
-                            <button class="no-box-shadow" mat-menu-item (click)="downloadBranchTransfer(element)">
-                                Download
-                            </button>
-                            <button class="no-box-shadow" mat-menu-item (click)="showEditBranchTransferPopup(element)">
-                                Edit
-                            </button>
-                            <button
-                                class="no-box-shadow"
-                                mat-menu-item
-                                (click)="showDeleteBranchTransferModal(element)"
-                            >
-                                Delete
-                            </button>
-                        </mat-menu>
-                    </td>
-                </ng-container>
-                <tr (clickOutside)="inlineSearch = null" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-            </table>
-        </form>
-        <div class="pagination-wrapper" *ngIf="branchTransferResponse?.length && !isLoading">
-            <pagination
-                [totalItems]="branchTransferPaginationObject?.totalItems"
-                [(ngModel)]="branchTransferPaginationObject.page"
-                [maxSize]="5"
-                class="pagination-sm"
-                [boundaryLinks]="true"
-                [itemsPerPage]="branchTransferPaginationObject.count"
-                [rotate]="false"
-                (pageChanged)="pageChanged($event)"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
-            ></pagination>
-        </div>
-    </section>
-
-    <div class="no-data" *ngIf="isLoading">
-        <giddh-page-loader></giddh-page-loader>
-    </div>
-    <section class="no-logs" *ngIf="!branchTransferResponse?.length && !isLoading">
-        <div class="no-data">
-            <h1>No entries found within given criteria.</h1>
-            <h1>Do search with some other dates</h1>
-        </div>
-    </section>
-</section>
-<!--Mat Dialog for Advance Filter-->
-<ng-template #advanceFilterDialog>
-    <div class="advance-search-dialog">
-        <div class="modal-header theme-bg pd-l2 pd-r2">
-            <h3 class="modal-title bg" id="modal-title">Advanced Filter</h3>
-            <i mat-dialog-close class="icon-cross color-white"></i>
-        </div>
-
-        <div class="modal-body clearfix">
-            <form class="col-md-12 pl-0 pr-0 mr-b05">
-                <div class="row mt-2 row-gap">
-                    <div class="col-md-4 col-sm-12">
-                        <label>Voucher Type</label>
-                    </div>
-                    <div class="col-md-8 col-sm-12">
-                        <select-field
-                            [cssClass]="'form-control mat-field-border'"
-                            [name]="'voucherType'"
-                            [placeholder]="'Select Voucher Type'"
-                            [options]="voucherTypes"
-                            (selectedOption)="selectVoucherType($event)"
-                            (onClear)="resetVoucherType($event)"
-                            [allowValueReset]="true"
-                            [defaultValue]="branchTransferAdvanceSearchFormObj?.voucherType"
-                        >
-                        </select-field>
-                    </div>
-                </div>
-                <div class="row mt-2 row-gap">
-                    <div class="col-md-4 col-sm-12">
-                        <label>Total Amount</label>
-                    </div>
-                    <div class="col-md-8 col-sm-12">
-                        <div class="row row-gap">
-                            <div class="col-6">
-                                <select-field
-                                    [cssClass]="'form-control mat-field-border'"
-                                    [name]="'entity'"
-                                    [placeholder]="'Select Condition'"
-                                    [options]="amountOperators"
-                                    (selectedOption)="selectOperator($event)"
-                                    (onClear)="resetOperators($event)"
-                                    [allowValueReset]="true"
-                                    [defaultValue]="branchTransferAdvanceSearchFormObj?.amountOperator"
-                                >
-                                </select-field>
+                    <ng-container matColumnDef="sender">
+                        <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchSenderContainer>
+                            <div [hidden]="inlineSearch === 'sender'">
+                                <i class="icon-search" (click)="toggleSearch('sender')"></i>
+                                <span class="pl-0">Sender</span>
                             </div>
-                            <div class="col-6">
+                            <div class="input-container" [hidden]="inlineSearch !== 'sender'">
                                 <text-field
-                                    [cssClass]="'form-control mat-field-border'"
-                                    [type]="'number'"
-                                    [placeholder]="'0'"
-                                    [name]="'total'"
-                                    [(ngModel)]="branchTransferAdvanceSearchFormObj.amount"
+                                    [placeholder]="'Sender'"
+                                    [type]="'text'"
+                                    [cssClass]="'form-control  mat-field-border'"
+                                    [formControl]="branchTransferForm.controls['sender']"
+                                    [autoFocus]="inlineSearch === 'sender'"
                                 >
                                 </text-field>
                             </div>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.sender }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="receiver">
+                        <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchRecieverContainer>
+                            <div [hidden]="inlineSearch === 'receiver'">
+                                <i class="icon-search" (click)="toggleSearch('receiver')"></i>
+                                <span class="pl-0">Receiver</span>
+                            </div>
+                            <div class="input-container" [hidden]="inlineSearch !== 'receiver'">
+                                <text-field
+                                    [placeholder]="'Receiver'"
+                                    [type]="'text'"
+                                    [cssClass]="'form-control  mat-field-border'"
+                                    [formControl]="branchTransferForm.controls['receiver']"
+                                    [autoFocus]="inlineSearch === 'receiver'"
+                                >
+                                </text-field>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.receiver }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="sender_receiver">
+                        <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchSenderRecieverContainer>
+                            <div [hidden]="inlineSearch === 'senderReceiver'">
+                                <i class="icon-search" (click)="toggleSearch('senderReceiver')"></i>
+                                <span class="pl-0">Sender/Reciever</span>
+                            </div>
+                            <div class="input-container" [hidden]="inlineSearch !== 'senderReceiver'">
+                                <text-field
+                                    [placeholder]="'Sender/Receiver'"
+                                    [type]="'text'"
+                                    [cssClass]="'form-control  mat-field-border'"
+                                    [formControl]="branchTransferForm.controls['senderReceiver']"
+                                    [autoFocus]="inlineSearch === 'senderReceiver'"
+                                >
+                                </text-field>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.senderReceiver }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="from_warehouse">
+                        <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchFromWarehouseContainer>
+                            <div [hidden]="inlineSearch === 'fromWarehouse'">
+                                <i class="icon-search" (click)="toggleSearch('fromWarehouse')"></i>
+                                <span class="pl-0">From Warehouse</span>
+                            </div>
+                            <div class="input-container" [hidden]="inlineSearch !== 'fromWarehouse'">
+                                <text-field
+                                    [placeholder]="'From Warehouse'"
+                                    [type]="'text'"
+                                    [cssClass]="'form-control  mat-field-border'"
+                                    [formControl]="branchTransferForm.controls['fromWarehouse']"
+                                    [autoFocus]="inlineSearch === 'fromWarehouse'"
+                                >
+                                </text-field>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.fromWarehouse }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="to_warehouse">
+                        <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchToWarehouseContainer>
+                            <div [hidden]="inlineSearch === 'toWarehouse'">
+                                <i class="icon-search" (click)="toggleSearch('toWarehouse')"></i>
+                                <span class="pl-0">To Warehouse</span>
+                            </div>
+                            <div class="input-container" [hidden]="inlineSearch !== 'toWarehouse'">
+                                <text-field
+                                    [placeholder]="'To Warehouse'"
+                                    [type]="'text'"
+                                    [cssClass]="'form-control  mat-field-border'"
+                                    [formControl]="branchTransferForm.controls['toWarehouse']"
+                                    [autoFocus]="inlineSearch === 'toWarehouse'"
+                                >
+                                </text-field>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.toWarehouse }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="total_amount">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Amount</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ activeCompany?.baseCurrencySymbol }} {{ element?.totalAmount | giddhCurrency }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-button [matMenuTriggerFor]="beforeMenu" class="bg-transparent mr-0 px-0">
+                                <span class="d-flex align-items-center justify-content-space-between">
+                                    <span class="text-light-2 pr-2">Select Action</span>
+                                    <span> <i class="icon-dots-three-vertical"></i></span>
+                                </span>
+                            </button>
+                            <mat-menu #beforeMenu="matMenu" xPosition="before">
+                                <button class="no-box-shadow" mat-menu-item (click)="downloadBranchTransfer(element)">
+                                    Download
+                                </button>
+                                <button
+                                    class="no-box-shadow"
+                                    mat-menu-item
+                                    (click)="showEditBranchTransferPopup(element)"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    class="no-box-shadow"
+                                    mat-menu-item
+                                    (click)="showDeleteBranchTransferModal(element)"
+                                >
+                                    Delete
+                                </button>
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+                    <tr (clickOutside)="inlineSearch = null" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+            </form>
+            <div class="pagination-wrapper" *ngIf="branchTransferResponse?.length && !isLoading">
+                <pagination
+                    [totalItems]="branchTransferPaginationObject?.totalItems"
+                    [(ngModel)]="branchTransferPaginationObject.page"
+                    [maxSize]="5"
+                    class="pagination-sm"
+                    [boundaryLinks]="true"
+                    [itemsPerPage]="branchTransferPaginationObject.count"
+                    [rotate]="false"
+                    (pageChanged)="pageChanged($event)"
+                    [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous"
+                    [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last"
+                ></pagination>
+            </div>
+        </section>
+
+        <div class="no-data" *ngIf="isLoading">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+        <section class="no-logs" *ngIf="!branchTransferResponse?.length && !isLoading">
+            <div class="no-data">
+                <h1>No entries found within given criteria.</h1>
+                <h1>Do search with some other dates</h1>
+            </div>
+        </section>
+    </section>
+    <!--Mat Dialog for Advance Filter-->
+    <ng-template #advanceFilterDialog>
+        <div class="advance-search-dialog">
+            <div class="modal-header theme-bg pd-l2 pd-r2">
+                <h3 class="modal-title bg" id="modal-title">Advanced Filter</h3>
+                <i mat-dialog-close class="icon-cross color-white"></i>
+            </div>
+
+            <div class="modal-body clearfix">
+                <form class="col-md-12 pl-0 pr-0 mr-b05">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-6 mr-b15 pr-2">
+                                    <dropdown-field
+                                        [placeholder]="'Select Voucher Type'"
+                                        [options]="voucherTypes"
+                                        (selectedOption)="selectVoucherType($event)"
+                                        [defaultValue]="branchTransferAdvanceSearchFormObj?.voucherType"
+                                        [allowValueReset]="true"
+                                        (onClear)="branchTransferAdvanceSearchFormObj.voucherType = ''"
+                                        [label]="'Voucher Type'"
+                                    >
+                                    </dropdown-field>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="d-flex justify-content-end mt-4">
-                    <div class="mr-2">
-                        <button type="button" class="mr-0" mat-stroked-button color="primary" (click)="search()">
-                            Search
-                        </button>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-6 mr-b15 pl-2">
+                                    <dropdown-field
+                                        [placeholder]="'Select Condition'"
+                                        [options]="amountOperators"
+                                        (selectedOption)="selectOperator($event)"
+                                        [defaultValue]="branchTransferAdvanceSearchFormObj?.amountOperator"
+                                        [allowValueReset]="true"
+                                        (onClear)="branchTransferAdvanceSearchFormObj.amountOperator = ''"
+                                        [label]="'Voucher Type'"
+                                    >
+                                    </dropdown-field>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="ml-2">
-                        <button type="button" mat-dialog-close class="mr-0" mat-stroked-button (click)="cancel()">
-                            Cancel
-                        </button>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-6 mr-b15 pl-2">
+                                    <input-field
+                                        [type]="'number'"
+                                        [placeholder]="'0'"
+                                        [name]="'amount'"
+                                        [(ngModel)]="branchTransferAdvanceSearchFormObj.amount"
+                                        [allowDigitsOnly]="true"
+                                        (onClear)="branchTransferAdvanceSearchFormObj.amount = ''"
+                                        [autocomplete]="'off'"
+                                        [label]="'Total Amount'"
+                                    >
+                                    </input-field>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</ng-template>
 
-<!-- Date Picker  -->
-
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            >
-            </app-datepicker-wrapper>
+                    <div class="d-flex justify-content-end mt-4">
+                        <div class="mr-2">
+                            <button type="button" class="mr-0" mat-stroked-button color="primary" (click)="search()">
+                                Search
+                            </button>
+                        </div>
+                        <div class="ml-2">
+                            <button type="button" mat-dialog-close class="mr-0" mat-stroked-button (click)="cancel()">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
-</ng-template>
+    </ng-template>
+    <!-- Date Picker  -->
+    <ng-template #datepickerTemplate>
+        <div class="datepicker-modal">
+            <div class="modal-body">
+                <app-datepicker-wrapper
+                    [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate"
+                    [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOption"
+                    [selectedRangeLabel]="selectedRangeLabel"
+                    [showCustomRangeLabel]="true"
+                    [showClearButton]="false"
+                    [showCancel]="true"
+                    [linkedCalendars]="true"
+                    [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)"
+                    (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false"
+                    [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"
+                >
+                </app-datepicker-wrapper>
+            </div>
+        </div>
+    </ng-template>
+</ng-container>
