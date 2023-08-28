@@ -43,6 +43,8 @@ import { CommonService } from '../../../services/common.service';
 export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of approve confirm dialog */
     @ViewChild("approveConfirm") public approveConfirm;
+    /** Instance of Aside Menu State For Other Taxes dialog */
+    @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** Instance of approve confirm dialog */
     @ViewChild("rejectionReason") public rejectionReason;
     @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
@@ -69,7 +71,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public imageURL: any[] = [];
     public companyUniqueName: string;
     public signatureSrc: string = '';
-    public asideMenuStateForOtherTaxes: string = 'out';
     public accountType: string;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public DownloadAttachedImgResponse: DownloadLedgerAttachmentResponse[] = [];
@@ -147,6 +148,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public isPettyCashEntryLoading: boolean = false;
     /** True if we need to show red border around the field */
     public showEntryAgainstRequired: boolean = false;
+    /** Holds Aside Menu State For Other Taxes DialogRef */
+    public asideMenuStateForOtherTaxesDialogRef:any;
 
     constructor(
         private toaster: ToasterService,
@@ -460,28 +463,20 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Toggles the fixed class on body
-     *
-     * @memberof ExpenseDetailsComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideMenuStateForOtherTaxes === 'in') {
-            document.querySelector('.petty-cash')?.classList?.add('sidebar-overlay');
-            document.querySelector('body')?.classList?.add('fixed');
-        } else {
-            document.querySelector('.petty-cash')?.classList?.remove('sidebar-overlay');
-            document.querySelector('body')?.classList?.remove('fixed');
-        }
-    }
-
-    /**
      * Toggles other tax aside pane
      *
      * @memberof ExpenseDetailsComponent
      */
     public toggleOtherTaxesAsidePane(): void {
-        this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes,{
+            position: {
+                right: '0'
+            },
+            maxWidth: '760px',
+            width:'100%',
+            height:'100vh',
+            maxHeight:'100vh'
+        });
     }
 
     /**

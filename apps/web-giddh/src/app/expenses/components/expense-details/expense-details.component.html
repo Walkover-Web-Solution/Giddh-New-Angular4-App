@@ -55,10 +55,10 @@
             </div>
             <div class="col-sm-12">
                 <div class="petty-cash">
-                    <div class="bg-white pd-b1">
+                    <div class="bg-color pd-b1">
                         <div class="row">
                             <div class="col-12">
-                                <div class="form-group mb-2">
+                                <div class="form-group mb-2 custom-input-field">
                                     <mat-form-field appearance="fill" class="w-100">
                                         <label>{{ commonLocaleData?.app_description }}</label>
                                         <textarea
@@ -168,16 +168,15 @@
 <!-- endregion -->
 
 <!-- region other taxes aside menu -->
-<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
-<app-aside-menu-sales-other-taxes
-    *ngIf="asideMenuStateForOtherTaxes === 'in'"
-    [class]="asideMenuStateForOtherTaxes"
-    [taxes]="companyTaxesList"
-    [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
-    [@slideInOut]="asideMenuStateForOtherTaxes"
-    [commonLocaleData]="commonLocaleData"
-    (closeModal)="toggleOtherTaxesAsidePane()"
-    (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event); toggleOtherTaxesAsidePane()"
->
-</app-aside-menu-sales-other-taxes>
+<ng-template #asideMenuStateForOtherTaxes>    
+    <app-aside-menu-sales-other-taxes
+        [class]="asideMenuStateForOtherTaxes"
+        [taxes]="companyTaxesList"
+        [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
+        [commonLocaleData]="commonLocaleData"
+        (closeModal)="asideMenuStateForOtherTaxesDialogRef.close()"
+        (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event); asideMenuStateForOtherTaxesDialogRef.close()"
+    >
+    </app-aside-menu-sales-other-taxes>
+</ng-template>
 <!-- endregion -->

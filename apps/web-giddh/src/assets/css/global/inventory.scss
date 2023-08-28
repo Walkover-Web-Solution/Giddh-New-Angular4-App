@@ -40,6 +40,7 @@ report-filters{
                 background-color: var(--color-body-background) !important;
                 border: 1px solid var(--color-primary-login-box-body-text) !important;
                 font-size: var(--font-size-12) !important;
+                border-radius: 5px !important;
             }
         }
     }
@@ -119,6 +120,38 @@ body{
                 .mat-mdc-icon-button.mat-mdc-button-base {
                     font-size: var(--font-size-15) !important;
                     padding: 0;
+                }
+            }
+        }
+    }
+}
+
+.field-m-width{
+    max-width: 170px;
+    .select-field-input {
+        width: 100% !important;
+    }
+}
+
+inventory-master{
+    .mat-grid-wrapper {
+        .mat-list-wrap {
+            .inventory-sub-sideabar {
+                .item-list {
+                    a {
+                        mat-list-item {
+                            .mdc-list-item__primary-text {
+                                color: var(--color-field-hover) !important;
+                            }
+                        }
+                        &.isActive{
+                            mat-list-item {
+                                .mdc-list-item__primary-text {
+                                    color: var(--color-list) !important;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

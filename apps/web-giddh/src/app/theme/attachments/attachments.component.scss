@@ -9,6 +9,7 @@
         height: 50px;
         .attachment-back-button {
             width: 64px;
+            color: var(--color-toast-primary-text) !important;
             i {
                 margin-right: 2px;
             }
@@ -50,14 +51,14 @@
             }
             .attachment {
                 font-size: var(--font-size-12);
-                margin-top: 10px;
-                margin-left: 25px;
+                margin-left: 28px;
             }
             .attachment-list {
                 overflow: auto;
                 margin-bottom: 14px;
                 mat-list {
                     padding-top: 0;
+                    padding-bottom: 0;
                     mat-list-item {
                         height: 45px;
                         .file-name {
@@ -72,6 +73,7 @@
                             color: var(--color-dark-gray) !important;
                             position: absolute;
                             right: 0;
+                            top: 10px;
                         }
                     }
                 }

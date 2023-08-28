@@ -1502,6 +1502,21 @@ export class GeneralService {
     }
 
     /**
+     * Reads the selected file and returns base64
+     *
+     * @param {*} file
+     * @param {Function} callback
+     * @memberof GeneralService
+     */
+    public getSelectedFileBase64(file: any, callback: Function): void {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            callback(reader.result);
+        };
+    }
+
+    /**
      * Check if is cidr range
      *
      * @param {string} cidr

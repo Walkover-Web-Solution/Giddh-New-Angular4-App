@@ -997,17 +997,6 @@ aside-create-group {
                     }
                 }
             }
-            div {
-                &:first-child {
-                    .mat-grid-tile {
-                        .mat-grid-tile-content {
-                            .item-list {
-                                margin-left: 0;
-                            }
-                        }
-                    }
-                }
-            }
         }
         mat-list {
             .cdk-virtual-scroll-viewport {
@@ -2851,20 +2840,6 @@ fieldset[disabled] .btn-primary:hover {
     background: var(--color-white) !important;
     border-color: var(--color-secondary-input-bar-border) !important;
     color: var(--color-common-primary-blue-border) !important;
-}
-
-.btn-default:hover,
-.btn-default:disabled,
-.open > .dropdown-toggle.btn-default:focus,
-.open > .dropdown-toggle.btn-default:hover,
-.btn-default:active,
-.btn-default.active,
-.btn-default:active:focus,
-.open > .dropdown-toggle.btn-default,
-.btn-default:not(:disabled):not(.disabled):active {
-    // background: var(--color-secondary-button-background-hover) !important;
-    // color: var(--color-secondary-button-text) !important;
-    // border-color: var(--color-secondary-button-background-hover) !important;
 }
 
 .success-btn {
@@ -5188,6 +5163,7 @@ label {
 
         label {
             width: auto !important;
+            padding: 0 0 0 6px !important;
 
             &:hover {
                 background-color: var(--color-dark-fog) !important;
@@ -5565,6 +5541,7 @@ fieldset[disabled] .disable-bg {
 }
 .disable-bg {
     border: 0;
+    background-color: transparent !important;
     &.mat-datepicker-input {
         &:disabled {
             background-color: transparent !important;
@@ -7706,7 +7683,7 @@ footer#footer.absolute-footer {
                     .top-bar {
                         border-color: var(--color-common-secondary-border) !important;
                     }
-                }
+                };
             }
         }
     }
@@ -8432,18 +8409,18 @@ button.btn.btn-filter {
 
 .modal-backdrop + .modal {
     margin-top: 70px;
-    z-index: 99999;
+    z-index: 992;
 }
 
 .invoice-preview-page {
     .modal-backdrop + .modal {
-        z-index: 9999 !important;
+        z-index: 992 !important;
     }
 }
 
 .new-branch-list-page {
     .modal-backdrop + .modal {
-        z-index: 9999 !important;
+        z-index: 992 !important;
     }
 }
 
@@ -8507,12 +8484,12 @@ button.btn.btn-filter {
 }
 
 .modal-backdrop {
-    z-index: 9991;
+    z-index: 991;
     opacity: 0.5;
 }
 
 .modal {
-    z-index: 9999;
+    z-index: 992;
 }
 
 .select2-ledger .menu .list-item:hover {
@@ -8589,10 +8566,6 @@ button.ladda-button .ladda-label {
 }
 
 .on-setting-page {
-    .mat-pseudo-checkbox-checked {
-        background: var(--color-giddh-blue) !important;
-    }
-
     .sub-entity-trigger {
         min-width: 100% !important;
     }
@@ -10080,18 +10053,6 @@ giddh-datepicker {
                             z-index: 6;
                         }
                     }
-
-                    .ledger-main {
-                        .new-entry-ledger {
-                            .ledger-account-label {
-                                sh-select-menu {
-                                    .menu {
-                                        z-index: 7;
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
 
                 .ledger-head-top {
@@ -10117,7 +10078,7 @@ giddh-datepicker {
                 align-items: center;
             }
             .mdc-button__label {
-                color: var(--color-white);
+                color: var(--color-toast-primary-text);
             }
         }
     }
@@ -10168,25 +10129,6 @@ body {
     .cdk-overlay-container {
         .page-leave-confirmation-modal-backdrop {
             z-index: 99999 !important;
-        }
-    }
-}
-
-.cdk-overlay-connected-position-bounding-box {
-    z-index: 9999;
-}
-
-.cmd-k {
-    .cdk-overlay-container {
-        z-index: 999 !important;
-    }
-}
-
-giddh-datepicker {
-    &:not(.date-border) {
-        .mat-form-field-appearance-fill .mat-form-field-flex {
-            border: 1px solid var(--color-secondary-input-bar-border) !important;
-            border-radius: 5px !important;
         }
     }
 }
@@ -10627,7 +10569,7 @@ giddh-datepicker {
 
     .nav-left-bar {
         display: block;
-        z-index: 9991 !important;
+        z-index: 990 !important;
         -moz-transform: translate3d(0px, 0px, 0px);
         -webkit-transform: translate3d(0px, 0px, 0px);
         -o-transform: translate(0px, 0px);
@@ -12439,7 +12381,7 @@ inventory-master {
     }
 
     .hide-scroll-body:last-child .modal {
-        z-index: 9993;
+        z-index: 992;
     }
 
     .page-has-tabs .invoice-generate-container,
@@ -13806,7 +13748,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
 
 hamburger-menu {
     position: relative;
-    z-index: 99999;
+    z-index: 990;
 }
 
 .activity-log-page {
@@ -13820,11 +13762,11 @@ hamburger-menu {
         z-index: 99999;
     }
 
-    .mat-table tbody > tr > td:first-child {
+    .mat-mdc-table tbody > tr > td:first-child {
         color: var(--color-table-tertiary-content) !important;
     }
 
-    .giddh-table.mat-table {
+    .giddh-table.mat-mdc-table {
         tbody {
             > tr.history-child-row {
                 > td {
@@ -13917,6 +13859,7 @@ hamburger-menu {
                 margin-right: 0 !important;
                 height: 100%;
                 width: 50%;
+                margin-top: -1px;
 
                 &:hover {
                     color: var(--color-giddh-blue) !important;
@@ -14511,6 +14454,9 @@ voucher-component {
         color: var(--color-toast-primary-text) !important;
         padding: 0;
         line-height: 55px !important;
+    }
+    .mdc-dialog__surface {
+        background-color: var(--color-white) !important;
     }
 }
 .mdc-dialog {

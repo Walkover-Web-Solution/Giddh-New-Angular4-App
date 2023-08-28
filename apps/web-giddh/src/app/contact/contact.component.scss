@@ -541,7 +541,7 @@ button.btn.btn-filter {
         bottom: 2px;
     }
     .mat-vendor-name {
-        padding-left: 16px !important;
+        padding-left: 10px !important;
     }
     .mat-customer-name {
         padding-left: 10px !important;
@@ -571,10 +571,15 @@ button.btn.btn-filter {
 .customer-vendor-name-search-icon {
     top: 2px;
     width: 25px;
+    height: 25px;
     padding: 0;
     align-items: center;
     justify-content: center;
     display: flex;
+    .mat-mdc-icon-button .mat-mdc-button-touch-target {
+        width: 25px !important;
+        height: 25px !important;
+    }
 }
 .customer-img {
     height: 360px;
@@ -943,9 +948,12 @@ button.btn.btn-filter {
 }
 
 .close-btn-in-mat-model {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
     right: 9px;
-    top: 9px;
+    top: 6px;
     font-size: 25px;
     color: var(--color-popup-list-head-text);
 }
@@ -968,9 +976,9 @@ button.btn.btn-filter {
 }
 .select-all-checkbox-wrapper {
     align-items: center;
-    padding-left: 25px;
+    margin-left: 25px;
     .mat-mdc-checkbox {
-        left: 12px;
+        left: 20px;
     }
 }
 .select-single-checkbox-wrapper {
@@ -981,8 +989,8 @@ button.btn.btn-filter {
     border: unset;
     margin-top: 20px;
 }
-.min-width-137 {
-    min-width: 137px;
+.min-width-150 {
+    min-width: 150px;
 }
 
 .btn-light:not(:disabled):not(.disabled).active,

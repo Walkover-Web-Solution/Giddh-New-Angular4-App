@@ -1690,7 +1690,7 @@ ul.pills li {
     height: auto;
 }
 .modal {
-    z-index: 1200;
+    z-index: 992;
 }
 .popover {
     z-index: 100;
@@ -1941,7 +1941,6 @@ ul.pills li {
 /*box styles  on settings integration page*/
 .box {
     padding: 15px;
-    // background-color: var(--color-common-primary-background-for-all-components);
 }
 #setting-tab .nav > li > a {
     color: var(--color-tab-secondary-text);
@@ -2447,6 +2446,15 @@ form#groupDetailForm {
     color: var(--color-right-sidebar-settings);
     background-color: var(--color-primary-right-side-popup-body-background) !important;
 }
+.help-support-aside {
+    &.setting-sidebar-wrapper{
+        aside-setting {
+            .aside-pane {
+                height: calc(100vh - 60px) !important;
+            } 
+        }
+    }
+}
 .aside-pane {
     max-width: 760px;
     width: 100%;
@@ -2457,7 +2465,7 @@ form#groupDetailForm {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 999;
+    z-index: 991;
     background: var(--color-primary-aside-pane-unactive-background);
     opacity: 0.5;
     -webkit-transition: opacity 0.15s linear;
@@ -2541,7 +2549,7 @@ form#groupDetailForm {
 }
 
 giddh-datepicker {
-    .mat-form-field {
+    .mat-mdc-form-field {
         width: 100% !important;
     }
 }
@@ -2550,7 +2558,7 @@ giddh-datepicker {
 .left-col-new,
 .right-col-new {
     giddh-datepicker {
-        .mat-form-field {
+        .mat-mdc-form-field {
             min-width: 100% !important;
         }
     }
@@ -2927,7 +2935,6 @@ td.mat-footer-cell {
 .petty-cash {
     .mat-mdc-tab-group {
         .mat-mdc-tab-header {
-            // background: var(--color-wild-sand) !important;
             border-bottom: 1px solid var(--color-tab-primary-border-bottom);
             .mat-mdc-tab-header {
                 padding-left: 15px !important;
