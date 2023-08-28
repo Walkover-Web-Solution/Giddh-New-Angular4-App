@@ -181,8 +181,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isAllowedForBetaTesting: boolean = false;
     /* This will hold value if settings sidebar is open through mobile hamburger icon */
     public isMobileSidebar: boolean = false;
-    /* This will hold if resolution is less than 768 to consider as mobile screen */
-    public isMobileScreen: boolean = false;
     /* This will hold current page url */
     public currentPageUrl: string = '';
     /** Stores the details of the current branch */
@@ -491,10 +489,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.getCurrentCompanyData();
         this._breakpointObserver.observe([
-            '(max-width: 767px)',
             '(max-width: 768px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result?.breakpoints['(max-width: 767px)'];
             this.isIpadScreen = result?.breakpoints['(max-width: 768px)'];
         });
 
