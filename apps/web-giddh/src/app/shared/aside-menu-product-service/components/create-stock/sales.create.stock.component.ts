@@ -2,7 +2,6 @@ import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { INVALID_STOCK_ERROR_MESSAGE } from 'apps/web-giddh/src/app/app.constant';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
@@ -313,7 +312,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                     this.addStockForm?.patchValue({ purchaseAccountUniqueName: a.purchaseAccountDetails.accountUniqueName });
 
                     // render purchase unit rates
-                    a.purchaseAccountDetails.unitRates.map((item, i) => {
+                    a.purchaseAccountDetails.unitRates?.map((item, i) => {
                         this.addPurchaseUnitRates(i, item);
                     });
                     purchaseUnitRatesControls.enable();
@@ -328,7 +327,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                     this.addStockForm?.patchValue({ salesAccountUniqueName: a.salesAccountDetails.accountUniqueName });
 
                     // render sale unit rates
-                    a.salesAccountDetails.unitRates.map((item, i) => {
+                    a.salesAccountDetails.unitRates?.map((item, i) => {
                         this.addSaleUnitRates(i, item);
                     });
                     saleUnitRatesControls.enable();
@@ -703,7 +702,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 this.addStockForm?.patchValue({ purchaseAccountUniqueName: activeStock.purchaseAccountDetails.accountUniqueName });
 
                 // render unit rates
-                activeStock.purchaseAccountDetails.unitRates.map((item, i) => {
+                activeStock.purchaseAccountDetails.unitRates?.map((item, i) => {
                     this.addPurchaseUnitRates(i, item);
                 });
             }
@@ -712,7 +711,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 this.addStockForm?.patchValue({ salesAccountUniqueName: activeStock.salesAccountDetails.accountUniqueName });
 
                 // render unit rates
-                activeStock.salesAccountDetails.unitRates.map((item, i) => {
+                activeStock.salesAccountDetails.unitRates?.map((item, i) => {
                     this.addSaleUnitRates(i, item);
                 });
             }
@@ -875,7 +874,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     }
 
     public flattenDATA(rawList: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []) {
-        rawList.map(p => {
+        rawList?.map(p => {
             if (p) {
                 let newOption: IOption = { label: '', value: '' };
                 newOption.label = p.name;
@@ -1055,7 +1054,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             }
         }
 
-        this.addStockForm.get('taxes')?.patchValue(this.taxTempArray.map(m => m?.uniqueName));
+        this.addStockForm.get('taxes')?.patchValue(this.taxTempArray?.map(m => m?.uniqueName));
     }
 
     /**
@@ -1064,7 +1063,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public mapSavedTaxes(taxes) {
         let taxToMap = [];
         let e: any = { target: { checked: true } };
-        let common = this.companyTaxesList$.subscribe(a => {
+        this.companyTaxesList$.subscribe(a => {
             _.filter(a, (tax) => {
                 _.find(taxes, (unq) => {
                     if (unq === tax?.uniqueName) {
@@ -1073,7 +1072,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 });
             });
         });
-        taxToMap.map((tax, i) => {
+        taxToMap?.map((tax, i) => {
             this.selectTax(e, tax);
         });
     }
