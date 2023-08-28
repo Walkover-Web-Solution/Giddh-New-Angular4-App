@@ -31,23 +31,6 @@
             id="primary-new-header"
             [ngClass]="{ 'open': sideMenu.isopen, 'unvisible': companyList?.length === 0 }"
         >
-            <div *ngIf="isMobileScreen">
-                <ul class="list-style-none">
-                    <li class="hamburger-menu cursor-pointer pull-left">
-                        <button class="btn mr-0" placement="right" (click)="redirectToMobileHome()">
-                            <i class="icon-home-new"></i>
-                        </button>
-                        <span class="setting-menu-icon" (click)="toggleSidebar(true)"> <i class="icon-bar"></i> </span>
-                        <span class="mobile-back-btn" (click)="redirectToMobileHome()"
-                            ><i class="icon-back-arrow"></i
-                        ></span>
-                        <span *ngIf="showGstIcon()" (click)="openGstSideMenu()" class="gst-menu-icon">
-                            <i class="icon-bar"></i>
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo-wrapper pd-l4">
                     <img
@@ -361,12 +344,12 @@
                             />
                         </div>
                     </li>
-                    <li *ngIf="!isMobileScreen">
+                    <li>
                         <a href="javascript:void(0);" id="add-manage" (click)="showManageGroupsModal()"
                             ><i class="icon-master-new1"></i> {{ commonLocaleData?.app_master }}</a
                         >
                     </li>
-                    <li *ngIf="!isMobileScreen" class="header-utility-icons" (click)="toggleSidebar(false)">
+                    <li class="header-utility-icons" (click)="toggleSidebar(false)">
                         <a href="javascript:void(0);"><i class="icon-settings-cog"></i></a>
                     </li>
                     <li class="header-utility-icons">

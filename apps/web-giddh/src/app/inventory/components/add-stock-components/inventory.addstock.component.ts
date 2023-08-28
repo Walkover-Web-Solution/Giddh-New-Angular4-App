@@ -283,7 +283,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.salesService.getAccountsWithCurrency('operatingcost, indirectexpenses').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data?.status === 'success') {
                 let purchaseAccounts: IOption[] = [];
-                data.body?.results.map(d => {
+                data.body?.results?.map(d => {
                     purchaseAccounts.push({ label: `${d.name} (${d?.uniqueName})`, value: d?.uniqueName });
                 });
                 this.purchaseAccountsDropDown$ = of(purchaseAccounts);
@@ -294,7 +294,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.salesService.getAccountsWithCurrency('revenuefromoperations, otherincome').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data?.status === 'success') {
                 let salesAccounts: IOption[] = [];
-                data.body?.results.map(d => {
+                data.body?.results?.map(d => {
                     salesAccounts.push({ label: `${d.name} (${d?.uniqueName})`, value: d?.uniqueName });
                 });
                 this.salesAccountsDropDown$ = of(salesAccounts);
@@ -362,7 +362,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     this.addStockForm?.patchValue({ purchaseAccountUniqueName: a.purchaseAccountDetails.accountUniqueName });
 
                     // render purchase unit rates
-                    a.purchaseAccountDetails.unitRates.map((item, i) => {
+                    a.purchaseAccountDetails.unitRates?.map((item, i) => {
                         this.addPurchaseUnitRates(i, item);
                     });
                     purchaseUnitRatesControls.enable();
@@ -377,7 +377,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     this.addStockForm?.patchValue({ salesAccountUniqueName: a.salesAccountDetails.accountUniqueName });
 
                     // render sale unit rates
-                    a.salesAccountDetails.unitRates.map((item, i) => {
+                    a.salesAccountDetails.unitRates?.map((item, i) => {
                         this.addSaleUnitRates(i, item);
                     });
                     saleUnitRatesControls.enable();
@@ -397,7 +397,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                             manufacturingUnitUniqueName: a.manufacturingDetails.manufacturingUnitUniqueName
                         }
                     });
-                    a.manufacturingDetails.linkedStocks.map((item, i) => {
+                    a.manufacturingDetails.linkedStocks?.map((item, i) => {
                         this.addItemInLinkedStocks(item, i, a.manufacturingDetails?.linkedStocks?.length - 1);
                     });
                 } else {
@@ -756,7 +756,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
         this.addStockForm.reset();
         this.companyTaxesList$.pipe(map((item) => {
-            return item.map(tax => tax.isChecked = false);
+            return item?.map(tax => tax.isChecked = false);
         }), takeUntil(this.destroyed$)).subscribe(res => {
             return res;
         });
@@ -777,7 +777,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 this.addStockForm?.patchValue({ purchaseAccountUniqueName: activeStock.purchaseAccountDetails.accountUniqueName });
 
                 // render unit rates
-                activeStock.purchaseAccountDetails.unitRates.map((item, i) => {
+                activeStock.purchaseAccountDetails.unitRates?.map((item, i) => {
                     this.addPurchaseUnitRates(i, item);
                 });
             }
@@ -786,7 +786,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 this.addStockForm?.patchValue({ salesAccountUniqueName: activeStock.salesAccountDetails.accountUniqueName });
 
                 // render unit rates
-                activeStock.salesAccountDetails.unitRates.map((item, i) => {
+                activeStock.salesAccountDetails.unitRates?.map((item, i) => {
                     this.addSaleUnitRates(i, item);
                 });
             }
@@ -801,7 +801,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                         manufacturingUnitUniqueName: activeStock.manufacturingDetails.manufacturingUnitUniqueName
                     }
                 });
-                activeStock.manufacturingDetails.linkedStocks.map((item, i) => {
+                activeStock.manufacturingDetails.linkedStocks?.map((item, i) => {
                     this.addItemInLinkedStocks(item, i, activeStock.manufacturingDetails.linkedStocks?.length - 1);
                 });
             } else {
@@ -1038,7 +1038,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public flattenDATA(rawList: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []) {
-        rawList.map(p => {
+        rawList?.map(p => {
             if (p) {
                 let newOption: IOption = { label: '', value: '' };
                 newOption.label = p.name;
@@ -1225,7 +1225,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 tax.isChecked = false;
             }
         }
-        this.addStockForm.get('taxes')?.patchValue(this.taxTempArray.map(m => m?.uniqueName));
+        this.addStockForm.get('taxes')?.patchValue(this.taxTempArray?.map(m => m?.uniqueName));
     }
 
     /**
@@ -1243,7 +1243,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 });
             });
         });
-        taxToMap.map((tax, i) => {
+        taxToMap?.map((tax, i) => {
             this.selectTax(e, tax);
         });
     }
