@@ -127,8 +127,8 @@
                 font-size: var(--font-size-15);
                 color: var(--color-popup-secondary-list-head-text);
                 text-transform: capitalize;
-                margin-left: 25px;
-                padding: 5px 0;
+                width: 100%;
+                padding: 5px 0 5px 25px;
                 .width-65 {
                     width: 65%;
                 }
@@ -142,6 +142,7 @@
                 small {
                     font-size: var(--font-size-12);
                     color: var(--color-abbey);
+                    display: block;
                 }
                 .command-hover-text {
                     color: var(--color-common-primary-text);
@@ -150,10 +151,16 @@
                     width: 25%;
                     word-break: break-word;
                     text-align: right;
+                    display: inline;
+                    white-space: initial;
                 }
                 .command-bread-crumb {
                     max-width: 150px;
                     overflow: hidden;
+                }
+                p{
+                    display: inline;
+                    white-space: initial;
                 }
             }
             // hover effect
@@ -216,11 +223,6 @@
     .universal-data-list-wrapper {
         .universal-list-items {
             .item {
-                height: 40px;
-                margin-bottom: 3px;
-                a {
-                    height: 40px;
-                }
                 .item-details {
                     padding-left: 24px;
                     line-height: 1.4;
