@@ -1,14 +1,3 @@
-/*--- pro-font ---*/
-@font-face {
-    font-family: "sfpro-regular";
-    font-display: swap;
-    src: url("../fonts/sf-pro/SF-Pro-Display-Regular.woff")
-            format("woff");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-
 /*--- inter-font ---*/
 @font-face {
     font-family: "inter-regular";
@@ -111,7 +100,7 @@ html,
 body {
     height: 100%;
     background: #f7f8fa;
-    font-family: "sfpro-regular", "inter-regular";
+    font-family: "inter-regular";
 
     color: #333333;
     -webkit-font-smoothing: antialiased;
