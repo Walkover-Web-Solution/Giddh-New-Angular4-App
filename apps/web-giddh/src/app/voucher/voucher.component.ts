@@ -5802,6 +5802,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!countryCode) {
             return;
         }
+        this.statesSource = [];
+        this.regionsSource = [];
         this.startLoader(true);
         return new Promise((resolve: Function) => {
             if (countryCode) {
@@ -5926,11 +5928,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.showTRNNo = false;
                 this.showVATNo = true;
                 this.getOnboardingForm('GB')
-            } else {
-                this.showGSTINNo = false;
-                this.showTRNNo = false;
-                this.showVATNo = false;
             }
+        } else {
+            this.showGSTINNo = false;
+            this.showTRNNo = false;
+            this.showVATNo = false;
         }
     }
 
@@ -6337,6 +6339,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     private handleGenerateResponse(response: BaseResponse<any, GenericRequestForGenerateSCD | PurchaseRecordRequest>, form: NgForm): void {
+        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         if (response?.status === 'success') {
             this.customerAcList$ = observableOf(orderBy(this.defaultCustomerSuggestions, 'label'));
             this.salesAccounts$ = observableOf(orderBy(this.defaultItemSuggestions, 'label'));
@@ -8570,7 +8573,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public copyInvoice(item: PreviousInvoicesVm): void {
-        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.getLastInvoiceDetails({ accountUniqueName: item.account?.uniqueName, invoiceNo: item.versionNumber, uniqueName: item?.uniqueName });
     }
 
