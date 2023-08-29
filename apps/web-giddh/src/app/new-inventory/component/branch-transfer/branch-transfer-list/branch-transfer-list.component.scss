@@ -5,6 +5,16 @@
             box-shadow: none !important;
         }
     }
+    .custom-datepicker{
+        input{
+            height: 48px;
+        }
+    }
+    .clear-filter {
+        .btn{
+            color: var(--color-black);
+        }
+    }
 }
 .no-box-shadow {
     &:focus {
