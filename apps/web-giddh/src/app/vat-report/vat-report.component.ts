@@ -19,6 +19,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { cloneDeep } from '../lodash-optimized';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { TemplateRef } from '@angular/core';
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],

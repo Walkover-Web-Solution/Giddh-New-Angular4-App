@@ -83,6 +83,10 @@
     }
 }
 .white-box {
+    .table-heading{
+        color: var(--color-giddh-blue);
+        font-size: var(--font-size-20);
+    }
     table {
         tbody {
             tr {

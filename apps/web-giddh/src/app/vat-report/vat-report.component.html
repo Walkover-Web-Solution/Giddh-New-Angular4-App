@@ -83,8 +83,8 @@
                         <ng-container *ngIf="!isUKCompany && !isLoading">
                             <div *ngFor="let report of vatReport; let i = index">
                                 <div class="white-box" *ngIf="i < 2">
-                                    <p class="font-15 text-black">
-                                        <strong>{{ report.section }}</strong>
+                                    <p>
+                                        <strong class="table-heading">{{ report.section }}</strong>
                                     </p>
                                     <div class="table-responsive">
                                         <!-- mat-table -->
@@ -192,8 +192,8 @@
                                     </div>
                                 </div>
                                 <div class="white-box" *ngIf="i == 2">
-                                    <p class="font-15 text-black">
-                                        <strong>{{ report.section }}</strong>
+                                    <p>
+                                        <strong class="table-heading">{{ report.section }}</strong>
                                     </p>
                                     <div class="table-responsive">
                                         <table
@@ -242,46 +242,51 @@
                         <ng-container *ngIf="isUKCompany && !isLoading">
                             <div *ngFor="let report of vatReport; let i = index">
                                 <div class="white-box" *ngIf="i < 2">
-                                    <p class="font-15 text-black">
-                                        <strong>{{ report.section }}</strong>
-                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <p>
+                                            <strong class="table-heading">{{ report.section }}</strong>
+                                        </p>
+                                        <p>
+                                            {{ commonLocaleData?.app_amount }}
+                                            ({{ activeCompany?.baseCurrency }})
+                                        </p>
+                                    </div>
                                     <div class="table-responsive">
                                         <table
                                             mat-table
                                             [dataSource]="report.sections"
-                                            class="table basic mr-t2 on-mobile-view vat-report-table table-border-top"
+                                            class="table basic mr-t2 on-mobile-view vat-report-table"
                                         >
                                             <ng-container matColumnDef="number">
-                                                <th mat-header-cell *matHeaderCellDef></th>
                                                 <td mat-cell *matCellDef="let element" width="5%">
                                                     {{ localeData?.box }} {{ element.order }}
                                                 </td>
                                             </ng-container>
                                             <ng-container matColumnDef="name">
-                                                <th mat-header-cell *matHeaderCellDef></th>
                                                 <td mat-cell *matCellDef="let element" width="45%">
                                                     {{ element.description }}
                                                 </td>
                                             </ng-container>
                                             <ng-container matColumnDef="aed_amt">
-                                                <th mat-header-cell *matHeaderCellDef class="text-right">
-                                                    {{ commonLocaleData?.app_amount }}
-                                                    ({{ activeCompany?.baseCurrency }})
-                                                </th>
                                                 <td mat-cell *matCellDef="let element" class="text-right" width="20%">
                                                     {{ activeCompany.baseCurrencySymbol }}
                                                     {{ element.amount | giddhCurrency }}
                                                 </td>
                                             </ng-container>
-                                            <tr mat-header-row *matHeaderRowDef="ukDisplayedColumns"></tr>
                                             <tr mat-row *matRowDef="let row; columns: ukDisplayedColumns"></tr>
                                         </table>
                                     </div>
                                 </div>
                                 <div class="white-box" *ngIf="i == 2">
-                                    <p class="font-15 text-black">
-                                        <strong>{{ report.section }}</strong>
-                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <p>
+                                            <strong class="table-heading">{{ report.section }}</strong>
+                                        </p>
+                                        <p>
+                                            {{ commonLocaleData?.app_amount }}
+                                            ({{ activeCompany?.baseCurrency }})
+                                        </p>
+                                    </div>
                                     <div class="table-responsive">
                                         <table
                                             mat-table
@@ -307,7 +312,7 @@
                                             </ng-container>
                                             <ng-container matColumnDef="aed_amt">
                                                 <th mat-header-cell *matHeaderCellDef></th>
-                                                <td mat-cell *matCellDef="let element">
+                                                <td mat-cell *matCellDef="let element" class="text-right">
                                                     <span class="pr-1">{{ element.toolTip }}</span>
                                                     <strong
                                                         >{{ activeCompany.baseCurrencySymbol }}
