@@ -3,46 +3,28 @@
     [file]="'inventory/stock'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
-    (translationComplete)="translationComplete($event)"
     ><section id="branch-transfer-create">
         <div class="branch-transfer-header">
             <h2>{{ branchTransferMode === "receipt-note" ? "Receipt Note" : "Delivery Challan" }}</h2>
         </div>
         <div class="branch-transfer-body">
-            <div class="branch-transfer-body-radio-btns">
-                <mat-radio-group
-                    name="products_sender"
-                    [(ngModel)]="transferType"
-                    (change)="branchTransferTypeOnchange()"
-                >
-                    <mat-radio-button color="primary" value="Products">Multiple Products</mat-radio-button>
-                    <mat-radio-button color="primary" value="Senders">Multiple Senders</mat-radio-button>
+            <div class="branch-transfer-body-radio-btns" *ngIf="!editBranchTransferUniqueName">
+                <mat-radio-group name="products_sender" [(ngModel)]="transferType">
+                    <mat-radio-button color="primary" value="products">Multiple Products</mat-radio-button>
+                    <mat-radio-button color="primary" value="senders">Multiple Senders</mat-radio-button>
                 </mat-radio-group>
             </div>
 
             <div class="branch-transfer-body-multiple-wrapper">
-                <form name="branchTransferCreateEditForm">
+                <form name="branchTransferCreateEditForm" novalidate="">
                     <div class="row clearfix primary-form-wrapper row-gap">
                         <div class="col-lg-8 px-0">
                             <div class="row">
                                 <div class="col-lg-6 mr-b15">
                                     <div class="direct-mat-datepicker">
-                                        <!-- <giddh-datepicker
-                                                        class="inline border-0"
-                                                        [showError]="
-                                                            (!isValidForm && !voucherFormData.date) ||
-                                                            isInvalidVoucherDate
-                                                        "
-                                                        name="receipt-date"
-                                                        [(ngModel)]="voucherFormData.date"
-                                                        (ngModelChange)="validateVoucherDate()"
-                                                        [placeholder]="commonLocaleData?.app_select_date"
-                                                        [cssClass]="
-                                                            ' border-left-right-none form-control w-100 date-border text-lg-right text-md-left'
-                                                        "
-                                                        [showToggleIcon]="false"
-                                                    ></giddh-datepicker> -->
-                                        <!-- [showError]="(!isValidForm && !voucherFormData.date) || isInvalidVoucherDate" -->
+                                        <!-- [showError]="(!isValidForm && !voucherFormData.date) || isInvalidVoucherDate"
+                                                    [(ngModel)]="voucherFormData.date"
+                                                        (ngModelChange)="validateVoucherDate()" -->
                                         <giddh-datepicker
                                             [readonly]="!editBranchTransferUniqueName"
                                             [disabled]="editBranchTransferUniqueName ? 'disabled' : null"
@@ -64,39 +46,41 @@
                             </div>
                             <div class="row row-gap">
                                 <div class="col-lg-6">
-                                    <div>
+                                    <div *ngIf="transferType === 'senders'">
                                         <dropdown-field
-                                            [name]="'senderProductName'"
-                                            [placeholder]="SenderProductName"
-                                            [options]="countries"
-                                            (selectedOption)="selectSenderProductName($event)"
-                                            [showError]="
-                                                branchTransferCreateEditForm &&
-                                                !branchTransferCreateEditForm.get('senderProductName')?.value
-                                            "
+                                            [name]="'productName'"
+                                            [placeholder]="'Product\'s Name'"
+                                            [options]="stockList"
+                                            (selectedOption)="selectSenderProduct($event)"
                                         >
                                         </dropdown-field>
+                                        <!-- [showError]="branchTransferCreateEditForm && !branchTransferCreateEditForm.sources[0].name" -->
                                     </div>
-                                    <div *ngIf="transferType === 'Senders' && editBranchTransferUniqueName " class="mr-b15 mr-t15">
-                                               <input-field
-                                    [name]="'name'"
-                                    [label]="'Senders Warehouse'"
-                                    [placeholder]=""
-                                    [type]="'text'"
-                                    formControlName="senders"
-                                    [showError]="branchTransferCreateEditForm && !branchTransferCreateEditForm.get('senders')?.value"
-                                >
-                                </input-field>
-                                        <!-- <input-field
-                                            [type]="'text'"
-                                            [name]="''"
-                                            [placeholder]="'SKU Code'"
-                                            [appearance]="'outline'"
+                                                                        <div *ngIf="transferType === 'senders'">
+                                        <dropdown-field
+                                            [name]="'productName'"
+                                            [placeholder]="'Sender\'s Name'"
+                                            [options]="stockList"
+                                            (selectedOption)="selectSenderProduct($event)"
                                         >
-                                        </input-field> -->
+                                        </dropdown-field>
+                                        <!-- [showError]="branchTransferCreateEditForm && !branchTransferCreateEditForm.sources[0].name" -->
+                                    </div>
+                                    <div
+                                        *ngIf="transferType === 'products' && editBranchTransferUniqueName"
+                                        class="mr-b15 mr-t15"
+                                    >
+                                        <input-field
+                                            [name]="'name'"
+                                            [label]="'Sender\'s Warehouse'"
+                                            [placeholder]=""
+                                            [type]="'text'"
+                                            [formControlName]="branchTransferCreateEditForm.sources.controls[0].name"
+                                        >
+                                        </input-field>
                                     </div>
                                     <div class="d-flex justify-content-space-between align-items-center mr-b15">
-                                        <div class="mr-b1" *ngIf="transferType === 'Senders'">
+                                        <div class="mr-b1" *ngIf="transferType === 'senders'">
                                             <mat-radio-group
                                                 name="sender_HsnSac"
                                                 class="d-flex font-14"
@@ -112,7 +96,7 @@
                                         </div>
                                         <div
                                             class="w-100 ml-3"
-                                            *ngIf="transferType === 'Senders'"
+                                            *ngIf="transferType === 'senders'"
                                             [ngStyle]="{ 'visibility': senderHsnSacStatus ? 'visible' : 'hidden' }"
                                         >
                                             <input-field
@@ -124,32 +108,36 @@
                                             </input-field>
                                         </div>
                                     </div>
-                                    <div *ngIf="transferType === 'Products'" class="mr-b15">
+                                    <div *ngIf="transferType === 'products'" class="mr-b15">
                                         <dropdown-field
-                                            [name]="''"
+                                            [name]="'senderWarehouse'"
                                             [placeholder]="'Sender\'s Warehouse'"
-                                            [options]="product"
-                                            [defaultValue]=""
-                                            [required]="true"
-                                            [appearance]="'outline'"
+                                            (selectedOption)="selectSenderWarehouse($event)"
+                                            [options]="senderWarehouses"
                                         >
                                         </dropdown-field>
                                     </div>
-                                    <div *ngIf="transferType === 'Products'" class="mr-b15">
-                                        <dropdown-field
-                                            [name]="''"
-                                            [placeholder]="'Sender\'s GSTIN'"
-                                            [options]="product"
-                                            [defaultValue]=""
-                                            [required]="true"
-                                            [appearance]="'outline'"
+                                    <div *ngIf="transferType === 'products'" class="mr-b15">
+                                        <input-field
+                                            [name]="'senderGstin'"
+                                            [label]="'Sender\'s GSTIN'"
+                                            [placeholder]=""
+                                            [type]="'text'"
                                         >
-                                        </dropdown-field>
+                                        </input-field>
                                     </div>
-                                    <div *ngIf="transferType === 'Products'" class="mr-b15">
+                                    <div *ngIf="transferType === 'products'" class="mr-b15">
                                         <mat-form-field appearance="outline" class="w-100">
                                             <mat-label>Sender's Address</mat-label>
-                                            <textarea matInput rows="3"></textarea>
+                                            <textarea
+                                                matInput
+                                                rows="3"
+                                                class="form-control"
+                                                rows="3"
+                                                name="sourceAddress"
+                                            ></textarea>
+                                            <!-- [disabled]="branchTransfer?.sources[0]?.warehouse?.uniqueName" -->
+                                            <!-- [(ngModel)]="branchTransfer.sources[0].warehouse.address" -->
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -157,41 +145,43 @@
                                 <div class="col-lg-6">
                                     <div class="mr-b15">
                                         <input-field
-                                            [type]="'text'"
-                                            [name]="''"
-                                            [placeholder]="'Receiver\'s Name'"
-                                            [required]="true"
-                                            [appearance]="'outline'"
+                                            [name]="'receiverName'"
                                             [label]="'Receiver\'s Name'"
+                                            [placeholder]=""
+                                            [type]="'text'"
                                         >
                                         </input-field>
                                     </div>
                                     <div class="mr-b15">
                                         <dropdown-field
-                                            [name]="''"
+                                            [name]="'receiverWarehouse'"
                                             [placeholder]="'Receiver\'s Warehouse'"
-                                            [options]="product"
-                                            [defaultValue]=""
-                                            [required]="true"
-                                            [appearance]="'outline'"
+                                            [options]="destinationWarehouses"
+                                            (selectedOption)="selectReceiverWarehouse($event)"
                                         >
                                         </dropdown-field>
                                     </div>
                                     <div class="mr-b15">
-                                        <dropdown-field
-                                            [name]="''"
-                                            [placeholder]="'Receiver\'s GSTIN'"
-                                            [options]="product"
-                                            [defaultValue]=""
-                                            [required]="true"
-                                            [appearance]="'outline'"
+                                        <input-field
+                                            [name]="'receiverGstin'"
+                                            [label]="'Receiver\'s GSTIN'"
+                                            [placeholder]=""
+                                            [type]="'text'"
                                         >
-                                        </dropdown-field>
+                                        </input-field>
                                     </div>
                                     <div class="mr-b15">
                                         <mat-form-field appearance="outline" class="w-100">
                                             <mat-label>Receiver's Address</mat-label>
-                                            <textarea matInput rows="3"></textarea>
+                                            <textarea
+                                                matInput
+                                                rows="3"
+                                                class="form-control"
+                                                rows="3"
+                                                name="sourceAddress"
+                                            ></textarea>
+                                            <!-- [disabled]="branchTransfer?.sources[0]?.warehouse?.uniqueName" -->
+                                            <!-- [(ngModel)]="branchTransfer.sources[0].warehouse.address" -->
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -232,7 +222,7 @@
                                                 <div *ngIf="!activeRow" class="placeholder-color">
                                                     Enter
                                                     {{
-                                                        transferType === "Products"
+                                                        transferType === "products"
                                                             ? "Product"
                                                             : branchTransferMode === "receipt-note"
                                                             ? "Sender's"
