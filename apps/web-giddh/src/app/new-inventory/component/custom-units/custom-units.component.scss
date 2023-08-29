@@ -7,6 +7,9 @@
         .item-list {
             width: 100%;
             margin: 0 15px;
+            &.group-list{
+                margin-left: 0 !important;
+            }
             strong {
                 color: var(--color-table-secondary-heading);
                 font-size: var(--font-size-15);
@@ -34,7 +37,7 @@
             .list-head {
                 display: flex;
                 justify-content: space-between;
-                padding-top: 0px;
+                padding: 0px;
                 column-gap: 10px;
 
                 &.selected-unit {

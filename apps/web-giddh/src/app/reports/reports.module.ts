@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -44,6 +43,7 @@ import { SendEmailModule } from '../shared/send-email/send-email.module';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
+import { SalesPurchaseRegisterExportComponent } from './sales-purchase-register-export/sales-purchase-register-export.component';
 
 @NgModule({
     declarations: [
@@ -63,12 +63,12 @@ import { SelectTableColumnModule } from '../shared/select-table-column/select-ta
         CashFlowStatementComponent,
         PaymentReportComponent,
         PaymentAdvanceSearchComponent,
-        PreviewComponent
+        PreviewComponent,
+        SalesPurchaseRegisterExportComponent
     ],
     exports: [
         ReportsComponent,
         ReportsDetailsComponent,
-        DatepickerModule,
         BsDropdownModule,
         Daterangepicker,
         PaginationModule

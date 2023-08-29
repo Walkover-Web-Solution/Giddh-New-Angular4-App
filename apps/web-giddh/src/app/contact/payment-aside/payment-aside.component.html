@@ -11,7 +11,7 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<mat-dialog-content class="all-payment-side">
+<mat-dialog-content class="all-payment-side  w-100">
     <div class="clearfix">
         <form #adjustAdvancePaymentForm="ngForm" autocomplete="off">
             <div class="row d-flex align-items-center payment-top-form">
@@ -100,7 +100,7 @@
                                 >
                             </p>
                         </div>
-                        <div class="form-group mr-r15">
+                        <div class="form-group mr-r15 ">
                             <label>{{ commonLocaleData?.app_total_amount }}<span class="red-text">*</span></label>
                             <text-field
                                 type="text"
@@ -112,7 +112,7 @@
                                 name="amount"
                             ></text-field>
                         </div>
-                        <div class="form-group mr-r15" *ngIf="isPayClicked">
+                        <div class="form-group mr-r15 " *ngIf="isPayClicked">
                             <label class="relative d-flex"
                                 >{{ commonLocaleData?.app_enter_otp }}<span class="red-text">*</span>
                                 <p class="resend-btn" *ngIf="!timerOn">
@@ -134,8 +134,7 @@
                                 [(ngModel)]="receivedOtp"
                             ></text-field>
                         </div>
-                        <div class="form-group mr-r15">
-                            <label class="d-flex"> &nbsp; </label>
+                        <div class="form-group mr-r15  d-flex column-gap15 align-items-center confirm-btn">
                             <button
                                 mat-stroked-button
                                 color="primary"
@@ -148,38 +147,40 @@
                                 [disabled]="!isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData"
                                 [ladda]="isRequestInProcess"
                                 (click)="payClicked()"
+                                class="pay-btn"
                             >
                                 {{ commonLocaleData?.app_pay }}
                             </button>
-
-                            <button
-                                mat-stroked-button
-                                color="primary"
-                                *ngIf="isPayClicked"
-                                [ngClass]="{
-                                    'disabled-ladda-btn':
-                                        !isBankSelectedForBulkPayment ||
-                                        !selectedBankUrn ||
-                                        !isValidData ||
-                                        !receivedOtp
-                                }"
-                                [disabled]="
-                                    !isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData || !receivedOtp
-                                "
-                                [ladda]="isRequestInProcess"
-                                (click)="confirmOTP()"
-                            >
-                                {{ commonLocaleData?.app_confirm }}
-                            </button>
-                            <button
-                                mat-stroked-button
-                                color="primary"
-                                type="button"
-                                *ngIf="isPayClicked"
-                                (click)="clickedCancelOtp()"
-                            >
-                                {{ commonLocaleData?.app_cancel }}
-                            </button>
+                            <div class="mr-t1 d-flex column-gap15">
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    *ngIf="isPayClicked"
+                                    [ngClass]="{
+                                        'disabled-ladda-btn':
+                                            !isBankSelectedForBulkPayment ||
+                                            !selectedBankUrn ||
+                                            !isValidData ||
+                                            !receivedOtp
+                                    }"
+                                    [disabled]="
+                                        !isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData || !receivedOtp
+                                    "
+                                    [ladda]="isRequestInProcess"
+                                    (click)="confirmOTP()"
+                                >
+                                    {{ commonLocaleData?.app_confirm }}
+                                </button>
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    type="button"
+                                    *ngIf="isPayClicked"
+                                    (click)="clickedCancelOtp()"
+                                >
+                                    {{ commonLocaleData?.app_cancel }}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -54,7 +54,7 @@
                                             </div>
                                             <div class="col-md-6 col-sm-12 row pl-0">
                                                 <div
-                                                    class="btn-wrapper d-flex align-items-center justify-content-center"
+                                                    class="btn-wrapper d-flex align-items-center justify-content-center ml-3"
                                                 >
                                                     <button
                                                         class="btn btn-success mr-r15"
@@ -400,6 +400,29 @@
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.invoiceSettings.debitNoteRoundOff"
                                                 name="debitNoteRoundOff"
+                                                class="hide-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSettings.invoiceSettings.generateAutoPurchaseNumber"
+                                                name="generatePurchaseNumber"
+                                                class="show-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                            <label>{{ localeData?.generate_auto_purchase_number }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9 form-group">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSettings.invoiceSettings.generateAutoPurchaseNumber"
+                                                name="generatePurchaseNumber"
                                                 class="hide-on-mobile"
                                                 color="primary"
                                             >

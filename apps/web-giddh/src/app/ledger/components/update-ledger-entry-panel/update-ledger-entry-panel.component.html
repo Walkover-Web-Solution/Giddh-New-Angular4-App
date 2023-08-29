@@ -125,10 +125,11 @@
                                 >
                                     <ng-container *ngIf="txn.type === 'DEBIT'">
                                         <td
-                                            class="col-3 d-flex align-items-center"
+                                            class="col-3 d-flex align-items-center custom-input-field"
                                             [attr.data-title]="commonLocaleData?.app_date"
                                         >
                                             <giddh-datepicker
+                                                class="width-datepicker"
                                                 [showToggleIcon]="false"
                                                 [disabled]="
                                                     isEinvoiceGenerated ||
@@ -464,7 +465,7 @@
                                     <ng-container *ngIf="txn.type == 'CREDIT'">
                                         <td
                                             [attr.data-title]="commonLocaleData?.app_date"
-                                            class="col-3 d-flex align-items-center"
+                                            class="col-3 d-flex align-items-center custom-input-field"
                                         >
                                             <giddh-datepicker
                                                 [showToggleIcon]="false"
@@ -1904,7 +1905,7 @@
                                                         [(ngModel)]="vm.selectedLedger.chequeNumber"
                                                     />
                                                 </td>
-                                                <td>
+                                                <td class="custom-input-field">
                                                     <label class="default-color">{{
                                                         commonLocaleData?.app_cheque_clearance_date
                                                     }}</label>
@@ -2112,12 +2113,9 @@
                                                 "
                                                 type="file"
                                                 name="invoiceFile"
-                                                #fileInputUpdate
                                                 id="invoiceFile"
-                                                ngFileSelect
-                                                [uploadInput]="uploadInput"
-                                                [options]="fileUploadOptions"
-                                                (uploadOutput)="onUploadOutputUpdate($event)"
+                                                #fileInputUpdate
+                                                (change)="uploadFile()"
                                             />
                                             <label for="invoiceFile" class="cp font-15">
                                                 <i
@@ -2143,7 +2141,7 @@
                                                 branches?.length > 1
                                             )
                                         "
-                                        class="d-flex"
+                                        class="d-flex column-gap15"
                                     >
                                         <button
                                             mat-stroked-button
@@ -2235,21 +2233,17 @@
     <!-- Tourist scheme template block end-->
 
     <ng-template #adjustPaymentModal>
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <advance-receipt-adjustment-component
-                    [adjustedVoucherType]="vm.selectedLedger?.voucher?.shortCode"
-                    [invoiceFormDetails]="adjustVoucherConfiguration"
-                    [isUpdateMode]="true"
-                    [invoiceListRequestParams]="invoiceListRequestParams"
-                    [advanceReceiptAdjustmentUpdatedData]="vm.selectedLedger?.voucherAdjustments"
-                    [isPaymentReceipt]="vm.isPaymentReceipt"
-                    (closeModelEvent)="closeAdjustmentModal($event)"
-                    (submitClicked)="getAdjustedPaymentData($event)"
-                >
-                </advance-receipt-adjustment-component>
-            </div>
-        </div>
+        <advance-receipt-adjustment-component
+            [adjustedVoucherType]="vm.selectedLedger?.voucher?.shortCode"
+            [invoiceFormDetails]="adjustVoucherConfiguration"
+            [isUpdateMode]="true"
+            [invoiceListRequestParams]="invoiceListRequestParams"
+            [advanceReceiptAdjustmentUpdatedData]="vm.selectedLedger?.voucherAdjustments"
+            [isPaymentReceipt]="vm.isPaymentReceipt"
+            (closeModelEvent)="closeAdjustmentModal($event)"
+            (submitClicked)="getAdjustedPaymentData($event)"
+        >
+        </advance-receipt-adjustment-component>
     </ng-template>
 
     <ng-template #attachments>

@@ -848,31 +848,27 @@ export class GeneralService {
      */
     public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean): void {
         let isQueryParams: boolean;
-        if (screen.width <= 767) {
-            this.router.navigate(["/pages/mobile/home"]);
+        if (route.includes('?')) {
+            parameter = parameter || {};
+            isQueryParams = true;
+            const splittedRoute = route.split('?');
+            route = splittedRoute[0];
+            const paramString = splittedRoute[1];
+            const params = paramString?.split('&');
+            params?.forEach(param => {
+                const [key, value] = param.split('=');
+                parameter[key] = value;
+            });
+        }
+        if (isQueryParams) {
+            this.router.navigate([route], { queryParams: parameter });
         } else {
-            if (route.includes('?')) {
-                parameter = parameter || {};
-                isQueryParams = true;
-                const splittedRoute = route.split('?');
-                route = splittedRoute[0];
-                const paramString = splittedRoute[1];
-                const params = paramString?.split('&');
-                params?.forEach(param => {
-                    const [key, value] = param.split('=');
-                    parameter[key] = value;
-                });
-            }
-            if (isQueryParams) {
-                this.router.navigate([route], { queryParams: parameter });
-            } else {
-                this.router.navigate([route], parameter);
-            }
-            if (isElectron && isSocialLogin) {
-                setTimeout(() => {
-                    window.location.reload();
-                }, 200);
-            }
+            this.router.navigate([route], parameter);
+        }
+        if (isElectron && isSocialLogin) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 200);
         }
     }
 
@@ -1488,4 +1484,46 @@ export class GeneralService {
 
         return result;
     }
+
+    /**
+     * Reads the selected file and returns blob
+     *
+     * @param {*} file
+     * @param {Function} callback
+     * @memberof GeneralService
+     */
+    public getSelectedFile(file: any, callback: Function): void {
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(file);
+        reader.onload = () => {
+            const blob = new Blob([reader.result], { type: file.type });
+            callback(blob, file);
+        };
+    }
+
+    /**
+     * Reads the selected file and returns base64
+     *
+     * @param {*} file
+     * @param {Function} callback
+     * @memberof GeneralService
+     */
+    public getSelectedFileBase64(file: any, callback: Function): void {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            callback(reader.result);
+        };
+    }
+
+    /**
+     * Check if is cidr range
+     *
+     * @param {string} cidr
+     * @return {*}  {boolean}
+     * @memberof GeneralService
+     */
+    public isCidr(cidr: string): boolean {
+        return (/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))?$/g).test(cidr);
+    };
 }

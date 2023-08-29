@@ -11,7 +11,7 @@
             [matSortDirection]="pettycashRequest.sort"
         >
             <ng-container matColumnDef="s_no">
-                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef width="2%">#</th>
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="mat-mdc-number" width="2%">#</th>
                 <td mat-cell *matCellDef="let expenses" data-title="#">
                     <span class="responsive-label" [hidden]="!expensesItems?.length">#</span>
                     {{ expenses.index + 1 }}
@@ -19,7 +19,7 @@
             </ng-container>
 
             <ng-container matColumnDef="entry_date">
-                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef mat-sort-header width="10%">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef mat-sort-header class="mat-mdc-entry">
                     {{ commonLocaleData?.app_date }}
                 </th>
                 <td mat-cell *matCellDef="let expenses" [attr.data-title]="commonLocaleData?.app_date">
@@ -31,7 +31,7 @@
             </ng-container>
 
             <ng-container matColumnDef="submitted_by">
-                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef width="10%">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="mat-mdc-submit">
                     {{ localeData?.submitted_by }}
                 </th>
                 <td mat-cell *matCellDef="let expenses" [attr.data-title]="localeData?.submitted_by">
@@ -43,7 +43,7 @@
             </ng-container>
 
             <ng-container matColumnDef="account">
-                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef width="10%">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="mat-mdc-submit">
                     {{ commonLocaleData?.app_account }}
                 </th>
                 <td mat-cell *matCellDef="let expenses" [attr.data-title]="commonLocaleData?.app_account">
@@ -63,8 +63,7 @@
                     [hidden]="!expensesItems?.length"
                     *matHeaderCellDef
                     mat-sort-header
-                    class="text-right"
-                    width="20%"
+                    class="text-right mat-mdc-submit"
                 >
                     {{ commonLocaleData?.app_amount }}
                 </th>
@@ -83,7 +82,7 @@
             </ng-container>
 
             <ng-container matColumnDef="receipt">
-                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef width="20%">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="mat-mdc-submit">
                     {{ localeData?.payment_receipt }}
                 </th>
                 <td mat-cell *matCellDef="let expenses" [attr.data-title]="localeData?.payment_receipt">
@@ -106,7 +105,7 @@
             </ng-container>
 
             <ng-container matColumnDef="file">
-                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef width="10%">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="mat-mdc-submit">
                     {{ localeData?.file }}
                 </th>
                 <td mat-cell *matCellDef="let expenses" [attr.data-title]="localeData?.file">
@@ -120,7 +119,7 @@
             </ng-container>
 
             <ng-container matColumnDef="description">
-                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef width="20%">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="mat-mdc-entry">
                     {{ commonLocaleData?.app_description }}
                 </th>
                 <td mat-cell *matCellDef="let expenses" [attr.data-title]="commonLocaleData?.app_description">
@@ -133,14 +132,16 @@
             </ng-container>
 
             <ng-container matColumnDef="action">
-                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef width="10%">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="mat-mdc-entry">
                     {{ commonLocaleData?.app_action }}
                 </th>
-                <td mat-cell *matCellDef="let expenses" [attr.data-title]="commonLocaleData?.app_action">
-                    <button
+                <td mat-cell *matCellDef="let expenses" [attr.data-title]="commonLocaleData?.app_action" class="action-btn">
+                    <div class="d-flex column-gap15">
+                        <button
                         mat-stroked-button
                         color="primary"
                         (click)="showApproveConfirmPopup(approveConfirm, expenses); $event.stopPropagation()"
+                        class="mr-t1"
                     >
                         {{ localeData?.approve }}
                     </button>
@@ -148,9 +149,11 @@
                         mat-stroked-button
                         color="warn"
                         (click)="showRejectConfirmPopup(rejectConfirm, expenses); $event.stopPropagation()"
+                        class="mr-t1 mr-b1"
                     >
                         {{ localeData?.reject }}
                     </button>
+                    </div>
                 </td>
             </ng-container>
 

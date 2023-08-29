@@ -8,7 +8,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GiddhDatepickerModule } from "../theme/giddh-datepicker/giddh-datepicker.module";
 import { MatSelectModule } from "@angular/material/select";
 import { MatInputModule } from "@angular/material/input";
-import { NgxUploaderModule } from "ngx-uploader";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatMenuModule } from "@angular/material/menu";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
@@ -48,7 +47,6 @@ import { AdvanceReceiptAdjustmentModule } from "../shared/advance-receipt-adjust
         GiddhDatepickerModule,
         MatSelectModule,
         MatInputModule,
-        NgxUploaderModule,
         MatCheckboxModule,
         MatMenuModule,
         AmountFieldComponentModule,

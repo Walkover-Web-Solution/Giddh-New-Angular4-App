@@ -1617,6 +1617,15 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.processedTaxes = [];
         this.activeTabIndex = 0;
         this.resetTaxes();
+
+        setTimeout(() => {
+            this.stockForm.name = "";
+            this.stockForm.customField1Value = "";
+            this.stockForm.customField2Value = "";
+            this.stockForm.hsnNumber = "";
+            this.stockForm.sacNumber = "";
+            this.stockForm.variants[0].skuCode = "";
+        });
     }
 
     /**

@@ -13,7 +13,7 @@ import {
     Output,
     ViewChild
 } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
@@ -45,7 +45,7 @@ import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions'
 })
 
 export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-    public addAccountForm: FormGroup;
+    public addAccountForm: UntypedFormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
     @Input() public createAccountInProcess$: Observable<boolean>;
@@ -178,7 +178,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public intl: any;
 
     constructor(
-        private _fb: FormBuilder,
+        private _fb: UntypedFormBuilder,
         private store: Store<AppState>,
         private _toaster: ToasterService,
         private commonActions: CommonActions,
@@ -252,7 +252,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         // get country code value change
         this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
-                const addresses = this.addAccountForm.get('addresses') as FormArray;
+                const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
                 if (addresses?.controls?.length === 0) {
                     this.addBlankGstForm();
                 }
@@ -312,13 +312,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         if (this.activeCompany.state) {
             setTimeout(() => {
-                let addresses = (this.addAccountForm.get('addresses') as FormArray).at(0);
+                let addresses = (this.addAccountForm.get('addresses') as UntypedFormArray).at(0);
                 addresses?.get('stateCode')?.patchValue(this.activeCompany.state);
             }, 500);
         } else {
             if (this.activeCompany?.addresses?.length && this.activeCompany?.addresses[0]?.stateCode) {
                 setTimeout(() => {
-                    let addresses = (this.addAccountForm.get('addresses') as FormArray).at(0);
+                    let addresses = (this.addAccountForm.get('addresses') as UntypedFormArray).at(0);
                     addresses?.get('stateCode')?.patchValue(this.activeCompany?.addresses[0]?.stateCode);
                     addresses?.get('state').get('code')?.patchValue(this.activeCompany?.addresses[0]?.stateCode);
                 }, 500);
@@ -418,7 +418,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.getInvoiceSettings();
     }
 
-    public initialGstDetailsForm(): FormGroup {
+    public initialGstDetailsForm(): UntypedFormGroup {
         this.isStateRequired = this.checkActiveGroupCountry();
 
         let gstFields = this._fb.group({
@@ -429,12 +429,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 name: [''],
                 stateGstCode: ['']
             }),
-            stateCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
+            stateCode: [{ value: '', disabled: false }, (this.stateList?.length ? (this.isStateRequired ? Validators.required:""):"")],
             county: this._fb.group({
                 code: [''],
                 name: ['']
             }),
-            countyCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
+            countyCode: [{ value: '', disabled: false }, (this.countyList?.length ? (this.isStateRequired ? Validators.required : "") : "")],
             isDefault: [false],
             isComposite: [false],
             partyType: ['NOT APPLICABLE'],
@@ -446,7 +446,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public resetGstStateForm() {
         this.forceClear$ = observableOf({ status: true });
 
-        let addresses = this.addAccountForm.get('addresses') as FormArray;
+        let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
         for (let control of addresses.controls) {
             control.get('stateCode')?.patchValue(null);
             control.get('countyCode')?.patchValue(null);
@@ -456,7 +456,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public resetBankDetailsForm() {
-        let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
+        let accountBankDetails = this.addAccountForm.get('accountBankDetails') as UntypedFormArray;
         for (let control of accountBankDetails.controls) {
             control.get('bankName')?.patchValue(null);
             control.get('bankAccountNo')?.patchValue(null);
@@ -468,7 +468,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public addGstDetailsForm(value?: string) {    // commented code because we no need GSTIN No. to add new address
-        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
         addresses.push(this.initialGstDetailsForm());
         if (addresses?.length > 4) {
             this.moreGstDetailsVisible = false;
@@ -477,12 +477,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public removeGstDetailsForm(i: number) {
-        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
         addresses.removeAt(i);
     }
 
     public addBlankGstForm() {
-        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
         if (addresses?.value?.length === 0) {
             addresses.push(this.initialGstDetailsForm());
         }
@@ -490,7 +490,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public isDefaultAddressSelected(val: boolean, i: number) {
         if (val) {
-            let addresses = this.addAccountForm.get('addresses') as FormArray;
+            let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
             for (let control of addresses.controls) {
                 control.get('isDefault')?.patchValue(false);
             }
@@ -498,7 +498,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-    public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent, event: KeyboardEvent) {
+    public getStateCode(gstForm: UntypedFormGroup, statesEle: ShSelectComponent, event: KeyboardEvent) {
         const keyAvoid = ['Tab', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
         if (keyAvoid.findIndex(key => key === event.key) > -1) {
             return;
@@ -537,7 +537,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public showMoreGst() {
-        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
         this.gstDetailsLength = addresses?.controls?.length;
         this.moreGstDetailsVisible = true;
     }
@@ -554,8 +554,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public resetAddAccountForm() {
-        const addresses = this.addAccountForm.get('addresses') as FormArray;
-        const countries = this.addAccountForm.get('country') as FormGroup;
+        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        const countries = this.addAccountForm.get('country') as UntypedFormGroup;
         addresses.reset();
         countries.reset();
         this.addAccountForm.reset();
@@ -687,14 +687,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-    public selectedState(gstForm: FormGroup, event) {
+    public selectedState(gstForm: UntypedFormGroup, event) {
         if (gstForm && event?.label) {
             gstForm.get('stateCode')?.patchValue(event?.value);
             gstForm.get('state').get('code')?.patchValue(event?.value);
         }
     }
 
-    public selectedCounty(gstForm: FormGroup, event) {
+    public selectedCounty(gstForm: UntypedFormGroup, event) {
         if (gstForm && event?.label) {
             gstForm.get('countyCode')?.patchValue(event?.value);
             gstForm.get('county').get('code')?.patchValue(event?.value);
@@ -823,7 +823,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public getStates(countryCode) {
         this.selectedCountryCode = countryCode;
         if (countryCode && this.addAccountForm) {
-            let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
+            let accountBankDetails = this.addAccountForm.get('accountBankDetails') as UntypedFormArray;
             for (let control of accountBankDetails.controls) {
                 if (countryCode === 'IN') {
                     control.get('bankAccountNo').setValidators([Validators.minLength(9), Validators.maxLength(18)]);
@@ -914,7 +914,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public toggleStateRequired(): void {
         this.isStateRequired = this.checkActiveGroupCountry();
         let i = 0;
-        let addresses = this.addAccountForm.get('addresses') as FormArray;
+        let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
         for (let control of addresses.controls) {
             control.get('stateCode').setValidators(null);
             control.get('countyCode').setValidators(null);
@@ -944,7 +944,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (element?.value && type) {
             // changes account number validation for country india as well ref card : GIDK-1119
             trim = element.value?.replace(/[^a-zA-Z0-9]/g, '');
-            let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
+            let accountBankDetail = this.addAccountForm.get('accountBankDetails') as UntypedFormArray;
             for (let control of accountBankDetail.controls) {
                 if (type === 'bankAccountNo') {
                     control.get('bankAccountNo')?.patchValue(trim);
@@ -1018,7 +1018,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public addBlankCustomFieldForm(): void {
-        const customField = this.addAccountForm.get('customFields') as FormArray;
+        const customField = this.addAccountForm.get('customFields') as UntypedFormArray;
         if (customField?.value?.length === 0) {
             customField.push(this.initialCustomFieldDetailsForm(null));
         }
@@ -1032,7 +1032,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
-        const customField = this.addAccountForm.get('customFields') as FormArray;
+        const customField = this.addAccountForm.get('customFields') as UntypedFormArray;
         if (customField?.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
@@ -1045,7 +1045,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @returns {FormGroup}
      * @memberof AccountAddNewDetailsComponent
      */
-    public initialCustomFieldDetailsForm(value: CustomFieldsData = null): FormGroup {
+    public initialCustomFieldDetailsForm(value: CustomFieldsData = null): UntypedFormGroup {
         let customFields = this._fb.group({
             uniqueName: [''],
             value: ['', (value?.isMandatory) ? Validators.required : undefined],
@@ -1076,7 +1076,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public selectedBooleanCustomField(isChecked: string, index: number): void {
-        const customField = this.addAccountForm.get('customFields') as FormArray;
+        const customField = this.addAccountForm.get('customFields') as UntypedFormArray;
         customField.controls[index].get('value')?.setValue(isChecked);
     }
 
@@ -1282,13 +1282,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             }, 50);
 
-            const accountAddress = this.addAccountForm.get('addresses') as FormArray;
+            const accountAddress = this.addAccountForm.get('addresses') as UntypedFormArray;
             if (accountAddress.controls?.length === 0 || !accountAddress?.length) {
                 this.addBlankGstForm();
             }
         } else {
             let loop = 0;
-            const addresses = this.addAccountForm.get('addresses') as FormArray;
+            const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
             for (let control of addresses.controls) {
                 this.removeGstDetailsForm(loop);
                 loop++;

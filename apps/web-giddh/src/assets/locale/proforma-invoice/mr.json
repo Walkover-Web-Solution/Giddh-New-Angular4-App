@@ -6,7 +6,10 @@
         "purchase": "खरेदी",
         "cash": "रोख",
         "proforma": "प्रोफार्मा",
-        "estimate": "अंदाज"
+        "estimate": "अंदाज",
+        "cash_bill": "रोख बिल",
+        "cash_credit_note": "रोख क्रेडिट नोट",
+        "cash_debit_note": "कॅश डेबिट नोट"
     },
     "customer_name": "ग्राहकाचे नाव",
     "balance_due": "शिल्लक बाकी",

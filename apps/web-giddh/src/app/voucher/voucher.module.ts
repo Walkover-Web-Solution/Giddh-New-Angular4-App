@@ -14,7 +14,6 @@ import { LaddaModule } from "angular2-ladda";
 import { CollapseModule } from "ngx-bootstrap/collapse";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { ModalModule } from "ngx-bootstrap/modal";
-import { NgxUploaderModule } from "ngx-uploader";
 import { AdvanceReceiptAdjustmentModule } from "../shared/advance-receipt-adjustment/advance-receipt-adjustment.module";
 import { AsideMenuOtherTaxesModule } from "../shared/aside-menu-other-taxes/aside-menu-other-taxes.module";
 import { AsideMenuProductServiceModule } from "../shared/aside-menu-product-service/aside-menu-product-service.module";
@@ -40,7 +39,6 @@ import { VoucherComponent } from "./voucher.component";
 import { VoucherRoutingModule } from "./voucher.routing.module";
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
-
 @NgModule({
     imports: [
         VoucherRoutingModule,
@@ -49,13 +47,12 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         ReactiveFormsModule,
         KeyboardShortutModule,
         DecimalDigitsModule,
-        CollapseModule,
-        NgxUploaderModule,
+        CollapseModule.forRoot(),
         BsDropdownModule.forRoot(),
         DigitsOnlyModule,
         SharedModule,
         AsideMenuRecurringEntryModule,
-        ModalModule,
+        ModalModule.forRoot(),
         TaxControlModule,
         DiscountControlModule,
         LaddaModule.forRoot({

@@ -6,7 +6,6 @@ import { ContentFilterComponent } from './edit-template/filters-container/conten
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { GstTemplateAComponent } from './edit-template/out-tempate/templates/gst-template-a/gst-template-a.component';
 import { GstTemplateEComponent } from './edit-template/out-tempate/templates/gst-template-e/gst-template-e.component';
-import { NgxUploaderModule } from 'ngx-uploader';
 import { HasFocusDirectiveModule } from '../../shared/helpers/directives/has-focus/has-focus.module';
 import { ThermalTemplateComponent } from './edit-template/out-tempate/templates/thermal-template/thermal-template.component';
 
@@ -15,8 +14,7 @@ import { ThermalTemplateComponent } from './edit-template/out-tempate/templates/
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        CollapseModule,
-        NgxUploaderModule,
+        CollapseModule.forRoot(),
         HasFocusDirectiveModule
     ],
     declarations: [

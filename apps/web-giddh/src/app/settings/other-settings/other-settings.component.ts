@@ -154,17 +154,6 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Inventory type update handler
-     *
-     * @param {boolean} value True, if Product is selected
-     * @memberof OtherSettingsComponent
-     */
-    public inventoryTypeUpdated(value: boolean): void {
-        this.profileData.manageInventory = value;
-        this.profileUpdated('manageInventory');
-    }
-
-    /**
      * This will set active locale
      *
      * @param {*} [event]
