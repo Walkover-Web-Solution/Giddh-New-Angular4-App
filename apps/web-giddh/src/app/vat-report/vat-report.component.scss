@@ -85,7 +85,10 @@
 .white-box {
     .table-heading{
         color: var(--color-giddh-blue);
-        font-size: var(--font-size-20);
+        font-size: var(--font-size-16);
+    }
+    .inner-table-heading{
+        color: var(--color-giddh-blue);
     }
     table {
         tbody {
