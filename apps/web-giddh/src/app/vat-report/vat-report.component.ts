@@ -19,6 +19,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { cloneDeep } from '../lodash-optimized';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { TemplateRef } from '@angular/core';
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
@@ -35,7 +36,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     @ViewChild('periodDropdown', { static: true }) public periodDropdown;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate:  TemplateRef<any>;
     public isMonthSelected: boolean = true;
     public currentPeriod: any = {};
     public showCalendar: boolean = false;
