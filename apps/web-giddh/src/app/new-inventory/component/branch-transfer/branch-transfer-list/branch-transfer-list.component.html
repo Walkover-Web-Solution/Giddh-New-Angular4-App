@@ -12,7 +12,7 @@
             <div class="clearfix">
                 <form name="branchTransferHeaderForm" class="col-12 pl-0 pr-0 mr-b05">
                     <div class="row">
-                        <div class="d-flex flex-wrap w-100 mb-3">
+                        <div class="d-flex flex-wrap align-items-center w-100 mb-3 column-gap15">
                             <div
                                 *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
                                 class="branch-width"
@@ -96,8 +96,8 @@
 
                     <ng-container matColumnDef="sender">
                         <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchSenderContainer>
-                            <div [hidden]="inlineSearch === 'sender'">
-                                <i class="icon-search" (click)="toggleSearch('sender')"></i>
+                            <div [hidden]="inlineSearch === 'sender'" class="d-flex align-items-center">
+                                <i class="icon-search mr-r05 cp" (click)="toggleSearch('sender')"></i>
                                 <span class="pl-0">Sender</span>
                             </div>
                             <div class="input-container" [hidden]="inlineSearch !== 'sender'">
@@ -115,8 +115,8 @@
                     </ng-container>
                     <ng-container matColumnDef="receiver">
                         <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchRecieverContainer>
-                            <div [hidden]="inlineSearch === 'receiver'">
-                                <i class="icon-search" (click)="toggleSearch('receiver')"></i>
+                            <div [hidden]="inlineSearch === 'receiver'" class="d-flex align-items-center">
+                                <i class="icon-search mr-r05 cp" (click)="toggleSearch('receiver')"></i>
                                 <span class="pl-0">Receiver</span>
                             </div>
                             <div class="input-container" [hidden]="inlineSearch !== 'receiver'">
@@ -135,8 +135,8 @@
 
                     <ng-container matColumnDef="sender_receiver">
                         <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchSenderRecieverContainer>
-                            <div [hidden]="inlineSearch === 'senderReceiver'">
-                                <i class="icon-search" (click)="toggleSearch('senderReceiver')"></i>
+                            <div [hidden]="inlineSearch === 'senderReceiver'" class="d-flex align-items-center">
+                                <i class="icon-search mr-r05 cp" (click)="toggleSearch('senderReceiver')"></i>
                                 <span class="pl-0">Sender/Reciever</span>
                             </div>
                             <div class="input-container" [hidden]="inlineSearch !== 'senderReceiver'">
@@ -155,8 +155,8 @@
 
                     <ng-container matColumnDef="from_warehouse">
                         <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchFromWarehouseContainer>
-                            <div [hidden]="inlineSearch === 'fromWarehouse'">
-                                <i class="icon-search" (click)="toggleSearch('fromWarehouse')"></i>
+                            <div [hidden]="inlineSearch === 'fromWarehouse'" class="d-flex align-items-center">
+                                <i class="icon-search mr-r05 cp" (click)="toggleSearch('fromWarehouse')"></i>
                                 <span class="pl-0">From Warehouse</span>
                             </div>
                             <div class="input-container" [hidden]="inlineSearch !== 'fromWarehouse'">
@@ -175,8 +175,8 @@
 
                     <ng-container matColumnDef="to_warehouse">
                         <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchToWarehouseContainer>
-                            <div [hidden]="inlineSearch === 'toWarehouse'">
-                                <i class="icon-search" (click)="toggleSearch('toWarehouse')"></i>
+                            <div [hidden]="inlineSearch === 'toWarehouse'" class="d-flex align-items-center">
+                                <i class="icon-search mr-r05 cp" (click)="toggleSearch('toWarehouse')"></i>
                                 <span class="pl-0">To Warehouse</span>
                             </div>
                             <div class="input-container" [hidden]="inlineSearch !== 'toWarehouse'">
@@ -275,7 +275,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="row">
-                                <div class="col-lg-12 col-sm-6 mr-b15 pr-2">
+                                <div class="col-lg-12 col-sm-6 mr-b15">
                                     <dropdown-field
                                         [placeholder]="'Select Voucher Type'"
                                         [options]="voucherTypes"
@@ -293,7 +293,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="row">
-                                <div class="col-lg-12 col-sm-6 mr-b15 pl-2">
+                                <div class="col-lg-12 col-sm-6 mr-b15">
                                     <dropdown-field
                                         [placeholder]="'Select Condition'"
                                         [options]="amountOperators"
@@ -311,7 +311,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="row">
-                                <div class="col-lg-12 col-sm-6 mr-b15 pl-2">
+                                <div class="col-lg-12 col-sm-6 mr-b15">
                                     <input-field
                                         [type]="'number'"
                                         [placeholder]="'0'"

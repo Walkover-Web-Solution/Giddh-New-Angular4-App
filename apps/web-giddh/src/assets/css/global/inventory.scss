@@ -157,3 +157,16 @@ inventory-master{
         }
     }
 }
+
+/*--- branch-transfer ---*/
+#branch-transfer-list {
+    table{
+        .bg-transparent {
+            &.mat-mdc-button {
+                .mdc-button__label {
+                    padding: 0 5px;
+                }
+            }
+        }
+    }
+}
