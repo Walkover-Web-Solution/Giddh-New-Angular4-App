@@ -1673,9 +1673,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public preparePreAppliedDiscounts(): void {
         if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.length) {
-            this.currentTxn.selectedAccount.accountApplicableDiscounts.map(item => item.isActive = true);
-            this.currentTxn.discounts?.map(item => { item.isActive = false });
-            if (this.currentTxn.discounts && this.currentTxn.discounts.length === 1) {
+            this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.map(item => item.isActive = true);
+            this.currentTxn?.discounts?.map(item => { item.isActive = false });
+            if (this.currentTxn?.discounts && this.currentTxn?.discounts?.length === 1) {
                 setTimeout(() => {
                     this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
                         this.currentTxn?.discounts?.map(item => {
@@ -1699,7 +1699,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
             this.currentTxn?.discounts?.map(item => { item.isActive = false });
             this.accountOtherApplicableDiscount.forEach(element => {
-                this.currentTxn.discounts?.map(item => {
+                this.currentTxn?.discounts?.map(item => {
                     if (element?.uniqueName === item?.discountUniqueName) {
                         item.isActive = true;
                     }
@@ -1715,7 +1715,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         /** if percent or value type discount applied */
         if (this.currentTxn?.discounts && this.currentTxn?.discounts[0]) {
-            if (this.currentTxn.discounts[0].amount) {
+            if (this.currentTxn?.discounts[0].amount) {
                 this.currentTxn.discounts[0].isActive = true;
             } else {
                 this.currentTxn.discounts[0].isActive = false;
