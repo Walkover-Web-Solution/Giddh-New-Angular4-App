@@ -49,7 +49,6 @@ import { TranslateDirectiveModule } from '../../../theme/translate/translate.dir
         MatSortModule,
         ReactiveFormsModule,
         TranslateDirectiveModule,
-        FormsModule
 
     ],
     exports: [
