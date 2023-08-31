@@ -61,7 +61,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public companyUniqueName: string = '';
     public templateType: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public showUploadButton: boolean = false;
     public showDeleteButton: boolean = false;
     @ViewChild('fileInput', { static: true }) logoFile: ElementRef;
     public selectedFont: string = "";
@@ -136,7 +135,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                     this.isFileUploaded = false;
                     if (!this._invoiceUiDataService.isLogoUpdateInProgress) {
                         this.showDeleteButton = true;
-                        this.showUploadButton = false;
                         let preview: any = document.getElementById('logoImage');
                         preview?.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
                     }
@@ -147,7 +145,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         this._invoiceUiDataService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
             if (!path) {
                 this.showDeleteButton = false;
-                this.showUploadButton = true;
                 this.logoAttached = false;
                 this.isFileUploaded = false;
                 this.defaultImageSize = 'S';
@@ -272,7 +269,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isFileUploadInProgress = false;
                     if (response?.status === 'success') {
-                        this.showUploadButton = false;
                         this.showDeleteButton = true;
                         this.onValueChange('logoUniqueName', response.body?.uniqueName);
                         this.isFileUploaded = true;
@@ -354,7 +350,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         this.isFileUploaded = false;
         this.isFileUploadInProgress = false;
         this.showDeleteButton = false;
-        this.showUploadButton = false;
         if (this.logoFile && this.logoFile.nativeElement) {
             this.logoFile.nativeElement.value = "";
         }
