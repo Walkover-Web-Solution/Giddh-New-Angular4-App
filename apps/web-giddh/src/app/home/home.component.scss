@@ -37,11 +37,14 @@ span.icon-info-icon {
     margin-bottom: 20px;
 }
 .panel-heading {
-    padding: 15px 15px;
+    padding: 15px 12px;
     font-size: var(--font-size-15);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    strong{
+        letter-spacing: -1px;
+    }
 }
 .basic > tbody > tr:hover td {
     background: transparent;
