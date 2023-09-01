@@ -126,15 +126,6 @@
                                 <img src="" alt="" id="logoImage" [hidden]="!logoAttached" />
                             </label>
                         </span>
-                        <button
-                            *ngIf="showUploadButton"
-                            type="button"
-                            class="start-upload-btn btn btn-success"
-                            (click)="startUpload()"
-                            tooltip="Clicking on Upload, will Upload image on server"
-                        >
-                            Upload
-                        </button>
                         <span class="start-upload-btn" *ngIf="isFileUploadInProgress"><b>Uploading...</b></span>
                         <button
                             *ngIf="showDeleteButton"
