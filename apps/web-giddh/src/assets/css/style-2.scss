@@ -2899,7 +2899,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .date-range-picker {
-    max-width: 220px;
+    max-width: 230px;
     min-width: 145px;
     width: 100% !important;
     background: none !important;
@@ -9114,7 +9114,7 @@ ngx-daterangepicker-material {
     box-shadow: 0 2px 4px 0 var(--color-primary-common-box-shadow), 0 2px 8px 0 var(--color-primary-common-box-shadow);
     z-index: 1;
     width: 100% !important;
-    max-width: 544px !important;
+    max-width: 560px !important;
 }
 
 .edit-modal {
@@ -9481,7 +9481,7 @@ span#HW_badge_cont:nth-child(3) {
     mat-card-content {
         display: flex;
         flex-direction: column;
-        padding: 20px;
+        padding: 20px 15px;
         height: 100%;
         row-gap: 50px;
     }
@@ -13193,7 +13193,7 @@ body.prevent-body-scroll {
 }
 
 .mat-datepicker-content .mat-calendar {
-    height: 320px !important;
+    height: 325px !important;
     background-color: var(--color-table-body-primary-background);
 }
 

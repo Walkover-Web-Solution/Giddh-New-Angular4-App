@@ -491,11 +491,6 @@
         }
     }
 }
-::ng-deep {
-    .mat-pseudo-checkbox-checked {
-        background: var(--color-giddh-blue) !important;
-    }
-}
 .create-warehouse-btn {
     background-color: var(--color-primary-inventory-stock-dropdown-button-background);
 }
