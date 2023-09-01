@@ -8,8 +8,8 @@ module.exports = {
             'isElectron': JSON.stringify(true),
             'errlyticsNeeded': JSON.stringify(false),
             'errlyticsKey': JSON.stringify(''),
-            'AppUrl': JSON.stringify('http://localhost:4200/'),
-            'ApiUrl': JSON.stringify('https://apitest.giddh.com/'),
+            'AppUrl': JSON.stringify('./'),
+            'ApiUrl': JSON.stringify('https://api.giddh.com/'),
             'APP_FOLDER': JSON.stringify(''),
             'PRODUCTION_ENV': JSON.stringify(false),
             'STAGING_ENV': JSON.stringify(false),
@@ -32,8 +32,8 @@ module.exports = {
             'process.env.isElectron': JSON.stringify(false),
             'process.env.errlyticsNeeded': JSON.stringify(false),
             'process.env.errlyticsKey': JSON.stringify(''),
-            'process.env.AppUrl': JSON.stringify('http://localhost:4200/'),
-            'process.env.ApiUrl': JSON.stringify('https://apitest.giddh.com/'),
+            'process.env.AppUrl': JSON.stringify('./'),
+            'process.env.ApiUrl': JSON.stringify('https://api.giddh.com/'),
             'process.env.APP_FOLDER': JSON.stringify(''),
         })
     ]
