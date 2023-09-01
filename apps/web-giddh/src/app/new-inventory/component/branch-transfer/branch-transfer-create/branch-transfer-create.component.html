@@ -207,8 +207,6 @@
                                     <div *ngIf="transferType === 'products'" formArrayName="sources">
                                         <div [formGroupName]="0">
                                             <div class="mr-b15">
-                                                {{ senderWarehouses | json }}
-                                                {{ branchTransferCreateEditForm.get("sources.0.uniqueName")?.value }}
                                                 <dropdown-field
                                                     #sourceWarehouse
                                                     [name]="'senderWarehouse'"
@@ -219,6 +217,11 @@
                                                             branchTransferCreateEditForm.get('sources.0.uniqueName')
                                                                 ?.value
                                                         ]
+                                                    "
+                                                    [defaultValue]="
+                                                        branchTransferCreateEditForm.get(
+                                                            'sources.0.warehouse.uniqueName'
+                                                        ).value
                                                     "
                                                     [allowValueReset]="true"
                                                     (onClear)="resetWarehouse('sources', 0)"
@@ -440,8 +443,14 @@
                                         <th>Amount</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody formArrayName="products">
                                     <tr
+                                        *ngFor="
+                                            let product of branchTransferCreateEditForm.get('products')['controls'];
+                                            let i = index;
+                                            let f = first;
+                                            let l = last
+                                        "
                                         (click)="setActiveRow(); $event.stopPropagation()"
                                         (clickOutside)="hideActiveRow()"
                                     >
@@ -468,7 +477,6 @@
                                                         [cssClass]="'form-control mat-field-border pb-0'"
                                                         [name]="''"
                                                         [placeholder]="'Type to filter'"
-                                                        [options]="product"
                                                         [defaultValue]=""
                                                     >
                                                     </select-field>
@@ -633,7 +641,10 @@
                                                 <span class="position-relative">
                                                     <span class="delete-btn-position d-flex">
                                                         <span *ngIf="true" class="delete-icon"
-                                                            ><i class="fa fa-trash"></i
+                                                            ><i
+                                                                class="fa fa-trash"
+                                                                (click)="removeProductDetailsForm(i)"
+                                                            ></i
                                                         ></span>
                                                         <i
                                                             *ngIf="true"
@@ -650,7 +661,10 @@
                                 <tfoot>
                                     <tr>
                                         <td colspan="4" class="pl-0">
-                                            <a href="javascript:void(0)" class="color-primary"
+                                            <a
+                                                href="javascript:void(0)"
+                                                (click)="addBlankProductsForm()"
+                                                class="color-primary"
                                                 >+ Add Multiple Products</a
                                             >
                                         </td>
