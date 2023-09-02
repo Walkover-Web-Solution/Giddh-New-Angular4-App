@@ -98,7 +98,9 @@ export default class WindowManager {
                 window.maximize();
             }
             setTimeout(() => {
-                window.loadURL(descriptor.url);
+                window.loadURL(descriptor.url,
+                    { userAgent: 'Chrome' }
+                );
                 window.show();
                 this.registerWindowEventHandlers(window, descriptor);
                 this.windows.push(window);
