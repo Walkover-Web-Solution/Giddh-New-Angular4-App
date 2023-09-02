@@ -34,5 +34,8 @@
     "enter_output_quantity": "Enter Output Quantity",
     "select_output_stock_unit": "Select Output Stock Unit",
     "enter_quantity": "Enter Quantity",
-    "select_stock_unit": "Select Stock Unit"
+    "select_stock_unit": "Select Stock Unit",
+    "add_expense":"+ Add Expense",
+    "app_expense":"Expense",
+    "manufacturing_expenses": "Total Manufacturing Expense"
 }

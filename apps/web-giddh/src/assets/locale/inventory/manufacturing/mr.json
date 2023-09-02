@@ -34,5 +34,8 @@
     "enter_output_quantity": "आउटपुट प्रमाण प्रविष्ट करा",
     "select_output_stock_unit": "आउटपुट स्टॉक युनिट निवडा",
     "enter_quantity": "प्रमाण प्रविष्ट करा",
-    "select_stock_unit": "स्टॉक युनिट निवडा"
+    "select_stock_unit": "स्टॉक युनिट निवडा",
+    "add_expense":"+ खर्च जोडा",
+    "app_expense":"खर्च",
+    "manufacturing_expenses": "एकूण उत्पादन खर्च"
 }
