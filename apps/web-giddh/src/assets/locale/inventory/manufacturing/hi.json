@@ -34,5 +34,8 @@
     "enter_output_quantity": "आउटपुट मात्रा दर्ज करें",
     "select_output_stock_unit": "आउटपुट स्टॉक यूनिट का चयन करें",
     "enter_quantity": "मात्रा दर्ज करें",
-    "select_stock_unit": "स्टॉक यूनिट का चयन करें"
+    "select_stock_unit": "स्टॉक यूनिट का चयन करें",
+    "add_expense":"+ व्यय जोड़ें",
+    "app_expense":"व्यय",
+    "manufacturing_expenses": "कुल विनिर्माण व्यय"
 }

@@ -126,6 +126,15 @@ body{
     }
 }
 
+.consumption-details-wrapper {
+    .mat-expansion-panel {
+        .mat-expansion-panel-header {
+            .mat-expansion-panel-header-title{
+                color: var(--color-primary-header-background) !important;
+            }
+        }
+    }
+}
 .field-m-width{
     max-width: 170px;
     .select-field-input {
