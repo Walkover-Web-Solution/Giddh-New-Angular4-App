@@ -33,21 +33,20 @@ import { take, takeUntil } from 'rxjs/operators';
 })
 
 export class BranchTransferCreateComponent implements OnInit, OnDestroy {
-    /** Form Group for group form */
-    public branchTransferCreateEditForm: FormGroup;
     /** Close the  HSN/SAC Opened Menu*/
     @ViewChild('hsnSacMenuTrigger') hsnSacMenuTrigger: MatMenuTrigger;
     /** Close the  HSN/SAC Opened Menu*/
     @ViewChild('skuMenuTrigger') skuMenuTrigger: MatMenuTrigger;
+    /** Instance for aside menu for product service and account*/
     @ViewChild("asideMenuProductService") public asideMenuProductService: TemplateRef<any>;
-    /** For HSN/SAC Code Inside Table*/
-    public showCodeType: 'HSN' | 'SAC' = 'HSN';
+    /** Form Group for group form */
+    public branchTransferCreateEditForm: FormGroup;
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if translations loaded */
     public translationLoaded: boolean = false;
     /* this will store image path*/
@@ -56,31 +55,58 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     public branchTransferMode: string = "";
     /* this will hold overall total amount */
     public overallTotal: number = 0;
-    /** Product Name Filter dropdown items*/
-    public product: any = [];
     /** Holds if Multiple Products/Senders selected */
     public transferType: string = 'products';
-    /** For Table Receipt Toggle Input Fields */
-    public activeRow: number = -1;
-    public hsnNumber: number;
-    public sacNumber: number;
-    public skuNumber: string;
-    /** On Sender */
+    /** For Active row index */
+    public activeIndx: number;
+    /** Hold hsc/sac status */
     public senderHsnSacStatus: 'HSN' | 'SAC';
-    public productSenderDescription: string = 'Product Description';
+    /** Hold  edit branch transfer uniqueName*/
     public editBranchTransferUniqueName: string = '';
+    /** Hold  temp data query params*/
     public tempDateParams: any = { dateOfSupply: new Date(), dispatchedDate: '' };
+    /** Hold  stock list data */
     public stockList: IOption[] = [];
+    /** Hold  transporter data details */
     public transporterPopupStatus: boolean = false;
+    /** Hold  transporter id*/
     public currenTransporterId: string;
+    /** Observable to get transporter list*/
     public transporterList$: Observable<IEwayBillTransporter[]>;
+    /** Observable to get transporter details*/
     public transporterListDetails$: Observable<IAllTransporterDetails>;
+    /** Hold get transporter details*/
     public transporterListDetails: IAllTransporterDetails;
+    /**True if transport edit mode*/
+    public transportEditMode: boolean = false;
+    /** Emit transport filter request*/
+    public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
+    /** Hold transported dropdown*/
+    public transporterDropdown: IOption[] = [];
+    /** Observable to get transporter in process*/
+    public isGenarateTransporterInProcess$: Observable<boolean>;
+    /** Observable to get transporter successfully*/
+    public isGenarateTransporterSuccessfully$: Observable<boolean>;
+    /** Observable to update transporter process*/
+    public updateTransporterInProcess$: Observable<boolean>;
+    /** Observable to update transporter success*/
+    public updateTransporterSuccess$: Observable<boolean>;
+    /** Hold object for generate new transporter*/
+    public generateNewTransporter: IEwayBillTransporter = {
+        transporterId: null,
+        transporterName: null
+    }; '';
+    /** Hold transported mode list */
+    public transporterMode: IOption[] = [];
+    /** Hold  active company details */
     public activeCompany: any = {};
+    /** Hold  input mask format  */
     public inputMaskFormat: any = '';
+    /** Hold  branch list data */
     public branches: any[] = [];
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** True if auto focus fields active */
     public allowAutoFocusInField: boolean = false;
     /** True if it's default load */
     private isDefaultLoad: boolean = false;
@@ -88,41 +114,37 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     public isBranch: boolean;
     /** True if current organization is company with single branch */
     public isCompanyWithSingleBranch: boolean;
-    public transportEditMode: boolean = false;
-    public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
-    public transporterDropdown: IOption[] = [];
-    public isGenarateTransporterInProcess$: Observable<boolean>;
-    public isGenarateTransporterSuccessfully$: Observable<boolean>;
-    public updateTransporterInProcess$: Observable<boolean>;
-    public updateTransporterSuccess$: Observable<boolean>;
-    public generateNewTransporter: IEwayBillTransporter = {
-        transporterId: null,
-        transporterName: null
-    }; '';
+    /** Hold  all branches list data */
     public allWarehouses: any[] = [];
+    /** Hold  sender warehouse list data */
     public senderWarehouses: { [key: string]: IOption[] } = {};
+    /** Hold  destination warehouse list data */
     public destinationWarehouses: { [key: string]: IOption[] } = {};
+    /** True if it is update mode */
     public isUpdateMode: boolean = false;
+    /** Hold  form fields data */
     public formFields: any[] = [];
     /** Information message to be shown to the user for branch transfer */
     public branchTransferInfoText: string = '';
-    public transporterMode: IOption[] = [];
+    /** True if  loading */
     public isLoading: boolean = false;
+    /** True if is valid source tax number */
     public isValidSourceTaxNumber: boolean = true;
     /** True if gstin number valid */
     public isGstinValid: boolean = false;
+    /** Hold inventory settings  */
     public inventorySettings: any;
+    /** True if destination tax number valid */
     public isValidDestinationTaxNumber: boolean = true;
+    /** Hold inner entry index number */
     public innerEntryIndex: number;
     /** Hold aside menu state for product service  */
     public asideMenuStateForProductService: any;
-    @ViewChild('selectDropdown', { static: false }) public selectDropdown: SelectFieldComponent;
-    @ViewChild('sourceWarehouse', { static: false }) public sourceWarehouse: SelectFieldComponent;
-    @ViewChild('destinationWarehouse', { static: false }) public destinationWarehouse: SelectFieldComponent;
     /** Stores the destination branch alias */
     public destinationBranchAlias: string;
     /** Stores the source branch alias */
     public sourceBranchAlias: string;
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -219,7 +241,6 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             transferType: (this.transferType) ? this.transferType : null,
             myCurrentCompany: ['']
         });
-        this.activeRow = -1;
     }
 
     public initSourceFormGroup(): UntypedFormGroup {
@@ -280,11 +301,13 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     }
 
     public setActiveRow(index: number): void {
-        this.activeRow = index;
+        console.log(index);
+
+        this.activeIndx = index;
     }
 
     public saveSkuNumberPopup(product): void {
-        product.skuCode = this.skuNumber;
+        // product.skuCode = this.skuNumber;
         // this.skuNumberPopupShow = false;
     }
 
@@ -302,8 +325,9 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     }
 
     public hideActiveRow(): void {
-        this.activeRow = null;
+        this.activeIndx = null;
     }
+
     /** Close the  HSN/SAC Opened Menu*/
     public closeShowCodeMenu(): void {
         this.hsnSacMenuTrigger.closeMenu();
@@ -413,16 +437,11 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         }
     }
 
-
-
-
-
-
-
     public addSender() {
         const sources = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
         sources.push(this.initSourceFormGroup());
     }
+
     public removeSenderDetailsForm(i: number) {
         const sources = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
         sources.removeAt(i);
@@ -432,6 +451,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         const destinations = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
         destinations.push(this.initDestinationFormGroup());
     }
+
     public removeReceiverDetailsForm(i: number) {
         const destinations = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
         destinations.removeAt(i);
@@ -463,6 +483,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     public changeTransferType(): void {
         this.allowAutoFocusInField = false;
         this.branchTransferCreateEditForm.reset();
@@ -963,7 +984,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     public focusSelectDropdown(index: number, event?: any): void {
         if (this.allowAutoFocusInField && (!event || event.value)) {
             // setTimeout(() => {
-            //     this.setActiveRow(index);
+            //     this.setactiveIndx(index);
             //     setTimeout(() => {
             //         this.selectDropdown?.show('');
             //     }, 100);
@@ -1282,9 +1303,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                 }
                 if (destinationsWarehouseFormGroup && destinationsWarehouseFormGroup.get('uniqueName')?.value) {
                     setTimeout(() => {
-                        // if (this.destinationWarehouse) {
-                        //     this.destinationWarehouse.writeValue(this.branchTransfer.destinations[index].warehouse?.uniqueName);
-                        // // }
+                        this.branchTransferCreateEditForm.get('destinations.0.warehouse.uniqueName').setValue(destinationsWarehouseFormGroup.get('uniqueName')?.value)
                     }, 100);
                 }
             }
@@ -1322,9 +1341,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                 }
                 if (destinationsWarehouseFormGroup && destinationsWarehouseFormGroup.get('uniqueName')?.value) {
                     setTimeout(() => {
-                        if (this.destinationWarehouse) {
-                            // this.destinationWarehouse.writeValue(destinationsWarehouseFormGroup.get('uniqueName')?.value);
-                        }
+                        this.branchTransferCreateEditForm.get('destinations.0.warehouse.uniqueName').setValue(destinationsWarehouseFormGroup.get('uniqueName')?.value)
                     }, 100);
                 }
             }
@@ -1370,52 +1387,53 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
 
         this.calculateOverallTotal();
     }
+
     public selectProduct(event, product): void {
         if (event && event.additional) {
-            product.value.name = event.additional.name;
-            product.value.uniqueName = event.additional.uniqueName;
-            product.value.stockDetails.stockUnit = event.additional.stockUnit.code;
-            product.value.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
-            product.value.stockDetails.rate = 0;
+            product.name = event.additional.name;
+            product.uniqueName = event.additional.uniqueName;
+            product.stockDetails.stockUnit = event.additional.stockUnit.code;
+            product.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
+            product.stockDetails.rate = 0;
 
             this.inventoryService.GetStockDetails(event.additional.stockGroup?.uniqueName, event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response?.status === 'success') {
-                    product.value.stockDetails.rate = response?.body?.purchaseAccountDetails?.unitRates[0]?.rate;
+                    product.stockDetails.rate = response?.body?.purchaseAccountDetails?.unitRates[0]?.rate;
                     if (!response?.body?.purchaseAccountDetails) {
-                        product.value.stockDetails.stockUnitUniqueName = response?.body?.stockUnit?.uniqueName;
-                        product.value.stockDetails.stockUnit = response?.body?.stockUnit?.code;
+                        product.stockDetails.stockUnitUniqueName = response?.body?.stockUnit?.uniqueName;
+                        product.stockDetails.stockUnit = response?.body?.stockUnit?.code;
                     } else {
-                        product.value.stockDetails.stockUnitUniqueName = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitUniqueName;
-                        product.value.stockDetails.stockUnit = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitCode;
+                        product.stockDetails.stockUnitUniqueName = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitUniqueName;
+                        product.stockDetails.stockUnit = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitCode;
                     }
-                    this.calculateRowTotal(product.value);
+                    this.calculateRowTotal(product);
                 }
             });
 
-            product.value.stockDetails.quantity = product.value.stockDetails.quantity || 1;
-            product.value.skuCode = event.additional.skuCode;
+            product.stockDetails.quantity = product.stockDetails.quantity || 1;
+            product.skuCode = event.additional.skuCode;
 
             if (event.additional?.hsnNumber && event.additional?.sacNumber) {
                 if (this.inventorySettings?.manageInventory) {
-                    product.value.hsnNumber = event.additional.hsnNumber;
-                    product.value.showCodeType = "hsn";
+                    product.hsnNumber = event.additional.hsnNumber;
+                    product.showCodeType = "hsn";
                 } else {
-                    product.value.sacNumber = event.additional.sacNumber;
-                    product.value.showCodeType = "sac";
+                    product.sacNumber = event.additional.sacNumber;
+                    product.showCodeType = "sac";
                 }
             } else if (event.additional?.hsnNumber && !event.additional?.sacNumber) {
-                product.value.hsnNumber = event.additional.hsnNumber;
-                product.value.showCodeType = "hsn";
+                product.hsnNumber = event.additional.hsnNumber;
+                product.showCodeType = "hsn";
             } else if (!event.additional?.hsnNumber && event.additional?.sacNumber) {
-                product.value.sacNumber = event.additional.sacNumber;
-                product.value.showCodeType = "sac";
+                product.sacNumber = event.additional.sacNumber;
+                product.showCodeType = "sac";
             } else if (!event.additional?.hsnNumber && !event.additional?.sacNumber) {
                 if (this.inventorySettings?.manageInventory) {
-                    product.value.hsnNumber = "";
-                    product.value.showCodeType = "hsn";
+                    product.hsnNumber = "";
+                    product.showCodeType = "hsn";
                 } else {
-                    product.value.sacNumber = "";
-                    product.value.showCodeType = "sac";
+                    product.sacNumber = "";
+                    product.showCodeType = "sac";
                 }
             }
 
