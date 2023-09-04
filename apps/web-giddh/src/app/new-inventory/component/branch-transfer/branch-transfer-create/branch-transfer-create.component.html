@@ -107,6 +107,9 @@
                                                 [name]="'skuCode'"
                                                 [label]="'SKU Code'"
                                                 [appearance]="'outline'"
+                                                [formControlName]="
+                                                    branchTransferCreateEditForm.get('products.0.skuCode')?.value
+                                                "
                                             >
                                             </input-field>
                                         </div>
@@ -179,21 +182,27 @@
                                                 [label]="'Sender\'s Warehouse'"
                                                 [placeholder]=""
                                                 [type]="'text'"
+                                                [formControlName]="
+                                                    branchTransferCreateEditForm.get('sources.0.uniqueName')?.value
+                                                "
                                             >
                                             </input-field>
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-space-between align-items-center mr-b15">
-                                        <div class="mr-b1" *ngIf="transferType === 'senders'">
-                                            <mat-radio-group name="sender_HsnSac" class="d-flex font-14">
-                                                <mat-radio-button color="primary" value="HSN"
-                                                    >HSN Code</mat-radio-button
-                                                >
-                                                <mat-radio-button color="primary" value="SAC"
-                                                    >SAC Code</mat-radio-button
-                                                >
-                                            </mat-radio-group>
-                                        </div>
+                                    <!-- <div class="branch-transfer-body-radio-btns" *ngIf="transferType === 'senders'">
+                                        <mat-radio-group
+                                            name="products_sender"
+                                                 [formControlName]="
+                                                    branchTransferCreateEditForm.get('products.0.showCodeType')?.value
+                                                "
+                                        >
+                                            <mat-radio-button color="primary" value="HSN"
+                                                >HSN Code</mat-radio-button
+                                            >
+                                            <mat-radio-button (click)="changeCodeType()" color="primary" value="SAC"
+                                                >SAC Code</mat-radio-button
+                                            >
+                                        </mat-radio-group>
                                         <div
                                             class="w-100 ml-3"
                                             *ngIf="transferType === 'senders'"
@@ -207,7 +216,7 @@
                                             >
                                             </input-field>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div *ngIf="transferType === 'products'" formArrayName="sources">
                                         <div [formGroupName]="0">
                                             <div class="mr-b15">
@@ -591,7 +600,10 @@
                                                                     [placeholder]="'Enter Qty/Unit'"
                                                                     [allowDecimalDigitsOnly]="true"
                                                                     (change)="
-                                                                        calculateRowTotal(source.get('warehouse').value)
+                                                                        calculateRowTotal(
+                                                                            source.get('warehouse').value,
+                                                                            i
+                                                                        )
                                                                     "
                                                                     formControlName="quantity"
                                                                 >
@@ -630,7 +642,8 @@
                                                                         [customDecimalPlaces]="2"
                                                                         (change)="
                                                                             calculateRowTotal(
-                                                                                source.get('warehouse').value
+                                                                                source.get('warehouse').value,
+                                                                                i
                                                                             )
                                                                         "
                                                                         [prefix]="activeCompany?.baseCurrencySymbol"
@@ -735,16 +748,17 @@
                                                                 [placeholder]="'Product\'s Name'"
                                                                 [options]="stockList"
                                                                 [appearance]="'outline'"
-                                                                (selectedOption)="selectProduct($event, product.value)"
+                                                                (selectedOption)="selectProduct($event, product, i)"
                                                                 [allowValueReset]="true"
-                                                                [defautlValue]="product.get('uniqueName').value"
+                                                                [defaultValue]="product.get('name').value"
                                                                 [cssClass]="'form-control mat-field-border pb-0'"
                                                             >
                                                             </select-field>
-                                                            <!-- && product.get('uniqueName').value -->
                                                             <div
                                                                 class="show-sku-code-position"
-                                                                *ngIf="activeIndx == i"
+                                                                *ngIf="
+                                                                    activeIndx == i && product.get('uniqueName').value
+                                                                "
                                                                 mat-button
                                                                 [matMenuTriggerFor]="sku_Menu"
                                                                 #skuMenuTrigger="matMenuTrigger"
@@ -806,12 +820,14 @@
                                                                         formControlName="description"
                                                                         *ngIf="activeIndx == i"
                                                                     ></textarea>
-                                                                    <!-- product.get('uniqueName')?.value -->
+                                                                    <!-- -->
                                                                 </div>
                                                             </div>
                                                             <div
                                                                 class="show-code-position"
-                                                                *ngIf="activeIndx === i"
+                                                                *ngIf="
+                                                                    activeIndx === i && product.get('uniqueName')?.value
+                                                                "
                                                                 mat-button
                                                                 [matMenuTriggerFor]="hsn_sac_Menu"
                                                                 #hsnSacMenuTrigger="matMenuTrigger"
@@ -922,7 +938,7 @@
                                                                     name="productQty{{ i }}"
                                                                     [placeholder]="'Enter Qty/Unit'"
                                                                     [allowDecimalDigitsOnly]="true"
-                                                                    (change)="calculateRowTotal(product?.value)"
+                                                                    (change)="calculateRowTotal(product, i)"
                                                                     formControlName="quantity"
                                                                 >
                                                                 </text-field>
@@ -951,7 +967,7 @@
                                                                         formControlName="rate"
                                                                         [allowDecimalDigitsOnly]="true"
                                                                         [customDecimalPlaces]="2"
-                                                                        (change)="calculateRowTotal(product?.value)"
+                                                                        (change)="calculateRowTotal(product, i)"
                                                                         [prefix]="activeCompany?.baseCurrencySymbol"
                                                                         [mask]="inputMaskFormat"
                                                                         [useMask]="true"
@@ -1173,7 +1189,8 @@
                                                                             [allowDecimalDigitsOnly]="true"
                                                                             (change)="
                                                                                 calculateRowTotal(
-                                                                                    destination.get('warehouse').value
+                                                                                    destination.get('warehouse').value,
+                                                                                    i
                                                                                 )
                                                                             "
                                                                             formControlName="quantity"
@@ -1217,7 +1234,8 @@
                                                                         [customDecimalPlaces]="2"
                                                                         (change)="
                                                                             calculateRowTotal(
-                                                                                destination.get('warehouse').value
+                                                                                destination.get('warehouse').value,
+                                                                                i
                                                                             )
                                                                         "
                                                                         [prefix]="activeCompany?.baseCurrencySymbol"

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormArray, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormArray, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -40,7 +40,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /** Instance for aside menu for product service and account*/
     @ViewChild("asideMenuProductService") public asideMenuProductService: TemplateRef<any>;
     /** Form Group for group form */
-    public branchTransferCreateEditForm: FormGroup;
+    public branchTransferCreateEditForm: UntypedFormGroup;
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /* This will hold local JSON data */
@@ -334,32 +334,40 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         this.skuMenuTrigger.closeMenu();
     }
     public submit(): void {
+
         this.isLoading = true;
-        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
-        sourcesArray[0]?.forEach(source => {
-            if (source?.warehouse) {
-                const [address, pin] = source.warehouse.address.split('\nPIN: ');
-                source.warehouse.address = address;
-                source.warehouse.pincode = pin;
+        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+        for (let i = 0; i < sourcesArray.length; i++) {
+            const sourcesFormGroup = sourcesArray.at(i) as UntypedFormGroup;
+            const sourcesStockDetails = sourcesFormGroup.get('warehouse') as UntypedFormGroup;
+            if (sourcesStockDetails) {
+                const [address, pin] = sourcesStockDetails.get('address').value?.split('\nPIN: ');
+                sourcesStockDetails.get('address')?.setValue(address);
+                sourcesStockDetails.get('pincode')?.setValue(pin);
             }
-        });
-        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as FormArray;
-        destinationsArray[0]?.forEach(destination => {
-            if (destination?.warehouse) {
-                const [address, pin] = destination.warehouse.address.split('\nPIN: ');
-                destination.warehouse.address = address;
-                destination.warehouse.pincode = pin;
+        }
+
+        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+        for (let i = 0; i < destinationsArray.length; i++) {
+            const destinationsFormGroup = destinationsArray.at(i) as UntypedFormGroup;
+            const destinationsStockDetails = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
+            if (destinationsStockDetails) {
+                const [address, pin] = destinationsStockDetails.get('address').value?.split('\nPIN: ');
+                destinationsStockDetails.get('address')?.setValue(address);
+                destinationsStockDetails.get('pincode')?.setValue(pin);
             }
-        });
-        const productsArray = this.branchTransferCreateEditForm.get('products') as FormArray;
-        productsArray[0]?.forEach(product => {
-            if (product.showCodeType === "hsn") {
-                product.sacNumber = "";
+        }
+        const productsArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
+        for (let i = 0; i < productsArray.length; i++) {
+            const productFormGroup = productsArray.at(i) as UntypedFormGroup;
+            if (productFormGroup.get('showCodeType').value === "hsn") {
+                productFormGroup.get('sacNumber').setValue("");
             } else {
-                product.hsnNumber = "";
+                productFormGroup.get('hsnNumber').setValue("");
             }
-            delete product.variant;
-        });
+            // delete product.variant;
+        }
+        console.log(this.branchTransferCreateEditForm);
 
         // if (this.editBranchTransferUniqueName) {
         //     this.inventoryService.updateNewBranchTransfer(this.branchTransfer).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -410,8 +418,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     }
     public checkTaxNumberValidation(): void {
         let isValid: boolean = false;
-        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
-        const warehouseFormGroup = sourcesArray.at(0).get('warehouse') as FormGroup;
+        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+        const warehouseFormGroup = sourcesArray.at(0).get('warehouse') as UntypedFormGroup;
         const taxNumberValue = warehouseFormGroup.get('taxNumber').value;
         if (taxNumberValue) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
@@ -503,58 +511,6 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         }, 200);
     }
 
-    public calculateOverallTotal(): void {
-        this.overallTotal = 0;
-
-        if (this.transferType === 'products') {
-            const productsArray = this.branchTransferCreateEditForm.get('products') as FormArray;
-            productsArray[0]?.forEach(product => {
-                let overallTotal = 0;
-                if (!isNaN(parseFloat(product.stockDetails.rate)) && !isNaN(parseFloat(product.stockDetails.quantity))) {
-                    overallTotal = parseFloat(product.stockDetails.rate) * parseFloat(product.stockDetails.quantity);
-                    if (isNaN(overallTotal)) {
-                        overallTotal = 0;
-                    }
-                } else {
-                    overallTotal = 0;
-                }
-
-                this.overallTotal += Number(this.generalService.convertExponentialToNumber((overallTotal)));
-            });
-        } else if (this.transferType !== 'products' && this.branchTransferMode === 'delivery-challan') {
-            const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as FormArray;
-            destinationsArray[0]?.forEach(destination => {
-                let overallTotal = 0;
-                if (!isNaN(parseFloat(destination.warehouse.stockDetails.rate)) && !isNaN(parseFloat(destination.warehouse.stockDetails.quantity))) {
-                    overallTotal = parseFloat(destination.warehouse.stockDetails.rate) * parseFloat(destination.warehouse.stockDetails.quantity);
-                    if (isNaN(overallTotal)) {
-                        overallTotal = 0;
-                    }
-                } else {
-                    overallTotal = 0;
-                }
-
-                this.overallTotal += Number(this.generalService.convertExponentialToNumber(overallTotal));
-            });
-        } else if (this.transferType !== 'products' && this.branchTransferMode === 'receipt-note') {
-            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
-            sourcesArray[0]?.forEach(source => {
-                let overallTotal = 0;
-                if (!isNaN(parseFloat(source.warehouse.stockDetails.rate)) && !isNaN(parseFloat(source.warehouse.stockDetails.quantity))) {
-                    overallTotal = parseFloat(source.warehouse.stockDetails.rate) * parseFloat(source.warehouse.stockDetails.quantity);
-                    if (isNaN(overallTotal)) {
-                        overallTotal = 0;
-                    }
-                } else {
-                    overallTotal = 0;
-                }
-
-                this.overallTotal += Number(this.generalService.convertExponentialToNumber(overallTotal));
-            });
-        }
-    }
-
-
     public getBranches(): void {
         this.store.dispatch(this.inventoryAction.GetAllLinkedStocks());
 
@@ -586,11 +542,11 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
 
     public getBranchTransfer(): void {
         this.isUpdateMode = true;
-        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
-        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as FormArray;
-        const productsArray = this.branchTransferCreateEditForm.get('products') as FormArray;
-        const destinationsFormGroup = destinationsArray?.at(0) as FormGroup;
-        const sourcesFormGroup = destinationsArray?.at(0) as FormGroup;
+        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+        const productsArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
+        const destinationsFormGroup = destinationsArray?.at(0) as UntypedFormGroup;
+        const sourcesFormGroup = destinationsArray?.at(0) as UntypedFormGroup;
 
         this.inventoryService.getNewBranchTransfer(this.editBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
@@ -668,7 +624,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                     const sourceBranch = this.branches.find(branch => branch.value === sourcesFormGroup.get('uniqueName').value);
                     this.sourceBranchAlias = sourceBranch && sourceBranch.additional ? sourceBranch.additional.alias : '';
                 }
-                const transporterDetailsFormGroup = this.branchTransferCreateEditForm.get('transporterDetails') as FormGroup;
+                const transporterDetailsFormGroup = this.branchTransferCreateEditForm.get('transporterDetails') as UntypedFormGroup;
                 if (!this.branchTransferCreateEditForm.get('transporterDetails')) {
                     transporterDetailsFormGroup.patchValue({
                         dispatchedDate: null,
@@ -709,12 +665,12 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     }
 
     public getWarehouseDetails(type, index): void {
-        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
-        const sourceFormGroup = sourcesArray.at(index) as FormGroup;
-        const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as FormGroup;
-        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as FormArray;
-        const destinationsFormGroup = destinationsArray.at(index) as FormGroup;
-        const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as FormGroup;
+        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+        const sourceFormGroup = sourcesArray.at(index) as UntypedFormGroup;
+        const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as UntypedFormGroup;
+        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+        const destinationsFormGroup = destinationsArray.at(index) as UntypedFormGroup;
+        const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
         if (type === 'sources') {
             if (sourcesWarehouseFormGroup && sourcesWarehouseFormGroup.get('uniqueName').value !== null) {
 
@@ -834,10 +790,10 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         if (!this.editBranchTransferUniqueName) {
             let updateBranch = this.isBranch ? branchName : hoBranch?.alias;
             this.branchTransferCreateEditForm.get('myCurrentCompany').setValue(updateBranch);
-            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
-            const sourceFormGroup = sourcesArray.at(0) as FormGroup;
-            const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as FormArray;
-            const destinationsFormGroup = destinationsArray.at(0) as FormGroup;
+            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+            const sourceFormGroup = sourcesArray.at(0) as UntypedFormGroup;
+            const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+            const destinationsFormGroup = destinationsArray.at(0) as UntypedFormGroup;
 
             if (this.branchTransferMode === "delivery-challan") {
                 sourceFormGroup.get('uniqueName')?.setValue(selectedBranch ? selectedBranch.uniqueName : hoBranch?.uniqueName);
@@ -993,8 +949,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     }
     public selectSenderName(event: any, index: number): void {
         if (event?.value) {
-            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
-            const sourceGroup = sourcesArray.at(0) as FormGroup;
+            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+            const sourceGroup = sourcesArray.at(0) as UntypedFormGroup;
             sourceGroup.patchValue({
                 name: event?.label,
                 uniqueName: event?.value
@@ -1007,8 +963,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
 
     public selectRecieverName(event: any): void {
         if (event?.value) {
-            const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as FormArray;
-            const destinationGroup = destinationsArray.at(0) as FormGroup;
+            const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+            const destinationGroup = destinationsArray.at(0) as UntypedFormGroup;
             destinationGroup.patchValue({
                 name: event?.label,
                 uniqueName: event?.value
@@ -1022,9 +978,9 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
 
     public selectReceiverWarehouse(event: any): void {
         if (event?.value) {
-            const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as FormArray;
-            const destinationGroup = destinationsArray.at(0) as FormGroup;
-            const destinationsWarehouseFormGroup = destinationGroup.get('warehouse') as FormGroup;
+            const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+            const destinationGroup = destinationsArray.at(0) as UntypedFormGroup;
+            const destinationsWarehouseFormGroup = destinationGroup.get('warehouse') as UntypedFormGroup;
             destinationsWarehouseFormGroup.patchValue({
                 name: event?.label,
                 uniqueName: event?.value
@@ -1036,9 +992,9 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
 
     public selectSenderWarehouse(event: any, index: number): void {
         if (event?.value) {
-            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
-            const sourceGroup = sourcesArray.at(0) as FormGroup;
-            const sourcesWarehouseFormGroup = sourceGroup.get('warehouse') as FormGroup;
+            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+            const sourceGroup = sourcesArray.at(0) as UntypedFormGroup;
+            const sourcesWarehouseFormGroup = sourceGroup.get('warehouse') as UntypedFormGroup;
             sourcesWarehouseFormGroup.patchValue({
                 name: event?.label,
                 uniqueName: event?.value
@@ -1064,11 +1020,11 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     public selectCompany(event, type, index): void {
         if (!this.isDefaultLoad && type) {
             if (type === "sources") {
-                const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
-                const sourceGroup = sourcesArray?.at(index) as FormGroup;
-                const sourceWarehouseArray = sourceGroup.get['warehouse'] as FormArray;
-                const warehouseGroup = sourceWarehouseArray?.at(index) as FormGroup;
-                const stockDetailsFormGroup = sourcesArray?.at(index).get('warehouse.stockDetails') as FormGroup;
+                const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+                const sourceGroup = sourcesArray?.at(index) as UntypedFormGroup;
+                const sourceWarehouseArray = sourceGroup.get['warehouse'] as UntypedFormArray;
+                const warehouseGroup = sourceWarehouseArray?.at(index) as UntypedFormGroup;
+                const stockDetailsFormGroup = sourcesArray?.at(index).get('warehouse.stockDetails') as UntypedFormGroup;
                 if (sourcesArray) {
                     sourceGroup.patchValue({
                         name: event?.label
@@ -1096,11 +1052,11 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                     this.resetSourceWarehouses(index);
                 }
             } else {
-                const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as FormArray;
-                const destinationsFormGroup = destinationsArray.at(index) as FormGroup;
-                const destinationsWarehouseArray = destinationsFormGroup.get['warehouse'] as FormArray;
-                const warehouseGroup = destinationsWarehouseArray?.at(index) as FormGroup;
-                const stockDetailsFormGroup = destinationsArray.at(index).get('warehouse.stockDetails') as FormGroup;
+                const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+                const destinationsFormGroup = destinationsArray.at(index) as UntypedFormGroup;
+                const destinationsWarehouseArray = destinationsFormGroup.get['warehouse'] as UntypedFormArray;
+                const warehouseGroup = destinationsWarehouseArray?.at(index) as UntypedFormGroup;
+                const stockDetailsFormGroup = destinationsArray.at(index).get('warehouse.stockDetails') as UntypedFormGroup;
 
                 if (destinationsArray) {
                     destinationsFormGroup.patchValue({
@@ -1133,15 +1089,15 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     }
 
     public resetWarehouse(type: string, index: number): void {
-        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
-        const sourceFormGroup = sourcesArray.at(index) as FormGroup;
-        const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as FormGroup;
-        const sourcesStockDetailsFormGroup = sourcesArray.at(index).get('warehouse.stockDetails') as FormGroup;
+        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+        const sourceFormGroup = sourcesArray.at(index) as UntypedFormGroup;
+        const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as UntypedFormGroup;
+        const sourcesStockDetailsFormGroup = sourcesArray.at(index).get('warehouse.stockDetails') as UntypedFormGroup;
 
-        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as FormArray;
-        const destinationsFormGroup = destinationsArray.at(index) as FormGroup;
-        const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as FormGroup;
-        const destinationsStockDetailsFormGroup = destinationsArray.at(index).get('warehouse.stockDetails') as FormGroup;
+        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+        const destinationsFormGroup = destinationsArray.at(index) as UntypedFormGroup;
+        const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
+        const destinationsStockDetailsFormGroup = destinationsArray.at(index).get('warehouse.stockDetails') as UntypedFormGroup;
 
         if (type === "sources") {
             if (sourcesArray && sourcesWarehouseFormGroup) {
@@ -1178,13 +1134,13 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     }
 
     public resetSourceWarehouses(index: number, reInitializeWarehouses?: boolean) {
-        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
-        const sourceFormGroup = sourcesArray?.at(index) as FormGroup;
-        const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as FormGroup;
+        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+        const sourceFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
+        const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as UntypedFormGroup;
 
-        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as FormArray;
-        const destinationsFormGroup = destinationsArray?.at(index) as FormGroup;
-        const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as FormGroup;
+        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+        const destinationsFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
+        const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
 
 
 
@@ -1265,13 +1221,13 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     }
     public resetDestinationWarehouses(index, reInitializeWarehouses?: boolean) {
 
-        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
-        const sourceFormGroup = sourcesArray?.at(index) as FormGroup;
-        const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as FormGroup;
+        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+        const sourceFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
+        const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as UntypedFormGroup;
 
-        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as FormArray;
-        const destinationsFormGroup = destinationsArray?.at(index) as FormGroup;
-        const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as FormGroup;
+        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+        const destinationsFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
+        const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
         if (sourcesArray && sourceFormGroup && sourcesWarehouseFormGroup.get('uniqueName')?.value !== null) {
             this.destinationWarehouses[sourceFormGroup.controls.uniqueName.value] = [];
             let allowWarehouse = true;
@@ -1363,85 +1319,64 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
 
         }
     }
-    public calculateRowTotal(product: any): void {
-        if (product) {
-            if (!isNaN(parseFloat(product.stockDetails.rate)) && !isNaN(parseFloat(product.stockDetails.quantity))) {
-                product.stockDetails.amount = parseFloat(product.stockDetails.rate) * parseFloat(product.stockDetails.quantity);
-                if (isNaN(parseFloat(product.stockDetails.amount))) {
-                    product.stockDetails.amount = 0;
-                } else {
-                    product.stockDetails.amount = Number(this.generalService.convertExponentialToNumber(parseFloat(product.stockDetails.amount).toFixed(this.giddhBalanceDecimalPlaces)));
-                }
-            } else {
-                if (isNaN(parseFloat(product.stockDetails.rate))) {
-                    product.stockDetails.rate = 0;
-                }
-                if (isNaN(parseFloat(product.stockDetails.quantity))) {
-                    product.stockDetails.quantity = 0;
-                }
-                product.stockDetails.amount = 0;
-            }
-        }
 
-        this.calculateOverallTotal();
-    }
-
-    public selectProduct(event, product): void {
+    public selectProduct(event: any, product: any, index?: number): void {
         if (event && event.additional) {
-            product.name = event.additional.name;
-            product.uniqueName = event.additional.uniqueName;
-            product.stockDetails.stockUnit = event.additional.stockUnit.code;
-            product.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
-            product.stockDetails.rate = 0;
-
+            const productArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
+            const productFormGroup = productArray?.at(index) as UntypedFormGroup;
+            const productStockDetailsFormGroup = productFormGroup.get('stockDetails') as UntypedFormGroup;
+            productFormGroup.get('name')?.setValue(event.additional.name);
+            productFormGroup.get('uniqueName')?.setValue(event.additional.uniqueName);
+            productStockDetailsFormGroup.get('stockUnit')?.setValue(event.additional.stockUnit);
+            productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
+            productStockDetailsFormGroup.get('rate')?.setValue(0);
             this.inventoryService.GetStockDetails(event.additional.stockGroup?.uniqueName, event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response?.status === 'success') {
-                    product.stockDetails.rate = response?.body?.purchaseAccountDetails?.unitRates[0]?.rate;
+                    productStockDetailsFormGroup.get('rate')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.rate);
                     if (!response?.body?.purchaseAccountDetails) {
-                        product.stockDetails.stockUnitUniqueName = response?.body?.stockUnit?.uniqueName;
-                        product.stockDetails.stockUnit = response?.body?.stockUnit?.code;
+                        productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(response?.body?.stockUnit?.uniqueName);
+                        productStockDetailsFormGroup.get('stockUnit')?.setValue(response?.body?.stockUnit?.code);
                     } else {
-                        product.stockDetails.stockUnitUniqueName = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitUniqueName;
-                        product.stockDetails.stockUnit = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitCode;
+                        productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitUniqueName);
+                        productStockDetailsFormGroup.get('stockUnit')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitCode);
                     }
-                    this.calculateRowTotal(product);
+                    this.calculateRowTotal(product, index);
                 }
             });
-
-            product.stockDetails.quantity = product.stockDetails.quantity || 1;
-            product.skuCode = event.additional.skuCode;
+            productStockDetailsFormGroup.get('quantity')?.setValue(productStockDetailsFormGroup.get('quantity')?.value || 1);
+            productStockDetailsFormGroup.get('skuCode')?.setValue(event.additional.skuCode);
 
             if (event.additional?.hsnNumber && event.additional?.sacNumber) {
                 if (this.inventorySettings?.manageInventory) {
-                    product.hsnNumber = event.additional.hsnNumber;
-                    product.showCodeType = "hsn";
+                    productStockDetailsFormGroup.get('hsnNumber')?.setValue(event.additional.hsnNumber);
+                    productStockDetailsFormGroup.get('showCodeType')?.setValue("hsn");
                 } else {
-                    product.sacNumber = event.additional.sacNumber;
-                    product.showCodeType = "sac";
+                    productStockDetailsFormGroup.get('sacNumber')?.setValue(event.additional.sacNumber);
+                    productStockDetailsFormGroup.get('showCodeType')?.setValue("sac");
                 }
             } else if (event.additional?.hsnNumber && !event.additional?.sacNumber) {
-                product.hsnNumber = event.additional.hsnNumber;
-                product.showCodeType = "hsn";
+                productStockDetailsFormGroup.get('hsnNumber')?.setValue(event.additional.hsnNumber);
+                productStockDetailsFormGroup.get('showCodeType')?.setValue("hsn");
             } else if (!event.additional?.hsnNumber && event.additional?.sacNumber) {
-                product.sacNumber = event.additional.sacNumber;
-                product.showCodeType = "sac";
+                productStockDetailsFormGroup.get('sacNumber')?.setValue(event.additional.sacNumber);
+                productStockDetailsFormGroup.get('showCodeType')?.setValue("sac");
             } else if (!event.additional?.hsnNumber && !event.additional?.sacNumber) {
                 if (this.inventorySettings?.manageInventory) {
-                    product.hsnNumber = "";
-                    product.showCodeType = "hsn";
+                    productStockDetailsFormGroup.get('hsnNumber')?.setValue("");
+                    productStockDetailsFormGroup.get('showCodeType')?.setValue("hsn");
                 } else {
-                    product.sacNumber = "";
-                    product.showCodeType = "sac";
+                    productStockDetailsFormGroup.get('sacNumber')?.setValue("");
+                    productStockDetailsFormGroup.get('showCodeType')?.setValue("sac");
                 }
             }
 
             if (this.transferType === 'senders') {
-                const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
-                const sourceFormGroup = sourcesArray?.at(0) as FormGroup;
-                const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as FormGroup;
-                const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as FormArray;
-                const destinationsFormGroup = destinationsArray?.at(0) as FormGroup;
-                const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as FormGroup;
+                const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+                const sourceFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
+                const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as UntypedFormGroup;
+                const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+                const destinationsFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
+                const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
                 destinationsWarehouseFormGroup.get('stockDetails.stockUnit')?.setValue(event.additional.stockUnit.code);
                 destinationsWarehouseFormGroup.get('stockDetails.stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
                 sourcesWarehouseFormGroup.get('stockDetails.stockUnit')?.setValue(event.additional.stockUnit.code);
@@ -1456,6 +1391,85 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             }, 200);
         }
     }
+
+    public calculateRowTotal(product: any, index?: number): void {
+        const productArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
+        const productsFormGroup = productArray?.at(index) as UntypedFormGroup;
+        const productStockDetailsFormGroup = productsFormGroup.get('stockDetails') as UntypedFormGroup;
+        if (product) {
+            if (!isNaN(parseFloat(productStockDetailsFormGroup.get('rate')?.value)) && !isNaN(parseFloat(productStockDetailsFormGroup.get('quantity')?.value))) {
+                productStockDetailsFormGroup.get('amount')?.setValue(parseFloat(productStockDetailsFormGroup.get('rate')?.value) * parseFloat(productStockDetailsFormGroup.get('quantity')?.value));
+                if (isNaN(parseFloat(productStockDetailsFormGroup.get('amount')?.value))) {
+                    productStockDetailsFormGroup.get('amount')?.setValue(0);
+                } else {
+                    productStockDetailsFormGroup.get('amount')?.setValue(Number(this.generalService.convertExponentialToNumber(parseFloat(productStockDetailsFormGroup.get('amount')?.value).toFixed(this.giddhBalanceDecimalPlaces))));
+                }
+            } else {
+                if (isNaN(parseFloat(productStockDetailsFormGroup.get('rate')?.value))) {
+                    productStockDetailsFormGroup.get('rate')?.setValue(0);
+                }
+                if (isNaN(parseFloat(productStockDetailsFormGroup.get('quantity')?.value))) {
+                    productStockDetailsFormGroup.get('quantity')?.setValue(0);
+                }
+                productStockDetailsFormGroup.get('amount')?.setValue(0);
+            }
+        }
+        this.calculateOverallTotal();
+    }
+
+    public calculateOverallTotal(): void {
+        this.overallTotal = 0;
+        if (this.transferType === 'products') {
+            const productArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
+            for (let i = 0; i < productArray.length; i++) {
+                const productFormGroup = productArray.at(i) as UntypedFormGroup;
+                const productStockDetailsFormGroup = productFormGroup.get('stockDetails') as UntypedFormGroup;
+                let overallTotal = 0;
+                if (!isNaN(parseFloat(productStockDetailsFormGroup.get('rate')?.value)) && !isNaN(parseFloat(productStockDetailsFormGroup.get('quantity')?.value))) {
+                    overallTotal = parseFloat(productStockDetailsFormGroup.get('rate')?.value) * parseFloat(productStockDetailsFormGroup.get('quantity')?.value);
+                    if (isNaN(overallTotal)) {
+                        overallTotal = 0;
+                    }
+                } else {
+                    overallTotal = 0;
+                }
+                this.overallTotal += Number(this.generalService.convertExponentialToNumber((overallTotal)));
+            }
+        } else if (this.transferType !== 'products' && this.branchTransferMode === 'delivery-challan') {
+            const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+            for (let i = 0; i < destinationsArray.length; i++) {
+                const destinationsFormGroup = destinationsArray?.at(i) as UntypedFormGroup;
+                const destinationsStockDetailsFormGroup = destinationsFormGroup.get('warehouse.stockDetails') as UntypedFormGroup;
+                let overallTotal = 0;
+                if (!isNaN(parseFloat(destinationsStockDetailsFormGroup.get('rate')?.value)) && !isNaN(parseFloat(destinationsStockDetailsFormGroup.get('quantity')?.value))) {
+                    overallTotal = parseFloat(destinationsStockDetailsFormGroup.get('rate')?.value) * parseFloat(destinationsStockDetailsFormGroup.get('quantity')?.value);
+                    if (isNaN(overallTotal)) {
+                        overallTotal = 0;
+                    }
+                } else {
+                    overallTotal = 0;
+                }
+                this.overallTotal += Number(this.generalService.convertExponentialToNumber((overallTotal)));
+            }
+        } else if (this.transferType !== 'products' && this.branchTransferMode === 'receipt-note') {
+            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+            for (let i = 0; i < sourcesArray.length; i++) {
+                const sourcesFormGroup = sourcesArray?.at(i) as UntypedFormGroup;
+                const sourcesStockDetailsFormGroup = sourcesFormGroup.get('warehouse.stockDetails') as UntypedFormGroup;
+                let overallTotal = 0;
+                if (!isNaN(parseFloat(sourcesStockDetailsFormGroup.get('rate')?.value)) && !isNaN(parseFloat(sourcesStockDetailsFormGroup.get('quantity')?.value))) {
+                    overallTotal = parseFloat(sourcesStockDetailsFormGroup.get('rate')?.value) * parseFloat(sourcesStockDetailsFormGroup.get('quantity')?.value);
+                    if (isNaN(overallTotal)) {
+                        overallTotal = 0;
+                    }
+                } else {
+                    overallTotal = 0;
+                }
+                this.overallTotal += Number(this.generalService.convertExponentialToNumber((overallTotal)));
+            }
+        }
+    }
+
 
     public generateTransporter(generateTransporterForm: any): void {
         this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
