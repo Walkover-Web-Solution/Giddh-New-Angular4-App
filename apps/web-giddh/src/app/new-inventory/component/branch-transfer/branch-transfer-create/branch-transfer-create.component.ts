@@ -61,6 +61,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     public activeIndx: number;
     /** Hold hsc/sac status */
     public senderHsnSacStatus: 'HSN' | 'SAC';
+    /** For HSN/SAC Code Inside Table*/
+    public showCodeType: 'HSN' | 'SAC' = 'HSN';
     /** Hold  edit branch transfer uniqueName*/
     public editBranchTransferUniqueName: string = '';
     /** Hold  temp data query params*/
@@ -301,8 +303,6 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     }
 
     public setActiveRow(index: number): void {
-        console.log(index);
-
         this.activeIndx = index;
     }
 
@@ -1364,8 +1364,6 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         }
     }
     public calculateRowTotal(product: any): void {
-        console.log(product);
-
         if (product) {
             if (!isNaN(parseFloat(product.stockDetails.rate)) && !isNaN(parseFloat(product.stockDetails.quantity))) {
                 product.stockDetails.amount = parseFloat(product.stockDetails.rate) * parseFloat(product.stockDetails.quantity);

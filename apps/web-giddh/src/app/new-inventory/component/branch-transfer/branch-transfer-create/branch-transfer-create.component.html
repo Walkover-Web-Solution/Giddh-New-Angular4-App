@@ -449,34 +449,33 @@
                                 <thead *ngIf="transferType !== 'products'">
                                     <tr>
                                         <th>#</th>
-                                        <th *ngIf="branchTransferMode === 'deliverynote'">Receiver’s Details</th>
-                                        <th *ngIf="branchTransferMode === 'receiptnote'">Sender’s Details</th>
+                                        <th *ngIf="branchTransferMode === 'delivery-challan'">Receiver’s Details</th>
+                                        <th *ngIf="branchTransferMode === 'receipt-note'">Sender’s Details</th>
                                         <th>Qty/Unit</th>
                                         <th>Rate</th>
                                         <th>Amount</th>
                                     </tr>
                                 </thead>
-
                                 <tbody
                                     *ngIf="transferType !== 'products' && branchTransferMode === 'receipt-note'"
                                     (clickOutside)="hideActiveRow()"
                                 >
-                                    <tr
-                                        *ngFor="
-                                            let source of branchTransferCreateEditForm.get('sources')['controls'];
-                                            let i = index
-                                        "
-                                        (click)="setActiveRow(i); $event.stopPropagation()"
-                                    >
-                                        <ng-container>
-                                            <td class="id">
-                                                <div>
-                                                    <div>{{ i + 1 }}</div>
-                                                </div>
-                                            </td>
-                                            <td class="name">
-                                                <span formArrayName="sources" class="w-100">
-                                                    <span [formGroupName]="i">
+                                    <ng-container formArrayName="sources">
+                                        <tr
+                                            *ngFor="
+                                                let source of branchTransferCreateEditForm.get('sources')['controls'];
+                                                let i = index
+                                            "
+                                            (click)="setActiveRow(i); $event.stopPropagation()"
+                                        >
+                                            <ng-container [formGroupName]="i">
+                                                <td class="id">
+                                                    <div>
+                                                        <div>{{ i + 1 }}</div>
+                                                    </div>
+                                                </td>
+                                                <td class="name">
+                                                    <span class="w-100">
                                                         <span formGroupName="warehouse" class="w-100">
                                                             <div
                                                                 *ngIf="activeIndx === i"
@@ -580,97 +579,41 @@
                                                             </div>
                                                         </span>
                                                     </span>
-                                                </span>
-                                            </td>
-                                            <td class="qtyUnit">
-                                                <span formArrayName="sources" class="w-100">
-                                                    <span [formGroupName]="i">
-                                                        <span formGroupName="warehouse" class="w-100">
-                                                            <span formGroupName="stockDetails" class="w-100">
-                                                                <div *ngIf="activeIndx === i" class="w-100">
-                                                                    <text-field
-                                                                        [cssClass]="'form-control mat-field-border'"
-                                                                        [type]="'number'"
-                                                                        name="sourceQty{{ i }}"
-                                                                        [placeholder]="'Enter Qty/Unit'"
-                                                                        [allowDecimalDigitsOnly]="true"
-                                                                        (change)="
-                                                                            calculateRowTotal(
-                                                                                source.get('warehouse').value
-                                                                            )
-                                                                        "
-                                                                        formControlName="quantity"
-                                                                    >
-                                                                    </text-field>
+                                                </td>
+                                                <ng-container formGroupName="warehouse">
+                                                    <ng-container formGroupName="stockDetails">
+                                                        <td class="qtyUnit">
+                                                            <div *ngIf="activeIndx === i" class="w-100">
+                                                                <text-field
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    [type]="'number'"
+                                                                    name="sourceQty{{ i }}"
+                                                                    [placeholder]="'Enter Qty/Unit'"
+                                                                    [allowDecimalDigitsOnly]="true"
+                                                                    (change)="
+                                                                        calculateRowTotal(source.get('warehouse').value)
+                                                                    "
+                                                                    formControlName="quantity"
+                                                                >
+                                                                </text-field>
+                                                            </div>
+                                                            <div *ngIf="activeIndx !== i">
+                                                                <div class="text-right">
+                                                                    {{
+                                                                        source.get("warehouse.stockDetails.quantity")
+                                                                            .value
+                                                                    }}
                                                                 </div>
-                                                                <div *ngIf="activeIndx !== i">
-                                                                    <div class="text-right">
-                                                                        {{
-                                                                            source.get(
-                                                                                "warehouse.stockDetails.quantity"
-                                                                            ).value
-                                                                        }}
-                                                                    </div>
-                                                                </div>
-                                                            </span></span
-                                                        >
-                                                    </span>
-                                                </span>
-                                            </td>
-                                            <td class="rate">
-                                                <span formArrayName="sources" class="w-100">
-                                                    <span [formGroupName]="i">
-                                                        <span formGroupName="warehouse" class="w-100">
-                                                            <span formGroupName="stockDetails" class="w-100">
-                                                                <div>
-                                                                    <div *ngIf="activeIndx !== i">
-                                                                        <div class="text-right">
-                                                                            {{ activeCompany?.baseCurrencySymbol }}
-                                                                            {{
-                                                                                source.get(
-                                                                                    "warehouse.stockDetails.rate"
-                                                                                ).value | giddhCurrency
-                                                                            }}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div *ngIf="activeIndx === i" class="w-100">
-                                                                        <text-field
-                                                                            [cssClass]="
-                                                                                'form-control mat-field-border  text-right'
-                                                                            "
-                                                                            [type]="'text'"
-                                                                            name="sourceRate{{ i }}"
-                                                                            [placeholder]="'Enter Rate'"
-                                                                            formControlName="rate"
-                                                                            [allowDecimalDigitsOnly]="true"
-                                                                            [customDecimalPlaces]="2"
-                                                                            (change)="
-                                                                                calculateRowTotal(
-                                                                                    source.get('warehouse').value
-                                                                                )
-                                                                            "
-                                                                            [prefix]="activeCompany?.baseCurrencySymbol"
-                                                                            [mask]="inputMaskFormat"
-                                                                            [useMask]="true"
-                                                                        >
-                                                                        </text-field>
-                                                                    </div>
-                                                                </div> </span
-                                                        ></span>
-                                                    </span>
-                                                </span>
-                                            </td>
-                                            <td class="amount">
-                                                <span formArrayName="sources" class="w-100">
-                                                    <span [formGroupName]="i">
-                                                        <span formGroupName="warehouse" class="w-100">
-                                                            <span formGroupName="stockDetails" class="w-100">
+                                                            </div>
+                                                        </td>
+                                                        <td class="rate">
+                                                            <div>
                                                                 <div *ngIf="activeIndx !== i">
                                                                     <div class="text-right">
                                                                         {{ activeCompany?.baseCurrencySymbol }}
                                                                         {{
                                                                             source.get("warehouse.stockDetails.rate")
-                                                                                .amount | giddhCurrency
+                                                                                .value | giddhCurrency
                                                                         }}
                                                                     </div>
                                                                 </div>
@@ -680,54 +623,87 @@
                                                                             'form-control mat-field-border  text-right'
                                                                         "
                                                                         [type]="'text'"
-                                                                        name="sourceAmount{{ i }}"
-                                                                        [placeholder]="'Enter Amount'"
-                                                                        formControlName="amount"
+                                                                        name="sourceRate{{ i }}"
+                                                                        [placeholder]="'Enter Rate'"
+                                                                        formControlName="rate"
                                                                         [allowDecimalDigitsOnly]="true"
                                                                         [customDecimalPlaces]="2"
+                                                                        (change)="
+                                                                            calculateRowTotal(
+                                                                                source.get('warehouse').value
+                                                                            )
+                                                                        "
                                                                         [prefix]="activeCompany?.baseCurrencySymbol"
                                                                         [mask]="inputMaskFormat"
                                                                         [useMask]="true"
-                                                                        [readonly]="true"
                                                                     >
                                                                     </text-field>
                                                                 </div>
-                                                                <span class="position-relative">
-                                                                    <span
-                                                                        class="delete-btn-position d-flex"
+                                                            </div>
+                                                        </td>
+                                                        <td class="amount">
+                                                            <div *ngIf="activeIndx !== i">
+                                                                <div class="text-right">
+                                                                    {{ activeCompany?.baseCurrencySymbol }}
+                                                                    {{
+                                                                        source.get("warehouse.stockDetails.rate").amount
+                                                                            | giddhCurrency
+                                                                    }}
+                                                                </div>
+                                                            </div>
+                                                            <div *ngIf="activeIndx === i" class="w-100">
+                                                                <text-field
+                                                                    [cssClass]="
+                                                                        'form-control mat-field-border  text-right'
+                                                                    "
+                                                                    [type]="'text'"
+                                                                    name="sourceAmount{{ i }}"
+                                                                    [placeholder]="'Enter Amount'"
+                                                                    formControlName="amount"
+                                                                    [allowDecimalDigitsOnly]="true"
+                                                                    [customDecimalPlaces]="2"
+                                                                    [prefix]="activeCompany?.baseCurrencySymbol"
+                                                                    [mask]="inputMaskFormat"
+                                                                    [useMask]="true"
+                                                                    [readonly]="true"
+                                                                >
+                                                                </text-field>
+                                                            </div>
+                                                            <span class="position-relative">
+                                                                <span
+                                                                    class="delete-btn-position d-flex"
+                                                                    *ngIf="
+                                                                        branchTransferCreateEditForm.get('sources')
+                                                                            .value.length > 1
+                                                                    "
+                                                                >
+                                                                    <span class="delete-icon"
+                                                                        ><i
+                                                                            class="fa fa-trash"
+                                                                            (click)="removeSenderDetailsForm(i)"
+                                                                        ></i
+                                                                    ></span>
+                                                                    <i
                                                                         *ngIf="
-                                                                            branchTransferCreateEditForm.get('sources')
-                                                                                .value.length > 1
+                                                                            senderWarehouses[
+                                                                                source.get('uniqueName').value
+                                                                            ]?.length !==
+                                                                            allWarehouses[
+                                                                                source.get('uniqueName').value
+                                                                            ]?.length
                                                                         "
-                                                                    >
-                                                                        <span class="delete-icon"
-                                                                            ><i
-                                                                                class="fa fa-trash"
-                                                                                (click)="removeSenderDetailsForm(i)"
-                                                                            ></i
-                                                                        ></span>
-                                                                        <i
-                                                                            *ngIf="
-                                                                                senderWarehouses[
-                                                                                    source.get('uniqueName').value
-                                                                                ]?.length !==
-                                                                                allWarehouses[
-                                                                                    source.get('uniqueName').value
-                                                                                ]?.length
-                                                                            "
-                                                                            matTooltip="{{ branchTransferInfoText }}"
-                                                                            matTooltipPosition="above"
-                                                                            class="icon-info"
-                                                                        ></i>
-                                                                    </span>
+                                                                        matTooltip="{{ branchTransferInfoText }}"
+                                                                        matTooltipPosition="above"
+                                                                        class="icon-info"
+                                                                    ></i>
                                                                 </span>
                                                             </span>
-                                                        </span>
-                                                    </span>
-                                                </span>
-                                            </td>
-                                        </ng-container>
-                                    </tr>
+                                                        </td>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
                                 </tbody>
 
                                 <tbody *ngIf="transferType === 'products'" (clickOutside)="hideActiveRow()">
@@ -765,19 +741,17 @@
                                                                 [cssClass]="'form-control mat-field-border pb-0'"
                                                             >
                                                             </select-field>
-                                                            {{ product.get("uniqueName").value }}
+                                                            <!-- && product.get('uniqueName').value -->
                                                             <div
                                                                 class="show-sku-code-position"
-                                                                *ngIf="
-                                                                    activeIndx == i && product.get('uniqueName').value
-                                                                "
+                                                                *ngIf="activeIndx == i"
                                                                 mat-button
                                                                 [matMenuTriggerFor]="sku_Menu"
                                                                 #skuMenuTrigger="matMenuTrigger"
                                                             >
                                                                 <label>SKU Code: </label>
                                                                 <span
-                                                                    >{{ product.get("skuNumber").value }}
+                                                                    >{{ product.get("skuCode").value }}
                                                                     <span class="edit-icon cp">
                                                                         <img src="assets/images/edit-pencilicon.svg" />
                                                                     </span>
@@ -806,7 +780,7 @@
                                                                             mat-stroked-button
                                                                             color="primary"
                                                                             class="w-100"
-                                                                            (click)="saveSkuNumberPopup(product)"
+                                                                            (click)="saveSkuNumberPopup(product.value)"
                                                                         >
                                                                             Save
                                                                         </button>
@@ -820,7 +794,6 @@
                                                                     </div>
                                                                 </div>
                                                             </mat-menu>
-
                                                             <div class="position-relative pb-3">
                                                                 <div class="py-3">
                                                                     <textarea
@@ -831,10 +804,79 @@
                                                                         rows="3"
                                                                         name="productDescription{{ i }}"
                                                                         formControlName="description"
-                                                                        *ngIf="product.get('uniqueName')?.value"
+                                                                        *ngIf="activeIndx == i"
                                                                     ></textarea>
+                                                                    <!-- product.get('uniqueName')?.value -->
                                                                 </div>
                                                             </div>
+                                                            <div
+                                                                class="show-code-position"
+                                                                *ngIf="activeIndx === i"
+                                                                mat-button
+                                                                [matMenuTriggerFor]="hsn_sac_Menu"
+                                                                #hsnSacMenuTrigger="matMenuTrigger"
+                                                            >
+                                                                <label>{{ showCodeType }} Code: </label>
+                                                                <span
+                                                                    >{{
+                                                                        product.showCodeType === "HSN"
+                                                                            ? product.hsnNumber
+                                                                            : product.sacNumber
+                                                                    }}
+                                                                    <span class="edit-icon cp">
+                                                                        <img src="assets/images/edit-pencilicon.svg" />
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                            <mat-menu #hsn_sac_Menu="matMenu" xPosition="after">
+                                                                <div
+                                                                    class="show-code-menu"
+                                                                    (click)="$event.stopPropagation()"
+                                                                >
+                                                                    <div class="radio-btns">
+                                                                        <mat-radio-group
+                                                                            name="code_type"
+                                                                            class="d-flex font-15"
+                                                                        >
+                                                                            <mat-radio-button
+                                                                                color="primary"
+                                                                                value="HSN"
+                                                                                >HSN Code</mat-radio-button
+                                                                            >
+                                                                            <mat-radio-button
+                                                                                color="primary"
+                                                                                value="SAC"
+                                                                                >SAC Code</mat-radio-button
+                                                                            >
+                                                                        </mat-radio-group>
+                                                                    </div>
+                                                                    <div class="pt-1">
+                                                                        <text-field
+                                                                            [cssClass]="'form-control mat-field-border'"
+                                                                            [type]="'number'"
+                                                                            [name]="''"
+                                                                            [placeholder]="showCodeType + ' Code'"
+                                                                        >
+                                                                        </text-field>
+                                                                    </div>
+                                                                    <div class="d-flex mt-3">
+                                                                        <button
+                                                                            mat-stroked-button
+                                                                            color="primary"
+                                                                            class="w-100"
+                                                                        >
+                                                                            Save
+                                                                        </button>
+                                                                        <button
+                                                                            mat-stroked-button
+                                                                            class="w-100"
+                                                                            (click)="closeShowCodeMenu()"
+                                                                        >
+                                                                            Cancel
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </mat-menu>
                                                         </div>
                                                         <div *ngIf="activeIndx !== i">
                                                             <div *ngIf="product.get('name').value">
@@ -983,23 +1025,298 @@
                                         </tr>
                                     </ng-container>
                                 </tbody>
+                                <tbody
+                                    *ngIf="transferType !== 'products' && branchTransferMode === 'delivery-challan'"
+                                    (clickOutside)="hideActiveRow()"
+                                >
+                                    <ng-container formArrayName="destinations">
+                                        <tr
+                                            *ngFor="
+                                                let destination of branchTransferCreateEditForm.get('destinations')[
+                                                    'controls'
+                                                ];
+                                                let i = index
+                                            "
+                                            (click)="setActiveRow(i); $event.stopPropagation()"
+                                        >
+                                            <ng-container [formGroupName]="i">
+                                                <td class="id">
+                                                    <div>
+                                                        <div>{{ i + 1 }}</div>
+                                                    </div>
+                                                </td>
+                                                <td class="name">
+                                                    <span class="w-100">
+                                                        <span formGroupName="warehouse" class="w-100">
+                                                            <div
+                                                                *ngIf="activeIndx === i"
+                                                                class="position-relative mb-3 w-100"
+                                                            >
+                                                                <select-field
+                                                                    [cssClass]="'form-control mat-field-border pb-0'"
+                                                                    name="destinationName{{ i }}"
+                                                                    [placeholder]="'Receiver\'s Name'"
+                                                                    [options]="branches"
+                                                                    (selectedOption)="
+                                                                        selectRecieverName($event, i);
+                                                                        focusSourceWarehouse($event)
+                                                                    "
+                                                                    [defautlValue]="destination.get('uniqueName').value"
+                                                                >
+                                                                </select-field>
+                                                                <select-field
+                                                                    [cssClass]="'form-control mat-field-border pb-0'"
+                                                                    name="destinationWarehouse{{ i }}"
+                                                                    [placeholder]="'Receiver\'s Warehouse'"
+                                                                    (selectedOption)="
+                                                                        selectReceiverWarehouse($event, i)
+                                                                    "
+                                                                    [options]="
+                                                                        destinationWarehouses[
+                                                                            destination.get('uniqueName').value
+                                                                        ]
+                                                                    "
+                                                                    [defaultValue]="
+                                                                        destination.get('warehouse.uniqueName').label
+                                                                    "
+                                                                    *ngIf="destination.get('uniqueName').value"
+                                                                    [allowValueReset]="true"
+                                                                    (onClear)="resetWarehouse('destinations', i)"
+                                                                >
+                                                                </select-field>
+                                                                <text-field
+                                                                    *ngIf="
+                                                                        formFields &&
+                                                                        formFields['taxName'] &&
+                                                                        destination.get('warehouse.uniqueName').value &&
+                                                                        destination.get('warehouse.taxNumber').value
+                                                                    "
+                                                                    name="destinationWarehouseTaxnumber{{ i }}"
+                                                                    [placeholder]="getEnterTaxText()"
+                                                                    [type]="'text'"
+                                                                    [label]="
+                                                                        'Reciever\'s ' +
+                                                                        formFields['taxName']?.label +
+                                                                        '*'
+                                                                    "
+                                                                    [maxlength]="15"
+                                                                    (change)="checkTaxNumberValidation()"
+                                                                    [readonly]="
+                                                                        destination.get('warehouse.uniqueName').value
+                                                                    "
+                                                                    formControlName="taxNumber"
+                                                                >
+                                                                </text-field>
+
+                                                                <div class="position-relative pb-3">
+                                                                    <div class="py-3">
+                                                                        <textarea
+                                                                            matInput
+                                                                            rows="3"
+                                                                            class="form-control"
+                                                                            rows="3"
+                                                                            name="destinationWarehouseAddress{{ i }}"
+                                                                            formControlName="address"
+                                                                            [readonly]="
+                                                                                destination.get('warehouse.uniqueName')
+                                                                                    .value
+                                                                            "
+                                                                            *ngIf="
+                                                                                destination.get('warehouse.uniqueName')
+                                                                                    .value
+                                                                            "
+                                                                        ></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div *ngIf="activeIndx !== i">
+                                                                <div *ngIf="destination.get('name').value">
+                                                                    {{ destination.get("name").value }}
+                                                                </div>
+                                                                <div *ngIf="destination.get('warehouse.name').value">
+                                                                    {{ destination.get("warehouse.name").value }}
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="destination.get('warehouse.taxNumber').value"
+                                                                >
+                                                                    {{ destination.get("warehouse.taxNumber").value }}
+                                                                </div>
+                                                                <div *ngIf="destination.get('warehouse.address').value">
+                                                                    {{ destination.get("warehouse.address").value }}
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="
+                                                                        !destination.get('name').value &&
+                                                                        !destination.get('warehouse.name').value &&
+                                                                        !destination.get('warehouse.taxNumber').value &&
+                                                                        !destination.get('warehouse.address').value
+                                                                    "
+                                                                    class="placeholder-for-table"
+                                                                >
+                                                                    Enter reciever's details
+                                                                </div>
+                                                            </div>
+                                                        </span>
+                                                    </span>
+                                                </td>
+                                                <ng-container formGroupName="warehouse">
+                                                    <ng-container formGroupName="stockDetails">
+                                                        <td class="qtyUnit">
+                                                            <span class="w-100">
+                                                                <span class="w-100">
+                                                                    <div *ngIf="activeIndx === i" class="w-100">
+                                                                        <text-field
+                                                                            [cssClass]="'form-control mat-field-border'"
+                                                                            [type]="'number'"
+                                                                            name="destinationQty{{ i }}"
+                                                                            [placeholder]="'Enter Qty/Unit'"
+                                                                            [allowDecimalDigitsOnly]="true"
+                                                                            (change)="
+                                                                                calculateRowTotal(
+                                                                                    destination.get('warehouse').value
+                                                                                )
+                                                                            "
+                                                                            formControlName="quantity"
+                                                                        >
+                                                                        </text-field>
+                                                                    </div>
+                                                                    <div *ngIf="activeIndx !== i">
+                                                                        <div class="text-right">
+                                                                            {{
+                                                                                destination.get(
+                                                                                    "warehouse.stockDetails.quantity"
+                                                                                ).value
+                                                                            }}
+                                                                        </div>
+                                                                    </div>
+                                                                </span></span
+                                                            >
+                                                        </td>
+                                                        <td class="rate">
+                                                            <div>
+                                                                <div *ngIf="activeIndx !== i">
+                                                                    <div class="text-right">
+                                                                        {{ activeCompany?.baseCurrencySymbol }}
+                                                                        {{
+                                                                            destination.get(
+                                                                                "warehouse.stockDetails.rate"
+                                                                            ).value | giddhCurrency
+                                                                        }}
+                                                                    </div>
+                                                                </div>
+                                                                <div *ngIf="activeIndx === i" class="w-100">
+                                                                    <text-field
+                                                                        [cssClass]="
+                                                                            'form-control mat-field-border  text-right'
+                                                                        "
+                                                                        [type]="'text'"
+                                                                        name="destinationRate{{ i }}"
+                                                                        [placeholder]="'Enter Rate'"
+                                                                        formControlName="rate"
+                                                                        [allowDecimalDigitsOnly]="true"
+                                                                        [customDecimalPlaces]="2"
+                                                                        (change)="
+                                                                            calculateRowTotal(
+                                                                                destination.get('warehouse').value
+                                                                            )
+                                                                        "
+                                                                        [prefix]="activeCompany?.baseCurrencySymbol"
+                                                                        [mask]="inputMaskFormat"
+                                                                        [useMask]="true"
+                                                                    >
+                                                                    </text-field>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="amount">
+                                                            <div *ngIf="activeIndx !== i">
+                                                                <div class="text-right">
+                                                                    {{ activeCompany?.baseCurrencySymbol }}
+                                                                    {{
+                                                                        destination.get("warehouse.stockDetails.rate")
+                                                                            .amount | giddhCurrency
+                                                                    }}
+                                                                </div>
+                                                            </div>
+                                                            <div *ngIf="activeIndx === i" class="w-100">
+                                                                <text-field
+                                                                    [cssClass]="
+                                                                        'form-control mat-field-border  text-right'
+                                                                    "
+                                                                    [type]="'text'"
+                                                                    name="destinationAmount{{ i }}"
+                                                                    [placeholder]="'Enter Amount'"
+                                                                    formControlName="amount"
+                                                                    [allowDecimalDigitsOnly]="true"
+                                                                    [customDecimalPlaces]="2"
+                                                                    [prefix]="activeCompany?.baseCurrencySymbol"
+                                                                    [mask]="inputMaskFormat"
+                                                                    [useMask]="true"
+                                                                    [readonly]="true"
+                                                                >
+                                                                </text-field>
+                                                            </div>
+                                                            <span class="position-relative">
+                                                                <span
+                                                                    class="delete-btn-position d-flex"
+                                                                    *ngIf="
+                                                                        branchTransferCreateEditForm.get('destinations')
+                                                                            .value.length > 1
+                                                                    "
+                                                                >
+                                                                    <span class="delete-icon"
+                                                                        ><i
+                                                                            class="fa fa-trash"
+                                                                            (click)="removeRecieverDetailsForm(i)"
+                                                                        ></i
+                                                                    ></span>
+                                                                    <i
+                                                                        *ngIf="
+                                                                            destinationWarehouses[
+                                                                                destination.get('uniqueName').value
+                                                                            ]?.length !==
+                                                                            allWarehouses[
+                                                                                destination.get('uniqueName').value
+                                                                            ]?.length
+                                                                        "
+                                                                        matTooltip="{{ branchTransferInfoText }}"
+                                                                        matTooltipPosition="above"
+                                                                        class="icon-info"
+                                                                    ></i>
+                                                                </span>
+                                                            </span>
+                                                        </td>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
 
                                 <tfoot>
                                     <tr>
                                         <td colspan="4" class="pl-0">
                                             <div class="add-new-line mr-t1">
-                                                <!-- <a
-                                                class="multiple-receivers color-primary"
-                                                (click)="addReceiver()"
-                                                *ngIf="
-                                                    transferType !== 'products' && branchTransferMode === 'deliverynote'
-                                                "
-                                            >
-                                                + Add Multiple Receivers</a
-                                            > -->
-                                                <!-- <a class="multiple-receivers color-primary" (click)="addSender()">
+                                                <a
+                                                    class="multiple-receivers color-primary"
+                                                    (click)="addReceiver()"
+                                                    *ngIf="
+                                                        transferType !== 'products' &&
+                                                        branchTransferMode === 'delivery-challan'
+                                                    "
+                                                >
+                                                    + Add Multiple Receivers</a
+                                                >
+                                                <a
+                                                    *ngIf="
+                                                        transferType !== 'products' &&
+                                                        branchTransferMode === 'receipt-note'
+                                                    "
+                                                    class="multiple-receivers color-primary"
+                                                    (click)="addSender()"
+                                                >
                                                     + Add Multiple Senders</a
-                                                > -->
+                                                >
 
                                                 <a
                                                     class="multiple-receivers color-primary"
