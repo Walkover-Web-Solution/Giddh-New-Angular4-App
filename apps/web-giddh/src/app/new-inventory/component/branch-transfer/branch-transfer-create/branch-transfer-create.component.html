@@ -724,9 +724,7 @@
                                     <tr
                                         *ngFor="
                                             let product of branchTransferCreateEditForm.get('products')['controls'];
-                                            let i = index;
-                                            let f = first;
-                                            let l = last
+                                            let i = index
                                         "
                                         (click)="setActiveRow(i); $event.stopPropagation()"
                                         (clickOutside)="hideActiveRow()"
@@ -751,19 +749,20 @@
                                                             (selectedOption)="selectProduct($event, product)"
                                                             [allowValueReset]="true"
                                                             [defautlValue]="product.get('uniqueName').value"
+                                                            [cssClass]="'form-control mat-field-border pb-0'"
                                                         >
                                                         </select-field>
-
+                                                        {{ product.get("uniqueName").value }}
                                                         <div
                                                             class="show-sku-code-position"
-                                                            *ngIf="activeRow"
+                                                            *ngIf="activeRow === i && product.get('uniqueName').value"
                                                             mat-button
                                                             [matMenuTriggerFor]="sku_Menu"
                                                             #skuMenuTrigger="matMenuTrigger"
                                                         >
                                                             <label>SKU Code: </label>
                                                             <span
-                                                                >{{ skuNumber }}
+                                                                >{{ product.get("skuNumber").value }}
                                                                 <span class="edit-icon cp">
                                                                     <img src="assets/images/edit-pencilicon.svg" />
                                                                 </span>
@@ -777,10 +776,13 @@
                                                             >
                                                                 <div>
                                                                     <text-field
+                                                                        type="text"
                                                                         [cssClass]="'form-control mat-field-border'"
                                                                         [type]="'text'"
-                                                                        [name]="''"
+                                                                        name="productSkuCode{{ i }}"
                                                                         [placeholder]="'SKU Code'"
+                                                                        maxlength="50"
+                                                                        formControlName="skuCode"
                                                                     >
                                                                     </text-field>
                                                                 </div>
@@ -789,6 +791,7 @@
                                                                         mat-stroked-button
                                                                         color="primary"
                                                                         class="w-100"
+                                                                        (click)="saveSkuNumberPopup(product)"
                                                                     >
                                                                         Save
                                                                     </button>
@@ -808,14 +811,12 @@
                                                                 <textarea
                                                                     matInput
                                                                     rows="3"
+                                                                    maxlength="100"
                                                                     class="form-control"
                                                                     rows="3"
-                                                                    name="sourceWarehouseAddress{{ i }}"
-                                                                    formControlName="address"
-                                                                    [readonly]="
-                                                                        source.get('warehouse.uniqueName').value
-                                                                    "
-                                                                    *ngIf="source.get('warehouse.uniqueName').value"
+                                                                    name="productDescription{{ i }}"
+                                                                    formControlName="description"
+                                                                    *ngIf="product.get('uniqueName')?.value"
                                                                 ></textarea>
                                                             </div>
                                                         </div>
@@ -942,7 +943,10 @@
                                                         <div *ngIf="activeRow !== i">
                                                             <div class="text-right">
                                                                 {{ activeCompany?.baseCurrencySymbol }}
-                                                                {{ product.get("stockDetails.amount").value | giddhCurrency }}
+                                                                {{
+                                                                    product.get("stockDetails.amount")?.value
+                                                                        | giddhCurrency
+                                                                }}
                                                             </div>
                                                         </div>
                                                         <span class="position-relative">

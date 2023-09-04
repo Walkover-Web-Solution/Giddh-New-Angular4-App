@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormArray, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,7 +10,6 @@ import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.a
 import { cloneDeep, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OnboardingFormRequest } from 'apps/web-giddh/src/app/models/api-models/Common';
-import { CompanyResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { IAllTransporterDetails, IEwayBillTransporter, IEwayBillfilter } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { InvoiceSetting } from 'apps/web-giddh/src/app/models/interfaces/invoice.setting.interface';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
@@ -62,7 +61,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /** Holds if Multiple Products/Senders selected */
     public transferType: string = 'products';
     /** For Table Receipt Toggle Input Fields */
-    public activeRow: number = 1;
+    public activeRow: number = -1;
     public hsnNumber: number;
     public sacNumber: number;
     public skuNumber: string;
@@ -269,19 +268,24 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             showCodeType: [''],
             skuCode: [''],
             uniqueName: [''],
-            stockDetails: {
+            description: [''],
+            stockDetails: this.formBuilder.group({
                 stockUnitUniqueName: [''],
                 stockUnit: [''],
                 amount: [''],
                 rate: [''],
                 quantity: ['']
-            },
-            description: ['']
+            }),
         });
     }
 
-    public setActiveRow(index:number): void {
+    public setActiveRow(index: number): void {
         this.activeRow = index;
+    }
+
+    public saveSkuNumberPopup(product): void {
+        product.skuCode = this.skuNumber;
+        // this.skuNumberPopupShow = false;
     }
 
     public selectDate(date: any, dateField: any): void {
@@ -966,7 +970,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             // }, 100);
         }
     }
-    public selectSenderName(event: any, index:number): void {
+    public selectSenderName(event: any, index: number): void {
         if (event?.value) {
             const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
             const sourceGroup = sourcesArray.at(0) as FormGroup;
@@ -1009,7 +1013,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         }
     }
 
-    public selectSenderWarehouse(event: any, index:number): void {
+    public selectSenderWarehouse(event: any, index: number): void {
         if (event?.value) {
             const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
             const sourceGroup = sourcesArray.at(0) as FormGroup;
@@ -1550,5 +1554,4 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     }
 
 }
-
 
