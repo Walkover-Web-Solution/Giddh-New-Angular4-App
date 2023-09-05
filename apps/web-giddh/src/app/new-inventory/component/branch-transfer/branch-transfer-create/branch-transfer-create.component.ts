@@ -547,8 +547,6 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
 
         this.inventoryService.getNewBranchTransfer(this.editBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
-                console.log(response);
-
                 this.branchTransferCreateEditForm.get('dateOfSupply').setValue(response.body?.dateOfSupply);
                 this.branchTransferCreateEditForm.get('challanNo').setValue(response.body?.challanNo);
                 this.branchTransferCreateEditForm.get('note').setValue(response.body?.note);
@@ -613,13 +611,10 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                         }
                     }
                 }
-                console.log(productsArray);
 
                 if (productsArray && productsArray.length > 0) {
                     for (let i = 0; i < productsArray.length; i++) {
                         const product = productsArray.at(i);
-                        console.log(product);
-
                         if (product && product.get('hsnNumber')) {
                             product.get('showCodeType')?.setValue('hsn');
                         } else {
@@ -969,9 +964,9 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         }
     }
     public selectSenderName(event: any, index: number): void {
-        if (event?.value) {
+        if (event) {
             const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
-            const sourceGroup = sourcesArray.at(0) as UntypedFormGroup;
+            const sourceGroup = sourcesArray.at(index) as UntypedFormGroup;
             sourceGroup.patchValue({
                 name: event?.label,
                 uniqueName: event?.value
@@ -983,7 +978,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     }
 
     public selectRecieverName(event: any): void {
-        if (event?.value) {
+        if (event) {
             const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
             const destinationGroup = destinationsArray.at(0) as UntypedFormGroup;
             destinationGroup.patchValue({
@@ -1157,29 +1152,27 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     public resetSourceWarehouses(index: number, reInitializeWarehouses?: boolean) {
         const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
         const sourceFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
-        const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as UntypedFormGroup;
+        const sourcesWarehouseFormGroup = sourceFormGroup?.get('warehouse') as UntypedFormGroup;
 
         const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
         const destinationsFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
-        const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
-
-
+        const destinationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
 
         if (destinationsArray && destinationsFormGroup && destinationsWarehouseFormGroup && destinationsWarehouseFormGroup.get('uniqueName')?.value !== null) {
             this.senderWarehouses[destinationsFormGroup.get('uniqueName').value] = [];
             let allowWarehouse = true;
 
-            if (this.allWarehouses[destinationsFormGroup.get('uniqueName')?.value] && this.allWarehouses[destinationsFormGroup.get('uniqueName').value].length > 0) {
-                this.allWarehouses[destinationsFormGroup.get('uniqueName').value].forEach(key => {
+            if (this.allWarehouses[destinationsFormGroup?.get('uniqueName')?.value] && this.allWarehouses[destinationsFormGroup?.get('uniqueName').value].length > 0) {
+                this.allWarehouses[destinationsFormGroup?.get('uniqueName').value]?.forEach(key => {
                     allowWarehouse = true;
 
-                    if (key?.uniqueName === destinationsWarehouseFormGroup.get('uniqueName')?.value ||
-                        key.taxNumber !== (destinationsWarehouseFormGroup.get('taxNumber')?.value || '')) {
+                    if (key?.uniqueName === destinationsWarehouseFormGroup?.get('uniqueName')?.value ||
+                        key.taxNumber !== (destinationsWarehouseFormGroup?.get('taxNumber')?.value || '')) {
                         allowWarehouse = false;
                     }
 
                     if (allowWarehouse) {
-                        this.senderWarehouses[sourceFormGroup.get('uniqueName').value].push({ label: key.name, value: key?.uniqueName });
+                        this.senderWarehouses[sourceFormGroup.get('uniqueName').value]?.push({ label: key.name, value: key?.uniqueName });
                     }
                 });
             }
@@ -1188,10 +1181,10 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                 // Update source warehouses
                 this.senderWarehouses[sourceFormGroup.get('uniqueName').value] = [];
                 if (this.allWarehouses[sourceFormGroup.get('uniqueName').value] && this.allWarehouses[sourceFormGroup.get('uniqueName').value].length > 0) {
-                    this.allWarehouses[sourceFormGroup.get('uniqueName').value].forEach(key => {
+                    this.allWarehouses[sourceFormGroup.get('uniqueName').value]?.forEach(key => {
                         if (destinationsArray && destinationsWarehouseFormGroup && key?.uniqueName !== destinationsWarehouseFormGroup.get('uniqueName')?.value &&
                             key.taxNumber === (destinationsWarehouseFormGroup.get('taxNumber')?.value || '')) {
-                            this.senderWarehouses[sourceFormGroup.get('uniqueName').value].push({ label: key.name, value: key?.uniqueName });
+                            this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value]?.push({ label: key.name, value: key?.uniqueName });
                         }
                     });
                     if (destinationsWarehouseFormGroup && sourcesWarehouseFormGroup.get('uniqueName')?.value) {
@@ -1203,11 +1196,11 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             }
         }
         else {
-            if (this.allWarehouses && this.allWarehouses[destinationsFormGroup.get('uniqueName')?.value]) {
-                this.senderWarehouses[destinationsFormGroup.get('uniqueName').value] = [];
+            if (this.allWarehouses && this.allWarehouses[destinationsFormGroup?.get('uniqueName')?.value]) {
+                this.senderWarehouses[destinationsFormGroup?.get('uniqueName').value] = [];
                 let allowWarehouse = true;
 
-                this.allWarehouses[destinationsFormGroup.get('uniqueName')?.value].forEach(key => {
+                this.allWarehouses[destinationsFormGroup?.get('uniqueName')?.value]?.forEach(key => {
                     allowWarehouse = true;
 
                     if (key?.uniqueName === destinationsWarehouseFormGroup.get('uniqueName')?.value ||
@@ -1216,7 +1209,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                     }
 
                     if (allowWarehouse) {
-                        this.senderWarehouses[destinationsFormGroup.get('uniqueName').value].push({ label: key.name, value: key?.uniqueName });
+                        this.senderWarehouses[destinationsFormGroup?.get('uniqueName')?.value]?.push({ label: key?.name, value: key?.uniqueName });
                     }
                 });
             }
@@ -1226,11 +1219,11 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                 // Update source warehouses
                 this.senderWarehouses[sourceFormGroup.get('uniqueName').value] = [];
                 if (this.allWarehouses[sourceFormGroup.get('uniqueName').value] && this.allWarehouses[sourceFormGroup.get('uniqueName').value].length > 0) {
-                    this.allWarehouses[sourceFormGroup.get('uniqueName').value].forEach(key => {
+                    this.allWarehouses[sourceFormGroup.get('uniqueName').value]?.forEach(key => {
                         if (destinationsArray && destinationsWarehouseFormGroup && key?.uniqueName !== destinationsWarehouseFormGroup.get('uniqueName')?.value &&
                             (reInitializeWarehouses || key.taxNumber === (destinationsWarehouseFormGroup.get('taxNumber')?.value || ''))) {
 
-                            this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value].push({ label: key.name, value: key?.uniqueName });
+                            this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value]?.push({ label: key?.name, value: key?.uniqueName });
 
                         }
                     });
@@ -1371,8 +1364,6 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
             productStockDetailsFormGroup.get('rate')?.setValue(0);
             this.inventoryService.GetStockDetails(event.additional.stockGroup?.uniqueName, event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                console.log(response);
-
                 if (response?.status === 'success') {
                     this.stockVariants = [];
                     let stockVariants = cloneDeep(response?.body?.variants);
@@ -1465,6 +1456,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             }
         }
         this.calculateOverallTotal();
+        this.detectChanges();
     }
 
     public calculateOverallTotal(): void {
@@ -1518,6 +1510,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                 this.overallTotal += Number(this.generalService.convertExponentialToNumber((overallTotal)));
             }
         }
+        this.detectChanges();
     }
 
 
