@@ -75,12 +75,7 @@
                             .show-code-position {
                                 position: absolute;
                                 right: 0;
-                                bottom: -12px;
-                            }
-                            .show-sku-code-position {
-                                position: absolute;
-                                left: 0;
-                                bottom: -32px;
+                                bottom: 0px;
                             }
                             .delete-btn-position {
                                 position: absolute;
@@ -112,6 +107,11 @@
                                         font-weight: 400
                                     }
                                 }
+                            }
+                            .fields-gap {
+                                display: flex;
+                                flex-direction: column;
+                                row-gap: 8px;
                             }
                         }
                     }

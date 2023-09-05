@@ -115,7 +115,7 @@
                                                     >
                                                     </input-field>
                                                 </div>
-                                                <div class="branch-transfer-body-radio-btns">
+                                                <div>
                                                     <mat-radio-group
                                                         name="products_sender"
                                                         formControlName="showCodeType "
@@ -140,6 +140,7 @@
                                                 [placeholder]=""
                                                 [type]="'text'"
                                                 [readonly]="isBranch || isCompanyWithSingleBranch"
+                                                class="mr-b15 d-block"
                                             >
                                             </input-field>
                                             <dropdown-field
@@ -461,7 +462,6 @@
                                     *ngIf="transferType !== 'products' && branchTransferMode === 'receipt-note'"
                                     (clickOutside)="hideActiveRow()"
                                 >
-                                    <h3>transferType !== 'products' && branchTransferMode === 'receipt-note'</h3>
                                     <ng-container formArrayName="sources">
                                         <tr
                                             *ngFor="
@@ -481,7 +481,7 @@
                                                         <span formGroupName="warehouse" class="w-100">
                                                             <div
                                                                 *ngIf="activeIndx === i"
-                                                                class="position-relative mb-3 w-100"
+                                                                class="position-relative w-100 fields-gap"
                                                             >
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border pb-0'"
@@ -507,7 +507,6 @@
                                                                     *ngIf="source.get('uniqueName').value"
                                                                     [allowValueReset]="true"
                                                                     (onClear)="resetWarehouse('sources', i)"
-                                                                    class="mr-t15 d-block"
                                                                 >
                                                                 </select-field>
                                                                 <text-field
@@ -535,7 +534,7 @@
                                                                 </text-field>
 
                                                                 <div class="position-relative pb-3">
-                                                                    <div class="py-3">
+                                                                    <div class="pb-3">
                                                                         <textarea
                                                                             matInput
                                                                             rows="3"
@@ -622,6 +621,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div *ngIf="activeIndx === i" class="w-100">
+
                                                                     <text-field
                                                                         [cssClass]="
                                                                             'form-control mat-field-border  text-right'
@@ -711,7 +711,6 @@
                                     </ng-container>
                                 </tbody>
                                 <tbody *ngIf="transferType === 'products'" (clickOutside)="hideActiveRow()">
-                                    <h3>transferType === 'products'"</h3>
                                     <ng-container formArrayName="products">
                                         <tr
                                             *ngFor="
@@ -731,7 +730,7 @@
                                                     <span>
                                                         <div
                                                             *ngIf="activeIndx === i"
-                                                            class="position-relative mb-3 w-100"
+                                                            class="position-relative w-100 fields-gap"
                                                         >
                                                             <select-field
                                                                 (createOption)="onProductNoResultsClicked(0)"
@@ -784,6 +783,7 @@
                                                                     (click)="$event.stopPropagation()"
                                                                 >
                                                                     <div>
+                                                                        <label class="mr-b1">SKU Code: </label>
                                                                         <text-field
                                                                             type="text"
                                                                             [cssClass]="'form-control mat-field-border'"
@@ -815,7 +815,7 @@
                                                                 </div>
                                                             </mat-menu>
                                                             <div class="position-relative pb-3">
-                                                                <div class="py-3">
+                                                                <div class="pb-3">
                                                                     <textarea
                                                                         matInput
                                                                         rows="3"
@@ -858,7 +858,7 @@
                                                                     class="show-code-menu"
                                                                     (click)="$event.stopPropagation()"
                                                                 >
-                                                                    <div class="radio-btns">
+                                                                    <div class="radio-btns mr-b1">
                                                                         <mat-radio-group
                                                                             name="code_type"
                                                                             class="d-flex font-15"
@@ -884,7 +884,7 @@
                                                                         >
                                                                         </text-field>
                                                                     </div>
-                                                                    <div class="d-flex mt-3">
+                                                                    <div class="d-flex mt-3 column-gap1">
                                                                         <button
                                                                             mat-stroked-button
                                                                             color="primary"
@@ -1080,7 +1080,7 @@
                                                         <span formGroupName="warehouse" class="w-100">
                                                             <div
                                                                 *ngIf="activeIndx === i"
-                                                                class="position-relative mb-3 w-100"
+                                                                class="position-relative w-100 fields-gap"
                                                             >
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border pb-0'"
@@ -1139,7 +1139,7 @@
                                                                 </text-field>
 
                                                                 <div class="position-relative pb-3">
-                                                                    <div class="py-3">
+                                                                    <div class="pb-3">
                                                                         <textarea
                                                                             matInput
                                                                             rows="3"
@@ -1327,7 +1327,7 @@
                                 <tfoot>
                                     <tr>
                                         <td colspan="4" class="pl-0">
-                                            <div class="add-new-line mr-t1">
+                                            <div class="add-new-line">
                                                 <a
                                                     class="multiple-receivers btn-link cp"
                                                     (click)="addReceiver()"
@@ -1358,7 +1358,7 @@
                                                 >
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="pr-0">
                                             <div class="row text-right">
                                                 <div class="col px-0"><strong>Total</strong></div>
                                                 <div class="col px-0">
@@ -1377,7 +1377,7 @@
                             <div>
                                 <h3 class="mr-b1">Transportation Details</h3>
                                 <div class="row row-gap" formGroupName="transporterDetails">
-                                    <div class="col-sm-6 pl-0 mr-b15">
+                                    <div class="col-sm-6 pl-0">
                                         <div class="direct-mat-datepicker">
                                             <giddh-datepicker
                                                 (dateSelected)="selectDate($event, 'dispatchedDate')"
@@ -1392,7 +1392,7 @@
                                             </giddh-datepicker>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 pr-0 mr-b15">
+                                    <div class="col-sm-6 pr-0">
                                         <dropdown-field
                                             (createOption)="toggleTransporterModel()"
                                             [showCreateNew]="true"
@@ -1450,7 +1450,7 @@
                     <div class="row position-bottom">
                         <div class="col-xl-8 col-lg-10 col-sm-12 mb-4">
                             <div class="action-btn-wrapper text-right w-100 d-flex column-gap1 justify-content-end">
-                                <button mat-stroked-button mat-dialog-close>Cancel</button>
+                                <button mat-stroked-button mat-dialog-close>Clear</button>
                                 <button
                                     mat-stroked-button
                                     color="primary"
