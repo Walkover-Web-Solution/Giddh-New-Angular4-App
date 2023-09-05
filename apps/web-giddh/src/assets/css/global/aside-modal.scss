@@ -29,7 +29,7 @@ body {
 body {
     &.aside-menu-product-service-page {
         .cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
-            z-index: 9999;
+            z-index: 999;
         }
     }
 }
