@@ -314,6 +314,7 @@ export class StockDetailResponse implements IStockDetail {
     public customField2Value?: string;
     public sacNumber?: number;
     public taxes?: string[];
+    public variants?: string[];
     public manageInventory?: boolean;
 }
 
