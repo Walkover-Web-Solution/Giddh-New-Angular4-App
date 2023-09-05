@@ -56,6 +56,7 @@
                     tr {
                         th {
                             color: var(--color-primary-button-text);
+                            font-weight: 400;
                         }
                     }
                 }
@@ -95,10 +96,21 @@
                                     display: flex;
                                     justify-content: center;
                                     align-items: center;
+                                    i{
+                                        font-size: var(--font-size-12);
+                                    }
                                 }
                                 .icon-info {
                                     margin-left: 10px;
                                     font-size: 18px;
+                                }
+                            }
+                            &.name{
+                                span{
+                                    .placeholder-for-table {
+                                        color: var(--color-gray);
+                                        font-weight: 400
+                                    }
                                 }
                             }
                         }
@@ -112,10 +124,12 @@
                     }
                 }
             }
-
-            .action-btn-wrapper {
-                background-color: var(--color-common-senary-background-for-all-components);
-                padding: 18px 0;
+        }
+        .info-field{
+            .icon-info {
+                position: absolute;
+                top: 17px;
+                right: -18px;
             }
         }
     }

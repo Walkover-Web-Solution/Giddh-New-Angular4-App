@@ -916,7 +916,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                 top: '0'
             },
             width: '760px',
-            height: '100vh !important'
+            height: '100vh !important',
+            disableClose: true
         });
 
         this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
@@ -927,6 +928,15 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             this.getStocks();
         }
     }
+
+    /**
+     * This Function is used to close Aside Menu Sidebar
+     *
+     * @memberof BranchTransferCreateComponent
+     */
+         public closeAsideMenuProductServiceModal(): void {
+            this.asideMenuStateForProductService?.close();
+        }
 
     public focusDestinationName(): void {
         // if (this.allowAutoFocusInField) {

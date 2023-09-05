@@ -69,7 +69,8 @@
                                                 (createOption)="onProductNoResultsClicked(0)"
                                                 [showCreateNew]="true"
                                                 [name]="'productName'"
-                                                [placeholder]="'Product\'s Name'"
+                                                [label]="'Product\'s Name'"
+                                                [placeholder]="'Select Product\'s Name'"
                                                 [options]="stockList"
                                                 [appearance]="'outline'"
                                                 (selectedOption)="
@@ -87,7 +88,8 @@
                                                 (createOption)="onProductNoResultsClicked(0)"
                                                 [showCreateNew]="true"
                                                 [name]="'productName'"
-                                                [placeholder]="'Product\'s Name'"
+                                                [label]="'Product\'s Name'"
+                                                [placeholder]="'Select Product\'s Name'"
                                                 [options]="stockList"
                                                 [appearance]="'outline'"
                                                 (selectedOption)="
@@ -115,7 +117,7 @@
                                         </div>
                                     </div>
                                     <div *ngIf="transferType === 'products'">
-                                        <div *ngIf="branchTransferMode === 'delivery-challan'">
+                                        <div *ngIf="branchTransferMode === 'delivery-challan'" class="position-relative info-field">
                                             <input-field
                                                 *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
                                                 [name]="'sourceName'"
@@ -128,7 +130,8 @@
                                             <dropdown-field
                                                 *ngIf="isUpdateMode"
                                                 [name]="'senderName'"
-                                                [placeholder]="'Sender\'s Name'"
+                                                [label]="'Sender\'s Name'"
+                                                [placeholder]="'Select Sender\'s Name'"
                                                 [options]="branches"
                                                 (selectedOption)="
                                                     selectSenderName($event, 0); focusSourceWarehouse($event)
@@ -150,11 +153,12 @@
                                             >
                                             </i>
                                         </div>
-                                        <div *ngIf="branchTransferMode === 'receipt-note'">
+                                        <div *ngIf="branchTransferMode === 'receipt-note'" class="mr-b15 position-relative info-field">
                                             <dropdown-field
                                                 #defaultSource
                                                 [name]="'senderName'"
-                                                [placeholder]="'Sender\'s Name'"
+                                                [label]="'Sender\'s Name'"
+                                                [placeholder]="'Select Sender\'s Name'"
                                                 [options]="branches"
                                                 (selectedOption)="
                                                     selectSenderName($event, 0); focusSourceWarehouse($event)
@@ -180,7 +184,7 @@
                                             <input-field
                                                 [name]="'name'"
                                                 [label]="'Sender\'s Warehouse'"
-                                                [placeholder]=""
+                                                [placeholder]="'Select Sender\'s Warehouse'"
                                                 [type]="'text'"
                                                 [formControlName]="
                                                     branchTransferCreateEditForm.get('sources.0.uniqueName')?.value
@@ -189,7 +193,7 @@
                                             </input-field>
                                         </div>
                                     </div>
-                                    <!-- <div class="branch-transfer-body-radio-btns" *ngIf="transferType === 'senders'">
+                                    <div class="branch-transfer-body-radio-btns" *ngIf="transferType === 'senders'">
                                         <mat-radio-group
                                             name="products_sender"
                                                  [formControlName]="
@@ -216,13 +220,14 @@
                                             >
                                             </input-field>
                                         </div>
-                                    </div> -->
+                                    </div>
                                     <div *ngIf="transferType === 'products'" formArrayName="sources">
                                         <div [formGroupName]="0">
                                             <div class="mr-b15">
                                                 <dropdown-field
                                                     [name]="'senderWarehouse'"
-                                                    [placeholder]="'Sender\'s Warehouse'"
+                                                    [label]="'Sender\'s Warehouse'"
+                                                    [placeholder]="'Select Sender\'s Warehouse'"
                                                     (selectedOption)="selectSenderWarehouse($event, 0)"
                                                     [options]="
                                                         senderWarehouses[
@@ -307,10 +312,11 @@
                                     <div formArrayName="destinations">
                                         <div [formGroupName]="0">
                                             <div *ngIf="branchTransferMode === 'delivery-challan'">
-                                                <div class="mr-b15">
+                                                <div class="mr-b15 position-relative info-field">
                                                     <dropdown-field
                                                         [name]="'receiverName'"
-                                                        [placeholder]="'Receiver\'s Name'"
+                                                        [label]="'Receiver\'s Name'"
+                                                        [placeholder]="'Select Receiver\'s Name'"
                                                         [options]="branches"
                                                         (selectedOption)="selectRecieverName($event)"
                                                         [readonly]="isUpdateMode"
@@ -336,11 +342,12 @@
                                                 </div>
                                             </div>
                                             <div *ngIf="branchTransferMode === 'receipt-note'">
-                                                <div class="mr-b15">
+                                                <div class="mr-b15 info-field">
                                                     <dropdown-field
                                                         *ngIf="isUpdateMode"
                                                         [name]="'receiverName'"
-                                                        [placeholder]="'Receiver\'s Name'"
+                                                        [label]="'Receiver\'s Name'"
+                                                        [placeholder]="'Select Receiver\'s Name'"
                                                         [options]="branches"
                                                         (selectedOption)="selectRecieverName($event)"
                                                         [readonly]="isUpdateMode"
@@ -369,7 +376,8 @@
                                                 <dropdown-field
                                                     #destinationWarehouse
                                                     [name]="'receiverWarehouse'"
-                                                    [placeholder]="'Receiver\'s Warehouse'"
+                                                    [label]="'Receiver\'s Warehouse'"
+                                                    [placeholder]="'Select Receiver\'s Warehouse'"
                                                     [options]="
                                                         destinationWarehouses[
                                                             branchTransferCreateEditForm.get(
@@ -448,21 +456,21 @@
                             <table id="table-receipt">
                                 <thead *ngIf="transferType === 'products'">
                                     <tr>
-                                        <th>#</th>
-                                        <th>Product Description</th>
-                                        <th>Qty/Unit</th>
-                                        <th>Rate</th>
-                                        <th>Amount</th>
+                                        <th width="2%">#</th>
+                                        <th width="30%">Product Description</th>
+                                        <th width="20%">Qty/Unit</th>
+                                        <th width="20%">Rate</th>
+                                        <th width="20%">Amount</th>
                                     </tr>
                                 </thead>
                                 <thead *ngIf="transferType !== 'products'">
                                     <tr>
-                                        <th>#</th>
-                                        <th *ngIf="branchTransferMode === 'delivery-challan'">Receiver’s Details</th>
-                                        <th *ngIf="branchTransferMode === 'receipt-note'">Sender’s Details</th>
-                                        <th>Qty/Unit</th>
-                                        <th>Rate</th>
-                                        <th>Amount</th>
+                                        <th width="2%">#</th>
+                                        <th width="30%" *ngIf="branchTransferMode === 'delivery-challan'">Receiver’s Details</th>
+                                        <th width="30%" *ngIf="branchTransferMode === 'receipt-note'">Sender’s Details</th>
+                                        <th width="20%">Qty/Unit</th>
+                                        <th width="20%">Rate</th>
+                                        <th width="20%">Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody
@@ -516,6 +524,7 @@
                                                                     *ngIf="source.get('uniqueName').value"
                                                                     [allowValueReset]="true"
                                                                     (onClear)="resetWarehouse('sources', i)"
+                                                                    class="mr-t15 d-block"
                                                                 >
                                                                 </select-field>
                                                                 <text-field
@@ -1098,6 +1107,7 @@
                                                                     *ngIf="destination.get('uniqueName').value"
                                                                     [allowValueReset]="true"
                                                                     (onClear)="resetWarehouse('destinations', i)"
+                                                                    class="mr-t15 d-block"
                                                                 >
                                                                 </select-field>
                                                                 <text-field
@@ -1316,7 +1326,7 @@
                                         <td colspan="4" class="pl-0">
                                             <div class="add-new-line mr-t1">
                                                 <a
-                                                    class="multiple-receivers color-primary"
+                                                    class="multiple-receivers btn-link cp"
                                                     (click)="addReceiver()"
                                                     *ngIf="
                                                         transferType !== 'products' &&
@@ -1330,14 +1340,14 @@
                                                         transferType !== 'products' &&
                                                         branchTransferMode === 'receipt-note'
                                                     "
-                                                    class="multiple-receivers color-primary"
+                                                    class="multiple-receivers btn-link cp"
                                                     (click)="addSender()"
                                                 >
                                                     + Add Multiple Senders</a
                                                 >
 
                                                 <a
-                                                    class="multiple-receivers color-primary"
+                                                    class="multiple-receivers btn-link cp"
                                                     (click)="addBlankProductsForm()"
                                                     *ngIf="transferType === 'products'"
                                                 >
@@ -1435,24 +1445,27 @@
                         </div>
                     </div>
                     <div class="row position-bottom">
-                        <div class="action-btn-wrapper text-right w-100 d-flex column-gap1">
-                            <button mat-stroked-button class="mr-3" mat-dialog-close>Cancel</button>
-                            <button
-                                *ngIf="isBranch || isCompanyWithSingleBranch"
-                                type="button"
-                                class="btn btn-success-text d-inline-block v-align-middle {{
-                                    branchTransferCreateEditForm.invalid
-                                }}-{{ isValidSourceTaxNumber }}-{{ isValidDestinationTaxNumber }}"
-                                (click)="submit()"
-                            >
-                                {{ editBranchTransferUniqueName ? "Update" : "Create" }}
-                                <!-- [disabled]="
-                                    branchTransferCreateEditForm.invalid ||
-                                    !isValidSourceTaxNumber ||
-                                    !isValidDestinationTaxNumber ||
-                                    isLoading
-                                " -->
-                            </button>
+                        <div class="col-xl-8 col-lg-10 col-sm-12 mb-4">
+                            <div class="action-btn-wrapper text-right w-100 d-flex column-gap1 justify-content-end">
+                                <button mat-stroked-button mat-dialog-close>Cancel</button>
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    *ngIf="isBranch || isCompanyWithSingleBranch"
+                                    class="d-inline-block v-align-middle {{
+                                        branchTransferCreateEditForm.invalid
+                                    }}-{{ isValidSourceTaxNumber }}-{{ isValidDestinationTaxNumber }}"
+                                    (click)="submit()"
+                                >
+                                    {{ editBranchTransferUniqueName ? "Update" : "Create" }}
+                                    <!-- [disabled]="
+                                        branchTransferCreateEditForm.invalid ||
+                                        !isValidSourceTaxNumber ||
+                                        !isValidDestinationTaxNumber ||
+                                        isLoading
+                                    " -->
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -1461,6 +1474,9 @@
     </section>
 </ng-container>
 
+<ng-template #asideMenuProductService>
+    <aside-menu-product-service  (closeAsideEvent)="closeAsideMenuProductServiceModal()"></aside-menu-product-service>
+</ng-template>
 <ng-template #asideManageTransport>
     <aside-manage-transport></aside-manage-transport>
 </ng-template>
