@@ -24,6 +24,7 @@ import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-p
 import { CurrencyModule } from '../../../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { MatSortModule } from '@angular/material/sort';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
+import { AsideManageTransportComponent } from './aside-manage-transport/aside-manage-transport.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -55,6 +56,6 @@ import { TranslateDirectiveModule } from '../../../theme/translate/translate.dir
         BranchTransferListComponent,
         BranchTransferCreateComponent
     ],
-    declarations: [MainComponent, BranchTransferListComponent, BranchTransferCreateComponent]
+    declarations: [MainComponent, BranchTransferListComponent, BranchTransferCreateComponent, AsideManageTransportComponent]
 })
 export class BranchTransferModule { }

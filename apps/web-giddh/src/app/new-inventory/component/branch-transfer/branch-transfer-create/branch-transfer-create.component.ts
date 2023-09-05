@@ -39,6 +39,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     @ViewChild('skuMenuTrigger') skuMenuTrigger: MatMenuTrigger;
     /** Instance for aside menu for product service and account*/
     @ViewChild("asideMenuProductService") public asideMenuProductService: TemplateRef<any>;
+    /** Instance for aside menu for Manage Transport*/
+    @ViewChild("asideManageTransport") public asideManageTransport: TemplateRef<any>;
     /** Form Group for group form */
     public branchTransferCreateEditForm: UntypedFormGroup;
     /** This will hold common JSON data */
@@ -1502,6 +1504,15 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         this.transporterPopupStatus = !this.transporterPopupStatus;
         // this.generateNewTransporterForm?.reset();
         this.transportEditMode = false;
+
+        this.dialog.open(this.asideManageTransport, {
+            position: {
+                right: '0',
+                top: '0'
+            },
+            width: '760px',
+            height: '100vh !important'
+        });
     }
 
     public deleteTransporter(transporter: IEwayBillTransporter): void {
