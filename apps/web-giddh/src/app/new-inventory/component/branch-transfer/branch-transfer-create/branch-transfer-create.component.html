@@ -66,6 +66,11 @@
                                     <div *ngIf="transferType === 'senders'">
                                         <div *ngIf="branchTransferMode === 'delivery-challan'">
                                             <dropdown-field
+                                                (scrollEnd)="handleScrollEnd($event)"
+                                                [scrollableElementId]="'selectAccount'"
+                                                [enableDynamicSearch]="true"
+                                                [isPaginationEnabled]="true"
+                                                (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                                                 (createOption)="onProductNoResultsClicked(0)"
                                                 [showCreateNew]="true"
                                                 [name]="'productName'"
@@ -85,6 +90,11 @@
                                         </div>
                                         <div *ngIf="branchTransferMode === 'receipt-note'">
                                             <dropdown-field
+                                                (scrollEnd)="handleScrollEnd($event)"
+                                                [scrollableElementId]="'selectAccount'"
+                                                [enableDynamicSearch]="true"
+                                                [isPaginationEnabled]="true"
+                                                (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                                                 (createOption)="onProductNoResultsClicked(0)"
                                                 [showCreateNew]="true"
                                                 [name]="'productName'"
@@ -502,7 +512,7 @@
 
                                 <tbody
                                     *ngIf="transferType !== 'products' && branchTransferMode === 'receipt-note'"
-                                    (clickOutside)="hideActiveRow()"
+                                    (clickOutside)="hideActiveRow($event)"
                                 >
                                     <h3>transferType !== 'products' && branchTransferMode === 'receipt-note'</h3>
                                     <ng-container formArrayName="sources">
