@@ -71,6 +71,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     public tempDateParams: any = { dateOfSupply: new Date(), dispatchedDate: '' };
     /** Hold  stock list data */
     public stockList: IOption[] = [];
+    /** Hold  stock list data */
+    public stockVariants: IOption[] = [];
     /** Hold  transporter data details */
     public transporterPopupStatus: boolean = false;
     /** Hold  transporter id*/
@@ -294,6 +296,10 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             skuCode: [''],
             uniqueName: [''],
             description: [''],
+            variant: this.formBuilder.group({
+                name: [''],
+                uniqueName: ['']
+            }),
             stockDetails: this.formBuilder.group({
                 stockUnitUniqueName: [''],
                 stockUnit: [''],
@@ -308,10 +314,6 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         this.activeIndx = index;
     }
 
-    public saveSkuNumberPopup(product): void {
-        // product.skuCode = this.skuNumber;
-        // this.skuNumberPopupShow = false;
-    }
 
     public selectDate(date: any, dateField: any): void {
         this.tempDateParams.dateOfSupply = date;
@@ -330,22 +332,17 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         this.activeIndx = null;
     }
 
-    /** Close the  HSN/SAC Opened Menu*/
-    public closeShowCodeMenu(): void {
-        this.hsnSacMenuTrigger.closeMenu();
-        this.skuMenuTrigger.closeMenu();
-    }
     public submit(): void {
 
         this.isLoading = true;
         const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
         for (let i = 0; i < sourcesArray.length; i++) {
             const sourcesFormGroup = sourcesArray.at(i) as UntypedFormGroup;
-            const sourcesStockDetails = sourcesFormGroup.get('warehouse') as UntypedFormGroup;
-            if (sourcesStockDetails) {
-                const [address, pin] = sourcesStockDetails.get('address').value?.split('\nPIN: ');
-                sourcesStockDetails.get('address')?.setValue(address);
-                sourcesStockDetails.get('pincode')?.setValue(pin);
+            const sourcesWarehouseFormGroup = sourcesFormGroup.get('warehouse') as UntypedFormGroup;
+            if (sourcesWarehouseFormGroup) {
+                const [address, pin] = sourcesWarehouseFormGroup.get('address')?.value?.split('\nPIN: ');
+                sourcesWarehouseFormGroup.get('address')?.setValue(address);
+                sourcesWarehouseFormGroup.get('pincode')?.setValue(pin);
             }
         }
 
@@ -367,7 +364,6 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             } else {
                 productFormGroup.get('hsnNumber').setValue("");
             }
-            // delete product.variant;
         }
         console.log(this.branchTransferCreateEditForm);
 
@@ -413,6 +409,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         //     });
         // }
     }
+
     public getEnterTaxText(): string {
         let text = 'Enter Tax';
         text = text?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
@@ -552,6 +549,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
 
         this.inventoryService.getNewBranchTransfer(this.editBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
+                console.log(response);
+
                 this.branchTransferCreateEditForm.get('dateOfSupply').setValue(response.body?.dateOfSupply);
                 this.branchTransferCreateEditForm.get('challanNo').setValue(response.body?.challanNo);
                 this.branchTransferCreateEditForm.get('note').setValue(response.body?.note);
@@ -564,12 +563,25 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                 if (Object.keys(this.allWarehouses)?.length > 0) {
                     const usedWarehouses = [];
 
-                    sourcesArray[0]?.forEach(branch => {
-                        usedWarehouses.push(branch?.warehouse?.uniqueName);
-                    });
-                    destinationsArray[0]?.forEach(branch => {
-                        usedWarehouses.push(branch?.warehouse?.uniqueName);
-                    });
+                    if (sourcesArray && sourcesArray.length > 0) {
+                        for (let i = 0; i < sourcesArray.length; i++) {
+                            const branch = sourcesArray.at(i);
+
+                            if (branch && branch.get('warehouse.uniqueName')) {
+                                usedWarehouses.push(branch.get('warehouse.uniqueName')?.value);
+                            }
+                        }
+                    }
+
+                    if (destinationsArray && destinationsArray.length > 0) {
+                        for (let i = 0; i < destinationsArray.length; i++) {
+                            const branch = destinationsArray.at(i);
+
+                            if (branch && branch.get('warehouse.uniqueName')) {
+                                usedWarehouses.push(branch.get('warehouse.uniqueName')?.value);
+                            }
+                        }
+                    }
 
                     Object.keys(this.allWarehouses)?.forEach(branch => {
                         allWarehouses[branch] = [];
@@ -579,34 +591,43 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                             }
                         });
                     });
-
                     this.allWarehouses = allWarehouses;
                 }
 
-                sourcesArray[0].forEach(source => {
-                    if (source?.warehouse?.address) {
-                        const pin = source.warehouse.pincode;
+                for (let i = 0; i < sourcesArray.length; i++) {
+                    const source = sourcesArray.at(i);
+                    if (source && source.get('warehouse.address')) {
+                        const pin = source.get('warehouse.pincode')?.value;
                         if (pin) {
-                            source.warehouse.address = `${source.warehouse.address}${'\n' + 'PIN: ' + pin}`;
+                            const currentAddress = source.get('warehouse.address')?.value;
+                            source.get('warehouse.address')?.setValue(`${currentAddress}\nPIN: ${pin}`);
                         }
                     }
-                });
-                destinationsArray[0].forEach(destination => {
-                    if (destination?.warehouse?.address) {
-                        const pin = destination.warehouse.pincode;
+                }
+
+                for (let i = 0; i < destinationsArray.length; i++) {
+                    const destination = destinationsArray.at(i);
+                    if (destination && destination.get('warehouse.address')) {
+                        const pin = destination.get('warehouse.pincode')?.value;
                         if (pin) {
-                            destination.warehouse.address = `${destination.warehouse.address}${'\n' + 'PIN: ' + pin}`;
+                            const currentAddress = destination.get('warehouse.address')?.value;
+                            destination.get('warehouse.address')?.setValue(`${currentAddress}\nPIN: ${pin}`);
                         }
                     }
-                });
-                if (productsArray?.length > 0) {
-                    productsArray[0].forEach(product => {
-                        if (product.hsnNumber) {
-                            product.showCodeType = "hsn";
+                }
+                console.log(productsArray);
+
+                if (productsArray && productsArray.length > 0) {
+                    for (let i = 0; i < productsArray.length; i++) {
+                        const product = productsArray.at(i);
+                        console.log(product);
+
+                        if (product && product.get('hsnNumber')) {
+                            product.get('showCodeType')?.setValue('hsn');
                         } else {
-                            product.showCodeType = "sac";
+                            product.get('showCodeType')?.setValue('sac');
                         }
-                    });
+                    }
                 }
 
                 let tempBranches = [];
@@ -1332,6 +1353,25 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         }
     }
 
+    public variantChanged(event: any, product: any, index: number): void {
+        if (event) {
+            const productArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
+            const productFormGroup = productArray?.at(index) as UntypedFormGroup;
+            const variantsFormGroup = productFormGroup.get('variant') as UntypedFormGroup;
+            variantsFormGroup.get('name')?.setValue(event.additional.name);
+            variantsFormGroup.get('uniqueName')?.setValue(event.additional.uniqueName);
+        }
+    }
+
+    public saveSkuNumberPopup(): void {
+        this.skuMenuTrigger?.closeMenu();
+    }
+
+    public closeShowCodeMenu(): void {
+        this.hsnSacMenuTrigger?.closeMenu();
+        this.skuMenuTrigger?.closeMenu();
+    }
+
     public selectProduct(event: any, product: any, index?: number): void {
         if (event && event.additional) {
             const productArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
@@ -1343,7 +1383,17 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
             productStockDetailsFormGroup.get('rate')?.setValue(0);
             this.inventoryService.GetStockDetails(event.additional.stockGroup?.uniqueName, event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                console.log(response);
+
                 if (response?.status === 'success') {
+                    this.stockVariants = [];
+                    let stockVariants = cloneDeep(response?.body?.variants);
+
+                    if (stockVariants) {
+                        stockVariants.forEach(key => {
+                            this.stockVariants.push({ label: key.name, value: key?.uniqueName, additional: key });
+                        });
+                    }
                     productStockDetailsFormGroup.get('rate')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.rate);
                     if (!response?.body?.purchaseAccountDetails) {
                         productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(response?.body?.stockUnit?.uniqueName);
