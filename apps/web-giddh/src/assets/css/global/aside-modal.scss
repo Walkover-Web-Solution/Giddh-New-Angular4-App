@@ -25,11 +25,3 @@ body {
         }
     }
 }
-/*--- sales voucher page aside menu ---*/
-body {
-    &.aside-menu-product-service-page {
-        .cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
-            z-index: 999;
-        }
-    }
-}
