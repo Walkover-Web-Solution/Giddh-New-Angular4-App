@@ -74,6 +74,9 @@ inventory-sidebar {
             padding: 12px;
             border: 1px solid var(--color-fields-border) !important;
             border-radius: 4px;
+            &.disabled{
+                background-color: var(--color-primary-input-bar-background) !important;
+            }
         }
     }
     select-field {
