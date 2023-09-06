@@ -650,8 +650,6 @@
         "group_updated": "Group updated successfully.",
         "receive_otp": "You will receive a verification code on your mobile shortly.",
         "otp_sent_email": "A verification code has been sent to your email account.",
-        "internet_error": "Please check your internet connection.",
-        "internet_disconnected": "Internet disconnected",
         "warehouse_created": "New warehouse created successfully.",
         "warehouse_updated": "Warehouse updated successfully.",
         "voucher_saved": "Voucher generated successfully",

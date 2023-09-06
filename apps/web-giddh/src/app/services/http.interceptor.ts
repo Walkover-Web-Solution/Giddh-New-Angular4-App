@@ -1,7 +1,7 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
-import { empty, Observable, of, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { LoaderService } from '../loader/loader.service';
 import { GeneralService } from './general.service';
 import { OrganizationType } from '../models/user-login-state';
@@ -58,7 +58,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
             );
         } else {
             setTimeout(() => {
-                this.toasterService.warningToast(this.localeService.translate("app_messages.internet_error"), this.localeService.translate("app_messages.internet_disconnected"));
+                this.toasterService.warningToast("Please check your internet connection.", "Internet disconnected");
             }, 100);
             this.loadingService.hide();
             if (request.body && request.body.handleNetworkDisconnection) {

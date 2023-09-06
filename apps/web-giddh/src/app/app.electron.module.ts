@@ -10,7 +10,7 @@ import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 @NgModule({
     imports: [
         AppModule,
-        RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: CustomPreloadingStrategy, relativeLinkResolution: 'corrected' }),
+        RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: CustomPreloadingStrategy }),
     ],
     bootstrap: [AppComponent]
 })

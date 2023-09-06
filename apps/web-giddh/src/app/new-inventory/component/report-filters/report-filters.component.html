@@ -95,16 +95,19 @@
                 class="select-multiple-chiplist-inventory"
                 [ngClass]="{ 'searching-bar-chiplist': filtersChipList?.length }"
             >
-                <mat-chip-list #matChipList>
-                    <mat-chip
+                <mat-chip-grid #matChipList>
+                    <mat-chip-row
                         *ngFor="let chip of filtersChipList; let indx = index"
                         [selectable]="true"
                         [removable]="true"
                         (removed)="removeOption(chip, indx)"
+                        class="mr-r1"
                     >
                         {{ chip?.name }}
-                        <i class="icon-cross" matChipRemove></i>
-                    </mat-chip>
+                        <span matChipRemove>
+                            <i class="icon-cross font-12"></i>
+                        </span>
+                    </mat-chip-row>
                     <input
                         type="text"
                         matInput
@@ -119,7 +122,7 @@
                         matAutocompletePosition="auto"
                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                     />
-                </mat-chip-list>
+                </mat-chip-grid>
                 <mat-autocomplete
                     class="inventory-autocomplete"
                     #auto="matAutocomplete"

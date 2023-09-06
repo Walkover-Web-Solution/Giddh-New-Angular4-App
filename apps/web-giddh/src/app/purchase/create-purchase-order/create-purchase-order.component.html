@@ -655,7 +655,7 @@
                             <!-- region customer dropdown -->
                             <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 select-customer-name">
                                 <section class="form-inline">
-                                    <div class="wrap-billing-address w-100 clearfix">
+                                    <div class="wrap-billing-address w-100 clearfix ">
                                         <div class="row">
                                             <!-- region billing address -->
                                             <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
@@ -2190,6 +2190,7 @@
                                         <div class="row">
                                             <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                 <giddh-datepicker
+                                                    [cssClass]="'mat-field-border bdr form-control'"
                                                     #shippingDate="ngModel"
                                                     [placeholder]="localeData?.ship_date"
                                                     name="shippingDate"
@@ -3292,6 +3293,7 @@
                             <div class="row">
                                 <div class="form-group col-xs-4">
                                     <giddh-datepicker
+                                         [cssClass]="'mat-field-border bdr form-control'"
                                         #shippingDate="ngModel"
                                         [placeholder]="localeData?.ship_date"
                                         name="shippingDate"
@@ -3572,7 +3574,7 @@
                 <!-- endregion -->
 
                 <!-- region update mode -->
-                <div class="pull-right pr" *ngIf="isUpdateMode">
+                <div class="pull-right pr d-flex column-gap15" *ngIf="isUpdateMode">
                     <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>

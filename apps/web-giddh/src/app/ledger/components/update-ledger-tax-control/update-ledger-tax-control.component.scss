@@ -20,6 +20,11 @@
 .update-ledger-tax-dropdown {
     max-height: 102px;
     min-height: 80px;
+    li{
+        label{
+            height: 40px;
+        }
+    }
 }
 .checkbox {
     .text-ellipsis {

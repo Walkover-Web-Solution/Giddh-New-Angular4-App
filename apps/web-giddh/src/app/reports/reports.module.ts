@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -70,7 +69,6 @@ import { SalesPurchaseRegisterExportComponent } from './sales-purchase-register-
     exports: [
         ReportsComponent,
         ReportsDetailsComponent,
-        DatepickerModule,
         BsDropdownModule,
         Daterangepicker,
         PaginationModule

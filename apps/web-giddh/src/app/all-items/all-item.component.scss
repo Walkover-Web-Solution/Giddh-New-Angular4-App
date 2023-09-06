@@ -12,7 +12,7 @@
                 background-color: var(--color-primary-all-items-input-group-input-background);
                 height: 50px;
                 position: relative;
-                top: -1px;
+                top: 0px;
             }
         }
     }
@@ -35,10 +35,11 @@
                     word-break: break-word;
                     width: 14.8%;
                     min-height: 90px;
+                    justify-content: center;
                     transition: all 140ms ease-in;
                     h4 {
                         font-size: var(--font-size-15);
-                        margin-bottom: 5px;
+                        margin-bottom: 10px;
                         display: flex;
                         align-items: center;
                         color: var(--color-primary-all-items-page-single-menu-items-heading);
@@ -52,13 +53,18 @@
                             }
                         }
                     }
+                    .mat-mdc-card-content{
+                        &:last-child{
+                            padding: 0 !important;
+                        }
+                    }
                     p {
                         color: var(--color-primary-all-items-page-single-menu-items-body);
                         font-size: var(--font-size-12);
                     }
                     &:hover,
                     &.active {
-                        background-color: var(--color-giddh-blue);
+                        background-color: var(--color-giddh-blue) !important;
                         h4,
                         p {
                             color: var(--color-white);
@@ -118,7 +124,7 @@
 
     &:hover,
     &.active {
-        background-color: var(--color-giddh-blue);
+        background-color: var(--color-giddh-blue) !important;
 
         h4,
         p {

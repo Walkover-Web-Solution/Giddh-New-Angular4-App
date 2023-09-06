@@ -34,27 +34,29 @@
             </div>
             <div class="row mt-4">
                 <div class="col-sm-4 pr-0">
-                    <button
-                        mat-stroked-button
-                        color="primary"
-                        type="button"
-                        (click)="saveUnitGroup()"
-                        *ngIf="!unitGroupDetails?.uniqueName"
-                    >
-                        {{ commonLocaleData?.app_save }}
-                    </button>
-                    <button
-                        mat-stroked-button
-                        color="primary"
-                        type="button"
-                        (click)="saveUnitGroup()"
-                        *ngIf="unitGroupDetails?.uniqueName"
-                    >
-                        {{ commonLocaleData?.app_update }}
-                    </button>
+                    <div class="d-flex column-gap15">
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            type="button"
+                            (click)="saveUnitGroup()"
+                            *ngIf="!unitGroupDetails?.uniqueName"
+                        >
+                            {{ commonLocaleData?.app_save }}
+                        </button>
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            type="button"
+                            (click)="saveUnitGroup()"
+                            *ngIf="unitGroupDetails?.uniqueName"
+                        >
+                            {{ commonLocaleData?.app_update }}
+                        </button>
+                    </div>
                 </div>
                 <div class="col-sm-8">
-                    <div class="pull-right">
+                    <div class="pull-right d-flex column-gap15">
                         <button
                             mat-stroked-button
                             type="button"

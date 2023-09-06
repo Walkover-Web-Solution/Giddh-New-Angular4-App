@@ -1,5 +1,5 @@
 .universal-date {
-    .mat-icon-button {
+    .mat-mdc-icon-button {
         margin: 0 !important;
         width: 32px;
         height: 32px;
@@ -17,9 +17,20 @@
         }
     }
 }
-.mat-menu-panel {
+.mat-mdc-menu-panel {
     max-width: 450px !important;
 }
 .mat-menu-content:not(:empty) {
     padding: 0 !important;
+}
+
+/*--- billing-detail ---*/
+.back-btnn {
+    .back-button {
+        .mdc-button__label {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
 }

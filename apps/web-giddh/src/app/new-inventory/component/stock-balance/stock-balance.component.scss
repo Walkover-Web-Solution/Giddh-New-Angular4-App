@@ -252,7 +252,7 @@
         .search-icon {
             position: absolute;
             z-index: 1;
-            top: 22.5px;
+            top: 10px;
             left: 6px;
             filter: var(--color-image-filter);
         }
@@ -261,6 +261,7 @@
             border-bottom: 1px solid var(--color-common-primary-border);
             height: 62px;
             width: fit-content;
+            align-items: center;
             .stock-searchbar {
                 position: sticky;
                 left: 0;
@@ -435,6 +436,7 @@
                             background-color: var(--color-primary-input-bar-background-focus);
                             position: relative;
                             right: 5px;
+                            border: 0;
                         }
                         .quantity-input {
                             width: 69px;
@@ -444,11 +446,13 @@
                             background-color: var(--color-primary-input-bar-background-focus);
                             position: relative;
                             right: 4px;
+                            border: 0;
                         }
                         .unit-dropdown {
                             width: 81px;
                             position: relative;
                             right: 4px;
+                            border: 0;
                         }
                     }
                     .warehouse-expanded-box-wrapper {
@@ -485,11 +489,6 @@
                 }
             }
         }
-    }
-}
-::ng-deep {
-    .mat-pseudo-checkbox-checked {
-        background: var(--color-giddh-blue) !important;
     }
 }
 .create-warehouse-btn {

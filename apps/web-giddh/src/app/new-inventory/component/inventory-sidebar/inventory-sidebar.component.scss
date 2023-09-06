@@ -6,7 +6,7 @@
     background-color: var(--color-white);
     width: 240px;
     left: -240px;
-    z-index: 999;
+    z-index: 991;
 
     .aside-pane {
         background-color: var(--color-white) !important;
@@ -62,7 +62,6 @@
 
                     mat-tree-node {
                         min-height: 30px;
-                        align-items: baseline;
                         .sidebar-menu-icons {
                             position: relative;
                             right: 7px;
@@ -79,7 +78,7 @@
 
                     .sidebar-list-icon {
                         position: absolute;
-                        bottom: 6px;
+                        bottom: 15px;
                         left: 220px;
                     }
                     .sub-option {
@@ -99,8 +98,7 @@
                         }
                         &.sub-option[aria-level="1"] {
                             position: relative;
-                            // left: 20px;
-                            padding-left: 20px !important;
+                            padding-left: 15px !important;
                             height: 27px;
                             width: 100%;
                             line-height: 15px;
