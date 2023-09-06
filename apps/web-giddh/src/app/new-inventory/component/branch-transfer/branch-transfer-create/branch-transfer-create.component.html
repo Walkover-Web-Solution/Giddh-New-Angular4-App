@@ -933,30 +933,32 @@
                                                                     (onClear)="resetWarehouse('sources', i)"
                                                                 >
                                                                 </select-field>
-                                                                <text-field
-                                                                    *ngIf="
-                                                                        formFields &&
-                                                                        formFields['taxName'] &&
-                                                                        source.get('warehouse.uniqueName').value &&
-                                                                        source.get('warehouse.taxNumber').value
-                                                                    "
-                                                                    name="sourceWarehouseTaxnumber{{ i }}"
-                                                                    [placeholder]="getEnterTaxText()"
-                                                                    [type]="'text'"
-                                                                    [label]="
-                                                                        'Sender\'s ' +
-                                                                        formFields['taxName']?.label +
-                                                                        '*'
-                                                                    "
-                                                                    [max]="15"
-                                                                    (change)="checkTaxNumberValidation()"
-                                                                    [readonly]="
-                                                                        source.get('warehouse.uniqueName').value
-                                                                    "
-                                                                    formControlName="taxNumber"
-                                                                >
-                                                                </text-field>
-
+                                                                <div class="option-value-field">
+                                                                    <text-field
+                                                                        *ngIf="
+                                                                            formFields &&
+                                                                            formFields['taxName'] &&
+                                                                            source.get('warehouse.uniqueName').value &&
+                                                                            source.get('warehouse.taxNumber').value
+                                                                        "
+                                                                        name="sourceWarehouseTaxnumber{{ i }}"
+                                                                        [placeholder]="getEnterTaxText()"
+                                                                        [type]="'text'"
+                                                                        [label]="
+                                                                            'Sender\'s ' +
+                                                                            formFields['taxName']?.label +
+                                                                            '*'
+                                                                        "
+                                                                        [max]="15"
+                                                                        (change)="checkTaxNumberValidation()"
+                                                                        [readonly]="
+                                                                            source.get('warehouse.uniqueName').value
+                                                                        "
+                                                                        formControlName="taxNumber"
+                                                                        [cssClass]="'form-control disabled w-100'"
+                                                                    >
+                                                                    </text-field>
+                                                                </div>
                                                                 <div class="position-relative pb-3">
                                                                     <div class="pb-3">
                                                                         <textarea
@@ -1045,6 +1047,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div *ngIf="activeIndx === i" class="w-100">
+
                                                                     <text-field
                                                                         [cssClass]="
                                                                             'form-control mat-field-border  text-right'
@@ -1191,7 +1194,7 @@
                                                                 [matMenuTriggerFor]="sku_Menu"
                                                                 #skuMenuTrigger="matMenuTrigger"
                                                             >
-                                                                <label class="mr-b1">SKU Code: </label>
+                                                                <label>SKU Code: </label>
                                                                 <span
                                                                     >{{ product.get("skuCode").value }}
                                                                     <span class="edit-icon cp">
@@ -1206,6 +1209,7 @@
                                                                     (click)="$event.stopPropagation()"
                                                                 >
                                                                     <div>
+                                                                        <label class="mr-b1">SKU Code: </label>
                                                                         <text-field
                                                                             type="text"
                                                                             [cssClass]="'form-control mat-field-border'"
@@ -1534,30 +1538,32 @@
                                                                     (onClear)="resetWarehouse('destinations', i)"
                                                                 >
                                                                 </select-field>
-                                                                <text-field
-                                                                    *ngIf="
-                                                                        formFields &&
-                                                                        formFields['taxName'] &&
-                                                                        destination.get('warehouse.uniqueName').value &&
-                                                                        destination.get('warehouse.taxNumber').value
-                                                                    "
-                                                                    name="destinationWarehouseTaxnumber{{ i }}"
-                                                                    [placeholder]="getEnterTaxText()"
-                                                                    [type]="'text'"
-                                                                    [label]="
-                                                                        'Reciever\'s ' +
-                                                                        formFields['taxName']?.label +
-                                                                        '*'
-                                                                    "
-                                                                    [max]="15"
-                                                                    (change)="checkTaxNumberValidation()"
-                                                                    [readonly]="
-                                                                        destination.get('warehouse.uniqueName').value
-                                                                    "
-                                                                    formControlName="taxNumber"
-                                                                >
-                                                                </text-field>
-
+                                                                <div class="option-value-field">
+                                                                    <text-field
+                                                                        *ngIf="
+                                                                            formFields &&
+                                                                            formFields['taxName'] &&
+                                                                            destination.get('warehouse.uniqueName').value &&
+                                                                            destination.get('warehouse.taxNumber').value
+                                                                        "
+                                                                        name="destinationWarehouseTaxnumber{{ i }}"
+                                                                        [placeholder]="getEnterTaxText()"
+                                                                        [type]="'text'"
+                                                                        [label]="
+                                                                            'Reciever\'s ' +
+                                                                            formFields['taxName']?.label +
+                                                                            '*'
+                                                                        "
+                                                                        [max]="15"
+                                                                        (change)="checkTaxNumberValidation()"
+                                                                        [readonly]="
+                                                                            destination.get('warehouse.uniqueName').value
+                                                                        "
+                                                                        formControlName="taxNumber"
+                                                                        [cssClass]="'w-100 form-control disabled'"
+                                                                        >
+                                                                    </text-field>
+                                                                </div>
                                                                 <div class="position-relative pb-3">
                                                                     <div class="pb-3">
                                                                         <textarea
@@ -1795,7 +1801,7 @@
                     <div class="row">
                         <div class="col-xl-8 col-lg-10 col-sm-12">
                             <div>
-                                <h3 class="mr-b1">Transportation Details</h3>
+                                <h3 class="mr-b15">Transportation Details</h3>
                                 <div class="row row-gap" formGroupName="transporterDetails">
                                     <div class="col-sm-6 pl-0">
                                         <div class="direct-mat-datepicker">
@@ -1860,7 +1866,6 @@
                                     <textarea
                                         matInput
                                         rows="3"
-                                        placeholder="Write Note Here . . . "
                                         formControlName="note"
                                     ></textarea>
                                 </mat-form-field>
@@ -1896,3 +1901,10 @@
         </div>
     </section>
 </ng-container>
+
+<ng-template #asideMenuProductService>
+    <aside-menu-product-service  (closeAsideEvent)="closeAsideMenuProductServiceModal()"></aside-menu-product-service>
+</ng-template>
+<ng-template #asideManageTransport>
+    <aside-manage-transport></aside-manage-transport>
+</ng-template>

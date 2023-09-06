@@ -1,0 +1,93 @@
+<div class="aside-pane">
+    <div class="header-create-unit">
+        <div class="form-header">
+            <h3 mat-dialog-title>Manage Transporter</h3>
+            <button id="close" mat-dialog-close><i class="icon-cross"></i></button>
+        </div>
+    </div>
+    <mat-dialog-content class="w-100">
+        <div class="aside-body create-group-aside-body">
+            <div class="aside-pane-form">
+                <form class="row form-gap">
+                    <div class="col-lg-12">
+                        <input-field 
+                            [label]="'Transporter Name'"
+                            [placeholder]="'Mention name'"
+                            [name]="'transporterName'">
+                        </input-field>
+                        <!-- <small
+                            class="text-danger"
+                        >Transporter name should contain atleast 5 characters and should not contain any special
+                        character.</small> -->
+                    </div>
+                    <div class="col-lg-12">
+                        <input-field 
+                            [label]="'Transporter ID'"
+                            [placeholder]="'Mention number'"
+                            [name]="'transporterId'">
+                        </input-field>
+                        <!-- <small
+                            class="text-danger"
+                        >Transporter ID should contain atleast 4 characters.
+                        </small> -->
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="d-flex column-gap1">
+                            <button mat-stroked-button color="primary">Save</button>
+                            <button mat-stroked-button color="primary">Update</button>
+                            <button mat-stroked-button>Clear</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="table-responsive manage-table">
+                    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                        <!--- Note that these columns can be defined in any order.
+                        The actual rendered columns are set as a property on the row definition" -->
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef class="mat-table-name"> Name </th>
+                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                        </ng-container>
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="transportid">
+                            <th mat-header-cell *matHeaderCellDef class="mat-table-id"> Transporter ID </th>
+                            <td mat-cell *matCellDef="let element"> {{element.transportid}} </td>
+                        </ng-container>
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="symbol">
+                            <th mat-header-cell *matHeaderCellDef class="text-right mat-table-action"> Actions </th>
+                            <td mat-cell *matCellDef="let element"> 
+                                <div class="d-flex column-gap5 justify-content-end edit-delete-btn">
+                                    <button mat-stroked-button>
+                                        <i class="icon-edit"></i>
+                                    </button>
+                                    <button mat-stroked-button>
+                                        <i class="icon-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+                <!-- <div class="pagination-wrapper" *ngIf="branchTransferResponse?.length && !isLoading">
+                    <pagination
+                        [totalItems]="branchTransferPaginationObject?.totalItems"
+                        [(ngModel)]="branchTransferPaginationObject.page"
+                        [maxSize]="5"
+                        class="pagination-sm"
+                        [boundaryLinks]="true"
+                        [itemsPerPage]="branchTransferPaginationObject.count"
+                        [rotate]="false"
+                        (pageChanged)="pageChanged($event)"
+                        [firstText]="commonLocaleData?.app_first"
+                        [previousText]="commonLocaleData?.app_previous"
+                        [nextText]="commonLocaleData?.app_next"
+                        [lastText]="commonLocaleData?.app_last"
+                    ></pagination>
+                </div> -->
+            </div>
+        </div>
+    </mat-dialog-content>
+</div>

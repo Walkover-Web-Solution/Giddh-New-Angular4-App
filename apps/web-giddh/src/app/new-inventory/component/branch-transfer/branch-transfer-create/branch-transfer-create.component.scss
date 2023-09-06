@@ -43,6 +43,8 @@
                     text-align: right;
                     border: 1px solid var(--color-iron);
                     vertical-align: top !important;
+                    color: var(--color-primary-button-text);
+                    font-weight: 400;
                     &:first-child {
                         text-align: left;
                     }
@@ -53,11 +55,6 @@
 
                 thead {
                     border-bottom: 1px solid var(--color-iron);
-                    tr {
-                        th {
-                            color: var(--color-primary-button-text);
-                        }
-                    }
                 }
                 tbody {
                     tr {
@@ -74,12 +71,7 @@
                             .show-code-position {
                                 position: absolute;
                                 right: 0;
-                                bottom: -12px;
-                            }
-                            .show-sku-code-position {
-                                position: absolute;
-                                left: 0;
-                                bottom: -32px;
+                                bottom: 0px;
                             }
                             .delete-btn-position {
                                 position: absolute;
@@ -95,11 +87,27 @@
                                     display: flex;
                                     justify-content: center;
                                     align-items: center;
+                                    i{
+                                        font-size: var(--font-size-12);
+                                    }
                                 }
                                 .icon-info {
                                     margin-left: 10px;
                                     font-size: 18px;
                                 }
+                            }
+                            &.name{
+                                span{
+                                    .placeholder-for-table {
+                                        color: var(--color-gray);
+                                        font-weight: 400
+                                    }
+                                }
+                            }
+                            .fields-gap {
+                                display: flex;
+                                flex-direction: column;
+                                row-gap: 8px;
                             }
                         }
                     }
@@ -112,10 +120,12 @@
                     }
                 }
             }
-
-            .action-btn-wrapper {
-                background-color: var(--color-common-senary-background-for-all-components);
-                padding: 18px 0;
+        }
+        .info-field{
+            .icon-info {
+                position: absolute;
+                top: 17px;
+                right: -18px;
             }
         }
     }
