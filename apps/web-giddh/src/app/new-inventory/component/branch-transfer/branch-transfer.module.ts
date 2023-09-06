@@ -55,7 +55,8 @@ import { AsideMenuProductServiceModule } from '../../../shared/aside-menu-produc
     ],
     exports: [
         BranchTransferListComponent,
-        BranchTransferCreateComponent
+        BranchTransferCreateComponent,
+        AsideManageTransportComponent
     ],
     declarations: [MainComponent, BranchTransferListComponent, BranchTransferCreateComponent, AsideManageTransportComponent]
 })

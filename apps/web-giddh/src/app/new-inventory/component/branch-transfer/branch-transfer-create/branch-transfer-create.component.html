@@ -37,6 +37,7 @@
                     name="branchTransferCreateEditForm"
                     [formGroup]="branchTransferCreateEditForm"
                 >
+                    <!-- Delivery Challan Content  Start-->
                     <div *ngIf="branchTransferMode === 'delivery-challan'">
                         <div class="row clearfix primary-form-wrapper row-gap">
                             <div class="col-lg-8 px-0">
@@ -258,7 +259,14 @@
                                                         >
                                                         </input-field>
                                                     </div>
-                                                    <div class="mr-b15">
+                                                    <div
+                                                        class="mr-b15"
+                                                        [ngClass]="{
+                                                            'readonly-field': branchTransferCreateEditForm.get(
+                                                                'sources.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        }"
+                                                    >
                                                         <mat-form-field appearance="outline" class="w-100">
                                                             <mat-label>Sender's Address</mat-label>
                                                             <textarea
@@ -283,33 +291,35 @@
                                     <div class="col-lg-6">
                                         <div *ngIf="transferType === 'products'" formArrayName="destinations">
                                             <div [formGroupName]="0">
-                                                <div class="mr-b15 position-relative info-field">
-                                                    <dropdown-field
-                                                        [name]="'receiverName'"
-                                                        [label]="'Receiver\'s Name'"
-                                                        [placeholder]="'Select Receiver\'s Name'"
-                                                        [options]="branches"
-                                                        (selectedOption)="selectRecieverName($event, 0)"
-                                                        [readonly]="isUpdateMode"
-                                                    >
-                                                    </dropdown-field>
-                                                    <i
-                                                        *ngIf="
-                                                            destinationWarehouses[
-                                                                branchTransferCreateEditForm.get(
-                                                                    'destinations.0.uniqueName'
-                                                                )?.value
-                                                            ]?.length !==
-                                                            allWarehouses[
-                                                                branchTransferCreateEditForm.get(
-                                                                    'destinations.0.uniqueName'
-                                                                )?.value
-                                                            ]?.length
-                                                        "
-                                                        class="icon-info"
-                                                        matTooltip="{{ branchTransferInfoText }}"
-                                                    >
-                                                    </i>
+                                                <div class="mr-b15">
+                                                    <div class="position-relative info-field">
+                                                        <dropdown-field
+                                                            [name]="'receiverName'"
+                                                            [label]="'Receiver\'s Name'"
+                                                            [placeholder]="'Select Receiver\'s Name'"
+                                                            [options]="branches"
+                                                            (selectedOption)="selectRecieverName($event, 0)"
+                                                            [readonly]="isUpdateMode"
+                                                        >
+                                                        </dropdown-field>
+                                                        <i
+                                                            *ngIf="
+                                                                destinationWarehouses[
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'destinations.0.uniqueName'
+                                                                    )?.value
+                                                                ]?.length !==
+                                                                allWarehouses[
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'destinations.0.uniqueName'
+                                                                    )?.value
+                                                                ]?.length
+                                                            "
+                                                            class="icon-info"
+                                                            matTooltip="{{ branchTransferInfoText }}"
+                                                        >
+                                                        </i>
+                                                    </div>
                                                 </div>
                                                 <div class="mr-b15">
                                                     <dropdown-field
@@ -359,7 +369,14 @@
                                                         >
                                                         </input-field>
                                                     </div>
-                                                    <div class="mr-b15">
+                                                    <div
+                                                        class="mr-b15"
+                                                        [ngClass]="{
+                                                            'readonly-field': branchTransferCreateEditForm.get(
+                                                                'destinations.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        }"
+                                                    >
                                                         <mat-form-field appearance="outline" class="w-100">
                                                             <mat-label>Receiver's Address</mat-label>
                                                             <textarea
@@ -393,7 +410,7 @@
                                             </input-field>
                                             <div formArrayName="sources">
                                                 <div [formGroupName]="0">
-                                                    <div class="mr-b15">
+                                                    <div class="mr-b15 position-relative info-field">
                                                         <dropdown-field
                                                             *ngIf="isUpdateMode"
                                                             [name]="'senderWarehouse'"
@@ -470,7 +487,14 @@
                                                             >
                                                             </input-field>
                                                         </div>
-                                                        <div class="mr-b15">
+                                                        <div
+                                                            class="mr-b15"
+                                                            [ngClass]="{
+                                                                'readonly-field': branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.uniqueName'
+                                                                )?.value
+                                                            }"
+                                                        >
                                                             <mat-form-field appearance="outline" class="w-100">
                                                                 <mat-label>Sender's Address</mat-label>
                                                                 <textarea
@@ -504,7 +528,8 @@
                             </div>
                         </div>
                     </div>
-
+                    <!-- Delivery Challan Content  End -->
+                    <!-- Receipt Note Content  Start-->
                     <div *ngIf="branchTransferMode === 'receipt-note'">
                         <div class="row clearfix primary-form-wrapper row-gap">
                             <div class="col-lg-8 px-0">
@@ -716,7 +741,14 @@
                                                         >
                                                         </input-field>
                                                     </div>
-                                                    <div class="mr-b15">
+                                                    <div
+                                                        class="mr-b15"
+                                                        [ngClass]="{
+                                                            'readonly-field': branchTransferCreateEditForm.get(
+                                                                'sources.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        }"
+                                                    >
                                                         <mat-form-field appearance="outline" class="w-100">
                                                             <mat-label>Sender's Address</mat-label>
                                                             <textarea
@@ -739,18 +771,35 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
-                                        <input-field
-                                            *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
-                                            [name]="'myCurrentCompany'"
-                                            formControlName="myCurrentCompany"
-                                            [type]="'text'"
-                                            [placeholder]="'Receiver\'s Name'"
-                                            [readonly]="isBranch || isCompanyWithSingleBranch"
-                                        >
-                                        </input-field>
+                                        <div class="position-relative info-field">
+                                            <input-field
+                                                *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
+                                                [name]="'myCurrentCompany'"
+                                                formControlName="myCurrentCompany"
+                                                [type]="'text'"
+                                                [placeholder]="'Receiver\'s Name'"
+                                                [readonly]="isBranch || isCompanyWithSingleBranch"
+                                            >
+                                            </input-field>
+                                            <i
+                                                *ngIf="
+                                                    destinationWarehouses[
+                                                        branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                            ?.value
+                                                    ]?.length !==
+                                                    allWarehouses[
+                                                        branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                            ?.value
+                                                    ]?.length
+                                                "
+                                                class="icon-info"
+                                                matTooltip="{{ branchTransferInfoText }}"
+                                            >
+                                            </i>
+                                        </div>
                                         <div formArrayName="destinations">
                                             <div [formGroupName]="0">
-                                                <div class="mr-b15">
+                                                <div class="mr-b15 position-relative info-field">
                                                     <dropdown-field
                                                         *ngIf="isUpdateMode"
                                                         [name]="'receiverName'"
@@ -761,27 +810,9 @@
                                                         [readonly]="isUpdateMode"
                                                     >
                                                     </dropdown-field>
-                                                    <i
-                                                        *ngIf="
-                                                            destinationWarehouses[
-                                                                branchTransferCreateEditForm.get(
-                                                                    'destinations.0.uniqueName'
-                                                                )?.value
-                                                            ]?.length !==
-                                                            allWarehouses[
-                                                                branchTransferCreateEditForm.get(
-                                                                    'destinations.0.uniqueName'
-                                                                )?.value
-                                                            ]?.length
-                                                        "
-                                                        class="icon-info"
-                                                        matTooltip="{{ branchTransferInfoText }}"
-                                                    >
-                                                    </i>
                                                 </div>
                                                 <div class="mr-b15">
                                                     <dropdown-field
-                                                        #destinationWarehouse
                                                         [name]="'receiverWarehouse'"
                                                         [placeholder]="'Receiver\'s Warehouse'"
                                                         [options]="
@@ -827,7 +858,14 @@
                                                         >
                                                         </input-field>
                                                     </div>
-                                                    <div class="mr-b15">
+                                                    <div
+                                                        class="mr-b15"
+                                                        [ngClass]="{
+                                                            'readonly-field': branchTransferCreateEditForm.get(
+                                                                'destinations.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        }"
+                                                    >
                                                         <mat-form-field appearance="outline" class="w-100">
                                                             <mat-label>Receiver's Address</mat-label>
                                                             <textarea
@@ -860,6 +898,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Receipt Note Content  End-->
                     <div class="row mt-1">
                         <div class="col-xl-8 col-lg-10 col-sm-12 mb-2">
                             <table id="table-receipt">
@@ -960,7 +999,13 @@
                                                                     </text-field>
                                                                 </div>
                                                                 <div class="position-relative pb-3">
-                                                                    <div class="pb-3">
+                                                                    <div
+                                                                        class="pb-3"
+                                                                        [ngClass]="{
+                                                                            'readonly-field':
+                                                                                source.get('warehouse.uniqueName').value
+                                                                        }"
+                                                                    >
                                                                         <textarea
                                                                             matInput
                                                                             rows="3"
@@ -1047,7 +1092,6 @@
                                                                     </div>
                                                                 </div>
                                                                 <div *ngIf="activeIndx === i" class="w-100">
-
                                                                     <text-field
                                                                         [cssClass]="
                                                                             'form-control mat-field-border  text-right'
@@ -1136,7 +1180,7 @@
                                         </tr>
                                     </ng-container>
                                 </tbody>
-                                <tbody *ngIf="transferType === 'products'" (clickOutside)="hideActiveRow()">
+                                <tbody *ngIf="transferType === 'products'" (clickOutside)="hideActiveRow($event)">
                                     <ng-container formArrayName="products">
                                         <tr
                                             *ngFor="
@@ -1173,7 +1217,10 @@
                                                             </select-field>
                                                             <span formGroupName="variant" class="w-100">
                                                                 <select-field
-                                                                    *ngIf="stockVariants?.length > 1"
+                                                                    *ngIf="
+                                                                        stockVariants?.length > 1 &&
+                                                                        product.get('uniqueName').value
+                                                                    "
                                                                     [cssClass]="'form-control mat-field-border'"
                                                                     [placeholder]="'Variant\'s Name'"
                                                                     (selectedOption)="
@@ -1481,7 +1528,7 @@
                                 </tbody>
                                 <tbody
                                     *ngIf="transferType !== 'products' && branchTransferMode === 'delivery-challan'"
-                                    (clickOutside)="hideActiveRow()"
+                                    (clickOutside)="hideActiveRow($event)"
                                 >
                                     <ng-container formArrayName="destinations">
                                         <tr
@@ -1543,7 +1590,8 @@
                                                                         *ngIf="
                                                                             formFields &&
                                                                             formFields['taxName'] &&
-                                                                            destination.get('warehouse.uniqueName').value &&
+                                                                            destination.get('warehouse.uniqueName')
+                                                                                .value &&
                                                                             destination.get('warehouse.taxNumber').value
                                                                         "
                                                                         name="destinationWarehouseTaxnumber{{ i }}"
@@ -1557,15 +1605,23 @@
                                                                         [max]="15"
                                                                         (change)="checkTaxNumberValidation()"
                                                                         [readonly]="
-                                                                            destination.get('warehouse.uniqueName').value
+                                                                            destination.get('warehouse.uniqueName')
+                                                                                .value
                                                                         "
                                                                         formControlName="taxNumber"
                                                                         [cssClass]="'w-100 form-control disabled'"
-                                                                        >
+                                                                    >
                                                                     </text-field>
                                                                 </div>
                                                                 <div class="position-relative pb-3">
-                                                                    <div class="pb-3">
+                                                                    <div
+                                                                        class="pb-3"
+                                                                        [ngClass]="{
+                                                                            'readonly-field':
+                                                                                destination.get('warehouse.uniqueName')
+                                                                                    .value
+                                                                        }"
+                                                                    >
                                                                         <textarea
                                                                             matInput
                                                                             rows="3"
@@ -1863,11 +1919,7 @@
                             <div>
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>Note</mat-label>
-                                    <textarea
-                                        matInput
-                                        rows="3"
-                                        formControlName="note"
-                                    ></textarea>
+                                    <textarea matInput rows="3" formControlName="note"></textarea>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -1903,8 +1955,8 @@
 </ng-container>
 
 <ng-template #asideMenuProductService>
-    <aside-menu-product-service  (closeAsideEvent)="closeAsideMenuProductServiceModal()"></aside-menu-product-service>
+    <aside-menu-product-service (closeAsideEvent)="closeAsideMenuProductServiceModal()"></aside-menu-product-service>
 </ng-template>
 <ng-template #asideManageTransport>
-    <aside-manage-transport></aside-manage-transport>
+    <aside-manage-transport (closeAsideEvent)="closeAsideTransporterModal()"></aside-manage-transport>
 </ng-template>

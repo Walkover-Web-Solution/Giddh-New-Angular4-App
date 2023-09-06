@@ -7,6 +7,7 @@ import { Store, select } from '@ngrx/store';
 import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
+import { PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { cloneDeep, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OnboardingFormRequest } from 'apps/web-giddh/src/app/models/api-models/Common';
@@ -15,12 +16,12 @@ import { InvoiceSetting } from 'apps/web-giddh/src/app/models/interfaces/invoice
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
+import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SettingsWarehouseService } from 'apps/web-giddh/src/app/services/settings.warehouse.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { transporterModes } from 'apps/web-giddh/src/app/shared/helpers/transporterModes';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-field/select-field.component';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
@@ -86,14 +87,11 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     public transporterListDetails$: Observable<IAllTransporterDetails>;
     /** Hold get transporter details*/
     public transporterListDetails: IAllTransporterDetails;
-    /**True if transport edit mode*/
-    public transportEditMode: boolean = false;
+
     /** Emit transport filter request*/
     public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
     /** Hold transported dropdown*/
     public transporterDropdown: IOption[] = [];
-    /** Observable to get transporter in process*/
-    public isGenarateTransporterInProcess$: Observable<boolean>;
     /** Observable to get transporter successfully*/
     public isGenarateTransporterSuccessfully$: Observable<boolean>;
     /** Observable to update transporter process*/
@@ -153,6 +151,13 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     public destinationBranchAlias: string;
     /** Stores the source branch alias */
     public sourceBranchAlias: string;
+    /** This will use for transporter logs object */
+    public transporterObj = {
+        count: PAGINATION_LIMIT,
+        page: 1,
+        totalPages: 0,
+        totalItems: 0
+    }
 
     constructor(
         private route: ActivatedRoute,
@@ -167,7 +172,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         private inventoryService: InventoryService,
         private toasty: ToasterService,
         private warehouseService: SettingsWarehouseService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private invoiceServices: InvoiceService
     ) {
         this.getInventorySettings();
         this.initBranchTransferForm();
@@ -332,7 +338,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     }
 
     public hideActiveRow(event: any): void {
-        if (event?.target?.nodeName !== "MAT-OPTION") {
+        // console.log(event);
+        if (event?.target?.nodeName !== "MAT-OPTION" && event?.target?.nodeName !== "SPAN") {
             this.activeIndx = null;
         }
     }
@@ -343,9 +350,9 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
         for (let i = 0; i < sourcesArray.length; i++) {
             const sourcesFormGroup = sourcesArray.at(i) as UntypedFormGroup;
-            const sourcesWarehouseFormGroup = sourcesFormGroup.get('warehouse') as UntypedFormGroup;
+            const sourcesWarehouseFormGroup = sourcesFormGroup?.get('warehouse') as UntypedFormGroup;
             if (sourcesWarehouseFormGroup) {
-                const [address, pin] = sourcesWarehouseFormGroup.get('address')?.value?.split('\nPIN: ');
+                const [address, pin] = sourcesWarehouseFormGroup?.get('address')?.value?.split('\nPIN: ');
                 sourcesWarehouseFormGroup.get('address')?.setValue(address);
                 sourcesWarehouseFormGroup.get('pincode')?.setValue(pin);
             }
@@ -354,9 +361,9 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
         for (let i = 0; i < destinationsArray.length; i++) {
             const destinationsFormGroup = destinationsArray.at(i) as UntypedFormGroup;
-            const destinationsStockDetails = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
+            const destinationsStockDetails = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
             if (destinationsStockDetails) {
-                const [address, pin] = destinationsStockDetails.get('address').value?.split('\nPIN: ');
+                const [address, pin] = destinationsStockDetails?.get('address').value?.split('\nPIN: ');
                 destinationsStockDetails.get('address')?.setValue(address);
                 destinationsStockDetails.get('pincode')?.setValue(pin);
             }
@@ -370,49 +377,62 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                 productFormGroup.get('hsnNumber').setValue("");
             }
         }
-        console.log(this.branchTransferCreateEditForm);
+        console.log(this.branchTransferCreateEditForm.value);
 
-        // if (this.editBranchTransferUniqueName) {
-        //     this.inventoryService.updateNewBranchTransfer(this.branchTransfer).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-        //         this.isLoading = false;
+        if (this.editBranchTransferUniqueName) {
+            this.inventoryService.updateNewBranchTransfer(this.branchTransferCreateEditForm.value).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                this.isLoading = false;
 
-        //         if (res) {
-        //             if (res.status === 'success') {
-        //                 if (this.branchTransferMode === 'receipt-note') {
-        //                     this.toasty.successToast("Receipt Note has been updated successfully.", "Success");
-        //                 } else {
-        //                     this.toasty.successToast("Delivery Challan has been updated successfully.", "Success");
-        //                 }
-        //                 this.router.navigate(['/pages', 'inventory', 'report']);
-        //             } else {
-        //                 this.toasty.errorToast(res.message, res.code);
-        //             }
-        //         } else {
-        //             this.toasty.errorToast(res?.message, res?.code);
-        //         }
-        //     });
-        // } else {
-        //     this.inventoryService.createNewBranchTransfer(this.branchTransfer).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-        //         this.isLoading = false;
-        //         if (res) {
-        //             if (res.status === 'success') {
-        //                 this.tempDateParams.dateOfSupply = new Date();
-        //                 this.tempDateParams.dispatchedDate = "";
+                if (res) {
+                    if (res.status === 'success') {
+                        if (this.branchTransferMode === 'receipt-note') {
+                            this.toasty.successToast("Receipt Note has been updated successfully.", "Success");
+                        } else {
+                            this.toasty.successToast("Delivery Challan has been updated successfully.", "Success");
+                        }
+                        this.router.navigate(['/pages', 'inventory', 'v2', 'branch-transfer', 'list']);
+                    } else {
+                        this.toasty.errorToast(res.message, res.code);
+                    }
+                } else {
+                    this.toasty.errorToast(res?.message, res?.code);
+                }
+            });
+        } else {
 
-        //                 if (this.branchTransferMode === 'receipt-note') {
-        //                     this.toasty.successToast("Receipt Note has been saved successfully.", "Success");
-        //                 } else {
-        //                     this.toasty.successToast("Delivery Challan has been saved successfully.", "Success");
-        //                 }
-        //                 this.router.navigate(['/pages', 'inventory', 'report']);
-        //             } else {
-        //                 this.toasty.errorToast(res.message, res.code);
-        //             }
-        //         } else {
-        //             this.toasty.errorToast(res?.message, res?.code);
-        //         }
-        //     });
-        // }
+            if (this.branchTransferMode === 'receipt-note') {
+                this.branchTransferMode = 'receiptnote';
+            } else {
+                this.branchTransferMode = 'deliverynote';
+            }
+
+            this.branchTransferCreateEditForm.get('entity').setValue(this.branchTransferMode);
+            this.inventoryService.createNewBranchTransfer(this.branchTransferCreateEditForm.value).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                this.isLoading = false;
+                if (res) {
+                    if (res.status === 'success') {
+                        let dataOfSupply = dayjs(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT)
+                        this.branchTransferCreateEditForm.get('dateOfSupply').setValue(dataOfSupply);
+
+                        if (this.branchTransferMode === 'receipt-note') {
+                            this.toasty.successToast("Receipt Note has been saved successfully.", "Success");
+                        } else {
+                            this.toasty.successToast("Delivery Challan has been saved successfully.", "Success");
+                        }
+                        this.router.navigate(['/pages', 'inventory', 'v2', 'branch-transfer', 'list']);
+                    } else {
+                        this.toasty.errorToast(res.message, res.code);
+                    }
+                } else {
+                    this.toasty.errorToast(res?.message, res?.code);
+                    if (this.branchTransferMode === 'receiptnote') {
+                        this.branchTransferMode = 'receipt-note';
+                    } else {
+                        this.branchTransferMode = 'delivery-challan';
+                    }
+                }
+            });
+        }
     }
 
     public getEnterTaxText(): string {
@@ -701,7 +721,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         });
     }
 
-    public getWarehouseDetails(type, index): void {
+    public getWarehouseDetails(type: any, index: number): void {
         const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
         const sourceFormGroup = sourcesArray.at(index) as UntypedFormGroup;
         const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as UntypedFormGroup;
@@ -795,7 +815,6 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                             }
                         }
                         this.resetSourceWarehouses(index);
-                        this.detectChanges();
                     }
                 });
             } else {
@@ -804,6 +823,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                 destinationsWarehouseFormGroup.get('address')?.setValue('');
             }
         }
+        this.detectChanges();
     }
 
     public assignCurrentCompany(): void {
@@ -951,7 +971,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                 top: '0'
             },
             width: '760px',
-            height: '100vh !important'
+            height: '100vh !important',
+            data: this.branchTransferMode
         });
 
         this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1384,10 +1405,12 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
             productStockDetailsFormGroup.get('rate')?.setValue(0);
             this.inventoryService.GetStockDetails(event.additional.stockGroup?.uniqueName, event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                const variantsFormGroup = productFormGroup.get('variant') as UntypedFormGroup;
+                variantsFormGroup.get('name')?.setValue("");
+                variantsFormGroup.get('uniqueName')?.setValue("");
                 if (response?.status === 'success') {
                     this.stockVariants = [];
-                    let stockVariants = cloneDeep(response?.body?.variants);
-
+                    let stockVariants = response?.body?.variants;
                     if (stockVariants) {
                         stockVariants.forEach(key => {
                             this.stockVariants.push({ label: key.name, value: key?.uniqueName, additional: key });
@@ -1536,107 +1559,46 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     }
 
 
-    public generateTransporter(generateTransporterForm: any): void {
-        this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.detectChanges();
-    }
-
-    public updateTransporter(generateTransporterForm: any): void {
-        this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currenTransporterId, generateTransporterForm.value));
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.transportEditMode = false;
-        this.detectChanges();
-    }
-
-    public editTransporter(transporter: any): void {
-        this.setTransporterDetail(transporter);
-        this.transportEditMode = true;
-    }
-
-    public setTransporterDetail(transporter): void {
-        if (transporter !== undefined && transporter) {
-            this.generateNewTransporter.transporterId = transporter.transporterId;
-            this.generateNewTransporter.transporterName = transporter.transporterName;
-            this.currenTransporterId = transporter.transporterId;
-        }
-        this.detectChanges();
-    }
-
     public toggleTransporterModel(): void {
-        this.transporterPopupStatus = !this.transporterPopupStatus;
-        // this.generateNewTransporterForm?.reset();
-        this.transportEditMode = false;
         this.dialog.open(this.asideManageTransport, {
-          position: {
-              right: '0',
-              top: '0'
-          },
-          width: '760px',
-          height: '100vh !important'
-      });
+            position: {
+                right: '0',
+                top: '0'
+            },
+            width: '760px',
+            height: '100vh !important'
+        });
     }
 
-          /**
-     * This Function is used to close Aside Menu Sidebar
-     *
-     * @memberof BranchTransferCreateComponent
-     */
-            public closeAsideMenuProductServiceModal(): void {
-            this.asideMenuStateForProductService?.close();
-        }
-
-    public deleteTransporter(transporter: IEwayBillTransporter): void {
-        this.store.dispatch(this.invoiceActions.deleteTransporter(transporter.transporterId));
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.toggleTransporterModel();
-        this.detectChanges();
+    /**
+* This Function is used to close Aside Menu Sidebar
+*
+* @memberof BranchTransferCreateComponent
+*/
+    public closeAsideMenuProductServiceModal(): void {
+        this.asideMenuStateForProductService?.close();
     }
+
+    public closeAsideTransporterModal(): void {
+        this.getTransportersList();
+    }
+
 
     public getTransportersList(): void {
-        this.transporterListDetails$ = this.store.pipe(select(p => p.ewaybillstate.TransporterListDetails), takeUntil(this.destroyed$));
-        this.transporterList$ = this.store.pipe(select(p => p.ewaybillstate.TransporterList), takeUntil(this.destroyed$));
-
-        this.transporterListDetails$.subscribe(op => {
-            this.transporterListDetails = op;
-        })
-
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-
-        this.store.pipe(select(s => s.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe(p => {
-            if (p && p.length) {
+        this.invoiceServices.getAllTransporterList(this.transporterObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.body?.results?.length) {
                 let transporterDropdown = null;
                 let transporterArr = null;
-                transporterDropdown = p;
+                transporterDropdown = response.body?.results;
                 transporterArr = transporterDropdown.map(trans => {
                     return { label: trans.transporterName, value: trans.transporterId };
                 });
                 this.transporterDropdown = transporterArr;
             }
         });
-
-        this.isGenarateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInProcess), takeUntil(this.destroyed$));
-        this.updateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.updateTransporterInProcess), takeUntil(this.destroyed$));
-        this.updateTransporterSuccess$ = this.store.pipe(select(p => p.ewaybillstate.updateTransporterSuccess), takeUntil(this.destroyed$));
-        this.isGenarateTransporterSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInSuccess), takeUntil(this.destroyed$));
-
-        this.updateTransporterSuccess$.subscribe(s => {
-            if (s) {
-                this.branchTransferCreateEditForm.reset();
-            }
-        });
-
-        this.store.pipe(select(state => state.ewaybillstate.isAddnewTransporterInSuccess), takeUntil(this.destroyed$)).subscribe(p => {
-            if (p) {
-                this.clearTransportForm();
-            }
-        });
         this.detectChanges();
     }
 
-    public clearTransportForm(): void {
-        this.generateNewTransporter.transporterId = this.generateNewTransporter.transporterName = null;
-    }
 
     public onClearTransportNameId(event: any): void {
         if (event) {

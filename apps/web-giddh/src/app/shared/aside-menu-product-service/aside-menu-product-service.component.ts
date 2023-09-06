@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnDestroy, OnInit, ChangeDetectorRef, Inject } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
@@ -10,6 +10,7 @@ import { AppState } from '../../store';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { GeneralService } from '../../services/general.service';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
     selector: 'aside-menu-product-service',
@@ -55,7 +56,8 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private accountsAction: AccountsAction,
         private changeDetectionRef: ChangeDetectorRef,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        @Inject(MAT_DIALOG_DATA) public inputData
     ) {
 
     }
